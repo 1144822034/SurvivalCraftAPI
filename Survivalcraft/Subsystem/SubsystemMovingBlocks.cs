@@ -57,12 +57,15 @@ namespace Game
 			bool IMovingBlockSet.Stopped => Stop;
 			List<MovingBlock> IMovingBlockSet.Blocks => Blocks;
 
+			public TerrainGeometry Geometry;
+
 			public MovingBlockSet()
 			{
 			}
 
 			public void Dispose()
 			{
+				Geometry.ClearGeometry();
 			}
 
 			public void UpdateBox()
@@ -135,8 +138,6 @@ namespace Game
 
 		public List<MovingBlockSet> m_removing = [];
 		
-		public TerrainGeometry MovingBlockGeometry;
-		
 		public DynamicArray<TerrainChunkGeometry.Buffer> Buffers;
 		
 		public DynamicArray<IMovingBlockSet> m_result = [];
@@ -173,7 +174,8 @@ namespace Game
 				Smoothness = smoothness,
 				Id = id,
 				Tag = tag,
-				Blocks = blocks.ToList()
+				Blocks = blocks.ToList(),
+				Geometry = new TerrainGeometry(m_subsystemAnimatedTextures.AnimatedBlocksTexture)
 			};
 			for(int i = 0; i < movingBlockSet.Blocks.Count; i++)
 			{
@@ -442,7 +444,6 @@ namespace Game
 			m_subsystemSky = base.Project.FindSubsystem<SubsystemSky>(throwOnError: true);
 			m_subsystemAnimatedTextures = base.Project.FindSubsystem<SubsystemAnimatedTextures>(throwOnError: true);
 			m_shader = ContentManager.Get<Shader>("Shaders/AlphaTested");
-			MovingBlockGeometry = new TerrainGeometry(m_subsystemAnimatedTextures.AnimatedBlocksTexture);
 			Buffers = new DynamicArray<TerrainChunkGeometry.Buffer>();
 			foreach (ValuesDictionary value9 in valuesDictionary.GetValue<ValuesDictionary>("MovingBlockSets").Values)
 			{
@@ -636,7 +637,7 @@ namespace Game
 				}
 			}
 			m_blockGeometryGenerator.ResetCache();
-			MovingBlockGeometry.ClearGeometry();
+			movingBlockSet.Geometry.ClearGeometry();
 			for (int n = 1; n < point2.X + 1; n++)
 			{
 				for (int num4 = 1; num4 < point2.Y + 1; num4++)
@@ -649,7 +650,7 @@ namespace Game
 							int num6 = Terrain.ExtractContents(cellValueFast);
 							if (num6 != 0)
 							{
-								BlocksManager.Blocks[num6].GenerateTerrainVertices(m_blockGeometryGenerator, MovingBlockGeometry, cellValueFast, n, num4 + num, num5);
+								BlocksManager.Blocks[num6].GenerateTerrainVertices(m_blockGeometryGenerator, movingBlockSet.Geometry, cellValueFast, n, num4 + num, num5);
 							}
 						}
 					}
@@ -665,7 +666,7 @@ namespace Game
 			{
 				GenerateGeometry(movingBlockSet);
 				Vector3 vector = movingBlockSet.Position + movingBlockSet.GeometryOffset;
-				TerrainRenderer.CompileDrawSubsets(new TerrainGeometry[1]{MovingBlockGeometry},Buffers,item => {
+				TerrainRenderer.CompileDrawSubsets([movingBlockSet.Geometry],Buffers,item => {
 					item.X += vector.X;
 					item.Y += vector.Y;
 					item.Z += vector.Z;
