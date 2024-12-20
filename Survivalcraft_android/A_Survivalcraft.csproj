@@ -5,18 +5,12 @@
 		<AndroidResgenFile>Resources\Resource.designer.cs</AndroidResgenFile>
 		<AndroidUseLatestPlatformSdk>true</AndroidUseLatestPlatformSdk>
 		<AndroidUseAapt2>true</AndroidUseAapt2>
-		<Configurations>Debug;Release</Configurations>
+		<Configurations>Release</Configurations>
 		<GenerateAssemblyInfo>true</GenerateAssemblyInfo>
 	</PropertyGroup>
-	<PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
-		<DefineConstants>DEBUG;android</DefineConstants>
-		<AllowUnsafeBlocks>true</AllowUnsafeBlocks>
-		<AndroidKeyStore>false</AndroidKeyStore>
-		<DebugType>full</DebugType>
-		<EmbedAssembliesIntoApk>True</EmbedAssembliesIntoApk>
-	</PropertyGroup>
 	<PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
-		<DefineConstants>TRACE;android</DefineConstants>
+		<TargetFramework>net9.0-android35.0</TargetFramework>
+		<DefineConstants>TRACE</DefineConstants>
 		<AllowUnsafeBlocks>true</AllowUnsafeBlocks>
 	</PropertyGroup>
 	<ItemGroup>

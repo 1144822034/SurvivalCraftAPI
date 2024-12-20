@@ -1,7 +1,5 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <TargetFrameworks Condition=" '$(Configuration)' == 'Release' ">net9.0;net9.0-windows;net9.0-android35.0</TargetFrameworks>
-	<TargetFramework Condition=" '$(Configuration)' == 'Debug' ">net9.0-windows</TargetFramework>
 	 <NoWarn>$(NoWarn);CA1416;1591;1573</NoWarn>
     <ImplicitUsings>enable</ImplicitUsings>
     <RootNamespace>Engine</RootNamespace>
@@ -21,10 +19,12 @@
 	<RepositoryType>Git</RepositoryType>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
+    <TargetFramework>net9.0-windows</TargetFramework>
     <DefineConstants>DEBUG</DefineConstants>
     <WarningLevel>2</WarningLevel>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
+    <TargetFrameworks>net9.0;net9.0-windows;net9.0-android35.0</TargetFrameworks>
     <DebugType>none</DebugType>
     <DefineConstants>TRACE</DefineConstants>
   </PropertyGroup>

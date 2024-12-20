@@ -1,7 +1,5 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 	<PropertyGroup>
-		<TargetFrameworks Condition=" '$(Configuration)' == 'Release' ">net9.0;net9.0-windows;net9.0-android35.0</TargetFrameworks>
-		<TargetFramework Condition=" '$(Configuration)' == 'Debug' ">net9.0-windows</TargetFramework>
 		<NoWarn>$(NoWarn);1591;1573</NoWarn>
 		<ImplicitUsings>enable</ImplicitUsings>
 		<Nullable>disable</Nullable>
@@ -16,6 +14,16 @@
 		<PackageProjectUrl>https://gitee.com/THPRC/survivalcraft-api</PackageProjectUrl>
 		<RepositoryUrl>https://gitee.com/THPRC/survivalcraft-api</RepositoryUrl>
 		<RepositoryType>Git</RepositoryType>
+	</PropertyGroup>
+	<PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
+		<TargetFramework>net9.0-windows</TargetFramework>
+		<DefineConstants>DEBUG</DefineConstants>
+		<WarningLevel>2</WarningLevel>
+	</PropertyGroup>
+	<PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
+		<TargetFrameworks>net9.0;net9.0-windows;net9.0-android35.0</TargetFrameworks>
+		<DebugType>none</DebugType>
+		<DefineConstants>TRACE</DefineConstants>
 	</PropertyGroup>
 	<ItemGroup>
 	  <PackageReference Include="System.Net.Http" Version="4.3.4" />

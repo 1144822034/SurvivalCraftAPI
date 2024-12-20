@@ -1,12 +1,12 @@
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-	<TargetFramework>net9.0-android35</TargetFramework>
 	<PlatformTarget>AnyCPU</PlatformTarget>
 	<AndroidApplication>True</AndroidApplication>
 	<ApplicationId>com.candy.SurvivalcraftAPI1_8</ApplicationId>
 	<AssemblyName>Launch_android</AssemblyName>
 	<RootNamespace>Game</RootNamespace>
 	<Nullable>enable</Nullable>
+	<Configurations>Release</Configurations>
 	<ImplicitUsings>enable</ImplicitUsings>
 	<Product>Survivalcraft</Product>
 	<Version>2.4.0.0</Version>
@@ -24,10 +24,11 @@
 	<PublishTrimmed>False</PublishTrimmed><!--切记不要修改，如果修改会导致运行时不完整-->
 	<TrimMode>partial</TrimMode>
   </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
-	  <DebugType>full</DebugType>
-	  <EmbedAssembliesIntoApk>True</EmbedAssembliesIntoApk>
-  </PropertyGroup>
+	<PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
+		<TargetFramework>net9.0-android35.0</TargetFramework>
+		<DebugType>none</DebugType>
+		<DefineConstants>TRACE</DefineConstants>
+	</PropertyGroup>
 <PropertyGroup>
 	<!--安卓优化-->
 	  <AndroidDexTool>d8</AndroidDexTool>
