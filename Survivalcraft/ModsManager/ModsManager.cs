@@ -24,9 +24,10 @@ public static class ModsManager
 	{
 		Version15x = 3,
 		Version170 = 17,
+		Version180 = 18,
 	}
 	[Obsolete("使用ApiVersionString")]
-	public const ApiVersionEnum ApiVersion = ApiVersionEnum.Version170; 
+	public const ApiVersionEnum ApiVersion = ApiVersionEnum.Version180;
 
 #if !ANDROID
 	public static string ExternalPath => "app:";

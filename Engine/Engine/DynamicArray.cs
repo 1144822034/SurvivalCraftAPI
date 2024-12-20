@@ -370,6 +370,7 @@ namespace Engine
 
 		public void Clear()
 		{
+            System.Array.Clear(m_array, 0, m_count);
 			m_count = 0;
 		}
 

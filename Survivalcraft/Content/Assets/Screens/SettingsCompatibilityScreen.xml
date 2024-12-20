@@ -22,18 +22,6 @@
           <StackPanelWidget Direction="Vertical" HorizontalAlignment="Center" VerticalAlignment="Center">
 
             <UniformSpacingPanelWidget Direction="Horizontal">
-              <LabelWidget Text="[SettingsCompatibilityScreen:3]"  HorizontalAlignment="Far" VerticalAlignment="Center" Margin="20, 0" />
-              <BevelledButtonWidget Name="SinglethreadedTerrainUpdateButton" Style="{Styles/ButtonStyle_310x60}" VerticalAlignment="Center" Margin="20, 0" />
-            </UniformSpacingPanelWidget>
-
-			  <UniformSpacingPanelWidget Name="使用内置路径" Direction="Horizontal">
-				  <LabelWidget Text="使用内置路径"  HorizontalAlignment="Far" VerticalAlignment="Center" Margin="20, 0" />
-				  <BevelledButtonWidget Name="使用内置路径" Style="{Styles/ButtonStyle_310x60}" VerticalAlignment="Center" Margin="20, 0" />
-			  </UniformSpacingPanelWidget>
-
-			<CanvasWidget Size="0, 20" />
-
-            <UniformSpacingPanelWidget Direction="Horizontal">
               <LabelWidget Text="[SettingsCompatibilityScreen:6]"  HorizontalAlignment="Far" VerticalAlignment="Center" Margin="20, 0" />
               <BevelledButtonWidget Name="ViewGameLogButton" Style="{Styles/ButtonStyle_310x60}" VerticalAlignment="Center" Margin="20, 0" Text="[SettingsCompatibilityScreen:7]"/>
             </UniformSpacingPanelWidget>

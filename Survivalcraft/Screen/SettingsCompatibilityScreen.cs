@@ -4,7 +4,7 @@ namespace Game
 {
 	public class SettingsCompatibilityScreen : Screen
 	{
-		public ButtonWidget m_singlethreadedTerrainUpdateButton;
+		//public ButtonWidget m_singlethreadedTerrainUpdateButton;
 
 		public ButtonWidget m_viewGameLogButton;
 
@@ -16,7 +16,7 @@ namespace Game
 		{
 			XElement node = ContentManager.Get<XElement>("Screens/SettingsCompatibilityScreen");
 			LoadContents(this, node);
-			m_singlethreadedTerrainUpdateButton = Children.Find<ButtonWidget>("SinglethreadedTerrainUpdateButton");
+			//m_singlethreadedTerrainUpdateButton = Children.Find<ButtonWidget>("SinglethreadedTerrainUpdateButton");
 			m_viewGameLogButton = Children.Find<ButtonWidget>("ViewGameLogButton");
 			m_resetDefaultsButton = Children.Find<ButtonWidget>("ResetDefaultsButton");
 			m_descriptionLabel = Children.Find<LabelWidget>("Description");
@@ -43,7 +43,7 @@ namespace Game
 			{
 				SettingsManager.MultithreadedTerrainUpdate = true;
 			}
-			m_singlethreadedTerrainUpdateButton.Text = "已弃用";
+			//m_singlethreadedTerrainUpdateButton.Text = "已弃用";
 			m_resetDefaultsButton.IsEnabled = !SettingsManager.MultithreadedTerrainUpdate;
 			if (Input.Back || Input.Cancel || Children.Find<ButtonWidget>("TopBar.Back").IsClicked)
 			{

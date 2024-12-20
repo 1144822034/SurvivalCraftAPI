@@ -185,7 +185,7 @@ namespace Game
 					float num28 = (y >= precipitationShaftInfo.YLimit) ? MathUtils.Lerp(0f, -2f, precipitationShaftInfo.Intensity) : 0f;
 					float num29 = MathUtils.Lerp(-6f, 0f, m_subsystemSky.SkyLightIntensity);
 					float num30 = SubsystemWeather.GetTemperatureAdjustmentAtHeight(y2);
-					num3 += num26 * MathUtils.Max((float)chunkAtCell.GetTemperatureFast(x2, z2) + num27, 0f) + num28 + num29 + num30;
+					num3 += num26 * (MathUtils.Max((float)chunkAtCell.GetTemperatureFast(x2, z2) + num27, 0f) + num28 + num29 + num30);
 					num4 += num26;
 				}
 				else if (m_toVisit.Count < 4090)

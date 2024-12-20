@@ -338,7 +338,7 @@ namespace Game
 			}
 			if (m_timeOfDayButton.IsClicked)
 			{
-				DialogsManager.ShowDialog(null, new ListSelectionDialog("Time Of Day:", EnumUtils.GetEnumValues(typeof(TimeOfDayMode)), 56f, (object e) => ((TimeOfDayMode)e/*cast due to .constrained prefix*/).ToString(), delegate(object e)
+				DialogsManager.ShowDialog(null, new ListSelectionDialog(LanguageControl.Get(fName, "7"), EnumUtils.GetEnumValues(typeof(TimeOfDayMode)), 56f, (object e) => LanguageControl.Get("TimeOfDayMode", ((TimeOfDayMode)e).ToString()), delegate(object e)
 				{
 					m_worldSettings.TimeOfDayMode = (TimeOfDayMode)e;
 					m_descriptionLabel.Text = StringsManager.GetString(string.Concat("TimeOfDayMode.", (TimeOfDayMode)e, ".Description"));
