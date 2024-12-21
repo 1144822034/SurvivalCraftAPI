@@ -150,7 +150,7 @@ namespace Game
 					{
 						Block block = BlocksManager.Blocks[Terrain.ExtractContents(item)];
 						ClothingData clothingData = block.GetClothingData(item);
-						num += clothingData.DensityModifier;
+						num += clothingData?.DensityModifier ?? 0f;
 					}
 				}
 				float num2 = num - m_densityModifierApplied;
@@ -165,29 +165,41 @@ namespace Game
 				{
 					Block block = BlocksManager.Blocks[Terrain.ExtractContents(clothe2)];
 					ClothingData clothingData2 = block.GetClothingData(clothe2);
-					num3 += clothingData2.Insulation;
-					SteedMovementSpeedFactor *= clothingData2.SteedMovementSpeedFactor;
+					if (clothingData2 != null)
+					{
+						num3 += clothingData2.Insulation;
+						SteedMovementSpeedFactor *= clothingData2.SteedMovementSpeedFactor;
+					}
 				}
 				foreach (int clothe3 in GetClothes(ClothingSlot.Torso))
 				{
 					Block block = BlocksManager.Blocks[Terrain.ExtractContents(clothe3)];
 					ClothingData clothingData3 = block.GetClothingData(clothe3);
-					num4 += clothingData3.Insulation;
-					SteedMovementSpeedFactor *= clothingData3.SteedMovementSpeedFactor;
+					if (clothingData3 != null)
+					{
+						num4 += clothingData3.Insulation;
+						SteedMovementSpeedFactor *= clothingData3.SteedMovementSpeedFactor;
+					}
 				}
 				foreach (int clothe4 in GetClothes(ClothingSlot.Legs))
 				{
 					Block block = BlocksManager.Blocks[Terrain.ExtractContents(clothe4)];
 					ClothingData clothingData4 = block.GetClothingData(clothe4);
-					num5 += clothingData4.Insulation;
-					SteedMovementSpeedFactor *= clothingData4.SteedMovementSpeedFactor;
+					if (clothingData4 != null)
+					{
+						num5 += clothingData4.Insulation;
+						SteedMovementSpeedFactor *= clothingData4.SteedMovementSpeedFactor;
+					}
 				}
 				foreach (int clothe5 in GetClothes(ClothingSlot.Feet))
 				{
 					Block block = BlocksManager.Blocks[Terrain.ExtractContents(clothe5)];
 					ClothingData clothingData5 = block.GetClothingData(clothe5);
-					num6 += clothingData5.Insulation;
-					SteedMovementSpeedFactor *= clothingData5.SteedMovementSpeedFactor;
+					if (clothingData5 != null)
+					{
+						num6 += clothingData5.Insulation;
+						SteedMovementSpeedFactor *= clothingData5.SteedMovementSpeedFactor;
+					}
 				}
 				Insulation = 1f / ((1f / num3) + (1f / num4) + (1f / num5) + (1f / num6));
 				float num7 = MathUtils.Min(num3, num4, num5, num6);
@@ -235,6 +247,10 @@ namespace Game
 					Block block = BlocksManager.Blocks[Terrain.ExtractContents(value)];
 					float num2 = block.GetDurability(value) + 1;
 					ClothingData clothingData = block.GetClothingData(value);
+					if(clothingData == null)
+					{
+						continue;
+					}
 					float x = (num2 - block.GetDamage(value)) / num2 * clothingData.Sturdiness;
 					float num3 = MathF.Min(attackPower * MathUtils.Saturate(clothingData.ArmorProtection), x);
 					if (num3 > 0f)
@@ -341,7 +357,7 @@ namespace Game
 				{
 					Block block = BlocksManager.Blocks[Terrain.ExtractContents(clothe)];
 					ClothingData clothingData = block.GetClothingData(clothe);
-					clothingData.Update?.Invoke(clothe, this);
+					clothingData?.Update?.Invoke(clothe, this);
 				}
 			}
 			foreach (ClothingSlot slot in m_outerSlotsOrder)
@@ -350,7 +366,7 @@ namespace Game
 				{
 					Block block = BlocksManager.Blocks[Terrain.ExtractContents(clothe)];
 					ClothingData clothingData = block.GetClothingData(clothe);
-					clothingData.Update?.Invoke(clothe, this);
+					clothingData?.Update?.Invoke(clothe, this);
 				}
 			}
 
@@ -367,6 +383,11 @@ namespace Game
 						int value = m_clothesList[num];
 						Block block = BlocksManager.Blocks[Terrain.ExtractContents(value)];
 						ClothingData clothingData = block.GetClothingData(value);
+						if (clothingData == null)
+						{
+							m_clothesList.RemoveAt(num);
+							flag = true;
+						}
 						if (clothingData.PlayerLevelRequired > m_componentPlayer.PlayerData.Level)
 						{
 
@@ -400,6 +421,10 @@ namespace Game
 							int value2 = m_clothesList[i];
 							Block block2 = BlocksManager.Blocks[Terrain.ExtractContents(value2)];
 							ClothingData clothingData2 = block2.GetClothingData(value2);
+							if (clothingData2 == null)
+							{
+								continue;
+							}
 							float num2 = (m_componentVitalStats.Wetness > 0f) ? (10f * clothingData2.Sturdiness) : (20f * clothingData2.Sturdiness);
 							double num3 = Math.Floor(m_lastTotalElapsedGameTime.Value / num2);
 							if (Math.Floor(m_subsystemGameInfo.TotalElapsedGameTime / num2) > num3 && m_random.Float(0f, 1f) < 0.75f)
@@ -503,6 +528,10 @@ namespace Game
 			if (block.CanWear(value))
 			{
 				ClothingData clothingData = block.GetClothingData(value);
+				if (clothingData == null)
+				{
+					return;
+				}
 				clothingData.Mount?.Invoke(value, this);
 				var list = new List<int>(GetClothes(clothingData.Slot))
 				{
@@ -522,7 +551,7 @@ namespace Game
 					int value = list[^1];
 					Block block = BlocksManager.Blocks[Terrain.ExtractContents(value)];
 					ClothingData clothingData = block.GetClothingData(value);
-					clothingData.Dismount?.Invoke(value, this);
+					clothingData?.Dismount?.Invoke(value, this);
 					list.RemoveAt(list.Count - 1);
 					SetClothes((ClothingSlot)slotIndex, list);
 					return 1;
@@ -557,6 +586,10 @@ namespace Game
 		{
 			Block block = BlocksManager.Blocks[Terrain.ExtractContents(value)];
 			ClothingData clothingData = block.GetClothingData(value);
+			if (clothingData == null)
+			{
+				return false;
+			}
 			IList<int> list = GetClothes(clothingData.Slot);
 			if (list.Count == 0)
 			{
@@ -565,6 +598,10 @@ namespace Game
 			int value2 = list[list.Count - 1];
 			Block block2 = BlocksManager.Blocks[Terrain.ExtractContents(value2)];
 			ClothingData clothingData2 = block2.GetClothingData(value2);
+			if (clothingData2 == null)
+			{
+				return false;
+			}
 			return clothingData.Layer > clothingData2.Layer;
 		}
 
@@ -609,6 +646,10 @@ namespace Game
 							int data = Terrain.ExtractData(clothe);
 							Block block = BlocksManager.Blocks[Terrain.ExtractContents(clothe)];
 							ClothingData clothingData = block.GetClothingData(clothe);
+							if(clothingData == null)
+							{
+								continue;
+							}
 							Color fabricColor = SubsystemPalette.GetFabricColor(m_subsystemTerrain, ClothingBlock.GetClothingColor(data));
 							texturedBatch2D = m_primitivesRenderer.TexturedBatch(clothingData.Texture, useAlphaTest: false, num++, DepthStencilState.None, null, BlendState.NonPremultiplied, SamplerState.PointClamp);
 							if (!clothingData.IsOuter)
@@ -629,6 +670,10 @@ namespace Game
 							int data2 = Terrain.ExtractData(clothe2);
 							Block block2 = BlocksManager.Blocks[Terrain.ExtractContents(clothe2)];
 							ClothingData clothingData2 = block2.GetClothingData(clothe2);
+							if(clothingData2 == null)
+							{
+								continue;
+							}
 							Color fabricColor2 = SubsystemPalette.GetFabricColor(m_subsystemTerrain, ClothingBlock.GetClothingColor(data2));
 							texturedBatch2D = m_primitivesRenderer.TexturedBatch(clothingData2.Texture, useAlphaTest: false, num++, DepthStencilState.None, null, BlendState.NonPremultiplied, SamplerState.PointClamp);
 							if (clothingData2.IsOuter)

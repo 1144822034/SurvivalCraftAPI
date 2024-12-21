@@ -429,7 +429,7 @@ namespace Game
 		{
 			Block block = BlocksManager.Blocks[Terrain.ExtractContents(clothingValue)];
 			ClothingData clothingData = block.GetClothingData(clothingValue);
-			if (clothingData.MovementSpeedFactor != 1f)
+			if (clothingData != null && clothingData.MovementSpeedFactor != 1f)
 			{
 				clothingFactor *= clothingData.MovementSpeedFactor;
 				factors?.Add(new Factor

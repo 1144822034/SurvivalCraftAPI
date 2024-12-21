@@ -123,6 +123,10 @@ namespace Game
 		{
 			int data = Terrain.ExtractData(value);
 			ClothingData clothingData = GetClothingData(value);
+			if(clothingData == null)
+			{
+				return String.Empty;
+			}
 			int clothingColor = GetClothingColor(data);
 			string displayName = clothingData.DisplayName;
 			if (clothingColor != 0)
@@ -136,6 +140,10 @@ namespace Game
 		{
 			int data = Terrain.ExtractData(value);
 			ClothingData clothingData = GetClothingData(value);
+			if (clothingData == null)
+			{
+				return String.Empty;
+			}
 			return clothingData.Description;
 		}
 
@@ -154,7 +162,7 @@ namespace Game
 		}
 		public override int GetDisplayOrder(int value)
 		{
-			return GetClothingData(value).DisplayIndex;
+			return GetClothingData(value)?.DisplayIndex ?? int.MaxValue;
 		}
 
 		public override int SetDamage(int value, int damage)
@@ -171,7 +179,7 @@ namespace Game
 		{
 			int data = Terrain.ExtractData(value);
 			int num = GetClothingIndex(data);
-			return m_clothingData[num];
+			return num < m_clothingData.Count ? m_clothingData[num] : null;
 		}
 		public override IEnumerable<int> GetCreativeValues()
 		{
@@ -223,7 +231,7 @@ namespace Game
 					int data2 = Terrain.ExtractData(num3);
 					int clothingColor = GetClothingColor(data2);
 					int clothingIndex = GetClothingIndex(data2);
-					bool canBeDyed = GetClothingData(data2).CanBeDyed;
+					bool canBeDyed = GetClothingData(data2)?.CanBeDyed ?? false;
 					int damage = BlocksManager.Blocks[203].GetDamage(num3);
 					int color = PaintBucketBlock.GetColor(Terrain.ExtractData(num));
 					int damage2 = BlocksManager.Blocks[129].GetDamage(num);
@@ -253,7 +261,7 @@ namespace Game
 					int data3 = Terrain.ExtractData(num3);
 					int clothingColor2 = GetClothingColor(data3);
 					int clothingIndex2 = GetClothingIndex(data3);
-					bool canBeDyed2 = GetClothingData(data3).CanBeDyed;
+					bool canBeDyed2 = GetClothingData(data3)?.CanBeDyed ?? false;
 					int damage3 = BlocksManager.Blocks[203].GetDamage(num3);
 					int damage4 = BlocksManager.Blocks[128].GetDamage(num2);
 					Block block3 = BlocksManager.Blocks[128];
@@ -311,6 +319,10 @@ namespace Game
 			int data = Terrain.ExtractData(value);
 			int clothingColor = GetClothingColor(data);
 			ClothingData clothingData = GetClothingData(value);
+			if (clothingData == null)
+			{
+				return;
+			}
 			Matrix matrix2 = m_slotTransforms[(int)clothingData.Slot] * Matrix.CreateScale(size) * matrix;
 			if (clothingData.IsOuter)
 			{
