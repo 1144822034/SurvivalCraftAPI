@@ -129,7 +129,7 @@ namespace Game
 				_ = Time.RealTime;
 				m_stream.Seek(value, SeekOrigin.Begin);
 				ReadChunkHeader(m_stream);
-				m_stream.Read(m_buffer, 0, 131072);
+				m_stream.ReadExactly(m_buffer, 0, 131072);
 				try
 				{
 					fixed (byte* ptr = &m_buffer[0])
@@ -155,7 +155,7 @@ namespace Game
 				finally
 				{
 				}
-				m_stream.Read(m_buffer, 0, 1024);
+				m_stream.ReadExactly(m_buffer, 0, 1024);
 				try
 				{
 					fixed (byte* ptr = &m_buffer[0])

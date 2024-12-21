@@ -45,7 +45,7 @@ namespace Game
 						using (Stream stream2 = Storage.OpenFile(Storage.CombinePaths(directoryName, Storage.CombinePaths("Chunks", text)), OpenFileMode.Read))
 						{
 							byte[] array4 = new byte[stream2.Length];
-							stream2.Read(array4, 0, array4.Length);
+							stream2.ReadExactly(array4);
 							int num2 = (int)stream.Length;
 							stream.Position = num2;
 							TerrainSerializer14.WriteChunkHeader(stream, cx, cz);

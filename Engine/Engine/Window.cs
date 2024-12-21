@@ -121,7 +121,10 @@ namespace Engine
 
         private static int? m_swapInterval;
 
-        
+
+        public static string m_titlePrefix = string.Empty;
+
+        public static string m_titleSuffix = string.Empty;
 
         public static Point2 ScreenSize
         {
@@ -204,6 +207,37 @@ namespace Engine
             }
         }
 
+
+        public static string TitlePrefix
+        {
+            get
+            {
+                VerifyWindowOpened();
+                return m_titlePrefix;
+            }
+            set
+            {
+                VerifyWindowOpened();
+                m_titlePrefix = value;
+                m_gameWindow.Title = $"{m_titlePrefix}{m_titleSuffix}";
+            }
+        }
+
+        public static string TitleSuffix
+        {
+            get
+            {
+                VerifyWindowOpened();
+                return m_titleSuffix;
+            }
+            set
+            {
+                VerifyWindowOpened();
+                m_titleSuffix = value;
+                m_gameWindow.Title = $"{m_titlePrefix}{m_titleSuffix}";
+            }
+        }
+
         public static string Title
         {
             get
@@ -215,6 +249,8 @@ namespace Engine
             {
                 VerifyWindowOpened();
                 m_gameWindow.Title = value;
+                m_titlePrefix = value;
+                m_titleSuffix = string.Empty;
             }
         }
         /*
@@ -311,6 +347,7 @@ namespace Engine
             width = (width == 0) ? (ScreenSize.X * 4 / 5) : width;
             height = (height == 0) ? (ScreenSize.Y * 4 / 5) : height;
             m_gameWindow = new GameWindow(width, height, mode, title);
+            m_titlePrefix = title;
 #if WINDOWS
             m_gameWindow.Icon = new Icon(typeof(Window).GetTypeInfo().Assembly.GetManifestResourceStream("Engine.Resources.icon.ico"), new Size(32, 32));
 #endif

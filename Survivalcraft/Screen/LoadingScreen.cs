@@ -28,6 +28,7 @@ namespace Game
 		private CanvasWidget Canvas = new();
 		private RectangleWidget Background = new() { FillColor = SettingsManager.DisplayLog ? Color.Black : Color.White, OutlineThickness = 0f, DepthWriteEnabled = true };
 		private static ListPanelWidget LogList = new() { Direction = LayoutDirection.Vertical, PlayClickSound = false };
+		public const string fName = "LoadingScreen";
 		static LoadingScreen()
 		{
 			LogList.ItemWidgetFactory = (obj) =>
@@ -142,7 +143,7 @@ namespace Game
 			    Dictionary<string, Assembly[]> assemblies = [];
 				ModsManager.ModListAllDo((modEntity) =>
 				{
-					Log.Information("Get assemblies " + modEntity.modInfo.PackageName);
+					Log.Information($"[{modEntity.modInfo.Name}] Getting assemblies.");
 				    assemblies[modEntity.modInfo.PackageName] = modEntity.GetAssemblies();
 				    foreach (var assembly in assemblies[modEntity.modInfo.PackageName])
 				    {
@@ -156,7 +157,7 @@ namespace Game
 					if (!isLoadSucceed) return;
 				    foreach(var asm in assemblies[modEntity.modInfo.PackageName])
 				    {
-					    Log.Information("handle assembly " + modEntity.modInfo.PackageName + " " + asm.FullName);
+					    Log.Information($"[{modEntity.modInfo.Name}] Handling assembly [{asm.FullName}]");
 					    try
 					    {
 						    modEntity.HandleAssembly(asm);
@@ -187,12 +188,12 @@ namespace Game
 					LoadingActoins.RemoveRange(1, LoadingActoins.Count - 1);
 					ModLoadingActoins.Clear();
 					ScreensManager.SwitchScreen(new LoadingFailedScreen(
-						title: "加载失败",
-						details: ["缺失模组依赖", "异常信息：", ..exception!.ToString().Split('\n')],
+						title: "Loading failed 加载失败",
+						details: ["Exceptions: 异常信息：", ..exception!.ToString().Split('\n')],
 						solveMethods:
 						[
-							"检查模组是否缺失，并添加所缺失的模组", "查看模组版本与要求的模组版本是否一致",
-							$"若以上方式都无法解决，请联系管理员，并发送 {Storage.GetSystemPath(ModsManager.LogPath)} 中的 Game.log "
+							"Check and add missing mods. 检查模组是否缺失，并添加所缺失的模组", "Check the mod version is equal to the required one. 查看模组版本与要求的模组版本是否一致",
+							"If not solved, please contact the developer with Game.log in the path below. 若以上方式都无法解决，请联系开发者，并发送下面路径中的 Game.log ", Storage.GetSystemPath(ModsManager.LogPath)
 						]
 					));
 
@@ -269,6 +270,13 @@ namespace Game
 					}
 				}
 				ModsManager.ModListAllDo((modEntity) => { modEntity.LoadLauguage(); });
+#if WINDOWS
+				string title = $"{LanguageControl.Get("Usual", "gameName")} {ModsManager.ShortGameVersion} API {ModsManager.ApiVersionString}";
+#if DEBUG
+				title = $"[{LanguageControl.Get("Usual","debug")}]{title}";
+#endif
+				Window.TitlePrefix = title;
+#endif
 			});
 			AddLoadAction(delegate
 			{ //读取所有的ModEntity的JavaScript
@@ -278,7 +286,7 @@ namespace Game
 			});
 			AddLoadAction(delegate
 			{
-				Info("执行初始化任务");
+				Info(LanguageControl.Get(fName, "1"));
 				List<Action> actions = [];
 				ModsManager.HookAction("OnLoadingStart", (loader) =>
 				{
@@ -292,7 +300,7 @@ namespace Game
 			});
 			AddLoadAction(delegate
 			{//初始化TextureAtlas
-				Info("初始化纹理地图");
+				Info(LanguageControl.Get(fName, "2"));
 				TextureAtlasManager.Initialize();
 			});
 			AddLoadAction(delegate
@@ -310,7 +318,7 @@ namespace Game
 			});
 			AddLoadAction(delegate
 			{
-				Info("读取数据库");
+				Info(LanguageControl.Get(fName, "3"));
 				try
 				{
 					DatabaseManager.LoadDataBaseFromXml(DatabaseManager.DatabaseNode);
@@ -322,7 +330,7 @@ namespace Game
 			});
 			AddLoadAction(delegate
 			{ //初始化方块管理器
-				Info("初始化方块管理器");
+				Info(LanguageControl.Get(fName, "4"));
 				BlocksManager.Initialize();
 			});
 			AddLoadAction(delegate
@@ -343,7 +351,7 @@ namespace Game
 			});
 			AddLoadAction(delegate
 			{
-				Info("初始化Mod设置参数");
+				Info(LanguageControl.Get(fName, "5"));
 				if (Storage.FileExists(ModsManager.ModsSetPath))
 				{
 					using System.IO.Stream stream = Storage.OpenFile(ModsManager.ModsSetPath, OpenFileMode.Read);
@@ -360,7 +368,7 @@ namespace Game
 			});
 			AddLoadAction(delegate
 			{
-				ModsManager.ModListAllDo((modEntity) => { Info("等待剩下的任务完成:" + modEntity.modInfo?.PackageName); modEntity.Loader?.OnLoadingFinished(ModLoadingActoins); });
+				ModsManager.ModListAllDo((modEntity) => { Info($"[{modEntity.modInfo?.Name}] {LanguageControl.Get(fName, "6")}"); modEntity.Loader?.OnLoadingFinished(ModLoadingActoins); });
 			});
 			AddLoadAction(delegate
 			{
@@ -521,7 +529,7 @@ namespace Game
 		public override void Update()
 		{
 			if (Input.Back || Input.Cancel)
-				DialogsManager.ShowDialog(null, new MessageDialog(LanguageControl.Warning, "Quit?", LanguageControl.Ok,
+				DialogsManager.ShowDialog(null, new MessageDialog(LanguageControl.Warning, "Quit? 退出？", LanguageControl.Ok,
 					LanguageControl.No, (vt) =>
 					{
 						if (vt == MessageDialogButton.Button1) Environment.Exit(0);

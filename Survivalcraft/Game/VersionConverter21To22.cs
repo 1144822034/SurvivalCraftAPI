@@ -241,7 +241,7 @@ namespace Game
 						stream.Position = stream.Length;
 						TerrainSerializer129.ReadChunkHeader(stream2);
 						TerrainSerializer22.WriteChunkHeader(stream, cx, cz);
-						stream2.Read(array, 0, 131072);
+						stream2.ReadExactly(array, 0, 131072);
 						int num3 = 0;
 						int num4 = 0;
 						for (int j = 0; j < 16; j++)
@@ -269,7 +269,7 @@ namespace Game
 							}
 						}
 						stream.Write(array2, 0, 262144);
-						stream2.Read(array, 0, 1024);
+						stream2.ReadExactly(array, 0, 1024);
 						stream.Write(array, 0, 1024);
 						num2++;
 					}

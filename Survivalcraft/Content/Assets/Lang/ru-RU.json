@@ -205,6 +205,27 @@
     "GameLoadingScreen": {
         "1": "Ошибка"
     },
+    "LoadingScreen": {
+        "1": "Executing OnLoadingStart missions.",
+        "2": "Initializing TextureAtlasManager.",
+        "3": "Loading database.",
+        "4": "Initializing BlocksManager.",
+        "5": "Loading mod settings.",
+        "6": "Executing OnLoadingFinished mission."
+    },
+    "ModEntity": {
+        "1": "Loading .csv blocksdata files.",
+        "2": "Loading .xdb database files.",
+        "3": "Loading .clo clothes data files.",
+        "4": "Loading .cr crafting recipaedia files.",
+        "5": "Loading .js javascript files."
+    },
+    "SurvivalCraftModEntity": {
+        "1": "Loading blocksdata.",
+        "2": "Loading database.",
+        "3": "Loading crafting recipaedia.",
+        "4": "Loading clothes data."
+    },
     "FurnitureDesign": {
         "1": "Ошибка названия",
         "2": "Ошибка модели",
@@ -859,7 +880,9 @@
         "not allowed": "Запрещено",
         "success": "Успех",
         "Unavailable": "Недоступно",
-        "delete": "Удаление"
+        "delete": "Удаление",
+        "gameName": "Survivalcraft",
+        "debug": "DEBUG"
     },
     "CRMessage": {
         "0": "Вместо этого делается каменный топор",

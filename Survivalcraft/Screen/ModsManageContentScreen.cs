@@ -611,7 +611,7 @@ public class ModsManageContentScreen : Screen
 			Stream stream2 = GetDecipherStream(stream);
 			FileStream fileStream = new(Storage.GetSystemPath(ModsManager.ModDisPath) + "/Original.scmod", FileMode.Create, FileAccess.ReadWrite, FileShare.ReadWrite);
 			byte[] buff = new byte[stream2.Length];
-			stream2.Read(buff, 0, buff.Length);
+			stream2.ReadExactly(buff);
 			fileStream.Write(buff, 0, buff.Length);
 			fileStream.Flush();
 			fileStream.Dispose();
@@ -996,7 +996,7 @@ public class ModsManageContentScreen : Screen
 	{
 		MemoryStream keepOpenStream = new();
 		byte[] buff = new byte[stream.Length];
-		stream.Read(buff, 0, buff.Length);
+		stream.ReadExactly(buff);
 		byte[] hc = Encoding.UTF8.GetBytes(HeadingCode);
 		bool decipher = true;
 		for (int i = 0; i < hc.Length; i++)
@@ -1063,7 +1063,7 @@ public class ModsManageContentScreen : Screen
 	{
 		Stream stream = Storage.OpenFile(path,OpenFileMode.Read);
 		byte[] buff = new byte[stream.Length];
-		stream.Read(buff,0,buff.Length);
+		stream.ReadExactly(buff);
 		byte[] hc = Encoding.UTF8.GetBytes(HeadingCode);
 		bool decipher = true;
 		for(int i = 0; i < hc.Length; i++)

@@ -215,7 +215,7 @@ namespace Game
 			}
 			byte[] array = new byte[4];
 			ZipFileStream.Seek(zfe.HeaderOffset, SeekOrigin.Begin);
-			ZipFileStream.Read(array, 0, 4);
+			ZipFileStream.ReadExactly(array, 0, 4);
 			if (BitConverter.ToUInt32(array, 0) != 67324752)
 			{
 				throw new InvalidOperationException("Unsupported zip archive.");
@@ -253,9 +253,9 @@ namespace Game
 		{
 			byte[] array = new byte[2];
 			ZipFileStream.Seek(_headerOffset + 26, SeekOrigin.Begin);
-			ZipFileStream.Read(array, 0, 2);
+			ZipFileStream.ReadExactly(array, 0, 2);
 			ushort num = BitConverter.ToUInt16(array, 0);
-			ZipFileStream.Read(array, 0, 2);
+			ZipFileStream.ReadExactly(array, 0, 2);
 			ushort num2 = BitConverter.ToUInt16(array, 0);
 			return (uint)(30 + num + num2 + _headerOffset);
 		}
@@ -440,7 +440,7 @@ namespace Game
 						ExistingFiles = existingFiles;
 						CentralDirImage = new byte[num];
 						ZipFileStream.Seek(num2, SeekOrigin.Begin);
-						ZipFileStream.Read(CentralDirImage, 0, num);
+						ZipFileStream.ReadExactly(CentralDirImage, 0, num);
 						ZipFileStream.Seek(num2, SeekOrigin.Begin);
 						return true;
 					}

@@ -43,7 +43,7 @@ public class LoadingFailedScreen : Screen
                 Size = new Vector2(float.PositiveInfinity, 80)
             });
             
-            widget.Children.Add(new LabelWidget { Text = "要解决此问题，请尝试：", HorizontalAlignment = WidgetAlignment.Center, Color = Color.Green, WordWrap = true});
+            widget.Children.Add(new LabelWidget { Text = "For solving this problem, please try: 要解决此问题，请尝试：", HorizontalAlignment = WidgetAlignment.Center, Color = Color.Green, WordWrap = true});
             foreach (string method in solveMethods)
             {
                 widget.Children.Add(new LabelWidget { Text = method, HorizontalAlignment = WidgetAlignment.Center, WordWrap = true});

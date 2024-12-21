@@ -13,7 +13,7 @@ namespace Game
 {
 	public class SurvivalCraftModEntity : ModEntity
 	{
-
+		public const string fName = "SurvivalCraftModEntity";
 		public SurvivalCraftModEntity()
 		{
 			var readers = new List<IContentReader.IContentReader>();
@@ -53,18 +53,20 @@ namespace Game
 			}
 			if(memoryStream == null)
 			{
-				throw new Exception("无法加载资源文件");
+				throw new Exception("Unable to load Content.zip file.");
 			}
 			memoryStream.Position = 0L;
 			ModArchive = ZipArchive.Open(memoryStream, false);
 			InitResources();
-			LabelWidget.BitmapFont = ContentManager.Get<Engine.Media.BitmapFont>("Fonts/Pericles");
-			LoadingScreen.Info("加载资源:" + modInfo?.Name);
-			modInfo.LoadOrder = int.MinValue;
+			if(modInfo != null)
+			{
+				LabelWidget.BitmapFont = ContentManager.Get<Engine.Media.BitmapFont>("Fonts/Pericles");
+				modInfo.LoadOrder = int.MinValue;
+			}
 		}
 		public override void LoadBlocksData()
 		{
-			LoadingScreen.Info("加载方块数据:" + modInfo?.Name);
+			LoadingScreen.Info($"[{modInfo?.Name}] {LanguageControl.Get(fName, "1")}");
 			BlocksManager.LoadBlocksData(ContentManager.Get<string>("BlocksData"));
 			ContentManager.Dispose("BlocksData");
 		}
@@ -104,19 +106,19 @@ namespace Game
 		}
 		public override void LoadXdb(ref XElement xElement)
 		{
-			LoadingScreen.Info("加载数据库:" + modInfo?.Name);
+			LoadingScreen.Info($"[{modInfo?.Name}] {LanguageControl.Get(fName, "2")}");
 			xElement = ContentManager.Get<XElement>("Database");
 			ContentManager.Dispose("Database");
 		}
 		public override void LoadCr(ref XElement xElement)
 		{
-			LoadingScreen.Info("加载合成谱:" + modInfo?.Name);
+			LoadingScreen.Info($"[{modInfo?.Name}] {LanguageControl.Get(fName, "3")}");
 			xElement = ContentManager.Get<XElement>("CraftingRecipes");
 			ContentManager.Dispose("CraftingRecipes");
 		}
 		public override void LoadClo(ClothingBlock block, ref XElement xElement)
 		{
-			LoadingScreen.Info("加载衣物数据:" + modInfo?.Name);
+			LoadingScreen.Info($"[{modInfo?.Name}] {LanguageControl.Get(fName, "4")}");
 			xElement = ContentManager.Get<XElement>("Clothes");
 			ContentManager.Dispose("Clothes");
 		}
@@ -134,6 +136,7 @@ namespace Game
 		public override void OnBlocksInitalized()
 		{
 			BlocksManager.AddCategory("Terrain");
+			BlocksManager.AddCategory("Minerals");
 			BlocksManager.AddCategory("Plants");
 			BlocksManager.AddCategory("Construction");
 			BlocksManager.AddCategory("Items");

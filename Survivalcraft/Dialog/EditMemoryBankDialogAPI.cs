@@ -3,6 +3,7 @@ using Engine.Input;
 using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Xml.Linq;
 
 namespace Game
 {
@@ -32,7 +33,7 @@ namespace Game
 			Data.Clear();
 			Data.AddRange(memory.Data);
 			var canvasWidget = new CanvasWidget() { Size = new Vector2(600f, 500f), HorizontalAlignment = WidgetAlignment.Center, VerticalAlignment = WidgetAlignment.Center };
-			var rectangleWidget = new RectangleWidget() { FillColor = new Color(0, 0, 0, 255), OutlineColor = new Color(128, 128, 128, 128), OutlineThickness = 2 };
+			var rectangleWidget = new BevelledRectangleWidget() { Style = ContentManager.Get<XElement>("Styles/DialogArea")};
 			var stackPanel = new StackPanelWidget() { Direction = LayoutDirection.Vertical };
 			var labelWidget = new LabelWidget() { Text = LanguageControl.GetContentWidgets(GetType().Name, 0), HorizontalAlignment = WidgetAlignment.Center, Margin = new Vector2(0, 10) };
 			var stackPanelWidget = new StackPanelWidget() { Direction = LayoutDirection.Horizontal, HorizontalAlignment = WidgetAlignment.Near, VerticalAlignment = WidgetAlignment.Near, Margin = new Vector2(10f, 10f) };

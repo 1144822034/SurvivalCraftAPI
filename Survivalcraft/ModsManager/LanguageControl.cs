@@ -1,4 +1,5 @@
-﻿using System.Globalization;
+﻿using Engine;
+using System.Globalization;
 using System.Text.Json;
 using System.IO;
 using System.Text.Json.Nodes;
@@ -282,6 +283,13 @@ namespace Game
 				ScreensManager.m_screens[c.Key] = c.Value as Screen;
 			}
 			CraftingRecipesManager.Initialize();
+#if WINDOWS
+			string title = $"{Get("Usual", "gameName")} {ModsManager.ShortGameVersion} API {ModsManager.ApiVersionString}";
+#if DEBUG
+			title = $"[{Get("Usual","debug")}]{title}";
+#endif
+			Window.TitlePrefix = title;
+#endif
 			ScreensManager.SwitchScreen("MainMenu");
 		}
 	}

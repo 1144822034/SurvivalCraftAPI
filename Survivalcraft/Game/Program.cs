@@ -28,7 +28,6 @@ namespace Game
 		public static float LastCpuFrameTime { get; set; }
 
 		public static event Action<Uri> HandleUri;
-		public static string Title = "生存战争2.4插件版_";
 		private static Timer JamTimer = new(JamChecker,null,0,8266);
 		private static int JamCounter = 0;
 		
@@ -94,11 +93,12 @@ namespace Game
 			ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls13;
 			CultureInfo.DefaultThreadCurrentCulture = CultureInfo.InvariantCulture;
 			CultureInfo.DefaultThreadCurrentUICulture = CultureInfo.InvariantCulture;
+			string title = $"Survivalcraft {ModsManager.ShortGameVersion} API {ModsManager.ApiVersionString}";
 			Log.RemoveAllLogSinks();
 			Log.AddLogSink(new GameLogSink());
 #if DEBUG
 			Log.AddLogSink(new ConsoleLogSink());
-			Title = "[DEBUG]" + Title;
+			title = "[DEBUG]" + title;
 #endif
 			Display.DeviceReset += ContentManager.Display_DeviceReset;
 			Window.UnhandledException += delegate(UnhandledExceptionInfo e)
@@ -106,8 +106,7 @@ namespace Game
 				ExceptionManager.ReportExceptionToUser("Unhandled exception.", e.Exception);
 				e.IsHandled = true;
 			};
-			Window.Run(0, 0, WindowMode.Resizable,
-				 Title+ ModsManager.ApiVersionString);
+			Window.Run(0, 0, WindowMode.Resizable, title);
 		}
 
 		public static void HandleUriHandler(Uri uri)

@@ -113,7 +113,7 @@ namespace Game
 					m_stream.Seek(value, SeekOrigin.Begin);
 					ReadChunkHeader(m_stream);
 					int num3 = 0;
-					m_stream.Read(m_buffer, 0, 131072);
+					m_stream.ReadExactly(m_buffer, 0, 131072);
 					for (int i = 0; i < 16; i++)
 					{
 						for (int j = 0; j < 16; j++)
@@ -128,7 +128,7 @@ namespace Game
 						}
 					}
 					num3 = 0;
-					m_stream.Read(m_buffer, 0, 1024);
+					m_stream.ReadExactly(m_buffer, 0, 1024);
 					for (int l = 0; l < 16; l++)
 					{
 						for (int m = 0; m < 16; m++)

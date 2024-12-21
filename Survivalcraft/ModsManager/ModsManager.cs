@@ -18,6 +18,7 @@ public static class ModsManager
 	public static string ModSuffix = ".scmod";
 	public static string ApiVersionString = "1.80";
 	public static string GameVersion = "2.4.0.0";
+	public static string ShortGameVersion = "2.4";
 	public static string fName = "ModsManager";
 	[Obsolete("使用ApiVersionString")]
 	public enum ApiVersionEnum//不准确，弃用
@@ -435,7 +436,7 @@ public static class ModsManager
 	{
 		byte[] bytes = new byte[stream.Length];
 		stream.Seek(0, SeekOrigin.Begin);
-		stream.Read(bytes, 0, bytes.Length);
+		stream.ReadExactly(bytes);
 		// 设置当前流的位置为流的开始
 		return bytes;
 	}
@@ -711,7 +712,7 @@ public static class ModsManager
 		// 把 Stream 转换成 byte[]
 		byte[] bytes = new byte[stream.Length];
 		stream.Seek(0,SeekOrigin.Begin);
-		stream.Read(bytes,0,bytes.Length);
+		stream.ReadExactly(bytes);
 		// 设置当前流的位置为流的开始
 		// 把 byte[] 写入文件
 		var fs = new FileStream(fileName,FileMode.Create);
@@ -729,7 +730,7 @@ public static class ModsManager
 		var fileStream = new FileStream(fileName,FileMode.Open,FileAccess.Read,FileShare.Read);
 		// 读取文件的 byte[]
 		byte[] bytes = new byte[fileStream.Length];
-		fileStream.Read(bytes,0,bytes.Length);
+		fileStream.ReadExactly(bytes);
 		fileStream.Close();
 		// 把 byte[] 转换成 Stream
 		Stream stream = new MemoryStream(bytes);
