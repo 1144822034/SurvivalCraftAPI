@@ -2,6 +2,7 @@ using Engine;
 using Engine.Graphics;
 using Engine.Media;
 using System;
+using System.Text;
 
 namespace Game
 {
@@ -38,9 +39,13 @@ namespace Game
 
 		public static string m_statsString;
 
+		public static readonly List<string> m_extraStats = [];
+
 		public static FrameData[] m_frameData;
 
 		public static int m_frameDataIndex;
+
+		public static FontBatch2D m_fontBatch;
 
 		public static float? LongTermAverageFrameTime => m_longTermAverageFrameTime;
 
@@ -55,6 +60,7 @@ namespace Game
 		static PerformanceManager()
 		{
 			m_primitivesRenderer = new PrimitivesRenderer2D();
+			m_fontBatch = m_primitivesRenderer.FontBatch(BitmapFont.DebugFont, 0, null, null, null, SamplerState.PointClamp);
 			m_averageFrameTime = new RunningAverage(1f);
 			m_averageCpuFrameTime = new RunningAverage(1f);
 			m_stateMachine = new StateMachine();
@@ -146,11 +152,17 @@ namespace Game
 					m_statsString = $"CPUMEM {TotalMemoryUsed / 1024f / 1024f:0}MB, GPUMEM {TotalGpuMemoryUsed / 1024f / 1024f:0}MB, CPU {AverageCpuFrameTime / AverageFrameTime * 100f:0}%, {1f / AverageFrameTime:0.0} FPS";
 #if DEBUG
 					string wname = ScreensManager.RootWidget.Input.MousePosition.HasValue ? ScreensManager.RootWidget.HitTestGlobal(ScreensManager.RootWidget.Input.MousePosition.Value)?.GetType().Name : string.Empty;
-					m_statsString += "\n Screen:[" + ScreensManager.CurrentScreen.GetType().Name + "]  [" + wname + "]";
+					m_statsString += "\nScreen:[" + ScreensManager.CurrentScreen.GetType().Name + "]  [" + wname + "]";
 #endif
 				}
-				FontBatch2D fontBatch2D = m_primitivesRenderer.FontBatch(BitmapFont.DebugFont, 0, null, null, null, SamplerState.PointClamp);
-				fontBatch2D.QueueText(m_statsString, Vector2.Transform(Vector2.Zero, ScreensManager.RootWidget.GlobalTransform), 0f, Color.White, TextAnchor.Default, scale, Vector2.Zero);
+				StringBuilder stringBuilder = new StringBuilder();
+				stringBuilder.AppendLine(m_statsString);
+				if(m_extraStats.Count > 0)
+				{
+					stringBuilder.AppendJoin('\n', m_extraStats);
+				}
+				m_fontBatch.QueueText(stringBuilder.ToString(), Vector2.Transform(Vector2.Zero, ScreensManager.RootWidget.GlobalTransform), 0f, Color.White, TextAnchor.Default, scale, Vector2.Zero);
+				m_extraStats.Clear();
 			}
 			if (SettingsManager.DisplayFpsRibbon)
 			{
@@ -189,6 +201,14 @@ namespace Game
 				m_frameData = null;
 			}
 			m_primitivesRenderer.Flush();
+		}
+
+		/// <summary>
+		/// 在性能信息下方添加一行信息，不支持中文
+		/// </summary>
+		public static void AddExtraStat(string stat)
+		{
+			m_extraStats.Add(stat);
 		}
 	}
 }
