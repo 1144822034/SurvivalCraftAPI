@@ -8,7 +8,7 @@ using System.Reflection;
 using System.Xml.Linq;
 
 namespace Game
-{
+{//打开游戏时
 	public class LoadingScreen : Screen
 	{
 		public enum LogType
