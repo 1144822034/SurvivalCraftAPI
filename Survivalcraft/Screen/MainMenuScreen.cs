@@ -20,6 +20,8 @@ namespace Game
 
 		public ButtonWidget m_languageSwitchButton;
 
+		public const string fName = "MainMenuScreen";
+
 		public MainMenuScreen()
 		{
 			XElement node = ContentManager.Get<XElement>("Screens/MainMenuScreen");
@@ -104,7 +106,7 @@ namespace Game
 				}
 				else
 				{
-					DialogsManager.ShowDialog(null, new MessageDialog("公告获取失败", "当前暂无发布公告，\n或者没有联网获取公告信息", LanguageControl.Ok, null, null));
+					DialogsManager.ShowDialog(null, new MessageDialog(LanguageControl.Get(fName, "1"), LanguageControl.Get(fName, "2"), LanguageControl.Ok, null, null));
 				}
 			}
 			if ((Input.Back && !Keyboard.BackButtonQuitsApp) || Input.IsKeyDownOnce(Key.Escape))

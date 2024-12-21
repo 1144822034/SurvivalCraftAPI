@@ -410,7 +410,7 @@ namespace Game
 			m_timeOfDayButton.Text = LanguageControl.Get("TimeOfDayMode", m_worldSettings.TimeOfDayMode.ToString());
 			m_areSeasonsChangingCheckBox.IsChecked = m_worldSettings.AreSeasonsChanging;
 			m_yearDaysSlider.Value = FindNearestIndex(m_yearDays, m_worldSettings.YearDays);
-			m_yearDaysSlider.Text = $"{m_worldSettings.YearDays} days";
+			m_yearDaysSlider.Text = $"{m_worldSettings.YearDays}{LanguageControl.Get(fName, "8")}";
 			m_timeOfYearSlider.Value = m_worldSettings.TimeOfYear;
 			m_timeOfYearSlider.Text = $"{SubsystemSeasons.GetTimeOfYearName(m_worldSettings.TimeOfYear)}";
 			m_timeOfYearSlider.TextColor = SubsystemSeasons.GetTimeOfYearColor(m_worldSettings.TimeOfYear);

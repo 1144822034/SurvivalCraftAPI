@@ -5,6 +5,8 @@ namespace Game
 {
 	public class AirBlock : Block
 	{
+		public const string fName = "AirBlock";
+
 		public static int Index = 0;
 
 		public override void DrawBlock(PrimitivesRenderer3D primitivesRenderer, int value, Color color, float size, ref Matrix matrix, DrawBlockEnvironmentData environmentData)
@@ -27,7 +29,7 @@ namespace Game
         {
 			int content = Terrain.ExtractContents(value);
             if(content == 0) return base.GetDisplayName(subsystemTerrain, value);
-			return ("未知方块" + value);
+			return ($"{LanguageControl.Get(fName, "1")}({value})");
         }
     }
 }

@@ -348,7 +348,7 @@ public static class ModsManager
 			//    AddException(new Exception($"[{modEntity1.modInfo.PackageName}]Target version {modInfo.Version} is less than api version {APIVersion}."), true);
 			//}
 			List<ModEntity> modEntities = ModListAll.FindAll(px => px.modInfo.PackageName == modInfo.PackageName);
-			if (modEntities.Count > 1) AddException(new Exception($"Multiple installed [{modInfo.PackageName}]"));
+			if (modEntities.Count > 1) AddException(new Exception($"Multiple installed [{modInfo.PackageName}], please keep only one."));
 		}
 		DisabledMods.Clear();
 		foreach (var item in ToDisable)
@@ -371,7 +371,7 @@ public static class ModsManager
 			}
 			catch (Exception e)
 			{
-				Log.Error($"加载程序集{args.Name}失败:{e.ToString()}");
+				Log.Error($"Load assembly [{args.Name}] failed:{e.ToString()}");
 				Log.Debug(e);
 				throw;
 			}

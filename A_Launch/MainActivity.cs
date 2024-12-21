@@ -29,6 +29,7 @@ namespace SC4Android
 				if(!Environment.IsExternalStorageManager)
 				{
 					arePermissionsGranted = false;
+					RunOnUiThread(() => Toast.MakeText(this, "Need Permission 需要权限", ToastLength.Short)!.Show());
 					StartActivity(new Intent(Settings.ActionManageAllFilesAccessPermission));
 				}
 
@@ -42,13 +43,18 @@ namespace SC4Android
 				if(readPermissionStatus != Permission.Granted)
 				{
 					arePermissionsGranted = false;
+					RunOnUiThread(() => Toast.MakeText(this, "Need Permission 需要权限", ToastLength.Short)!.Show());
 					RequestPermissions([Manifest.Permission.ReadExternalStorage],0);
 				}
 
 				var writePermissionStatus = CheckSelfPermission(Manifest.Permission.WriteExternalStorage);
 				if(writePermissionStatus != Permission.Granted)
 				{
-					arePermissionsGranted = false;
+					if (arePermissionsGranted)
+					{
+						RunOnUiThread(() => Toast.MakeText(this, "Need Permission 需要权限", ToastLength.Short)!.Show());
+						arePermissionsGranted = false;
+					}
 					RequestPermissions([Manifest.Permission.WriteExternalStorage],1);
 				}
 			}
@@ -74,11 +80,9 @@ namespace SC4Android
 			
 			m_thread = new(() =>
 			{
-				var counter = 0;
 				while (true)
 				{
 					Thread.Sleep(100);
-					counter += 1;
 					if (RunRequired)
 					{
 						break;
@@ -90,13 +94,6 @@ namespace SC4Android
 						{
 							break;
 						}
-					}
-
-					// 15 秒后仍未成功申请
-					if (counter >= 150)
-					{
-						RunOnUiThread(() => Toast.MakeText(this, "申请外部权限失败！正在退出……", ToastLength.Short)!.Show());
-						System.Environment.Exit(1);
 					}
 				}
 				RunOnUiThread(Program.EntryPoint);
@@ -125,6 +122,25 @@ namespace SC4Android
 				{
 					RunRequired = true;
 				}
+			}
+		}
+
+		private bool isPaused = false;
+
+		protected override void OnPause()
+		{
+			base.OnPause();
+			isPaused = true;
+		}
+
+		protected override void OnResume()
+		{
+			base.OnResume();
+			if(isPaused)
+			{
+				isPaused = false;
+				CheckAndRequestPermission(out bool granted);
+				RunRequired = granted;
 			}
 		}
 	}

@@ -15,6 +15,8 @@ namespace Game
 
 		public Random m_random = new();
 
+		public const string fName = "SubsystemEggBlockBehavior";
+
 		public override int[] HandledBlocks => new int[0];
 
         public override bool OnHitAsProjectile(CellFace? cellFace, ComponentBody componentBody, WorldItem worldItem)
@@ -36,14 +38,14 @@ namespace Game
                 }
                 catch (Exception e)
                 {
-                    Engine.Log.Error("Spawning creature from egg error: " + e);
+                    Engine.Log.Error($"Spawning creature from egg (index: {((data >> 4) & 0xFFF)}) error: {e}");
                     Projectile projectile = worldItem as Projectile;
                     if (projectile != null)
                     {
                         ComponentGui componentGui = projectile.Owner?.Entity.FindComponent<ComponentGui>();
                         if (componentGui != null)
                         {
-                            componentGui.DisplaySmallMessage("生成动物失败，请查看游戏日志或联系模组管理员处理！", Color.White, true, false);
+                            componentGui.DisplaySmallMessage(LanguageControl.Get(fName, "1"), Color.White, true, false);
                         }
                     }
                 }

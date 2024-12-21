@@ -112,11 +112,18 @@
         "10": "Тип содержимого не поддерживается",
         "11": "Перезагрузить изменённую конфигурацию?"
     },
+    "MainMenuScreen": {
+        "1": "Failed to Get Announcement",
+        "2": "There is no announcement now.\nOr connecting to the server is failed."
+    },
     "SubsystemFurnitureBlockBehavior": {
         "0": "Превращение в мебель не поддерживается",
         "1": "Превращение в мебель не поддерживается",
         "2": "Превышен допустимый размер",
         "3": "Достигнуто ограничение количества моделей мебели"
+    },
+    "SubsystemEggBlockBehavior": {
+        "1": "Failed to spawn creature, check game log."
     },
     "ExternalContentManager": {
         "1": "Название не введено",
@@ -363,6 +370,9 @@
         "5": "Зелёный ",
         "6": "Оранжевый ",
         "7": "Фиолетовый "
+    },
+    "AirBlock": {
+        "1": "Unknown Block"
     },
     "GameMenuDialog": {
         "1": "Устройство сочтено быстрым",
@@ -784,7 +794,8 @@
         "3": "Текстуры блоков",
         "4": "Недоступно",
         "5": "Доступно только в творчестве",
-        "6": "Нормально"
+        "6": "Нормально",
+        "8": " days"
     },
     "ComponentSickness": {
         "1": "Тошнота",
@@ -859,7 +870,15 @@
         "1": "Подтвердить?",
         "2": "Удаление",
         "3": "Подтвердить?",
-        "4": "Отмену"
+        "4": "Отмену",
+        "5": "Enter \"yes\" to continue"
+    },
+    "JsInterface": {
+        "1": "There is already a script running.",
+        "2": "Empty request body.",
+        "3": "Invalid password.",
+        "4": "Only post method is supported.",
+        "5": "Load Init.js failed."
     },
     "Usual": {
         "unknown": "Неизвестно",

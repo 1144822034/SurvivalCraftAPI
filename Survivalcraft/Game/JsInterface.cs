@@ -28,6 +28,7 @@ namespace Game
 		public static bool httpScriptPrepared;
 		public static Prepared<Script> httpScript;
 		public static TaskCompletionSource<HttpResponse> httpResponse = new();
+		public const string fName = "JsInterface";
 
 		public static bool CheckInitJsFileRelease()
 		//改前:是安卓或者文件释放成功或外置 init.js存在返回真(不明确)
@@ -72,7 +73,7 @@ namespace Game
 			}
 			catch
 			{
-				Log.Warning("Init.js加载失败");
+				Log.Warning(LanguageControl.Get(fName, "5"));
 			}
 
 			Execute(codeString);
@@ -309,7 +310,7 @@ namespace Game
 			try {
 				string responseString;
 				if (httpProcessing) {
-					responseString = ErrorJsonResponse(LanguageControl.Get("JsInterface", "1"));
+					responseString = ErrorJsonResponse(LanguageControl.Get(fName, "1"));
 				}
 				else if (context.Request.HttpMethod == "POST") {
 					if (httpPassword.Length == 0
@@ -327,7 +328,7 @@ namespace Game
 											responseString = JsonSerializer.Serialize(await httpResponse.Task);
 										}
 										else {
-											responseString = ErrorJsonResponse(LanguageControl.Get("JsInterface", "2"));
+											responseString = ErrorJsonResponse(LanguageControl.Get(fName, "2"));
 										}
 									}
 								}
@@ -339,7 +340,7 @@ namespace Game
 
 					}
 					else {
-						responseString = ErrorJsonResponse(LanguageControl.Get("JsInterface", "3"));
+						responseString = ErrorJsonResponse(LanguageControl.Get(fName, "3"));
 					}
 				}
 				else if(context.Request.HttpMethod == "ELEVATE")
@@ -351,7 +352,7 @@ namespace Game
 				}
 				else
 					{
-					responseString = ErrorJsonResponse(LanguageControl.Get("JsInterface", "4"));
+					responseString = ErrorJsonResponse(LanguageControl.Get(fName, "4"));
 				}
 				HttpListenerResponse response = context.Response;
 				response.ContentType = "application/json";

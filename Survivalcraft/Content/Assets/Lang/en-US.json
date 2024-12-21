@@ -110,6 +110,10 @@
     "10": "Invalid item type.",
     "11": "The configuration has been changed. Do you want to reload it?"
   },
+  "MainMenuScreen": {
+    "1": "Failed to Get Announcement",
+    "2": "There is no announcement now.\nOr connecting to the server is failed."
+  },
   "SubsystemFurnitureBlockBehavior": {
     "0": "Unsuitable block found",
     "1": "Unsuitable block found",
@@ -117,6 +121,9 @@
     "3": "Too many different furniture designs",
     "4": "Blocks in the wild are not permitted to build furniture",
     "5": "The durability of hammer is not enough to build furniture"
+  },
+  "SubsystemEggBlockBehavior": {
+    "1": "Failed to spawn creature, check game log."
   },
   "ExternalContentManager": {
     "1": "Name empty.",
@@ -365,6 +372,9 @@
     "7": "Purple",
     "Format": "{0} {1}",
     "CRDescription": "Make colored leds from copper, glass and paint"
+  },
+  "AirBlock": {
+    "1": "Unknown Block"
   },
   "SevenSegmentDisplayBlock": {
     "1": "Make 7-segment displays from copper, glass and paint"
@@ -794,7 +804,9 @@
     "3": "Select Blocks Texture",
     "4": "Unavailable",
     "5": "Flat terrain is only available in Creative Mode",
-    "6": "Normal"
+    "6": "Normal",
+    "7": "Time Of Day:",
+    "8": " days"
   },
   "ComponentSickness": {
     "1": "Sickness",
@@ -873,10 +885,11 @@
     "5": "Enter \"yes\" to continue"
   },
   "JsInterface": {
-    "1": "There is already a script running",
-    "2": "Empty request body",
-    "3": "Invalid password",
-    "4": "Only post method is supported"
+    "1": "There is already a script running.",
+    "2": "Empty request body.",
+    "3": "Invalid password.",
+    "4": "Only post method is supported.",
+    "5": "Load Init.js failed."
   },
   "Usual": {
     "unknown": "Unknown",

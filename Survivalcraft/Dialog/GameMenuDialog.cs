@@ -76,7 +76,7 @@ namespace Game
 			AddStat(stackPanelWidget, LanguageControl.Get(fName, 13), subsystemGameInfo.WorldSettings.BiomeSize.ToString() + "x");
 			if (subsystemGameInfo.WorldSettings.AreSeasonsChanging)
 			{
-				AddStat(stackPanelWidget, LanguageControl.Get(fName, 96), subsystemGameInfo.WorldSettings.YearDays + " days");
+				AddStat(stackPanelWidget, LanguageControl.Get(fName, 96), subsystemGameInfo.WorldSettings.YearDays + LanguageControl.Get(fName, "23"));
 			}
 			string value0 = (subsystemGameInfo.WorldSettings.AreSeasonsChanging ? "" : "(fixed season)");
 			AddStat(stackPanelWidget, LanguageControl.Get(fName, 97), SubsystemSeasons.GetTimeOfYearName(subsystemGameInfo.WorldSettings.TimeOfYear), value0, SubsystemSeasons.GetTimeOfYearColor(subsystemGameInfo.WorldSettings.TimeOfYear));
