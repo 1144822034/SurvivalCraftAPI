@@ -118,7 +118,9 @@ namespace Engine
 		public static void Error(string message)
 		{
 			Write(LogType.Error, message);
-			Window.TitleSuffix = " #" + message;
+#if WINDOWS
+            Window.TitleSuffix = " #" + message;
+#endif
 		}
 
 		public static void Error(string format, params object[] parameters)
