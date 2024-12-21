@@ -271,6 +271,13 @@ namespace Game
 			{
 				c.LoadLauguage();
 			}
+#if WINDOWS
+			string title = $"{Get("Usual", "gameName")} {ModsManager.ShortGameVersion} API {ModsManager.ApiVersionString}";
+#if DEBUG
+			title = $"[{Get("Usual","debug")}]{title}";
+#endif
+			Window.TitlePrefix = title;
+#endif
 			Dictionary<string, object> objs = [];
 			foreach (var c in ScreensManager.m_screens)
 			{
@@ -283,13 +290,7 @@ namespace Game
 				ScreensManager.m_screens[c.Key] = c.Value as Screen;
 			}
 			CraftingRecipesManager.Initialize();
-#if WINDOWS
-			string title = $"{Get("Usual", "gameName")} {ModsManager.ShortGameVersion} API {ModsManager.ApiVersionString}";
-#if DEBUG
-			title = $"[{Get("Usual","debug")}]{title}";
-#endif
-			Window.TitlePrefix = title;
-#endif
+			BlocksManager.Blocks[ClothingBlock.Index].Initialize();
 			ScreensManager.SwitchScreen("MainMenu");
 		}
 	}

@@ -184,7 +184,7 @@ namespace Game
 				{
 					if (num2 != 23 && flag)
 					{
-						ComponentPlayer.ComponentGui.DisplaySmallMessage("Digging with bare hands is slow, use a stick", Color.White, blinking: true, playNotificationSound: true);
+						ComponentPlayer.ComponentGui.DisplaySmallMessage(LanguageControl.Get(fName, "11"), Color.White, blinking: true, playNotificationSound: true);
 						m_lastToolHintTime = Time.FrameStartTime;
 					}
 				}

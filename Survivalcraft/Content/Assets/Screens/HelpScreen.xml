@@ -22,6 +22,7 @@
       <CanvasWidget Size="0, 10" />
 
       <StackPanelWidget Direction="Horizontal" HorizontalAlignment="Center">
+        <BevelledButtonWidget Name="ReportButton" Style="{Styles/ButtonStyle_310x60}" Text="[HelpScreen:4]" />
         <BevelledButtonWidget Name="BestiaryButton" Style="{Styles/ButtonStyle_310x60}" Text="[HelpScreen:2]">
           <BevelledRectangleWidget Name="BevelledButton.Rectangle" CenterColor="120, 65, 30" BevelColor="120, 65, 30" />
         </BevelledButtonWidget>

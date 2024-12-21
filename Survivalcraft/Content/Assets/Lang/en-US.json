@@ -741,6 +741,7 @@
     "8": "unknown attacker",
     "9": "wrong place wrong time",
     "10": "unlucky",
+    "11": "Digging with bare hands is slow, use a stick",
     "killed": "killed",
     "kicked": "kicked",
     "stung": "stung",
@@ -2393,10 +2394,12 @@
     },
     "DirtStairsBlock:0": {
       "DisplayName": "Dirt Stairs",
+      "Description": "Stairs make it easy to climb slopes. You no longer need to constantly jump and climb vertical faces, instead you move faster, saving time and energy. Stairs can be crafted from various materials. Stairs can also be placed upside-down on the ceilings. Can be painted.",
       "CRDescription:0": "Make stairs to be able to climb heights quicker"
     },
     "DirtSlabBlock:0": {
       "DisplayName": "Dirt Slab",
+      "Description": "Slabs are half-height blocks, which can be crafted from a variety of different materials. They can be used to cover floors at a cheaper cost than full size blocks. They can also be used to make long stairs, where each unit of length moves one up by a half unit of height. Slabs can also be affixed to the ceilings.",
       "CRDescription:0": "Make slabs for decoration purposes"
     },
     "PoplarWoodBlock:0": {
@@ -2712,7 +2715,8 @@
     "HelpScreen": {
       "1": "Help Topics",
       "2": "Bestiary",
-      "3": "Recipaedia"
+      "3": "Recipaedia",
+      "4": "Report API Bug"
     },
     "HelpTopicScreen": {
       "1": "Help Topics"
@@ -2724,7 +2728,7 @@
       "4": "Settings",
       "5": "Manage",
       "6": "Full Version...",
-      "7": "Copyright 2011-2019 Candy Rufus Games.",
+      "7": "Copyright 2011-2025 Candy Rufus Games.",
       "8": " Check ",
       "9": "kaalus.wordpress.com",
       "10": " for more information."
@@ -2820,7 +2824,8 @@
       "6": "View Game Log:",
       "7": "...",
       "8": "Reset To Defaults:",
-      "9": "Reset"
+      "9": "Reset",
+      "10": "Report API Bug"
     },
     "SettingsControlsScreen": [
       "Adjust Controls Settings",

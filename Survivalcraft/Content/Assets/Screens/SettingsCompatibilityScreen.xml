@@ -25,7 +25,12 @@
               <LabelWidget Text="[SettingsCompatibilityScreen:6]"  HorizontalAlignment="Far" VerticalAlignment="Center" Margin="20, 0" />
               <BevelledButtonWidget Name="ViewGameLogButton" Style="{Styles/ButtonStyle_310x60}" VerticalAlignment="Center" Margin="20, 0" Text="[SettingsCompatibilityScreen:7]"/>
             </UniformSpacingPanelWidget>
-			
+
+            <UniformSpacingPanelWidget Direction="Horizontal">
+              <LabelWidget HorizontalAlignment="Far" VerticalAlignment="Center" Margin="20, 0" />
+              <BevelledButtonWidget Name="ReportButton" Style="{Styles/ButtonStyle_310x60}" VerticalAlignment="Center" Margin="20, 0" Text="[SettingsCompatibilityScreen:10]"/>
+            </UniformSpacingPanelWidget>
+
             <UniformSpacingPanelWidget Direction="Horizontal">
 			  <LabelWidget Text="[SettingsCompatibilityScreen:8]"  HorizontalAlignment="Far" VerticalAlignment="Center" Margin="20, 0" />
               <BevelledButtonWidget Name="ResetDefaultsButton" Style="{Styles/ButtonStyle_310x60}" VerticalAlignment="Center" Margin="20, 0" Text="[SettingsCompatibilityScreen:9]"/>

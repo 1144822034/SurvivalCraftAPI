@@ -8,6 +8,8 @@ namespace Game
 	{
 		public ListPanelWidget m_topicsList;
 
+		public ButtonWidget m_reportButton;
+
 		public ButtonWidget m_recipaediaButton;
 
 		public ButtonWidget m_bestiaryButton;
@@ -21,6 +23,7 @@ namespace Game
 			XElement node = ContentManager.Get<XElement>("Screens/HelpScreen");
 			LoadContents(this, node);
 			m_topicsList = Children.Find<ListPanelWidget>("TopicsList");
+			m_reportButton = Children.Find<ButtonWidget>("ReportButton");
 			m_recipaediaButton = Children.Find<ButtonWidget>("RecipaediaButton");
 			m_bestiaryButton = Children.Find<ButtonWidget>("BestiaryButton");
 			m_topicsList.ItemWidgetFactory = delegate (object item)
@@ -109,6 +112,10 @@ namespace Game
 			if (m_bestiaryButton.IsClicked)
 			{
 				ScreensManager.SwitchScreen("Bestiary");
+			}
+			if (m_reportButton.IsClicked)
+			{
+				WebBrowserManager.LaunchBrowser(ModsManager.ReportLink);
 			}
 			if (Input.Back || Input.Cancel || Children.Find<ButtonWidget>("TopBar.Back").IsClicked)
 			{

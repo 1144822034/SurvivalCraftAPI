@@ -8,6 +8,8 @@ namespace Game
 
 		public ButtonWidget m_viewGameLogButton;
 
+		public ButtonWidget m_reportButton;
+
 		public ButtonWidget m_resetDefaultsButton;
 
 		public LabelWidget m_descriptionLabel;
@@ -18,6 +20,7 @@ namespace Game
 			LoadContents(this, node);
 			//m_singlethreadedTerrainUpdateButton = Children.Find<ButtonWidget>("SinglethreadedTerrainUpdateButton");
 			m_viewGameLogButton = Children.Find<ButtonWidget>("ViewGameLogButton");
+			m_reportButton = Children.Find<ButtonWidget>("ReportButton");
 			m_resetDefaultsButton = Children.Find<ButtonWidget>("ResetDefaultsButton");
 			m_descriptionLabel = Children.Find<LabelWidget>("Description");
 		}
@@ -38,6 +41,10 @@ namespace Game
 			if (m_viewGameLogButton.IsClicked)
 			{
 				DialogsManager.ShowDialog(null, new ViewGameLogDialog());
+			}
+			if (m_reportButton.IsClicked)
+			{
+				WebBrowserManager.LaunchBrowser(ModsManager.ReportLink);
 			}
 			if (m_resetDefaultsButton.IsClicked)
 			{

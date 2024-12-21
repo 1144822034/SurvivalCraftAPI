@@ -77,7 +77,10 @@ API的兄弟们， 让模组无序加载机制, 模组自动依赖检索护送�
    git submodule update --init
    ```
 
-4. 使用 [Visual Studio](https://visualstudio.microsoft.com/) 打开`survivalcraft-api`目录中的`SurvivalCraft.sln`，点击`生成`-`生成解决方案`，如果报错未安装相应功能，请按提示完成安装
-   
-   > 不想安装Android负载？  
-   > 在`解决方案资源管理器`-`解决方案'SurvivalCraft'`-`安卓端`右键，点击`卸载解决方案文件夹中的项目`
+4. 使用 [Visual Studio](https://visualstudio.microsoft.com/)或[Rider](https://www.jetbrains.com/zh-cn/rider/) 打开`survivalcraft-api`目录中的`SurvivalCraft.sln`
+5. 如果只是在Windows系统上进行调试，请右键卸载`安卓端`文件夹中的所有项目，在`电脑端`文件夹的`Survivalcraft`项目上右键，点击`构建所选项目`即可
+6. 如果需要生成Android系统上的`APK`安装文件，需要切换配置为`Release`模式，在`安卓端`文件夹的`A_Launch2`和`A_Survivalcraft`两个项目上分别右键，点击`加载项目`，最后在`A_Launch2`上右键，点击`归档以用于发布`即可
+7. 以上过程中，如果报错未安装相应功能，请按提示完成安装
+
+> 关于项目还原  
+> 请运行`dotnet restore /p:Configuration="Release"`
