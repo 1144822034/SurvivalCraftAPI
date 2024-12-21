@@ -922,7 +922,8 @@
 		"Unavailable": "不可用的",
 		"delete": "删除",
 		"gameName": "生存战争",
-		"debug": "调试"
+		"debug": "调试",
+		"api": "插件版"
 	},
 	"CRMessage": {
 		"0": "请制作石斧来代替",

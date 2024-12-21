@@ -93,7 +93,7 @@ namespace Game
 			ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls13;
 			CultureInfo.DefaultThreadCurrentCulture = CultureInfo.InvariantCulture;
 			CultureInfo.DefaultThreadCurrentUICulture = CultureInfo.InvariantCulture;
-			string title = $"Survivalcraft {ModsManager.ShortGameVersion} API {ModsManager.ApiVersionString}";
+			string title = $"Survivalcraft {ModsManager.ShortGameVersion} - API {ModsManager.ApiVersionString}";
 			Log.RemoveAllLogSinks();
 			Log.AddLogSink(new GameLogSink());
 #if DEBUG

@@ -272,7 +272,7 @@ namespace Game
 				c.LoadLauguage();
 			}
 #if WINDOWS
-			string title = $"{Get("Usual", "gameName")} {ModsManager.ShortGameVersion} API {ModsManager.ApiVersionString}";
+			string title = $"{Get("Usual", "gameName")} {ModsManager.ShortGameVersion} - API {ModsManager.ApiVersionString}";
 #if DEBUG
 			title = $"[{Get("Usual","debug")}]{title}";
 #endif

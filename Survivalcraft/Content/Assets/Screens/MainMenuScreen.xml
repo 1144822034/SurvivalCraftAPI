@@ -49,6 +49,6 @@
 
 	</StackPanelWidget>
 
-	<BitmapButtonWidget Name="LanguageSwitchButton" Size="36, 36" NormalSubtexture="{Textures/Gui/Earth}" ClickedSubtexture="{Textures/Gui/Earth}" Margin="24, 24" IsAutoCheckingEnabled="false" VerticalAlignment="Far" HorizontalAlignment="Near"/>
-	<BitmapButtonWidget Name="Help" Size="36, 36" NormalSubtexture="{Textures/Atlas/HelpButton}" ClickedSubtexture="{Textures/Atlas/HelpButton}" Margin="24, 24" IsAutoCheckingEnabled="false" VerticalAlignment="Far" HorizontalAlignment="Far"/>
+	<BitmapButtonWidget Name="LanguageSwitchButton" Size="51, 48" NormalSubtexture="{Textures/Gui/Earth}" ClickedSubtexture="{Textures/Gui/Earth}" Margin="24, 24" IsAutoCheckingEnabled="false" VerticalAlignment="Far" HorizontalAlignment="Near"/>
+	<BitmapButtonWidget Name="Help" Size="51, 48" NormalSubtexture="{Textures/Atlas/HelpButton}" ClickedSubtexture="{Textures/Atlas/HelpButton}" Margin="24, 24" IsAutoCheckingEnabled="false" VerticalAlignment="Far" HorizontalAlignment="Far"/>
 </Screen>

@@ -883,7 +883,8 @@
         "Unavailable": "Недоступно",
         "delete": "Удаление",
         "gameName": "Survivalcraft",
-        "debug": "DEBUG"
+        "debug": "DEBUG",
+        "api": "API"
     },
     "CRMessage": {
         "0": "Вместо этого делается каменный топор",

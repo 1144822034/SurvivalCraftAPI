@@ -900,7 +900,8 @@
     "Unavailable": "Unavailable",
     "delete": "Delete",
     "gameName": "Survivalcraft",
-    "debug": "DEBUG"
+    "debug": "DEBUG",
+    "api": "API"
   },
   "CRMessage": {
     "0": "Make a stone axe instead",

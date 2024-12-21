@@ -59,7 +59,7 @@ namespace Game
 				m_versionStringTrial = MarketplaceManager.IsTrialMode;
 			}
 			Children.Find("Buy").IsVisible = MarketplaceManager.IsTrialMode;
-			Children.Find<LabelWidget>("Version").Text = m_versionString + "  API " + ModsManager.ApiVersionString;
+			Children.Find<LabelWidget>("Version").Text = m_versionString + " -  API " + ModsManager.ApiVersionString;
 			RectangleWidget rectangleWidget = Children.Find<RectangleWidget>("Logo");
 			float num = 1f + (0.02f * MathF.Sin(1.5f * (float)MathUtils.Remainder(Time.FrameStartTime, 10000.0)));
 			rectangleWidget.RenderTransform = Matrix.CreateTranslation((0f - rectangleWidget.ActualSize.X) / 2f, (0f - rectangleWidget.ActualSize.Y) / 2f, 0f) * Matrix.CreateScale(num, num, 1f) * Matrix.CreateTranslation(rectangleWidget.ActualSize.X / 2f, rectangleWidget.ActualSize.Y / 2f, 0f);
