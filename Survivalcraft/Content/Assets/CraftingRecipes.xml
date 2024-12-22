@@ -595,7 +595,7 @@
       "aa"
       "aaa"
     </Recipe>
-    <Recipe Result="DirtSlabBlock" ResultCount="6" RequiredHeatLevel="0" a="dirt" Description="Make slabs for decoration purposes">
+    <Recipe Result="DirtSlabBlock" ResultCount="6" RequiredHeatLevel="0" a="dirt" Description="[0]">
       "aaa"
     </Recipe>
     <Recipe Result="StoneSlabBlock" ResultCount="6" RequiredHeatLevel="0" a="granite" Description="[0]">

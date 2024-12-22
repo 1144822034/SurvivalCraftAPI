@@ -39,13 +39,13 @@ namespace Game
 
         public Random m_random = new();
 
-        public bool m_regenerateLifeEnabled = true;//��������
-        public virtual float VoidDamageFactor { get; set; }//y����߻��߹�����ɵ��˺�ϵ��
-        public virtual float AirLackResilience { get; set; }//��ˮ�˺�����
-        public virtual float MagmaResilience { get; set; }//�����˺�����
-        public virtual float CrushResilience { get; set; }//��ѹ�˺�����
-        public virtual float SpikeResilience { get; set; }//����˺�����
-        public virtual float ExplosionResilience { get; set; }//��ը�˺�����
+        public bool m_regenerateLifeEnabled = true;//生命再生
+        public virtual float VoidDamageFactor { get; set; }//y轴过高或者过低造成的伤害系数
+        public virtual float AirLackResilience { get; set; }//溺水伤害抗性
+        public virtual float MagmaResilience { get; set; }//熔岩伤害抗性
+        public virtual float CrushResilience { get; set; }//挤压伤害抗性
+        public virtual float SpikeResilience { get; set; }//尖刺伤害抗性
+        public virtual float ExplosionResilience { get; set; }//爆炸伤害抗性
 
         public virtual void OnSpiked(SubsystemBlockBehavior spikeBlockBehavior, float damage , CellFace cellFace, float velocity, ComponentBody componentBody, string causeOfDeath)
         {
@@ -124,7 +124,7 @@ namespace Game
         public float m_fireResilience;
 
         /// <summary>
-        /// ����ֵ
+        /// 攻击抗性
         /// </summary>
         public virtual float AttackResilience
         {
@@ -132,7 +132,7 @@ namespace Game
             set;
         }
         /// <summary>
-        /// ���俹��
+        /// 掉落抗性
         /// </summary>
         public virtual float FallResilience
         {
@@ -159,19 +159,19 @@ namespace Game
         }
 
         /// <summary>
-        /// ����ֵ�ӳ�ϵ��
+        /// 攻击抗性加成系数
         /// </summary>
         public virtual float AttackResilienceFactor { get; set; }
         /// <summary>
-        /// ���俹�Լӳ�ϵ��
+        /// 掉落抗性加成系数
         /// </summary>
         public virtual float FallResilienceFactor { get; set; }
         /// <summary>
-        /// �����˺�����ϵ��
+        /// 火焰伤害抗性系数
         /// </summary>
         public virtual float FireResilienceFactor { get; set; }
         /// <summary>
-        /// �����ָ��ٶ�ϵ��
+        /// 生命恢复速度系数
         /// </summary>
         public virtual float HealFactor { get; set; }
 

@@ -204,7 +204,7 @@ namespace Game
 		}
 
 		/// <summary>
-		/// 在性能信息下方添加一行信息，不支持中文
+		/// 在性能信息下方添加一行信息，需每帧添加，不支持中文
 		/// </summary>
 		public static void AddExtraStat(string stat)
 		{

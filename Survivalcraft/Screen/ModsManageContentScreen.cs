@@ -650,14 +650,13 @@ public class ModsManageContentScreen : Screen
 					}
 					if (result == MessageDialogButton.Button2)
 					{
-						ScreensManager.SwitchScreen("Content");
+						ScreensManager.SwitchScreen("MainMenu");
 					}
 				}));
 			}
 			else
 			{
-				//ScreensManager.SwitchScreen("Content");
-				ScreensManager.SwitchScreen(ScreensManager.PreviousScreen);
+				ScreensManager.SwitchScreen("MainMenu");
 			}
 		}
 	}
