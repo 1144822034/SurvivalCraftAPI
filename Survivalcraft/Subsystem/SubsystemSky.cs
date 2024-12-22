@@ -327,26 +327,9 @@ namespace Game
 
 		public delegate float CalculateFogDelegate(Vector3 viewPosition, Vector3 position);
 		public CalculateFogDelegate CalculateFog { get; set; }
-		public float CalculateFogSurvivalcraft(Vector3 viewPosition, Vector3 position)
-		{
-			Vector3 vector = viewPosition - position;
-			vector.Y *= VisibilityRangeYMultiplier;
-			float num = vector.Length();
-			float num2 = (FogIntegral(viewPosition.Y) - FogIntegral(position.Y)) / (viewPosition.Y - position.Y);
-			float num3 = MathUtils.Saturate(ViewHazeDensity * (num - ViewHazeStart));
-			float num4 = num2 * ViewFogDensity * num;
-			return MathUtils.Saturate(num3 + num4);
-		}
 
 		public delegate float CalculateFogNoHazeDelegate(Vector3 viewPosition, Vector3 position);
 		public CalculateFogNoHazeDelegate CalculateFogNoHaze { get; set; }
-		public float CalculateFogNoHazeSurvivalcraft(Vector3 viewPosition, Vector3 position)
-		{
-			Vector3 vector = viewPosition - position;
-			vector.Y *= VisibilityRangeYMultiplier;
-			float num = vector.Length();
-			return MathUtils.Saturate((FogIntegral(viewPosition.Y) - FogIntegral(position.Y)) / (viewPosition.Y - position.Y) * ViewFogDensity * num);
-		}
 
 		public void Update(float dt)
 		{
@@ -817,78 +800,18 @@ namespace Game
 
 		public delegate float CalculateLightIntensityDelegate(float timeOfDay);
 		public CalculateLightIntensityDelegate CalculateLightIntensity { get; set; }
-		public float CalculateLightIntensitySurvivalcraft(float timeOfDay)
-		{
-			if (IntervalUtils.IsBetween(timeOfDay, m_subsystemTimeOfDay.NightStart, m_subsystemTimeOfDay.DawnStart))
-			{
-				return 0f;
-			}
-			if (IntervalUtils.IsBetween(timeOfDay, m_subsystemTimeOfDay.DawnStart, m_subsystemTimeOfDay.DayStart))
-			{
-				return IntervalUtils.Interval(m_subsystemTimeOfDay.DawnStart, timeOfDay) / m_subsystemTimeOfDay.DawnInterval;
-			}
-			if (IntervalUtils.IsBetween(timeOfDay, m_subsystemTimeOfDay.DayStart, m_subsystemTimeOfDay.DuskStart))
-			{
-				return 1f;
-			}
-			return 1f - IntervalUtils.Interval(m_subsystemTimeOfDay.DuskStart, timeOfDay) / m_subsystemTimeOfDay.DuskInterval;
-		}
 
 		public delegate float CalculateSeasonAngleDelegate();
 		public CalculateSeasonAngleDelegate CalculateSeasonAngle { get; set; }
-		public float CalculateSeasonAngleSurvivalcraft()
-		{
-			return -0.4f - 0.7f * (0.5f - 0.5f * MathF.Cos((m_subsystemGameInfo.WorldSettings.TimeOfYear - SubsystemSeasons.MidSummer) * 2f * MathF.PI));
-		}
 
 		public delegate float CalculateHazeFactorDelegate();
 		public CalculateHazeFactorDelegate CalculateHazeFactor { get; set; }
-		public float CalculateHazeFactorSurvivalcraft()
-		{
-			return MathUtils.Saturate(m_subsystemWeather.PrecipitationIntensity + 30f * m_viewFogDensity);
-		}
 
 		public delegate Color CalculateSkyColorDelegate(Vector3 direction,int temperature);
 		public CalculateSkyColorDelegate CalculateSkyColor { get; set; }
-		public Color CalculateSkyColorSurvivalcraft(Vector3 direction, int temperature)
-		{
-			float timeOfDay = m_subsystemTimeOfDay.TimeOfDay;
-			float f = CalculateHazeFactor();
-			direction = Vector3.Normalize(direction);
-			Vector2 vector = Vector2.Normalize(new Vector2(direction.X, direction.Z));
-			float num = CalculateLightIntensity(timeOfDay);
-			float f2 = MathUtils.Saturate((float)temperature / 15f);
-			Vector3 v = new Vector3(0.65f, 0.68f, 0.7f);
-			Vector3 v2 = Vector3.Lerp(new Vector3(0.33f, 0.39f, 0.46f), new Vector3(0.15f, 0.3f, 0.56f), f2);
-			Vector3 v3 = Vector3.Lerp(new Vector3(0.79f, 0.83f, 0.88f), new Vector3(0.64f, 0.77f, 0.91f), f2);
-			Vector3 v4 = Vector3.Lerp(v2, v, f) * num;
-			Vector3 vector2 = Vector3.Lerp(v3, v, f) * num;
-			Vector3 vector3 = new Vector3(1f, 0.3f, -0.2f);
-			Vector3 vector4 = new Vector3(1f, 0.3f, -0.2f);
-			if (m_lightningStrikePosition.HasValue)
-			{
-				v4 = Vector3.Max(new Vector3(m_lightningStrikeBrightness), v4);
-			}
-			float num2 = MathUtils.Lerp(CalculateDawnGlowIntensity(timeOfDay), 0f, f);
-			float num3 = MathUtils.Lerp(CalculateDuskGlowIntensity(timeOfDay), 0f, f);
-			float f3 = MathUtils.Saturate((direction.Y - 0.1f) / 0.4f);
-			float num4 = num2 * MathUtils.Sqr(MathUtils.Saturate(0f - vector.X));
-			float num5 = num3 * MathUtils.Sqr(MathUtils.Saturate(vector.X));
-			Color color =  new Color(Vector3.Lerp(vector2 + vector3 * num4 + vector4 * num5, v4, f3));
-			ModsManager.HookAction("ChangeSkyColor", loader =>
-			{
-				color = loader.ChangeSkyColor(color, direction, timeOfDay, temperature);
-				return true;
-			});
-			return color;
-		}
 
 		public delegate float CalculateSkyFogDelegate(Vector3 viewPosition);
 		public CalculateSkyFogDelegate CalculateSkyFog { get; set; }
-		public float CalculateSkyFogSurvivalcraft(Vector3 viewPosition)
-		{
-			return CalculateFogNoHaze(viewPosition, viewPosition + new Vector3(1000f, 150f, 0f));
-		}
 
 		public float FogIntegral(float y)
 		{
@@ -1030,32 +953,110 @@ namespace Game
 
 		public delegate float CalculateDawnGlowIntensityDelegate(float timeOfDay);
 		public CalculateDawnGlowIntensityDelegate CalculateDawnGlowIntensity { get; set; }
-		public float CalculateDawnGlowIntensitySurvivalcraft(float timeOfDay)
-		{
-			float num = MathUtils.Lerp(0.1f, 0.75f, MathUtils.LinearStep(-0.05f, 0.15f, CalculateWinterDistance()));
-			float middawn = m_subsystemTimeOfDay.Middawn;
-			float num2 = 1f * m_subsystemTimeOfDay.DawnInterval;
-			return num * MathUtils.Max(1f - IntervalUtils.Distance(timeOfDay, middawn) / num2 * 2f, 0f);
-		}
 
 		public delegate float CalculateDuskGlowIntensityDelegate(float timeOfDay);
 		public CalculateDuskGlowIntensityDelegate CalculateDuskGlowIntensity;
-		public float CalculateDuskGlowIntensitySurvivalcraft(float timeOfDay)
-		{
-			float num = MathUtils.Lerp(0.2f, 1f, MathUtils.LinearStep(-0.05f, 0.15f, CalculateWinterDistance()));
-			float middusk = m_subsystemTimeOfDay.Middusk;
-			float num2 = 1f * m_subsystemTimeOfDay.DuskInterval;
-			return num * MathUtils.Max(1f - IntervalUtils.Distance(timeOfDay, middusk) / num2 * 2f, 0f);
-		}
 
 		public delegate float CalculateWinterDistanceDelegate();
-
 		public CalculateWinterDistanceDelegate CalculateWinterDistance;
+
+		#region CalculationSurvivalcraft
+		public float CalculateFogSurvivalcraft(Vector3 viewPosition,Vector3 position)
+		{
+			Vector3 vector = viewPosition - position;
+			vector.Y *= VisibilityRangeYMultiplier;
+			float num = vector.Length();
+			float num2 = (FogIntegral(viewPosition.Y) - FogIntegral(position.Y)) / (viewPosition.Y - position.Y);
+			float num3 = MathUtils.Saturate(ViewHazeDensity * (num - ViewHazeStart));
+			float num4 = num2 * ViewFogDensity * num;
+			return MathUtils.Saturate(num3 + num4);
+		}
+		public float CalculateFogNoHazeSurvivalcraft(Vector3 viewPosition,Vector3 position)
+		{
+			Vector3 vector = viewPosition - position;
+			vector.Y *= VisibilityRangeYMultiplier;
+			float num = vector.Length();
+			return MathUtils.Saturate((FogIntegral(viewPosition.Y) - FogIntegral(position.Y)) / (viewPosition.Y - position.Y) * ViewFogDensity * num);
+		}
+		public float CalculateLightIntensitySurvivalcraft(float timeOfDay)
+		{
+			if(IntervalUtils.IsBetween(timeOfDay,m_subsystemTimeOfDay.NightStart,m_subsystemTimeOfDay.DawnStart))
+			{
+				return 0f;
+			}
+			if(IntervalUtils.IsBetween(timeOfDay,m_subsystemTimeOfDay.DawnStart,m_subsystemTimeOfDay.DayStart))
+			{
+				return IntervalUtils.Interval(m_subsystemTimeOfDay.DawnStart,timeOfDay) / m_subsystemTimeOfDay.DawnInterval;
+			}
+			if(IntervalUtils.IsBetween(timeOfDay,m_subsystemTimeOfDay.DayStart,m_subsystemTimeOfDay.DuskStart))
+			{
+				return 1f;
+			}
+			return 1f - IntervalUtils.Interval(m_subsystemTimeOfDay.DuskStart,timeOfDay) / m_subsystemTimeOfDay.DuskInterval;
+		}
+		public float CalculateSeasonAngleSurvivalcraft()
+		{
+			return -0.4f - 0.7f * (0.5f - 0.5f * MathF.Cos((m_subsystemGameInfo.WorldSettings.TimeOfYear - SubsystemSeasons.MidSummer) * 2f * MathF.PI));
+		}
+		public float CalculateHazeFactorSurvivalcraft()
+		{
+			return MathUtils.Saturate(m_subsystemWeather.PrecipitationIntensity + 30f * m_viewFogDensity);
+		}
+		public Color CalculateSkyColorSurvivalcraft(Vector3 direction,int temperature)
+		{
+			float timeOfDay = m_subsystemTimeOfDay.TimeOfDay;
+			float f = CalculateHazeFactor();
+			direction = Vector3.Normalize(direction);
+			Vector2 vector = Vector2.Normalize(new Vector2(direction.X,direction.Z));
+			float num = CalculateLightIntensity(timeOfDay);
+			float f2 = MathUtils.Saturate((float)temperature / 15f);
+			Vector3 v = new Vector3(0.65f,0.68f,0.7f);
+			Vector3 v2 = Vector3.Lerp(new Vector3(0.33f,0.39f,0.46f),new Vector3(0.15f,0.3f,0.56f),f2);
+			Vector3 v3 = Vector3.Lerp(new Vector3(0.79f,0.83f,0.88f),new Vector3(0.64f,0.77f,0.91f),f2);
+			Vector3 v4 = Vector3.Lerp(v2,v,f) * num;
+			Vector3 vector2 = Vector3.Lerp(v3,v,f) * num;
+			Vector3 vector3 = new Vector3(1f,0.3f,-0.2f);
+			Vector3 vector4 = new Vector3(1f,0.3f,-0.2f);
+			if(m_lightningStrikePosition.HasValue)
+			{
+				v4 = Vector3.Max(new Vector3(m_lightningStrikeBrightness),v4);
+			}
+			float num2 = MathUtils.Lerp(CalculateDawnGlowIntensity(timeOfDay),0f,f);
+			float num3 = MathUtils.Lerp(CalculateDuskGlowIntensity(timeOfDay),0f,f);
+			float f3 = MathUtils.Saturate((direction.Y - 0.1f) / 0.4f);
+			float num4 = num2 * MathUtils.Sqr(MathUtils.Saturate(0f - vector.X));
+			float num5 = num3 * MathUtils.Sqr(MathUtils.Saturate(vector.X));
+			Color color = new Color(Vector3.Lerp(vector2 + vector3 * num4 + vector4 * num5,v4,f3));
+			ModsManager.HookAction("ChangeSkyColor",loader => {
+				color = loader.ChangeSkyColor(color,direction,timeOfDay,temperature);
+				return true;
+			});
+			return color;
+		}
+		public float CalculateSkyFogSurvivalcraft(Vector3 viewPosition)
+		{
+			return CalculateFogNoHaze(viewPosition,viewPosition + new Vector3(1000f,150f,0f));
+		}
+		public float CalculateDawnGlowIntensitySurvivalcraft(float timeOfDay)
+		{
+			float num = MathUtils.Lerp(0.1f,0.75f,MathUtils.LinearStep(-0.05f,0.15f,CalculateWinterDistance()));
+			float middawn = m_subsystemTimeOfDay.Middawn;
+			float num2 = 1f * m_subsystemTimeOfDay.DawnInterval;
+			return num * MathUtils.Max(1f - IntervalUtils.Distance(timeOfDay,middawn) / num2 * 2f,0f);
+		}
+		public float CalculateDuskGlowIntensitySurvivalcraft(float timeOfDay)
+		{
+			float num = MathUtils.Lerp(0.2f,1f,MathUtils.LinearStep(-0.05f,0.15f,CalculateWinterDistance()));
+			float middusk = m_subsystemTimeOfDay.Middusk;
+			float num2 = 1f * m_subsystemTimeOfDay.DuskInterval;
+			return num * MathUtils.Max(1f - IntervalUtils.Distance(timeOfDay,middusk) / num2 * 2f,0f);
+		}
 		public float CalculateWinterDistanceSurvivalcraft()
 		{
-			float t = IntervalUtils.Midpoint(SubsystemSeasons.WinterStart, SubsystemSeasons.SpringStart);
-			float num = IntervalUtils.Interval(SubsystemSeasons.WinterStart, SubsystemSeasons.SpringStart);
-			return IntervalUtils.Distance(m_subsystemGameInfo.WorldSettings.TimeOfYear, t) - 0.5f * num;
+			float t = IntervalUtils.Midpoint(SubsystemSeasons.WinterStart,SubsystemSeasons.SpringStart);
+			float num = IntervalUtils.Interval(SubsystemSeasons.WinterStart,SubsystemSeasons.SpringStart);
+			return IntervalUtils.Distance(m_subsystemGameInfo.WorldSettings.TimeOfYear,t) - 0.5f * num;
 		}
+		#endregion
 	}
 }
