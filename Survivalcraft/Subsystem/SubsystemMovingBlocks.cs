@@ -225,7 +225,7 @@ namespace Game
 		{
 			foreach (MovingBlockSet movingBlockSet in m_movingBlockSets)
 			{
-				if (ExclusiveBoxIntersection(boundingBox, movingBlockSet.BoundingBox(extendToFillCells)))
+				if (!movingBlockSet.Stop && ExclusiveBoxIntersection(boundingBox, movingBlockSet.BoundingBox(extendToFillCells)))
 				{
 					result.Add(movingBlockSet);
 				}
