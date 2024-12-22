@@ -325,7 +325,9 @@ namespace Game
 			}
 		}
 
-		public float CalculateFog(Vector3 viewPosition, Vector3 position)
+		public delegate float CalculateFogDelegate(Vector3 viewPosition, Vector3 position);
+		public CalculateFogDelegate CalculateFog { get; set; }
+		public float CalculateFogSurvivalcraft(Vector3 viewPosition, Vector3 position)
 		{
 			Vector3 vector = viewPosition - position;
 			vector.Y *= VisibilityRangeYMultiplier;
@@ -336,7 +338,9 @@ namespace Game
 			return MathUtils.Saturate(num3 + num4);
 		}
 
-		public float CalculateFogNoHaze(Vector3 viewPosition, Vector3 position)
+		public delegate float CalculateFogNoHazeDelegate(Vector3 viewPosition, Vector3 position);
+		public CalculateFogNoHazeDelegate CalculateFogNoHaze { get; set; }
+		public float CalculateFogNoHazeSurvivalcraft(Vector3 viewPosition, Vector3 position)
 		{
 			Vector3 vector = viewPosition - position;
 			vector.Y *= VisibilityRangeYMultiplier;
@@ -504,9 +508,24 @@ namespace Game
 			{
 				m_moonTextures[i] = ContentManager.Get<Texture2D>("Textures/Moon" + (i + 1).ToString(CultureInfo.InvariantCulture));
 			}
+			InitializeCalculation();
 			UpdateMoonPhase();
 			UpdateLightAndViewParameters();
 			Display.DeviceReset += Display_DeviceReset;
+		}
+
+		public virtual void InitializeCalculation()
+		{
+			CalculateFog = CalculateFogSurvivalcraft;
+			CalculateFogNoHaze = CalculateFogNoHazeSurvivalcraft;
+			CalculateLightIntensity = CalculateLightIntensitySurvivalcraft;
+			CalculateSeasonAngle = CalculateSeasonAngleSurvivalcraft;
+			CalculateHazeFactor = CalculateHazeFactorSurvivalcraft;
+			CalculateSkyColor = CalculateSkyColorSurvivalcraft;
+			CalculateSkyFog = CalculateSkyFogSurvivalcraft;
+			CalculateDawnGlowIntensity = CalculateDawnGlowIntensitySurvivalcraft;
+			CalculateDuskGlowIntensity = CalculateDuskGlowIntensitySurvivalcraft;
+			CalculateWinterDistance = CalculateWinterDistanceSurvivalcraft;
 		}
 
 		public override void Dispose()
@@ -796,7 +815,9 @@ namespace Game
 			MoonPhase = ((int)Math.Floor(m_subsystemTimeOfDay.Day - 0.5 + 5.0) % 8 + 8) % 8;
 		}
 
-		public float CalculateLightIntensity(float timeOfDay)
+		public delegate float CalculateLightIntensityDelegate(float timeOfDay);
+		public CalculateLightIntensityDelegate CalculateLightIntensity { get; set; }
+		public float CalculateLightIntensitySurvivalcraft(float timeOfDay)
 		{
 			if (IntervalUtils.IsBetween(timeOfDay, m_subsystemTimeOfDay.NightStart, m_subsystemTimeOfDay.DawnStart))
 			{
@@ -813,17 +834,23 @@ namespace Game
 			return 1f - IntervalUtils.Interval(m_subsystemTimeOfDay.DuskStart, timeOfDay) / m_subsystemTimeOfDay.DuskInterval;
 		}
 
-		public float CalculateSeasonAngle()
+		public delegate float CalculateSeasonAngleDelegate();
+		public CalculateSeasonAngleDelegate CalculateSeasonAngle { get; set; }
+		public float CalculateSeasonAngleSurvivalcraft()
 		{
 			return -0.4f - 0.7f * (0.5f - 0.5f * MathF.Cos((m_subsystemGameInfo.WorldSettings.TimeOfYear - SubsystemSeasons.MidSummer) * 2f * MathF.PI));
 		}
 
-		public float CalculateHazeFactor()
+		public delegate float CalculateHazeFactorDelegate();
+		public CalculateHazeFactorDelegate CalculateHazeFactor { get; set; }
+		public float CalculateHazeFactorSurvivalcraft()
 		{
 			return MathUtils.Saturate(m_subsystemWeather.PrecipitationIntensity + 30f * m_viewFogDensity);
 		}
 
-		public Color CalculateSkyColor(Vector3 direction, int temperature)
+		public delegate Color CalculateSkyColorDelegate(Vector3 direction,int temperature);
+		public CalculateSkyColorDelegate CalculateSkyColor { get; set; }
+		public Color CalculateSkyColorSurvivalcraft(Vector3 direction, int temperature)
 		{
 			float timeOfDay = m_subsystemTimeOfDay.TimeOfDay;
 			float f = CalculateHazeFactor();
@@ -856,7 +883,9 @@ namespace Game
 			return color;
 		}
 
-		public float CalculateSkyFog(Vector3 viewPosition)
+		public delegate float CalculateSkyFogDelegate(Vector3 viewPosition);
+		public CalculateSkyFogDelegate CalculateSkyFog { get; set; }
+		public float CalculateSkyFogSurvivalcraft(Vector3 viewPosition)
 		{
 			return CalculateFogNoHaze(viewPosition, viewPosition + new Vector3(1000f, 150f, 0f));
 		}
@@ -999,7 +1028,9 @@ namespace Game
 			m_starsIndexBuffer.SetData(array2, 0, array2.Length);
 		}
 
-		public float CalculateDawnGlowIntensity(float timeOfDay)
+		public delegate float CalculateDawnGlowIntensityDelegate(float timeOfDay);
+		public CalculateDawnGlowIntensityDelegate CalculateDawnGlowIntensity { get; set; }
+		public float CalculateDawnGlowIntensitySurvivalcraft(float timeOfDay)
 		{
 			float num = MathUtils.Lerp(0.1f, 0.75f, MathUtils.LinearStep(-0.05f, 0.15f, CalculateWinterDistance()));
 			float middawn = m_subsystemTimeOfDay.Middawn;
@@ -1007,7 +1038,9 @@ namespace Game
 			return num * MathUtils.Max(1f - IntervalUtils.Distance(timeOfDay, middawn) / num2 * 2f, 0f);
 		}
 
-		public float CalculateDuskGlowIntensity(float timeOfDay)
+		public delegate float CalculateDuskGlowIntensityDelegate(float timeOfDay);
+		public CalculateDuskGlowIntensityDelegate CalculateDuskGlowIntensity;
+		public float CalculateDuskGlowIntensitySurvivalcraft(float timeOfDay)
 		{
 			float num = MathUtils.Lerp(0.2f, 1f, MathUtils.LinearStep(-0.05f, 0.15f, CalculateWinterDistance()));
 			float middusk = m_subsystemTimeOfDay.Middusk;
@@ -1015,7 +1048,10 @@ namespace Game
 			return num * MathUtils.Max(1f - IntervalUtils.Distance(timeOfDay, middusk) / num2 * 2f, 0f);
 		}
 
-		public float CalculateWinterDistance()
+		public delegate float CalculateWinterDistanceDelegate();
+
+		public CalculateWinterDistanceDelegate CalculateWinterDistance;
+		public float CalculateWinterDistanceSurvivalcraft()
 		{
 			float t = IntervalUtils.Midpoint(SubsystemSeasons.WinterStart, SubsystemSeasons.SpringStart);
 			float num = IntervalUtils.Interval(SubsystemSeasons.WinterStart, SubsystemSeasons.SpringStart);
