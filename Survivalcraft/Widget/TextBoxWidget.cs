@@ -205,11 +205,14 @@ public class TextBoxWidget : Widget
         get => m_text;
         set
         {
-            m_text = value ?? "";
-            Caret = Math.Clamp(Caret, 0, m_text.Length);
-            TextChanged?.Invoke(this);
-            Scroll = Math.Clamp(Scroll, -Font.MeasureText(FullText, new Vector2(FontScale), FontSpacing).X,
-                Font.MeasureText(FullText, new Vector2(FontScale), FontSpacing).X);
+	        string text = value == null ? string.Empty : ((value.Length > MaximumLength) ? value.Substring(0, MaximumLength) : value);
+	        if(text != m_text)
+	        {
+		        m_text = text;
+		        Caret = Math.Clamp(Caret,0,m_text.Length);
+		        TextChanged?.Invoke(this);
+		        Scroll = Math.Clamp(Scroll,-Font.MeasureText(FullText,new Vector2(FontScale),FontSpacing).X,Font.MeasureText(FullText,new Vector2(FontScale),FontSpacing).X);
+	        }
         }
     }
 

@@ -359,6 +359,12 @@ namespace Game
 			set;
 		}
 
+		public static CommunityContentMode OriginalCommunityContentMode
+		{
+			get;
+			set;
+		}
+
 		public static bool MultithreadedTerrainUpdate
 		{
 			get;
@@ -520,6 +526,7 @@ namespace Game
 				UserId = string.Empty;
 				LastLaunchedVersion = string.Empty;
 				CommunityContentMode = CommunityContentMode.Normal;
+				OriginalCommunityContentMode = CommunityContentMode.Normal;
 				MultithreadedTerrainUpdate = true;
 				NewYearCelebrationLastYear = 2035;
 				ScreenLayout1 = ScreenLayout.Single;

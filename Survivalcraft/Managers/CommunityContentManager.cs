@@ -17,6 +17,8 @@ namespace Game
 		public static Dictionary<string, string> m_idToAddressMap = [];
 		public static Dictionary<string, bool> m_feedbackCache = [];
 
+		public const string fName = "CommunityContentManager";
+
 		public static void Initialize()
 		{
 			Load();
@@ -59,7 +61,7 @@ namespace Game
 			progress ??= new CancellableProgress();
 			if (!WebManager.IsInternetConnectionAvailable())
 			{
-				failure(new InvalidOperationException("Internet connection is unavailable."));
+				failure(new InvalidOperationException(LanguageControl.Get(fName, "1")));
 				return;
 			}
 			var dictionary = new Dictionary<string, string>();
@@ -130,7 +132,7 @@ namespace Game
 			progress ??= new CancellableProgress();
 			if (!WebManager.IsInternetConnectionAvailable())
 			{
-				failure(new InvalidOperationException("Internet connection is unavailable."));
+				failure(new InvalidOperationException(LanguageControl.Get(fName, "1")));
 			}
 			else
 			{
@@ -172,11 +174,11 @@ namespace Game
 			progress ??= new CancellableProgress();
 			if (MarketplaceManager.IsTrialMode)
 			{
-				failure(new InvalidOperationException("Cannot publish links in trial mode."));
+				failure(new InvalidOperationException(LanguageControl.Get(fName, "2")));
 			}
 			else if (!WebManager.IsInternetConnectionAvailable())
 			{
-				failure(new InvalidOperationException("Internet connection is unavailable."));
+				failure(new InvalidOperationException(LanguageControl.Get(fName, "1")));
 			}
 			else
 			{
@@ -237,7 +239,7 @@ namespace Game
 			progress ??= new CancellableProgress();
 			if (!WebManager.IsInternetConnectionAvailable())
 			{
-				failure(new InvalidOperationException("Internet connection is unavailable."));
+				failure(new InvalidOperationException(LanguageControl.Get(fName, "1")));
 				return;
 			}
 			var dictionary = new Dictionary<string, string>
@@ -293,7 +295,7 @@ namespace Game
 			progress ??= new CancellableProgress();
 			if (!WebManager.IsInternetConnectionAvailable())
 			{
-				failure(new InvalidOperationException("Internet connection is unavailable."));
+				failure(new InvalidOperationException(LanguageControl.Get(fName, "1")));
 				return;
 			}
 
@@ -329,7 +331,7 @@ namespace Game
 					Task.Run(delegate
 					{
 						Task.Delay(1500).Wait();
-						failure(new InvalidOperationException("Duplicate feedback."));
+						failure(new InvalidOperationException(LanguageControl.Get(fName, "3")));
 					});
 					return;
 				}
@@ -347,7 +349,7 @@ namespace Game
 			progress ??= new CancellableProgress();
 			if (!WebManager.IsInternetConnectionAvailable())
 			{
-				failure(new InvalidOperationException("Internet connection is unavailable."));
+				failure(new InvalidOperationException(LanguageControl.Get(fName, "1")));
 				return;
 			}
 			var Header = new Dictionary<string, string>
@@ -435,7 +437,7 @@ namespace Game
 			progress ??= new CancellableProgress();
 			if (!WebManager.IsInternetConnectionAvailable())
 			{
-				failure(new InvalidOperationException("Internet connection is unavailable."));
+				failure(new InvalidOperationException(LanguageControl.Get(fName, "1")));
 				return;
 			}
 			var header = new Dictionary<string, string>
@@ -465,7 +467,7 @@ namespace Game
 			progress ??= new CancellableProgress();
 			if (!WebManager.IsInternetConnectionAvailable())
 			{
-				failure(new InvalidOperationException("Internet connection is unavailable."));
+				failure(new InvalidOperationException(LanguageControl.Get(fName, "1")));
 				return;
 			}
 			var header = new Dictionary<string, string>
@@ -492,7 +494,7 @@ namespace Game
 			progress ??= new CancellableProgress();
 			if (!WebManager.IsInternetConnectionAvailable())
 			{
-				failure(new InvalidOperationException("Internet connection is unavailable."));
+				failure(new InvalidOperationException(LanguageControl.Get(fName, "1")));
 				return;
 			}
 			var header = new Dictionary<string, string>
@@ -520,7 +522,7 @@ namespace Game
 			progress ??= new CancellableProgress();
 			if (!WebManager.IsInternetConnectionAvailable())
 			{
-				failure(new InvalidOperationException("Internet connection is unavailable."));
+				failure(new InvalidOperationException(LanguageControl.Get(fName, "1")));
 				return;
 			}
 			var header = new Dictionary<string, string>
@@ -547,7 +549,7 @@ namespace Game
 			progress ??= new CancellableProgress();
 			if (!WebManager.IsInternetConnectionAvailable())
 			{
-				failure(new InvalidOperationException("Internet connection is unavailable."));
+				failure(new InvalidOperationException(LanguageControl.Get(fName, "1")));
 				return;
 			}
 			var header = new Dictionary<string, string>
@@ -573,7 +575,7 @@ namespace Game
 			progress ??= new CancellableProgress();
 			if (!WebManager.IsInternetConnectionAvailable())
 			{
-				failure(new InvalidOperationException("Internet connection is unavailable."));
+				failure(new InvalidOperationException(LanguageControl.Get(fName, "1")));
 				return;
 			}
 			var header = new Dictionary<string, string>
@@ -640,7 +642,7 @@ namespace Game
 			}
 			catch (Exception e)
 			{
-				ExceptionManager.ReportExceptionToUser("Loading Community Content cache failed.", e);
+				ExceptionManager.ReportExceptionToUser(LanguageControl.Get(fName, "4"), e);
 			}
 		}
 
@@ -671,7 +673,7 @@ namespace Game
 			}
 			catch (Exception e)
 			{
-				ExceptionManager.ReportExceptionToUser("Saving Community Content cache failed.", e);
+				ExceptionManager.ReportExceptionToUser(LanguageControl.Get(fName, "5"), e);
 			}
 		}
 	}

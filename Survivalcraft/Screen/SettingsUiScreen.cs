@@ -28,6 +28,8 @@ namespace Game
 
 		public ButtonWidget m_communityContentModeButton;
 
+		public ButtonWidget m_originalCommunityContentModeButton;
+
 		public ButtonWidget m_deleteWorldNeedToTextButton;
 
 		public static string fName = "SettingsUiScreen";
@@ -47,6 +49,7 @@ namespace Game
 			m_showLogoInScreenshotsButton = Children.Find<ButtonWidget>("ShowLogoInScreenshotsButton");
 			m_screenshotSizeButton = Children.Find<ButtonWidget>("ScreenshotSizeButton");
 			m_communityContentModeButton = Children.Find<ButtonWidget>("CommunityContentModeButton");
+			m_originalCommunityContentModeButton = Children.Find<ButtonWidget>("OriginalCommunityContentModeButton");
             m_deleteWorldNeedToTextButton = Children.Find<ButtonWidget>("DeleteWorldNeedToTextButton");
         }
 
@@ -125,6 +128,10 @@ namespace Game
 			{
 				SettingsManager.CommunityContentMode = (CommunityContentMode)((int)(SettingsManager.CommunityContentMode + 1) % EnumUtils.GetEnumValues(typeof(CommunityContentMode)).Count);
 			}
+			if (m_originalCommunityContentModeButton.IsClicked)
+			{
+				SettingsManager.OriginalCommunityContentMode = (CommunityContentMode)((int)(SettingsManager.OriginalCommunityContentMode + 1) % EnumUtils.GetEnumValues(typeof(CommunityContentMode)).Count);
+			}
 			m_windowModeButton.Text = LanguageControl.Get("WindowMode", SettingsManager.WindowMode.ToString());
 			m_languageButton.Text = LanguageControl.Get("Language", "Name");
 			m_displayLogButton.Text = SettingsManager.DisplayLog ? LanguageControl.Yes : LanguageControl.No;
@@ -135,6 +142,7 @@ namespace Game
 			m_screenshotSizeButton.Text = LanguageControl.Get("ScreenshotSize", SettingsManager.ScreenshotSize.ToString());
 			m_deleteWorldNeedToTextButton.Text = SettingsManager.DeleteWorldNeedToText ? LanguageControl.Yes : LanguageControl.No;
 			m_communityContentModeButton.Text = LanguageControl.Get("CommunityContentMode", SettingsManager.CommunityContentMode.ToString());
+			m_originalCommunityContentModeButton.Text = LanguageControl.Get("CommunityContentMode", SettingsManager.OriginalCommunityContentMode.ToString());
 			if (Input.Back || Input.Cancel || Children.Find<ButtonWidget>("TopBar.Back").IsClicked)
 			{
 				ScreensManager.SwitchScreen(ScreensManager.PreviousScreen);

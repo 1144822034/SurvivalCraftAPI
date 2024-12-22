@@ -343,6 +343,7 @@ namespace Game
 				BlocksTexturesManager.Initialize();
 				CharacterSkinsManager.Initialize();
 				CommunityContentManager.Initialize();
+				OriginalCommunityContentManager.Initialize();
 				ExternalContentManager.Initialize();
 				FurniturePacksManager.Initialize();
 				LightingManager.Initialize();
@@ -469,6 +470,10 @@ namespace Game
 			AddLoadAction(delegate
 			{
 				AddScreen("CommunityContent", new CommunityContentScreen());
+			});
+			AddLoadAction(delegate
+			{
+				AddScreen("OriginalCommunityContent", new OriginalCommunityContentScreen());
 			});
 			AddLoadAction(delegate
 			{

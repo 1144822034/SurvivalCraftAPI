@@ -16,6 +16,8 @@ namespace Game
 
 		public ButtonWidget m_closeButton;
 
+		public const string fName = "MoreCommunityLinkDialog";
+
 		public MoreCommunityLinkDialog()
 		{
 			XElement node = ContentManager.Get<XElement>("Dialogs/MoreCommunityLinkDialog");
@@ -30,13 +32,13 @@ namespace Game
 
 		public override void Update()
 		{
-			string text = (UserManager.ActiveUser != null) ? UserManager.ActiveUser.DisplayName : "No User";
+			string text = (UserManager.ActiveUser != null) ? UserManager.ActiveUser.DisplayName : LanguageControl.Get(fName, "1");
 			if (text.Length > 15)
 			{
 				text = text.Substring(0, 15) + "...";
 			}
 			m_userLabel.Text = text;
-			string text2 = (UserManager.ActiveUser != null) ? UserManager.ActiveUser.UniqueId : "No User";
+			string text2 = (UserManager.ActiveUser != null) ? UserManager.ActiveUser.UniqueId : LanguageControl.Get(fName, "1");
 			if (text2.Length > 15)
 			{
 				text2 = text2.Substring(0, 15) + "...";
@@ -46,7 +48,7 @@ namespace Game
 			m_copyUserIdButton.IsEnabled = UserManager.ActiveUser != null;
 			if (m_changeUserButton.IsClicked)
 			{
-				DialogsManager.ShowDialog(ParentWidget, new ListSelectionDialog("Select Active User", UserManager.GetUsers(), 60f, (object item) => ((UserInfo)item).DisplayName, delegate (object item)
+				DialogsManager.ShowDialog(ParentWidget, new ListSelectionDialog(LanguageControl.Get(fName, "2"), UserManager.GetUsers(), 60f, (object item) => ((UserInfo)item).DisplayName, delegate (object item)
 				{
 					UserManager.ActiveUser = (UserInfo)item;
 				}));

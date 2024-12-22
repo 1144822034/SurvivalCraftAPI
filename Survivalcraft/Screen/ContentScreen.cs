@@ -12,6 +12,8 @@ namespace Game
 
 		public ButtonWidget m_communityContentButton;
 
+		public ButtonWidget m_originalCommunityContentButton;
+
 		public ButtonWidget m_linkButton;
 
 		public ButtonWidget m_manageButton;
@@ -23,6 +25,7 @@ namespace Game
 			LoadContents(this, node);
 			m_externalContentButton = Children.Find<ButtonWidget>("External");
 			m_communityContentButton = Children.Find<ButtonWidget>("Community");
+			m_originalCommunityContentButton = Children.Find<ButtonWidget>("OriginalCommunity");
 			m_linkButton = Children.Find<ButtonWidget>("Link");
 			m_manageButton = Children.Find<BevelledButtonWidget>("Manage");
 		}
@@ -64,6 +67,7 @@ namespace Game
 		public override void Update()
 		{
 			m_communityContentButton.IsEnabled = SettingsManager.CommunityContentMode != CommunityContentMode.Disabled;
+			m_originalCommunityContentButton.IsEnabled = SettingsManager.OriginalCommunityContentMode != CommunityContentMode.Disabled;
 			if (m_externalContentButton.IsClicked)
 			{
 				ScreensManager.SwitchScreen("ExternalContent");
@@ -71,6 +75,10 @@ namespace Game
 			if (m_communityContentButton.IsClicked)
 			{
 				ScreensManager.SwitchScreen("CommunityContent");
+			}
+			if (m_originalCommunityContentButton.IsClicked)
+			{
+				ScreensManager.SwitchScreen("OriginalCommunityContent");
 			}
 			if (m_linkButton.IsClicked)
 			{

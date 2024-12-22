@@ -16,6 +16,13 @@
   "ContentManager": {
     "1": "Content \"{0}\" has type {1}, requested type was {2}"
   },
+  "CommunityContentManager": {
+    "1": "Internet connection is unavailable.",
+    "2": "Cannot publish links in trial mode.",
+    "3": "Duplicate feedback.",
+    "4": "Loading Community Content cache failed.",
+    "5": "Saving Community Content cache failed."
+  },
   "AndroidSdCardExternalContentProvider": {
     "1": "SD Card"
   },
@@ -304,6 +311,10 @@
     "12": "Error Spawning Player",
     "13": "Copy This log"
   },
+  "MoreCommunityLinkDialog": {
+    "1": "No User",
+    "2": "Select Active User"
+  },
   "FurnitureDesignWidget": [ "Front", "Side" ],
   "FurnitureSetItemWidget": [ "Uncategorized", "{0} design(s)" ],
   "FurnitureInventoryPanel": {
@@ -531,6 +542,26 @@
     "12": "Recently Added",
     "13": "Invalid order.",
     "14": "Star",
+    "15": "Add to Boutique",
+    "16": "Remove from Boutique",
+    "17": "Operation",
+    "18": "Please enter rating, the default value is 5.",
+    "19": "Add to Boutique Successfully:",
+    "20": "Operation Done",
+    "21": "Confirm Removing from Boutique?",
+    "22": "Remove from Boutique Successfully:",
+    "23": "Delete",
+    "24": "Publish",
+    "25": "Hide",
+    "26": "Confirm Deleting",
+    "27": "Delete Successfully:",
+    "28": "Publish Successfully:",
+    "29": "Hide Successfully:",
+    "30": "Not published",
+    "31": "ByRank",
+    "32": "ByTime",
+    "33": "ByBoutique",
+    "34": "ByHide",
     "Unknown": "Unknown",
     "Directory": "Directory",
     "World": "World",
@@ -541,6 +572,18 @@
     "ByTime": "ByTime",
     "Order Type": "Order Type",
     "Filter": "Filter"
+  },
+  "OriginalCommunityContentScreen": {
+    "1": "Select Sort Order",
+    "2": "Select Items Filter",
+    "3": "Selected User's Items",
+    "4": "Top Ranked",
+    "5": "Most Recent",
+    "6": "Most Downloaded",
+    "7": "Largest",
+    "8": "Newest Version",
+    "9": "Oldest Version",
+    "10": "downloads"
   },
   "ComponentClothing": {
     "1": "Must be level {0} to wear {1}",
@@ -2693,7 +2736,7 @@
       "1": "Bestiary"
     },
     "CommunityContentScreen": {
-      "1": "Community Content",
+      "1": "Chinese Community Content",
       "2": "-",
       "3": "...",
       "4": "-",
@@ -2704,16 +2747,27 @@
       "9": "Input Keywords",
       "10": "Search"
     },
+    "OriginalCommunityContentScreen": {
+      "1": "Original Community Content",
+      "2": "-",
+      "3": "...",
+      "4": "Download",
+      "5": "Delete",
+      "6": "Search",
+      "7": "x"
+    },
     "ContentScreen": {
       "1": "Choose Content Type",
       "2": "Access content previously uploaded to one of your public storage spaces",
       "3": "Private",
-      "4": "Access content created by other community members and registered for public access",
-      "5": "Community",
+      "4": "Access content created by other Chinese community members and registered for public access",
+      "5": "Chinese Community",
       "6": "Download a file directly from a web link, if you know it (it's best to use copy\/paste to enter links)",
       "7": "From Link",
       "8": "Manage downloaded content",
-      "9": "Manage"
+      "9": "Manage",
+      "10": "Access content created by other Original community members and registered for public access",
+      "11": "Original Community"
     },
     "ExternalContentScreen": {
       "1": "",
@@ -2902,9 +2956,10 @@
       "Show UI in screenshots:",
       "Show logo in screenshots:",
       "Screenshot resolution:",
-      "Community Content:",
+      "Chinese Community Content:",
       "Show loading log:",
-      "Input \"yes\" to delete world:"
+      "Input \"yes\" to delete world:",
+      "Original Community Content"
     ],
     "TrialEndedScreen": {
       "1": "The day has ended",

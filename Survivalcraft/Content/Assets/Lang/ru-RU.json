@@ -18,6 +18,13 @@
     "ContentManager": {
         "1": "Тип {0} - {1}, запрошенный - {2}"
     },
+    "CommunityContentManager": {
+        "1": "Internet connection is unavailable.",
+        "2": "Cannot publish links in trial mode.",
+        "3": "Duplicate feedback.",
+        "4": "Loading Community Content cache failed.",
+        "5": "Saving Community Content cache failed."
+    },
     "AndroidSdCardExternalContentProvider": {
         "1": "Карта памяти"
     },
@@ -300,6 +307,10 @@
     "12": "Ошибка генератора игрока",
     "13": "Скопируй этот журнал"
   },
+    "MoreCommunityLinkDialog": {
+        "1": "No User",
+        "2": "Select Active User"
+    },
     "FurnitureDesignWidget": [
         "Спереди",
         "Сбоку"
@@ -524,6 +535,27 @@
         "11": "Лучшее",
         "12": "Недавнее",
         "13": "Ошибка",
+        "14": "Star",
+        "15": "Add to Boutique",
+        "16": "Remove from Boutique",
+        "17": "Operation",
+        "18": "Please enter rating, the default value is 5.",
+        "19": "Add to Boutique Successfully:",
+        "20": "Operation Done",
+        "21": "Confirm Removing from Boutique?",
+        "22": "Remove from Boutique Successfully:",
+        "23": "Delete",
+        "24": "Publish",
+        "25": "Hide",
+        "26": "Confirm Deleting",
+        "27": "Delete Successfully:",
+        "28": "Publish Successfully:",
+        "29": "Hide Successfully:",
+        "30": "Not published",
+        "31": "ByRank",
+        "32": "ByTime",
+        "33": "ByBoutique",
+        "34": "ByHide",
         "Unknown": "Неизвестно",
         "Directory": "Папка",
         "World": "Мир",
@@ -534,6 +566,18 @@
         "ByTime": "По времени",
         "Order Type": "Порядок",
         "Filter": "Отбор"
+    },
+    "OriginalCommunityContentScreen": {
+        "1": "Select Sort Order",
+        "2": "Select Items Filter",
+        "3": "Selected User's Items",
+        "4": "Top Ranked",
+        "5": "Most Recent",
+        "6": "Most Downloaded",
+        "7": "Largest",
+        "8": "Newest Version",
+        "9": "Oldest Version",
+        "10": "downloads"
     },
     "ComponentClothing": {
         "1": "Для ношения {1} требуется уровень {0}",
@@ -2666,7 +2710,7 @@
             "1": "Бестиарий"
         },
         "CommunityContentScreen": {
-            "1": "Содержимое сообщества",
+            "1": "Chinese Содержимое сообщества",
             "2": "-",
             "3": "...",
             "4": "-",
@@ -2677,16 +2721,27 @@
             "9": "Ключевые слова",
             "10": "Поиск"
         },
+        "OriginalCommunityContentScreen": {
+            "1": "Original Community Content",
+            "2": "-",
+            "3": "...",
+            "4": "Download",
+            "5": "Delete",
+            "6": "Search",
+            "7": "x"
+        },
         "ContentScreen": {
             "1": "Тип содержимого",
             "2": "Доступ к содержимому своего хранилища",
             "3": "Частное",
             "4": "Доступ к содержимому от других пользователей",
-            "5": "Сообщество",
+            "5": "Chinese Сообщество",
             "6": "Загрузка по ссылке",
             "7": "По ссылке",
             "8": "Управление загруженным содержимым",
-            "9": "Управление"
+            "9": "Управление",
+            "10": "Access content created by other Original community members and registered for public access",
+            "11": "Original Community"
         },
         "ExternalContentScreen": {
             "1": "",
@@ -2885,7 +2940,8 @@
             "Логотип в снимках экрана",
             "Разрешение снимков экрана",
             "Содержимое сообщества",
-            "Журнал загрузки"
+            "Журнал загрузки",
+            "Original Community Content"
         ],
         "TrialEndedScreen": {
             "1": "День прошёл",

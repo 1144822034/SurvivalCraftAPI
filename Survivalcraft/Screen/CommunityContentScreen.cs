@@ -52,6 +52,8 @@ namespace Game
 
 		public SchubExternalContentProvider m_provider;
 
+		public const string fName = "CommunityContentScreen";
+
 		public CommunityContentScreen()
 		{
 			XElement node = ContentManager.Get<XElement>("Screens/CommunityContentScreen");
@@ -551,10 +553,10 @@ namespace Game
 		{
 			return order switch
 			{
-				Order.ByRank => m_isCNLanguageType ? "评分最高" : "ByRank",
-				Order.ByTime => m_isCNLanguageType ? "最新发布" : "ByTime",
-				Order.ByBoutique => m_isCNLanguageType ? "精品推荐" : "ByBoutique",
-				Order.ByHide => m_isCNLanguageType ? "尚未发布" : "ByHide",
+				Order.ByRank => LanguageControl.Get(fName, "31"),
+				Order.ByTime => LanguageControl.Get(fName, "32"),
+				Order.ByBoutique => LanguageControl.Get(fName, "33"),
+				Order.ByHide => LanguageControl.Get(fName, "34"),
 				_ => throw new InvalidOperationException(LanguageControl.Get(nameof(CommunityContentScreen),13)),
 			};
 		}
