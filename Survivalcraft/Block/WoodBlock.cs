@@ -63,13 +63,16 @@ namespace Game
 
 		public override void GetDropValues(SubsystemTerrain subsystemTerrain, int oldValue, int newValue, int toolLevel, List<BlockDropValue> dropValues, out bool showDebris)
 		{
-			int data = Terrain.ExtractData(oldValue);
-			data = SetCutFace(data, 4);
-			dropValues.Add(new BlockDropValue
+			if(toolLevel >= GetRequiredToolLevel(oldValue))
 			{
-				Value = Terrain.MakeBlockValue(BlockIndex, 0, data),
-				Count = 1
-			});
+				int data = Terrain.ExtractData(oldValue);
+				data = SetCutFace(data,4);
+				dropValues.Add(new BlockDropValue
+				{
+					Value = Terrain.MakeBlockValue(BlockIndex,0,data),
+					Count = 1
+				});
+			}
 			showDebris = true;
 		}
 
