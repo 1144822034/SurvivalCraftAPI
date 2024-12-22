@@ -604,110 +604,7 @@ namespace Game
 			}
 		}
 
-		/*public virtual bool MoveToFreeSpace(float maxMoveDistance)
-		{
-			Vector3 stanceBoxSize = StanceBoxSize;
-			Vector3 position = Position;
-			for (int i = 0; i < m_freeSpaceOffsets.Length; i++)
-			{
-				Vector3? vector = null;
-				Vector3 vector2 = position + m_freeSpaceOffsets[i];
-				if (Terrain.ToCell(vector2) != Terrain.ToCell(position))
-				{
-					continue;
-				}
-				BoundingBox box = new(vector2 - new Vector3(stanceBoxSize.X / 2f, 0f, stanceBoxSize.Z / 2f), vector2 + new Vector3(stanceBoxSize.X / 2f, stanceBoxSize.Y, stanceBoxSize.Z / 2f));
-				box.Min += new Vector3(0.01f, MaxSmoothRiseHeight + 0.01f, 0.01f);
-				box.Max -= new Vector3(0.01f);
-				m_collisionBoxes.Clear();
-				FindTerrainCollisionBoxes(box, m_collisionBoxes);
-				m_collisionBoxes.AddRange(m_movingBlocksCollisionBoxes);
-				m_collisionBoxes.AddRange(m_bodiesCollisionBoxes);
-				if (IsColliding(box, m_collisionBoxes))
-				{
-					m_stoppedTime = 0f;
-					CollisionBox pushingCollisionBox;
-					float num = CalculatePushBack(box, 0, m_collisionBoxes, out pushingCollisionBox);
-					CollisionBox pushingCollisionBox2;
-					float num2 = CalculatePushBack(box, 1, m_collisionBoxes, out pushingCollisionBox2);
-					CollisionBox pushingCollisionBox3;
-					float num3 = CalculatePushBack(box, 2, m_collisionBoxes, out pushingCollisionBox3);
-					float num4 = num * num;
-					float num5 = num2 * num2;
-					float num6 = num3 * num3;
-					List<Vector3> list = [];
-					if (num4 <= num5 && num4 <= num6)
-					{
-						list.Add(vector2 + new Vector3(num, 0f, 0f));
-						if (num5 <= num6)
-						{
-							list.Add(vector2 + new Vector3(0f, num2, 0f));
-							list.Add(vector2 + new Vector3(0f, 0f, num3));
-						}
-						else
-						{
-							list.Add(vector2 + new Vector3(0f, 0f, num3));
-							list.Add(vector2 + new Vector3(0f, num2, 0f));
-						}
-					}
-					else if (num5 <= num4 && num5 <= num6)
-					{
-						list.Add(vector2 + new Vector3(0f, num2, 0f));
-						if (num4 <= num6)
-						{
-							list.Add(vector2 + new Vector3(num, 0f, 0f));
-							list.Add(vector2 + new Vector3(0f, 0f, num3));
-						}
-						else
-						{
-							list.Add(vector2 + new Vector3(0f, 0f, num3));
-							list.Add(vector2 + new Vector3(num, 0f, 0f));
-						}
-					}
-					else
-					{
-						list.Add(vector2 + new Vector3(0f, 0f, num3));
-						if (num4 <= num5)
-						{
-							list.Add(vector2 + new Vector3(num, 0f, 0f));
-							list.Add(vector2 + new Vector3(0f, num2, 0f));
-						}
-						else
-						{
-							list.Add(vector2 + new Vector3(0f, num2, 0f));
-							list.Add(vector2 + new Vector3(num, 0f, 0f));
-						}
-					}
-					foreach (Vector3 item in list)
-					{
-						box = new BoundingBox(item - new Vector3(stanceBoxSize.X / 2f, 0f, stanceBoxSize.Z / 2f), item + new Vector3(stanceBoxSize.X / 2f, stanceBoxSize.Y, stanceBoxSize.Z / 2f));
-						box.Min += new Vector3(0.02f, MaxSmoothRiseHeight + 0.02f, 0.02f);
-						box.Max -= new Vector3(0.02f);
-						m_collisionBoxes.Clear();
-						FindTerrainCollisionBoxes(box, m_collisionBoxes);
-						m_collisionBoxes.AddRange(m_movingBlocksCollisionBoxes);
-						m_collisionBoxes.AddRange(m_bodiesCollisionBoxes);
-						if (!IsColliding(box, m_collisionBoxes))
-						{
-							vector = item;
-							break;
-						}
-					}
-				}
-				else
-				{
-					vector = vector2;
-				}
-				if (vector.HasValue && Vector3.Distance(vector.Value, Position) <= maxMoveDistance)
-				{
-					Position = vector.Value;
-					return true;
-				}
-			}
-			return false;
-		}*/
-
-		public void MoveToFreeSpace(float dt)
+		public virtual void MoveToFreeSpace(float dt)
 		{
 			if (MoveToFreeSpaceHelper(0.5f))
 			{
@@ -750,111 +647,122 @@ namespace Game
 			CrushedTime += dt;
 		}
 
-		public bool MoveToFreeSpaceHelper(float maxMoveFraction)
+		public bool IsSpaceFreeToMove(float maxMoveFraction, out Vector3? freePosition)
 		{
+			freePosition = null;
 			Vector3 stanceBoxSize = StanceBoxSize;
 			Vector3 position = base.Position;
-			for (int i = 0; i < m_freeSpaceOffsets.Length; i++)
+			for(int i = 0; i < m_freeSpaceOffsets.Length; i++)
 			{
 				Vector3? vector = null;
 				Vector3 vector2 = position + m_freeSpaceOffsets[i];
-				if (Terrain.ToCell(vector2) != Terrain.ToCell(position))
+				if(Terrain.ToCell(vector2) != Terrain.ToCell(position))
 				{
 					continue;
 				}
-				BoundingBox box = new BoundingBox(vector2 - new Vector3(stanceBoxSize.X / 2f, 0f, stanceBoxSize.Z / 2f), vector2 + new Vector3(stanceBoxSize.X / 2f, stanceBoxSize.Y, stanceBoxSize.Z / 2f));
-				box.Min += new Vector3(0.01f, MaxSmoothRiseHeight + 0.01f, 0.01f);
+				BoundingBox box = new BoundingBox(vector2 - new Vector3(stanceBoxSize.X / 2f,0f,stanceBoxSize.Z / 2f),vector2 + new Vector3(stanceBoxSize.X / 2f,stanceBoxSize.Y,stanceBoxSize.Z / 2f));
+				box.Min += new Vector3(0.01f,MaxSmoothRiseHeight + 0.01f,0.01f);
 				box.Max -= new Vector3(0.01f);
 				m_collisionBoxes.Clear();
-				FindTerrainCollisionBoxes(box, m_collisionBoxes);
+				FindTerrainCollisionBoxes(box,m_collisionBoxes);
 				m_collisionBoxes.AddRange(m_movingBlocksCollisionBoxes);
 				m_collisionBoxes.AddRange(m_bodiesCollisionBoxes);
-				if (IsColliding(box, m_collisionBoxes))
+				if(IsColliding(box,m_collisionBoxes))
 				{
 					m_stoppedTime = 0f;
 					CollisionBox pushingCollisionBox;
-					float num = CalculatePushBack(box, 0, m_collisionBoxes, out pushingCollisionBox);
+					float num = CalculatePushBack(box,0,m_collisionBoxes,out pushingCollisionBox);
 					CollisionBox pushingCollisionBox2;
-					float num2 = CalculatePushBack(box, 1, m_collisionBoxes, out pushingCollisionBox2);
+					float num2 = CalculatePushBack(box,1,m_collisionBoxes,out pushingCollisionBox2);
 					CollisionBox pushingCollisionBox3;
-					float num3 = CalculatePushBack(box, 2, m_collisionBoxes, out pushingCollisionBox3);
+					float num3 = CalculatePushBack(box,2,m_collisionBoxes,out pushingCollisionBox3);
 					float num4 = num * num;
 					float num5 = num2 * num2;
 					float num6 = num3 * num3;
 					List<Vector3> list = new List<Vector3>();
-					if (num4 <= num5 && num4 <= num6)
+					if(num4 <= num5 && num4 <= num6)
 					{
-						list.Add(vector2 + new Vector3(num, 0f, 0f));
-						if (num5 <= num6)
+						list.Add(vector2 + new Vector3(num,0f,0f));
+						if(num5 <= num6)
 						{
-							list.Add(vector2 + new Vector3(0f, num2, 0f));
-							list.Add(vector2 + new Vector3(0f, 0f, num3));
+							list.Add(vector2 + new Vector3(0f,num2,0f));
+							list.Add(vector2 + new Vector3(0f,0f,num3));
 						}
 						else
 						{
-							list.Add(vector2 + new Vector3(0f, 0f, num3));
-							list.Add(vector2 + new Vector3(0f, num2, 0f));
+							list.Add(vector2 + new Vector3(0f,0f,num3));
+							list.Add(vector2 + new Vector3(0f,num2,0f));
 						}
 					}
-					else if (num5 <= num4 && num5 <= num6)
+					else if(num5 <= num4 && num5 <= num6)
 					{
-						list.Add(vector2 + new Vector3(0f, num2, 0f));
-						if (num4 <= num6)
+						list.Add(vector2 + new Vector3(0f,num2,0f));
+						if(num4 <= num6)
 						{
-							list.Add(vector2 + new Vector3(num, 0f, 0f));
-							list.Add(vector2 + new Vector3(0f, 0f, num3));
+							list.Add(vector2 + new Vector3(num,0f,0f));
+							list.Add(vector2 + new Vector3(0f,0f,num3));
 						}
 						else
 						{
-							list.Add(vector2 + new Vector3(0f, 0f, num3));
-							list.Add(vector2 + new Vector3(num, 0f, 0f));
+							list.Add(vector2 + new Vector3(0f,0f,num3));
+							list.Add(vector2 + new Vector3(num,0f,0f));
 						}
 					}
 					else
 					{
-						list.Add(vector2 + new Vector3(0f, 0f, num3));
-						if (num4 <= num5)
+						list.Add(vector2 + new Vector3(0f,0f,num3));
+						if(num4 <= num5)
 						{
-							list.Add(vector2 + new Vector3(num, 0f, 0f));
-							list.Add(vector2 + new Vector3(0f, num2, 0f));
+							list.Add(vector2 + new Vector3(num,0f,0f));
+							list.Add(vector2 + new Vector3(0f,num2,0f));
 						}
 						else
 						{
-							list.Add(vector2 + new Vector3(0f, num2, 0f));
-							list.Add(vector2 + new Vector3(num, 0f, 0f));
+							list.Add(vector2 + new Vector3(0f,num2,0f));
+							list.Add(vector2 + new Vector3(num,0f,0f));
 						}
 					}
-					foreach (Vector3 item in list)
+					foreach(Vector3 item in list)
 					{
-						if (!(MathF.Abs(item.X - position.X) > stanceBoxSize.X * maxMoveFraction) && !(MathF.Abs(item.Y - position.Y) > stanceBoxSize.Y * maxMoveFraction) && !(MathF.Abs(item.Z - position.Z) > stanceBoxSize.Z * maxMoveFraction))
+						if(!(MathF.Abs(item.X - position.X) > stanceBoxSize.X * maxMoveFraction) && !(MathF.Abs(item.Y - position.Y) > stanceBoxSize.Y * maxMoveFraction) && !(MathF.Abs(item.Z - position.Z) > stanceBoxSize.Z * maxMoveFraction))
 						{
-							box = new BoundingBox(item - new Vector3(stanceBoxSize.X / 2f, 0f, stanceBoxSize.Z / 2f), item + new Vector3(stanceBoxSize.X / 2f, stanceBoxSize.Y, stanceBoxSize.Z / 2f));
-							box.Min += new Vector3(0.02f, MaxSmoothRiseHeight + 0.02f, 0.02f);
+							box = new BoundingBox(item - new Vector3(stanceBoxSize.X / 2f,0f,stanceBoxSize.Z / 2f),item + new Vector3(stanceBoxSize.X / 2f,stanceBoxSize.Y,stanceBoxSize.Z / 2f));
+							box.Min += new Vector3(0.02f,MaxSmoothRiseHeight + 0.02f,0.02f);
 							box.Max -= new Vector3(0.02f);
 							m_collisionBoxes.Clear();
-							FindTerrainCollisionBoxes(box, m_collisionBoxes);
+							FindTerrainCollisionBoxes(box,m_collisionBoxes);
 							m_collisionBoxes.AddRange(m_movingBlocksCollisionBoxes);
 							m_collisionBoxes.AddRange(m_bodiesCollisionBoxes);
-							if (!IsColliding(box, m_collisionBoxes))
+							if(!IsColliding(box,m_collisionBoxes))
 							{
 								vector = item;
 								break;
 							}
 						}
 					}
+				}
+				else
+				{
+					vector = vector2;
+				}
+				if(vector.HasValue)
+				{
+					freePosition = vector.Value;
+					return true;
+				}
 			}
-			else
+			return false;
+		}
+		public bool MoveToFreeSpaceHelper(float maxMoveFraction)
+		{
+			bool hasFreeSpaceToMove = IsSpaceFreeToMove(maxMoveFraction, out Vector3? freePosition);
+			if(freePosition.HasValue)
 			{
-				vector = vector2;
-			}
-			if (vector.HasValue)
-			{
-				base.Position = vector.Value;
+				Position = freePosition.Value;
 				return true;
 			}
+			return false;
 		}
-		return false;
-	}
 
 		public virtual void MoveWithCollision(float dt, Vector3 move)
 		{
