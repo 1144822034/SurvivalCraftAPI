@@ -70,7 +70,7 @@ public class SubsystemSeasons : Subsystem, IUpdateable
 		TimeOfSeason = timeOfSeason;
 	}
 
-	private static void TimeOfYearToSeason(float timeOfYear, out Season season, out float timeOfSeason)
+	public static void TimeOfYearToSeason(float timeOfYear, out Season season, out float timeOfSeason)
 	{
 		if (IntervalUtils.IsBetween(timeOfYear, SummerStart, AutumnStart))
 		{
