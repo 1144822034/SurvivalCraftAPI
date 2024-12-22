@@ -12,21 +12,21 @@ public class SubsystemSeasons : Subsystem, IUpdateable
 
 	private static Image m_seasonsGradient;
 
-	public static readonly float SummerStart = 0f;
+	public static float SummerStart = 0f;
 
-	public static readonly float AutumnStart = 0.25f;
+	public static float AutumnStart = 0.25f;
 
-	public static readonly float WinterStart = 0.5f;
+	public static float WinterStart = 0.5f;
 
-	public static readonly float SpringStart = 0.75f;
+	public static float SpringStart = 0.75f;
 
-	public static readonly float MidSummer = IntervalUtils.Midpoint(SummerStart, AutumnStart);
+	public static float MidSummer = IntervalUtils.Midpoint(SummerStart, AutumnStart);
 
-	public static readonly float MidAutumn = IntervalUtils.Midpoint(AutumnStart, WinterStart);
+	public static float MidAutumn = IntervalUtils.Midpoint(AutumnStart, WinterStart);
 
-	public static readonly float MidWinter = IntervalUtils.Midpoint(WinterStart, SpringStart);
+	public static float MidWinter = IntervalUtils.Midpoint(WinterStart, SpringStart);
 
-	public static readonly float MidSpring = IntervalUtils.Midpoint(SpringStart, SummerStart);
+	public static float MidSpring = IntervalUtils.Midpoint(SpringStart, SummerStart);
 
 	public Season Season { get; private set; }
 
