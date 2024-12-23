@@ -511,7 +511,7 @@ namespace Game
 				LookSensitivity = 0.5f;
 				GamepadDeadZone = 0.16f;
 				GamepadCursorSpeed = 1f;
-				CreativeDigTime = 0.1f;
+				CreativeDigTime = 0.33f;
 				CreativeReach = 7.5f;
 				MinimumHoldDuration = 0.15f;
 				MinimumDragDistance = 10f;

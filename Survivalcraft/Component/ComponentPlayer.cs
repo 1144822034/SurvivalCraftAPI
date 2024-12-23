@@ -461,6 +461,7 @@ namespace Game
             }
 
             double timeIntervalDig = 0.33000001311302185;
+			if(m_subsystemGameInfo.WorldSettings.GameMode == GameMode.Creative) timeIntervalDig = SettingsManager.CreativeDigTime;
             if (playerInput.Dig.HasValue)
 			{
                 bool skipVanilla_ = false;

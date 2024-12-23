@@ -84,7 +84,7 @@
 
           <UniformSpacingPanelWidget Direction="Horizontal" Margin="0, 3">
             <LabelWidget Text="[SettingsControlsScreen:11]"  HorizontalAlignment="Far" VerticalAlignment="Center" Margin="20, 0" />
-            <SliderWidget Name="CreativeDigTimeSlider" Size="Infinity, 60" VerticalAlignment="Center" Margin="20, 0" MinValue="0.1" MaxValue="0.3" Granularity="0.025" />
+            <SliderWidget Name="CreativeDigTimeSlider" Size="Infinity, 60" VerticalAlignment="Center" Margin="20, 0" MinValue="0.1" MaxValue="1" Granularity="0.01" />
           </UniformSpacingPanelWidget>
 
           <UniformSpacingPanelWidget Direction="Horizontal" Margin="0, 3">
