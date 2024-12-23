@@ -191,7 +191,7 @@ namespace Game
 				else if (CalculateDigTime(cellValue, Terrain.ExtractContents(num4)) < 0.5f * num3 || flag)
 				{
 					string displayName = BlocksManager.Blocks[Terrain.ExtractContents(num4)].GetDisplayName(m_subsystemTerrain, num4);
-					ComponentPlayer.ComponentGui.DisplaySmallMessage($"Use your {displayName} to dig this faster", Color.White, blinking: true, playNotificationSound: true);
+					ComponentPlayer.ComponentGui.DisplaySmallMessage(string.Format(LanguageControl.Get(fName, "12"), displayName), Color.White, blinking: true, playNotificationSound: true);
 					m_lastToolHintTime = Time.FrameStartTime;
 				}
 			}

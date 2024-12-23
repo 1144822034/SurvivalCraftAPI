@@ -15,7 +15,6 @@ namespace Game
 {
 	public static class WebManager
 	{
-		// TODO: 根据安卓和Windows新源码更新
 		public class ProgressHttpContent : HttpContent
 		{
 			public Stream m_sourceStream;

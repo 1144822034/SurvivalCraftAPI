@@ -8,7 +8,13 @@ namespace Game
 
 		public string m_worldSnapshotName;
 
+		public LabelWidget m_loadingLabel;
+
 		public StateMachine m_stateMachine = new();
+
+		public bool m_upgradeCompleted;
+
+		public Exception m_upgradeError;
 		public static string fName = "GameLoadingScreen";
 		public GameLoadingScreen()
 		{
@@ -26,6 +32,34 @@ namespace Game
 					{
 						m_stateMachine.TransitionTo("RestoringSnapshot");
 					}
+				}
+			}, null);
+			m_stateMachine.AddState("Upgrading", delegate
+			{
+				GameManager.DisposeProject();
+				m_upgradeCompleted = false;
+				m_upgradeError = null;
+				Task.Run(delegate
+				{
+					try
+					{
+						GameManager.RepairAndUpgradeWorld(m_worldInfo);
+						m_upgradeCompleted = true;
+					}
+					catch (Exception upgradeError)
+					{
+						m_upgradeError = upgradeError;
+					}
+				});
+			}, delegate
+			{
+				if (m_upgradeCompleted)
+				{
+					m_stateMachine.TransitionTo("Loading");
+				}
+				else if (m_upgradeError != null)
+				{
+					throw m_upgradeError;
 				}
 			}, null);
 			m_stateMachine.AddState("Loading", null, delegate

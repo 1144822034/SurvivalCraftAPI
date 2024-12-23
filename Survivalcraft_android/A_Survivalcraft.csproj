@@ -777,6 +777,10 @@
 		<Compile Include="..\Survivalcraft\ModsManager\ObjModelReader.cs"/>
 		<Compile Include="..\Survivalcraft\ModsManager\SurvivalCraftModEntity.cs"/>
 		<Compile Include="..\Survivalcraft\ModsManager\SurvivalCraftModLoader.cs"/>
+		<Compile Include="..\Survivalcraft\Screen\OriginalCommunity\OriginalCommunityContentEntry.cs"/>
+		<Compile Include="..\Survivalcraft\Screen\OriginalCommunity\OriginalCommunityContentManager.cs"/>
+		<Compile Include="..\Survivalcraft\Screen\OriginalCommunity\OriginalCommunityContentScreen.cs"/>
+		<Compile Include="..\Survivalcraft\Screen\OriginalCommunity\OriginalExternalContentType.cs"/>
 		<Compile Include="..\Survivalcraft\Screen\BestiaryDescriptionScreen.cs"/>
 		<Compile Include="..\Survivalcraft\Screen\BestiaryScreen.cs"/>
 		<Compile Include="..\Survivalcraft\Screen\CommunityContentScreen.cs"/>

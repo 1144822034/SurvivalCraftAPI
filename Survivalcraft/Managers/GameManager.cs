@@ -29,6 +29,12 @@ namespace Game
 
 		public static event Action<Project> ProjectDisposed;
 
+		public static void RepairAndUpgradeWorld(WorldInfo worldInfo)
+		{
+			WorldsManager.RepairWorldIfNeeded(worldInfo.DirectoryName);
+			VersionsManager.UpgradeWorld(worldInfo.DirectoryName);
+		}
+
 		public static void LoadProject(WorldInfo worldInfo, ContainerWidget gamesWidget)
 		{
 			DisposeProject();
