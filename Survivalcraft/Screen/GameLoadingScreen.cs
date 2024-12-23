@@ -1,9 +1,10 @@
-﻿using System.Xml.Linq;
+﻿using System;
+using System.Xml.Linq;
 
 namespace Game
 {
 	public class GameLoadingScreen : Screen
-	{//加载存档时
+	{
 		public WorldInfo m_worldInfo;
 
 		public string m_worldSnapshotName;
@@ -97,7 +98,6 @@ namespace Game
 			m_worldSnapshotName = (string)parameters[1];
 			m_stateMachine.TransitionTo("WaitingForFadeIn");
 			ProgressManager.UpdateProgress("Loading World", 0f);
-			ScreensManager.m_screens.Remove("CommunityContent");
 		}
 	}
 }
