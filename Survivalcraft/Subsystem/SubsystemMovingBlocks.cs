@@ -161,6 +161,7 @@ namespace Game
 
 		public event Action<IMovingBlockSet> Stopped;
 
+		public bool m_noDropOnMovingBlockStopped = false;
 		public IMovingBlockSet AddMovingBlockSet(Vector3 position, Vector3 targetPosition, float speed, float acceleration, float drag, Vector2 smoothness, IEnumerable<MovingBlock> blocks, string id, object tag, bool testCollision)
 		{
 			MovingBlockSet movingBlockSet = new()
@@ -683,13 +684,15 @@ namespace Game
 			}
 			return false;
 		}
+
 		public virtual void AddTerrainBlock(int x, int y, int z, int value, MovingBlock movingBlock)
 		{
 			try
 			{
 				if(movingBlock == null) throw new NullReferenceException("Moving Block Set cannot be null when stop block movement!");
 				movingBlock?.MovingBlockSet?.Stop();
-				m_subsystemTerrain.ChangeCell(x,y,z,value,true,movingBlock);
+				m_subsystemTerrain.DestroyCell(0, x, y, z, value, noDrop: m_noDropOnMovingBlockStopped, noParticleSystem: false, movingBlock);
+				//m_subsystemTerrain.ChangeCell(x,y,z,value,true,movingBlock);
 			}
 			catch(Exception ex)
 			{

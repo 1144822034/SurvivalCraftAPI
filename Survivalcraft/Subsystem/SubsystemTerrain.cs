@@ -358,7 +358,7 @@ namespace Game
 			}
 		}
 
-		public virtual void DestroyCell(int toolLevel, int x, int y, int z, int newValue, bool noDrop, bool noParticleSystem)
+		public virtual void DestroyCell(int toolLevel, int x, int y, int z, int newValue, bool noDrop, bool noParticleSystem, MovingBlock movingBlock = null)
 		{
 			int cellValue = Terrain.GetCellValue(x, y, z);
 			int num = Terrain.ExtractContents(cellValue);
@@ -393,7 +393,7 @@ namespace Game
 					m_subsystemParticles.AddParticleSystem(block.CreateDebrisParticleSystem(this, new Vector3(x + 0.5f, y + 0.5f, z + 0.5f), cellValue, 1f));
 				}
 			}
-			ChangeCell(x, y, z, newValue);
+			ChangeCell(x, y, z, newValue, true, movingBlock);
 		}
 
 		public virtual void Draw(Camera camera, int drawOrder)
