@@ -1,3 +1,4 @@
+using Acornima.Ast;
 using Engine;
 using GameEntitySystem;
 using System;
@@ -553,7 +554,10 @@ namespace Game
 					num7 -= num8;
 				}
 			}
-			CollisionVelocityChange = m_velocity - velocity;
+			if(ParentBody != null)
+				CollisionVelocityChange = ParentBody.CollisionVelocityChange;
+			else
+				CollisionVelocityChange = m_velocity - velocity;
 			if (IsGroundDragEnabled && StandingOnValue.HasValue)
 			{
 				m_velocity = Vector3.Lerp(m_velocity, StandingOnVelocity, 6f * dt);
@@ -647,95 +651,99 @@ namespace Game
 			CrushedTime += dt;
 		}
 
-		public bool IsSpaceFreeToMove(float maxMoveFraction, out Vector3? freePosition)
+		public bool IsSpaceFreeToMove(float maxMoveFraction,out Vector3? freePosition, out bool needToTeleport)
 		{
+			needToTeleport = false;
 			freePosition = null;
 			Vector3 stanceBoxSize = StanceBoxSize;
 			Vector3 position = base.Position;
 			for(int i = 0; i < m_freeSpaceOffsets.Length; i++)
 			{
 				Vector3? vector = null;
-				Vector3 vector2 = position + m_freeSpaceOffsets[i];
-				if(Terrain.ToCell(vector2) != Terrain.ToCell(position))
+				Vector3 positionToDetect = position + m_freeSpaceOffsets[i];
+				if(Terrain.ToCell(positionToDetect) != Terrain.ToCell(position))//不能瞬移到不同的格子，只能在相同的格子中瞬移
 				{
 					continue;
 				}
-				BoundingBox box = new BoundingBox(vector2 - new Vector3(stanceBoxSize.X / 2f,0f,stanceBoxSize.Z / 2f),vector2 + new Vector3(stanceBoxSize.X / 2f,stanceBoxSize.Y,stanceBoxSize.Z / 2f));
-				box.Min += new Vector3(0.01f,MaxSmoothRiseHeight + 0.01f,0.01f);
-				box.Max -= new Vector3(0.01f);
+				BoundingBox boxThere = new BoundingBox(positionToDetect - new Vector3(stanceBoxSize.X / 2f,0f,stanceBoxSize.Z / 2f),positionToDetect + new Vector3(stanceBoxSize.X / 2f,stanceBoxSize.Y,stanceBoxSize.Z / 2f));
+				//在检测点处玩家的碰撞箱
+				boxThere.Min += new Vector3(0.01f,MaxSmoothRiseHeight + 0.01f,0.01f);
+				boxThere.Max -= new Vector3(0.01f);
 				m_collisionBoxes.Clear();
-				FindTerrainCollisionBoxes(box,m_collisionBoxes);
+				FindTerrainCollisionBoxes(boxThere,m_collisionBoxes);
 				m_collisionBoxes.AddRange(m_movingBlocksCollisionBoxes);
 				m_collisionBoxes.AddRange(m_bodiesCollisionBoxes);
-				if(IsColliding(box,m_collisionBoxes))
+				if(IsColliding(boxThere,m_collisionBoxes))//目标碰撞箱存在碰撞
 				{
 					m_stoppedTime = 0f;
 					CollisionBox pushingCollisionBox;
-					float num = CalculatePushBack(box,0,m_collisionBoxes,out pushingCollisionBox);
+					float pushBack_X = CalculatePushBack(boxThere,0,m_collisionBoxes,out pushingCollisionBox);
 					CollisionBox pushingCollisionBox2;
-					float num2 = CalculatePushBack(box,1,m_collisionBoxes,out pushingCollisionBox2);
+					float pushBack_Y = CalculatePushBack(boxThere,1,m_collisionBoxes,out pushingCollisionBox2);
 					CollisionBox pushingCollisionBox3;
-					float num3 = CalculatePushBack(box,2,m_collisionBoxes,out pushingCollisionBox3);
-					float num4 = num * num;
-					float num5 = num2 * num2;
-					float num6 = num3 * num3;
+					float pushBack_Z = CalculatePushBack(boxThere,2,m_collisionBoxes,out pushingCollisionBox3);
+					float pushBackXLength = pushBack_X * pushBack_X;
+					float pushBackYLength = pushBack_Y * pushBack_Y;
+					float pushBackZLength = pushBack_Z * pushBack_Z;
 					List<Vector3> list = new List<Vector3>();
-					if(num4 <= num5 && num4 <= num6)
+					//将pushBack后的点，加入待检查的点当中
+					if(pushBackXLength <= pushBackYLength && pushBackXLength <= pushBackZLength)
 					{
-						list.Add(vector2 + new Vector3(num,0f,0f));
-						if(num5 <= num6)
+						list.Add(positionToDetect + new Vector3(pushBack_X,0f,0f));
+						if(pushBackYLength <= pushBackZLength)
 						{
-							list.Add(vector2 + new Vector3(0f,num2,0f));
-							list.Add(vector2 + new Vector3(0f,0f,num3));
+							list.Add(positionToDetect + new Vector3(0f,pushBack_Y,0f));
+							list.Add(positionToDetect + new Vector3(0f,0f,pushBack_Z));
 						}
 						else
 						{
-							list.Add(vector2 + new Vector3(0f,0f,num3));
-							list.Add(vector2 + new Vector3(0f,num2,0f));
+							list.Add(positionToDetect + new Vector3(0f,0f,pushBack_Z));
+							list.Add(positionToDetect + new Vector3(0f,pushBack_Y,0f));
 						}
 					}
-					else if(num5 <= num4 && num5 <= num6)
+					else if(pushBackYLength <= pushBackXLength && pushBackYLength <= pushBackZLength)
 					{
-						list.Add(vector2 + new Vector3(0f,num2,0f));
-						if(num4 <= num6)
+						list.Add(positionToDetect + new Vector3(0f,pushBack_Y,0f));
+						if(pushBackXLength <= pushBackZLength)
 						{
-							list.Add(vector2 + new Vector3(num,0f,0f));
-							list.Add(vector2 + new Vector3(0f,0f,num3));
+							list.Add(positionToDetect + new Vector3(pushBack_X,0f,0f));
+							list.Add(positionToDetect + new Vector3(0f,0f,pushBack_Z));
 						}
 						else
 						{
-							list.Add(vector2 + new Vector3(0f,0f,num3));
-							list.Add(vector2 + new Vector3(num,0f,0f));
+							list.Add(positionToDetect + new Vector3(0f,0f,pushBack_Z));
+							list.Add(positionToDetect + new Vector3(pushBack_X,0f,0f));
 						}
 					}
 					else
 					{
-						list.Add(vector2 + new Vector3(0f,0f,num3));
-						if(num4 <= num5)
+						list.Add(positionToDetect + new Vector3(0f,0f,pushBack_Z));
+						if(pushBackXLength <= pushBackYLength)
 						{
-							list.Add(vector2 + new Vector3(num,0f,0f));
-							list.Add(vector2 + new Vector3(0f,num2,0f));
+							list.Add(positionToDetect + new Vector3(pushBack_X,0f,0f));
+							list.Add(positionToDetect + new Vector3(0f,pushBack_Y,0f));
 						}
 						else
 						{
-							list.Add(vector2 + new Vector3(0f,num2,0f));
-							list.Add(vector2 + new Vector3(num,0f,0f));
+							list.Add(positionToDetect + new Vector3(0f,pushBack_Y,0f));
+							list.Add(positionToDetect + new Vector3(pushBack_X,0f,0f));
 						}
 					}
 					foreach(Vector3 item in list)
 					{
 						if(!(MathF.Abs(item.X - position.X) > stanceBoxSize.X * maxMoveFraction) && !(MathF.Abs(item.Y - position.Y) > stanceBoxSize.Y * maxMoveFraction) && !(MathF.Abs(item.Z - position.Z) > stanceBoxSize.Z * maxMoveFraction))
 						{
-							box = new BoundingBox(item - new Vector3(stanceBoxSize.X / 2f,0f,stanceBoxSize.Z / 2f),item + new Vector3(stanceBoxSize.X / 2f,stanceBoxSize.Y,stanceBoxSize.Z / 2f));
-							box.Min += new Vector3(0.02f,MaxSmoothRiseHeight + 0.02f,0.02f);
-							box.Max -= new Vector3(0.02f);
+							boxThere = new BoundingBox(item - new Vector3(stanceBoxSize.X / 2f,0f,stanceBoxSize.Z / 2f),item + new Vector3(stanceBoxSize.X / 2f,stanceBoxSize.Y,stanceBoxSize.Z / 2f));
+							boxThere.Min += new Vector3(0.02f,MaxSmoothRiseHeight + 0.02f,0.02f);
+							boxThere.Max -= new Vector3(0.02f);
 							m_collisionBoxes.Clear();
-							FindTerrainCollisionBoxes(box,m_collisionBoxes);
+							FindTerrainCollisionBoxes(boxThere,m_collisionBoxes);
 							m_collisionBoxes.AddRange(m_movingBlocksCollisionBoxes);
 							m_collisionBoxes.AddRange(m_bodiesCollisionBoxes);
-							if(!IsColliding(box,m_collisionBoxes))
+							if(!IsColliding(boxThere,m_collisionBoxes))
 							{
 								vector = item;
+								needToTeleport = true;
 								break;
 							}
 						}
@@ -743,7 +751,8 @@ namespace Game
 				}
 				else
 				{
-					vector = vector2;
+					//和目标位置没有碰撞，说明目标位置可以装人
+					vector = positionToDetect;
 				}
 				if(vector.HasValue)
 				{
@@ -755,7 +764,7 @@ namespace Game
 		}
 		public bool MoveToFreeSpaceHelper(float maxMoveFraction)
 		{
-			bool hasFreeSpaceToMove = IsSpaceFreeToMove(maxMoveFraction, out Vector3? freePosition);
+			bool hasFreeSpaceToMove = IsSpaceFreeToMove(maxMoveFraction, out Vector3? freePosition, out bool teleport);
 			if(freePosition.HasValue)
 			{
 				Position = freePosition.Value;
