@@ -59,7 +59,7 @@ namespace Game
 
 		public float m_environmentTemperature;
 
-		private float m_targetTemperature;
+		public float m_targetTemperature;
 
 		public float m_targetTemperatureFlux;
 
