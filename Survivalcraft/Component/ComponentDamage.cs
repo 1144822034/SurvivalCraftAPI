@@ -71,6 +71,10 @@ namespace Game
 				m_subsystemAudio.PlayRandomSound(DamageSoundName, 1f, 0f, m_componentBody.Position, 4f, autoDelay: true);
 				Project.RemoveEntity(Entity, disposeEntity: true);
 			}
+			if (m_componentBody.CrushedTime > 0f)
+			{
+				Damage(1f * dt);
+			}
 			float num = MathF.Abs(m_componentBody.CollisionVelocityChange.Y);
 			if (num > m_fallResilience)
 			{

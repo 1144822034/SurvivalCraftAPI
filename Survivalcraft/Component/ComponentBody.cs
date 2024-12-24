@@ -128,8 +128,6 @@ namespace Game
 
 		public virtual Vector3 StandingOnVelocity { get; set; }
 
-		public virtual bool IsCrushing{get;set;}
-
 		public virtual bool IsSneaking
 		{
 			get
@@ -259,9 +257,6 @@ namespace Game
 			}
 		}
 
-		public bool m_isSneaking; //�����ʹ�ô����ԣ������IsSneaking
-
-		public float m_crushInjureTime;
 		public virtual Action<ComponentBody> CollidedWithBody { get; set; }
 
 		public virtual Action<IMovingBlockSet> CollidedWithMovingBlock { get; set; }
@@ -378,7 +373,6 @@ namespace Game
 			IsGravityEnabled = true;
 			IsGroundDragEnabled = true;
 			IsWaterDragEnabled = true;
-			m_crushInjureTime = 1f;
 		}
 
 		public override void Save(ValuesDictionary valuesDictionary, EntityToIdMap entityToIdMap)
@@ -541,7 +535,7 @@ namespace Game
 			StandingOnVelocity = Vector3.Zero;
 			Vector3 velocity = m_velocity;
 			float num6 = m_velocity.Length();
-			if (num6 > 0f)
+			if (num6 > 0f && CrushedTime == 0f)
 			{
 				Vector3 stanceBoxSize = StanceBoxSize;
 				float x = 0.45f * MathUtils.Min(stanceBoxSize.X, stanceBoxSize.Y, stanceBoxSize.Z) / num6;

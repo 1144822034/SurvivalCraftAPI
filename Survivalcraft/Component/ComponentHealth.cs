@@ -268,7 +268,7 @@ namespace Game
 
                     if (StackExperienceOnKill)
                     {
-                        for (int i = 0; i < Math.Min(100, experienceOrbDropCount); i++) //����������ĵ����߼�������100��ʱ���������ֹ����
+                        for (int i = 0; i < Math.Min(100, experienceOrbDropCount); i++) //调整经验球的掉落逻辑，多于100个时则成组掉落防止卡顿
                         {
                             Vector2 vector = m_random.Vector2(2.5f, 3.5f);
                             int dropInWave = experienceOrbDropCount / 100;
@@ -291,7 +291,7 @@ namespace Game
         {
             lock (this)
             {
-                //�������Լӳ�
+                //更新属性加成
                 AttackResilience = m_attackResilience * AttackResilienceFactor;
                 FallResilience = m_fallResilience * FallResilienceFactor;
                 FireResilienceFactor = m_fireResilience * FireResilienceFactor;
@@ -320,7 +320,7 @@ namespace Game
                     }
                     Heal(m_subsystemGameInfo.TotalElapsedGameTimeDelta * num);
                 }
-                //��ˮ����ֵ
+                //溺水空气值
                 if (BreathingMode == BreathingMode.Air)
                 {
                     int cellContents = m_subsystemTerrain.Terrain.GetCellContents(Terrain.ToCell(position.X), Terrain.ToCell(m_componentCreature.ComponentCreatureModel.EyePosition.Y), Terrain.ToCell(position.Z));
@@ -330,14 +330,14 @@ namespace Game
                 {
                     Air = (m_componentCreature.ComponentBody.ImmersionFactor > 0.25f || m_componentCreature.ComponentBody.IsEmbeddedInIce) ? 1f : MathUtils.Saturate(Air - (dt / AirCapacity));
                 }
-                //�����˺�
+                //岩浆伤害
                 if (m_componentCreature.ComponentBody.ImmersionFactor > 0f && m_componentCreature.ComponentBody.ImmersionFluidBlock is MagmaBlock)
                 {
                     Injure(1f / MagmaResilience * m_componentCreature.ComponentBody.ImmersionFactor * dt, null, ignoreInvulnerability: false, LanguageControl.Get(GetType().Name, 1));
                     float num2 = 1.1f + (0.1f * (float)Math.Sin(12.0 * m_subsystemTime.GameTime));
                     m_redScreenFactor = MathUtils.Max(m_redScreenFactor, num2 * 0.75f * m_componentCreature.ComponentBody.ImmersionFactor / MagmaResilience);
                 }
-                //�����˺�
+                //跌落伤害
                 float fallDamage = CalculateFallDamage();
                 ModsManager.HookAction("CalculateFallDamage", loader =>
                 {
@@ -346,13 +346,13 @@ namespace Game
                 });
                 if (fallDamage > 0f) Injure(fallDamage, null, ignoreInvulnerability: false, LanguageControl.Get(GetType().Name, 2));
                 m_wasStanding = m_componentCreature.ComponentBody.StandingOnValue.HasValue || m_componentCreature.ComponentBody.StandingOnBody != null;
-                //����˺�
+                //虚空伤害
                 if (VoidDamageFactor > 0f && (position.Y < 0f || position.Y > 296f) && m_subsystemTime.PeriodicGameTimeEvent(2.0, 0.0))
                 {
                     Injure(VoidDamageFactor * 0.1f, null, ignoreInvulnerability: true, LanguageControl.Get(GetType().Name, 3));
                     m_componentPlayer?.ComponentGui.DisplaySmallMessage(LanguageControl.Get(GetType().Name, 4), Color.White, blinking: true, playNotificationSound: false);
                 }
-                //��ˮ�˺�
+                //溺水伤害
                 bool num5 = m_subsystemTime.PeriodicGameTimeEvent(1.0, 0.0);
                 if (num5 && Air == 0f)
                 {
@@ -360,19 +360,28 @@ namespace Game
                     num6 /= m_componentFactors?.ResilienceFactor ?? 1;
                     Injure(num6, null, ignoreInvulnerability: false, LanguageControl.Get(GetType().Name, 7));
                 }
-                //�����˺�
+                //火焰伤害
                 if (num5 && (m_componentOnFire.IsOnFire || m_componentOnFire.TouchesFire))
                 {
                     float num7 = 1f / FireResilience;
                     num7 /= m_componentFactors?.ResilienceFactor ?? 1;
                     Injure(new FireInjury(num7, m_componentOnFire.Attacker));
                 }
-                //�����ǳ�˺�
+                //挤压伤害
+                if (m_componentCreature.ComponentBody.CrushedTime > 0f)
+                {
+	                if (m_subsystemTime.PeriodicGameTimeEvent(1.0, 0.0) && m_componentCreature.ComponentBody.CrushedTime > 0.2f)
+	                {
+		                Injure(1 / CrushResilience, null, ignoreInvulnerability: true, LanguageControl.Get("ComponentMiner", "crushed"));
+	                }
+	                m_redScreenFactor = 1f;
+                }
+                //鱼类搁浅伤害
                 if (num5 && CanStrand && m_componentCreature.ComponentBody.ImmersionFactor < 0.25f && (m_componentCreature.ComponentBody.StandingOnValue != 0 || m_componentCreature.ComponentBody.StandingOnBody != null))
                 {
                     Injure(1f / AirLackResilience, null, ignoreInvulnerability: false, LanguageControl.Get(GetType().Name, 6));
                 }
-                //�˺�����
+                //伤害结算
                 float lastHealth = m_lastHealth;
                 HealthChange = Health - m_lastHealth;
                 m_lastHealth = Health;

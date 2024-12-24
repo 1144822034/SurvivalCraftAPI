@@ -4173,7 +4173,7 @@
 					<Parameter Name="VoidDamageFactor" Description="Controls the damage taken when the creature position is too high or too low" Guid="59028bf3-0003-41c1-2c02-f3196294fe40" Value="1" Type="float" />
 					<Parameter Name="AirLackResilience" Description="Time to die when the creature cannot breathe" Guid="e76def38-d79c-0760-58cc-76a408f03508" Value="8.333" Type="float" />
 					<Parameter Name="MagmaResilience" Description="Time to die when the creature is in magma" Guid="09385792-004e-7f5f-b989-3952e449dfba" Value="0.5" Type="float" />
-					<Parameter Name="CrushResilience" Description="controls the damage taken when the creature is crushed" Guid="cacf3868-e0df-c47f-462d-a647731ffa32" Value="6.667" Type="float" />
+					<Parameter Name="CrushResilience" Description="controls the damage taken when the creature is crushed" Guid="cacf3868-e0df-c47f-462d-a647731ffa32" Value="5" Type="float" />
 					<Parameter Name="SpikeResilience" Description="Controls the damage taken when the creature is getting spiked by spikes, cactus and sea urchin" Guid="bc9fa077-d6c1-9101-91d1-b0c88fc481c8" Value="10" Type="float" />
 					<Parameter Name="ExplosionResilience" Description="Controls the damage taken when the creature is exploded" Guid="959d00cd-5e66-1db7-d763-c0d8dd2875e5" Value="1" Type="float" />
 				</ComponentTemplate>
