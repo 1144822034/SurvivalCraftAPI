@@ -7,7 +7,6 @@ namespace Game
 		public IronDoorBlock()
 			: base("Models/IronDoor", 0.0625f)
 		{
-			OnlyInteractiveToPlayer = true;
 		}
 	}
 }

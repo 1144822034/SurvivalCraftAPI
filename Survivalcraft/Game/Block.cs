@@ -32,8 +32,6 @@ namespace Game
 		public bool CanBeBuiltIntoFurniture = false;
 
 		public bool IsCollapsable = false;
-
-		public bool OnlyInteractiveToPlayer = false;
 		public virtual Vector3 GetFirstPersonOffset(int value)
 		{
 			return FirstPersonOffset;
@@ -413,14 +411,6 @@ namespace Game
 		{
 			return DefaultIsInteractive;
 		}
-		public virtual bool IsInteractive(SubsystemTerrain subsystemTerrain, int value, ComponentMiner componentMiner)
-		{
-			if(OnlyInteractiveToPlayer)
-			{
-				if(componentMiner == null || componentMiner.ComponentPlayer == null) return false;
-			}
-			return IsInteractive(subsystemTerrain, value);
-		}
 
 		public virtual IEnumerable<CraftingRecipe> GetProceduralCraftingRecipes()
 		{
@@ -744,7 +734,7 @@ namespace Game
 		}
 		public virtual int GetPriorityInteract(int value, ComponentMiner componentMiner)
 		{
-			if(componentMiner.m_subsystemTerrain != null && IsInteractive(componentMiner.m_subsystemTerrain, value, componentMiner))
+			if(componentMiner.m_subsystemTerrain != null && IsInteractive(componentMiner.m_subsystemTerrain, value))
 			{
                 return PriorityInteract;
             }
