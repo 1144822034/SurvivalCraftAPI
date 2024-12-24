@@ -93,8 +93,6 @@ namespace Game
 
 		public bool IsRaycastTransparent = false;//不可选中
 
-		public float? RedScreenFactorInCrush = 1f;
-
 		public static bool ResetVelocityOnProjectLoad = true;
 		public virtual Vector3 StanceBoxSize => new(BoxSize.X, ((CrouchFactor >= 1f) ? 0.5f : 1f) * BoxSize.Y, BoxSize.Z);
 

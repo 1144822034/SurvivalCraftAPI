@@ -40,7 +40,9 @@ namespace Game
         public Random m_random = new();
 
         public bool m_regenerateLifeEnabled = true;//生命再生
-        public virtual float VoidDamageFactor { get; set; }//y轴过高或者过低造成的伤害系数
+
+		public float? RedScreenFactorInCrush = 1f;
+		public virtual float VoidDamageFactor { get; set; }//y轴过高或者过低造成的伤害系数
         public virtual float AirLackResilience { get; set; }//溺水伤害抗性
         public virtual float MagmaResilience { get; set; }//熔岩伤害抗性
         public virtual float CrushResilience { get; set; }//挤压伤害抗性
@@ -374,7 +376,7 @@ namespace Game
 	                {
 		                Injure(1 / CrushResilience, null, ignoreInvulnerability: true, LanguageControl.Get("ComponentMiner", "crushed"));
 	                }
-	                m_redScreenFactor = 1f;
+	                if(RedScreenFactorInCrush.HasValue) m_redScreenFactor = RedScreenFactorInCrush.Value;
                 }
                 //鱼类搁浅伤害
                 if (num5 && CanStrand && m_componentCreature.ComponentBody.ImmersionFactor < 0.25f && (m_componentCreature.ComponentBody.StandingOnValue != 0 || m_componentCreature.ComponentBody.StandingOnBody != null))
