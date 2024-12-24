@@ -307,7 +307,20 @@ namespace Game
 			return true;
 		}
 
-        public virtual void UnderExplosion(Vector3 impulse, float damage)
+		public virtual void UnderExplosionStart(Vector3 explosionCenter,float explosionPressure)
+		{
+			float num = Vector3.Distance(Position, explosionCenter);
+			float num2 = 5f * MathF.Sqrt(explosionPressure);
+			float num3 = 1f * MathF.Sqrt(explosionPressure);
+			float strength = num2 / (num / num3 + 1f);
+			ModsManager.HookAction("OnComponentBodyExplodedStart",loader => {
+				loader.OnComponentBodyExplodedStart(this, explosionCenter, explosionPressure, ref strength);
+				return false;
+			});
+			if(strength > 0) ApplyShaking(strength);
+		}
+
+		public virtual void UnderExplosion(Vector3 impulse, float damage)
 		{
 			bool setOnFire = true;
 			float fluctuation = 0.5f;

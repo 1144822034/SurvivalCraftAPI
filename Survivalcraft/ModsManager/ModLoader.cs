@@ -1436,5 +1436,18 @@ namespace Game
 
 		}
 
+		/// <summary>
+		/// 在爆炸开始，计算动物摇晃程度时执行。
+		/// 为了尽可能确保兼容性，建议只对属于自己模组的生物进行接管编辑
+		/// </summary>
+		/// <param name="componentBody">将要摇晃的动物</param>
+		/// <param name="explosionCenter">爆炸中心地点</param>
+		/// <param name="explosionPressure">爆炸强度</param>
+		/// <param name="shakeStrength">动物摇晃的强度</param>
+		public virtual void OnComponentBodyExplodedStart(ComponentBody componentBody, Vector3 explosionCenter, float explosionPressure, ref float shakeStrength)
+		{
+
+		}
+
 	}
 }

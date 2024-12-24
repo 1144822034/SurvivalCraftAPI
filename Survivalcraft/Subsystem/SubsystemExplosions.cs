@@ -515,11 +515,7 @@ namespace Game
 		{
 			foreach (ComponentBody body in m_subsystemBodies.Bodies)
 			{
-				float num = Vector3.Distance(body.Position, center);
-				float num2 = 5f * MathF.Sqrt(pressure);
-				float num3 = 1f * MathF.Sqrt(pressure);
-				float strength = num2 / (num / num3 + 1f);
-				body.ApplyShaking(strength);
+				body.UnderExplosionStart(center, pressure);
 			}
 		}
 
