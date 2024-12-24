@@ -421,7 +421,7 @@ namespace Game
 					}
 					m_countWidget.IsVisible = num > 1 && !flag;
 					m_editOverlayWidget.IsVisible = !HideEditOverlay && block.IsEditable_(slotValue);
-					m_interactiveOverlayWidget.IsVisible = !HideInteractiveOverlay && block.IsInteractive(m_subsystemTerrain, slotValue);
+					m_interactiveOverlayWidget.IsVisible = !HideInteractiveOverlay && block.IsInteractive(m_subsystemTerrain, slotValue, GetViewPlayer().ComponentMiner);
 					m_foodOverlayWidget.IsVisible = !HideFoodOverlay && block.GetRotPeriod(slotValue) > 0;
 					m_foodOverlayWidget.FillColor = flag2 ? new Color(128, 64, 0) : new Color(160, 160, 160);
 					if (!flag)

@@ -508,7 +508,7 @@ namespace Game
 					{
 						if (block.IsPlacementTransparent_(value))
 						{
-							return block.IsInteractive(m_subsystemTerrain, value);
+							return block.IsInteractive(m_subsystemTerrain, value, this);
 						}
 						return true;
 					}
@@ -644,7 +644,7 @@ namespace Game
 			for (int i = 0; i < 10; i++)
 			{
 				TerrainRaycastResult? terrainRaycastResult = Raycast<TerrainRaycastResult>(new Ray3(eyePosition, forwardVector + m_random.Vector3(0.75f)), RaycastMode.Interaction);
-				if (terrainRaycastResult.HasValue && terrainRaycastResult.Value.Distance < 1.5f && Terrain.ExtractContents(terrainRaycastResult.Value.Value) != 57 && Interact(terrainRaycastResult.Value))
+				if (terrainRaycastResult.HasValue && terrainRaycastResult.Value.Distance < 1.5f && Interact(terrainRaycastResult.Value))
 				{
 					break;
 				}
