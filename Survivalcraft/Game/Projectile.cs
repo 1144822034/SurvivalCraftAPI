@@ -314,6 +314,7 @@ namespace Game
             if (terrainRaycastResult.HasValue || bodyRaycastResult.HasValue)
             {
                 disintegrate |= ProcessOnHitAsProjectileBlockBehavior(nullableCellFace, componentBody, dt);
+				ToRemove |= disintegrate;
             }
             //如果弹射物命中了Body，进行攻击，并改变速度。
             if (bodyRaycastResult.HasValue && (!terrainRaycastResult.HasValue || bodyRaycastResult.Value.Distance < terrainRaycastResult.Value.Distance))
@@ -332,7 +333,6 @@ namespace Game
                 if (disintegrate)
                 {
                     m_subsystemParticles.AddParticleSystem(block.CreateDebrisParticleSystem(SubsystemTerrain, Position, Value, 1f));
-                    ToRemove = true;
                 }
                 else if (!ToRemove && (pickableStuckMatrix.HasValue || Velocity.Length() < 1f))
                 {
