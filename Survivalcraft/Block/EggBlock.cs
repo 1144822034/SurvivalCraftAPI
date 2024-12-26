@@ -184,9 +184,11 @@ namespace Game
 
 		public override IEnumerable<CraftingRecipe> GetProceduralCraftingRecipes()
 		{
+			string description = LanguageControl.Get(fName, 4);
 			foreach (EggType eggType in EggTypes)
 			{
 				if (eggType == null) continue;
+				Console.WriteLine(eggType.DisplayName);
 				if (eggType.NutritionalValue > 0f)
 				{
 					int rot = 0;
@@ -199,15 +201,15 @@ namespace Game
 							RemainsCount = 1,
 							RemainsValue = Terrain.MakeBlockValue(91),
 							RequiredHeatLevel = 1f,
-							Description = LanguageControl.Get(fName, 4)
+							Description = description
 						};
 						int data = SetEggType(SetIsLaid(0, isLaid: true), eggType.EggTypeIndex);
 						int value = SetDamage(Terrain.MakeBlockValue(118, 0, data), rot);
 						craftingRecipe.Ingredients[0] = "egg:" + Terrain.ExtractData(value).ToString(CultureInfo.InvariantCulture);
 						craftingRecipe.Ingredients[1] = "waterbucket";
+						Console.WriteLine(craftingRecipe.Ingredients[0]);
 						yield return craftingRecipe;
-						int num = rot + 1;
-						rot = num;
+						rot++;
 					}
 				}
 			}

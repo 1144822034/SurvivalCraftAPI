@@ -226,7 +226,7 @@ namespace Game
 		/// 计算基础投影矩阵，创建透视视野
 		/// </summary>
 		/// <returns></returns>
-		public Matrix CalculateBaseProjectionMatrix()
+		public virtual Matrix CalculateBaseProjectionMatrix()
 		{
 			if(!Eye.HasValue)
 			{
