@@ -227,7 +227,7 @@ namespace Game
         /// <param name="componentClothing"></param>
         /// <param name="attackPower">未计算免伤前的伤害</param>
         /// <returns>免伤后的伤害，当多个mod都有免伤计算时，取最小值</returns>
-        public virtual float ApplyArmorProtection(ComponentClothing componentClothing, float attackPower, out bool Applied)
+        public virtual float ApplyArmorProtection(ComponentClothing componentClothing, float attackPower, bool appliedByOtherMods, out bool Applied)
         {
             Applied = false;
             return attackPower;

@@ -232,7 +232,7 @@ namespace Game
 			bool Applied = false;
 			ModsManager.HookAction("ApplyArmorProtection", modLoader =>
 			{
-				attackPower = modLoader.ApplyArmorProtection(this, attackPower, out bool flag2);
+				attackPower = modLoader.ApplyArmorProtection(this, attackPower, Applied, out bool flag2);
 				Applied |= flag2;
 				return false;
 			});
