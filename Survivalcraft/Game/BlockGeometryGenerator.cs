@@ -411,7 +411,7 @@ namespace Game
 				indices5.Array[count10 + 5] = count9;
 			}
 			cellValueFast = chunkAtCell.GetCellValueFast(x & 0xF, y - 1, z & 0xF);
-			if (((block.GenerateFacesForSameNeighbors || Terrain.ExtractContents(cellValueFast) != blockIndex) && block.ShouldGenerateFace(SubsystemTerrain, 4, value, cellValueFast, x, y, z)) || height11 < 1f || height12 < 1f || height21 < 1f || height22 < 1f)
+			if (((block.GenerateFacesForSameNeighbors || Terrain.ExtractContents(cellValueFast) != blockIndex) && block.ShouldGenerateFace(SubsystemTerrain, 4, value, cellValueFast, x, y, z)))
 			{
 				DynamicArray<TerrainVertex> vertices6 = subsetsByFace[5].Vertices;
 				var indices6 = subsetsByFace[5].Indices;

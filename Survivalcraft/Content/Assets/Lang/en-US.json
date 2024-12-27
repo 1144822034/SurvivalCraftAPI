@@ -702,7 +702,9 @@
     "10": "Large Visibility Range",
     "11": "The game may crash randomly if your device does not have enough memory to handle the visibility range you selected.",
     "12": "API",
-    "13": "Primary"
+    "13": "Primary",
+    "14": "1 VSYNC",
+    "15": "2 VSYNC"
   },
   "RecipaediaDescriptionScreen": {
     "Luminosity": "Luminosity",
