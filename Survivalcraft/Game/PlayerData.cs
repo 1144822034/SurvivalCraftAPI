@@ -260,8 +260,6 @@ namespace Game
 				else
 				{
 					m_spawnMode = SpawnMode.Respawn;
-					if(ReduceLevelUponDeath)
-						Level = MathUtils.Max(MathF.Floor(Level / 2f),1f);
 				}
 				if (m_spawnMode == SpawnMode.Respawn)
 				{
@@ -331,7 +329,12 @@ namespace Game
 								GameManager.DisposeProject();
                             }
 						}
-						m_stateMachine.TransitionTo("Playing");
+						if(m_playerDeathTime.HasValue || ComponentPlayer.ComponentHealth.Health <= 0f)
+						{
+							m_playerDeathTime = Time.RealTime;
+							m_stateMachine.TransitionTo("PlayerDead");
+						}
+						else m_stateMachine.TransitionTo("Playing");
 					}
 				}
 			}, null);
@@ -355,11 +358,14 @@ namespace Game
 			}, null);
 			m_stateMachine.AddState("PlayerDead", delegate
 			{
+				HideSpawnDialog();
 				ModsManager.HookAction("OnPlayerDead", modLoader =>
 				{
 					modLoader.OnPlayerDead(this);
 					return false;
 				});
+				if(ReduceLevelUponDeath && m_stateMachine.PreviousState == "Playing")
+					Level = MathUtils.Max(MathF.Floor(Level / 2f),1f);
 			}, delegate
 			{
 				if (ComponentPlayer == null)
@@ -373,7 +379,7 @@ namespace Game
 					loader.UpdateDeathCameraWidget(this, ref disableVanillaTapToRespawnAction, ref respawn);
 					return false;
 				});
-				if (!disableVanillaTapToRespawnAction && Time.RealTime - m_playerDeathTime.Value > 1.5 && !DialogsManager.HasDialogs(ComponentPlayer.GuiWidget) && ComponentPlayer.GameWidget.Input.Any)
+				if (!disableVanillaTapToRespawnAction && Time.RealTime - (m_playerDeathTime ?? 0) > 1.5 && !DialogsManager.HasDialogs(ComponentPlayer.GuiWidget) && ComponentPlayer.GameWidget.Input.Any)
 				{
 					if (m_subsystemGameInfo.WorldSettings.GameMode == GameMode.Cruel)
 					{

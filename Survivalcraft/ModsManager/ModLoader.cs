@@ -171,11 +171,12 @@ namespace Game
             return false;
         }
 
-        /// <summary>
-        /// 当人物死亡时执行
-        /// </summary>
-        /// <param name="playerData"></param>
-        public virtual void OnPlayerDead(PlayerData playerData)
+		/// <summary>
+		/// 当人物死亡时执行。在玩家进入世界且玩家处于死亡状态时也会执行
+		/// 可以通过playerData.m_stateMachine.PreviousState == "Playing"，来判断是刚死的，还是加载世界的时候就已经死了。并规避由于退出重进世界造成的“反复死亡判断”bug
+		/// </summary>
+		/// <param name="playerData"></param>
+		public virtual void OnPlayerDead(PlayerData playerData)
         {
         }
 
