@@ -183,7 +183,7 @@ namespace Game
 			bool flag = false;
             foreach (string key in keys)
 			{
-				if(key.Length == 0)
+				if(key.Length == 0 || nowNode == null)
 				{
 					break;
 				}
