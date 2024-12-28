@@ -94,7 +94,7 @@ namespace Game
 		public bool IsRaycastTransparent = false;//不可选中
 
 		public static bool ResetVelocityOnProjectLoad = true;
-		public virtual Vector3 StanceBoxSize => new(BoxSize.X, ((CrouchFactor >= 1f) ? 0.5f : 1f) * BoxSize.Y, BoxSize.Z);
+		public virtual Vector3 StanceBoxSize => new(BoxSize.X, ((CrouchFactor >= 0.8f) ? 0.5f : 1f) * BoxSize.Y, BoxSize.Z);
 
 		public virtual Vector3 BoxSize { get; set; }
 
@@ -126,7 +126,7 @@ namespace Game
 
 		public virtual Vector3 StandingOnVelocity { get; set; }
 
-		public virtual bool IsSneaking
+		public virtual bool IsCrouching
 		{
 			get
 			{
@@ -165,7 +165,7 @@ namespace Game
 			}
 			set
 			{
-				if (!StandingOnValue.HasValue || !CanCrouch)
+				if (!CanCrouch)
 				{
 					value = 0f;
 				}
@@ -181,12 +181,11 @@ namespace Game
 			}
 			set
 			{
-				if (!StandingOnValue.HasValue || !CanCrouch)
+				if (!CanCrouch)
 				{
 					value = 0f;
 				}
 				m_crouchFactor = value;
-				m_targetCrouchFactor = value;
 			}
 		}
 

@@ -81,7 +81,7 @@ namespace Game
 
 		public override void Update(float dt)
 		{
-			m_sneakFactor = m_componentCreature.ComponentBody.IsSneaking
+			m_sneakFactor = m_componentCreature.ComponentBody.IsCrouching
 				? MathUtils.Min(m_sneakFactor + (2f * dt), 1f)
 				: MathUtils.Max(m_sneakFactor - (2f * dt), 0f);
 

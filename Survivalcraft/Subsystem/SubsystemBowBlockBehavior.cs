@@ -59,7 +59,7 @@ namespace Game
 						}
 						float num2 = (float)(m_subsystemTime.GameTime - value);
 						float num3 = (float)MathUtils.Remainder(m_subsystemTime.GameTime, 1000.0);
-						Vector3 v = ((componentMiner.ComponentCreature.ComponentBody.IsSneaking ? 0.02f : 0.04f) + (0.25f * MathUtils.Saturate((num2 - 2.1f) / 5f))) * new Vector3
+						Vector3 v = ((componentMiner.ComponentCreature.ComponentBody.IsCrouching ? 0.02f : 0.04f) + (0.25f * MathUtils.Saturate((num2 - 2.1f) / 5f))) * new Vector3
 						{
 							X = SimplexNoise.OctavedNoise(num3, 2f, 3, 2f, 0.5f),
 							Y = SimplexNoise.OctavedNoise(num3 + 100f, 2f, 3, 2f, 0.5f),

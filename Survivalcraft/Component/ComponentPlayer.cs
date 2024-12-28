@@ -310,7 +310,7 @@ namespace Game
                 });
                 if (!skipVanilla_h)
 				{
-                    ComponentLocomotion.WalkOrder = ComponentBody.IsSneaking ? (0.66f * new Vector2(playerInput.CrouchMove.X, playerInput.CrouchMove.Z)) : new Vector2(playerInput.Move.X, playerInput.Move.Z);
+                    ComponentLocomotion.WalkOrder = ComponentBody.IsCrouching ? (0.66f * new Vector2(playerInput.CrouchMove.X, playerInput.CrouchMove.Z)) : new Vector2(playerInput.Move.X, playerInput.Move.Z);
                     ComponentLocomotion.FlyOrder = new Vector3(0f, playerInput.Move.Y, 0f);
                     ComponentLocomotion.TurnOrder = playerInput.Look * new Vector2(1f, 0f);
                     ComponentLocomotion.JumpOrder = MathUtils.Max(playerInput.Jump ? 1 : 0, ComponentLocomotion.JumpOrder);
@@ -392,7 +392,7 @@ namespace Game
                             {
                                 Time.QueueTimeDelayedExecution(Time.RealTime + 3.0, delegate
                                 {
-                                    if (!m_aimHintIssued && m_aim.HasValue && !ComponentBody.IsSneaking)
+                                    if (!m_aimHintIssued && m_aim.HasValue && !ComponentBody.IsCrouching)
                                     {
                                         m_aimHintIssued = true;
                                         ComponentGui.DisplaySmallMessage(LanguageControl.Get(fName, 1), Color.White, blinking: true, playNotificationSound: true);

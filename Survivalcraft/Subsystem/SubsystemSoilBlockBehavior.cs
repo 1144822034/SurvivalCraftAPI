@@ -23,7 +23,7 @@ namespace Game
 
 		public override void OnCollide(CellFace cellFace, float velocity, ComponentBody componentBody)
 		{
-			if (componentBody.Mass > 20f && !componentBody.IsSneaking)
+			if (componentBody.Mass > 20f && !componentBody.IsCrouching)
 			{
 				Vector3 velocity2 = componentBody.Velocity;
 				if (velocity2.Y < -3f || (velocity2.Y < 0f && m_random.Float(0f, 1f) < 1.5f * m_subsystemTime.GameTimeDelta && velocity2.LengthSquared() > 1f))

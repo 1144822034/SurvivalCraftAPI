@@ -188,7 +188,6 @@ namespace Game
 			foreach (EggType eggType in EggTypes)
 			{
 				if (eggType == null) continue;
-				Console.WriteLine(eggType.DisplayName);
 				if (eggType.NutritionalValue > 0f)
 				{
 					int rot = 0;
@@ -207,7 +206,6 @@ namespace Game
 						int value = SetDamage(Terrain.MakeBlockValue(118, 0, data), rot);
 						craftingRecipe.Ingredients[0] = "egg:" + Terrain.ExtractData(value).ToString(CultureInfo.InvariantCulture);
 						craftingRecipe.Ingredients[1] = "waterbucket";
-						Console.WriteLine(craftingRecipe.Ingredients[0]);
 						yield return craftingRecipe;
 						rot++;
 					}
