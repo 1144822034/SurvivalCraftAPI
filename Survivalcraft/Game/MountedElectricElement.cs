@@ -18,8 +18,9 @@ namespace Game
 			if (SubsystemElectricity.SubsystemTerrain.Terrain.IsCellValid(x, y, z))
 			{
 				int cellValue = SubsystemElectricity.SubsystemTerrain.Terrain.GetCellValue(x, y, z);
+				int elementCellValue = SubsystemElectricity.SubsystemTerrain.Terrain.GetCellValue(point.X, point.Y, point.Z);
 				Block block = BlocksManager.Blocks[Terrain.ExtractContents(cellValue)];
-				if (!block.IsFaceSuitableForElectricElements(SubsystemElectricity.SubsystemTerrain, cellFace, cellValue) && (cellFace.Face != 4 || !(block is FenceBlock)))
+				if (block.IsFaceNonAttachable(SubsystemElectricity.SubsystemTerrain, cellFace.Face, cellValue, elementCellValue) && (cellFace.Face != 4 || !(block is FenceBlock)))
 				{
 					SubsystemElectricity.SubsystemTerrain.DestroyCell(0, cellFace.X, cellFace.Y, cellFace.Z, 0, noDrop: false, noParticleSystem: false);
 				}

@@ -15,11 +15,12 @@ namespace Game
         }
         public override void OnNeighborBlockChanged(int x, int y, int z, int neighborX, int neighborY, int neighborZ)
 		{
+			int bottomSuckerBlockValue = SubsystemTerrain.Terrain.GetCellValue(x,y,z);
 			base.OnNeighborBlockChanged(x, y, z, neighborX, neighborY, neighborZ);
-			int face = BottomSuckerBlock.GetFace(Terrain.ExtractData(SubsystemTerrain.Terrain.GetCellValue(x, y, z)));
+			int face = BottomSuckerBlock.GetFace(Terrain.ExtractData(bottomSuckerBlockValue));
 			Point3 point = CellFace.FaceToPoint3(CellFace.OppositeFace(face));
 			int cellValue = SubsystemTerrain.Terrain.GetCellValue(x + point.X, y + point.Y, z + point.Z);
-			if (!IsSupport(cellValue, face))
+			if (!IsSupport(cellValue, face, bottomSuckerBlockValue))
 			{
 				SubsystemTerrain.DestroyCell(0, x, y, z, 0, noDrop: false, noParticleSystem: false);
 			}
@@ -36,12 +37,12 @@ namespace Game
 			}
 		}
 
-		public virtual bool IsSupport(int value, int face)
+		public virtual bool IsSupport(int value, int face, int bottomSuckerBlockValue = 226)
 		{
 			Block block = BlocksManager.Blocks[Terrain.ExtractContents(value)];
 			if (block.IsCollidable_(value))
 			{
-				return !block.IsFaceTransparent(SubsystemTerrain, CellFace.OppositeFace(face), value);
+				return !block.IsFaceNonAttachable(SubsystemTerrain, CellFace.OppositeFace(face), value, bottomSuckerBlockValue);
 			}
 			return false;
 		}

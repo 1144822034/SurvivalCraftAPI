@@ -188,6 +188,8 @@ namespace Game
 
 		public float DefaultSicknessProbability;
 
+		public bool? DefaultIsNonAttachable = null;
+
 		public int PriorityUse = 3000;
 		public int PriorityInteract = 2000;
 		public int PriorityPlace = 1000;
@@ -674,7 +676,7 @@ namespace Game
 		}
 		public virtual bool IsCollapseSupportBlock(SubsystemTerrain subsystemTerrain, int value)
 		{
-			return !IsFaceTransparent(subsystemTerrain, 4, value);
+			return !IsFaceNonAttachable(subsystemTerrain, 4, value, 0);
 		}
 
 		public virtual bool IsCollapseDestructibleBlock(int value)
@@ -710,13 +712,15 @@ namespace Game
 
 		public virtual bool IsNonAttachable(int value)
 		{
+			if(DefaultIsNonAttachable.HasValue) return DefaultIsNonAttachable.Value;
 			return IsTransparent_(value);
 		}
-		public virtual bool IsFaceSuitableForElectricElements(SubsystemTerrain subsystemTerrain, CellFace cellFace, int value)
-        {
-			if(!IsCollidable_(value) || IsNonAttachable(value)) return false;
-			return true;
-        }
+
+		public virtual bool IsFaceNonAttachable(SubsystemTerrain subsystemTerrain,int face,int value, int attachBlockValue)
+		{
+			if(!IsCollidable_(value) || IsNonAttachable(value)) return true;
+			return false;
+		}
 
 		public virtual bool ShouldBeAddedToProject(SubsystemBlocksManager subsystemBlocksManager)
 		{

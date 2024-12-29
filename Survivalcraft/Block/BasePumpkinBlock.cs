@@ -225,5 +225,10 @@ namespace Game
 			}
 			return DefaultRotPeriod;
 		}
+
+		public override bool IsSuitableForPlants(int value,int plantValue)
+		{
+			return false;
+		}
 	}
 }
