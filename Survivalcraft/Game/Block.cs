@@ -705,8 +705,6 @@ namespace Game
 
 		public virtual bool IsSuitableForPlants(int value, int plantValue)
 		{
-			int plantContents = Terrain.ExtractContents(plantValue);
-			if (value > 0 && (plantContents == 131 || plantContents == 132 || plantContents == 244)) return true;
 			return false;
 		}
 

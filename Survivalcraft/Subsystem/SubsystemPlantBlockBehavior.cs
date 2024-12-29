@@ -15,6 +15,8 @@ namespace Game
 
 		public SubsystemSeasons m_subsystemSeasons;
 
+		public SubsystemTerrain m_subsystemTerrain;
+
 		public Random m_random = new();
 
 		public override int[] HandledBlocks => new int[11]
@@ -34,15 +36,25 @@ namespace Game
 
 		public sealed override void OnNeighborBlockChanged(int x, int y, int z, int neighborX, int neighborY, int neighborZ)
 		{
+			bool destroyCell = false;
 			int plantValue = SubsystemTerrain.Terrain.GetCellValue(x, y, z);
             int plantContents = Terrain.ExtractContents(plantValue);
 			int cellValue = SubsystemTerrain.Terrain.GetCellValue(x, y - 1, z);
 			int soilContents = Terrain.ExtractContents(cellValue);
-			Block soilBlock = BlocksManager.Blocks[soilContents];
-			if(!soilBlock.IsSuitableForPlants(cellValue, plantValue))
+			Block blockUnder = BlocksManager.Blocks[soilContents];
+			if(BlocksManager.Blocks[plantContents] is BasePumpkinBlock)
 			{
-                SubsystemTerrain.DestroyCell(0, x, y, z, 0, noDrop: false, noParticleSystem: false);
-            }
+				if(blockUnder.IsFaceNonAttachable(m_subsystemTerrain, 4, cellValue, plantValue))
+					destroyCell = true;
+			}
+			else if(!blockUnder.IsSuitableForPlants(cellValue, plantValue))
+			{
+				destroyCell = true;
+			}
+			if(destroyCell)
+			{
+				SubsystemTerrain.DestroyCell(0,x,y,z,0,noDrop: false,noParticleSystem: false);
+			}
 		}
 
 		public override void OnBlockGenerated(int value, int x, int y, int z, bool isLoaded)
@@ -97,6 +109,7 @@ namespace Game
 			m_subsystemCellChangeQueue = base.Project.FindSubsystem<SubsystemCellChangeQueue>(throwOnError: true);
 			m_subsystemGameInfo = base.Project.FindSubsystem<SubsystemGameInfo>(throwOnError: true);
 			m_subsystemSeasons = base.Project.FindSubsystem<SubsystemSeasons>(throwOnError: true);
+			m_subsystemTerrain = Project.FindSubsystem<SubsystemTerrain>(throwOnError: true);
 		}
 
 		public void GrowTallGrass(int value, int x, int y, int z, int pollPass)

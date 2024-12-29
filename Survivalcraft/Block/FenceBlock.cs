@@ -207,6 +207,13 @@ namespace Game
 			}
 		}
 
+		public override bool IsFaceNonAttachable(SubsystemTerrain subsystemTerrain,int face,int value,int attachBlockValue)
+		{
+			Block block = BlocksManager.Blocks[Terrain.ExtractContents(attachBlockValue)];
+			if(block is BasePumpkinBlock) return false;
+			return base.IsFaceNonAttachable(subsystemTerrain,face,value,attachBlockValue);
+		}
+
 		public override void DrawBlock(PrimitivesRenderer3D primitivesRenderer, int value, Color color, float size, ref Matrix matrix, DrawBlockEnvironmentData environmentData)
 		{
 			int? color2 = GetColor(Terrain.ExtractData(value));
