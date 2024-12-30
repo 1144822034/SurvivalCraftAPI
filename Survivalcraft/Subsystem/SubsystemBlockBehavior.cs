@@ -47,11 +47,11 @@ namespace Game
 		}
 		public virtual void OnBlockStartMoving(int value, int newValue, int x, int y, int z, MovingBlock movingBlock)
 		{
-
+			OnBlockRemoved(value,newValue,x,y,z);
 		}
 		public virtual void OnBlockStopMoving(int value, int oldValue, int x, int y, int z, MovingBlock movingBlock)
 		{
-
+			OnBlockAdded(value,oldValue,x,y,z);
 		}
 
 		public virtual void OnNeighborBlockChanged(int x, int y, int z, int neighborX, int neighborY, int neighborZ)
