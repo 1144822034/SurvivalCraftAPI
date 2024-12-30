@@ -15,6 +15,13 @@ namespace Game
 			new(new Vector3(0f, 0f, 0f), new Vector3(1f, 0.9375f, 1f))
 		};
 
+		public override bool IsFaceNonAttachable(SubsystemTerrain subsystemTerrain,int face,int value,int attachBlockValue)
+		{
+			Block block = BlocksManager.Blocks[Terrain.ExtractContents(attachBlockValue)];
+			if(block is BasePumpkinBlock) return false;
+			return base.IsFaceNonAttachable(subsystemTerrain,face,value,attachBlockValue);
+		}
+
 		public override int GetFaceTextureSlot(int face, int value)
 		{
 			int nitrogen = GetNitrogen(Terrain.ExtractData(value));
