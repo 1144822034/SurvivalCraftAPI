@@ -1450,5 +1450,19 @@ namespace Game
 
 		}
 
+		/// <summary>
+		/// 在游戏执行植物生长判定时执行，为保证良好兼容性，建议只在处理属于自己模组的方块时改变控制
+		/// </summary>
+		/// <param name="subsystemPlantBlockBehavior">子系统，便于定位SubsystemTerrain等必要组件</param>
+		/// <param name="x">植物的坐标x</param>
+		/// <param name="y">植物的坐标y</param>
+		/// <param name="z">植物的坐标z</param>
+		/// <param name="pollPass">用途不确定</param>
+		/// <param name="skipVanilla">是否跳过原版的执行进程，注意本接口不能跳过其他模组的执行进程</param>
+		public virtual void GrowPlant(SubsystemPlantBlockBehavior subsystemPlantBlockBehavior, int x, int y,int z, int pollPass, out bool skipVanilla)
+		{
+			skipVanilla = false;
+		}
+
 	}
 }

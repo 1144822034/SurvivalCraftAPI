@@ -76,29 +76,38 @@ namespace Game
 			{
 				return;
 			}
-			int num = Terrain.ExtractContents(value);
-			Block block = BlocksManager.Blocks[num];
-			if (num == 19)
+			bool skipVanilla = false;
+			ModsManager.HookAction("GrowPlant",modLoader => {
+				modLoader.GrowPlant(this,x,y,z,pollPass,out bool skip);
+				skipVanilla |= skip;
+				return false;
+			});
+			if(!skipVanilla)
 			{
-				GrowTallGrass(value, x, y, z, pollPass);
-				return;
-			}
-			if (block is FlowerBlock)
-			{
-				GrowFlower(value, x, y, z, pollPass);
-				return;
-			}
-			switch (num)
-			{
-				case 174:
-					GrowRye(value, x, y, z, pollPass);
+				int num = Terrain.ExtractContents(value);
+				Block block = BlocksManager.Blocks[num];
+				if(num == 19)
+				{
+					GrowTallGrass(value,x,y,z,pollPass);
+					return;
+				}
+				if(block is FlowerBlock)
+				{
+					GrowFlower(value,x,y,z,pollPass);
+					return;
+				}
+				switch(num)
+				{
+					case 174:
+					GrowRye(value,x,y,z,pollPass);
 					break;
-				case 204:
-					GrowCotton(value, x, y, z, pollPass);
+					case 204:
+					GrowCotton(value,x,y,z,pollPass);
 					break;
-				case 131:
-					GrowPumpkin(value, x, y, z, pollPass);
+					case 131:
+					GrowPumpkin(value,x,y,z,pollPass);
 					break;
+				}
 			}
 		}
 
