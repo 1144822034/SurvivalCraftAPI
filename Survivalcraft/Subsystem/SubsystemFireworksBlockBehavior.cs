@@ -26,6 +26,8 @@ namespace Game
 
 		public float m_newYearCelebrationTimeRemaining;
 
+		public const string fName = "SubsystemFireworksBlockBehavior";
+
 		public override int[] HandledBlocks => new int[0];
 
 		public UpdateOrder UpdateOrder => UpdateOrder.Default;
@@ -98,7 +100,7 @@ namespace Game
 				{
 					SettingsManager.NewYearCelebrationLastYear = now.Year;
 					m_newYearCelebrationTimeRemaining = 180f;
-					componentPlayer.ComponentGui.DisplayLargeMessage("Happy New Year!", "--- Enjoy the fireworks ---", 15f, 3f);
+					componentPlayer.ComponentGui.DisplayLargeMessage(LanguageControl.Get(fName, "1"), LanguageControl.Get(fName, "2"), 15f, 3f);
 				}
 			}
 			if (!(m_newYearCelebrationTimeRemaining > 0f))

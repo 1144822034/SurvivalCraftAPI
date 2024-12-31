@@ -133,6 +133,10 @@
 	"SubsystemEggBlockBehavior": {
 		"1": "生成动物失败，请检查游戏日志"
 	},
+	"SubsystemFireworksBlockBehavior": {
+		"1": "新年快乐！",
+		"2": "--- 享受烟花 ---"
+	},
 	"ExternalContentManager": {
 		"1": "名字不能为空",
 		"2": "名字不能超出50个字符",

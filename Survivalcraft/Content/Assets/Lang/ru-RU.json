@@ -132,6 +132,10 @@
     "SubsystemEggBlockBehavior": {
         "1": "Failed to spawn creature, check game log."
     },
+    "SubsystemFireworksBlockBehavior": {
+        "1": "Happy New Year!",
+        "2": "--- Enjoy the fireworks ---"
+    },
     "ExternalContentManager": {
         "1": "Название не введено",
         "2": "Длина названия превышает 50 символов",
