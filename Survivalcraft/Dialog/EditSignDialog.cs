@@ -41,6 +41,8 @@ namespace Game
 
 		public ButtonWidget m_linesButton;
 
+		public SubsystemSignBlockBehavior.TextData m_editingTextData;
+
 		public Color[] m_colors = new Color[8]
 		{
 			new(0, 0, 0),
@@ -76,7 +78,8 @@ namespace Game
 			m_subsystemSignBlockBehavior = subsystemSignBlockBehavior;
 			m_signPoint = signPoint;
 			SignData signData = m_subsystemSignBlockBehavior.GetSignData(m_signPoint);
-			if (signData != null)
+			m_editingTextData = m_subsystemSignBlockBehavior.m_textsByPoint.GetValueOrDefault(m_signPoint,null);
+			if (signData != null && m_editingTextData != null)
 			{
 				m_textBox1.Text = signData.Lines[0];
 				m_textBox2.Text = signData.Lines[1];
@@ -158,6 +161,10 @@ namespace Game
 				m_colorButton4.Color = m_colors[(m_colors.FirstIndex(m_colorButton4.Color) + 1) % m_colors.Length];
 			}
 			if (Input.Cancel || m_cancelButton.IsClicked)
+			{
+				Dismiss();
+			}
+			if(!MovingBlock.IsNullOrStopped(m_editingTextData.MovingBlock))
 			{
 				Dismiss();
 			}
