@@ -14,6 +14,7 @@ namespace Game
 		public Dictionary<int, T> m_itemsData = [];
 
 		public Dictionary<Point3, T> m_blocksData = [];
+		public Dictionary<MovingBlock, T> m_movingBlocksData = new Dictionary<MovingBlock, T>();
 
 		public SubsystemEditableItemBehavior(int contents)
 		{
@@ -23,6 +24,11 @@ namespace Game
 		public T GetBlockData(Point3 point)
 		{
 			m_blocksData.TryGetValue(point, out T value);
+			return value;
+		}
+		public T GetBlockData(MovingBlock movingBlock)
+		{
+			m_movingBlocksData.TryGetValue(movingBlock, out T value);
 			return value;
 		}
 
@@ -35,6 +41,17 @@ namespace Game
 			else
 			{
 				m_blocksData.Remove(point);
+			}
+		}
+		public void SetBlockData(MovingBlock movingBlock,T t)
+		{
+			if(t != null)
+			{
+				m_movingBlocksData[movingBlock] = t;
+			}
+			else
+			{
+				m_movingBlocksData.Remove(movingBlock);
 			}
 		}
 
@@ -77,16 +94,41 @@ namespace Game
 			m_blocksData.Remove(new Point3(x, y, z));
 		}
 
+		public override void OnBlockStartMoving(int value,int newValue,int x,int y,int z,MovingBlock movingBlock)
+		{
+			Point3 point = new Point3(x,y,z);
+			T blockData = m_blocksData[point];
+			m_blocksData.Remove(point);
+			m_movingBlocksData.Add(movingBlock, blockData);
+		}
+
+		public override void OnBlockStopMoving(int value,int oldValue,int x,int y,int z,MovingBlock movingBlock)
+		{
+			Point3 point = new Point3(x,y,z);
+			T blockData = m_movingBlocksData[movingBlock];
+			m_movingBlocksData.Remove(movingBlock);
+			m_blocksData.Add(point, blockData);
+		}
+
 		public override void Load(ValuesDictionary valuesDictionary)
 		{
 			base.Load(valuesDictionary);
 			m_subsystemItemsScanner = Project.FindSubsystem<SubsystemItemsScanner>(throwOnError: true);
 			foreach (KeyValuePair<string, object> item in valuesDictionary.GetValue<ValuesDictionary>("Blocks"))
 			{
-				Point3 key = HumanReadableConverter.ConvertFromString<Point3>(item.Key);
 				var value = new T();
 				value.LoadString((string)item.Value);
-				m_blocksData[key] = value;
+				MovingBlock movingBlock = MovingBlock.LoadFromString(Project,item.Key, out Exception exception);
+				if(exception == null)
+				{
+					m_movingBlocksData[movingBlock] = value;
+				}
+				else
+				{
+					Log.Error("加载移动的M板出错：" + exception);
+					Point3 key = HumanReadableConverter.ConvertFromString<Point3>(item.Key);
+					m_blocksData[key] = value;
+				}
 			}
 			foreach (KeyValuePair<string, object> item2 in valuesDictionary.GetValue<ValuesDictionary>("Items"))
 			{
@@ -106,6 +148,10 @@ namespace Game
 			foreach (KeyValuePair<Point3, T> blocksDatum in m_blocksData)
 			{
 				valuesDictionary2.SetValue(HumanReadableConverter.ConvertToString(blocksDatum.Key), blocksDatum.Value.SaveString());
+			}
+			foreach(KeyValuePair<MovingBlock, T> movingBlocksDatum in m_movingBlocksData)
+			{
+				valuesDictionary2.SetValue(movingBlocksDatum.Key.ToString(), movingBlocksDatum.Value.SaveString());
 			}
 			var valuesDictionary3 = new ValuesDictionary();
 			valuesDictionary.SetValue("Items", valuesDictionary3);

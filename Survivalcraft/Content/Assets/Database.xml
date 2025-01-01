@@ -4323,8 +4323,7 @@
 				<MemberSubsystemTemplate Name="Postprocessor" Guid="12ea3147-b243-44c7-b3b3-29e76f72810c" InheritanceParent="7da47c66-2c8d-4b54-90ac-c270b42c333f" />
 				<MemberSubsystemTemplate Name="RakeBlockBehavior" Guid="14c832ee-b501-4f78-8246-c6cac079c3cc" InheritanceParent="349f7e10-7478-4ae9-ae17-278866421f39" />
 				<MemberSubsystemTemplate Name="Players" Guid="194f1d5a-9b95-40aa-8926-f9b373626a5f" InheritanceParent="30b8559d-fc03-42cb-b716-e985aaac96c0" />
-        <MemberSubsystemTemplate Name="FallenLeavesBlockBehavior" Guid="19c9c0b3-2467-4e96-983e-5e34d0305350" InheritanceParent="0a4bc5f7-5c06-4f21-97ff-2a825bcb4f2d" />
-				<MemberSubsystemTemplate Name="TruthTableCircuitBlockBehavior" Guid="1a251c4f-0276-411b-b78a-cbc1b053b566" InheritanceParent="0758eaf6-7242-44c6-958c-5d35471b0ac8" />
+				<MemberSubsystemTemplate Name="FallenLeavesBlockBehavior" Guid="19c9c0b3-2467-4e96-983e-5e34d0305350" InheritanceParent="0a4bc5f7-5c06-4f21-97ff-2a825bcb4f2d" />
 				<MemberSubsystemTemplate Name="SaddleBlockBehavior" Guid="1ca8b755-b1b4-4738-8b6d-e213a3120ac7" InheritanceParent="bbc85044-ea2e-400f-80c9-0ee35df9e3ee" />
 				<MemberSubsystemTemplate Name="Spawn" Guid="1e3da1bc-96f7-4bad-ae5f-21d84f5e981c" InheritanceParent="6bae095b-8129-446e-8a8a-9e2184b442e0" />
 				<MemberSubsystemTemplate Name="ButtonBlockBehavior" Guid="206c4ebd-d7f4-4da1-8d03-a8c8b9302a29" InheritanceParent="0302cf98-4263-466a-8d01-985fa3d9b002" />
@@ -4335,7 +4334,6 @@
 				<MemberSubsystemTemplate Name="AdjustableDelayGateBlockBehavior" Guid="2e17ce19-33c1-4f34-b1aa-afa72c9c4706" InheritanceParent="e0211467-e017-4d2d-bd48-877a0fefe234" />
 				<MemberSubsystemTemplate Name="Pickables" Guid="2ecad8c6-edd9-4018-b797-b0975cd20cba" InheritanceParent="4eeab2d1-c84c-4fa5-a784-5706f5626bf2" />
 				<MemberSubsystemTemplate Name="BlocksTexture" Guid="2f33ce6e-278e-4c15-ac45-c9b7e5b4c619" InheritanceParent="959b7b8c-35b6-47c7-ab04-7bc6469cddad" />
-				<MemberSubsystemTemplate Name="MemoryBankBlockBehavior" Guid="2f358320-0b5a-4757-b37f-fe4de7b94ca8" InheritanceParent="afa0f291-980f-4f6e-b700-89cd387a6873" />
 				<MemberSubsystemTemplate Name="Audio" Guid="31db6e8c-5358-4c3d-9346-ec53dfbbb6d0" InheritanceParent="1a7dc615-f95f-46b1-916e-4a05d502527d" />
 				<MemberSubsystemTemplate Name="TreasureGeneratorBlockBehavior" Guid="32079992-8781-4b5b-9395-4ffefc5c418c" InheritanceParent="84edaa11-d20d-4bbd-b57e-c805e43e6f9b" />
 				<MemberSubsystemTemplate Name="SoilBlockBehavior" Guid="32f02f16-e4c2-4044-838e-1b7f9eb20f03" InheritanceParent="59d44a4c-bc6a-499f-944e-39390092696e" />
@@ -4347,7 +4345,7 @@
 				<MemberSubsystemTemplate Name="Views" Guid="42d8175d-de32-42d0-97b3-8a2cd747528d" InheritanceParent="2e35e78b-680f-4eba-b8a4-fe7c186ae969" />
 				<MemberSubsystemTemplate Name="Pathfinding" Guid="4502e758-8845-4991-8aeb-06e173c3fd46" InheritanceParent="36854096-5b71-4530-a68d-a8f8ae5422af" />
 				<MemberSubsystemTemplate Name="PistonBlockBehavior" Guid="46c16e9b-9153-4e61-b8b1-09b66bcec451" InheritanceParent="9bbd943a-f452-42a1-b96a-7457d06ff34c" />
-        <MemberSubsystemTemplate Name="CellChangeQueue" Guid="47ddbfb6-83b0-4171-bc62-b5b6fd05e025" InheritanceParent="36751293-aade-4618-9412-762e1de60fe2" />
+			    <MemberSubsystemTemplate Name="CellChangeQueue" Guid="47ddbfb6-83b0-4171-bc62-b5b6fd05e025" InheritanceParent="36751293-aade-4618-9412-762e1de60fe2" />
 				<MemberSubsystemTemplate Name="Shadows" Guid="49c1bd92-3a09-47bc-91d1-1867f12fbfce" InheritanceParent="f9bc658e-d0cc-4b74-8a20-b8f1c244de44" />
 				<MemberSubsystemTemplate Name="FireBlockBehavior" Guid="4a534ac6-1ff0-4be9-b819-27c412d0065f" InheritanceParent="1889526b-eecc-47f7-856b-e5a324ecbf9e" />
 				<MemberSubsystemTemplate Name="ExplosivesBlockBehavior" Guid="4bbba319-3aa2-4067-8c3e-fa86b06a17e2" InheritanceParent="ced0bc07-bf58-4116-b4c6-19b1499c6ae7" />
@@ -4375,7 +4373,7 @@
 				<MemberSubsystemTemplate Name="Drawing" Guid="7ef54900-f34d-42e5-92ba-b14ae143d3f1" InheritanceParent="9d9f5cfd-17e8-461b-91aa-78bf6fe0cfde" />
 				<MemberSubsystemTemplate Name="Explosions" Guid="831663af-e4ae-4acf-9917-842727c3a74c" InheritanceParent="f2149216-75c1-4a5d-b385-0038d60ba9fe" />
 				<MemberSubsystemTemplate Name="CactusBlockBehavior" Guid="87ca89c1-f95e-4a3c-85f2-2d99de0220f0" InheritanceParent="3858a400-2708-4e12-bccf-0495889fff79" />
-        <MemberSubsystemTemplate Name="Seasons" Guid="89222d4c-84ff-4f57-adaf-b3fd377f845f" InheritanceParent="ea787ac6-0207-4bbf-af0f-3e81a30d58c1" />
+				<MemberSubsystemTemplate Name="Seasons" Guid="89222d4c-84ff-4f57-adaf-b3fd377f845f" InheritanceParent="ea787ac6-0207-4bbf-af0f-3e81a30d58c1" />
 				<MemberSubsystemTemplate Name="SignBlockBehavior" Guid="897fdf9a-574e-434f-aae3-89bf53a00fd7" InheritanceParent="039ea51e-c41d-4c93-99ae-a9b5a491c7aa" />
 				<MemberSubsystemTemplate Name="SwitchBlockBehavior" Guid="8a33158d-1fcd-4432-91f6-97772d51445d" InheritanceParent="8717b547-e3eb-4465-946a-e4fb0b2fedb4" />
 				<MemberSubsystemTemplate Name="GraveBlockBehavior" Guid="8c3f5107-195a-4af1-83f1-cbfb4de5a76a" InheritanceParent="4d1886bf-8d73-4f73-8f25-3187c066c9d3" />
@@ -4385,12 +4383,14 @@
 				<MemberSubsystemTemplate Name="Noise" Guid="96ab0397-b53d-4a4e-83f3-21a846117faa" InheritanceParent="93d8dc8f-a3cb-4825-a66a-d5ad3b9195dc" />
 				<MemberSubsystemTemplate Name="Names" Guid="97722e41-b7c0-4055-a5bd-dbbb44f3daa2" InheritanceParent="1678591a-ffc1-4138-b2ee-d6729286d356" />
 				<MemberSubsystemTemplate Name="MovingBlocks" Guid="9804a921-1b13-4591-a998-458f23a59e6f" InheritanceParent="bb01254d-4991-4135-96f2-50ad9262a28e" />
+				<MemberSubsystemTemplate Name="MemoryBankBlockBehavior" Guid="2f358320-0b5a-4757-b37f-fe4de7b94ca8" InheritanceParent="afa0f291-980f-4f6e-b700-89cd387a6873" />
+				<MemberSubsystemTemplate Name="TruthTableCircuitBlockBehavior" Guid="1a251c4f-0276-411b-b78a-cbc1b053b566" InheritanceParent="0758eaf6-7242-44c6-958c-5d35471b0ac8" />
 				<MemberSubsystemTemplate Name="CarpetBlockBehavior" Guid="9917da93-d6ba-45e2-8cc7-c316c3cf367a" InheritanceParent="edaebc7e-2119-4440-89a0-ece7503b15d3" />
 				<MemberSubsystemTemplate Name="Update" Guid="9b516b86-f26d-4c3c-9bda-a5dde1654017" InheritanceParent="743dceeb-03d9-4d12-9c0a-3e9774a6afe6" />
 				<MemberSubsystemTemplate Name="EggBlockBehavior" Guid="a6e0c0e1-cf67-4075-8ccb-f983c8a68ba3" InheritanceParent="efa35e1b-09b2-4e92-a61e-0ae7dfc5beb1" />
 				<MemberSubsystemTemplate Name="ChestBehavior" Guid="a7a12f9d-951b-4254-8e57-20d7ed33055f" InheritanceParent="8723c7b1-fe0c-4003-b41b-db3f4d46ac03" />
 				<MemberSubsystemTemplate Name="ImpactExplosivesBlockBehavior" Guid="a88f438c-9e81-4914-a741-74545b2dc606" InheritanceParent="e1d4e2b6-3b31-4f67-9272-de4c00c89bcb" />
-        <MemberSubsystemTemplate Name="DeciduousLeavesBlockBehavior" Guid="a91b81c8-ed81-4482-abd4-6ecee79161f4" InheritanceParent="2090a18e-9015-4102-b5c5-df077eb6953e" />
+				<MemberSubsystemTemplate Name="DeciduousLeavesBlockBehavior" Guid="a91b81c8-ed81-4482-abd4-6ecee79161f4" InheritanceParent="2090a18e-9015-4102-b5c5-df077eb6953e" />
 				<MemberSubsystemTemplate Name="ArrowBlockBehavior" Guid="acbf239e-3b99-41b5-90a7-1401de32e149" InheritanceParent="caa9e7c7-b031-458b-a834-c78efab295c7" />
 				<MemberSubsystemTemplate Name="GameInfo" Guid="adbbb66b-ea04-4399-b20c-6175b2eac060" InheritanceParent="af753bf7-a952-4222-8507-4289c3b7670b" />
 				<MemberSubsystemTemplate Name="BatteryBlockBehavior" Guid="aeaa8df3-39f9-4afe-94c4-2b550fcb3339" InheritanceParent="499ccd8e-0113-4f47-ada1-0e976cad1221" />

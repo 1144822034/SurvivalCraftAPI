@@ -2,6 +2,7 @@ using Engine;
 using GameEntitySystem;
 using Jint.Native;
 using TemplatesDatabase;
+using Engine.Serialization;
 
 namespace Game
 {
@@ -23,35 +24,63 @@ namespace Game
 				return MovingBlockSet.Position + new Vector3(Offset);
 			}
 		}
-		public static MovingBlock LoadFromValuesDictionary(Project project,ValuesDictionary valuesDictionary,bool throwOnError = true, bool throwIfNotFound = false)
+
+		public static MovingBlock LoadFromPositionAndOffset(Project project, Vector3 movingBlocksPosition, Point3 offset, bool throwOnError = true)
 		{
 			SubsystemMovingBlocks subsystemMovingBlocks = project.FindSubsystem<SubsystemMovingBlocks>();
-			Vector3? movingBlocksPosition = valuesDictionary.GetValue<Vector3?>("MovingBlockSetPosition",null);
-			if(movingBlocksPosition != null && movingBlocksPosition.HasValue)
+			IMovingBlockSet movingBlockSet = subsystemMovingBlocks.MovingBlockSets.FirstOrDefault(set => set.Position.ToString() == movingBlocksPosition.ToString(),null);
+			if(movingBlockSet != null)
 			{
-				IMovingBlockSet movingBlockSet = subsystemMovingBlocks.MovingBlockSets.FirstOrDefault(set => set.Position.ToString() == movingBlocksPosition.ToString(),null);
-				if(movingBlockSet != null)
+				MovingBlock movingBlock = movingBlockSet.Blocks.FirstOrDefault(block => block.Offset == offset,null);
+				if(!MovingBlock.IsNullOrStopped(movingBlock))
 				{
-					Point3 point = valuesDictionary.GetValue<Point3>("MovingBlockOffset");
-					MovingBlock movingBlock = movingBlockSet.Blocks.FirstOrDefault(block => block.Offset == point,null);
-					if(!MovingBlock.IsNullOrStopped(movingBlock))
-					{
-						return movingBlock;
-					}
-					else
-					{
-						if(throwOnError) throw new Exception("Required moving block offset " + point.ToString() + " is not found in MovingBlockSet " + movingBlocksPosition.ToString());
-						return null;
-					}
+					return movingBlock;
 				}
 				else
 				{
-					if(throwOnError) throw new Exception("Required moving block set " + movingBlocksPosition.ToString() + " is not found.");
+					if(throwOnError) throw new Exception("Required moving block offset " + offset.ToString() + " is not found in MovingBlockSet " + movingBlocksPosition.ToString());
 					return null;
 				}
 			}
+			else
+			{
+				if(throwOnError) throw new Exception("Required moving block set " + movingBlocksPosition.ToString() + " is not found.");
+				return null;
+			}
+		}
+		public static MovingBlock LoadFromValuesDictionary(Project project,ValuesDictionary valuesDictionary,bool throwOnError = true, bool throwIfNotFound = false)
+		{
+			Vector3? movingBlocksPosition = valuesDictionary.GetValue<Vector3?>("MovingBlockSetPosition",null);
+			Point3? point = valuesDictionary.GetValue<Point3?>("MovingBlockOffset", null);
+			if(movingBlocksPosition.HasValue && point.HasValue)
+			{
+				return LoadFromPositionAndOffset(project, movingBlocksPosition.Value, point.Value);
+			}
 			if(throwIfNotFound) throw new Exception("MovingBlockSetPosition is not contained in valuesDictionary.");
 			return null;
+		}
+
+		public static MovingBlock LoadFromString(Project project, string movingBlockInfo, out Exception exception)
+		{
+			exception = null;
+			try
+			{
+				string[] str1 = movingBlockInfo.Split(';');
+				if(str1.Length == 0 || !str1[0].Contains("MovingBlock"))
+				{
+					exception = new InvalidDataException("String \"" + movingBlockInfo + "\"" + " is not valid for moving block load.");
+					return null;
+				}
+				Vector3 movingBlockSetPosition = HumanReadableConverter.ConvertFromString<Vector3>(str1[1]);
+				Point3 movingBlockOffset = HumanReadableConverter.ConvertFromString<Point3>(str1[2]);
+				return LoadFromPositionAndOffset(project, movingBlockSetPosition, movingBlockOffset);
+			}
+			catch(Exception e)
+			{
+				exception = e;
+				return null;
+			}
+			
 		}
 
 		public void SetValuesDicionary(ValuesDictionary valuesDictionary, bool saveWhenStopped = false)
@@ -61,6 +90,11 @@ namespace Game
 				valuesDictionary.SetValue("MovingBlockSetPosition", MovingBlockSet.Position);
 				valuesDictionary.SetValue("MovingBlockOffset", Offset);
 			}
+		}
+
+		public override string ToString()
+		{
+			return "MovingBlock;" + HumanReadableConverter.ConvertToString(MovingBlockSet.Position) + ";" + HumanReadableConverter.ConvertToString(Offset);
 		}
 
 		public Point3 Offset;
