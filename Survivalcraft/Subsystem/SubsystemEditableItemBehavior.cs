@@ -99,7 +99,7 @@ namespace Game
 			Point3 point = new Point3(x,y,z);
 			T blockData = m_blocksData[point];
 			m_blocksData.Remove(point);
-			m_movingBlocksData.Add(movingBlock, blockData);
+			m_movingBlocksData[movingBlock] = blockData;
 		}
 
 		public override void OnBlockStopMoving(int value,int oldValue,int x,int y,int z,MovingBlock movingBlock)
@@ -107,7 +107,7 @@ namespace Game
 			Point3 point = new Point3(x,y,z);
 			T blockData = m_movingBlocksData[movingBlock];
 			m_movingBlocksData.Remove(movingBlock);
-			m_blocksData.Add(point, blockData);
+			m_blocksData[point] = blockData;
 		}
 
 		public override void Load(ValuesDictionary valuesDictionary)
@@ -125,7 +125,6 @@ namespace Game
 				}
 				else
 				{
-					Log.Error("加载移动的M板出错：" + exception);
 					Point3 key = HumanReadableConverter.ConvertFromString<Point3>(item.Key);
 					m_blocksData[key] = value;
 				}
