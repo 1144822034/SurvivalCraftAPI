@@ -3412,6 +3412,7 @@
 				</SubsystemTemplate>
 				<SubsystemTemplate Name="SignBlockBehavior" Guid="039ea51e-c41d-4c93-99ae-a9b5a491c7aa" InheritanceParent="fefb9590-4972-4893-b02a-76063611b745">
 					<ParameterSet Name="Texts" Description="Contains sign texts" Guid="bdafca01-cf4e-414d-854e-aaaa8a138d0e" />
+					<Parameter Name="Dependencies" Guid="17fb151b-01dd-9391-a789-85d1db5dbdc3" Value="MovingBlocks" Type="string" />
 					<Parameter Name="Class" Guid="e62ca7a9-a354-48ee-a504-e7d112d859b9" Value="Game.SubsystemSignBlockBehavior" Type="string" />
 				</SubsystemTemplate>
 				<SubsystemTemplate Name="EntityBlockBehavior" Guid="3adb82ac-b42c-485d-b393-4b017aba88d0" InheritanceParent="f84d81fb-ee41-4908-b935-abce190ed017">

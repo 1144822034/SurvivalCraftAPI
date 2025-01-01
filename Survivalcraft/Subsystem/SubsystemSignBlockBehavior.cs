@@ -121,7 +121,7 @@ namespace Game
 			return null;
 		}
 
-		public void SetSignData(Point3 point, string[] lines, Color[] colors, string url)
+		public void SetSignData(Point3 point, string[] lines, Color[] colors, string url, MovingBlock movingBlock = null)
 		{
 			var textData = new TextData();
 			textData.Point = point;
@@ -131,6 +131,7 @@ namespace Game
 				textData.Colors[i] = colors[i];
 			}
 			textData.Url = url;
+			textData.MovingBlock = movingBlock;
 			m_textsByPoint[point] = textData;
 			m_lastUpdatePositions.Clear();
 		}
@@ -237,6 +238,7 @@ namespace Game
 			foreach (ValuesDictionary value11 in valuesDictionary.GetValue<ValuesDictionary>("Texts").Values)
 			{
 				Point3 value = value11.GetValue<Point3>("Point");
+				MovingBlock movingBlock = MovingBlock.LoadFromValuesDictionary(Project, value11);
 				string value2 = value11.GetValue("Line1", string.Empty);
 				string value3 = value11.GetValue("Line2", string.Empty);
 				string value4 = value11.GetValue("Line3", string.Empty);
@@ -258,9 +260,52 @@ namespace Game
 					value7,
 					value8,
 					value9
-				}, value10);
+				}, value10,
+				movingBlock);
 			}
 			Display.DeviceReset += Display_DeviceReset;
+		}
+
+		public virtual void SaveTextData(TextData textData, ValuesDictionary valuesDictionary)
+		{
+			valuesDictionary.SetValue("Point",textData.Point);
+			textData.MovingBlock?.SetValuesDicionary(valuesDictionary);
+			if(!string.IsNullOrEmpty(textData.Lines[0]))
+			{
+				valuesDictionary.SetValue("Line1",textData.Lines[0]);
+			}
+			if(!string.IsNullOrEmpty(textData.Lines[1]))
+			{
+				valuesDictionary.SetValue("Line2",textData.Lines[1]);
+			}
+			if(!string.IsNullOrEmpty(textData.Lines[2]))
+			{
+				valuesDictionary.SetValue("Line3",textData.Lines[2]);
+			}
+			if(!string.IsNullOrEmpty(textData.Lines[3]))
+			{
+				valuesDictionary.SetValue("Line4",textData.Lines[3]);
+			}
+			if(textData.Colors[0] != Color.Black)
+			{
+				valuesDictionary.SetValue("Color1",textData.Colors[0]);
+			}
+			if(textData.Colors[1] != Color.Black)
+			{
+				valuesDictionary.SetValue("Color2",textData.Colors[1]);
+			}
+			if(textData.Colors[2] != Color.Black)
+			{
+				valuesDictionary.SetValue("Color3",textData.Colors[2]);
+			}
+			if(textData.Colors[3] != Color.Black)
+			{
+				valuesDictionary.SetValue("Color4",textData.Colors[3]);
+			}
+			if(!string.IsNullOrEmpty(textData.Url))
+			{
+				valuesDictionary.SetValue("Url",textData.Url);
+			}
 		}
 
 		public override void Save(ValuesDictionary valuesDictionary)
@@ -271,44 +316,14 @@ namespace Game
 			foreach (TextData value in m_textsByPoint.Values)
 			{
 				var valuesDictionary3 = new ValuesDictionary();
-				valuesDictionary3.SetValue("Point", value.Point);
-				if (!string.IsNullOrEmpty(value.Lines[0]))
-				{
-					valuesDictionary3.SetValue("Line1", value.Lines[0]);
-				}
-				if (!string.IsNullOrEmpty(value.Lines[1]))
-				{
-					valuesDictionary3.SetValue("Line2", value.Lines[1]);
-				}
-				if (!string.IsNullOrEmpty(value.Lines[2]))
-				{
-					valuesDictionary3.SetValue("Line3", value.Lines[2]);
-				}
-				if (!string.IsNullOrEmpty(value.Lines[3]))
-				{
-					valuesDictionary3.SetValue("Line4", value.Lines[3]);
-				}
-				if (value.Colors[0] != Color.Black)
-				{
-					valuesDictionary3.SetValue("Color1", value.Colors[0]);
-				}
-				if (value.Colors[1] != Color.Black)
-				{
-					valuesDictionary3.SetValue("Color2", value.Colors[1]);
-				}
-				if (value.Colors[2] != Color.Black)
-				{
-					valuesDictionary3.SetValue("Color3", value.Colors[2]);
-				}
-				if (value.Colors[3] != Color.Black)
-				{
-					valuesDictionary3.SetValue("Color4", value.Colors[3]);
-				}
-				if (!string.IsNullOrEmpty(value.Url))
-				{
-					valuesDictionary3.SetValue("Url", value.Url);
-				}
+				SaveTextData(value, valuesDictionary3);
 				valuesDictionary2.SetValue(num++.ToString(CultureInfo.InvariantCulture), valuesDictionary3);
+			}
+			foreach(TextData textData in m_textsByMovingBlock.Values)
+			{
+				var valuesDictionary3 = new ValuesDictionary();
+				SaveTextData(textData, valuesDictionary3);
+				valuesDictionary2.SetValue(num++.ToString(CultureInfo.InvariantCulture),valuesDictionary3);
 			}
 		}
 

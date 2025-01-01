@@ -92,32 +92,13 @@ namespace Game
 			m_subsystemTerrain = Project.FindSubsystem<SubsystemTerrain>(true);
 			m_subsystemAudio = Project.FindSubsystem<SubsystemAudio>(true);
 			Coordinates = valuesDictionary.GetValue<Point3>("Coordinates");
-			//object movingBlocksTag = valuesDictionary.GetValue<object>("MovingBlocksTag", null);
-			Vector3? movingBlocksPosition = valuesDictionary.GetValue<Vector3?>("MovingBlockSetPosition", null);
-			if(movingBlocksPosition != null && movingBlocksPosition.HasValue)
-			{
-				IMovingBlockSet movingBlockSet = m_subsystemMovingBlocks.MovingBlockSets.FirstOrDefault(set => set.Position.ToString() == movingBlocksPosition.ToString(), null);
-				if(movingBlockSet != null)
-				{
-					Point3 point = valuesDictionary.GetValue<Point3>("MovingBlockOffset");
-					MovingBlock movingBlock = movingBlockSet.Blocks.FirstOrDefault(block => block.Offset == point, null);
-					if(!MovingBlock.IsNullOrStopped(movingBlock))
-					{
-						MovingBlock = movingBlock;
-					}
-					else throw new Exception("Required moving block offset " + point.ToString() + " is not found in MovingBlockSet " + movingBlocksPosition.ToString() + "fot BlockEntity " + Entity.Id + ": " + Entity.ValuesDictionary.DatabaseObject.Name);
-				}
-				else throw new Exception("Required moving block set " + movingBlocksPosition.ToString() + " is not found in BlockEntity " + Entity.Id + ": " + Entity.ValuesDictionary.DatabaseObject.Name);
-			}
+			MovingBlock = MovingBlock.LoadFromValuesDictionary(Project, valuesDictionary);
 		}
 
 		public override void Save(ValuesDictionary valuesDictionary, EntityToIdMap entityToIdMap)
 		{
 			valuesDictionary.SetValue("Coordinates", Coordinates);
-			if(!MovingBlock.IsNullOrStopped(MovingBlock)) {
-				valuesDictionary.SetValue("MovingBlockSetPosition",MovingBlock.MovingBlockSet.Position);
-				valuesDictionary.SetValue("MovingBlockOffset", MovingBlock.Offset);
-			}
+			MovingBlock?.SetValuesDicionary(valuesDictionary);
 		}
 	}
 }
