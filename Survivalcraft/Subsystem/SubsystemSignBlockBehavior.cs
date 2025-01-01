@@ -132,7 +132,11 @@ namespace Game
 			}
 			textData.Url = url;
 			textData.MovingBlock = movingBlock;
-			m_textsByPoint[point] = textData;
+			if(!MovingBlock.IsNullOrStopped(movingBlock))
+			{
+				m_textsByMovingBlock[movingBlock] = textData;
+			}
+			else m_textsByPoint[point] = textData;
 			m_lastUpdatePositions.Clear();
 		}
 
@@ -315,6 +319,7 @@ namespace Game
 			valuesDictionary.SetValue("Texts", valuesDictionary2);
 			foreach (TextData value in m_textsByPoint.Values)
 			{
+				if(!MovingBlock.IsNullOrStopped(value.MovingBlock)) continue;
 				var valuesDictionary3 = new ValuesDictionary();
 				SaveTextData(value, valuesDictionary3);
 				valuesDictionary2.SetValue(num++.ToString(CultureInfo.InvariantCulture), valuesDictionary3);
