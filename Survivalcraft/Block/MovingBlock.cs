@@ -13,6 +13,14 @@ namespace Game
 			return false;
 		}
 
+		public Vector3 Position
+		{
+			get
+			{
+				return MovingBlockSet.Position + new Vector3(Offset);
+			}
+		}
+
 		public Point3 Offset;
 
 		public int Value;

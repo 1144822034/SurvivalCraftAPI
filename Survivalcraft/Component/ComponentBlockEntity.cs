@@ -56,7 +56,7 @@ namespace Game
 			{
 				if(!MovingBlock.IsNullOrStopped(MovingBlock))
 				{
-					return MovingBlock.MovingBlockSet.Position + new Vector3(MovingBlock.Offset);
+					return MovingBlock.Position;
 				}
 				return new Vector3(Coordinates);
 			}

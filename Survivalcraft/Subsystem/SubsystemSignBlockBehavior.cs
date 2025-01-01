@@ -1,6 +1,7 @@
 using Engine;
 using Engine.Graphics;
 using Engine.Media;
+using Jint.Native;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
@@ -13,6 +14,8 @@ namespace Game
 		public class TextData
 		{
 			public Point3 Point;
+
+			public MovingBlock MovingBlock;
 
 			public string[] Lines = new string[4]
 			{
@@ -62,6 +65,8 @@ namespace Game
 		public SubsystemGameInfo m_subsystemGameInfo;
 
 		public Dictionary<Point3, TextData> m_textsByPoint = [];
+
+		public Dictionary<MovingBlock, TextData> m_textsByMovingBlock = new Dictionary<MovingBlock, TextData>();
 
 		public List<RenderTarget2D> m_texturesByPoint = [];
 
@@ -177,6 +182,32 @@ namespace Game
 				DialogsManager.ShowDialog(componentMiner.ComponentPlayer.GuiWidget, new EditSignDialog(this, point));
 			}
 			return true;
+		}
+
+		public override void OnBlockStartMoving(int value,int newValue,int x,int y,int z,MovingBlock movingBlock)
+		{
+			var key = new Point3(x,y,z);
+			bool valueGotten = m_textsByPoint.TryGetValue(key,out TextData textData);
+			m_textsByPoint.Remove(key);
+			if(valueGotten)
+			{
+				m_textsByMovingBlock.Add(movingBlock, textData);
+				textData.MovingBlock = movingBlock;
+			}
+			m_lastUpdatePositions.Clear();
+		}
+
+		public override void OnBlockStopMoving(int value,int oldValue,int x,int y,int z,MovingBlock movingBlock)
+		{
+			bool valueGotten = m_textsByMovingBlock.TryGetValue(movingBlock,out TextData textData);
+			m_textsByMovingBlock.Remove(movingBlock);
+			if(valueGotten)
+			{
+				m_textsByPoint[new Point3(x,y,z)] = textData;
+				textData.Point = new Point3(x,y,z);
+				textData.MovingBlock = null;
+			}
+			m_lastUpdatePositions.Clear();
 		}
 
 		public override void OnBlockRemoved(int value, int newValue, int x, int y, int z)
@@ -389,6 +420,17 @@ namespace Game
 					m_nearTexts.Add(value);
 				}
 			}
+			foreach(MovingBlock movingBlock in m_textsByMovingBlock.Keys)
+			{
+				Vector3 position = movingBlock.Position;
+				TextData value = m_textsByMovingBlock[movingBlock];
+				float num = m_subsystemViews.CalculateSquaredDistanceFromNearestView(position);
+				if(num <= 400f)
+				{
+					value.Distance = num;
+					m_nearTexts.Add(value);
+				}
+			}
 			m_nearTexts.Sort((TextData d1, TextData d2) => Comparer<float>.Default.Compare(d1.Distance, d2.Distance));
 			if (m_nearTexts.Count > 32)
 			{
@@ -465,6 +507,7 @@ namespace Game
 					continue;
 				}
 				int cellValue = m_subsystemTerrain.Terrain.GetCellValue(nearText.Point.X, nearText.Point.Y, nearText.Point.Z);
+				if(!MovingBlock.IsNullOrStopped(nearText.MovingBlock)) cellValue = nearText.MovingBlock.Value;
 				int num = Terrain.ExtractContents(cellValue);
 				if (!(BlocksManager.Blocks[num] is SignBlock signBlock))
 				{
@@ -487,6 +530,10 @@ namespace Game
 					float x4 = ((float)nearText.TextureLocation.Value + (nearText.UsedTextureHeight / (m_font.GlyphHeight * 4f))) / 32f;
 					Vector3 signSurfaceNormal = signBlock.GetSignSurfaceNormal(data);
 					Vector3 vector = new(nearText.Point.X, nearText.Point.Y, nearText.Point.Z);
+					if(!MovingBlock.IsNullOrStopped(nearText.MovingBlock))
+					{
+						vector = nearText.MovingBlock.Position;
+					}
 					float num3 = Vector3.Dot(camera.ViewPosition - (vector + new Vector3(0.5f)), signSurfaceNormal);
 					Vector3 vector2 = MathUtils.Max(0.01f * num3, 0.005f) * signSurfaceNormal;
 					for (int i = 0; i < signSurfaceBlockMesh.Indices.Count / 3; i++)
