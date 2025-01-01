@@ -164,7 +164,7 @@ namespace Game
 			{
 				Dismiss();
 			}
-			if(!MovingBlock.IsNullOrStopped(m_editingTextData.MovingBlock))
+			if(!MovingBlock.IsNullOrStopped(m_editingTextData?.MovingBlock))
 			{
 				Dismiss();
 			}
