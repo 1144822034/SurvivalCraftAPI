@@ -105,7 +105,6 @@ namespace Game
 				num = base.RemoveSlotItems(slotIndex, count);
 			}
 			m_recipeUpdateNeeded = true;
-            m_slots[RemainsSlotIndex].Count = 0;
             m_slots[ResultSlotIndex].Count = 0;
             for (int i = 0; i < originalCount.Length; i++)
 			{
