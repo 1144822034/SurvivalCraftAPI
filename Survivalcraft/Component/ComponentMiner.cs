@@ -149,24 +149,24 @@ namespace Game
 			m_lastDigFrameIndex = Time.FrameIndex;
 			CellFace cellFace = raycastResult.CellFace;
 			int cellValue = m_subsystemTerrain.Terrain.GetCellValue(cellFace.X, cellFace.Y, cellFace.Z);
-			int num = Terrain.ExtractContents(cellValue);
-			Block block = BlocksManager.Blocks[num];
+			int cellContents = Terrain.ExtractContents(cellValue);
+			Block cellBlock = BlocksManager.Blocks[cellContents];
 			int activeBlockValue = ActiveBlockValue;
-			int num2 = Terrain.ExtractContents(activeBlockValue);
-			Block block2 = BlocksManager.Blocks[num2];
+			int activeBlockContents = Terrain.ExtractContents(activeBlockValue);
+			Block activeBlock = BlocksManager.Blocks[activeBlockContents];
 			if (!DigCellFace.HasValue || DigCellFace.Value.X != cellFace.X || DigCellFace.Value.Y != cellFace.Y || DigCellFace.Value.Z != cellFace.Z)
 			{
 				m_digStartTime = m_subsystemTime.GameTime;
 				DigCellFace = cellFace;
 			}
-			float num3 = CalculateDigTime(cellValue, activeBlockValue);
-			m_digProgress = (num3 > 0f) ? MathUtils.Saturate((float)(m_subsystemTime.GameTime - m_digStartTime) / num3) : 1f;
+			float digTimeWithActiveTool = CalculateDigTime(cellValue, activeBlockValue);
+			m_digProgress = (digTimeWithActiveTool > 0f) ? MathUtils.Saturate((float)(m_subsystemTime.GameTime - m_digStartTime) / digTimeWithActiveTool) : 1f;
 			if (!IsLevelSufficientForTool(activeBlockValue))
 			{
 				m_digProgress = 0f;
 				if (m_subsystemTime.PeriodicGameTimeEvent(5.0, m_digStartTime + 1.0))
 				{
-					ComponentPlayer?.ComponentGui.DisplaySmallMessage(string.Format(LanguageControl.Get(fName, 1), block2.PlayerLevelRequired, block2.GetDisplayName(m_subsystemTerrain, activeBlockValue)), Color.White, blinking: true, playNotificationSound: true);
+					ComponentPlayer?.ComponentGui.DisplaySmallMessage(string.Format(LanguageControl.Get(fName, 1), activeBlock.PlayerLevelRequired, activeBlock.GetDisplayName(m_subsystemTerrain, activeBlockValue)), Color.White, blinking: true, playNotificationSound: true);
 				}
 			}
 			bool flag2 = ComponentPlayer != null && !ComponentPlayer.ComponentInput.IsControlledByTouch && m_subsystemGameInfo.WorldSettings.GameMode == GameMode.Creative;
@@ -176,21 +176,21 @@ namespace Game
 					flag2 |= flag3;
 				return false;
 			});
-			if ((m_subsystemGameInfo.WorldSettings.GameMode == GameMode.Survival || m_subsystemGameInfo.WorldSettings.GameMode == GameMode.Harmless) && ComponentPlayer != null && num3 >= 3f && m_digProgress > 0.5f && (m_lastToolHintTime == 0.0 || Time.FrameStartTime - m_lastToolHintTime > 300.0))
+			if ((m_subsystemGameInfo.WorldSettings.GameMode == GameMode.Survival || m_subsystemGameInfo.WorldSettings.GameMode == GameMode.Harmless) && ComponentPlayer != null && digTimeWithActiveTool >= 3f && m_digProgress > 0.5f && (m_lastToolHintTime == 0.0 || Time.FrameStartTime - m_lastToolHintTime > 300.0))
 			{
-				bool flag = num3 == CalculateDigTime(cellValue, 0);
-				int num4 = FindBestInventoryToolForDigging(cellValue);
-				if (num4 == 0)
+				bool flag = digTimeWithActiveTool == CalculateDigTime(cellValue, 0);//flag:该物品挖掘时间和空手相同
+				int bestInventoryToolValue = FindBestInventoryToolForDigging(cellValue);
+				if (bestInventoryToolValue == 0)
 				{
-					if (num2 != 23 && flag)
+					if (activeBlockContents != 23 && flag)
 					{
 						ComponentPlayer.ComponentGui.DisplaySmallMessage(LanguageControl.Get(fName, "11"), Color.White, blinking: true, playNotificationSound: true);
 						m_lastToolHintTime = Time.FrameStartTime;
 					}
 				}
-				else if (CalculateDigTime(cellValue, Terrain.ExtractContents(num4)) < 0.5f * num3 || flag)
+				else if (CalculateDigTime(cellValue, bestInventoryToolValue) < 0.5f * digTimeWithActiveTool || flag)
 				{
-					string displayName = BlocksManager.Blocks[Terrain.ExtractContents(num4)].GetDisplayName(m_subsystemTerrain, num4);
+					string displayName = BlocksManager.Blocks[Terrain.ExtractContents(bestInventoryToolValue)].GetDisplayName(m_subsystemTerrain, bestInventoryToolValue);
 					ComponentPlayer.ComponentGui.DisplaySmallMessage(string.Format(LanguageControl.Get(fName, "12"), displayName), Color.White, blinking: true, playNotificationSound: true);
 					m_lastToolHintTime = Time.FrameStartTime;
 				}
@@ -204,8 +204,8 @@ namespace Game
                     {
                         Poke(forceRestart: true);
                     }
-                    BlockPlacementData digValue = block.GetDigValue(m_subsystemTerrain, this, cellValue, activeBlockValue, raycastResult);
-                    m_subsystemTerrain.DestroyCell(block2.ToolLevel, digValue.CellFace.X, digValue.CellFace.Y, digValue.CellFace.Z, digValue.Value, noDrop: false, noParticleSystem: false);
+                    BlockPlacementData digValue = cellBlock.GetDigValue(m_subsystemTerrain, this, cellValue, activeBlockValue, raycastResult);
+                    m_subsystemTerrain.DestroyCell(activeBlock.ToolLevel, digValue.CellFace.X, digValue.CellFace.Y, digValue.CellFace.Z, digValue.Value, noDrop: false, noParticleSystem: false);
 					int durabilityReduction = 1;
 					int playerDataAdd = 1;
 					bool mute_ = false;
@@ -227,7 +227,7 @@ namespace Game
 				else
 				{
 					m_subsystemSoundMaterials.PlayImpactSound(cellValue, new Vector3(cellFace.X, cellFace.Y, cellFace.Z), 1f);
-					BlockDebrisParticleSystem particleSystem = block.CreateDebrisParticleSystem(m_subsystemTerrain, raycastResult.HitPoint(0.1f), cellValue, 0.35f);
+					BlockDebrisParticleSystem particleSystem = cellBlock.CreateDebrisParticleSystem(m_subsystemTerrain, raycastResult.HitPoint(0.1f), cellValue, 0.35f);
 					base.Project.FindSubsystem<SubsystemParticles>(throwOnError: true).AddParticleSystem(particleSystem);
 				}
 			}
@@ -791,7 +791,7 @@ namespace Game
 					int slotValue = item.GetSlotValue(i);
 					if (IsLevelSufficientForTool(slotValue))
 					{
-						float num2 = CalculateDigTime(digValue, Terrain.ExtractContents(slotValue));
+						float num2 = CalculateDigTime(digValue, slotValue);
 						if (num2 < num)
 						{
 							num = num2;
