@@ -187,52 +187,9 @@ namespace Game
 		{
 			m_drawBlockEnvironmentData.SubsystemTerrain = m_subsystemTerrain;
 			m_drawBlockEnvironmentData.InWorldMatrix = Matrix.Identity;
-			float num = MathUtils.Sqr(m_subsystemSky.VisibilityRange);
 			foreach (Projectile projectile in m_projectiles)
 			{
-				Vector3 position = projectile.Position;
-				if (!projectile.NoChunk && Vector3.DistanceSquared(camera.ViewPosition, position) < num && camera.ViewFrustum.Intersection(position))
-				{
-					int x = Terrain.ToCell(position.X);
-					int num2 = Terrain.ToCell(position.Y);
-					int z = Terrain.ToCell(position.Z);
-					int num3 = Terrain.ExtractContents(projectile.Value);
-					Block block = BlocksManager.Blocks[num3];
-					TerrainChunk chunkAtCell = m_subsystemTerrain.Terrain.GetChunkAtCell(x, z);
-					if (chunkAtCell != null && chunkAtCell.State >= TerrainChunkState.InvalidVertices1 && num2 >= 0 && num2 < 255)
-					{
-						m_drawBlockEnvironmentData.Humidity = m_subsystemTerrain.Terrain.GetSeasonalHumidity(x, z);
-						m_drawBlockEnvironmentData.Temperature = m_subsystemTerrain.Terrain.GetSeasonalTemperature(x, z) + SubsystemWeather.GetTemperatureAdjustmentAtHeight(num2);
-						projectile.Light = m_subsystemTerrain.Terrain.GetCellLightFast(x, num2, z);
-					}
-					m_drawBlockEnvironmentData.Light = projectile.Light;
-					m_drawBlockEnvironmentData.BillboardDirection = block.GetAlignToVelocity(projectile.Value) ? null : new Vector3?(camera.ViewDirection);
-					m_drawBlockEnvironmentData.InWorldMatrix.Translation = position;
-					Matrix matrix;
-					if (block.GetAlignToVelocity(projectile.Value))
-					{
-						CalculateVelocityAlignMatrix(block, position, projectile.Velocity, out matrix);
-					}
-					else if (projectile.Rotation != Vector3.Zero)
-					{
-						matrix = Matrix.CreateFromAxisAngle(Vector3.Normalize(projectile.Rotation), projectile.Rotation.Length());
-						matrix.Translation = projectile.Position;
-					}
-					else
-					{
-						matrix = Matrix.CreateTranslation(projectile.Position);
-					}
-					bool shouldDrawBlock = true;
-					float drawBlockSize = 0.3f;
-					Color drawBlockColor = Color.MultiplyNotSaturated(Color.White, 1f - m_subsystemSky.CalculateFog(camera.ViewPosition, projectile.Position));
-                    ModsManager.HookAction("OnProjectileDraw", loader =>
-                    {
-                        loader.OnProjectileDraw(projectile, this, camera, drawOrder, ref shouldDrawBlock, ref drawBlockSize, ref drawBlockColor);
-                        return false;
-                    });
-                    if(shouldDrawBlock)
-						block.DrawBlock(m_primitivesRenderer, projectile.Value, drawBlockColor, drawBlockSize, ref matrix, m_drawBlockEnvironmentData);
-				}
+				projectile.Draw(camera, drawOrder);
 			}
 			m_primitivesRenderer.Flush(camera.ViewProjectionMatrix);
 		}

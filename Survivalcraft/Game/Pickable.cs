@@ -1,5 +1,6 @@
 ﻿using Engine;
 using GameEntitySystem;
+using System;
 using TemplatesDatabase;
 
 namespace Game
@@ -304,6 +305,65 @@ namespace Game
                 }
             }
         }
+
+		public virtual void Draw(Camera camera,int drawOrder, double totalElapsedGameTime, Matrix rotationMatrix)
+		{
+			float num = MathUtils.Min(SubsystemPickables.m_subsystemSky.VisibilityRange,30f);
+			Vector3 position = Position;
+			Vector3 v = position - camera.ViewPosition;
+			float num2 = Vector3.Dot(camera.ViewDirection,v);
+			if(num2 < -0.5f || num2 > num)
+			{
+				return;
+			}
+			float num3 = v.Length();
+			if(!(num3 > num))
+			{
+				int num4 = Terrain.ExtractContents(Value);
+				Block block = BlocksManager.Blocks[num4];
+				float num5 = (float)(totalElapsedGameTime - CreationTime);
+				if(!StuckMatrix.HasValue)
+				{
+					position.Y += 0.25f * MathUtils.Saturate(3f * num5);
+				}
+				int x = Terrain.ToCell(position.X);
+				int num6 = Terrain.ToCell(position.Y);
+				int z = Terrain.ToCell(position.Z);
+				TerrainChunk chunkAtCell = SubsystemPickables.m_subsystemTerrain.Terrain.GetChunkAtCell(x,z);
+				if(chunkAtCell != null && chunkAtCell.State >= TerrainChunkState.InvalidVertices1 && num6 >= 0 && num6 < 255)
+				{
+					SubsystemPickables.m_drawBlockEnvironmentData.Humidity = SubsystemPickables.m_subsystemTerrain.Terrain.GetSeasonalHumidity(x,z);
+					SubsystemPickables.m_drawBlockEnvironmentData.Temperature = SubsystemPickables.m_subsystemTerrain.Terrain.GetSeasonalTemperature(x,z) + SubsystemWeather.GetTemperatureAdjustmentAtHeight(num6);
+					float f = MathUtils.Max(position.Y - num6 - 0.75f,0f) / 0.25f;
+					Light = (int)MathUtils.Lerp(SubsystemPickables.m_subsystemTerrain.Terrain.GetCellLightFast(x,num6,z),SubsystemPickables.m_subsystemTerrain.Terrain.GetCellLightFast(x,num6 + 1,z),f);
+				}
+				SubsystemPickables.m_drawBlockEnvironmentData.Light = Light;
+				SubsystemPickables.m_drawBlockEnvironmentData.BillboardDirection = Position - camera.ViewPosition;
+				SubsystemPickables.m_drawBlockEnvironmentData.InWorldMatrix.Translation = position;
+				float num7 = 1f - SubsystemPickables.m_subsystemSky.CalculateFog(camera.ViewPosition,Position);
+				num7 *= MathUtils.Saturate(0.25f * (num - num3));
+				Matrix drawMatrix;
+				if(StuckMatrix.HasValue)
+					drawMatrix = StuckMatrix.Value;
+				else
+				{
+					rotationMatrix.Translation = position + new Vector3(0f,0.04f * MathF.Sin(3f * num5),0f);
+					drawMatrix = rotationMatrix;
+				}
+				bool shouldDrawBlock = true;
+				float drawBlockSize = 0.3f;
+				Color drawBlockColor = Color.MultiplyNotSaturated(Color.White,num7);
+				ModsManager.HookAction("OnPickableDraw",loader =>
+				{
+					loader.OnPickableDraw(this,SubsystemPickables,camera,drawOrder,ref shouldDrawBlock,ref drawBlockSize,ref drawBlockColor);
+					return false;
+				});
+				if(shouldDrawBlock)
+				{
+					block.DrawBlock(SubsystemPickables.m_primitivesRenderer,Value,drawBlockColor,drawBlockSize,ref drawMatrix,SubsystemPickables.m_drawBlockEnvironmentData);
+				}
+			}
+		}
         public virtual void Save(ValuesDictionary valuesDictionary)
         {
             valuesDictionary.SetValue("Value", Value);
