@@ -67,6 +67,7 @@ namespace Game
 		public UpdateOrder UpdateOrder => UpdateOrder.Default;
         public virtual Projectile AddProjectile(Projectile projectile)
         {
+			if(projectile == null) return null;
             projectile.CreationTime = m_subsystemGameInfo.TotalElapsedGameTime;
             projectile.IsInFluid = IsWater(projectile.Position);
 
@@ -98,16 +99,33 @@ namespace Game
         }
         public virtual T CreateProjectile<T>(int value, Vector3 position, Vector3 velocity, Vector3 angularVelocity, ComponentCreature owner) where T : Projectile, new()
 		{
-            var projectile = new T();
-			projectile.Initialize(value, position, velocity, angularVelocity, owner);
-			return projectile;
+			try
+			{
+				var projectile = new T();
+				projectile.Initialize(value,position,velocity,angularVelocity,owner);
+				return projectile;
+			}
+			catch(Exception ex)
+			{
+				Log.Error("Projectile create error: " + ex);
+				return null;
+			}
+            
         }
 
         public virtual T AddProjectile<T>(int value, Vector3 position, Vector3 velocity, Vector3 angularVelocity, ComponentCreature owner) where T : Projectile, new()
 		{
-			T projectile = CreateProjectile<T>(value, position, velocity, angularVelocity, owner);
-            Projectile projectile2 = AddProjectile(projectile);
-            return projectile2 as T;
+			try
+			{
+				T projectile = CreateProjectile<T>(value,position,velocity,angularVelocity,owner);
+				Projectile projectile2 = AddProjectile(projectile);
+				return projectile2 as T;
+			}
+			catch(Exception ex)
+			{
+				Log.Error("Projectile add error: " + ex);
+				return null;
+			}
         }
 
         public virtual Projectile FireProjectile(int value, Vector3 position, Vector3 velocity, Vector3 angularVelocity, ComponentCreature owner)
@@ -155,7 +173,8 @@ namespace Game
 
         public virtual void FireProjectileFast(Projectile projectile)
 		{
-            AddProjectile(projectile);
+            projectile = AddProjectile(projectile);
+			if(projectile == null) return;
             SubsystemBlockBehavior[] blockBehaviors = m_subsystemBlockBehaviors.GetBlockBehaviors(Terrain.ExtractContents(projectile.Value));
             for (int i = 0; i < blockBehaviors.Length; i++)
             {

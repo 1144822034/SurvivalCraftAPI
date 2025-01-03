@@ -59,6 +59,7 @@ namespace Game
 
 		public virtual Pickable AddPickable(Pickable pickable)
         {
+			if(pickable == null) return null;
             pickable.CreationTime = m_subsystemGameInfo.TotalElapsedGameTime;
             ModsManager.HookAction("OnPickableAdded", loader =>
             {
@@ -86,16 +87,32 @@ namespace Game
 		}
         public virtual T CreatePickable<T>(int value, int count, Vector3 position, Vector3? velocity, Matrix? stuckMatrix, Entity owner) where T : Pickable, new()
 		{
-            var pickable = new T();
-            pickable.Initialize(value, count, position, velocity, stuckMatrix, owner);
-			return pickable;
+			try
+			{
+				var pickable = new T();
+				pickable.Initialize(value,count,position,velocity,stuckMatrix,owner);
+				return pickable;
+			}
+			catch(Exception e)
+			{
+				Log.Error("Pickable create error: " + e);
+				return null;
+			}
         }
 
         public virtual T AddPickable<T>(int value, int count, Vector3 position, Vector3? velocity, Matrix? stuckMatrix, Entity owner) where T : Pickable, new()
 		{
-			T pickable = CreatePickable<T>(value, count, position, velocity, stuckMatrix, owner);
-            Pickable pickable2 = AddPickable(pickable);
-			return pickable2 as T;
+			try
+			{
+				T pickable = CreatePickable<T>(value,count,position,velocity,stuckMatrix,owner);
+				Pickable pickable2 = AddPickable(pickable);
+				return pickable2 as T;
+			}
+			catch(Exception e)
+			{
+				Log.Error("Pickable add error: " + e);
+				return null;
+			}
 		}
 
 		public void Draw(Camera camera, int drawOrder)
