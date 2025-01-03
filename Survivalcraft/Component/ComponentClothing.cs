@@ -510,7 +510,7 @@ namespace Game
 			{
 				if (block is BucketBlock)
 				{
-					processedValue = Terrain.MakeBlockValue(90, 0, Terrain.ExtractData(value));
+					processedValue = EmptyBucketBlock.Index;
 					processedCount = 1;
 				}
 				if (count > 1 && processedCount > 0 && processedValue != value)

@@ -51,11 +51,11 @@ namespace Game
 					int newBucketValue = -1;
 					if (block is WaterBlock && FluidBlock.GetLevel(data) == 0)
 					{
-                        newBucketValue = Terrain.ReplaceContents(activeBlockValue, m_waterBucketBlockIndex);
+                        newBucketValue = m_waterBucketBlockIndex;
 					}
 					if (block is MagmaBlock && FluidBlock.GetLevel(data) == 0)
 					{
-						newBucketValue = Terrain.ReplaceContents(activeBlockValue, m_magmaBucketBlockIndex);
+						newBucketValue = m_magmaBucketBlockIndex;
 					}
 					if (newBucketValue <= 0) return false;
                     inventory.RemoveSlotItems(inventory.ActiveSlotIndex, 1);
@@ -75,7 +75,7 @@ namespace Game
 				else if (obj is BodyRaycastResult)
 				{
 					ComponentUdder componentUdder = ((BodyRaycastResult)obj).ComponentBody.Entity.FindComponent<ComponentUdder>();
-                    int newBucketValue = Terrain.ReplaceContents(activeBlockValue, m_milkBucketBlockIndex);
+                    int newBucketValue = m_milkBucketBlockIndex;
                     inventory.RemoveSlotItems(inventory.ActiveSlotIndex, 1);
                     int acquireSlot = ComponentInventoryBase.FindAcquireSlotForItem(inventory, newBucketValue);
 					bool success = false;
@@ -103,7 +103,7 @@ namespace Game
 				if (terrainRaycastResult.HasValue)
 				{
 					inventory.RemoveSlotItems(inventory.ActiveSlotIndex, 1);
-					int newBucketValue = Terrain.ReplaceContents(activeBlockValue, m_emptyBucketBlockIndex);
+					int newBucketValue = m_emptyBucketBlockIndex;
                     int acquireSlot = ComponentInventoryBase.FindAcquireSlotForItem(inventory, newBucketValue);
 					if(acquireSlot >= 0 && componentMiner.Place(terrainRaycastResult.Value, Terrain.MakeBlockValue(fluidValue)))
 					{
