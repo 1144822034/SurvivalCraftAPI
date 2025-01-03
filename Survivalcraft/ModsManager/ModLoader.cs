@@ -1464,5 +1464,15 @@ namespace Game
 			skipVanilla = false;
 		}
 
+		/// <summary>
+		/// 射弹转化为掉落物时执行
+		/// </summary>
+		/// <param name="projectile">即将被转化并删除的射弹</param>
+		/// <param name="pickable">即将加入的掉落物</param>
+		public virtual void OnProjectileTurnIntoPickable(Projectile projectile, ref Pickable pickable)
+		{
+
+		}
+
 	}
 }

@@ -3,6 +3,8 @@ using System;
 using GameEntitySystem;
 using TemplatesDatabase;
 using System.Globalization;
+using Acornima;
+using Jint.Native;
 
 namespace Game
 {
@@ -70,6 +72,8 @@ namespace Game
         public bool StopTrailParticleInFluid = true;
 
         public int DamageToPickable = 1;//弹射物结算时掉的耐久
+
+		public int? TurnIntoPickableBlockValue = null;
 
         public bool TerrainCollidable = true;
 
@@ -299,6 +303,36 @@ namespace Game
             }
             MakeNoise();
         }
+
+		public virtual void TurnIntoPickable(Vector3? pickableStuckMatrix)
+		{
+			Block block = BlocksManager.Blocks[Terrain.ExtractContents(Value)];
+			int damagedBlockValue = BlocksManager.DamageItem(Value,DamageToPickable,OwnerEntity);
+			if(TurnIntoPickableBlockValue.HasValue) damagedBlockValue = TurnIntoPickableBlockValue.Value;
+			if(damagedBlockValue != 0)
+			{
+				Pickable pickable = null;
+				if(pickableStuckMatrix.HasValue)
+				{
+					SubsystemProjectiles.CalculateVelocityAlignMatrix(block,pickableStuckMatrix.Value,Velocity,out Matrix matrix);
+					pickable = m_subsystemPickables.CreatePickable(damagedBlockValue,1,Position,Vector3.Zero,matrix,OwnerEntity);
+				}
+				else
+				{
+					pickable = m_subsystemPickables.CreatePickable(damagedBlockValue,1,Position,Vector3.Zero,null,OwnerEntity);
+				}
+				ModsManager.HookAction("OnProjectileTurnIntoPickable",loader => {
+					loader.OnProjectileTurnIntoPickable(this,ref pickable);
+					return false;
+				});
+				if(pickable != null) m_subsystemPickables.AddPickable(pickable);
+			}
+			else
+			{
+				m_subsystemParticles.AddParticleSystem(block.CreateDebrisParticleSystem(SubsystemTerrain,Position,Value,1f));
+			}
+			ToRemove = true;
+		}
         public virtual void UpdateInChunk(float dt)
         {
             Block block = BlocksManager.Blocks[Terrain.ExtractContents(Value)];
@@ -338,24 +372,7 @@ namespace Game
                 {
                     if (ProjectileStoppedAction == ProjectileStoppedAction.TurnIntoPickable)
                     {
-                        int damagedBlockValue = BlocksManager.DamageItem(Value, DamageToPickable, OwnerEntity);
-                        if (damagedBlockValue != 0)
-                        {
-                            if (pickableStuckMatrix.HasValue)
-                            {
-                                SubsystemProjectiles.CalculateVelocityAlignMatrix(block, pickableStuckMatrix.Value, Velocity, out Matrix matrix);
-                                m_subsystemPickables.AddPickable(damagedBlockValue, 1, Position, Vector3.Zero, matrix, OwnerEntity);
-                            }
-                            else
-                            {
-                                m_subsystemPickables.AddPickable(damagedBlockValue, 1, position, Vector3.Zero, null, OwnerEntity);
-                            }
-                        }
-                        else
-                        {
-                            m_subsystemParticles.AddParticleSystem(block.CreateDebrisParticleSystem(SubsystemTerrain, Position, Value, 1f));
-                        }
-                        ToRemove = true;
+						TurnIntoPickable(pickableStuckMatrix);
                     }
                     else if (ProjectileStoppedAction == ProjectileStoppedAction.Disappear)
                     {
