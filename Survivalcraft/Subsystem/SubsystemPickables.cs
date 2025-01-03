@@ -105,7 +105,18 @@ namespace Game
 			var matrix = Matrix.CreateRotationY((float)MathUtils.Remainder(totalElapsedGameTime, 6.2831854820251465));
 			foreach (Pickable pickable in m_pickables)
 			{
-				pickable.Draw(camera, drawOrder, totalElapsedGameTime, matrix);
+				try
+				{
+					pickable.Draw(camera,drawOrder,totalElapsedGameTime,matrix);
+				}
+				catch(Exception e)
+				{
+					if(pickable.LogDrawError)
+					{
+						Log.Error("Pickable draw error: " + e);
+						pickable.LogDrawError = false;
+					}
+				}
 			}
 			m_primitivesRenderer.Flush(camera.ViewProjectionMatrix);
 		}

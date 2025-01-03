@@ -23,6 +23,8 @@ namespace Game
         public float? MaxTimeExist;
 
         public float ExplosionMass = 20f;
+
+		public bool LogDrawError = true;
 		public virtual void UnderExplosion(Vector3 impulse, float damage) { }
     }
 }

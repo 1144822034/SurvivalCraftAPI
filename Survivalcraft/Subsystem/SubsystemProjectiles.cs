@@ -189,7 +189,18 @@ namespace Game
 			m_drawBlockEnvironmentData.InWorldMatrix = Matrix.Identity;
 			foreach (Projectile projectile in m_projectiles)
 			{
-				projectile.Draw(camera, drawOrder);
+				try
+				{
+					projectile.Draw(camera,drawOrder);
+				}
+				catch(Exception e)
+				{
+					if(projectile.LogDrawError)
+					{
+						Log.Error("Projectile draw error: " + e);
+						projectile.LogDrawError = false;
+					}
+				}
 			}
 			m_primitivesRenderer.Flush(camera.ViewProjectionMatrix);
 		}
