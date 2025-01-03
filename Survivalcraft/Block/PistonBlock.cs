@@ -57,6 +57,11 @@ namespace Game
 			}
 		}
 
+		public override bool IsCollapseSupportBlock(SubsystemTerrain subsystemTerrain,int value)
+		{
+			return !IsFaceTransparent(subsystemTerrain, 4, value);
+		}
+
 		public override bool IsFaceTransparent(SubsystemTerrain subsystemTerrain, int face, int value)
 		{
 			int data = Terrain.ExtractData(value);
