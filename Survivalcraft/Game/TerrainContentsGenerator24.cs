@@ -5,7 +5,7 @@ namespace Game;
 
 public class TerrainContentsGenerator24 : ITerrainContentsGenerator
 {
-	private class CavePoint
+	public class CavePoint
 	{
 		public Vector3 Position;
 
@@ -18,13 +18,13 @@ public class TerrainContentsGenerator24 : ITerrainContentsGenerator
 		public int StepsTaken;
 	}
 
-	private class Grid2d
+	public class Grid2d
 	{
-		private int m_sizeX;
+		public int m_sizeX;
 
-		private int m_sizeY;
+		public int m_sizeY;
 
-		private float[] m_data;
+		public float[] m_data;
 
 		public int SizeX => m_sizeX;
 
@@ -37,17 +37,17 @@ public class TerrainContentsGenerator24 : ITerrainContentsGenerator
 			m_data = new float[m_sizeX * m_sizeY];
 		}
 
-		public float Get(int x, int y)
+		public virtual float Get(int x, int y)
 		{
 			return m_data[x + y * m_sizeX];
 		}
 
-		public void Set(int x, int y, float value)
+		public virtual void Set(int x, int y, float value)
 		{
 			m_data[x + y * m_sizeX] = value;
 		}
 
-		public float Sample(float x, float y)
+		public virtual float Sample(float x, float y)
 		{
 			int num = (int)MathF.Floor(x);
 			int num2 = (int)MathF.Floor(y);
@@ -65,17 +65,17 @@ public class TerrainContentsGenerator24 : ITerrainContentsGenerator
 		}
 	}
 
-	private class Grid3d
+	public class Grid3d
 	{
-		private int m_sizeX;
+		public int m_sizeX;
 
-		private int m_sizeY;
+		public int m_sizeY;
 
-		private int m_sizeZ;
+		public int m_sizeZ;
 
-		private int m_sizeXY;
+		public int m_sizeXY;
 
-		private float[] m_data;
+		public float[] m_data;
 
 		public int SizeX => m_sizeX;
 
@@ -92,7 +92,7 @@ public class TerrainContentsGenerator24 : ITerrainContentsGenerator
 			m_data = new float[m_sizeX * m_sizeY * m_sizeZ];
 		}
 
-		public void Get8(int x, int y, int z, out float v111, out float v211, out float v121, out float v221, out float v112, out float v212, out float v122, out float v222)
+		public virtual void Get8(int x, int y, int z, out float v111, out float v211, out float v121, out float v221, out float v112, out float v212, out float v122, out float v222)
 		{
 			int num = x + y * m_sizeX + z * m_sizeXY;
 			v111 = m_data[num];
@@ -105,17 +105,17 @@ public class TerrainContentsGenerator24 : ITerrainContentsGenerator
 			v222 = m_data[num + 1 + m_sizeX + m_sizeXY];
 		}
 
-		public float Get(int x, int y, int z)
+		public virtual float Get(int x, int y, int z)
 		{
 			return m_data[x + y * m_sizeX + z * m_sizeXY];
 		}
 
-		public void Set(int x, int y, int z, float value)
+		public virtual void Set(int x, int y, int z, float value)
 		{
 			m_data[x + y * m_sizeX + z * m_sizeXY] = value;
 		}
 
-		public float Sample(float x, float y, float z)
+		public virtual float Sample(float x, float y, float z)
 		{
 			int num = (int)MathF.Floor(x);
 			int num2 = (int)MathF.Ceiling(x);
@@ -144,59 +144,59 @@ public class TerrainContentsGenerator24 : ITerrainContentsGenerator
 		}
 	}
 
-	private static List<TerrainBrush> m_coalBrushes;
+	public static List<TerrainBrush> m_coalBrushes;
 
-	private static List<TerrainBrush> m_ironBrushes;
+	public static List<TerrainBrush> m_ironBrushes;
 
-	private static List<TerrainBrush> m_copperBrushes;
+	public static List<TerrainBrush> m_copperBrushes;
 
-	private static List<TerrainBrush> m_saltpeterBrushes;
+	public static List<TerrainBrush> m_saltpeterBrushes;
 
-	private static List<TerrainBrush> m_sulphurBrushes;
+	public static List<TerrainBrush> m_sulphurBrushes;
 
-	private static List<TerrainBrush> m_diamondBrushes;
+	public static List<TerrainBrush> m_diamondBrushes;
 
-	private static List<TerrainBrush> m_germaniumBrushes;
+	public static List<TerrainBrush> m_germaniumBrushes;
 
-	private static List<TerrainBrush> m_dirtPocketBrushes;
+	public static List<TerrainBrush> m_dirtPocketBrushes;
 
-	private static List<TerrainBrush> m_gravelPocketBrushes;
+	public static List<TerrainBrush> m_gravelPocketBrushes;
 
-	private static List<TerrainBrush> m_limestonePocketBrushes;
+	public static List<TerrainBrush> m_limestonePocketBrushes;
 
-	private static List<TerrainBrush> m_sandPocketBrushes;
+	public static List<TerrainBrush> m_sandPocketBrushes;
 
-	private static List<TerrainBrush> m_basaltPocketBrushes;
+	public static List<TerrainBrush> m_basaltPocketBrushes;
 
-	private static List<TerrainBrush> m_granitePocketBrushes;
+	public static List<TerrainBrush> m_granitePocketBrushes;
 
-	private static List<TerrainBrush> m_clayPocketBrushes;
+	public static List<TerrainBrush> m_clayPocketBrushes;
 
-	private static List<TerrainBrush> m_waterPocketBrushes;
+	public static List<TerrainBrush> m_waterPocketBrushes;
 
-	private static List<TerrainBrush> m_magmaPocketBrushes;
+	public static List<TerrainBrush> m_magmaPocketBrushes;
 
-	private static List<List<TerrainBrush>> m_caveBrushesByType;
+	public static List<List<TerrainBrush>> m_caveBrushesByType;
 
 	public SubsystemTerrain m_subsystemTerrain;
 
 	public SubsystemBottomSuckerBlockBehavior m_subsystemBottomSuckerBlockBehavior;
 
-	private WorldSettings m_worldSettings;
+	public WorldSettings m_worldSettings;
 
-	private int m_seed;
+	public int m_seed;
 
-	private Vector2? m_islandSize;
+	public Vector2? m_islandSize;
 
-	private Vector2 m_oceanCorner;
+	public Vector2 m_oceanCorner;
 
-	private Vector2 m_temperatureOffset;
+	public Vector2 m_temperatureOffset;
 
-	private Vector2 m_humidityOffset;
+	public Vector2 m_humidityOffset;
 
-	private Vector2 m_mountainsOffset;
+	public Vector2 m_mountainsOffset;
 
-	private Vector2 m_riversOffset;
+	public Vector2 m_riversOffset;
 
 	public float TGBiomeScaling;
 
@@ -230,11 +230,11 @@ public class TerrainContentsGenerator24 : ITerrainContentsGenerator
 
 	public float TGMountainsPercentage;
 
-	private static float TGMountainsDetailFreq;
+	public static float TGMountainsDetailFreq;
 
-	private static int TGMountainsDetailOctaves;
+	public static int TGMountainsDetailOctaves;
 
-	private static float TGMountainsDetailPersistence;
+	public static float TGMountainsDetailPersistence;
 
 	public float TGRiversStrength;
 
@@ -246,11 +246,11 @@ public class TerrainContentsGenerator24 : ITerrainContentsGenerator
 
 	public float TGTurbulencePersistence;
 
-	private float TGMinTurbulence;
+	public float TGMinTurbulence;
 
-	private float TGTurbulenceZero;
+	public float TGTurbulenceZero;
 
-	private static float TGSurfaceMultiplier;
+	public static float TGSurfaceMultiplier;
 
 	public bool TGWater;
 
@@ -258,7 +258,7 @@ public class TerrainContentsGenerator24 : ITerrainContentsGenerator
 
 	public bool TGCavesAndPockets;
 
-	public int OceanLevel => 64 + m_worldSettings.SeaLevelOffset;
+	public virtual int OceanLevel => 64 + m_worldSettings.SeaLevelOffset;
 
 	public List<ChunkGenerationStep> ChunkGenerationStep1 = new List<ChunkGenerationStep>();
 	public List<ChunkGenerationStep> ChunkGenerationStep2 = new List<ChunkGenerationStep>();
@@ -371,7 +371,7 @@ public class TerrainContentsGenerator24 : ITerrainContentsGenerator
 		ChunkGenerationStep4.Sort((a,b) => (a.GenerateOrder.CompareTo(b.GenerateOrder)));
 	}
 
-	public Vector3 FindCoarseSpawnPosition()
+	public virtual Vector3 FindCoarseSpawnPosition()
 	{
 		Vector2 vector = Vector2.Zero;
 		float num = float.MinValue;
@@ -411,7 +411,7 @@ public class TerrainContentsGenerator24 : ITerrainContentsGenerator
 		});
 		return ans;
 	}
-	public void GenerateChunkContentsPass1(TerrainChunk chunk)
+	public virtual void GenerateChunkContentsPass1(TerrainChunk chunk)
 	{
 		foreach(ChunkGenerationStep step in ChunkGenerationStep1)
 		{
@@ -419,7 +419,7 @@ public class TerrainContentsGenerator24 : ITerrainContentsGenerator
 		}
 	}
 
-	public void GenerateChunkContentsPass2(TerrainChunk chunk)
+	public virtual void GenerateChunkContentsPass2(TerrainChunk chunk)
 	{
 		foreach(ChunkGenerationStep step in ChunkGenerationStep2)
 		{
@@ -427,7 +427,7 @@ public class TerrainContentsGenerator24 : ITerrainContentsGenerator
 		}
 	}
 
-	public void GenerateChunkContentsPass3(TerrainChunk chunk)
+	public virtual void GenerateChunkContentsPass3(TerrainChunk chunk)
 	{
 		foreach(ChunkGenerationStep step in ChunkGenerationStep3)
 		{
@@ -435,7 +435,7 @@ public class TerrainContentsGenerator24 : ITerrainContentsGenerator
 		}
 	}
 
-	public void GenerateChunkContentsPass4(TerrainChunk chunk)
+	public virtual void GenerateChunkContentsPass4(TerrainChunk chunk)
 	{
 		foreach(ChunkGenerationStep step in ChunkGenerationStep4)
 		{
@@ -443,7 +443,7 @@ public class TerrainContentsGenerator24 : ITerrainContentsGenerator
 		}
 	}
 
-	public float CalculateOceanShoreDistance(float x, float z)
+	public virtual float CalculateOceanShoreDistance(float x, float z)
 	{
 		if (m_islandSize.HasValue)
 		{
@@ -458,12 +458,12 @@ public class TerrainContentsGenerator24 : ITerrainContentsGenerator
 		return MathUtils.Min(x - num5, z - num6);
 	}
 
-	public float CalculateMountainRangeFactor(float x, float z)
+	public virtual float CalculateMountainRangeFactor(float x, float z)
 	{
 		return SimplexNoise.OctavedNoise(x + m_mountainsOffset.X, z + m_mountainsOffset.Y, TGMountainRangeFreq / TGBiomeScaling, 3, 1.91f, 0.75f, ridged: true);
 	}
 
-	public float CalculateHeight(float x, float z)
+	public virtual float CalculateHeight(float x, float z)
 	{
 		float num = TGOceanSlope + TGOceanSlopeVariation * MathUtils.PowSign(2f * SimplexNoise.OctavedNoise(x + m_mountainsOffset.X, z + m_mountainsOffset.Y, 0.01f, 1, 2f, 0.5f) - 1f, 0.5f);
 		float num2 = CalculateOceanShoreDistance(x, z);
@@ -493,39 +493,39 @@ public class TerrainContentsGenerator24 : ITerrainContentsGenerator
 		return Math.Clamp(64f + num19, 10f, 251f);
 	}
 
-	public int CalculateTemperature(float x, float z)
+	public virtual int CalculateTemperature(float x, float z)
 	{
 		return Math.Clamp((int)(MathUtils.Saturate(3f * SimplexNoise.OctavedNoise(x + m_temperatureOffset.X, z + m_temperatureOffset.Y, 0.0015f / TGBiomeScaling, 5, 2f, 0.6f) - 1.1f + m_worldSettings.TemperatureOffset / 16f) * 16f), 0, 15);
 	}
 
-	public int CalculateHumidity(float x, float z)
+	public virtual int CalculateHumidity(float x, float z)
 	{
 		return Math.Clamp((int)(MathUtils.Saturate(3f * SimplexNoise.OctavedNoise(x + m_humidityOffset.X, z + m_humidityOffset.Y, 0.0012f / TGBiomeScaling, 5, 2f, 0.6f) - 0.9f + m_worldSettings.HumidityOffset / 16f) * 16f), 0, 15);
 	}
 
-	private static float Squish(float v, float zero, float one)
+	public static float Squish(float v, float zero, float one)
 	{
 		return MathUtils.Saturate((v - zero) / (one - zero));
 	}
 
-	private float CalculateOceanShoreX(float z)
+	public virtual float CalculateOceanShoreX(float z)
 	{
 		return m_oceanCorner.X + TGShoreFluctuations * SimplexNoise.OctavedNoise(z, 0f, 0.005f / TGShoreFluctuationsScaling, 4, 1.95f, 1f);
 	}
 
-	private float CalculateOceanShoreZ(float x)
+	public virtual float CalculateOceanShoreZ(float x)
 	{
 		return m_oceanCorner.Y + TGShoreFluctuations * SimplexNoise.OctavedNoise(0f, x, 0.005f / TGShoreFluctuationsScaling, 4, 1.95f, 1f);
 	}
 
-	private float CalculateForestDensity(float x, float z)
+	public virtual float CalculateForestDensity(float x, float z)
 	{
 		Point2 point = Terrain.ToChunk(new Vector2(x, z));
 		bool flag = MathUtils.Hash((uint)(point.X + 1000 * point.Y)) % 1000 < 300;
 		return MathUtils.Saturate((SimplexNoise.OctavedNoise(point.X, point.Y, 0.1f, 2, 2f, 0.5f) - 0.25f) / 0.2f + (flag ? 0.6f : 0f));
 	}
 
-	private float ScoreSpawnPosition(int x, int z)
+	public virtual float ScoreSpawnPosition(int x, int z)
 	{
 		int num = CalculateTemperature(x, z);
 		int num2 = CalculateHumidity(x, z);
@@ -572,7 +572,7 @@ public class TerrainContentsGenerator24 : ITerrainContentsGenerator
 		}
 	}
 
-	private static float DistanceFromRange(float x, float min, float max)
+	public static float DistanceFromRange(float x, float min, float max)
 	{
 		if (x < min)
 		{
@@ -585,7 +585,7 @@ public class TerrainContentsGenerator24 : ITerrainContentsGenerator
 		return 0f;
 	}
 
-	private void GenerateSurfaceParameters(TerrainChunk chunk, int x1, int z1, int x2, int z2)
+	public virtual void GenerateSurfaceParameters(TerrainChunk chunk, int x1, int z1, int x2, int z2)
 	{
 		for (int i = x1; i < x2; i++)
 		{
@@ -601,7 +601,7 @@ public class TerrainContentsGenerator24 : ITerrainContentsGenerator
 		}
 	}
 
-	private void GenerateTerrain(TerrainChunk chunk, int x1, int z1, int x2, int z2)
+	public virtual void GenerateTerrain(TerrainChunk chunk, int x1, int z1, int x2, int z2)
 	{
 		int num = x2 - x1;
 		int num2 = z2 - z1;
@@ -709,7 +709,7 @@ public class TerrainContentsGenerator24 : ITerrainContentsGenerator
 		}
 	}
 
-	private void GenerateSurface(TerrainChunk chunk)
+	public virtual void GenerateSurface(TerrainChunk chunk)
 	{
 		Terrain terrain = m_subsystemTerrain.Terrain;
 		Random random = new Random(m_seed + chunk.Coords.X + 101 * chunk.Coords.Y);
@@ -771,7 +771,7 @@ public class TerrainContentsGenerator24 : ITerrainContentsGenerator
 		}
 	}
 
-	private void GenerateMinerals(TerrainChunk chunk)
+	public virtual void GenerateMinerals(TerrainChunk chunk)
 	{
 		if (!TGCavesAndPockets)
 		{
@@ -850,7 +850,7 @@ public class TerrainContentsGenerator24 : ITerrainContentsGenerator
 		}
 	}
 
-	private void GeneratePockets(TerrainChunk chunk)
+	public virtual void GeneratePockets(TerrainChunk chunk)
 	{
 		if (!TGCavesAndPockets)
 		{
@@ -966,7 +966,7 @@ public class TerrainContentsGenerator24 : ITerrainContentsGenerator
 		}
 	}
 
-	private void GenerateCaves(TerrainChunk chunk)
+	public virtual void GenerateCaves(TerrainChunk chunk)
 	{
 		if (!TGCavesAndPockets)
 		{
@@ -1086,7 +1086,7 @@ public class TerrainContentsGenerator24 : ITerrainContentsGenerator
 		}
 	}
 
-	private void GenerateLogs(TerrainChunk chunk)
+	public virtual void GenerateLogs(TerrainChunk chunk)
 	{
 		if (!TGExtras)
 		{
@@ -1230,7 +1230,7 @@ public class TerrainContentsGenerator24 : ITerrainContentsGenerator
 		}
 	}
 
-	private void GenerateTrees(TerrainChunk chunk)
+	public virtual void GenerateTrees(TerrainChunk chunk)
 	{
 		if (!TGExtras)
 		{
@@ -1287,7 +1287,7 @@ public class TerrainContentsGenerator24 : ITerrainContentsGenerator
 		}
 	}
 
-	private void GenerateBedrockAndAir(TerrainChunk chunk)
+	public virtual void GenerateBedrockAndAir(TerrainChunk chunk)
 	{
 		int value = Terrain.MakeBlockValue(1);
 		for (int i = 0; i < 16; i++)
@@ -1306,7 +1306,7 @@ public class TerrainContentsGenerator24 : ITerrainContentsGenerator
 		}
 	}
 
-	private void GenerateGrassAndPlants(TerrainChunk chunk)
+	public virtual void GenerateGrassAndPlants(TerrainChunk chunk)
 	{
 		if (!TGExtras)
 		{
@@ -1344,7 +1344,7 @@ public class TerrainContentsGenerator24 : ITerrainContentsGenerator
 		}
 	}
 
-	private void GenerateBottomSuckers(TerrainChunk chunk)
+	public virtual void GenerateBottomSuckers(TerrainChunk chunk)
 	{
 		if (!TGExtras)
 		{
@@ -1434,7 +1434,7 @@ public class TerrainContentsGenerator24 : ITerrainContentsGenerator
 		}
 	}
 
-	private void GenerateCacti(TerrainChunk chunk)
+	public virtual void GenerateCacti(TerrainChunk chunk)
 	{
 		if (!TGExtras)
 		{
@@ -1483,7 +1483,7 @@ public class TerrainContentsGenerator24 : ITerrainContentsGenerator
 		}
 	}
 
-	private void GeneratePumpkins(TerrainChunk chunk)
+	public virtual void GeneratePumpkins(TerrainChunk chunk)
 	{
 		if (!TGExtras)
 		{
@@ -1527,7 +1527,7 @@ public class TerrainContentsGenerator24 : ITerrainContentsGenerator
 		}
 	}
 
-	private void GenerateKelp(TerrainChunk chunk)
+	public virtual void GenerateKelp(TerrainChunk chunk)
 	{
 		if (!TGExtras)
 		{
@@ -1609,7 +1609,7 @@ public class TerrainContentsGenerator24 : ITerrainContentsGenerator
 		}
 	}
 
-	private void GenerateSeagrass(TerrainChunk chunk)
+	public virtual void GenerateSeagrass(TerrainChunk chunk)
 	{
 		if (!TGExtras)
 		{
@@ -1663,7 +1663,7 @@ public class TerrainContentsGenerator24 : ITerrainContentsGenerator
 		}
 	}
 
-	private void GenerateIvy(TerrainChunk chunk)
+	public virtual void GenerateIvy(TerrainChunk chunk)
 	{
 		if (!TGExtras)
 		{
@@ -1735,7 +1735,7 @@ public class TerrainContentsGenerator24 : ITerrainContentsGenerator
 		}
 	}
 
-	private void GenerateTraps(TerrainChunk chunk)
+	public virtual void GenerateTraps(TerrainChunk chunk)
 	{
 		if (!TGExtras)
 		{
@@ -1813,7 +1813,7 @@ public class TerrainContentsGenerator24 : ITerrainContentsGenerator
 		}
 	}
 
-	private void GenerateGraves(TerrainChunk chunk)
+	public virtual void GenerateGraves(TerrainChunk chunk)
 	{
 		if (!TGExtras)
 		{
@@ -2007,7 +2007,7 @@ public class TerrainContentsGenerator24 : ITerrainContentsGenerator
 		}
 	}
 
-	private void GenerateCairns(TerrainChunk chunk)
+	public virtual void GenerateCairns(TerrainChunk chunk)
 	{
 		int num = 190;
 		Point2 point = default(Point2);
@@ -2037,7 +2037,7 @@ public class TerrainContentsGenerator24 : ITerrainContentsGenerator
 		}
 	}
 
-	private void GenerateSnowAndIce(TerrainChunk chunk)
+	public virtual void GenerateSnowAndIce(TerrainChunk chunk)
 	{
 		for (int i = 0; i < 16; i++)
 		{
@@ -2092,7 +2092,7 @@ public class TerrainContentsGenerator24 : ITerrainContentsGenerator
 		}
 	}
 
-	private void PropagateFluidsDownwards(TerrainChunk chunk)
+	public virtual void PropagateFluidsDownwards(TerrainChunk chunk)
 	{
 		for (int i = 0; i < 16; i++)
 		{
@@ -2117,7 +2117,7 @@ public class TerrainContentsGenerator24 : ITerrainContentsGenerator
 		}
 	}
 
-	private void UpdateFluidIsTop(TerrainChunk chunk)
+	public virtual void UpdateFluidIsTop(TerrainChunk chunk)
 	{
 		for (int i = 0; i < 16; i++)
 		{
@@ -2143,7 +2143,7 @@ public class TerrainContentsGenerator24 : ITerrainContentsGenerator
 		}
 	}
 
-	private static void CreateBrushes()
+	public static void CreateBrushes()
 	{
 		Random random = new Random(24);
 		for (int i = 0; i < 16; i++)
