@@ -1409,10 +1409,13 @@ namespace Game
         {
 
         }
+		[Obsolete("Use TerrainContentsGenerator24Initialize")]
+		public virtual void TerrainContentsGenerator23Initialize(ITerrainContentsGenerator terrainContentsGenerator,SubsystemTerrain subsystemTerrain)
+		{
 
-        public virtual void TerrainContentsGenerator23Initialize(ITerrainContentsGenerator terrainContentsGenerator, SubsystemTerrain subsystemTerrain)
+		}
+		public virtual void TerrainContentsGenerator24Initialize(ITerrainContentsGenerator terrainContentsGenerator, SubsystemTerrain subsystemTerrain)
         {
-
         }
 
         public virtual void PrepareModels(SubsystemModelsRenderer subsystemModelsRenderer, Camera camera, bool skippedByOtherMods, out bool skip)

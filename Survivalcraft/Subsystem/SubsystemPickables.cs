@@ -124,6 +124,8 @@ namespace Game
 			{
 				try
 				{
+					pickable.SubsystemTerrain = m_subsystemTerrain;
+					pickable.SubsystemPickables = this;
 					pickable.Draw(camera,drawOrder,totalElapsedGameTime,matrix);
 				}
 				catch(Exception e)

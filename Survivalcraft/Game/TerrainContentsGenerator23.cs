@@ -403,6 +403,7 @@ namespace Game
 				}
 			}
 			Vector3 ans = new Vector3(vector.X, CalculateHeight(vector.X, vector.Y), vector.Y);
+			Log.Information("Survivalcraft FindCoarseSpawnPosition");
             ModsManager.HookAction("FindCoarseSpawnPosition", loader =>
             {
                 loader.FindCoarseSpawnPosition(this, ref ans);

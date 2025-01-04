@@ -260,6 +260,11 @@ public class TerrainContentsGenerator24 : ITerrainContentsGenerator
 
 	public int OceanLevel => 64 + m_worldSettings.SeaLevelOffset;
 
+	public List<ChunkGenerationStep> ChunkGenerationStep1 = new List<ChunkGenerationStep>();
+	public List<ChunkGenerationStep> ChunkGenerationStep2 = new List<ChunkGenerationStep>();
+	public List<ChunkGenerationStep> ChunkGenerationStep3 = new List<ChunkGenerationStep>();
+	public List<ChunkGenerationStep> ChunkGenerationStep4 = new List<ChunkGenerationStep>();
+
 	static TerrainContentsGenerator24()
 	{
 		m_coalBrushes = new List<TerrainBrush>();
@@ -327,6 +332,43 @@ public class TerrainContentsGenerator24 : ITerrainContentsGenerator
 		TGWater = true;
 		TGExtras = true;
 		TGCavesAndPockets = true;
+		//Step 1
+		ChunkGenerationStep1.Add(new ChunkGenerationStep(1000,(chunk) => GenerateSurfaceParameters(chunk,0,0,16,8)));
+		ChunkGenerationStep1.Add(new ChunkGenerationStep(2000,(chunk) => GenerateTerrain(chunk,0,0,16,8)));
+		//Step 2
+		ChunkGenerationStep2.Add(new ChunkGenerationStep(1000,(chunk) => GenerateSurfaceParameters(chunk,0,8,16,16)));
+		ChunkGenerationStep2.Add(new ChunkGenerationStep(2000,(chunk) => GenerateTerrain(chunk,0,8,16,16)));
+		//Step 3
+		ChunkGenerationStep3.Add(new ChunkGenerationStep(100,GenerateCaves));
+		ChunkGenerationStep3.Add(new ChunkGenerationStep(200,GeneratePockets));
+		ChunkGenerationStep3.Add(new ChunkGenerationStep(300,GenerateMinerals));
+		ChunkGenerationStep3.Add(new ChunkGenerationStep(400,GenerateSurface));
+		ChunkGenerationStep3.Add(new ChunkGenerationStep(500,PropagateFluidsDownwards));
+		//step 4
+		ChunkGenerationStep4.Add(new ChunkGenerationStep(100,GenerateGrassAndPlants));
+		ChunkGenerationStep4.Add(new ChunkGenerationStep(200,GenerateLogs));
+		ChunkGenerationStep4.Add(new ChunkGenerationStep(300,GenerateTrees));
+		ChunkGenerationStep4.Add(new ChunkGenerationStep(400,GenerateCacti));
+		ChunkGenerationStep4.Add(new ChunkGenerationStep(500,GeneratePumpkins));
+		ChunkGenerationStep4.Add(new ChunkGenerationStep(600,GenerateKelp));
+		ChunkGenerationStep4.Add(new ChunkGenerationStep(700,GenerateSeagrass));
+		ChunkGenerationStep4.Add(new ChunkGenerationStep(800,GenerateBottomSuckers));
+		ChunkGenerationStep4.Add(new ChunkGenerationStep(900,GenerateTraps));
+		ChunkGenerationStep4.Add(new ChunkGenerationStep(1000,GenerateIvy));
+		ChunkGenerationStep4.Add(new ChunkGenerationStep(1100,GenerateGraves));
+		ChunkGenerationStep4.Add(new ChunkGenerationStep(1200,GenerateCairns));
+		ChunkGenerationStep4.Add(new ChunkGenerationStep(1300,GenerateSnowAndIce));
+		ChunkGenerationStep4.Add(new ChunkGenerationStep(1400,GenerateBedrockAndAir));
+		ChunkGenerationStep4.Add(new ChunkGenerationStep(1500,UpdateFluidIsTop));
+		ModsManager.HookAction("TerrainContentsGenerator24Initialize",loader =>
+		{
+			loader.TerrainContentsGenerator24Initialize(this,subsystemTerrain);
+			return false;
+		});
+		ChunkGenerationStep1.Sort((a,b) => (a.GenerateOrder.CompareTo(b.GenerateOrder)));
+		ChunkGenerationStep2.Sort((a,b) => (a.GenerateOrder.CompareTo(b.GenerateOrder)));
+		ChunkGenerationStep3.Sort((a,b) => (a.GenerateOrder.CompareTo(b.GenerateOrder)));
+		ChunkGenerationStep4.Sort((a,b) => (a.GenerateOrder.CompareTo(b.GenerateOrder)));
 	}
 
 	public Vector3 FindCoarseSpawnPosition()
@@ -360,47 +402,45 @@ public class TerrainContentsGenerator24 : ITerrainContentsGenerator
 				}
 			}
 		}
-		return new Vector3(vector.X, CalculateHeight(vector.X, vector.Y), vector.Y);
-	}
 
+		Vector3 ans = new Vector3(vector.X,CalculateHeight(vector.X,vector.Y),vector.Y);
+		ModsManager.HookAction("FindCoarseSpawnPosition",loader =>
+		{
+			loader.FindCoarseSpawnPosition(this,ref ans);
+			return false;
+		});
+		return ans;
+	}
 	public void GenerateChunkContentsPass1(TerrainChunk chunk)
 	{
-		GenerateSurfaceParameters(chunk, 0, 0, 16, 8);
-		GenerateTerrain(chunk, 0, 0, 16, 8);
+		foreach(ChunkGenerationStep step in ChunkGenerationStep1)
+		{
+			if(step.ShouldGenerate) step.GenerateAction(chunk);
+		}
 	}
 
 	public void GenerateChunkContentsPass2(TerrainChunk chunk)
 	{
-		GenerateSurfaceParameters(chunk, 0, 8, 16, 16);
-		GenerateTerrain(chunk, 0, 8, 16, 16);
+		foreach(ChunkGenerationStep step in ChunkGenerationStep2)
+		{
+			if(step.ShouldGenerate) step.GenerateAction(chunk);
+		}
 	}
 
 	public void GenerateChunkContentsPass3(TerrainChunk chunk)
 	{
-		GenerateCaves(chunk);
-		GeneratePockets(chunk);
-		GenerateMinerals(chunk);
-		GenerateSurface(chunk);
-		PropagateFluidsDownwards(chunk);
+		foreach(ChunkGenerationStep step in ChunkGenerationStep3)
+		{
+			if(step.ShouldGenerate) step.GenerateAction(chunk);
+		}
 	}
 
 	public void GenerateChunkContentsPass4(TerrainChunk chunk)
 	{
-		GenerateGrassAndPlants(chunk);
-		GenerateLogs(chunk);
-		GenerateTrees(chunk);
-		GenerateCacti(chunk);
-		GeneratePumpkins(chunk);
-		GenerateKelp(chunk);
-		GenerateSeagrass(chunk);
-		GenerateBottomSuckers(chunk);
-		GenerateTraps(chunk);
-		GenerateIvy(chunk);
-		GenerateGraves(chunk);
-		GenerateCairns(chunk);
-		GenerateSnowAndIce(chunk);
-		GenerateBedrockAndAir(chunk);
-		UpdateFluidIsTop(chunk);
+		foreach(ChunkGenerationStep step in ChunkGenerationStep4)
+		{
+			if(step.ShouldGenerate) step.GenerateAction(chunk);
+		}
 	}
 
 	public float CalculateOceanShoreDistance(float x, float z)
@@ -2428,5 +2468,10 @@ public class TerrainContentsGenerator24 : ITerrainContentsGenerator
 				m_caveBrushesByType[num82].Add(terrainBrush17);
 			}
 		}
+		ModsManager.HookAction("OnTerrainBrushesCreated",loader =>
+		{
+			loader.OnTerrainBrushesCreated();
+			return false;
+		});
 	}
 }

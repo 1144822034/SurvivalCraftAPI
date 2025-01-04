@@ -210,6 +210,8 @@ namespace Game
 			{
 				try
 				{
+					projectile.SubsystemProjectiles = this;
+					projectile.SubsystemTerrain = m_subsystemTerrain;
 					projectile.Draw(camera,drawOrder);
 				}
 				catch(Exception e)
