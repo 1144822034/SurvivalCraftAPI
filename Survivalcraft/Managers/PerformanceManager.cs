@@ -1,6 +1,7 @@
 using Engine;
 using Engine.Graphics;
 using Engine.Media;
+using SixLabors.ImageSharp.Diagnostics;
 using System;
 using System.Text;
 
@@ -26,6 +27,8 @@ namespace Game
 		public static long m_totalMemoryUsed;
 
 		public static long m_totalGpuMemoryUsed;
+
+		public static long m_totalGraphicResourcesCount;
 
 		public static StateMachine m_stateMachine;
 
@@ -56,6 +59,8 @@ namespace Game
 		public static long TotalMemoryUsed => m_totalMemoryUsed;
 
 		public static long TotalGpuMemoryUsed => m_totalGpuMemoryUsed;
+
+		public static long TotalGraphicResourcesCount => m_totalGraphicResourcesCount;
 
 		static PerformanceManager()
 		{
@@ -137,6 +142,7 @@ namespace Game
 			{
 				m_totalMemoryUsed = GC.GetTotalMemory(forceFullCollection: false);
 				m_totalGpuMemoryUsed = Display.GetGpuMemoryUsage();
+				m_totalGraphicResourcesCount = GraphicsResource.m_resources.Count;
 			}
 			m_stateMachine.Update();
 		}
@@ -149,7 +155,7 @@ namespace Game
 			{
 				if (Time.PeriodicEvent(1.0, 0.0) && ScreensManager.CurrentScreen != null)
 				{
-					m_statsString = $"CPUMEM {TotalMemoryUsed / 1024f / 1024f:0}MB, GPUMEM {TotalGpuMemoryUsed / 1024f / 1024f:0}MB, CPU {AverageCpuFrameTime / AverageFrameTime * 100f:0}%, {1f / AverageFrameTime:0.0} FPS";
+					m_statsString = $"CPUMEM {TotalMemoryUsed / 1024f / 1024f:0}MB, GPUMEM {TotalGpuMemoryUsed / 1024f / 1024f:0}MB({TotalGraphicResourcesCount}), CPU {AverageCpuFrameTime / AverageFrameTime * 100f:0}%, {1f / AverageFrameTime:0.0} FPS";
 #if DEBUG
 					string wname = ScreensManager.RootWidget.Input.MousePosition.HasValue ? ScreensManager.RootWidget.HitTestGlobal(ScreensManager.RootWidget.Input.MousePosition.Value)?.GetType().Name : string.Empty;
 					m_statsString += "\nScreen:[" + ScreensManager.CurrentScreen.GetType().Name + "]  [" + wname + "]";

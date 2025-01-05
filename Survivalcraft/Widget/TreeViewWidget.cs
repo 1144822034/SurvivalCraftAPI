@@ -142,9 +142,19 @@ namespace Game
 			m_widgetsDirty = true;
 		}
 
-		public void Clear()
+		public void Clear(bool dispose = true)
 		{
-			Nodes.ForEach(x => x.ParentTree = null);
+			Nodes.ForEach(x => {
+					if(dispose)
+					{
+						x.Dispose();
+					}
+					else
+					{
+						x.ParentTree = null;
+					}
+				}
+			);
 			Nodes.Clear();
 			m_widgetsDirty = true;
 		}
@@ -156,13 +166,14 @@ namespace Game
 		}
 	}
 
-	public class TreeViewNode
+	public class TreeViewNode : IDisposable
 	{
 		#region 字段
 		private List<TreeViewNode> m_nodes;
 		private bool m_expanded;
 		private bool m_selected;
 		private bool m_selectable;
+		private Subtexture m_subtexture;
 		#endregion
 
 		#region 属性
@@ -217,6 +228,18 @@ namespace Game
 		{
 			get;
 			set;
+		}
+
+		public Subtexture Subtexture
+		{
+			get
+			{
+				if(m_subtexture == null && Icon != null)
+				{
+					m_subtexture = new Subtexture(Icon, Vector2.Zero, Vector2.One);
+				}
+				return m_subtexture;
+			}
 		}
 
 		public TreeViewNode ParentNode
@@ -292,9 +315,13 @@ namespace Game
 		#endregion
 
 		#region 其他函数
-		public void Remove() {
+		public void Remove(bool dispose = true) {
 			if (ParentNode != null) ParentNode.Nodes.Remove(this);
 			else ParentTree.Nodes.Remove(this);
+			if(dispose)
+			{
+				Dispose();
+			}
 		}
 
 		public void EnsureVisible() {
@@ -313,10 +340,17 @@ namespace Game
 			child.ParentNode = this;
 		}
 
-		public void RemoveChild(TreeViewNode child)
+		public void RemoveChild(TreeViewNode child, bool dispose = true)
 		{
-			child.ParentTree = null;
-			child.ParentNode = null;
+			if(dispose)
+			{
+				child.Dispose();
+			}
+			else
+			{
+				child.ParentTree = null;
+				child.ParentNode = null;
+			}
 			m_nodes.Remove(child);
 		}
 
@@ -324,7 +358,42 @@ namespace Game
 		{
 			children.ForEach(AddChild);
 		}
+
+		public void ClearChildren(bool dispose = true)
+		{
+			m_nodes.ForEach(x => {
+					if(dispose)
+					{
+						x.Dispose();
+					}
+					else
+					{
+						x.ParentTree = null;
+						x.ParentNode = null;
+					}
+				}
+			);
+			m_nodes.Clear();
+		}
 		#endregion
+
+		public void Dispose()
+		{
+			ClearChildren();
+			ParentTree = null;
+			ParentNode = null;
+			//Icon?.Dispose();
+			if(Icon != null && Icon.m_texture!=0)
+			{
+				if(Icon.Tag is Image image)
+				{
+					image.m_pixels = null;
+					image.m_trueImage.Dispose();
+				}
+				Icon.Dispose();
+			}
+			GC.SuppressFinalize(this);
+		}
 	}
 
 	public class TreeViewNodeContentItem : ContainerWidget
@@ -380,7 +449,7 @@ namespace Game
 				m_node.OnClicked?.Invoke();
 			}
 			m_icon.IsVisible = m_node.Icon != null;
-			if (m_node.Icon != null) m_icon.Subtexture = new Subtexture(m_node.Icon,Vector2.Zero, Vector2.One);
+			if (m_node.Icon != null) m_icon.Subtexture = m_node.Subtexture;
 			m_selectedHighLight.IsVisible = m_node.Selected;
 			m_expandIcon.Subtexture = m_node.Expanded ? m_expandIconTexture : m_unexpandIconTexture;
 		}

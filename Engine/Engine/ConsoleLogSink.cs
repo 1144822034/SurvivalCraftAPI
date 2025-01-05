@@ -1,10 +1,15 @@
 using System;
 using System.IO;
+using System.Text;
 
 namespace Engine
 {
 	public class ConsoleLogSink : ILogSink
 	{
+        public ConsoleLogSink()
+		{
+            Console.OutputEncoding = Encoding.UTF8;
+		}
 		public LogType MinimumLogType
 		{
 			get;

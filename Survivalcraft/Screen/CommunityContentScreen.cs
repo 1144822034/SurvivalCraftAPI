@@ -225,7 +225,7 @@ namespace Game
 				DialogsManager.ShowDialog(null, new ListSelectionDialog(LanguageControl.Get(GetType().Name, "Filter"), list, 60f, (object item) => GetFilterDisplayName(item), delegate (object item)
 				{
 					m_filter = item;
-					m_isOwn = GetFilterDisplayName(item) == "只看自己";
+					m_isOwn = item is string str && !string.IsNullOrEmpty(str);
 					PopulateList(null, true);
 				}));
 			}
@@ -413,16 +413,17 @@ namespace Game
 			string cacheKey = text2 + "\n" + text3 + "\n" + text4 + "\n" + text + "\n" + m_inputKey.Text;
 			if (string.IsNullOrEmpty(cursor) && !force)
 			{
-				m_treePanel.Clear();
 				m_treePanel.ScrollPosition = 0f;
 				if (m_contentExpiryTime != 0.0 && Time.RealTime < m_contentExpiryTime && m_itemsCache.TryGetValue(cacheKey, out IEnumerable<object> value))
 				{
+					m_treePanel.Clear(false);
 					foreach (object item in value)//添加
 					{
 						if (item is TreeViewNode treeViewNode) m_treePanel.AddRoot(treeViewNode);
 					}
 					return;
 				}
+				m_treePanel.Clear();
 			}
 			if (force)
 			{
@@ -461,14 +462,16 @@ namespace Game
 									{
 										var texture = Engine.Graphics.Texture2D.Load(Image.Load(new System.IO.MemoryStream(data)));
 										item2.Icon = texture;
-										if(item2.LinkedNode != null)
+										TreeViewNode linkedNode = item2.LinkedNode;
+										if(linkedNode != null)
 										{
-											//item2.LinkedNode.Icon = texture; //资源节点的图标
-											if(item2.LinkedNode.ParentNode is {
+											linkedNode.Icon = texture; //资源节点的图标
+											TreeViewNode parentNode = item2.LinkedNode.ParentNode;
+											if(parentNode is {
 													Tag: int
-												}) //合集节点的图标
+												} && parentNode.Nodes.Last(item3 => item3.Icon != null) == linkedNode) //合集节点的图标
 											{
-												item2.LinkedNode.ParentNode.Icon = texture;
+												parentNode.Icon = texture;
 											}
 										}
 									}
@@ -485,7 +488,7 @@ namespace Game
 				if (list.Count > 0 && !string.IsNullOrEmpty(nextCursor))
 				{
 					//加载更多节点
-					TreeViewNode loadMoreNode = new("加载更多",new Color(64,192,64),string.Empty,Color.Transparent);
+					TreeViewNode loadMoreNode = new(LanguageControl.Get(fName, "35"),new Color(64,192,64),string.Empty,Color.Transparent);
 					loadMoreNode.Selectable = false;
 					loadMoreNode.Tag = "Load More";
 					loadMoreNode.OnClicked = () => PopulateList(nextCursor);
