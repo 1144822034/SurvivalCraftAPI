@@ -317,130 +317,130 @@
         }
 
 
-        [Obsolete("Use Math.Clamp instead", true)]
+        [Obsolete("Use Math.Clamp instead")]
         public static int Clamp(int x, int min, int max)
         {
             return x < min ? min : x <= max ? x : max;
         }
 
-        [Obsolete("Use Math.Sign instead", true)]
+        [Obsolete("Use Math.Sign instead")]
         public static int Sign(int x) => Math.Sign(x);
 
-        [Obsolete("Use Math.Abs instead", true)]
+        [Obsolete("Use Math.Abs instead")]
         public static int Abs(int x) => Math.Abs(x);
 
-        [Obsolete("Use Math.Clamp instead", true)]
+        [Obsolete("Use Math.Clamp instead")]
         public static long Clamp(long x, long min, long max)
         {
             return x < min ? min : x <= max ? x : max;
         }
 
-        [Obsolete("Use Math.Sign instead", true)]
+        [Obsolete("Use Math.Sign instead")]
         public static long Sign(long x) => Math.Sign(x);
 
-        [Obsolete("Use Math.Abs instead", true)]
+        [Obsolete("Use Math.Abs instead")]
         public static long Abs(long x) => Math.Abs(x);
 
-        [Obsolete("Use Math.Ceiling instead", true)]
+        [Obsolete("Use Math.Ceiling instead")]
         public static float Ceiling(float x) => (float)Math.Ceiling((double)x);
 
-        [Obsolete("Use Math.Round instead", true)]
+        [Obsolete("Use Math.Round instead")]
         public static float Round(float x) => (float)Math.Round((double)x);
 
-        [Obsolete("Use Math.Sqrt instead", true)]
+        [Obsolete("Use Math.Sqrt instead")]
         public static float Sqrt(float x) => (float)Math.Sqrt((double)x);
 
-        [Obsolete("Use Math.Sin instead", true)]
+        [Obsolete("Use Math.Sin instead")]
         public static float Sin(float x) => (float)Math.Sin((double)x);
 
-        [Obsolete("Use Math.Cos instead", true)]
+        [Obsolete("Use Math.Cos instead")]
         public static float Cos(float x) => (float)Math.Cos((double)x);
 
-        [Obsolete("Use Math.Tan instead", true)]
+        [Obsolete("Use Math.Tan instead")]
         public static float Tan(float x) => (float)Math.Tan((double)x);
 
-        [Obsolete("Use Math.Asin instead", true)]
+        [Obsolete("Use Math.Asin instead")]
         public static float Asin(float x) => (float)Math.Asin((double)x);
 
-        [Obsolete("Use Math.Acos instead", true)]
+        [Obsolete("Use Math.Acos instead")]
         public static float Acos(float x) => (float)Math.Acos((double)x);
 
-        [Obsolete("Use Math.Atan instead", true)]
+        [Obsolete("Use Math.Atan instead")]
         public static float Atan(float x) => (float)Math.Atan((double)x);
 
-        [Obsolete("Use Math.Atan2 instead", true)]
+        [Obsolete("Use Math.Atan2 instead")]
         public static float Atan2(float y, float x) => (float)Math.Atan2((double)y, (double)x);
 
-        [Obsolete("Use Math.Log instead", true)]
+        [Obsolete("Use Math.Log instead")]
         public static float Log(float x) => (float)Math.Log((double)x);
 
-        [Obsolete("Use Math.Log10 instead", true)]
+        [Obsolete("Use Math.Log10 instead")]
         public static float Log10(float x) => (float)Math.Log10((double)x);
 
-        [Obsolete("Use Math.Pow instead", true)]
+        [Obsolete("Use Math.Pow instead")]
         public static float Pow(float x, float n) => (float)Math.Pow((double)x, (double)n);
 
-        [Obsolete("Use Math.Clamp instead", true)]
+        [Obsolete("Use Math.Clamp instead")]
         public static double Clamp(double x, double min, double max)
         {
             return x < min ? min : x <= max ? x : max;
         }
 
-        [Obsolete("Use Math.Sign instead", true)]
+        [Obsolete("Use Math.Sign instead")]
         public static double Sign(double x) => Math.Sign(x);
 
-        [Obsolete("Use Math.Abs instead", true)]
+        [Obsolete("Use Math.Abs instead")]
         public static double Abs(double x) => Math.Abs(x);
 
-        [Obsolete("Use Math.Floor instead", true)]
+        [Obsolete("Use Math.Floor instead")]
         public static double Floor(double x) => Math.Floor(x);
 
-        [Obsolete("Use Math.Ceiling instead", true)]
+        [Obsolete("Use Math.Ceiling instead")]
         public static double Ceiling(double x) => Math.Ceiling(x);
 
-        [Obsolete("Use Math.Round instead", true)]
+        [Obsolete("Use Math.Round instead")]
         public static double Round(double x) => Math.Round(x);
 
-        [Obsolete("Use x * x instead", true)]
+        [Obsolete("Use x * x instead")]
         public static double Sqr(double x) => x * x;
 
-        [Obsolete("Use Math.Sqrt instead", true)]
+        [Obsolete("Use Math.Sqrt instead")]
         public static double Sqrt(double x) => Math.Sqrt(x);
 
-        [Obsolete("Use Math.Sin instead", true)]
+        [Obsolete("Use Math.Sin instead")]
         public static double Sin(double x) => Math.Sin(x);
 
-        [Obsolete("Use Math.Cos instead", true)]
+        [Obsolete("Use Math.Cos instead")]
         public static double Cos(double x) => Math.Cos(x);
 
-        [Obsolete("Use Math.Tan instead", true)]
+        [Obsolete("Use Math.Tan instead")]
         public static double Tan(double x) => Math.Tan(x);
 
-        [Obsolete("Use Math.Asin instead", true)]
+        [Obsolete("Use Math.Asin instead")]
         public static double Asin(double x) => Math.Asin(x);
 
-        [Obsolete("Use Math.Acos instead", true)]
+        [Obsolete("Use Math.Acos instead")]
         public static double Acos(double x) => Math.Acos(x);
 
-        [Obsolete("Use Math.Atan instead", true)]
+        [Obsolete("Use Math.Atan instead")]
         public static double Atan(double x) => Math.Atan(x);
 
-        [Obsolete("Use Math.Atan2 instead", true)]
+        [Obsolete("Use Math.Atan2 instead")]
         public static double Atan2(double y, double x) => Math.Atan2(y, x);
 
-        [Obsolete("Use Math.Exp instead", true)]
+        [Obsolete("Use Math.Exp instead")]
         public static double Exp(double n) => Math.Exp(n);
 
-        [Obsolete("Use Math.Log instead", true)]
+        [Obsolete("Use Math.Log instead")]
         public static double Log(double x) => Math.Log(x);
 
-        [Obsolete("Use Math.Log10 instead", true)]
+        [Obsolete("Use Math.Log10 instead")]
         public static double Log10(double x) => Math.Log10(x);
 
-        [Obsolete("Use Math.Pow instead", true)]
+        [Obsolete("Use Math.Pow instead")]
         public static double Pow(double x, double n) => Math.Pow(x, n);
 
-        [Obsolete("Use MathF.Floor instead", true)]
+        [Obsolete("Use MathF.Floor instead")]
         public static float Floor(float x) => MathF.Floor(x);
     }
 }
