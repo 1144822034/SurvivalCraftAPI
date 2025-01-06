@@ -2,9 +2,9 @@
 {
     public static class MathUtils
     {
-        const float PI = MathF.PI;
+        public const float PI = MathF.PI;
 
-        const float E = MathF.E;
+        public const float E = MathF.E;
 
         public static int Min(int x1, int x2)
         {
@@ -391,6 +391,9 @@
 
         [Obsolete("Use Math.Abs instead")]
         public static double Abs(double x) => Math.Abs(x);
+
+        [Obsolete("Use Math.Abs instead")]
+        public static float Abs(float x) => Math.Abs(x);
 
         [Obsolete("Use Math.Floor instead")]
         public static double Floor(double x) => Math.Floor(x);
