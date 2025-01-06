@@ -379,6 +379,12 @@
 
         [Obsolete("Use Math.Pow instead")]
         public static float Pow(float x, float n) => (float)Math.Pow((double)x, (double)n);
+        
+        [Obsolete("Use Math.Clamp instead")]
+        public static float Clamp(float x, float min, float max)
+        {
+            return x < min ? min : x <= max ? x : max;
+        }
 
         [Obsolete("Use Math.Clamp instead")]
         public static double Clamp(double x, double min, double max)

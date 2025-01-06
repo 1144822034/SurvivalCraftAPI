@@ -126,6 +126,8 @@ namespace Game
 
 		public virtual Vector3 StandingOnVelocity { get; set; }
 
+		[Obsolete("Use IsCrouching")]
+		public virtual bool IsSneaking { get { return IsCrouching; } set { IsCrouching = value; } }
 		public virtual bool IsCrouching
 		{
 			get
