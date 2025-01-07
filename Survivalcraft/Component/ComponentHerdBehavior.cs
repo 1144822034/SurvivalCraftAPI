@@ -47,7 +47,7 @@ namespace Game
 				if (Vector3.DistanceSquared(position, creature.ComponentBody.Position) < 256f)
 				{
 					ComponentHerdBehavior componentHerdBehavior = creature.Entity.FindComponent<ComponentHerdBehavior>();
-					if (componentHerdBehavior != null && componentHerdBehavior.HerdName == HerdName && componentHerdBehavior.m_autoNearbyCreaturesHelp)
+					if (componentHerdBehavior != null && !string.IsNullOrEmpty(componentHerdBehavior.HerdName) && componentHerdBehavior.HerdName == HerdName && componentHerdBehavior.m_autoNearbyCreaturesHelp)
 					{
 						ComponentChaseBehavior componentChaseBehavior = creature.Entity.FindComponent<ComponentChaseBehavior>();
 						if (componentChaseBehavior != null && componentChaseBehavior.Target == null)

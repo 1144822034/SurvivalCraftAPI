@@ -2923,7 +2923,7 @@
 							<Parameter Name="AttackPower" Guid="fcb7e883-0308-4201-98d0-84f35816c92f" Value="3" Type="float" />
 						</MemberComponentTemplate>
 						<MemberComponentTemplate Name="HerdBehavior" Guid="23b5d0ef-96b1-431d-adad-ef96f5487833">
-							<Parameter Name="HerdName" Guid="a0902ce8-8679-4635-bab7-252f1f88460b" Value="" Type="string" />
+							<Parameter Name="HerdName" Guid="a0902ce8-8679-4635-bab7-252f1f88460b" Value="KaalusGlitch" Type="string" />
 						</MemberComponentTemplate>
 						<MemberComponentTemplate Name="FourLeggedModel" Guid="8c02b096-cca0-4adf-9b4a-a1a697e94296">
 							<Parameter Name="TextureOverride" Guid="da2af368-2bf9-41f9-90c7-3535d2563786" Value="Textures/Creatures/Bull_White" Type="string" />
@@ -3925,7 +3925,7 @@
 				</ComponentTemplate>
 				<ComponentTemplate Name="HerdBehavior" Description="Behavior that makes a creature stay close to similar creatures" Guid="dfe7218e-ce14-4bde-8dac-f919c38e9efe" InheritanceParent="6cc7245f-56f2-4a77-a3db-5f628b6369b3">
 					<Parameter Name="AutoNearbyCreaturesHelp" Description="If true, when a nearby creature from the same herd is attacked will automatically attack its attacker" Guid="0d7915bd-5933-44aa-994d-a5a9638d2c8f" Value="False" Type="bool" />
-					<Parameter Name="HerdName" Description="Identifier used to find members of the same species for herding purposes" Guid="8d6ba257-8360-4b22-bd15-165e440b8644" Value="" Type="string" />
+					<Parameter Name="HerdName" Description="Identifier used to find members of the same species for herding purposes" Guid="8d6ba257-8360-4b22-bd15-165e440b8644" Value="KaalusGlitch" Type="string" />
 					<Parameter Name="Class" Guid="b66ad5ac-f597-43b4-95cf-218e9955332b" Value="Game.ComponentHerdBehavior" Type="string" />
 					<Parameter Name="HerdingRange" Description="Maximum distance to search for herd members when determining herd center" Guid="ddc3be68-4581-4100-ba02-5f31277267ac" Value="32" Type="float" />
 				</ComponentTemplate>
