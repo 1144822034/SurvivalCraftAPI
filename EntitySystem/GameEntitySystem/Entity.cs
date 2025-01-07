@@ -108,7 +108,7 @@ namespace GameEntitySystem
 			Id = id;
 		}
 
-		public static Action<List<KeyValuePair<int,Component>>> EntityComponentsInitialized;
+		public static Action<Entity, List<KeyValuePair<int,Component>>> EntityComponentsInitialized;
 
 		public Entity(Project project, ValuesDictionary valuesDictionary)
 		{
@@ -148,7 +148,7 @@ namespace GameEntitySystem
 					list.Add(new KeyValuePair<int, Component>(value3, component));
 				}
 			}
-			EntityComponentsInitialized.Invoke(list);
+			EntityComponentsInitialized.Invoke(this, list);
 			list.Sort((KeyValuePair<int, Component> x, KeyValuePair<int, Component> y) => x.Key - y.Key);
 			m_components = new List<Component>(list.Select((KeyValuePair<int, Component> x) => x.Value));
 		}
