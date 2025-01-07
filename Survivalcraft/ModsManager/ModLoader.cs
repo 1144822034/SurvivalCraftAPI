@@ -1477,5 +1477,24 @@ namespace Game
 
 		}
 
+		/// <summary>
+		/// 在实体创建时执行，可用于移除实体的特定组件
+		/// </summary>
+		/// <param name="entity">被创建的实体</param>
+		/// <param name="componentList">这个实体将会拥有的Component，KeyValuePair的第一个表示Component的加载顺序编号，第二个表示实体的Component</param>
+		public virtual void EntityComponentsInitialized(Entity entity, List<KeyValuePair<int,Component>> componentList)
+		{
+
+		}
+
+		/// <summary>
+		/// 游戏Project创建时执行，可用于移除Subsystem、Entity、Entity.Component
+		/// </summary>
+		/// <param name="project"></param>
+		public virtual void ProjectBeforeSubsystemsAndEntitiesLoad(Project project)
+		{
+
+		}
+
 	}
 }

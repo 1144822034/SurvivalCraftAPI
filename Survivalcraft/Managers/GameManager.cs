@@ -76,6 +76,19 @@ namespace Game
 						return false;
 					});
 				});
+				Entity.EntityComponentsInitialized += (entity,componentList) =>
+				{
+					ModsManager.HookAction("EntityComponentsInitialized",loader => {
+						loader.EntityComponentsInitialized(entity,componentList);
+						return false;
+					});
+				};
+				Project.BeforeSubsystemsAndEntitiesLoad += (project) => {
+					ModsManager.HookAction("ProjectBeforeSubsystemsAndEntitiesLoad",loader => {
+						loader.ProjectBeforeSubsystemsAndEntitiesLoad(project);
+						return false;
+					});
+				};
 				var projectData = new ProjectData(DatabaseManager.GameDatabase, projectNode, valuesDictionary, ignoreInvalidEntities: true);
 				m_project = new Project(DatabaseManager.GameDatabase, projectData);
 				m_subsystemUpdate = m_project.FindSubsystem<SubsystemUpdate>(throwOnError: true);

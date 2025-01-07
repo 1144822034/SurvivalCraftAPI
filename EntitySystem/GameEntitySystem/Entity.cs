@@ -108,7 +108,7 @@ namespace GameEntitySystem
 			Id = id;
 		}
 
-		public static Action<Entity, List<KeyValuePair<int,Component>>> EntityComponentsInitialized;
+		public static event Action<Entity, List<KeyValuePair<int,Component>>> EntityComponentsInitialized;
 
 		public Entity(Project project, ValuesDictionary valuesDictionary)
 		{

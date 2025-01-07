@@ -32,12 +32,13 @@ namespace GameEntitySystem
 
 		public static event Action<Project> OnProjectLoad;
 
+		public static event Action<Project> BeforeSubsystemsAndEntitiesLoad;
+
 		public ProjectData m_projectData;
 
         public int NextEntityID = 1;
 
 		public bool PostponeFireEntityAddedEvents = true;
-
         public Project(GameDatabase gameDatabase, ProjectData projectData)
 		{
 			try
@@ -83,6 +84,7 @@ namespace GameEntitySystem
                     NextEntityID = projectData.NextEntityID;
                     AddEntities(entities);
                 }
+				BeforeSubsystemsAndEntitiesLoad.Invoke(this);
                 foreach (Subsystem value3 in dictionary.Values)
 				{
 					LoadSubsystem(value3, dictionary, loadedSubsystems, 0);
