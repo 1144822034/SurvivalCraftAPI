@@ -336,6 +336,8 @@ namespace Game
 		{
 			if(modInfo.Dependencies is { Count: 0 })
 			{
+				IsDependencyChecked = true;
+				modEntities.Add(this);
 				return;
 			}
 			LoadingScreen.Info($"[{modInfo.Name}] Checking dependencies.");
