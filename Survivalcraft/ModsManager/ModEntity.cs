@@ -122,8 +122,11 @@ namespace Game
 		/// </summary>
 		public virtual void LoadLauguage()
 		{
-			LoadingScreen.Info($"[{modInfo.Name}] Loading Language file");
-			GetAssetsFile($"Lang/{ModsManager.Configs["Language"]}.json", (stream) => { LanguageControl.loadJson(stream); });
+			GetAssetsFile($"Lang/{ModsManager.Configs["Language"]}.json",
+				(stream) => {
+					LoadingScreen.Info($"[{modInfo.Name}] Loading Language file");
+					LanguageControl.loadJson(stream);
+				});
 		}
 		/// <summary>
 		/// Mod初始化
@@ -181,9 +184,14 @@ namespace Game
 		/// </summary>
 		public virtual void LoadBlocksData()
 		{
-			LoadingScreen.Info($"[{modInfo.Name}] {LanguageControl.Get(fName, "1")}");
+			bool flag = true;
 			GetFiles(".csv", (filename, stream) =>
 			{
+				if (flag)
+				{
+					LoadingScreen.Info($"[{modInfo.Name}] {LanguageControl.Get(fName, "1")}");
+					flag = false;
+				}
 				BlocksManager.LoadBlocksData(ModsManager.StreamToString(stream));
 			});
 		}
@@ -193,10 +201,15 @@ namespace Game
 		/// <param name="xElement"></param>
 		public virtual void LoadXdb(ref XElement xElement)
 		{
+			bool flag = true;
 			XElement element = xElement;
-			LoadingScreen.Info($"[{modInfo.Name}] {LanguageControl.Get(fName, "2")}");
 			GetFiles(".xdb", (filename, stream) =>
 			{
+				if (flag)
+				{
+					LoadingScreen.Info($"[{modInfo.Name}] {LanguageControl.Get(fName, "2")}");
+					flag = false;
+				}
 				ModsManager.CombineDataBase(element, stream);
 			});
 			Loader?.OnXdbLoad(xElement);
@@ -208,10 +221,15 @@ namespace Game
 		/// <param name="xElement"></param>
 		public virtual void LoadClo(ClothingBlock block, ref XElement xElement)
 		{
+			bool flag = true;
 			XElement element = xElement;
-			LoadingScreen.Info($"[{modInfo.Name}] {LanguageControl.Get(fName, "3")}");
 			GetFiles(".clo", (filename, stream) =>
 			{
+				if (flag)
+				{
+					LoadingScreen.Info($"[{modInfo.Name}] {LanguageControl.Get(fName, "3")}");
+					flag = false;
+				}
 				ModsManager.CombineClo(element, stream);
 			});
 		}
@@ -221,9 +239,17 @@ namespace Game
 		/// <param name="xElement"></param>
 		public virtual void LoadCr(ref XElement xElement)
 		{
+			bool flag = true;
 			XElement element = xElement;
-			LoadingScreen.Info($"[{modInfo.Name}] {LanguageControl.Get(fName, "4")}");
-			GetFiles(".cr", (filename, stream) => { ModsManager.CombineCr(element, stream); });
+			GetFiles(".cr",
+				(filename,stream) => {
+					if(flag)
+					{
+						LoadingScreen.Info($"[{modInfo.Name}] {LanguageControl.Get(fName, "4")}");
+						flag = false;
+					}
+					ModsManager.CombineCr(element, stream);
+				});
 		}
 		
 		/// <summary>
@@ -231,12 +257,16 @@ namespace Game
 		/// </summary>
 		public virtual Assembly[] GetAssemblies()
 		{
-			LoadingScreen.Info($"[{modInfo.Name}] Loading .dll assembly files.");
-			
+			bool flag = true;
 			var assemblies = new List<Assembly>();
 			
 			GetFiles(".dll", (filename, stream) =>
 			{
+				if(flag)
+				{
+					LoadingScreen.Info($"[{modInfo.Name}] Loading .dll assembly files.");
+					flag = false;
+				}
 			    if(!filename.StartsWith("Assets/"))
 				    assemblies.Add(Assembly.Load(ModsManager.StreamToBytes(stream)));
 			});//获取mod文件内的dll文件（不包括Assets文件夹内的dll）
@@ -288,9 +318,14 @@ namespace Game
 		}
 		public virtual void LoadJs()
 		{
-			LoadingScreen.Info($"[{modInfo.Name}] {LanguageControl.Get(fName, "5")}");
+			bool flag = true;
 			GetFiles(".js", (filename, stream) =>
 			{
+				if(flag)
+				{
+					LoadingScreen.Info($"[{modInfo.Name}] {LanguageControl.Get(fName, "5")}");
+					flag = false;
+				}
 				JsInterface.Execute(new StreamReader(stream).ReadToEnd());
 			});
 		}
@@ -299,6 +334,10 @@ namespace Game
 		/// </summary>
 		public virtual void CheckDependencies(List<ModEntity> modEntities)
 		{
+			if(modInfo.Dependencies is { Count: 0 })
+			{
+				return;
+			}
 			LoadingScreen.Info($"[{modInfo.Name}] Checking dependencies.");
 			for (int j = 0; j < modInfo.Dependencies.Count; j++)
 			{

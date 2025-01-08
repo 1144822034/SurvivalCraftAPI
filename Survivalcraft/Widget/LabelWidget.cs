@@ -3,7 +3,19 @@ namespace Game
 {
 	public class LabelWidget : FontTextWidget
 	{
-		public static BitmapFont BitmapFont;
+		public static BitmapFont m_bitmapFont;
+
+		public static BitmapFont BitmapFont
+		{
+			get
+			{
+				return m_bitmapFont ??= ContentManager.Get<BitmapFont>("Fonts/Pericles");
+			}
+			set
+			{
+				m_bitmapFont = value;
+			}
+		}
 		public override string Text
 		{
 			get => m_text; set

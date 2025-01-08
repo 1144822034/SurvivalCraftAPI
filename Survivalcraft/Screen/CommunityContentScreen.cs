@@ -1,4 +1,7 @@
 ﻿using Engine;
+using SixLabors.ImageSharp;
+using SixLabors.ImageSharp.PixelFormats;
+using SixLabors.ImageSharp.Processing;
 using System.Text.Json;
 using System.Xml.Linq;
 
@@ -460,18 +463,37 @@ namespace Game
 								{
 									try
 									{
-										var texture = Engine.Graphics.Texture2D.Load(Image.Load(new System.IO.MemoryStream(data)));
+										Image<Rgba32> image = SixLabors.ImageSharp.Image.Load<Rgba32>(data);
+										bool flag = image.Width > image.Height;
+										if(image.Width > 256 || image.Height > 256)
+										{
+											image.Mutate(x => x.Resize(flag ? 256 : 0, flag ? 0 : 256, KnownResamplers.Bicubic));
+										}
+										Vector2 iconMargin = Vector2.Zero;
+										if(flag)
+										{
+											float ratio = (float)image.Height / image.Width;
+											iconMargin = new Vector2(0f, (1f - ratio) * 32f);
+										}
+										else if(image.Width < image.Height)
+										{
+											float ratio = (float)image.Width / image.Height;
+											iconMargin = new Vector2((1f - ratio) * 32f, 0f);
+										}
+										var texture = Engine.Graphics.Texture2D.Load(image);
 										item2.Icon = texture;
 										TreeViewNode linkedNode = item2.LinkedNode;
 										if(linkedNode != null)
 										{
 											linkedNode.Icon = texture; //资源节点的图标
+											linkedNode.IconMargin = iconMargin;
 											TreeViewNode parentNode = item2.LinkedNode.ParentNode;
 											if(parentNode is {
 													Tag: int
 												} && parentNode.Nodes.Last(item3 => item3.Icon != null) == linkedNode) //合集节点的图标
 											{
 												parentNode.Icon = texture;
+												parentNode.IconMargin = iconMargin;
 											}
 										}
 									}
@@ -483,7 +505,11 @@ namespace Game
 							});
 						}, delegate (Exception e) { });
 					}
-					else if (item2.LinkedNode  != null) item2.LinkedNode.Icon = item2.Icon;
+					else if(item2.LinkedNode != null)
+					{
+						item2.LinkedNode.Icon = item2.Icon;
+						item2.LinkedNode.IconMargin = Vector2.Zero;
+					}
 				}
 				if (list.Count > 0 && !string.IsNullOrEmpty(nextCursor))
 				{

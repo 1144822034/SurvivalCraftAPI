@@ -141,12 +141,16 @@ namespace Game
 			AddLoadAction(() =>
 			{
 			    Dictionary<string, Assembly[]> assemblies = [];
-				ModsManager.ModListAllDo((modEntity) =>
-				{
-					Log.Information($"[{modEntity.modInfo.Name}] Getting assemblies.");
+				ModsManager.ModListAllDo((modEntity) => {
+					bool flag = true;
 				    assemblies[modEntity.modInfo.PackageName] = modEntity.GetAssemblies();
 				    foreach (var assembly in assemblies[modEntity.modInfo.PackageName])
 				    {
+					    if(flag)
+					    {
+						    Log.Information($"[{modEntity.modInfo.Name}] Getting assemblies.");
+						    flag = false;
+					    }
 					    ModsManager.Dlls.Add(assembly.GetName().FullName, assembly);
 				    }
 				});
@@ -369,7 +373,14 @@ namespace Game
 			});
 			AddLoadAction(delegate
 			{
-				ModsManager.ModListAllDo((modEntity) => { Info($"[{modEntity.modInfo?.Name}] {LanguageControl.Get(fName, "6")}"); modEntity.Loader?.OnLoadingFinished(ModLoadingActoins); });
+				ModsManager.ModListAllDo(
+					(modEntity) => {
+						if(modEntity.Loader != null)
+						{
+							Info($"[{modEntity.modInfo?.Name}] {LanguageControl.Get(fName, "6")}");
+							modEntity.Loader.OnLoadingFinished(ModLoadingActoins);
+						}
+					});
 			});
 			AddLoadAction(delegate
 			{

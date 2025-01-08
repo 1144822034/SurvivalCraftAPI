@@ -160,8 +160,8 @@ public class ModsManageContentScreen : Screen
 			containerWidget.Children.Find<LabelWidget>("ExternalContentItem.Details").Text = details;
 			RectangleWidget iconWidget = containerWidget.Children.Find<RectangleWidget>("ExternalContentItem.Icon");
 			iconWidget.Subtexture = modItem.Subtexture;
-			iconWidget.Size = new Vector2(50, 50);
-			iconWidget.Margin = new Vector2(10, 10);
+			iconWidget.Size = new Vector2(40, 40);
+			iconWidget.Margin = new Vector2(8, 8);
 			return containerWidget;
 		};
 		m_modsContentList.ItemClicked += delegate (object item)

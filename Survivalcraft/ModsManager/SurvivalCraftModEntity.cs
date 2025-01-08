@@ -60,7 +60,6 @@ namespace Game
 			InitResources();
 			if(modInfo != null)
 			{
-				LabelWidget.BitmapFont = ContentManager.Get<Engine.Media.BitmapFont>("Fonts/Pericles");
 				modInfo.LoadOrder = int.MinValue;
 			}
 		}

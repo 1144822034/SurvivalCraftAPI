@@ -230,6 +230,12 @@ namespace Game
 			set;
 		}
 
+		public Vector2 IconMargin
+		{
+			get;
+			set;
+		}
+
 		public Subtexture Subtexture
 		{
 			get
@@ -449,7 +455,11 @@ namespace Game
 				m_node.OnClicked?.Invoke();
 			}
 			m_icon.IsVisible = m_node.Icon != null;
-			if (m_node.Icon != null) m_icon.Subtexture = m_node.Subtexture;
+			if(m_node.Icon != null)
+			{
+				m_icon.Subtexture = m_node.Subtexture;
+				m_icon.Margin = m_node.IconMargin;
+			}
 			m_selectedHighLight.IsVisible = m_node.Selected;
 			m_expandIcon.Subtexture = m_node.Expanded ? m_expandIconTexture : m_unexpandIconTexture;
 		}
