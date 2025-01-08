@@ -142,6 +142,7 @@ namespace Engine.Media
 		{
 			try
 			{
+                char[] splitters = [(char)0x20, (char)0x09];// 空格和制表符
 				Texture2D texture = Texture2D.Load(TextureStream);
 				BitmapFont bitmapFont = new();
 				StreamReader streamReader = new(GlyphsStream);
@@ -150,7 +151,7 @@ namespace Engine.Media
 				for (int i = 0; i < num; i++)
 				{
 					string line = streamReader.ReadLine();
-					string[] arr = line.Split(new[] { (char)0x20, (char)0x09 }, StringSplitOptions.None);
+					string[] arr = line.Split(splitters, StringSplitOptions.None);
 					if (arr.Length == 9)
 					{
 						string[] tmp = new string[8];
@@ -174,10 +175,23 @@ namespace Engine.Media
 				}
 				float glyphHeight = float.Parse(streamReader.ReadLine());
 				string line2 = streamReader.ReadLine();
-				string[] arr2 = line2.Split(new char[] { (char)0x20, (char)0x09 }, StringSplitOptions.None);
+				string[] arr2 = line2.Split(splitters, StringSplitOptions.None);
 				Vector2 spacing = new(float.Parse(arr2[0]), float.Parse(arr2[1]));
 				float scale = float.Parse(streamReader.ReadLine());
 				char fallbackCode = char.Parse(streamReader.ReadLine());
+                int num2 = int.Parse(streamReader.ReadLine() ?? "0");
+                for (int j = 0; j < num2; j++)
+                {
+                    string line = streamReader.ReadLine();
+                    string[] arr = line.Split(splitters, StringSplitOptions.None);
+                    if (arr.Length == 3)
+                    {
+                        char code2 = char.Parse(arr[0]);
+                        char followingCode = char.Parse(arr[1]);
+                        float num3 = float.Parse(arr[2]);
+                        bitmapFont.SetKerning(code2, followingCode, num3);
+                    }
+                }
 				bitmapFont.Initialize(texture, null, array, fallbackCode, glyphHeight, spacing, scale);
 				return bitmapFont;
 			}

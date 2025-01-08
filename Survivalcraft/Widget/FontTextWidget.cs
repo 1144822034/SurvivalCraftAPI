@@ -81,8 +81,7 @@ namespace Game
 		{
 			get
 			{
-				if (LabelWidget.BitmapFont != null) return LabelWidget.BitmapFont;
-				return m_font;
+				return m_font ?? (LabelWidget.BitmapFont ?? BitmapFont.DebugFont);
 			}
 			set
 			{
@@ -199,7 +198,6 @@ namespace Game
 			Text = string.Empty;
 			FontScale = 1f;
 			Color = Color.White;
-			Font = BitmapFont.DebugFont;
 			TextureLinearFilter = true;
 			Size = new Vector2(-1f);
 		}

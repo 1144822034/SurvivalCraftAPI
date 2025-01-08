@@ -1,7 +1,6 @@
 using Engine;
 using Engine.Graphics;
 using Engine.Media;
-using SixLabors.ImageSharp.Diagnostics;
 using System;
 using System.Text;
 

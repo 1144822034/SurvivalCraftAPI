@@ -1,1 +1,1 @@
-<BevelledButtonWidget xmlns="runtime-namespace:Game" Size="70, 60"  />
+<BevelledButtonWidget xmlns="runtime-namespace:Game" Size="70, 60" FontScale="1.25" />
