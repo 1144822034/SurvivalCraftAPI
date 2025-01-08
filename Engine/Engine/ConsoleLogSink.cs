@@ -8,7 +8,9 @@ namespace Engine
 	{
         public ConsoleLogSink()
 		{
+#if WINDOWS
             Console.OutputEncoding = Encoding.UTF8;
+#endif
 		}
 		public LogType MinimumLogType
 		{

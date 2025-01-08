@@ -568,10 +568,6 @@ namespace Game
 			{
 				m_velocity = Vector3.Lerp(m_velocity, StandingOnVelocity, 6f * dt);
 			}
-			if (!StandingOnValue.HasValue && dt != 0)
-			{
-				TargetCrouchFactor = 0f;
-			}
 			UpdateImmersionData();
 			if (ImmersionFluidBlock is WaterBlock && ImmersionDepth > 0.3f && !m_fluidEffectsPlayed)
 			{

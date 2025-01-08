@@ -120,7 +120,7 @@ namespace Game {
                 }
                 return new LabelWidget {
                     Text = text,
-                    Font = BitmapFont.DebugFont,
+                    Font = LabelWidget.BitmapFont,
                     HorizontalAlignment = WidgetAlignment.Near,
                     VerticalAlignment = WidgetAlignment.Center,
                     FontScale = 0.6f,
