@@ -109,6 +109,14 @@ namespace Engine.Media
 			set;
 		}
 
+        public static Glyph EmptyGlyph = new Glyph(
+            (char)0,
+            Vector2.Zero,
+            Vector2.Zero,
+            Vector2.Zero,
+            0f
+        );
+
 		public char MaxGlyphCode
 		{
 			get;
@@ -218,7 +226,7 @@ namespace Engine.Media
 
 		public Glyph GetGlyph(char code)
 		{
-            return code >= m_glyphsByCode.Length ? FallbackGlyph : m_glyphsByCode[code];
+            return code == 0 ? EmptyGlyph : code >= m_glyphsByCode.Length ? FallbackGlyph : m_glyphsByCode[code];
         }
 
         public float GetKerning(char code, char followingCode)
@@ -477,14 +485,25 @@ namespace Engine.Media
 			LineHeight = glyphHeight + spacing.Y;
 			Spacing = spacing;
 			Scale = scale;
-			FallbackGlyph = glyphs.First((Glyph g) => g.Code == fallbackCode);
-			MaxGlyphCode = glyphs.Max((Glyph g) => g.Code);
+            IEnumerable<Glyph> enumerable = glyphs as Glyph[] ?? glyphs.ToArray();
+            foreach (Glyph glyph in enumerable)
+            {
+                if (glyph.Code == fallbackCode)
+                {
+                    FallbackGlyph = glyph;
+                }
+                if (glyph.Code > MaxGlyphCode)
+                {
+                    MaxGlyphCode = glyph.Code;
+                }
+            }
+            FallbackGlyph ??= enumerable.First(g=> g.Code == 0);
 			m_glyphsByCode = new Glyph[MaxGlyphCode + 1];
 			for (int i = 0; i < m_glyphsByCode.Length; i++)
 			{
 				m_glyphsByCode[i] = FallbackGlyph;
 			}
-			foreach (Glyph glyph in glyphs)
+			foreach (Glyph glyph in enumerable)
 			{
 				m_glyphsByCode[glyph.Code] = glyph;
 			}

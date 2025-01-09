@@ -2541,7 +2541,7 @@
 	},
 	"Help": {
 		"1": {
-			"value": "\\n A11PI版本发布的mod格式为scmod，只有在mod管理器中有显示的mod才是有效的。\\n \\nmod安装路径为\/sdcard\/SurvivalCraft2.4_API1.8\/Mods \\n\\n(同理，电脑版在游戏目录的Mods文件夹) \\n\\n\\n 具体操作：\\n\\n用手机自带的文件管理器或MT管理器等等，找到下载的2.4插件版可用的mod文件(文件格式为scmod)，移动或复制粘贴到手机内部存储中的Survivalcraft2.4_API1.8里的Mods文件夹中，移动完文件后重启游戏即可。\\n\\n如果要卸载mod，将Mods文件夹中的指定mod删除或移出Mods文件夹，最后重启游戏。\\n\\nMods文件夹每次更新后都需要重启一下游戏。\\n\\n\\n如果觉得麻烦，可以试试在内置社区下载mod，然后用自带mod管理器安装。",
+			"value": "\\n API版本发布的mod格式为scmod，只有在mod管理器中有显示的mod才是有效的。\\n \\nmod安装路径为\/sdcard\/SurvivalCraft2.4_API1.8\/Mods \\n\\n(同理，电脑版在游戏目录的Mods文件夹) \\n\\n\\n 具体操作：\\n\\n用手机自带的文件管理器或MT管理器等等，找到下载的2.4插件版可用的mod文件(文件格式为scmod)，移动或复制粘贴到手机内部存储中的Survivalcraft2.4_API1.8里的Mods文件夹中，移动完文件后重启游戏即可。\\n\\n如果要卸载mod，将Mods文件夹中的指定mod删除或移出Mods文件夹，最后重启游戏。\\n\\nMods文件夹每次更新后都需要重启一下游戏。\\n\\n\\n如果觉得麻烦，可以试试在内置社区下载mod，然后用自带mod管理器安装。",
 			"Title": "安装mod教程"
 		},
 		"2": {
