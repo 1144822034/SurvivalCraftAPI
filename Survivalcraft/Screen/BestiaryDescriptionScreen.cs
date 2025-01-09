@@ -1,6 +1,7 @@
 using Engine;
 using System.Collections.Generic;
 using System.Xml.Linq;
+using TemplatesDatabase;
 
 namespace Game
 {
@@ -115,6 +116,13 @@ namespace Game
 				m_propertyNames2Widget.Text = m_propertyNames2Widget.Text.TrimEnd();
 				m_propertyValues2Widget.Text = m_propertyValues2Widget.Text.TrimEnd();
 				m_dropsPanel.Children.Clear();
+
+				ValuesDictionary valuesDictionaryLoot = DatabaseManager.FindValuesDictionaryForComponent(bestiaryCreatureInfo.EntityValuesDictionary,typeof(ComponentLoot));
+				if(valuesDictionaryLoot != null)
+				{
+					bestiaryCreatureInfo.Loot = ComponentLoot.ParseLootList(valuesDictionaryLoot.GetValue<ValuesDictionary>("Loot"));
+				}
+
 				if (bestiaryCreatureInfo.Loot.Count > 0)
 				{
 					foreach (ComponentLoot.Loot item in bestiaryCreatureInfo.Loot)
