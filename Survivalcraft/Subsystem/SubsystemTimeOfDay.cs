@@ -14,13 +14,13 @@ namespace Game
 
 		public float DayDuration { get; set; } = 1200f;
 
-		public float DawnStart { get; private set; }
+		public float DawnStart { get; set; }
 
-		public float DayStart { get; private set; }
+		public float DayStart { get; set; }
 
-		public float DuskStart { get; private set; }
+		public float DuskStart { get; set; }
 
-		public float NightStart { get; private set; }
+		public float NightStart { get; set; }
 
 		public float DayInterval => IntervalUtils.Interval(DayStart, DuskStart);
 
