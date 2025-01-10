@@ -80,7 +80,7 @@ namespace Game
 
 		public double CalculateDay(double totalElapsedGameTime)
 		{
-			return (totalElapsedGameTime + (TimeOfDayOffset + (double)DayStart) * 1200.0) / 1200.0;
+			return (totalElapsedGameTime + (TimeOfDayOffset + (double)DayStart) * DayDuration) / DayDuration;
 		}
 
 		public float CalculateTimeOfDay(double totalElapsedGameTime)

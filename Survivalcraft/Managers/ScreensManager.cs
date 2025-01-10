@@ -153,6 +153,10 @@ namespace Game
 				if (m_animationData.OldScreen != null)
 				{
 					m_animationData.OldScreen.Leave();
+					ModsManager.HookAction("OnScreenLeaved",loader => {
+						loader.OnScreenLeaved(m_animationData.OldScreen);
+						return false;
+					});
 					RootWidget.Children.Remove(m_animationData.OldScreen);
 				}
 				if (m_animationData.NewScreen != null)
@@ -160,6 +164,10 @@ namespace Game
 					RootWidget.Children.Insert(0, m_animationData.NewScreen);
 					m_animationData.NewScreen.Enter(m_animationData.Parameters);
 					m_animationData.NewScreen.ColorTransform = Color.Transparent;
+					ModsManager.HookAction("OnScreenEntered",loader => {
+						loader.OnScreenEntered(m_animationData.NewScreen,m_animationData.Parameters);
+						return false;
+					});
 					RootWidget.IsUpdateEnabled = true;
 				}
 			}
