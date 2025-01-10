@@ -421,7 +421,7 @@ public class ModsManageContentScreen : Screen
 							}
 							catch (Exception e)
 							{
-								DialogsManager.ShowDialog(null, new MessageDialog(LanguageControl.Get(fName, 50), LanguageControl.Get(fName, 51) + e.Message, LanguageControl.Get("Usual", "ok"), null, null));
+								DialogsManager.ShowDialog(null, new MessageDialog(LanguageControl.Get(fName, 50), LanguageControl.Get(fName, 51) + e.ToString(), LanguageControl.Get("Usual", "ok"), null, null));
 							}
 						}
 					}));
@@ -468,7 +468,7 @@ public class ModsManageContentScreen : Screen
 											}
 											catch (Exception e)
 											{
-												DialogsManager.ShowDialog(null, new MessageDialog(LanguageControl.Get(fName, 56), LanguageControl.Get(fName, 51) + e.Message, LanguageControl.Get("Usual", "ok"), null, null));
+												DialogsManager.ShowDialog(null, new MessageDialog(LanguageControl.Get(fName, 56), LanguageControl.Get(fName, 51) + e.ToString(), LanguageControl.Get("Usual", "ok"), null, null));
 											}
 											break;
 										}
@@ -772,7 +772,7 @@ public class ModsManageContentScreen : Screen
 		}
 		catch (Exception e)
 		{
-			Log.Warning("SetModItemList:" + e.Message);
+			Log.Warning("SetModItemList:" + e.ToString());
 		}
 	}
 

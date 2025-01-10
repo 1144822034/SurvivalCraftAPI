@@ -62,7 +62,7 @@ namespace Game
 					}
 					catch (Exception e)
 					{
-						Log.Error(string.Format("Get file [{0}] failed: {1}", zipArchiveEntry.FilenameInZip, e.Message));
+						Log.Error(string.Format("Get file [{0}] failed: {1}", zipArchiveEntry.FilenameInZip, e));
 					}
 					finally
 					{
@@ -106,7 +106,7 @@ namespace Game
 				}
 				catch(Exception e)
 				{
-					LoadingScreen.Error($"[{modInfo.Name}] Get file [{filename}] failed: " + e.Message);
+					LoadingScreen.Error($"[{modInfo.Name}] Get file [{filename}] failed: " + e);
 				}
 				return false;
 			}

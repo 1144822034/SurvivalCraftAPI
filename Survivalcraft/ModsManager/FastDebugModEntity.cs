@@ -146,7 +146,7 @@ namespace Game
 						}
 						catch (Exception e)
 						{
-							Log.Error(string.Format("GetFile {0} Error:{1}", item.Key, e.Message));
+							Log.Error(string.Format("GetFile {0} Error:{1}", item.Key, e));
 						}
 					}
 				}
@@ -164,7 +164,7 @@ namespace Game
 					}
 					catch (Exception e)
 					{
-						Log.Error(string.Format("GetFile {0} Error:{1}", filename, e.Message));
+						Log.Error(string.Format("GetFile {0} Error:{1}", filename, e));
 					}
 				}
 				return true;

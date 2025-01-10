@@ -382,7 +382,7 @@ public static class ModsManager
 
 	public static void AddException(Exception e, bool AllowContinue_ = false)
 	{
-		LoadingScreen.Error(e.Message);
+		LoadingScreen.Error(e.ToString());
 		Log.Error(e);
 		AllowContinue = !SettingsManager.DisplayLog || AllowContinue_;
 	}
@@ -794,7 +794,7 @@ public static class ModsManager
         }
         catch (Exception e)
         {
-            Console.WriteLine(e.Message);
+            Console.WriteLine(e);
         }
     }
 #endif

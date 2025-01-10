@@ -317,7 +317,7 @@ namespace Game
 				}
 				catch (Exception e)
 				{
-					Warning(e.Message);
+					Warning(e.ToString());
 				}
 			});
 			AddLoadAction(delegate
@@ -329,7 +329,7 @@ namespace Game
 				}
 				catch (Exception e)
 				{
-					Warning(e.Message);
+					Warning(e.ToString());
 				}
 			});
 			AddLoadAction(delegate
@@ -367,7 +367,7 @@ namespace Game
 					}
 					catch (Exception e)
 					{
-						Warning(e.Message);
+						Warning(e.ToString());
 					}
 				}
 			});
@@ -560,7 +560,7 @@ namespace Game
 				}
 				catch (Exception e)
 				{
-					Error(e.Message);
+					Error(e.ToString());
 				}
 				finally
 				{
@@ -577,7 +577,7 @@ namespace Game
 					}
 					catch (Exception e)
 					{
-						Error(e.Message);
+						Error(e.ToString());
 					}
 					finally
 					{
