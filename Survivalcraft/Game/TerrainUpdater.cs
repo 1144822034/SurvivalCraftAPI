@@ -856,7 +856,7 @@ namespace Game
                                 }
                             }
                         }
-                        this.CalculateChunkSliceContentsHashes(chunk);
+                        CalculateChunkSliceContentsHashes(chunk);
                         double realTime5 = Time.RealTime;
 						lock (chunk.Geometry)
 						{
@@ -1309,13 +1309,14 @@ namespace Game
             {
                 if (index % 2 == stage)
                 {
-	                chunk.SliceContentsHashes[index] = CalculateChunkSliceContentsHash(chunk, index);
 	                int generateHash = chunk.GeneratedSliceContentsHashes[index];
 	                if (generateHash != 0 && generateHash == chunk.SliceContentsHashes[index])
 	                {
 		                m_statistics.SkippedSlices++;
 		                continue;
-	                } 
+	                }
+
+	                chunk.GeneratedSliceContentsHashes[index] = 0;
 	                ++this.m_statistics.GeneratedSlices;
 	                var geometry = chunk.ChunkSliceGeometries[index];
 	                if(geometry == null)
@@ -1361,6 +1362,8 @@ namespace Game
                             }
                         }
                     }
+
+	                chunk.GeneratedSliceContentsHashes[index] = chunk.SliceContentsHashes[index];
                 }
             }
         }
@@ -1368,11 +1371,10 @@ namespace Game
         {
             double realTime = Time.RealTime;
             int num = 1;
-            num += this.m_terrain.SeasonTemperature;
+            num += m_terrain.SeasonTemperature;
             num *= 31;
-            num += this.m_terrain.SeasonHumidity;
+            num += m_terrain.SeasonHumidity;
             num *= 31;
-            TerrainChunkGeometry geometry = chunk.Geometry;
             for (int i = 0; i < 16; i++)
             {
                 chunk.SliceContentsHashes[i] = num;
@@ -1385,7 +1387,7 @@ namespace Game
             {
                 for (int k = num4; k < num5; k++)
                 {
-                    TerrainChunk chunkAtCell = this.m_terrain.GetChunkAtCell(j, k);
+                    TerrainChunk chunkAtCell = m_terrain.GetChunkAtCell(j, k);
                     if (chunkAtCell != null)
                     {
                         int num6 = j & 15;
@@ -1393,10 +1395,10 @@ namespace Game
                         int shaftValueFast = chunkAtCell.GetShaftValueFast(num6, num7);
                         int num8 = Terrain.ExtractTopHeight(shaftValueFast);
                         int num9 = Terrain.ExtractBottomHeight(shaftValueFast);
-                        int num10 = ((num6 > 0) ? chunkAtCell.GetBottomHeightFast(num6 - 1, num7) : this.m_terrain.GetBottomHeight(j - 1, k));
-                        int num11 = ((num7 > 0) ? chunkAtCell.GetBottomHeightFast(num6, num7 - 1) : this.m_terrain.GetBottomHeight(j, k - 1));
-                        int num12 = ((num6 < 15) ? chunkAtCell.GetBottomHeightFast(num6 + 1, num7) : this.m_terrain.GetBottomHeight(j + 1, k));
-                        int num13 = ((num7 < 15) ? chunkAtCell.GetBottomHeightFast(num6, num7 + 1) : this.m_terrain.GetBottomHeight(j, k + 1));
+                        int num10 = ((num6 > 0) ? chunkAtCell.GetBottomHeightFast(num6 - 1, num7) : m_terrain.GetBottomHeight(j - 1, k));
+                        int num11 = ((num7 > 0) ? chunkAtCell.GetBottomHeightFast(num6, num7 - 1) : m_terrain.GetBottomHeight(j, k - 1));
+                        int num12 = ((num6 < 15) ? chunkAtCell.GetBottomHeightFast(num6 + 1, num7) : m_terrain.GetBottomHeight(j + 1, k));
+                        int num13 = ((num7 < 15) ? chunkAtCell.GetBottomHeightFast(num6, num7 + 1) : m_terrain.GetBottomHeight(j, k + 1));
                         int num14 = MathUtils.Min(MathUtils.Min(num10, num11, num12, num13), num9 - 1);
                         int num15 = num8 + 2;
                         num14 = MathUtils.Max(num14, 0);
@@ -1428,64 +1430,9 @@ namespace Game
                 }
             }
             double realTime2 = Time.RealTime;
-            this.m_statistics.HashCount++;
-            this.m_statistics.HashTime += realTime2 - realTime;
+            m_statistics.HashCount++;
+            m_statistics.HashTime += realTime2 - realTime;
         }
-        public static int CalculateLightPropagationBitIndex(int x, int z)
-		{
-			return x + 1 + (3 * (z + 1));
-		}
-
-		public int CalculateChunkSliceContentsHash(TerrainChunk chunk, int sliceIndex)
-		{
-			double realTime = Time.RealTime;
-			int num = 1;
-			int num2 = chunk.Origin.X - 1;
-			int num3 = chunk.Origin.X + 16 + 1;
-			int num4 = chunk.Origin.Y - 1;
-			int num5 = chunk.Origin.Y + 16 + 1;
-			int x = MathUtils.Max((16 * sliceIndex) - 1, 0);
-			int x2 = MathUtils.Min((16 * (sliceIndex + 1)) + 1, 256);
-			for (int i = num2; i < num3; i++)
-			{
-				for (int j = num4; j < num5; j++)
-				{
-					TerrainChunk chunkAtCell = m_terrain.GetChunkAtCell(i, j);
-					if (chunkAtCell != null)
-					{
-						int x3 = i & 0xF;
-						int z = j & 0xF;
-						int shaftValueFast = chunkAtCell.GetShaftValueFast(x3, z);
-						int num6 = Terrain.ExtractBottomHeight(shaftValueFast);
-						int num7 = Terrain.ExtractTopHeight(shaftValueFast);
-						int num8 = MathUtils.Max(x, num6 - 1);
-						int num9 = MathUtils.Min(x2, num7 + 2);
-						int num10 = TerrainChunk.CalculateCellIndex(x3, num8, z);
-						int num11 = num10 + num9 - num8;
-						while (num10 < num11)
-						{
-							num += chunkAtCell.GetCellValueFast(num10++);
-							num *= 31;
-						}
-						num += Terrain.ExtractTemperature(shaftValueFast);
-						num *= 31;
-						num += Terrain.ExtractHumidity(shaftValueFast);
-						num *= 31;
-						num += num8;
-						num *= 31;
-					}
-				}
-			}
-			num += m_terrain.SeasonTemperature;
-			num *= 31;
-			num += m_terrain.SeasonHumidity;
-			num *= 31;
-			double realTime2 = Time.RealTime;
-			m_statistics.HashCount++;
-			m_statistics.HashTime += realTime2 - realTime;
-			return num;
-		}
-
 		public void NotifyBlockBehaviors(TerrainChunk chunk)
 		{
 			this.ChunkInitialized?.Invoke(chunk);
