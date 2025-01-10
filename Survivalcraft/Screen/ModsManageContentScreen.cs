@@ -7,6 +7,7 @@ using System.IO;
 using System.Text;
 using System.Threading.Tasks;
 using System.Xml.Linq;
+using static ModsManageContentScreen;
 
 public class ModsManageContentScreen : Screen
 {
@@ -98,6 +99,25 @@ public class ModsManageContentScreen : Screen
 
 	public string[] m_commonPaths = [];//Abandoned
 
+	public static bool IsOldApiVersionMod(ModItem modItem, out string details)
+	{
+		ModInfo modInfo = modItem.ModInfo;
+		if(modItem.ModInfo == null)
+		{
+			details = string.Format(LanguageControl.Get(fName,68),"1.3");
+			return true;
+		}
+		if(modInfo.ApiVersion.StartsWith("1.4") || modInfo.ApiVersion.StartsWith("1.5") || modInfo.ApiVersion.StartsWith("1.6") || modInfo.ApiVersion.StartsWith("1.7"))
+		{
+			details = string.Format(LanguageControl.Get(fName,68),modItem.ModInfo.ApiVersion);
+			return true;
+		}
+		else
+		{
+			details = string.Format(LanguageControl.Get(fName,3),modItem.ModInfo.Version,modItem.ModInfo.Author,MathF.Round(modItem.ExternalContentEntry.Size / 1000));
+			return false;
+		}
+	}
 	public ModsManageContentScreen()
 	{
 		m_androidSystem = Environment.CurrentDirectory == "/";
@@ -145,14 +165,9 @@ public class ModsManageContentScreen : Screen
 			}
 			if (modItem.ExternalContentEntry.Type == ExternalContentType.Mod)
 			{
-				if (modItem.ModInfo == null)
+				if(IsOldApiVersionMod(modItem, out details))
 				{
-					details = LanguageControl.Get(fName, 68);
 					color = Color.Red;
-				}
-				else
-				{
-					details = string.Format(LanguageControl.Get(fName, 3), modItem.ModInfo.Version, modItem.ModInfo.Author, MathF.Round(modItem.ExternalContentEntry.Size / 1000));
 				}
 			}
 			containerWidget.Children.Find<LabelWidget>("ExternalContentItem.Text").Text = modItem.Name;
