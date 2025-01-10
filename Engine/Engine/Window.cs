@@ -511,8 +511,7 @@ namespace Engine
         public static void DestroyedHandler()
         {
             if (m_state == State.Active)
-            
-
+            {
                 m_state = State.Inactive;
                 Deactivated?.Invoke();
             }
