@@ -132,6 +132,7 @@ public static class ModsManager
 		}
 		ScreensManager.SwitchScreen("Loading");
 	}
+
 	/// <summary>
 	/// 执行Hook
 	/// </summary>
@@ -143,7 +144,7 @@ public static class ModsManager
 		{
 			foreach (ModLoader modLoader in modHook.Loaders.Keys)
 			{
-				if (action.Invoke(modLoader)) break;
+				if(TryInvoke(modHook,modLoader,action)) break;
 			}
 		}
 	}
@@ -153,10 +154,31 @@ public static class ModsManager
         {
             foreach (ModLoader modLoader in modHook.Loaders.Keys.Reverse())
             {
-                if (action.Invoke(modLoader)) break;
+                if(TryInvoke(modHook, modLoader, action)) break;
             }
         }
     }
+
+	public static Dictionary<KeyValuePair<ModHook,ModLoader>,bool> m_hookBugLogged = [];
+	public static bool TryInvoke(ModHook modHook, ModLoader modLoader,Func<ModLoader,bool> action)
+	{
+		try
+		{
+			if(action.Invoke(modLoader)) return true;
+			return false;
+		}
+		catch(Exception ex)
+		{
+			var keyValuePair = new KeyValuePair<ModHook,ModLoader>(modHook,modLoader);
+			if(!m_hookBugLogged.GetValueOrDefault(keyValuePair, false))
+			{
+				Log.Error(ex);
+			}
+			m_hookBugLogged[keyValuePair] = true;
+			return false;
+		}
+
+	}
 
 	/// <summary>
 	/// 注册Hook
