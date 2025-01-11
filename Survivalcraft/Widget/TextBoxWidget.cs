@@ -7,11 +7,6 @@ using Window = Engine.Window;
 
 #if WINDOWS
 using ImeSharp;
-#elif ANDROID
-using Android.Views;
-using Android.Content;
-using Android.Views.InputMethods;
-using OpenTK.Platform.Android;
 #endif
 
 namespace Game;
@@ -51,24 +46,22 @@ public class TextBoxWidget : Widget
 
     /// <summary>
     /// <para>
-    /// Android 文本框的 Description（现版本 API 不再使用 Android 文本框，故此属性不再使用）。
+    /// Android 文本框的 Description。
     /// </para>
     /// <para>
-    /// This is the description of android text box(now api doesn't use android text box, and this property is deprecated).
+    /// This is the description of android text box.
     /// </para>
     /// </summary>
-    [Obsolete("TextBoxWidget.Description is deprecated.", error: true)]
     public string Description { get; set; }
 
     /// <summary>
     /// <para>
-    /// Android 文本框的 Title（现版本 API 不再使用 Android 文本框，故此属性不再使用）。
+    /// Android 文本框的 Title。
     /// </para>
     /// <para>
-    /// This is the title of android text box(now api doesn't use android text box, and this property is deprecated).
+    /// This is the title of android text box.
     /// </para>
     /// </summary>
-    [Obsolete("TextBoxWidget.Title is deprecated.", error: true)]
     public string Title { get; set; }
 
     /// <summary>
@@ -789,7 +782,7 @@ public class TextBoxWidget : Widget
                 }
             }
         };
-#elif ANDROID
+/*#elif ANDROID
         Window.Activity.OnDispatchKeyEvent += keyEvent =>
         {
             if (FocusedTextBox == null)
@@ -805,7 +798,7 @@ public class TextBoxWidget : Widget
             }
             FocusedTextBox.EnterText(keyEvent.Characters ?? "");
             return keyEvent.Characters != null && keyEvent.Characters.Length > 0;
-        };
+        };*/
 #endif
     }
 
@@ -846,6 +839,45 @@ public class TextBoxWidget : Widget
         
     public override void Update()
     {
+        if (Input.Click.HasValue)
+        {
+            // 处理点击，使文本框在被点击时获取焦点。
+            if (HitTestGlobal(Input.Click.Value.Start) == this && HitTestGlobal(Input.Click.Value.End) == this)
+            {
+                FocusStartTime = Time.RealTime;
+#if WINDOWS
+                ShowInputMethod();
+#elif ANDROID
+                Keyboard.ShowKeyboard(
+                    Title ?? "",
+                    Description ?? "",
+                    Text,
+                    passwordMode: PasswordMode,
+                    text =>
+                    {
+                        Text = text;
+                        HasFocus = false;
+                    },
+                    () => HasFocus = false);
+#endif
+                HasFocus = true;
+                Caret = CalculateClickedCharacterIndex(Font, PasswordMode ? new string('*', Text.Length) : Text,
+                    InteractionToWidget(Input.Click.Value.Start + new Vector2(Scroll * GlobalTransform.M11, 0)),
+                    FontScale, FontSpacing.X);
+                OnFocus?.Invoke(this);
+            }
+            else if (FocusedTextBox == this)
+            {
+                // 如果点击不在文本框内，则失去焦点。
+                CloseInputMethod();
+                HasFocus = false;
+                FocusLost?.Invoke(this);
+            }
+
+            SelectionLength = 0;
+        }
+
+#if !ANDROID
 		if(Input.Scroll.HasValue &&
 					Input.MousePosition.HasValue &&
 					HitTestGlobal(Input.MousePosition.Value) == this)
@@ -855,49 +887,39 @@ public class TextBoxWidget : Widget
 			Scroll = Math.Clamp(Scroll,-Font.MeasureText(FullText,new Vector2(FontScale),FontSpacing).X,
 				Font.MeasureText(FullText,new Vector2(FontScale),FontSpacing).X);
 		}
-
-		if (Input.Hold.HasValue && HitTestGlobal(Input.Hold.Value) == this &&
-            Input.HoldTime > SettingsManager.MinimumHoldDuration)
-        {
-            SelectionStarted = true;
-        }
-
         if (Input.Drag.HasValue)
         {
             if (DragStartTime < 0)
             {
                 // 拖拽刚开始时：
                 DragStartTime = Time.RealTime;
+	            SelectionLength = 0;
                 if (HitTestGlobal(Input.Drag.Value) == this)
                 {
                     HasFocus = true;
+                    SelectionStarted = true;
                     ShowInputMethod();
                     Caret = CalculateClickedCharacterIndex(Font, PasswordMode ? new string('*', Text.Length) : Text,
-                        InteractionToWidget(Input.Drag.Value + new Vector2(Scroll * GlobalTransform.M11, 0)));
-                    SelectionLength = 0;
+                        InteractionToWidget(Input.Drag.Value + new Vector2(Scroll * GlobalTransform.M11, 0)),
+                        FontScale, FontSpacing.X);
                     DragStartedInsideTextBox = true;
                 }
                 else
                 {
+                    SelectionStarted = false;
                     DragStartedInsideTextBox = false;
                     HasFocus = false;
-                    SelectionLength = 0;
                 }
             }
             else if (Time.RealTime - DragStartTime > 0 && DragStartedInsideTextBox)
             {
                 // 拖拽正在进行时：
                 var caret2 = CalculateClickedCharacterIndex(Font, PasswordMode ? new string('*', Text.Length) : Text,
-                    InteractionToWidget(Input.Drag.Value + new Vector2(Scroll * GlobalTransform.M11, 0)));
+                    InteractionToWidget(Input.Drag.Value + new Vector2(Scroll * GlobalTransform.M11, 0)),
+                    FontScale, FontSpacing.X);
                 if (SelectionStarted)
                 {
                     SelectionLength = caret2 - Caret;
-                }
-                else
-                {
-                    Scroll -= Input.Drag.Value.X - LastDragPosition!.Value.X;
-                    Scroll = Math.Clamp(Scroll, -Font.MeasureText(FullText, new Vector2(FontScale), FontSpacing).X,
-                        Font.MeasureText(FullText, new Vector2(FontScale), FontSpacing).X);
                 }
 
                 if (Math.Abs(caret2 - Caret) > 1)
@@ -913,28 +935,6 @@ public class TextBoxWidget : Widget
             DragStartTime = -1;
             SelectionStarted = false;
             ScrollStarted = false;
-        }
-        else if (Input.Click.HasValue)
-        {
-            // 处理点击，使文本框在被点击时获取焦点。
-            if (HitTestGlobal(Input.Click.Value.Start) == this && HitTestGlobal(Input.Click.Value.End) == this)
-            {
-                FocusStartTime = Time.RealTime;
-                ShowInputMethod();
-                HasFocus = true;
-                Caret = CalculateClickedCharacterIndex(Font, PasswordMode ? new string('*', Text.Length) : Text,
-                    InteractionToWidget(Input.Click.Value.Start + new Vector2(Scroll * GlobalTransform.M11, 0)));
-                OnFocus?.Invoke(this);
-            }
-            else if (FocusedTextBox == this)
-            {
-                // 如果点击不在文本框内，则失去焦点。
-                CloseInputMethod();
-                HasFocus = false;
-                FocusLost?.Invoke(this);
-            }
-
-            SelectionLength = 0;
         }
 
         // 处理光标移动。
@@ -978,7 +978,7 @@ public class TextBoxWidget : Widget
             Escape?.Invoke(this);
         }
 
-#if !ANDROID
+//#if !ANDROID
         // 处理 Delete 键。
         if (HasFocus && Caret != Text.Length && Keyboard.IsKeyDownRepeat(Key.Delete))
         {
@@ -998,7 +998,7 @@ public class TextBoxWidget : Widget
             HasFocus = false;
             CloseInputMethod();
         }
-#endif
+//#endif
 
         // 处理键盘输入。
         // 如果输入法已开启，就跳过。
@@ -1067,6 +1067,7 @@ public class TextBoxWidget : Widget
         }
 
         return;
+#endif
 
         static List<TextBoxWidget> FindTextBoxWidgets(ContainerWidget widget)
         {
@@ -1093,22 +1094,9 @@ public class TextBoxWidget : Widget
             return textBoxes;
         }
 
-        static int CalculateClickedCharacterIndex(BitmapFont font, string text, Vector2 clickPosition)
+        static int CalculateClickedCharacterIndex(BitmapFont font, string text, Vector2 clickPosition, float fontScale, float fontSpacing)
         {
-            float tmp = 0;
-            for (var i = 0; i < text.Length; i++)
-            {
-                char character = text[i];
-                var glyph = font.GetGlyph(character);
-                if (tmp + 0.5f * glyph.Width > clickPosition.X)
-                {
-                    return i;
-                }
-
-                tmp += glyph.Width;
-            }
-
-            return text.Length;
+	        return font.FitText(clickPosition.X, text, fontScale, fontSpacing);
         }
 
         Vector2 InteractionToWidget(Vector2 position)
@@ -1119,26 +1107,20 @@ public class TextBoxWidget : Widget
 
     /// <summary>
     /// <para>
-    /// 显示系统输入法
+    /// 显示 Windows 系统输入法
     /// </para>
     /// </summary>
     public static void ShowInputMethod()
     {
-#if !ANDROID
+#if WINDOWS
         InputMethodEnabled = true;
-#elif ANDROID
-        var manager = (InputMethodManager)Window.Activity.GetSystemService(Context.InputMethodService);
-        manager.ShowSoftInput(Window.View, ShowFlags.Forced);
 #endif
     }
 
     public static void CloseInputMethod()
     {
-#if !ANDROID
+#if WINDOWS
         InputMethodEnabled = false;
-#elif ANDROID
-        var manager = (InputMethodManager)Window.Activity.GetSystemService(Context.InputMethodService);
-        manager.HideSoftInputFromWindow(Window.Activity.Window!.DecorView.WindowToken, HideSoftInputFlags.None);
 #endif
     }
 
@@ -1725,7 +1707,7 @@ public class TextBoxWidget : Widget
                 ((Time.RealTime - FocusStartTime - 0.4) % 1.0 <= 0.3f ||
                  (Time.RealTime - FocusStartTime - 0.4) % 1.0 >= 0.8f))
             {
-                DrawCaret(flatBatch, 1, Font.GlyphHeight * FontScale, (FullTextCaretPosition, ActualSize.Y / 2),
+                DrawCaret(flatBatch, 1, Font.GlyphHeight * FontScale * Font.Scale, (FullTextCaretPosition, ActualSize.Y / 2),
                     Scroll);
             }
 
@@ -1734,8 +1716,9 @@ public class TextBoxWidget : Widget
                 var selectionEndPosition = Font.MeasureText(FullText, 0, Caret + SelectionLength,
                     new Vector2(FontScale),
                     FontSpacing);
-                flatBatch.QueueQuad((0 - Scroll + TextCaretPosition, (ActualSize.Y - Font.GlyphHeight) / 2),
-                    (0 - Scroll, (ActualSize.Y - Font.GlyphHeight) / 2) + selectionEndPosition, 0, (64, 64, 255, 128));
+                var topOfCaret = (ActualSize.Y - Font.GlyphHeight * FontScale * Font.Scale) / 2;
+                flatBatch.QueueQuad((0 - Scroll + TextCaretPosition, topOfCaret),
+                    (0 - Scroll, topOfCaret) + selectionEndPosition, 0, (64, 64, 255, 128));
             }
 
             Vector2 currentDrawPosition = new Vector2(0, ActualSize.Y / 2);
@@ -1743,13 +1726,13 @@ public class TextBoxWidget : Widget
             List<TextDrawItem> drawItems = new(capacity: 3);
 
             var split = SplitStringAt(textToDraw, Caret);
-            drawItems.Add(new NormalDrawItem(split[0], fontBatch, FontScale, FontSpacing, Color));
+            drawItems.Add(new NormalDrawItem(textToDraw, 0, split[0].Length, fontBatch, FontScale, FontSpacing, Color));
             drawItems.Add(
                 new CompositionTextDrawItem(CompositionText ?? "", fontBatch, underlineFlatBatch, FontScale,
                     FontSpacing, Color));
             if (split.Length > 1)
             {
-                drawItems.Add(new NormalDrawItem(split[1], fontBatch, FontScale, FontSpacing, Color));
+                drawItems.Add(new NormalDrawItem(textToDraw, split[0].Length, split[1].Length, fontBatch, FontScale, FontSpacing, Color));
             }
 
             foreach (var drawItem in drawItems)
@@ -1816,15 +1799,28 @@ public class TextBoxWidget : Widget
         public abstract void Draw(ref Vector2 position, float scroll);
     }
 
-    public class NormalDrawItem(string text, FontBatch2D fontBatch, float fontScale, Vector2 fontSpacing, Color color)
+    public class NormalDrawItem(
+	    string fullText,
+	    int start,
+	    int length,
+	    FontBatch2D fontBatch,
+	    float fontScale,
+	    Vector2 fontSpacing,
+	    Color color)
         : TextDrawItem
     {
         public override void Draw(ref Vector2 position, float scroll)
         {
+	        if(length == 0)
+	        {
+		        return;
+	        }
+	        
             var font = fontBatch.Font;
-            var size = font.MeasureText(text, 0, text.Length, new Vector2(font.Scale),
+
+            var size = font.MeasureText(fullText, start, length, new Vector2(fontScale),
                 Vector2.Zero);
-            fontBatch.QueueText(text, (position.X - scroll, position.Y), 0, color, TextAnchor.VerticalCenter,
+            fontBatch.QueueText(fullText.Substring(start, length), (position.X - scroll, position.Y), 0, color, TextAnchor.VerticalCenter,
                 new Vector2(fontScale),
                 fontSpacing);
             position.X += size.X;
@@ -1844,9 +1840,9 @@ public class TextBoxWidget : Widget
         {
             var font = fontBatch.Font;
             var size = font.MeasureText(compositionText, 0, compositionText.Length,
-                new Vector2(font.Scale),
+                new Vector2(fontScale),
                 Vector2.Zero);
-
+            
             fontBatch.QueueText(compositionText, (position.X- scroll, position.Y), 0, color, TextAnchor.VerticalCenter,
                 new Vector2(fontScale), fontSpacing);
             underlineFlatBatch.QueueLine((position.X - scroll, position.Y) + size / 2 * Vector2.UnitY,
