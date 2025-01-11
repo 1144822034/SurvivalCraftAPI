@@ -32,23 +32,23 @@ namespace Game
 
 		public double m_precipitationEndTime;
 
-		private float m_precipitationRampTime;
+		public float m_precipitationRampTime;
 
-		private float m_lightningIntensity;
+		public float m_lightningIntensity;
 
-		private double m_fogStartTime;
+		public double m_fogStartTime;
 
-		private double m_fogEndTime;
+		public double m_fogEndTime;
 
-		private float m_fogRampTime;
+		public float m_fogRampTime;
 
-		private const int m_rainSoundRadius = 7;
+		public const int m_rainSoundRadius = 7;
 
 		public float m_rainVolumeFactor;
 
 		public Sound m_rainSound;
 
-		private int[] m_shuffledOrder;
+		public int[] m_shuffledOrder;
 
 		public static int[] m_drawOrders = new int[1]
 		{
@@ -103,13 +103,13 @@ namespace Game
 			set;
 		}
 
-		public int FogSeed { get; private set; }
+		public virtual int FogSeed { get; set; }
 
-		public float FogProgress { get; private set; }
+		public virtual float FogProgress { get; set; }
 
-		public float FogIntensity { get; private set; }
+		public virtual float FogIntensity { get; set; }
 
-		public bool IsPrecipitationStarted
+		public virtual bool IsPrecipitationStarted
 		{
 			get
 			{
@@ -121,7 +121,7 @@ namespace Game
 			}
 		}
 
-		public bool IsFogStarted
+		public virtual bool IsFogStarted
 		{
 			get
 			{
@@ -194,27 +194,27 @@ namespace Game
 			}
 		}
 
-		public void ManualPrecipitationStart()
+		public virtual void ManualPrecipitationStart()
 		{
 			m_precipitationStartTime = m_subsystemGameInfo.TotalElapsedGameTime;
 			m_precipitationEndTime = double.PositiveInfinity;
 			m_precipitationRampTime = 1f;
 		}
 
-		public void ManualPrecipitationEnd()
+		public virtual void ManualPrecipitationEnd()
 		{
 			m_precipitationRampTime = 1f;
 			m_precipitationEndTime = m_subsystemGameInfo.TotalElapsedGameTime + (double)m_precipitationRampTime;
 		}
 
-		public void ManualFogStart()
+		public virtual void ManualFogStart()
 		{
 			m_fogStartTime = m_subsystemGameInfo.TotalElapsedGameTime;
 			m_fogEndTime = double.PositiveInfinity;
 			m_fogRampTime = 3f;
 		}
 
-		public void ManualFogEnd()
+		public virtual void ManualFogEnd()
 		{
 			m_fogRampTime = 3f;
 			m_fogEndTime = m_subsystemGameInfo.TotalElapsedGameTime + (double)m_fogRampTime;
@@ -348,7 +348,7 @@ namespace Game
 			valuesDictionary.SetValue("FogProgress", FogProgress);
 		}
 
-		public void UpdatePrecipitation(float dt)
+		public virtual void UpdatePrecipitation(float dt)
 		{
 			if (m_subsystemGameInfo.TotalElapsedGameTime > m_precipitationEndTime)
 			{
@@ -461,7 +461,7 @@ namespace Game
 			}
 		}
 
-		public void UpdateLightning(float dt)
+		public virtual void UpdateLightning(float dt)
 		{
 			if (PrecipitationIntensity != 1f || !SubsystemTime.PeriodicGameTimeEvent(1.0, 0.0))
 			{
@@ -497,7 +497,7 @@ namespace Game
 			}
 		}
 
-		public void UpdateFog(float dt)
+		public virtual void UpdateFog(float dt)
 		{
 			if (m_subsystemGameInfo.TotalElapsedGameTime > m_fogEndTime)
 			{
