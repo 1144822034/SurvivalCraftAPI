@@ -78,6 +78,7 @@ namespace Game
 			for (int i = 0; i < m_componentBodies.Count; i++)
 			{
 				ComponentBody componentBody = m_componentBodies.Array[i];
+				if(componentBody == null) continue;
 				if (componentBody.IsRaycastTransparent) continue;
 				float? num2 = null;
                 bool skipVanilla_ = false;
