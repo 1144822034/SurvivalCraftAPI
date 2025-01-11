@@ -10,6 +10,7 @@ namespace Game
 
 		public SubsystemTime m_subsystemTime;
 
+		public SubsystemTimeOfDay m_subsystemTimeOfDay;
 		public WorldSettings WorldSettings
 		{
 			get;
@@ -106,6 +107,7 @@ namespace Game
 		public override void Load(ValuesDictionary valuesDictionary)
 		{
 			m_subsystemTime = Project.FindSubsystem<SubsystemTime>(throwOnError: true);
+			m_subsystemTimeOfDay = Project.FindSubsystem<SubsystemTimeOfDay>(throwOnError: true);
 			WorldSettings = new WorldSettings();
 			WorldSettings.Load(valuesDictionary);
 			DirectoryName = valuesDictionary.GetValue<string>("WorldDirectoryName");
@@ -127,7 +129,7 @@ namespace Game
 			m_lastTotalElapsedGameTime = TotalElapsedGameTime;
 			if (WorldSettings.AreSeasonsChanging && m_subsystemTime.PeriodicGameTimeEvent(10.0, 5.0))
 			{
-				float num = WorldSettings.YearDays * 1200f;
+				float num = WorldSettings.YearDays * m_subsystemTimeOfDay.DayDuration;
 				WorldSettings.TimeOfYear = IntervalUtils.Normalize(WorldSettings.TimeOfYear + 10f / num);
 			}
 			if (m_subsystemTime.GameTime >= 600.0 && m_subsystemTime.GameTime - m_subsystemTime.GameTimeDelta < 600.0 && UserManager.ActiveUser != null)

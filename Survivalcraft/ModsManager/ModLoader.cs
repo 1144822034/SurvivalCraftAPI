@@ -1496,5 +1496,22 @@ namespace Game
 
 		}
 
+		/// <summary>
+		/// 进入Screen时执行
+		/// </summary>
+		/// <param name="screen">进入的Screen</param>
+		/// <param name="screenParameters">进入Screen时传入的参数</param>
+		public virtual void OnScreenEntered(Screen screen,object[] screenParameters)
+		{
+
+		}
+
+		/// <summary>
+		/// 离开Screen时执行
+		/// </summary>
+		/// <param name="screen">离开的Screen</param>
+		public virtual void OnScreenLeaved(Screen screen) 
+		{
+		}
 	}
 }

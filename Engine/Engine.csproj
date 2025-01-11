@@ -53,7 +53,7 @@
 	<PackageReference Include="System.Net.Http" Version="4.3.4" />
 	<PackageReference Include="System.Private.Uri" Version="4.3.2" />
 	<PackageReference Include="System.Text.RegularExpressions" Version="4.3.1" />
-	<PackageReference Include="Tomlyn" Version="0.17.0" />
+	<PackageReference Include="Tomlyn" Version="0.18.0" />
     <Reference Include="OpenTK-1.0.2moded" Condition="'$(TargetFramework)' == 'net9.0-android35.0'">
       <HintPath>reference\OpenTK-1.0.2moded.dll</HintPath>
       <Private>True</Private>

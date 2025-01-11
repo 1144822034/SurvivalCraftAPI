@@ -82,19 +82,19 @@ namespace Game
 
 		public Random m_random = new();
 
-		private Random m_fogSeedRandom = new();
+		public Random m_fogSeedRandom = new();
 
 		public Color m_viewFogColor;
 
-		private float m_viewFogBottom;
+		public float m_viewFogBottom;
 
-		private float m_viewFogTop;
+		public float m_viewFogTop;
 
-		private float m_viewHazeStart;
+		public float m_viewHazeStart;
 
-		private float m_viewHazeDensity;
+		public float m_viewHazeDensity;
 
-		private float m_viewFogDensity;
+		public float m_viewFogDensity;
 
 		public bool m_viewIsSkyVisible;
 
@@ -793,7 +793,7 @@ namespace Game
 			}
 		}
 
-		private void UpdateMoonPhase()
+		public void UpdateMoonPhase()
 		{
 			MoonPhase = ((int)Math.Floor(m_subsystemTimeOfDay.Day - 0.5 + 5.0) % 8 + 8) % 8;
 		}

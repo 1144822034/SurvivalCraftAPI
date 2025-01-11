@@ -10,7 +10,7 @@ public class SubsystemSeasons : Subsystem, IUpdateable
 {
 	public SubsystemGameInfo m_subsystemGameInfo;
 
-	private static Image m_seasonsGradient;
+	public static Image m_seasonsGradient;
 
 	public static float SummerStart = 0f;
 
@@ -28,9 +28,9 @@ public class SubsystemSeasons : Subsystem, IUpdateable
 
 	public static float MidSpring = IntervalUtils.Midpoint(SpringStart, SummerStart);
 
-	public Season Season { get; private set; }
+	public Season Season { get; set; }
 
-	public float TimeOfSeason { get; private set; }
+	public float TimeOfSeason { get; set; }
 
 	public UpdateOrder UpdateOrder => UpdateOrder.Default;
 

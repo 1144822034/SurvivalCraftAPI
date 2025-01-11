@@ -53,6 +53,7 @@ namespace Game
 				{
 					m_lastAutosaveTime = realTime;
 					GameManager.SaveProject(waitForCompletion: false, showErrorDialog: true);
+					SettingsManager.SaveSettings();
 				}
 				if (MarketplaceManager.IsTrialMode && GameManager.Project.FindSubsystem<SubsystemGameInfo>(throwOnError: true).TotalElapsedGameTime > 1140.0)
 				{

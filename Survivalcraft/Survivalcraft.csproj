@@ -87,7 +87,7 @@
         <PackageReference Include="System.Text.RegularExpressions" Version="4.3.1" />
         <PackageReference Include="TextCopy" Version="6.2.1" Condition="'$(TargetFramework)' == 'net9.0-windows'" />
         <PackageReference Include="NAudio.Flac.Unknown.Mod" Version="1.0.3" PrivateAssets="all" />
-        <PackageReference Include="Tomlyn" Version="0.17.0" />
+        <PackageReference Include="Tomlyn" Version="0.18.0" />
         <Compile Remove="SimpleJson\SimpleJson.Reflection\ReflectionUtils.cs" />
 		<None Update="openal32.dll">
 			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
