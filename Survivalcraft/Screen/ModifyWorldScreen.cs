@@ -36,6 +36,7 @@ namespace Game
 
 		public bool m_changingGameModeAllowed;
 
+		public bool m_cruelAllowed = true;
 		public ModifyWorldScreen()
 		{
 			XElement node = ContentManager.Get<XElement>("Screens/ModifyWorldScreen");
@@ -74,7 +75,7 @@ namespace Game
 		{
 			if (m_gameModeButton.IsClicked && m_changingGameModeAllowed)
 			{
-				DialogsManager.ShowDialog(null, new SelectGameModeDialog(string.Empty, allowAdventure: true, allowCruel: false, delegate (GameMode gameMode)
+				DialogsManager.ShowDialog(null, new SelectGameModeDialog(string.Empty, allowAdventure: true, allowCruel: m_cruelAllowed, delegate (GameMode gameMode)
 				{
 					m_worldSettings.GameMode = gameMode;
 				}));
