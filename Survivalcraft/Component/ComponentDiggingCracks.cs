@@ -17,9 +17,10 @@ namespace Game
 
 		public Shader m_shader;
 
-		public ComponentDiggingCracks.Geometry m_geometry;
+		public Geometry m_geometry;
 
-        private DynamicArray<ComponentDiggingCracks.CracksVertex> m_vertices = new DynamicArray<ComponentDiggingCracks.CracksVertex>();
+        private DynamicArray<TerrainVertex> m_vertices = new DynamicArray<TerrainVertex>();
+        private DynamicArray<int> m_indices = new DynamicArray<int>();
 
         public Point3 m_point;
 
@@ -42,29 +43,28 @@ namespace Game
 			Block block = BlocksManager.Blocks[Terrain.ExtractContents(cellValue)];
 			if (m_geometry == null || cellValue != m_value || point != m_point)
             {
-                m_geometry = new ComponentDiggingCracks.Geometry();
+                m_geometry = new Geometry();
 				block.GenerateTerrainVertices(m_subsystemTerrain.BlockGeometryGenerator, m_geometry, cellValue, point.X, point.Y, point.Z);
 				m_point = point;
 				m_value = cellValue;
                 m_vertices.Count = 0;
-                foreach(TerrainVertex terrainVertex in m_geometry.SubsetOpaque.Vertices)
-				{
-                    byte num = (byte)(((int)terrainVertex.Color.R + (int)terrainVertex.Color.G + (int)terrainVertex.Color.B) / 3);
-                    ComponentDiggingCracks.CracksVertex cracksVertex;
-                    cracksVertex.X = terrainVertex.X;
-                    cracksVertex.Y = terrainVertex.Y;
-                    cracksVertex.Z = terrainVertex.Z;
-                    cracksVertex.Tx = (float)((double)terrainVertex.Tx / (double)short.MaxValue * 16.0);
-                    cracksVertex.Ty = (float)((double)terrainVertex.Ty / (double)short.MaxValue * 16.0);
-                    cracksVertex.Color = new Color(num, num, num, (byte)128);
-                    this.m_vertices.Add(cracksVertex);
+                m_indices.Count = 0;
+                foreach(var geometry in m_geometry.Subsets)
+                {
+	                foreach(var index in geometry.Indices)
+	                {
+		                m_indices.Add(index + m_vertices.Count);
+	                }
+					foreach(var vertex in geometry.Vertices)
+					{
+						var terrainVertex = block.SetDiggingCrackingTextureTransform(vertex);
+						m_vertices.Add(terrainVertex);
+					}
                 }
 			}
 			Vector3 viewPosition = camera.InvertedViewMatrix.Translation;
 			Vector3 v = new(MathF.Floor(viewPosition.X), 0f, MathF.Floor(viewPosition.Z));
 			Matrix value = Matrix.CreateTranslation(v - viewPosition) * camera.ViewMatrix.OrientationMatrix * camera.ProjectionMatrix;
-            DynamicArray<int> indices = m_geometry.SubsetOpaque.Indices;
-			//根据外置材质生成破坏纹理
 			try
 			{
 				Display.BlendState = BlendState.NonPremultiplied;
@@ -80,7 +80,7 @@ namespace Game
 				m_shader.GetParameter("u_hazeStartDensity").SetValue(new Vector2(m_subsystemSky.ViewHazeStart, m_subsystemSky.ViewHazeDensity));
 				m_shader.GetParameter("u_alphaThreshold").SetValue(0.5f);
 				m_shader.GetParameter("u_texture").SetValue(block.GetDiggingCrackingTexture(m_componentMiner, m_componentMiner.m_digProgress, cellValue, m_textures));
-                Display.DrawUserIndexed<ComponentDiggingCracks.CracksVertex>(PrimitiveType.TriangleList, m_shader, ComponentDiggingCracks.CracksVertex.VertexDeclaration, m_vertices.Array, 0, m_vertices.Count, indices.Array, 0, indices.Count);
+                Display.DrawUserIndexed(PrimitiveType.TriangleList, m_shader, TerrainVertex.VertexDeclaration, m_vertices.Array, 0, m_vertices.Count, m_indices.Array, 0, m_indices.Count);
             }
 			catch
 			{
@@ -102,53 +102,8 @@ namespace Game
 		{
 			public Geometry()
 			{
-				TerrainGeometrySubset terrainGeometrySubset = new TerrainGeometrySubset();
-				this.SubsetOpaque = terrainGeometrySubset;
-				this.SubsetAlphaTest = terrainGeometrySubset;
-				this.SubsetTransparent = terrainGeometrySubset;
-				this.OpaqueSubsetsByFace = new TerrainGeometrySubset[6]
-				{
-                    terrainGeometrySubset,
-                    terrainGeometrySubset,
-                    terrainGeometrySubset,
-                    terrainGeometrySubset,
-                    terrainGeometrySubset,
-					terrainGeometrySubset
-                };
-				this.AlphaTestSubsetsByFace = new TerrainGeometrySubset[6]
-				{
-                    terrainGeometrySubset,
-                    terrainGeometrySubset,
-                    terrainGeometrySubset,
-                    terrainGeometrySubset,
-                    terrainGeometrySubset,
-                    terrainGeometrySubset
-                };
-				this.TransparentSubsetsByFace = new TerrainGeometrySubset[6]
-				{
-                    terrainGeometrySubset,
-                    terrainGeometrySubset,
-                    terrainGeometrySubset,
-                    terrainGeometrySubset,
-                    terrainGeometrySubset,
-                    terrainGeometrySubset
-                };
+				InitSubsets();
 			}
-        }
-        private struct CracksVertex
-        {
-            public float X;
-            public float Y;
-            public float Z;
-            public float Tx;
-            public float Ty;
-            public Color Color;
-            public static readonly VertexDeclaration VertexDeclaration = new VertexDeclaration(new VertexElement[3]
-            {
-				new VertexElement(0, VertexElementFormat.Vector3, VertexElementSemantic.Position),
-				new VertexElement(12, VertexElementFormat.Vector2, VertexElementSemantic.TextureCoordinate),
-				new VertexElement(20, VertexElementFormat.NormalizedByte4, VertexElementSemantic.Color)
-            });
         }
     }
 }
