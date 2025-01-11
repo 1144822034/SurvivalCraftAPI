@@ -43,23 +43,26 @@ namespace Game
 			Block block = BlocksManager.Blocks[Terrain.ExtractContents(cellValue)];
 			if (m_geometry == null || cellValue != m_value || point != m_point)
             {
-                m_geometry = new Geometry();
+                m_geometry = new Geometry(m_textures[0]);//这里随便默认一个纹理就行
 				block.GenerateTerrainVertices(m_subsystemTerrain.BlockGeometryGenerator, m_geometry, cellValue, point.X, point.Y, point.Z);
 				m_point = point;
 				m_value = cellValue;
                 m_vertices.Count = 0;
                 m_indices.Count = 0;
-                foreach(var geometry in m_geometry.Subsets)
+                foreach(var drawGroup in m_geometry.Draws)
                 {
-	                foreach(var index in geometry.Indices)
+	                foreach(var geometry in drawGroup.Value.Subsets)
 	                {
-		                m_indices.Add(index + m_vertices.Count);
+		                foreach(var index in geometry.Indices)
+		                {
+			                m_indices.Add(index + m_vertices.Count);
+		                }
+		                foreach(var vertex in geometry.Vertices)
+		                {
+			                var terrainVertex = block.SetDiggingCrackingTextureTransform(vertex);
+			                m_vertices.Add(terrainVertex);
+		                }
 	                }
-					foreach(var vertex in geometry.Vertices)
-					{
-						var terrainVertex = block.SetDiggingCrackingTextureTransform(vertex);
-						m_vertices.Add(terrainVertex);
-					}
                 }
 			}
 			Vector3 viewPosition = camera.InvertedViewMatrix.Translation;
@@ -98,12 +101,6 @@ namespace Game
 				m_textures[i] = ContentManager.Get<Texture2D>($"Textures/Cracks{i + 1}");
 			}
 		}
-		public class Geometry : TerrainGeometry
-		{
-			public Geometry()
-			{
-				InitSubsets();
-			}
-        }
+		public class Geometry(Texture2D texture2D) : TerrainGeometry(texture2D);
     }
 }
