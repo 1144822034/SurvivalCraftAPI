@@ -63,7 +63,7 @@ namespace Game
 
 			private int NodeDataSize => NodeSize - 8;
 
-			public void Open(string directoryName, string suffix)
+			public virtual void Open(string directoryName, string suffix)
 			{
 				string path = Storage.CombinePaths(directoryName, FileName + suffix);
 				try
@@ -114,7 +114,7 @@ namespace Game
 				}
 			}
 
-			public void Dispose()
+			public virtual void Dispose()
 			{
 				if (Stream != null)
 				{
@@ -122,7 +122,7 @@ namespace Game
 				}
 			}
 
-			public int Load(Point2 p, byte[] buffer)
+			public virtual int Load(Point2 p, byte[] buffer)
 			{
 				if (!ChunkDescriptors.TryGetValue(p, out var value))
 				{
@@ -137,7 +137,7 @@ namespace Game
 				return num;
 			}
 
-			public void Save(Point2 p, byte[] buffer, int size)
+			public virtual void Save(Point2 p, byte[] buffer, int size)
 			{
 				int count = Math.Max((size + NodeDataSize - 1) / NodeDataSize, 1);
 				List<int> freeNodes = GetFreeNodes(count);
@@ -169,7 +169,7 @@ namespace Game
 				ChunkDescriptors[p] = value;
 			}
 
-			public List<int> GetFreeNodes(int count)
+			public virtual List<int> GetFreeNodes(int count)
 			{
 				List<int> list = [];
 				int nextNode = FreeNode;
@@ -201,7 +201,7 @@ namespace Game
 				return list;
 			}
 
-            public int FindLastNode(int startNode)
+            public virtual int FindLastNode(int startNode)
 			{
 				int num = startNode;
 				while (true)
@@ -216,14 +216,14 @@ namespace Game
 				return num;
 			}
 
-            public void SetAndWriteFreeNode(int freeNode)
+            public virtual void SetAndWriteFreeNode(int freeNode)
 			{
 				Stream.Position = 8L;
 				Writer.Write(freeNode);
 				FreeNode = freeNode;
 			}
 
-            public ChunkDescriptor ReadChunkDescriptor(int i)
+            public virtual ChunkDescriptor ReadChunkDescriptor(int i)
 			{
 				Stream.Position = 12 + (i * 12);
 				ChunkDescriptor result = default(ChunkDescriptor);
@@ -234,7 +234,7 @@ namespace Game
 				return result;
 			}
 
-            public void WriteChunkDescriptor(ChunkDescriptor desc)
+            public virtual void WriteChunkDescriptor(ChunkDescriptor desc)
 			{
 				Stream.Position = 12 + (desc.Index * 12);
 				Writer.Write(desc.Coords.X);
@@ -242,7 +242,7 @@ namespace Game
 				Writer.Write(desc.StartNode);
 			}
 
-            public int ReadNode(int node, byte[] data, int offset, out int nextNode)
+            public virtual int ReadNode(int node, byte[] data, int offset, out int nextNode)
 			{
 				if (node < 0 || node >= (Stream.Length - FileHeaderSize) / NodeSize)
 				{
@@ -262,7 +262,7 @@ namespace Game
 				return dataSize;
 			}
 
-            public void WriteNode(int node, byte[] data, int offset, int size, int nextNode)
+            public virtual void WriteNode(int node, byte[] data, int offset, int size, int nextNode)
 			{
 				if (node < 0 || node >= (Stream.Length - FileHeaderSize) / NodeSize)
 				{
@@ -278,7 +278,7 @@ namespace Game
 				}
 			}
 
-            public int MakeNodeHeader(int node, int dataSize, int nextNode)
+            public virtual int MakeNodeHeader(int node, int dataSize, int nextNode)
 			{
 				if (nextNode < 0)
 				{
@@ -287,7 +287,7 @@ namespace Game
 				return (nextNode - (node + 1)) << 1;
 			}
 
-            public void ParseNodeHeader(int node, int nodeHeader, out int dataSize, out int nextNode)
+            public virtual void ParseNodeHeader(int node, int nodeHeader, out int dataSize, out int nextNode)
 			{
 				if (((uint)nodeHeader & (true ? 1u : 0u)) != 0)
 				{
@@ -306,7 +306,7 @@ namespace Game
 				return ((n & 0xFF000000u) >> 24) | ((n & 0xFF0000) >> 8) | ((n & 0xFF00) << 8) | (n << 24);
 			}
 
-			public void LogDebugInfo()
+			public virtual void LogDebugInfo()
 			{
 				Log.Information("{0} chunks:", ChunkDescriptors.Count);
 				foreach (KeyValuePair<Point2, ChunkDescriptor> chunkDescriptor in ChunkDescriptors)
@@ -363,7 +363,7 @@ namespace Game
 
 			private Queue<Stream> OpenedStreams = new();
 
-			public void Dispose()
+			public virtual void Dispose()
 			{
 				while (OpenedStreams.Count > 0)
 				{
@@ -371,7 +371,7 @@ namespace Game
 				}
 			}
 
-			public void Open(string directoryName, string suffix)
+			public virtual void Open(string directoryName, string suffix)
 			{
 				RegionsDirectoryName = Storage.CombinePaths(directoryName, "Regions" + suffix);
 				Storage.CreateDirectory(RegionsDirectoryName);
@@ -395,7 +395,7 @@ namespace Game
 				}
 			}
 
-			public int Load(Point2 coords, byte[] buffer)
+			public virtual int Load(Point2 coords, byte[] buffer)
 			{
 				Point2 region = new(coords.X >> 4, coords.Y >> 4);
 				Point2 chunk = new(coords.X & 0xF, coords.Y & 0xF);
@@ -415,7 +415,7 @@ namespace Game
 				return -1;
 			}
 
-			public void Save(Point2 coords, byte[] buffer, int size)
+			public virtual void Save(Point2 coords, byte[] buffer, int size)
 			{
 				Point2 region = new(coords.X >> 4, coords.Y >> 4);
 				Point2 point = new(coords.X & 0xF, coords.Y & 0xF);
@@ -533,12 +533,12 @@ namespace Game
 				}
 			}
 
-            public string GetRegionPath(Point2 region)
+            public virtual string GetRegionPath(Point2 region)
 			{
 				return string.Format("{0}/Region {1},{2}.dat", new object[3] { RegionsDirectoryName, region.X, region.Y });
 			}
 
-            public Stream GetRegionStream(Point2 region, bool createNew)
+            public virtual Stream GetRegionStream(Point2 region, bool createNew)
 			{
 				if (!StreamsByRegion.TryGetValue(region, out var value) || value == null || !value.CanRead)
 				{
@@ -708,12 +708,12 @@ namespace Game
 			m_storage.Open(directoryName, suffix);
 		}
 
-		public bool LoadChunk(TerrainChunk chunk)
+		public virtual bool LoadChunk(TerrainChunk chunk)
 		{
 			return LoadChunkData(chunk);
 		}
 
-		public void SaveChunk(TerrainChunk chunk)
+		public virtual void SaveChunk(TerrainChunk chunk)
 		{
 			if (chunk.State > TerrainChunkState.InvalidContents4 && chunk.ModificationCounter > 0)
 			{
@@ -722,7 +722,7 @@ namespace Game
 			}
 		}
 
-		public bool LoadChunkData(TerrainChunk chunk)
+		public virtual bool LoadChunkData(TerrainChunk chunk)
 		{
 			lock (m_lock)
 			{
@@ -749,7 +749,7 @@ namespace Game
 			}
 		}
 
-		public void SaveChunkData(TerrainChunk chunk)
+		public virtual void SaveChunkData(TerrainChunk chunk)
 		{
 			lock (m_lock)
 			{
@@ -771,12 +771,12 @@ namespace Game
 			}
 		}
 
-		public void Dispose()
+		public virtual void Dispose()
 		{
 			Utilities.Dispose(ref m_storage);
 		}
 
-        public int CompressChunkData(TerrainChunk chunk, byte[] buffer)
+        public virtual int CompressChunkData(TerrainChunk chunk, byte[] buffer)
 		{
 			int num = 0;
 			for (int i = 0; i < 16; i++)
@@ -825,7 +825,7 @@ namespace Game
 			return Deflate(m_compressBuffer, 0, num, buffer);
 		}
 
-        public void DecompressChunkData(TerrainChunk chunk, byte[] buffer, int size)
+        public virtual void DecompressChunkData(TerrainChunk chunk, byte[] buffer, int size)
 		{
 			size = UnDeflate(buffer, 0, size, m_compressBuffer);
 			int num = 0;

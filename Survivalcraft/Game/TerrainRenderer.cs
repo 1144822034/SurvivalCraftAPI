@@ -48,7 +48,7 @@ namespace Game
 
 		public static int ChunkTrianglesDrawn;
 
-		public string ChunksGpuMemoryUsage
+		public virtual string ChunksGpuMemoryUsage
 		{
 			get
 			{
@@ -80,7 +80,7 @@ namespace Game
 			Display.DeviceReset += Display_DeviceReset;
 		}
 
-		public void PrepareForDrawing(Camera camera)
+		public virtual void PrepareForDrawing(Camera camera)
 		{
 			Vector2 xZ = camera.ViewPosition.XZ;
 			float num = MathUtils.Sqr(m_subsystemSky.VisibilityRange);
@@ -134,7 +134,7 @@ namespace Game
 			ChunkTrianglesDrawn = 0;
 		}
 
-		public void DrawOpaque(Camera camera)
+		public virtual void DrawOpaque(Camera camera)
 		{
 			int gameWidgetIndex = camera.GameWidget.GameWidgetIndex;
 			Vector3 viewPosition = camera.InvertedViewMatrix.Translation;
@@ -182,7 +182,7 @@ namespace Game
 			}
 		}
 
-		public void DrawAlphaTested(Camera camera)
+		public virtual void DrawAlphaTested(Camera camera)
 		{
 			int gameWidgetIndex = camera.GameWidget.GameWidgetIndex;
 			Vector3 viewPosition = camera.InvertedViewMatrix.Translation;
@@ -212,7 +212,7 @@ namespace Game
 			}
 		}
 
-		public void DrawTransparent(Camera camera)
+		public virtual void DrawTransparent(Camera camera)
 		{
 			int gameWidgetIndex = camera.GameWidget.GameWidgetIndex;
 			Vector3 viewPosition = camera.InvertedViewMatrix.Translation;
@@ -241,12 +241,12 @@ namespace Game
 			}
 		}
 
-		public void Dispose()
+		public virtual void Dispose()
 		{
 			Display.DeviceReset -= Display_DeviceReset;
 		}
 
-		public void Display_DeviceReset()
+		public virtual void Display_DeviceReset()
 		{
 			m_subsystemTerrain.TerrainUpdater.DowngradeAllChunksState(TerrainChunkState.InvalidVertices1, forceGeometryRegeneration: false);
 			TerrainChunk[] allocatedChunks = m_subsystemTerrain.Terrain.AllocatedChunks;
@@ -255,7 +255,7 @@ namespace Game
                 terrainChunk.DisposeVertexIndexBuffers();
             }
 		}
-		public void DisposeTerrainChunkGeometryVertexIndexBuffers(TerrainChunk chunk)
+		public virtual void DisposeTerrainChunkGeometryVertexIndexBuffers(TerrainChunk chunk)
 		{
 			foreach (TerrainChunkGeometry.Buffer buffer in chunk.Buffers)
 			{
@@ -265,14 +265,14 @@ namespace Game
 			chunk.InvalidateSliceContentsHashes();
 		}
 
-		public void SetupTerrainChunkGeometryVertexIndexBuffers(TerrainChunk chunk)
+		public virtual void SetupTerrainChunkGeometryVertexIndexBuffers(TerrainChunk chunk)
 		{
 			DisposeTerrainChunkGeometryVertexIndexBuffers(chunk);
 			CompileDrawSubsets(chunk.ChunkSliceGeometries, chunk.Buffers);
 			chunk.CopySliceContentsHashes();
 		}
 
-		internal sealed class SubsetStat
+		public class SubsetStat
 		{
 			public int[] subsetTotalIndexCount=new int[7];
 			public int[] subsetTotalVertexCount=new int[7];
@@ -282,7 +282,7 @@ namespace Game
 			public int totalVertextCount;
 			public TerrainChunkGeometry.Buffer Buffer;
 		}
-		static Dictionary<Texture2D,SubsetStat> stat = new Dictionary<Texture2D,SubsetStat>();
+		public static Dictionary<Texture2D,SubsetStat> stat = new Dictionary<Texture2D,SubsetStat>();
 		public static void CompileDrawSubsets(TerrainGeometry[] chunkSliceGeometries, DynamicArray<TerrainChunkGeometry.Buffer> buffers, Func<TerrainVertex, TerrainVertex> vertexTransform = null)
 		{
 			stat.Clear();
@@ -392,7 +392,7 @@ namespace Game
 			}
 		}
 
-        public void DrawTerrainChunkGeometrySubsets(Shader shader, TerrainChunk chunk, int subsetsMask,bool ApplyTexture = true)
+        public virtual void DrawTerrainChunkGeometrySubsets(Shader shader, TerrainChunk chunk, int subsetsMask,bool ApplyTexture = true)
 		{
 			foreach (TerrainChunkGeometry.Buffer buffer in chunk.Buffers)
 			{
@@ -426,7 +426,7 @@ namespace Game
 			}
 		}
 
-		public void StartChunkFadeIn(Camera camera, TerrainChunk chunk)
+		public virtual void StartChunkFadeIn(Camera camera, TerrainChunk chunk)
 		{
 			Vector3 viewPosition = camera.ViewPosition;
 			Vector2 v = new(chunk.Origin.X, chunk.Origin.Y);
@@ -440,7 +440,7 @@ namespace Game
 			chunk.HazeEnds[camera.GameWidget.GameWidgetIndex] = MathF.Max(Math.Min(Math.Min(Math.Min(x, x2), x3), x4), 0.001f);
 		}
 
-		public void RunChunkFadeIn(Camera camera, TerrainChunk chunk)
+		public virtual void RunChunkFadeIn(Camera camera, TerrainChunk chunk)
 		{
 			chunk.HazeEnds[camera.GameWidget.GameWidgetIndex] += 32f * Time.FrameDuration;
 			if (chunk.HazeEnds[camera.GameWidget.GameWidgetIndex] >= m_subsystemSky.VisibilityRange)

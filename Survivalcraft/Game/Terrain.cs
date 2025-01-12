@@ -19,7 +19,7 @@ namespace Game
 			public TerrainChunk[] m_array = new TerrainChunk[65536];
 
 			[MethodImpl(MethodImplOptions.AggressiveInlining)]
-			public TerrainChunk Get(int x, int y)
+			public virtual TerrainChunk Get(int x, int y)
 			{
 				int num = (x + (y << 8)) & 0xFFFF;
 				TerrainChunk terrainChunk;
@@ -39,7 +39,7 @@ namespace Game
 				return terrainChunk;
 			}
 
-			public void Add(int x, int y, TerrainChunk chunk)
+			public virtual void Add(int x, int y, TerrainChunk chunk)
 			{
 				int num = (x + (y << 8)) & 0xFFFF;
 				while (m_array[num] != null)
@@ -49,7 +49,7 @@ namespace Game
 				m_array[num] = chunk;
 			}
 
-			public void Remove(int x, int y)
+			public virtual void Remove(int x, int y)
 			{
 				int num = (x + (y << 8)) & 0xFFFF;
 				while (true)
@@ -109,7 +109,7 @@ namespace Game
 
 		public int SeasonHumidity;
 
-		public TerrainChunk[] AllocatedChunks
+		public virtual TerrainChunk[] AllocatedChunks
 		{
 			get
 			{
@@ -127,7 +127,7 @@ namespace Game
 			m_allocatedChunks = [];
 		}
 
-		public void Dispose()
+		public virtual void Dispose()
 		{
 			foreach (TerrainChunk allocatedChunk in m_allocatedChunks)
 			{
@@ -135,7 +135,7 @@ namespace Game
 			}
 		}
 
-		public TerrainChunk LoopChunks(int startChunkX, int startChunkZ, bool skipStartChunk, out bool hasLooped)
+		public virtual TerrainChunk LoopChunks(int startChunkX, int startChunkZ, bool skipStartChunk, out bool hasLooped)
 		{
 			hasLooped = false;
 			TerrainChunk terrainChunk = null;
@@ -169,23 +169,33 @@ namespace Game
 			return terrainChunk;
 		}
 
-		public TerrainChunk LoopChunks(int startChunkX, int startChunkZ, bool skipStartChunk)
+		public virtual TerrainChunk LoopChunks(int startChunkX, int startChunkZ, bool skipStartChunk)
 		{
 			bool hasLooped;
 			return LoopChunks(startChunkX, startChunkZ, skipStartChunk, out hasLooped);
 		}
 
-		public TerrainChunk GetChunkAtCoords(int chunkX, int chunkZ)
+		public virtual TerrainChunk GetChunkAtCoords(int chunkX, int chunkZ)
 		{
 			return m_allChunks.Get(chunkX, chunkZ);
 		}
 
-		public TerrainChunk GetChunkAtCell(int x, int z)
+		public virtual TerrainChunk GetChunkAtCoords(int chunkX, int chunkY, int chunkZ)
+		{
+			return chunkY is >= 0 and < 16 ? m_allChunks.Get(chunkX, chunkZ) : null;
+		}
+
+		public virtual TerrainChunk GetChunkAtCell(int x, int z)
 		{
 			return GetChunkAtCoords(x >> 4, z >> 4);
 		}
 
-		public TerrainChunk AllocateChunk(int chunkX, int chunkZ)
+		public virtual TerrainChunk GetChunkAtCell(int x, int y, int z)
+		{
+			return y is >= 0 and < 256 ? m_allChunks.Get(x >> 4, z >> 4) : null;
+		}
+
+		public virtual TerrainChunk AllocateChunk(int chunkX, int chunkZ)
 		{
 			if (GetChunkAtCoords(chunkX, chunkZ) != null)
 			{
@@ -198,7 +208,7 @@ namespace Game
 			return terrainChunk;
 		}
 
-		public void FreeChunk(TerrainChunk chunk)
+		public virtual void FreeChunk(TerrainChunk chunk)
 		{
 			if (!m_allocatedChunks.Remove(chunk))
 			{
@@ -256,112 +266,112 @@ namespace Game
 			return new Point3((int)MathF.Floor(p.X), (int)MathF.Floor(p.Y), (int)MathF.Floor(p.Z));
 		}
 
-		public bool IsCellValid(int x, int y, int z)
+		public virtual bool IsCellValid(int x, int y, int z)
 		{
 			return y >= 0 && y < 256;
 		}
 
-		public int GetCellValue(int x, int y, int z)
+		public virtual int GetCellValue(int x, int y, int z)
 		{
 			return !IsCellValid(x, y, z) ? 0 : GetCellValueFast(x, y, z);
 		}
 
-		public int GetCellContents(int x, int y, int z)
+		public virtual int GetCellContents(int x, int y, int z)
 		{
 			return !IsCellValid(x, y, z) ? 0 : GetCellContentsFast(x, y, z);
 		}
 
-		public int GetCellLight(int x, int y, int z)
+		public virtual int GetCellLight(int x, int y, int z)
 		{
 			return !IsCellValid(x, y, z) ? 0 : GetCellLightFast(x, y, z);
 		}
 
-		public int GetCellValueFast(int x, int y, int z)
+		public virtual int GetCellValueFast(int x, int y, int z)
 		{
 			return GetChunkAtCell(x, z)?.GetCellValueFast(x & 0xF, y, z & 0xF) ?? 0;
 		}
 
-		public int GetCellValueFastChunkExists(int x, int y, int z)
+		public virtual int GetCellValueFastChunkExists(int x, int y, int z)
 		{
 			return GetChunkAtCell(x, z).GetCellValueFast(x & 0xF, y, z & 0xF);
 		}
 
-		public int GetCellContentsFast(int x, int y, int z)
+		public virtual int GetCellContentsFast(int x, int y, int z)
 		{
 			return ExtractContents(GetCellValueFast(x, y, z));
 		}
 
-		public int GetCellLightFast(int x, int y, int z)
+		public virtual int GetCellLightFast(int x, int y, int z)
 		{
 			return ExtractLight(GetCellValueFast(x, y, z));
 		}
 
-		public void SetCellValueFast(int x, int y, int z, int value)
+		public virtual void SetCellValueFast(int x, int y, int z, int value)
 		{
 			GetChunkAtCell(x, z)?.SetCellValueFast(x & 0xF, y, z & 0xF, value);
 		}
 
-		public int CalculateTopmostCellHeight(int x, int z)
+		public virtual int CalculateTopmostCellHeight(int x, int z)
 		{
 			return GetChunkAtCell(x, z)?.CalculateTopmostCellHeight(x & 0xF, z & 0xF) ?? 0;
 		}
 
-		public int GetShaftValue(int x, int z)
+		public virtual int GetShaftValue(int x, int z)
 		{
 			return GetChunkAtCell(x, z)?.GetShaftValueFast(x & 0xF, z & 0xF) ?? 0;
 		}
 
-		public void SetShaftValue(int x, int z, int value)
+		public virtual void SetShaftValue(int x, int z, int value)
 		{
 			GetChunkAtCell(x, z)?.SetShaftValueFast(x & 0xF, z & 0xF, value);
 		}
 
-		public int GetTemperature(int x, int z)
+		public virtual int GetTemperature(int x, int z)
 		{
 			return ExtractTemperature(GetShaftValue(x, z));
 		}
 
-		public void SetTemperature(int x, int z, int temperature)
+		public virtual void SetTemperature(int x, int z, int temperature)
 		{
 			SetShaftValue(x, z, ReplaceTemperature(GetShaftValue(x, z), temperature));
 		}
 
-		public int GetHumidity(int x, int z)
+		public virtual int GetHumidity(int x, int z)
 		{
 			return ExtractHumidity(GetShaftValue(x, z));
 		}
 
-		public void SetHumidity(int x, int z, int humidity)
+		public virtual void SetHumidity(int x, int z, int humidity)
 		{
 			SetShaftValue(x, z, ReplaceHumidity(GetShaftValue(x, z), humidity));
 		}
 
-		public int GetTopHeight(int x, int z)
+		public virtual int GetTopHeight(int x, int z)
 		{
 			return ExtractTopHeight(GetShaftValue(x, z));
 		}
 
-		public void SetTopHeight(int x, int z, int topHeight)
+		public virtual void SetTopHeight(int x, int z, int topHeight)
 		{
 			SetShaftValue(x, z, ReplaceTopHeight(GetShaftValue(x, z), topHeight));
 		}
 
-		public int GetBottomHeight(int x, int z)
+		public virtual int GetBottomHeight(int x, int z)
 		{
 			return ExtractBottomHeight(GetShaftValue(x, z));
 		}
 
-		public void SetBottomHeight(int x, int z, int bottomHeight)
+		public virtual void SetBottomHeight(int x, int z, int bottomHeight)
 		{
 			SetShaftValue(x, z, ReplaceBottomHeight(GetShaftValue(x, z), bottomHeight));
 		}
 
-		public int GetSunlightHeight(int x, int z)
+		public virtual int GetSunlightHeight(int x, int z)
 		{
 			return ExtractSunlightHeight(GetShaftValue(x, z));
 		}
 
-		public void SetSunlightHeight(int x, int z, int sunlightHeight)
+		public virtual void SetSunlightHeight(int x, int z, int sunlightHeight)
 		{
 			SetShaftValue(x, z, ReplaceSunlightHeight(GetShaftValue(x, z), sunlightHeight));
 		}
@@ -456,22 +466,22 @@ namespace Game
 			return value ^ ((value ^ (temperature << 8)) & 0xF00);
 		}
 
-		public int GetSeasonalTemperature(int x, int z)
+		public virtual int GetSeasonalTemperature(int x, int z)
 		{
 			return MathUtils.Max(GetTemperature(x, z) + SeasonTemperature, 0);
 		}
 
-		public int GetSeasonalTemperature(int shaftValue)
+		public virtual int GetSeasonalTemperature(int shaftValue)
 		{
 			return MathUtils.Max(ExtractTemperature(shaftValue) + SeasonTemperature, 0);
 		}
 
-		public int GetSeasonalHumidity(int x, int z)
+		public virtual int GetSeasonalHumidity(int x, int z)
 		{
 			return MathUtils.Max(GetHumidity(x, z) + SeasonHumidity, 0);
 		}
 
-		public int GetSeasonalHumidity(int shaftValue)
+		public virtual int GetSeasonalHumidity(int shaftValue)
 		{
 			return MathUtils.Max(ExtractHumidity(shaftValue) + SeasonHumidity, 0);
 		}

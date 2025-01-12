@@ -10,7 +10,7 @@
                 </CanvasWidget>
                 <CanvasWidget Size="Infinity, 45" Margin="10, 0">
                     <BevelledRectangleWidget Style="{Styles/TextBoxArea}" />
-                    <TextBoxWidget Name="RunJsDialog.Input" Color="255, 255, 255" Size="Infinity, 45" Margin="4, 0" VerticalAlignment="Center" HorizontalAlignment="Stretch" MaximumLength="100000" />
+                    <TextBoxWidget Name="RunJsDialog.Input" Color="255, 255, 255" Size="Infinity, 45" Margin="10, 0" VerticalAlignment="Center" HorizontalAlignment="Stretch" MaximumLength="100000" />
                 </CanvasWidget>
             </StackPanelWidget>
             <CanvasWidget Size="0, 10" />
@@ -21,7 +21,7 @@
                 <CanvasWidget Size="Infinity, 120" Margin="10, 0">
                     <BevelledRectangleWidget Style="{Styles/TextBoxArea}" />
                     <ScrollPanelWidget Direction="Vertical" ClampToBounds="true">
-                        <LabelWidget Name="RunJsDialog.Output" Color="255, 255, 255" Margin="4, 0" HorizontalAlignment="Stretch"/>
+                        <LabelWidget Name="RunJsDialog.Output" Color="255, 255, 255" Margin="10, 0" HorizontalAlignment="Stretch"/>
                     </ScrollPanelWidget>
                 </CanvasWidget>
             </StackPanelWidget>

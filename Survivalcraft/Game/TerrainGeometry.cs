@@ -37,7 +37,7 @@ namespace Game
 	        Draws.Add(DefaultTexture,this);
         }
 
-        public void InitSubsets()
+        public virtual void InitSubsets()
         {
             Subsets = new TerrainGeometrySubset[7];
             for(int i = 0; i < 7; i++)
@@ -76,7 +76,7 @@ namespace Game
             };
         }
 
-        public TerrainGeometry GetGeometry(Texture2D texture)
+        public virtual TerrainGeometry GetGeometry(Texture2D texture)
         {
             if (Draws == null) Draws = new ();
             if (Draws.TryGetValue(texture, out var geometries)) return geometries;
@@ -88,7 +88,7 @@ namespace Game
             }
         }
 
-        public void ClearGeometry()
+        public virtual void ClearGeometry()
         {
 	        foreach(var subset in Subsets)
 	        {

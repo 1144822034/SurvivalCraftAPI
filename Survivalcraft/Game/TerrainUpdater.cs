@@ -68,7 +68,7 @@ namespace Game
 
 			public int SkippedSlices;
 
-			public void Log()
+			public virtual void Log()
 			{
 				Engine.Log.Information("Terrain Update #{0}", m_counter++);
 				if (FindBestChunkCount > 0)
@@ -235,7 +235,7 @@ namespace Game
 			SettingsManager.SettingChanged += SettingsManager_SettingChanged;
 		}
 
-		public void Dispose()
+		public virtual void Dispose()
 		{
 			SettingsManager.SettingChanged -= SettingsManager_SettingChanged;
 			m_quitUpdateThread = true;
@@ -250,12 +250,12 @@ namespace Game
 			m_updateEvent.Dispose();
 		}
 
-		public void RequestSynchronousUpdate()
+		public virtual void RequestSynchronousUpdate()
 		{
 			m_synchronousUpdateFrame = Time.FrameIndex;
 		}
 
-		public void SetUpdateLocation(int locationIndex, Vector2 center, float visibilityDistance, float contentDistance)
+		public virtual void SetUpdateLocation(int locationIndex, Vector2 center, float visibilityDistance, float contentDistance)
 		{
 			contentDistance = MathUtils.Max(contentDistance, visibilityDistance);
 			m_updateParameters.Locations.TryGetValue(locationIndex, out UpdateLocation value);
@@ -269,12 +269,12 @@ namespace Game
 			}
 		}
 
-		public void RemoveUpdateLocation(int locationIndex)
+		public virtual void RemoveUpdateLocation(int locationIndex)
 		{
 			m_pendingLocations[locationIndex] = null;
 		}
 
-		public float GetUpdateProgress(int locationIndex, float visibilityDistance, float contentDistance)
+		public virtual float GetUpdateProgress(int locationIndex, float visibilityDistance, float contentDistance)
 		{
 			int num = 0;
 			int num2 = 0;
@@ -322,7 +322,7 @@ namespace Game
 			return 0f;
 		}
 
-		public void Update()
+		public virtual void Update()
 		{
 			if (m_subsystemSky.SkyLightValue != m_lastSkylightValue)
 			{
@@ -413,7 +413,7 @@ namespace Game
 			}
 		}
 
-		public void PrepareForDrawing(Camera camera)
+		public virtual void PrepareForDrawing(Camera camera)
 		{
 			SetUpdateLocation(camera.GameWidget.PlayerData.PlayerIndex, camera.ViewPosition.XZ, m_subsystemSky.VisibilityRange, 64f);
 			if (m_synchronousUpdateFrame == Time.FrameIndex)
@@ -444,7 +444,7 @@ namespace Game
 			}
 		}
 
-		public void DowngradeChunkNeighborhoodState(Point2 coordinates, int radius, TerrainChunkState state, bool forceGeometryRegeneration)
+		public virtual void DowngradeChunkNeighborhoodState(Point2 coordinates, int radius, TerrainChunkState state, bool forceGeometryRegeneration)
 		{
 			for (int i = -radius; i <= radius; i++)
 			{
@@ -468,7 +468,7 @@ namespace Game
 			}
 		}
 
-		public void DowngradeAllChunksState(TerrainChunkState state, bool forceGeometryRegeneration)
+		public virtual void DowngradeAllChunksState(TerrainChunkState state, bool forceGeometryRegeneration)
 		{
 			TerrainChunk[] allocatedChunks = m_terrain.AllocatedChunks;
 			foreach (TerrainChunk terrainChunk in allocatedChunks)
@@ -484,7 +484,7 @@ namespace Game
 				terrainChunk.WasDowngraded = true;
 			}
         }
-        private static bool IsChunkInRange(Vector2 chunkCenter, ref TerrainUpdater.UpdateLocation location)
+		public static bool IsChunkInRange(Vector2 chunkCenter, ref TerrainUpdater.UpdateLocation location)
         {
             return (double)Vector2.DistanceSquared(location.Center, chunkCenter) <= (double)MathUtils.Sqr(location.ContentDistance);
         }
@@ -501,7 +501,7 @@ namespace Game
 			return false;
 		}
 
-		public bool AllocateAndFreeChunks(UpdateLocation[] locations)
+		public virtual bool AllocateAndFreeChunks(UpdateLocation[] locations)
 		{
 			bool result = false;
 			TerrainChunk[] allocatedChunks = m_terrain.AllocatedChunks;
@@ -562,7 +562,7 @@ namespace Game
 			return result;
 		}
 
-		public bool SendReceiveChunkStates()
+		public virtual bool SendReceiveChunkStates()
 		{
 			bool result = false;
 			TerrainChunk[] chunks = m_updateParameters.Chunks;
@@ -583,7 +583,7 @@ namespace Game
 			return result;
 		}
 
-		public void SendReceiveChunkStatesThread()
+		public virtual void SendReceiveChunkStatesThread()
 		{
 			TerrainChunk[] chunks = m_threadUpdateParameters.Chunks;
 			foreach (TerrainChunk terrainChunk in chunks)
@@ -601,7 +601,7 @@ namespace Game
 			}
 		}
 
-		public void ThreadUpdateFunction()
+		public virtual void ThreadUpdateFunction()
 		{
 			while (!m_quitUpdateThread)
 			{
@@ -632,7 +632,7 @@ namespace Game
 			}
 		}
 
-		public bool SynchronousUpdateFunction()
+		public virtual bool SynchronousUpdateFunction()
 		{
 			lock (m_updateParametersLock)
 			{
@@ -659,7 +659,7 @@ namespace Game
 			return true;
 		}
 
-		public TerrainChunk FindBestChunkToUpdate(out TerrainChunkState desiredState)
+		public virtual TerrainChunk FindBestChunkToUpdate(out TerrainChunkState desiredState)
 		{
 			double realTime = Time.RealTime;
 			TerrainChunk[] chunks = m_threadUpdateParameters.Chunks;
@@ -699,7 +699,7 @@ namespace Game
 			return result;
 		}
 
-		public List<TerrainChunk> DetermineSynchronousUpdateChunks(Vector3 viewPosition, Vector3 viewDirection)
+		public virtual List<TerrainChunk> DetermineSynchronousUpdateChunks(Vector3 viewPosition, Vector3 viewDirection)
 		{
 			Vector3 vector = Vector3.Normalize(Vector3.Cross(viewDirection, Vector3.UnitY));
 			Vector3 v = Vector3.Normalize(Vector3.Cross(viewDirection, vector));
@@ -725,7 +725,7 @@ namespace Game
 			return list;
 		}
 
-		public void UpdateChunkSingleStep(TerrainChunk chunk, int skylightValue)
+		public virtual void UpdateChunkSingleStep(TerrainChunk chunk, int skylightValue)
 		{
 			switch (chunk.ThreadState)
 			{
@@ -891,7 +891,7 @@ namespace Game
 			}
 		}
 
-		public void GenerateChunkSunLightAndHeight(TerrainChunk chunk, int skylightValue)
+		public virtual void GenerateChunkSunLightAndHeight(TerrainChunk chunk, int skylightValue)
 		{
 			for (int i = 0; i < 16; i++)
 			{
@@ -971,7 +971,7 @@ namespace Game
 			}
 		}
 
-		public void GenerateChunkLightSources(TerrainChunk chunk)
+		public virtual void GenerateChunkLightSources(TerrainChunk chunk)
 		{
 			ModsManager.HookAction("GenerateChunkLightSources", loader => { loader.GenerateChunkLightSources(m_lightSources, chunk); return false; });
 			Block[] blocks = BlocksManager.Blocks;
@@ -1151,7 +1151,7 @@ namespace Game
                 }
             }
         }
-        public void PropagateLightSource(int x, int y, int z, int light)
+        public virtual void PropagateLightSource(int x, int y, int z, int light)
 		{
 			TerrainChunk chunkAtCell = m_terrain.GetChunkAtCell(x, z);
 			if (chunkAtCell == null)
@@ -1254,7 +1254,7 @@ namespace Game
             }
         }
         [MethodImpl(256)]
-        private void PropagateLightSource(TerrainChunk chunk, int x, int y, int z, int light)
+        public virtual void PropagateLightSource(TerrainChunk chunk, int x, int y, int z, int light)
         {
             if (chunk != null)
             {
@@ -1282,7 +1282,7 @@ namespace Game
                 }
             }
         }
-        public void GenerateChunkVertices(TerrainChunk chunk, int stage)
+        public virtual void GenerateChunkVertices(TerrainChunk chunk, int stage)
 		{
             this.m_subsystemTerrain.BlockGeometryGenerator.ResetCache();
             TerrainChunk chunkAtCoords1 = this.m_terrain.GetChunkAtCoords(chunk.Coords.X - 1, chunk.Coords.Y - 1);
@@ -1367,7 +1367,7 @@ namespace Game
                 }
             }
         }
-        private void CalculateChunkSliceContentsHashes(TerrainChunk chunk)
+        public virtual void CalculateChunkSliceContentsHashes(TerrainChunk chunk)
         {
             double realTime = Time.RealTime;
             int num = 1;
@@ -1433,7 +1433,7 @@ namespace Game
             m_statistics.HashCount++;
             m_statistics.HashTime += realTime2 - realTime;
         }
-		public void NotifyBlockBehaviors(TerrainChunk chunk)
+		public virtual void NotifyBlockBehaviors(TerrainChunk chunk)
 		{
 			this.ChunkInitialized?.Invoke(chunk);
 			foreach (SubsystemBlockBehavior blockBehavior in m_subsystemBlockBehaviors.BlockBehaviors)
@@ -1469,7 +1469,7 @@ namespace Game
 
 		}
 
-		public void UnpauseUpdateThread()
+		public virtual void UnpauseUpdateThread()
 		{
 			lock (m_unpauseLock)
 			{
@@ -1478,7 +1478,7 @@ namespace Game
 			}
 		}
 
-		public void SettingsManager_SettingChanged(string name)
+		public virtual void SettingsManager_SettingChanged(string name)
 		{
 			if (name == "Brightness")
 			{

@@ -92,7 +92,7 @@ namespace Game
             Shafts = TerrainChunk.m_shaftsCache.Rent(256, true);
         }
 
-		public void DisposeVertexIndexBuffers()
+		public virtual void DisposeVertexIndexBuffers()
 		{
 			foreach (var b in Buffers)
 			{
@@ -101,20 +101,20 @@ namespace Game
 			}
 		}
 
-		public void InvalidateSliceContentsHashes()
+		public virtual void InvalidateSliceContentsHashes()
 		{
 			for (int i = 0; i < GeneratedSliceContentsHashes.Length; i++)
 			{
 				GeneratedSliceContentsHashes[i] = 0;
 			}
 		}
-		public void CopySliceContentsHashes() {
+		public virtual void CopySliceContentsHashes() {
 			for (int i = 0; i < GeneratedSliceContentsHashes.Length; i++)
 			{
 				GeneratedSliceContentsHashes[i] = SliceContentsHashes[i];
 			}
 		}
-		public void Dispose()
+		public virtual void Dispose()
 		{
             if (this.Geometry == null)
                 throw new InvalidOperationException();
@@ -143,10 +143,25 @@ namespace Game
 
 		public static int CalculateCellIndex(int x, int y, int z)
 		{
-			return y + (x * 256) + (z * 256 * 16);
+			if(y is >= 0 and < 256)
+			{
+				return y | (x << 8) | (z << 12);
+			}
+			else
+			{
+				int absY = Math.Abs(y);
+				int yUpperBits = absY >> 8;
+				if (yUpperBits > 0x7FFF)
+				{
+					throw new ArgumentOutOfRangeException(nameof(y), "Height is too large.");
+				}
+				int yLower8Bits = absY & 0xFF;
+				yUpperBits = yUpperBits & 0x7FFF;
+				return (((y < 0) ? 1 : 0) << 31) | (yUpperBits << 16) | (z << 12) | (x << 8) | yLower8Bits;
+			}
 		}
 
-		public int CalculateTopmostCellHeight(int x, int z)
+		public virtual int CalculateTopmostCellHeight(int x, int z)
 		{
 			int num = CalculateCellIndex(x, 255, z);
 			int num2 = 255;
@@ -162,97 +177,97 @@ namespace Game
 			return 0;
 		}
 
-		public int GetCellValueFast(int index)
+		public virtual int GetCellValueFast(int index)
 		{
 			return Cells[index];
 		}
 
-		public int GetCellValueFast(int x, int y, int z)
+		public virtual int GetCellValueFast(int x, int y, int z)
 		{
 			return Cells[y + (x * 256) + (z * 256 * 16)];
 		}
 
-		public void SetCellValueFast(int x, int y, int z, int value)
+		public virtual void SetCellValueFast(int x, int y, int z, int value)
 		{
 			Cells[y + (x * 256) + (z * 256 * 16)] = value;
 		}
 
-		public void SetCellValueFast(int index, int value)
+		public virtual void SetCellValueFast(int index, int value)
 		{
 			Cells[index] = value;
 		}
 
-		public int GetCellContentsFast(int x, int y, int z)
+		public virtual int GetCellContentsFast(int x, int y, int z)
 		{
 			return Terrain.ExtractContents(GetCellValueFast(x, y, z));
 		}
 
-		public int GetCellLightFast(int x, int y, int z)
+		public virtual int GetCellLightFast(int x, int y, int z)
 		{
 			return Terrain.ExtractLight(GetCellValueFast(x, y, z));
 		}
 
-		public int GetShaftValueFast(int x, int z)
+		public virtual int GetShaftValueFast(int x, int z)
 		{
 			return Shafts[x + (z * 16)];
 		}
 
-		public void SetShaftValueFast(int x, int z, int value)
+		public virtual void SetShaftValueFast(int x, int z, int value)
 		{
 			Shafts[x + (z * 16)] = value;
 		}
 
-		public int GetTemperatureFast(int x, int z)
+		public virtual int GetTemperatureFast(int x, int z)
 		{
 			return Terrain.ExtractTemperature(GetShaftValueFast(x, z));
 		}
 
-		public void SetTemperatureFast(int x, int z, int temperature)
+		public virtual void SetTemperatureFast(int x, int z, int temperature)
 		{
 			SetShaftValueFast(x, z, Terrain.ReplaceTemperature(GetShaftValueFast(x, z), temperature));
 		}
 
-		public int GetHumidityFast(int x, int z)
+		public virtual int GetHumidityFast(int x, int z)
 		{
 			return Terrain.ExtractHumidity(GetShaftValueFast(x, z));
 		}
 
-		public void SetHumidityFast(int x, int z, int humidity)
+		public virtual void SetHumidityFast(int x, int z, int humidity)
 		{
 			SetShaftValueFast(x, z, Terrain.ReplaceHumidity(GetShaftValueFast(x, z), humidity));
 		}
 
-		public int GetTopHeightFast(int x, int z)
+		public virtual int GetTopHeightFast(int x, int z)
 		{
 			return Terrain.ExtractTopHeight(GetShaftValueFast(x, z));
 		}
 
-		public void SetTopHeightFast(int x, int z, int topHeight)
+		public virtual void SetTopHeightFast(int x, int z, int topHeight)
 		{
 			SetShaftValueFast(x, z, Terrain.ReplaceTopHeight(GetShaftValueFast(x, z), topHeight));
 		}
 
-		public int GetBottomHeightFast(int x, int z)
+		public virtual int GetBottomHeightFast(int x, int z)
 		{
 			return Terrain.ExtractBottomHeight(GetShaftValueFast(x, z));
 		}
 
-		public void SetBottomHeightFast(int x, int z, int bottomHeight)
+		public virtual void SetBottomHeightFast(int x, int z, int bottomHeight)
 		{
 			SetShaftValueFast(x, z, Terrain.ReplaceBottomHeight(GetShaftValueFast(x, z), bottomHeight));
 		}
 
-		public int GetSunlightHeightFast(int x, int z)
+		public virtual int GetSunlightHeightFast(int x, int z)
 		{
 			return Terrain.ExtractSunlightHeight(GetShaftValueFast(x, z));
 		}
 
-		public void SetSunlightHeightFast(int x, int z, int sunlightHeight)
+		public virtual void SetSunlightHeightFast(int x, int z, int sunlightHeight)
 		{
 			SetShaftValueFast(x, z, Terrain.ReplaceSunlightHeight(GetShaftValueFast(x, z), sunlightHeight));
 		}
 
-		public void AddBrushPaint(int x, int y, int z, TerrainBrush brush)
+		public virtual void AddBrushPaint(int x, int y, int z, TerrainBrush brush)
 		{
 			m_brushPaints.Add(new BrushPaint
 			{
@@ -261,7 +276,7 @@ namespace Game
 			});
 		}
 
-		public void ApplyBrushPaints(TerrainChunk chunk)
+		public virtual void ApplyBrushPaints(TerrainChunk chunk)
 		{
 			foreach (BrushPaint brushPaint in m_brushPaints)
 			{
