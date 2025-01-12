@@ -21,6 +21,7 @@ namespace Game
 		public bool m_recipeRefindNeeded = false;
 		public int ResultSlotIndex => SlotsCount - 2;
 
+		public bool m_resetWhenSlotItemsRemoved;
 
 		public virtual void Update(float dt)
 		{
@@ -105,8 +106,8 @@ namespace Game
 				num = base.RemoveSlotItems(slotIndex, count);
 			}
 			m_recipeUpdateNeeded = true;
-            m_slots[ResultSlotIndex].Count = 0;
-            for (int i = 0; i < originalCount.Length; i++)
+			if(m_resetWhenSlotItemsRemoved) m_slots[ResultSlotIndex].Count = 0;
+			for (int i = 0; i < originalCount.Length; i++)
 			{
 				if (originalCount[i] > 0 && GetSlotCount(i) == 0)
 					m_recipeRefindNeeded = true;

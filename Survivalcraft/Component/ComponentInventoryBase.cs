@@ -204,9 +204,16 @@ namespace Game
 			if (count > 0 && slotIndex >= 0 && slotIndex < m_slots.Count)
 			{
 				Slot slot = m_slots[slotIndex];
-				if ((GetSlotCount(slotIndex) != 0 && GetSlotValue(slotIndex) != value) || GetSlotCount(slotIndex) + count > GetSlotCapacity(slotIndex, value))
+				int slotValue = GetSlotValue(slotIndex);
+				int slotCount = GetSlotCount(slotIndex);
+				int slotCapacity = GetSlotCapacity(slotIndex,value);
+				if (slotCount != 0 && slotValue != value)
 				{
-					throw new InvalidOperationException("Cannot add slot items.");
+					throw new InvalidOperationException(string.Format("Cannot add slot items because items are different. Slot {0} Contains BlockValue {1} with count {2}. The value to add is {3} with count {4}. Slot capacity is {5}", slotIndex, slotValue, slotCount, value, count, slotCapacity));
+				}
+				if(GetSlotCount(slotIndex) + count > slotCapacity)
+				{
+					throw new InvalidOperationException(string.Format("Cannot add slot items because it exceeded capacity. Slot {0} Contains BlockValue {1} with count {2}. The value to add is {3} with count {4}. Slot capacity is {5}",slotIndex,slotValue,slotCount,value,count,slotCapacity));
 				}
 				slot.Value = value;
 				slot.Count += count;
