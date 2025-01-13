@@ -67,7 +67,7 @@ namespace Engine.Graphics
 		{
 		}
 
-		private void InitializeShader(string vertexShaderCode, string pixelShaderCode, ShaderMacro[] shaderMacros)
+        public virtual void InitializeShader(string vertexShaderCode, string pixelShaderCode, ShaderMacro[] shaderMacros)
 		{
 			ArgumentNullException.ThrowIfNull(vertexShaderCode);
 			ArgumentNullException.ThrowIfNull(pixelShaderCode);
@@ -83,7 +83,7 @@ namespace Engine.Graphics
 		}
 
 		public ReadOnlyList<ShaderParameter> Parameters => new(m_parameters);
-		public void Construct(string vertexShaderCode, string pixelShaderCode, params ShaderMacro[] shaderMacros)
+		public virtual void Construct(string vertexShaderCode, string pixelShaderCode, params ShaderMacro[] shaderMacros)
 		{
 			try
 			{
@@ -97,7 +97,7 @@ namespace Engine.Graphics
 			}
 		}
 		public Shader(string vertexShaderCode, string pixelShaderCode, params ShaderMacro[] shaderMacros)
-		{
+        {
 			Construct(vertexShaderCode, pixelShaderCode, shaderMacros);
 		}
 		public override void Dispose()
@@ -106,13 +106,13 @@ namespace Engine.Graphics
 			DeleteShaders();
 		}
 
-        public void PrepareForDrawing()
+        public virtual void PrepareForDrawing()
 		{
 			m_glymulParameter.SetValue((Display.RenderTarget != null) ? (-1f) : 1f);
 			PrepareForDrawingOverride();
 		}
 
-        public VertexAttributeData[] GetVertexAttribData(VertexDeclaration vertexDeclaration)
+        public virtual VertexAttributeData[] GetVertexAttribData(VertexDeclaration vertexDeclaration)
 		{
 			if (!m_vertexAttributeDataByDeclaration.TryGetValue(vertexDeclaration, out VertexAttributeData[] value))
 			{
@@ -198,7 +198,7 @@ namespace Engine.Graphics
 			}
 		}
 
-        public string PrependShaderMacros(string shaderCode, ShaderMacro[] shaderMacros, bool isVertexShader)
+        public virtual string PrependShaderMacros(string shaderCode, ShaderMacro[] shaderMacros, bool isVertexShader)
 		{
 			string str = "";
 
@@ -239,7 +239,7 @@ namespace Engine.Graphics
 			CompileShaders();
 		}
 
-        public void CompileShaders()
+        public virtual void CompileShaders()
 		{
 			DeleteShaders();
 			Dictionary<string, string> dictionary = [];
@@ -366,7 +366,7 @@ namespace Engine.Graphics
 			}
 		}
 
-        public void DeleteShaders()
+        public virtual void DeleteShaders()
 		{
 			if (m_program != 0)
 			{

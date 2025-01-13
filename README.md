@@ -29,7 +29,7 @@ API的兄弟们， 让模组无序加载机制, 模组自动依赖检索护送�
 * Windows系统下载后缀为`.7z`的压缩包，推荐使用 [7-Zip](https://www.7-zip.org/download.html) 进行解压，运行解压后的`.exe`文件
 
 > Windows 系统请勿直接运行压缩包中的文件，务必解压后运行  
-> 如果游戏打开后语言不是系统语言，请依次点击：`左下角按钮`→`左下角按钮`→`顶部按钮`，即可切换语言
+> 如果游戏打开后语言不是系统语言，请点击左下角地球图标，即可切换语言
 
 ## 模组开发者引用
 
@@ -64,23 +64,11 @@ API的兄弟们， 让模组无序加载机制, 模组自动依赖检索护送�
    ```
    
    > 还没有 Git？[官网下载](https://git-scm.com/downloads)
-
-2. 进入此仓库
    
-   ```bat
-   cd survivalcraft-api
-   ```
-
-3. 更新子模块
-   
-   ```bat
-   git submodule update --init
-   ```
-
-4. 使用 [Visual Studio](https://visualstudio.microsoft.com/)或[Rider](https://www.jetbrains.com/zh-cn/rider/) 打开`survivalcraft-api`目录中的`SurvivalCraft.sln`
-5. 如果只是在Windows系统上进行调试，请右键卸载`安卓端`文件夹中的所有项目，在`电脑端`文件夹的`Survivalcraft`项目上右键，点击`构建所选项目`即可
-6. 如果需要生成Android系统上的`APK`安装文件，需要切换配置为`Release`模式，在`安卓端`文件夹的`A_Launch2`和`A_Survivalcraft`两个项目上分别右键，点击`加载项目`，最后在`A_Launch2`上右键，点击`归档以用于发布`即可
-7. 以上过程中，如果报错未安装相应功能，请按提示完成安装
+2. 进入此仓库，使用 [Visual Studio](https://visualstudio.microsoft.com/)或[Rider](https://www.jetbrains.com/zh-cn/rider/) 打开`survivalcraft-api`目录中的`SurvivalCraft.sln`
+3. 如果只是在Windows系统上进行调试，请右键卸载`安卓端`文件夹中的所有项目，在`电脑端`文件夹的`Survivalcraft`项目上右键，点击`构建所选项目`即可
+4. 如果需要生成Android系统上的`APK`安装文件，需要切换配置为`Release`模式，在`安卓端`文件夹的`A_Launch2`和`A_Survivalcraft`两个项目上分别右键，点击`加载项目`，最后在`A_Launch2`上右键，点击`归档以用于发布`即可
+5. 以上过程中，如果报错未安装相应功能，请按提示完成安装
 
 > 关于项目还原  
 > 请运行`dotnet restore /p:Configuration="Release"`

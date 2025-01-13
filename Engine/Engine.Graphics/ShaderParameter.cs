@@ -4,13 +4,13 @@ namespace Engine.Graphics
 {
 	public  class ShaderParameter
 	{
-		internal int Location;
+		public int Location;
 
-		internal float[] Value;
+		public float[] Value;
 
-		internal object Resource;
+		public object Resource;
 
-		internal bool IsChanged = true;
+		public bool IsChanged = true;
 
 		public readonly Shader Shader;
 
@@ -20,13 +20,13 @@ namespace Engine.Graphics
 
 		public readonly int Count;
 
-		internal ShaderParameter(string name, ShaderParameterType type)
+		public ShaderParameter(string name, ShaderParameterType type)
 		{
 			Name = name;
 			Type = type;
 		}
 
-		internal ShaderParameter(Shader shader, string name, ShaderParameterType type, int count)
+		public ShaderParameter(Shader shader, string name, ShaderParameterType type, int count)
 		{
 			Shader = shader;
 			Name = name;
