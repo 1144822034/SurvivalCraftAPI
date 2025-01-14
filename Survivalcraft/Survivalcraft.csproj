@@ -74,6 +74,9 @@
         <AutoGenerateBindingRedirects>false</AutoGenerateBindingRedirects>
     </PropertyGroup>
     <ItemGroup>
+		<None Include="Content.zip">
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</None>
         <Content Include="Content\icon.ico" />
 		<Reference Include="OpenTK-1.0.2moded" Condition="'$(TargetFramework)' == 'net9.0-android'">
 			<HintPath>..\Engine\reference\OpenTK-1.0.2moded.dll</HintPath>
@@ -103,10 +106,6 @@
 		</None>
     </ItemGroup>
     <ItemGroup Condition="'$(Configuration)' == 'Debug' And '$(TargetFramework)' == 'net9.0-windows'">
-        <None Update="Content.zip">
-            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-        </None>
-
 		<EmbeddedResource Include="init.js">
 			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 		</EmbeddedResource>
@@ -115,9 +114,6 @@
 		</None>
     </ItemGroup>
     <ItemGroup Condition="'$(Configuration)' == 'Release' And '$(TargetFramework)' == 'net9.0-windows'">
-        <EmbeddedResource Include="Content.zip">
-            <CopyToOutputDirectory>Never</CopyToOutputDirectory>
-        </EmbeddedResource>
 		<EmbeddedResource Include="init.js">
 			<CopyToOutputDirectory>Never</CopyToOutputDirectory>
 		</EmbeddedResource>

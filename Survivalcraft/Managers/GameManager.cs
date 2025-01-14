@@ -124,6 +124,10 @@ namespace Game
 						XmlUtils.SetAttributeValue(xElement, "Version", VersionsManager.SerializationVersion);
                         XmlUtils.SetAttributeValue(xElement, "APIVersion", ModsManager.ApiVersionString);
                         Storage.CreateDirectory(subsystemGameInfo.DirectoryName);
+						ModsManager.HookAction("OnProjectXmlSaved",loader => {
+							loader.OnProjectXmlSaved(xElement);
+							return false;
+						});
 						using (Stream stream = Storage.OpenFile(projectFileName, OpenFileMode.Create))
 						{
 							XmlUtils.SaveXmlToStream(xElement, stream, null, throwOnError: true);

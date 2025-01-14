@@ -212,12 +212,18 @@ namespace Game
 				//ModsManager.AddException(e);
 				Log.Error("Game Running Error!");
 				Log.Error(e);
-				ScreensManager.SwitchScreen("MainMenu");
-                //Dialog dialog = new MessageDialog(LanguageControl.Get("MainMenuScreen", 11), LanguageControl.Get("MainMenuScreen", 12) + "\n" + e.Message, LanguageControl.Ok, null, null);
-                ViewGameLogDialog dialog = new ViewGameLogDialog();
-				dialog.SetErrorHead(9, 10);
-				DialogsManager.ShowDialog(null, dialog);
-				GameManager.DisposeProject();
+				try
+				{
+					ScreensManager.SwitchScreen("MainMenu");
+					ViewGameLogDialog dialog = new ViewGameLogDialog();
+					dialog.SetErrorHead(9,10);
+					DialogsManager.ShowDialog(null,dialog);
+					GameManager.DisposeProject();
+				}
+				catch(Exception e3)
+				{
+					Log.Error(e3);
+				}
 			}
 
 			m_cpuEndTime = Time.RealTime;
