@@ -59,7 +59,10 @@ namespace Engine
             GL.GetInteger(GetPName.AlphaBits, out int params4);
             GL.GetInteger(GetPName.DepthBits, out int params5);
             GL.GetInteger(GetPName.StencilBits, out int params6);
-            Log.Information("OpenGL framebuffer created, R={0} G={1} B={2} A={3}, D={4} S={5}", @params, params2, params3, params4, params5, params6);
+            GL.GetInteger(GetPName.MajorVersion, out int params7);
+            GL.GetInteger(GetPName.MinorVersion, out int params8);
+            GL.GetInteger(GetPName.MaxTextureSize, out int params9);
+            Log.Information("OpenGL{6}.{7} framebuffer created, R={0} G={1} B={2} A={3}, D={4} S={5}, MaxTextureSize={8}", @params, params2, params3, params4, params5, params6, params7, params8, params9);
         }
 
         public void EnableImmersiveMode()

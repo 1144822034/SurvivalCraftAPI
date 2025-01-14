@@ -2,6 +2,7 @@ using Engine;
 using Engine.Graphics;
 using Engine.Media;
 using Jint.Native;
+using OpenTK.Graphics.ES30;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
@@ -57,6 +58,8 @@ namespace Game
 		public const int m_textHeight = 32;
 
 		public const int m_maxTexts = 32;
+
+		public float m_fontScale = 1f;
 
 		public SubsystemGameWidgets m_subsystemViews;
 
@@ -345,7 +348,20 @@ namespace Game
 
 		public void CreateRenderTarget()
 		{
-			m_renderTarget = new RenderTarget2D((int)m_font.GlyphHeight * 16, (int)m_font.GlyphHeight * 4 * 32, 1, ColorFormat.Rgba8888, DepthFormat.None);
+			GL.GetInteger(GetPName.MaxTextureSize, out int maxTextureSize);
+			int height = (int)m_font.GlyphHeight * 4 * 32;
+			if(height > maxTextureSize)
+			{
+				m_fontScale = maxTextureSize / (float)height;
+				height = maxTextureSize;
+			}
+			m_renderTarget = new RenderTarget2D(
+				(int)(m_font.GlyphHeight * 16 * m_fontScale),
+				height,
+				1,
+				ColorFormat.Rgba8888,
+				DepthFormat.None
+			);
 		}
 
 		public void InvalidateRenderTarget()
@@ -379,8 +395,8 @@ namespace Game
 			}
 			if (list.Count > 0)
 			{
-				float num = list.Max((string l) => l.Length) * m_font.GlyphHeight;
-				float num2 = list.Count * m_font.GlyphHeight;
+				float num = list.Max((string l) => l.Length) * m_font.GlyphHeight * m_fontScale;
+				float num2 = list.Count * m_font.GlyphHeight * m_fontScale;
 				float num3 = 4f;
 				float num4;
 				float num5;
@@ -397,7 +413,7 @@ namespace Game
 				bool flag = !string.IsNullOrEmpty(textData.Url);
 				for (int j = 0; j < list.Count; j++)
 				{
-					fontBatch.QueueText(position: new Vector2(num4 / 2f, ((float)j * m_font.GlyphHeight) + ((float)textData.TextureLocation.Value * (4f * m_font.GlyphHeight)) + ((num5 - num2) / 2f)), text: list[j], depth: 0f, color: flag ? new Color(0, 0, 64) : list2[j], anchor: TextAnchor.HorizontalCenter, scale: new Vector2(1f / m_font.Scale), spacing: Vector2.Zero);
+					fontBatch.QueueText(position: new Vector2(num4 / 2f, ((float)j * m_font.GlyphHeight * m_fontScale) + ((float)textData.TextureLocation.Value * (4f * m_font.GlyphHeight * m_fontScale)) + ((num5 - num2) / 2f)), text: list[j], depth: 0f, color: flag ? new Color(0, 0, 64) : list2[j], anchor: TextAnchor.HorizontalCenter, scale: new Vector2(1f / m_font.Scale * m_fontScale), spacing: Vector2.Zero);
 				}
 				textData.UsedTextureWidth = num4;
 				textData.UsedTextureHeight = num5;
@@ -545,9 +561,9 @@ namespace Game
 					float num2 = LightingManager.LightIntensityByLightValue[nearText.Light];
 					Color color = new(num2, num2, num2);
 					float x = 0f;
-					float x2 = nearText.UsedTextureWidth / (m_font.GlyphHeight * 16f);
+					float x2 = nearText.UsedTextureWidth / (m_font.GlyphHeight * 16f * m_fontScale);
 					float x3 = (float)nearText.TextureLocation.Value / 32f;
-					float x4 = ((float)nearText.TextureLocation.Value + (nearText.UsedTextureHeight / (m_font.GlyphHeight * 4f))) / 32f;
+					float x4 = ((float)nearText.TextureLocation.Value + (nearText.UsedTextureHeight / (m_font.GlyphHeight * 4f * m_fontScale))) / 32f;
 					Vector3 signSurfaceNormal = signBlock.GetSignSurfaceNormal(data);
 					Vector3 vector = new(nearText.Point.X, nearText.Point.Y, nearText.Point.Z);
 					if(!MovingBlock.IsNullOrStopped(nearText.MovingBlock))

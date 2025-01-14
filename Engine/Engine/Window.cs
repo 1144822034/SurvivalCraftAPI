@@ -372,7 +372,8 @@ namespace Engine
             GL.GetInteger(GetPName.StencilBits, out int data5);
             GL.GetInteger(GetPName.MajorVersion, out int data6);
             GL.GetInteger(GetPName.MinorVersion, out int data7);
-            Log.Information("OpenGL{6}.{7} framebuffer created, R={0} G={1} B={2} A={3}, D={4} S={5}", data0, data1, data2, data3, data4, data5,data6,data7);
+            GL.GetInteger(GetPName.MaxTextureSize, out int data8);
+            Log.Information("OpenGL{6}.{7} framebuffer created, R={0} G={1} B={2} A={3}, D={4} S={5}, MaxTextureSize={8}", data0, data1, data2, data3, data4, data5,data6,data7,data8);
             m_gameWindow.Run();//会阻塞，不要放置在前边
         }
 
