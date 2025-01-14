@@ -4,6 +4,8 @@ namespace Game
 	{
 		public static int Index = 15;
 
+		public bool IsCollapseSupportBlock_ = false;
+
 		public GlassBlock()
 		{
 			CanBeBuiltIntoFurniture = true;
@@ -19,5 +21,10 @@ namespace Game
         {
 			return false;
         }
-    }
+
+		public override bool IsCollapseSupportBlock(SubsystemTerrain subsystemTerrain,int value)
+		{
+			return IsCollapseSupportBlock_;
+		}
+	}
 }
