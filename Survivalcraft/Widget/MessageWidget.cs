@@ -21,12 +21,13 @@ namespace Game
 
 			public bool Blinking;
 
-			public Message(string text, Color color, bool blinking)
+			public Message(string text, Color color, bool blinking, float fontScale = 1f)
 			{
 				LabelWidget = new LabelWidget
 				{
 					Text = text,
 					Font = ContentManager.Get<BitmapFont>("Fonts/Pericles"),
+					FontScale = fontScale,
 					HorizontalAlignment = WidgetAlignment.Center,
 					TextAnchor = TextAnchor.Center,
 					DropShadow = true,
@@ -67,11 +68,11 @@ namespace Game
 			LoadContents(this, node);
 		}
 
-		public void DisplayMessage(string text, Color color, bool blinking)
+		public void DisplayMessage(string text, Color color, bool blinking,float fontScale=1f)
 		{
 			if (!string.IsNullOrEmpty(text))
 			{
-				AddMessage(new Message(text, color, blinking));
+				AddMessage(new Message(text, color, blinking,fontScale));
 				RemoveOldMessages();
 			}
 		}
