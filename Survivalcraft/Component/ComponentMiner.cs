@@ -620,7 +620,7 @@ namespace Game
 
         public void Update(float dt)
 		{
-			float num = (m_subsystemGameInfo.WorldSettings.GameMode == GameMode.Creative) ? (0.5f / SettingsManager.CreativeDigTime) : 4f;
+			float num = (m_subsystemGameInfo.WorldSettings.GameMode == GameMode.Creative) ? (1f / SettingsManager.CreativeDigTime) : 4f;
 			m_lastPokingPhase = PokingPhase;
 			if (DigCellFace.HasValue || PokingPhase > 0f)
 			{
