@@ -620,12 +620,21 @@ namespace Game
         {
         }
 
-        /// <summary>
-        /// 配方解码时执行
-        /// </summary>
-        /// <param name="element">配方的Xelement</param>
-        /// <param name="Decoded">是否解码成功，不成功交由下一个Mod处理</param>
-        public virtual void OnCraftingRecipeDecode(List<CraftingRecipe> m_recipes, XElement element, out bool Decoded)
+		/// <summary>
+		/// Project.xml在所有的Entity和Subsystem保存完毕后再执行
+		/// </summary>
+		/// <param name="xElement"></param>
+		public virtual void OnProjectXmlSaved(XElement xElement)
+		{
+
+		}
+
+		/// <summary>
+		/// 配方解码时执行
+		/// </summary>
+		/// <param name="element">配方的Xelement</param>
+		/// <param name="Decoded">是否解码成功，不成功交由下一个Mod处理</param>
+		public virtual void OnCraftingRecipeDecode(List<CraftingRecipe> m_recipes, XElement element, out bool Decoded)
         {
             Decoded = false;
         }
