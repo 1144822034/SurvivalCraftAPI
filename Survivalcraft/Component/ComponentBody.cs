@@ -204,6 +204,7 @@ namespace Game
 		public virtual float MaxSmoothRiseHeight { get; set; }
 
 		public virtual Vector3 CollisionVelocityChange { get; set; }
+		public virtual bool CrouchPreventsFalling { get; set; } = true;
 
 		public virtual BoundingBox BoundingBox
 		{
@@ -813,7 +814,7 @@ namespace Game
 		{
 			Vector3 stanceBoxSize = StanceBoxSize;
 			m_collisionBoxes.Clear();
-			if (m_crouchFactor >= 1f && axis != 1)
+			if (CrouchPreventsFalling && m_crouchFactor >= 1f && axis != 1)
 			{
 				FindCrouchCollisionBoxes(position, new Vector2(stanceBoxSize.X - 0.08f, stanceBoxSize.Z - 0.08f), m_collisionBoxes);
 			}
