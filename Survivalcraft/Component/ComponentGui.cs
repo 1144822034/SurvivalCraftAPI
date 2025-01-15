@@ -184,6 +184,8 @@ namespace Game
 			set;
 		}
 
+		public virtual bool ShowTouchWidget => m_componentPlayer.ComponentInput.IsControlledByTouch;
+
 		public Widget ModalPanelWidget
 		{
 			get
@@ -354,7 +356,7 @@ namespace Game
 		{
 			float num = MathUtils.Min(Time.FrameDuration, 0.1f);
 			bool flag = ModalPanelWidget != null && (m_modalPanelAnimationData == null || m_modalPanelAnimationData.NewWidget != null);
-			float num2 = (!(m_componentPlayer.ComponentInput.IsControlledByTouch | flag)) ? 1 : 0;
+			float num2 = (!(ShowTouchWidget | flag)) ? 1 : 0;
 			float x = num2 - m_sidePanelsFactor;
 			if (MathF.Abs(x) > 0.01f)
 			{
@@ -446,16 +448,16 @@ namespace Game
 				m_largeMessageWidget.IsVisible = false;
 			}
 			ControlsContainerWidget.IsVisible = m_componentPlayer.PlayerData.IsReadyForPlaying && m_componentPlayer.GameWidget.ActiveCamera.IsEntityControlEnabled && componentSleep.SleepFactor <= 0f;
-			m_moveRectangleContainerWidget.IsVisible = !SettingsManager.HideMoveLookPads && componentInput.IsControlledByTouch;
+			m_moveRectangleContainerWidget.IsVisible = !SettingsManager.HideMoveLookPads && ShowTouchWidget;
 			bool flag = false;
-			if (!SettingsManager.HideMoveLookPads && componentInput.IsControlledByTouch)
+			if (!SettingsManager.HideMoveLookPads && ShowTouchWidget)
 			{
 				if (SettingsManager.MoveControlMode == MoveControlMode.Buttons && SettingsManager.LookControlMode == LookControlMode.Pad) flag = true;
 				else if (SettingsManager.MoveControlMode == MoveControlMode.Pad) flag = true;
 			}
 			m_lookRectangleContainerWidget.IsVisible = flag;
-			m_lookPadContainerWidget.IsVisible = !SettingsManager.HideMoveLookPads && componentInput.IsControlledByTouch;
-			MoveRoseWidget.IsVisible = componentInput.IsControlledByTouch;
+			m_lookPadContainerWidget.IsVisible = !SettingsManager.HideMoveLookPads && ShowTouchWidget;
+			MoveRoseWidget.IsVisible = ShowTouchWidget;
 			m_moreContentsWidget.IsVisible = m_moreButtonWidget.IsChecked;
 			HealthBarWidget.IsVisible = gameMode != GameMode.Creative;
 			FoodBarWidget.IsVisible = gameMode != 0 && worldSettings.AreAdventureSurvivalMechanicsEnabled;
@@ -482,6 +484,7 @@ namespace Game
 				m_moveRectangleWidget.FlipHorizontal = false;
 				m_lookRectangleWidget.FlipHorizontal = true;
 			}
+			m_moveContainerWidget.Margin = new Vector2(SettingsManager.MoveWidgetMarginX, SettingsManager.MoveWidgetMarginY) * ControlsContainerWidget.ActualSize;
 			m_precipitationButtonWidget.IsChecked = m_subsystemWeather.IsPrecipitationStarted;
 			m_fogButtonWidget.IsChecked = m_subsystemWeather.IsFogStarted;
 			m_crouchButtonWidget.IsChecked = m_componentPlayer.ComponentBody.TargetCrouchFactor > 0f;

@@ -2923,7 +2923,9 @@
       "MemoryBank Style:",
       "Creative Mode Drag Max Stack Of Blocks:",
       "Drag Half Stack Of Blocks In Split:",
-      "Touch Screen Joystick Offset"
+      "Touch Screen Joystick Offset",
+      "Touch Screen Joystick Offset X",
+      "Touch Screen Joystick Offset Y"
     ],
     "SettingsGraphicsScreen": {
       "1": "Adjust Graphics Settings",
