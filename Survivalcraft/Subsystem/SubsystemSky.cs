@@ -661,8 +661,8 @@ namespace Game
 					float s3 = ((num3 & 1) == 0) ? 1 : (-1);
 					float s4 = MathUtils.Lerp(0.05f, 0.2f, (float)(double)((num3 >> 8) & 0xFF) / 255f);
 					float num5 = num2;
-					float num6 = num5 - (num4 * MathUtils.Lerp(0.45f, 0.55f, (float)(double)((num3 >> 16) & 0xFF) / 255f));
-					float num7 = num5 - (num4 * MathUtils.Lerp(0.45f, 0.55f, (float)(double)((num3 >> 24) & 0xFF) / 255f));
+					float num6 = num5 - (num4 * MathUtils.Lerp(0.45f, 0.55f, (float)((num3 >> 16) & 0xFF) / 255f));
+					float num7 = num5 - (num4 * MathUtils.Lerp(0.45f, 0.55f, (float)((num3 >> 24) & 0xFF) / 255f));
 					float num8 = num5 - num4;
 					Vector3 p = new Vector3(value.X, num5, value.Z) + v2;
 					Vector3 vector = new Vector3(value.X, num6, value.Z) + v2 - (num4 * v * s3 * s4);
@@ -729,10 +729,10 @@ namespace Game
 					texturedBatch3D.TriangleVertices.Array[count2++] = new VertexPositionColorTexture(position, color, texCoord);
 					if (j > 0 && i > 0)
 					{
-						ushort num9 = (ushort)(count + j + (i * 7));
-						ushort num10 = (ushort)(count + (j - 1) + (i * 7));
-						ushort num11 = (ushort)(count + (j - 1) + ((i - 1) * 7));
-						ushort num12 = (ushort)(count + j + ((i - 1) * 7));
+						int num9 = count + j + (i * 7);
+						int num10 = count + (j - 1) + (i * 7);
+						int num11 = count + (j - 1) + ((i - 1) * 7);
+						int num12 = count + j + ((i - 1) * 7);
 						if ((num2 <= 0 && num3 <= 0) || (num2 > 0 && num3 > 0))
 						{
 							texturedBatch3D.TriangleIndices.Array[count3++] = num9;
@@ -908,10 +908,10 @@ namespace Game
 				Vector3 v2 = 900f * v;
 				Vector3 vector = Vector3.Normalize(Vector3.Cross((v.X > v.Y) ? Vector3.UnitY : Vector3.UnitX, v));
 				Vector3 v3 = Vector3.Normalize(Vector3.Cross(vector, v));
-				Vector3 position = v2 + (s * (-vector - v3));
-				Vector3 position2 = v2 + (s * (vector - v3));
-				Vector3 position3 = v2 + (s * (vector + v3));
-				Vector3 position4 = v2 + (s * (-vector + v3));
+				Vector3 position = v2 + (num * (-vector - v3));
+				Vector3 position2 = v2 + (num * (vector - v3));
+				Vector3 position3 = v2 + (num * (vector + v3));
+				Vector3 position4 = v2 + (num * (-vector + v3));
 				StarVertex starVertex = array[i * 4] = new StarVertex
 				{
 					Position = position,
