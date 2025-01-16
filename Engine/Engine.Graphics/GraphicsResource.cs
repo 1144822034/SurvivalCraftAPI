@@ -30,9 +30,9 @@ namespace Engine.Graphics
 
 		public abstract int GetGpuMemoryUsage();
 
-		internal abstract void HandleDeviceLost();
+        public abstract void HandleDeviceLost();
 
-		internal abstract void HandleDeviceReset();
+        public abstract void HandleDeviceReset();
 
         public void VerifyNotDisposed()
 		{

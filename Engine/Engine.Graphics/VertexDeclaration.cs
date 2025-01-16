@@ -18,7 +18,8 @@ namespace Engine.Graphics
 			set;
 		}
 
-		public VertexDeclaration(params VertexElement[] elements)
+        public VertexDeclaration(params VertexElement[] elements) : this(true, elements){}
+		public VertexDeclaration(bool useCache = true, params VertexElement[] elements)
 		{
 			if (elements.Length == 0)
 			{
@@ -32,6 +33,11 @@ namespace Engine.Graphics
 				}
 				VertexStride = MathUtils.Max(VertexStride, vertexElement.Offset + vertexElement.Format.GetSize());
 			}
+            if (!useCache)
+            {
+                m_elements = elements.ToArray();
+                return;
+            }
 			for (int j = 0; j < m_allElements.Count; j++)
 			{
 				if (elements.SequenceEqual(m_allElements[j]))

@@ -66,12 +66,12 @@ namespace Engine.Graphics
 			}
 		}
 
-		internal override void HandleDeviceLost()
+		public override void HandleDeviceLost()
 		{
 			DeleteBuffer();
 		}
 
-		internal override void HandleDeviceReset()
+        public override void HandleDeviceReset()
 		{
 			AllocateBuffer();
 		}

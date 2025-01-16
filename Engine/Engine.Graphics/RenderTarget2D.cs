@@ -90,12 +90,12 @@ namespace Engine.Graphics
             GL.GenerateMipmap(TextureTarget.Texture2D);
         }
 
-        internal override void HandleDeviceLost()
+        public override void HandleDeviceLost()
         {
             DeleteRenderTarget();
         }
 
-        internal override void HandleDeviceReset()
+        public override void HandleDeviceReset()
         {
             AllocateRenderTarget();
         }

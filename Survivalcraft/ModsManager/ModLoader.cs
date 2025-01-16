@@ -1522,5 +1522,23 @@ namespace Game
 		public virtual void OnScreenLeaved(Screen screen) 
 		{
 		}
+
+		/// <summary>
+		/// 在Widget即将执行Update()时执行
+		/// </summary>
+		/// <param name="widget"></param>
+		public virtual void BeforeWidgetUpdate(Widget widget)
+		{
+
+		}
+
+		/// <summary>
+		/// 在Widget完成Update()后立即执行
+		/// </summary>
+		/// <param name="widget"></param>
+		public virtual void AfterWidgetUpdate(Widget widget)
+		{
+
+		}	
 	}
 }

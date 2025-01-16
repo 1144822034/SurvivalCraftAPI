@@ -1014,7 +1014,19 @@ namespace Game
 					}
 				}
 			}
-			if (widget.Update1 == null) widget.Update(); else widget.Update1();
+			if(widget.Update1 == null)
+			{
+				ModsManager.HookAction("BeforeWidgetUpdate",loader => {
+					loader.BeforeWidgetUpdate(widget);
+					return false;
+				});
+				widget.Update();
+				ModsManager.HookAction("AfterWidgetUpdate",loader => {
+					loader.AfterWidgetUpdate(widget);
+					return false;
+				});
+			}
+			else widget.Update1();
 		}
 	}
 }

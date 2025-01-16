@@ -43,8 +43,9 @@ namespace Game
 		public SliderWidget m_holdDurationSlider;
 
 		public SliderWidget m_dragDistanceSlider;
-		
 
+		public SliderWidget m_moveWidgetMarginXSlider;
+		public SliderWidget m_moveWidgetMarginYSlider;
 		public SettingsControlsScreen()
 		{
 			XElement node = ContentManager.Get<XElement>("Screens/SettingsControlsScreen");
@@ -68,6 +69,8 @@ namespace Game
 			m_holdDurationSlider = Children.Find<SliderWidget>("HoldDurationSlider");
 			m_dragDistanceSlider = Children.Find<SliderWidget>("DragDistanceSlider");
 			m_MemoryBankStyle = Children.Find<ButtonWidget>("MemoryBankStyle");
+			m_moveWidgetMarginXSlider = Children.Find<SliderWidget>("MoveWidgetMarginXSlider");
+			m_moveWidgetMarginYSlider = Children.Find<SliderWidget>("MoveWidgetMarginYSlider");
 			m_horizontalCreativeFlightPanel.IsVisible = true;
 		}
 
@@ -141,6 +144,14 @@ namespace Game
 			{
 				SettingsManager.UsePrimaryMemoryBank = !SettingsManager.UsePrimaryMemoryBank;
 			}
+			if(m_moveWidgetMarginXSlider.IsSliding)
+			{
+				SettingsManager.MoveWidgetMarginX = m_moveWidgetMarginXSlider.Value;
+			}
+			if(m_moveWidgetMarginYSlider.IsSliding)
+			{
+				SettingsManager.MoveWidgetMarginY = m_moveWidgetMarginYSlider.Value;
+			}
 			if (m_AllowInitialIntro.IsClicked) SettingsManager.AllowInitialIntro = !SettingsManager.AllowInitialIntro;
 			m_moveControlModeButton.Text = LanguageControl.Get("MoveControlMode", SettingsManager.MoveControlMode.ToString());
 			m_lookControlModeButton.Text = LanguageControl.Get("LookControlMode", SettingsManager.LookControlMode.ToString());
@@ -168,6 +179,10 @@ namespace Game
 			m_holdDurationSlider.Text = $"{MathF.Round(1000f * SettingsManager.MinimumHoldDuration)}ms";
 			m_dragDistanceSlider.Value = SettingsManager.MinimumDragDistance;
 			m_dragDistanceSlider.Text = $"{MathF.Round(SettingsManager.MinimumDragDistance)} " + LanguageControl.Get(GetType().Name, 1);
+			m_moveWidgetMarginXSlider.Value = SettingsManager.MoveWidgetMarginX;
+			m_moveWidgetMarginXSlider.Text = String.Format("{0:F0}%",SettingsManager.MoveWidgetMarginX * 100f);
+			m_moveWidgetMarginYSlider.Value = SettingsManager.MoveWidgetMarginY;
+			m_moveWidgetMarginYSlider.Text = String.Format("{0:F0}%", SettingsManager.MoveWidgetMarginY * 100f);
 			if (Input.Back || Input.Cancel || Children.Find<ButtonWidget>("TopBar.Back").IsClicked)
 			{
 				ScreensManager.SwitchScreen(ScreensManager.PreviousScreen);

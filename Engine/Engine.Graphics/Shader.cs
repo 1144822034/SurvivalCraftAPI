@@ -229,12 +229,12 @@ namespace Engine.Graphics
 			return str + shaderCode;
 		}
 
-		internal override void HandleDeviceLost()
+        public override void HandleDeviceLost()
 		{
 			DeleteShaders();
 		}
 
-		internal override void HandleDeviceReset()
+        public override void HandleDeviceReset()
 		{
 			CompileShaders();
 		}

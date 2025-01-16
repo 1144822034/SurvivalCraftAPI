@@ -177,6 +177,7 @@ namespace Engine.Graphics
 
         public static void DrawIndexed(PrimitiveType primitiveType, Shader shader, VertexBuffer vertexBuffer, IndexBuffer indexBuffer, int startIndex, int indicesCount)
         {
+            Console.WriteLine("DrawIndexed");
             VerifyParametersDrawIndexed(primitiveType, shader, vertexBuffer, indexBuffer, startIndex, indicesCount);
             GLWrapper.ApplyRenderTarget(RenderTarget);
             GLWrapper.ApplyViewportScissor(Viewport, ScissorRectangle, RasterizerState.ScissorTestEnable);
@@ -197,26 +198,26 @@ namespace Engine.Graphics
             GLWrapper.InitializeCache();
         }
 
-        internal static void Initialize()
+        public static void Initialize()
         {
             GLWrapper.Initialize();
             GLWrapper.InitializeCache();
             Resize();
         }
 
-        internal static void Dispose()
+        public static void Dispose()
         {
         }
 
-        internal static void BeforeFrame()
+        public static void BeforeFrame()
         {
         }
 
-        internal static void AfterFrame()
+        public static void AfterFrame()
         {
         }
 
-        internal static void Resize()
+        public static void Resize()
         {
             BackbufferSize = new Point2(Window.Size.X, Window.Size.Y);
             Viewport = new Viewport(0, 0, Window.Size.X, Window.Size.Y);
@@ -238,7 +239,7 @@ namespace Engine.Graphics
             Clear(color.HasValue ? new Vector4?(new Vector4(color.Value)) : null, depth, stencil);
         }
 
-        internal static void VerifyParametersDrawUser<T>(PrimitiveType primitiveType, Shader shader, VertexDeclaration vertexDeclaration, T[] vertexData, int startVertex, int verticesCount) where T : struct
+        public static void VerifyParametersDrawUser<T>(PrimitiveType primitiveType, Shader shader, VertexDeclaration vertexDeclaration, T[] vertexData, int startVertex, int verticesCount) where T : struct
         {
             int num = Utilities.SizeOf<T>();
             ArgumentNullException.ThrowIfNull(shader);
@@ -255,7 +256,7 @@ namespace Engine.Graphics
             shader.VerifyNotDisposed();
         }
 
-        internal static void VerifyParametersDrawUserIndexed<T>(PrimitiveType primitiveType, Shader shader, VertexDeclaration vertexDeclaration, T[] vertexData, int startVertex, int verticesCount, int[] indexData, int startIndex, int indicesCount) where T : struct
+        public static void VerifyParametersDrawUserIndexed<T>(PrimitiveType primitiveType, Shader shader, VertexDeclaration vertexDeclaration, T[] vertexData, int startVertex, int verticesCount, int[] indexData, int startIndex, int indicesCount) where T : struct
         {
             int num = Utilities.SizeOf<T>();
             ArgumentNullException.ThrowIfNull(shader);
@@ -277,7 +278,7 @@ namespace Engine.Graphics
             shader.VerifyNotDisposed();
         }
 
-        internal static void VerifyParametersDraw(PrimitiveType primitiveType, Shader shader, VertexBuffer vertexBuffer, int startVertex, int verticesCount)
+        public static void VerifyParametersDraw(PrimitiveType primitiveType, Shader shader, VertexBuffer vertexBuffer, int startVertex, int verticesCount)
         {
             vertexBuffer.VerifyNotDisposed();
             ArgumentNullException.ThrowIfNull(shader);
@@ -289,7 +290,7 @@ namespace Engine.Graphics
             shader.VerifyNotDisposed();
         }
 
-        internal static void VerifyParametersDrawIndexed(PrimitiveType primitiveType, Shader shader, VertexBuffer vertexBuffer, IndexBuffer indexBuffer, int startIndex, int indicesCount)
+        public static void VerifyParametersDrawIndexed(PrimitiveType primitiveType, Shader shader, VertexBuffer vertexBuffer, IndexBuffer indexBuffer, int startIndex, int indicesCount)
         {
             ArgumentNullException.ThrowIfNull(shader);
             ArgumentNullException.ThrowIfNull(vertexBuffer);
@@ -303,7 +304,7 @@ namespace Engine.Graphics
             indexBuffer.VerifyNotDisposed();
         }
 
-        internal static void HandleDeviceLost()
+        public static void HandleDeviceLost()
         {
             foreach (GraphicsResource resource in GraphicsResource.m_resources)
             {
@@ -312,7 +313,7 @@ namespace Engine.Graphics
             Display.DeviceLost?.Invoke();
         }
 
-        internal static void HandleDeviceReset()
+        public static void HandleDeviceReset()
         {
             foreach (GraphicsResource resource in GraphicsResource.m_resources)
             {
