@@ -207,12 +207,12 @@ namespace Engine.Graphics
             Utilities.Swap(ref texture1.m_tag, ref texture2.m_tag);
         }
 
-		internal override void HandleDeviceLost()
+        public override void HandleDeviceLost()
 		{
 			DeleteTexture();
 		}
 
-		internal override void HandleDeviceReset()
+        public override void HandleDeviceReset()
 		{
 			AllocateTexture();
 		}

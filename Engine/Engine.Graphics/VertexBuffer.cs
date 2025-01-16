@@ -66,12 +66,12 @@ namespace Engine.Graphics
 			}
 		}
 
-		internal override void HandleDeviceLost()
+		public override void HandleDeviceLost()
 		{
 			DeleteBuffer();
 		}
 
-		internal override void HandleDeviceReset()
+        public override void HandleDeviceReset()
 		{
 			AllocateBuffer();
 		}
@@ -97,7 +97,7 @@ namespace Engine.Graphics
 			return VertexDeclaration.VertexStride * VerticesCount;
 		}
 
-		private void InitializeVertexBuffer(VertexDeclaration vertexDeclaration, int verticesCount)
+        public void InitializeVertexBuffer(VertexDeclaration vertexDeclaration, int verticesCount)
 		{
 			ArgumentNullException.ThrowIfNull(vertexDeclaration);
 			if (verticesCount <= 0)
@@ -108,7 +108,7 @@ namespace Engine.Graphics
 			VerticesCount = verticesCount;
 		}
 
-		private void VerifyParametersSetData<T>(T[] source, int sourceStartIndex, int sourceCount, int targetStartIndex = 0) where T : struct
+		public void VerifyParametersSetData<T>(T[] source, int sourceStartIndex, int sourceCount, int targetStartIndex = 0) where T : struct
 		{
 			VerifyNotDisposed();
 			int num = Utilities.SizeOf<T>();
