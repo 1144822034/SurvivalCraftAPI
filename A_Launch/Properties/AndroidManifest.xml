@@ -8,5 +8,7 @@
 	<uses-permission android:name="android.permission.VIBRATE" />
 	<uses-permission android:name="android.permission.INTERNET" />
 	<meta-data android:name="android.notch_support" android:value="true" />
+	<meta-data android:name="android.game_mode_config"
+		   android:resource="@xml/game_mode_config" />
 	<!--by把红色赋予黑海，适配异形屏-->
 </manifest>

@@ -1,15 +1,15 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
 	<TargetFramework>net9.0-android35</TargetFramework>
 	<PlatformTarget>AnyCPU</PlatformTarget>
 	<AndroidApplication>True</AndroidApplication>
-	<ApplicationId>com.candy.SurvivalcraftAPI1_7</ApplicationId>
+	<ApplicationId>com.candy.SurvivalcraftAPI1_8</ApplicationId>
 	<AssemblyName>Launch_android</AssemblyName>
 	<RootNamespace>Game</RootNamespace>
 	<Nullable>enable</Nullable>
 	<ImplicitUsings>enable</ImplicitUsings>
 	<Product>Survivalcraft</Product>
-	<Version>2.3.10.4</Version>
+	<Version>2.4.10.4</Version>
 	<AndroidStoreUncompressedFileExtensions>.dll</AndroidStoreUncompressedFileExtensions>
 	<RuntimeIdentifiers>android-arm64</RuntimeIdentifiers>
 	<NeutralLanguage>zh-CN</NeutralLanguage>
