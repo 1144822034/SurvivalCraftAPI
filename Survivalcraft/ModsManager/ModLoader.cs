@@ -1539,6 +1539,34 @@ namespace Game
 		public virtual void AfterWidgetUpdate(Widget widget)
 		{
 
-		}	
+		}
+		public virtual void OnChaseBehaviorStartChasing(ComponentChaseBehavior chaseBehavior)
+		{
+
+		}
+		public virtual void OnChaseBehaviorStopChasing(ComponentChaseBehavior chaseBehavior)
+		{
+
+		}
+
+		/// <summary>
+		/// 生物在选择追捕对象时，对被追捕对象的评分。评分越高，则会被选中。
+		/// </summary>
+		/// <param name="chaseBehavior"></param>
+		/// <param name="creatureToBeTarget">被评估的对象</param>
+		/// <param name="score">给出的评分</param>
+		public virtual void ChaseBehaviorScoreTarget(ComponentChaseBehavior chaseBehavior, ComponentCreature creatureToBeTarget, ref float score)
+		{
+
+		}
+
+		public virtual void UpdateChaseBehaviorLookingForTarget(ComponentChaseBehavior chaseBehavior)
+		{
+
+		}
+		public virtual void UpdateChaseBehaviorChasing(ComponentChaseBehavior chaseBehavior)
+		{
+
+		}
 	}
 }

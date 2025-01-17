@@ -121,6 +121,10 @@ namespace Game
 			m_chaseTime = maxChaseTime;
 			m_isPersistent = isPersistent;
 			m_importanceLevel = isPersistent ? ImportanceLevelPersistent : ImportanceLevelNonPersistent;
+			ModsManager.HookAction("OnChaseBehaviorStartChasing",loader => {
+				loader.OnChaseBehaviorStartChasing(this);
+				return false;
+			});
 		}
 
 		public virtual void StopAttack()
@@ -133,6 +137,10 @@ namespace Game
 			m_chaseTime = 0;
 			m_isPersistent = false;
 			m_importanceLevel = 0;
+			ModsManager.HookAction("OnChaseBehaviorStopChasing",loader => {
+				loader.OnChaseBehaviorStopChasing(this);
+                return false;
+			});
         }
 
 		public void Update(float dt)
@@ -260,29 +268,36 @@ namespace Game
 				m_target = null;
 			}, delegate
 			{
-				if (IsActive)
+				if(IsActive)
 				{
 					m_stateMachine.TransitionTo("Chasing");
 				}
-				else if (!Suppressed && m_autoChaseSuppressionTime <= 0f && (m_target == null || ScoreTarget(m_target) <= 0f) && m_componentCreature.ComponentHealth.Health > MinHealthToAttackActively)
+				else
 				{
-					m_range = (m_subsystemSky.SkyLightIntensity < 0.2f) ? m_nightChaseRange : m_dayChaseRange;
-					ComponentCreature componentCreature = FindTarget();
-					if (componentCreature != null)
+					if(!Suppressed && m_autoChaseSuppressionTime <= 0f && (m_target == null || ScoreTarget(m_target) <= 0f) && m_componentCreature.ComponentHealth.Health > MinHealthToAttackActively)
 					{
-						m_targetInRangeTime += m_dt;
+						m_range = (m_subsystemSky.SkyLightIntensity < 0.2f) ? m_nightChaseRange : m_dayChaseRange;
+						ComponentCreature componentCreature = FindTarget();
+						if(componentCreature != null)
+						{
+							m_targetInRangeTime += m_dt;
+						}
+						else
+						{
+							m_targetInRangeTime = 0f;
+						}
+						if(m_targetInRangeTime > TargetInRangeTimeToChase)
+						{
+							bool flag = m_subsystemSky.SkyLightIntensity >= 0.1f;
+							float maxRange = flag ? (m_dayChaseRange + 6f) : (m_nightChaseRange + 6f);
+							float maxChaseTime = flag ? (m_dayChaseTime * m_random.Float(0.75f,1f)) : (m_nightChaseTime * m_random.Float(0.75f,1f));
+							Attack(componentCreature,maxRange,maxChaseTime,!flag);
+						}
 					}
-					else
-					{
-						m_targetInRangeTime = 0f;
-					}
-					if (m_targetInRangeTime > TargetInRangeTimeToChase)
-					{
-						bool flag = m_subsystemSky.SkyLightIntensity >= 0.1f;
-						float maxRange = flag ? (m_dayChaseRange + 6f) : (m_nightChaseRange + 6f);
-						float maxChaseTime = flag ? (m_dayChaseTime * m_random.Float(0.75f, 1f)) : (m_nightChaseTime * m_random.Float(0.75f, 1f));
-						Attack(componentCreature, maxRange, maxChaseTime, !flag);
-					}
+					ModsManager.HookAction("UpdateChaseBehaviorLookingForTarget", loader => {
+						loader.UpdateChaseBehaviorLookingForTarget(this);
+						return false;
+					});
 				}
 			}, null);
 			m_stateMachine.AddState("RandomMoving", delegate
@@ -378,6 +393,10 @@ namespace Game
 						}
 					}
 				}
+				ModsManager.HookAction("UpdateChaseBehaviorChasing",loader => {
+					loader.UpdateChaseBehaviorChasing(this);
+					return false;
+				});
 			}, null);
 			m_stateMachine.TransitionTo("LookingForTarget");
 		}
@@ -407,20 +426,25 @@ namespace Game
 
 		public virtual float ScoreTarget(ComponentCreature componentCreature)
 		{
-			bool flag = componentCreature.Entity.FindComponent<ComponentPlayer>() != null;
-			bool flag2 = m_componentCreature.Category != CreatureCategory.WaterPredator && m_componentCreature.Category != CreatureCategory.WaterOther;
-			bool flag3 = componentCreature == Target || m_subsystemGameInfo.WorldSettings.GameMode > GameMode.Harmless;
-			bool flag4 = (componentCreature.Category & m_autoChaseMask) != 0;
-			bool flag5 = componentCreature == Target || (flag4 && MathUtils.Remainder((0.004999999888241291 * m_subsystemTime.GameTime) + (GetHashCode() % 1000 / 1000f) + (componentCreature.GetHashCode() % 1000 / 1000f), 1.0) < m_chaseNonPlayerProbability);
-			if (componentCreature != m_componentCreature && ((!flag && flag5) || (flag && flag3)) && componentCreature.Entity.IsAddedToProject && componentCreature.ComponentHealth.Health > 0f && (flag2 || IsTargetInWater(componentCreature.ComponentBody)))
+			float score = 0f;
+			bool isPlayer = componentCreature.Entity.FindComponent<ComponentPlayer>() != null;
+			bool isLandCreature = m_componentCreature.Category != CreatureCategory.WaterPredator && m_componentCreature.Category != CreatureCategory.WaterOther;
+			bool notHarmless = componentCreature == Target || m_subsystemGameInfo.WorldSettings.GameMode > GameMode.Harmless;
+			bool isAutoChaseMask = (componentCreature.Category & m_autoChaseMask) != 0;
+			bool allowToChaseNonCreature = componentCreature == Target || (isAutoChaseMask && MathUtils.Remainder((0.004999999888241291 * m_subsystemTime.GameTime) + (GetHashCode() % 1000 / 1000f) + (componentCreature.GetHashCode() % 1000 / 1000f), 1.0) < m_chaseNonPlayerProbability);
+			if (componentCreature != m_componentCreature && ((!isPlayer && allowToChaseNonCreature) || (isPlayer && notHarmless)) && componentCreature.Entity.IsAddedToProject && componentCreature.ComponentHealth.Health > 0f && (isLandCreature || IsTargetInWater(componentCreature.ComponentBody)))
 			{
 				float num = Vector3.Distance(m_componentCreature.ComponentBody.Position, componentCreature.ComponentBody.Position);
 				if (num < m_range)
 				{
-					return m_range - num;
+					score = m_range - num;
 				}
 			}
-			return 0f;
+			ModsManager.HookAction("ChaseBehaviorScoreTarget",loader => {
+				loader.ChaseBehaviorScoreTarget(this,componentCreature,ref score);
+				return false;
+			});
+			return score;
 		}
 
 		public virtual bool IsTargetInWater(ComponentBody target)
