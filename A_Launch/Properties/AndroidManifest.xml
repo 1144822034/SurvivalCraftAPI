@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<manifest xmlns:android="http://schemas.android.com/apk/res/android" android:versionCode="18000" android:versionName="API1.80" package="com.candy.survivalcraftAPI1_8">
-	<application android:label="@string/ApiTitle" android:theme="@style/MainTheme" android:requestLegacyExternalStorage="true" android:icon="@mipmap/icon" android:usesCleartextTraffic="true" android:localeConfig="@xml/locales_config" android:appCategory="game" android:isGame="true"/>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android" android:versionCode="18010" android:versionName="API1.80" package="com.candy.survivalcraftAPI1_8">
+	<application android:label="@string/ApiTitle" android:theme="@style/MainTheme" android:requestLegacyExternalStorage="true" android:icon="@mipmap/icon" android:usesCleartextTraffic="true" android:localeConfig="@xml/locales_config" android:appCategory="game" android:isGame="true" />
 	<uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 	<uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
 	<uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
@@ -8,7 +8,6 @@
 	<uses-permission android:name="android.permission.VIBRATE" />
 	<uses-permission android:name="android.permission.INTERNET" />
 	<meta-data android:name="android.notch_support" android:value="true" />
-	<meta-data android:name="android.game_mode_config"
-		   android:resource="@xml/game_mode_config" />
+	<meta-data android:name="android.game_mode_config" android:resource="@xml/game_mode_config" />
 	<!--by把红色赋予黑海，适配异形屏-->
 </manifest>
