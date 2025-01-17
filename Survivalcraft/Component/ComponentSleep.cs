@@ -6,6 +6,8 @@ namespace Game
 {
 	public class ComponentSleep : Component, IUpdateable
 	{
+		public Dictionary<string, Func<string> > m_conditionsToSleep = [];
+
 		public SubsystemPlayers m_subsystemPlayers;
 
 		public SubsystemSky m_subsystemSky;
@@ -38,40 +40,21 @@ namespace Game
 
 		public UpdateOrder UpdateOrder => UpdateOrder.Default;
 
+		public double m_minAutoSleepTime = 180;
+		public bool m_wakeUpWhenWet = true;
+		public bool m_wakeUpWhenInjured = true;
+		public bool m_wakeUpWhenAttacked = true;
+		public float MaxSleepBlackoutFactor = 1f;
+
 		public virtual bool CanSleep(out string reason)
 		{
-			Block block = m_componentPlayer.ComponentBody.StandingOnValue.HasValue ? BlocksManager.Blocks[Terrain.ExtractContents(m_componentPlayer.ComponentBody.StandingOnValue.Value)] : null;
-			if (block == null || m_componentPlayer.ComponentBody.ImmersionDepth > 0f)
+			foreach(string condition in m_conditionsToSleep.Keys)
 			{
-				reason = LanguageControl.Get(fName, 1);
-				return false;
-			}
-			if (block != null && block.SleepSuitability == 0f)
-			{
-				reason = LanguageControl.Get(fName, 2);
-				return false;
-			}
-			if (m_componentPlayer.ComponentVitalStats.Sleep > 0.99f)
-			{
-				reason = LanguageControl.Get(fName, 3);
-				return false;
-			}
-			if (m_componentPlayer.ComponentVitalStats.Wetness > 0.95f)
-			{
-				reason = LanguageControl.Get(fName, 4);
-				return false;
-			}
-			for (int i = -1; i <= 1; i++)
-			{
-				for (int j = -1; j <= 1; j++)
+				string reasonUnableToSleep = m_conditionsToSleep[condition]();
+				if(!string.IsNullOrEmpty(reasonUnableToSleep))
 				{
-					Vector3 start = m_componentPlayer.ComponentBody.Position + new Vector3(i, 1f, j);
-					var end = new Vector3(start.X, 255f, start.Z);
-					if (!m_subsystemTerrain.Raycast(start, end, useInteractionBoxes: false, skipAirBlocks: true, (int value, float distance) => Terrain.ExtractContents(value) != 0).HasValue)
-					{
-						reason = LanguageControl.Get(fName, 5);
-						return false;
-					}
+					reason = reasonUnableToSleep;
+					return false;
 				}
 			}
 			reason = string.Empty;
@@ -109,15 +92,15 @@ namespace Game
 				m_sleepFactor = MathUtils.Min(m_sleepFactor + (0.33f * Time.FrameDuration), 1f);
 				m_minWetness = MathUtils.Min(m_minWetness, m_componentPlayer.ComponentVitalStats.Wetness);
 				m_componentPlayer.PlayerStats.TimeSlept += m_subsystemGameInfo.TotalElapsedGameTimeDelta;
-				if ((m_componentPlayer.ComponentVitalStats.Sleep >= 1f || m_subsystemGameInfo.WorldSettings.GameMode == GameMode.Creative) && IntervalUtils.IsBetween(m_subsystemTimeOfDay.TimeOfDay, m_subsystemTimeOfDay.DayStart, IntervalUtils.Add(m_subsystemTimeOfDay.DuskStart, -0.1f)) && m_sleepStartTime.HasValue && m_subsystemGameInfo.TotalElapsedGameTime > m_sleepStartTime + 180.0)
+				if ((m_componentPlayer.ComponentVitalStats.Sleep >= 1f || m_subsystemGameInfo.WorldSettings.GameMode == GameMode.Creative) && IntervalUtils.IsBetween(m_subsystemTimeOfDay.TimeOfDay, m_subsystemTimeOfDay.DayStart, IntervalUtils.Add(m_subsystemTimeOfDay.DuskStart, -0.1f)) && m_sleepStartTime.HasValue && m_subsystemGameInfo.TotalElapsedGameTime > m_sleepStartTime + m_minAutoSleepTime)
 				{
 					WakeUp();
 				}
-				if (m_componentPlayer.ComponentHealth.HealthChange < 0f && (m_componentPlayer.ComponentHealth.Health < 0.5f || m_componentPlayer.ComponentVitalStats.Sleep > 0.5f))
+				if (m_wakeUpWhenWet && m_componentPlayer.ComponentHealth.HealthChange < 0f && (m_componentPlayer.ComponentHealth.Health < 0.5f || m_componentPlayer.ComponentVitalStats.Sleep > 0.5f))
 				{
 					WakeUp();
 				}
-				if (m_componentPlayer.ComponentVitalStats.Wetness > m_minWetness + 0.05f && m_componentPlayer.ComponentVitalStats.Sleep > 0.2f)
+				if (m_wakeUpWhenInjured && m_componentPlayer.ComponentVitalStats.Wetness > m_minWetness + 0.05f && m_componentPlayer.ComponentVitalStats.Sleep > 0.2f)
 				{
 					WakeUp();
 					m_subsystemTime.QueueGameTimeDelayedExecution(m_subsystemTime.GameTime + 1.0, delegate
@@ -155,7 +138,8 @@ namespace Game
 			{
 				m_sleepFactor = MathUtils.Max(m_sleepFactor - (1f * Time.FrameDuration), 0f);
 			}
-			m_componentPlayer.ComponentScreenOverlays.BlackoutFactor = MathUtils.Max(m_componentPlayer.ComponentScreenOverlays.BlackoutFactor, m_sleepFactor);
+			float sleepBlackoutFactor = MathUtils.Min(m_sleepFactor,MaxSleepBlackoutFactor);
+			m_componentPlayer.ComponentScreenOverlays.BlackoutFactor = MathUtils.Max(m_componentPlayer.ComponentScreenOverlays.BlackoutFactor, sleepBlackoutFactor);
 			if (m_sleepFactor > 0.01f)
 			{
 				m_componentPlayer.ComponentScreenOverlays.FloatingMessage = LanguageControl.Get(fName, 10);
@@ -177,7 +161,7 @@ namespace Game
 			m_allowManualWakeUp = valuesDictionary.GetValue<bool>("AllowManualWakeUp");
 			m_componentPlayer.ComponentBody.Attacked += delegate (Attackment attackment)
 			{
-				if (IsSleeping && m_componentPlayer.ComponentVitalStats.Sleep > 0.25f)
+				if (m_wakeUpWhenAttacked && IsSleeping && m_componentPlayer.ComponentVitalStats.Sleep > 0.25f)
 				{
 					WakeUp();
 				}
@@ -191,6 +175,56 @@ namespace Game
 				m_sleepFactor = 1f;
 				m_minWetness = float.MaxValue;
 			}
+			m_conditionsToSleep.Add("OnDryLand", delegate
+			{
+				Block block = m_componentPlayer.ComponentBody.StandingOnValue.HasValue ? BlocksManager.Blocks[Terrain.ExtractContents(m_componentPlayer.ComponentBody.StandingOnValue.Value)] : null;
+				if(block == null || m_componentPlayer.ComponentBody.ImmersionDepth > 0f)
+				{
+					return LanguageControl.Get(fName,1);
+				}
+				return string.Empty;
+			});
+			m_conditionsToSleep.Add("BlockIsComfortable" ,delegate
+			{
+				Block block = m_componentPlayer.ComponentBody.StandingOnValue.HasValue ? BlocksManager.Blocks[Terrain.ExtractContents(m_componentPlayer.ComponentBody.StandingOnValue.Value)] : null;
+				if(block != null && block.SleepSuitability == 0f)
+				{
+					return LanguageControl.Get(fName,2);
+				}
+				return string.Empty;
+			});
+			m_conditionsToSleep.Add("TiredEnough",delegate
+			{
+				if(m_componentPlayer.ComponentVitalStats.Sleep > 0.99f)
+				{
+					return LanguageControl.Get(fName,3);
+				}
+				return string.Empty;
+			});
+			m_conditionsToSleep.Add("NotTooWet",delegate
+			{
+				if(m_componentPlayer.ComponentVitalStats.Wetness > 0.95f)
+				{
+					return LanguageControl.Get(fName,4);
+				}
+				return string.Empty;
+			});
+			m_conditionsToSleep.Add("Ceiling",delegate
+			{
+				for(int i = -1; i <= 1; i++)
+				{
+					for(int j = -1; j <= 1; j++)
+					{
+						Vector3 start = m_componentPlayer.ComponentBody.Position + new Vector3(i,1f,j);
+						var end = new Vector3(start.X,255f,start.Z);
+						if(!m_subsystemTerrain.Raycast(start,end,useInteractionBoxes: false,skipAirBlocks: true,(int value,float distance) => Terrain.ExtractContents(value) != 0).HasValue)
+						{
+							return LanguageControl.Get(fName,5);
+						}
+					}
+				}
+				return string.Empty;
+			});
 		}
 
 		public override void Save(ValuesDictionary valuesDictionary, EntityToIdMap entityToIdMap)
