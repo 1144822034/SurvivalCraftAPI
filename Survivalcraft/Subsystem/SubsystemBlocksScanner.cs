@@ -73,7 +73,17 @@ namespace Game
 									SubsystemPollableBlockBehavior[] array = m_pollableBehaviorsByContents[num3];
 									for (int i = 0; i < array.Length; i++)
 									{
-										array[i].OnPoll(cellValueFast, terrainChunk.Origin.X + m_pollX, num2, terrainChunk.Origin.Y + m_pollZ, m_pollPass);
+										int x = terrainChunk.Origin.X + m_pollX;
+										int y = num2;
+										int z = terrainChunk.Origin.Y + m_pollZ;
+										try
+										{
+											array[i].OnPoll(cellValueFast,x ,y, z, m_pollPass);
+										}
+										catch(Exception e)
+										{
+											Log.Error(array[i].ToString() + " Poll " + BlocksManager.Blocks[num3].GetType().Name + " at " + string.Format("({0},{1},{2}) ", x, y, z) + "\n" + e);
+										}
 									}
 								}
 								num2++;
