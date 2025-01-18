@@ -21,7 +21,10 @@ namespace Game
 		public Vector3 m_randomLookPoint;
 
 		public Random m_random = new();
-
+		/// <summary>
+		/// 模型透明度
+		/// </summary>
+		public float Transparent=1f;
 		public float Bob
 		{
 			get;
@@ -156,7 +159,8 @@ namespace Game
 		public override void Animate()
 		{
 			AnimateCreature();
-			Opacity = (m_componentCreature.ComponentSpawn.SpawnDuration > 0f) ? ((float)MathUtils.Saturate((m_subsystemGameInfo.TotalElapsedGameTime - m_componentCreature.ComponentSpawn.SpawnTime) / m_componentCreature.ComponentSpawn.SpawnDuration)) : 1f;
+			var qpacity = (m_componentCreature.ComponentSpawn.SpawnDuration > 0f) ? ((float)MathUtils.Saturate((m_subsystemGameInfo.TotalElapsedGameTime - m_componentCreature.ComponentSpawn.SpawnTime) / m_componentCreature.ComponentSpawn.SpawnDuration)) : 1f;
+			Opacity = MathUtils.Min(qpacity, Transparent);
 			if (m_componentCreature.ComponentSpawn.DespawnTime.HasValue)
 			{
 				Opacity = MathUtils.Min(Opacity.Value, (float)MathUtils.Saturate(1.0 - ((m_subsystemGameInfo.TotalElapsedGameTime - m_componentCreature.ComponentSpawn.DespawnTime.Value) / m_componentCreature.ComponentSpawn.DespawnDuration)));
