@@ -19,26 +19,26 @@
 	<RepositoryType>Git</RepositoryType>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
-    <TargetFramework>net9.0-windows</TargetFramework>
+    <TargetFramework>net9-windows</TargetFramework>
     <DefineConstants>DEBUG</DefineConstants>
     <WarningLevel>2</WarningLevel>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
-    <TargetFrameworks>net9.0;net9.0-windows;net9.0-android35.0</TargetFrameworks>
+    <TargetFrameworks>net9;net9-windows;net9-android</TargetFrameworks>
     <DebugType>none</DebugType>
     <DefineConstants>TRACE</DefineConstants>
   </PropertyGroup>
-  <PropertyGroup Condition="'$(TargetFramework)' == 'net9.0-android35.0'">
+  <PropertyGroup Condition="'$(TargetFramework)' == 'net9-android'">
 	  <SupportedOSPlatformVersion>23.0</SupportedOSPlatformVersion>
   </PropertyGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Resources\Lit.psh" Condition="'$(TargetFramework)' == 'net9.0-windows'" />
-    <EmbeddedResource Include="Resources\Lit.vsh" Condition="'$(TargetFramework)' == 'net9.0-windows'" />
-    <EmbeddedResource Include="Resources\Unlit.psh" Condition="'$(TargetFramework)' == 'net9.0-windows'" />
-    <EmbeddedResource Include="Resources\Unlit.vsh" Condition="'$(TargetFramework)' == 'net9.0-windows'" />
-    <EmbeddedResource Include="Resources\Debugfont.lst" Condition="'$(TargetFramework)' == 'net9.0-windows'" />
-    <EmbeddedResource Include="Resources\Debugfont.png" Condition="'$(TargetFramework)' == 'net9.0-windows'" />
-    <EmbeddedResource Include="Resources\icon.ico" Condition="'$(TargetFramework)' == 'net9.0-windows'" />
+    <EmbeddedResource Include="Resources\Lit.psh" Condition="'$(TargetFramework)' == 'net9-windows'" />
+    <EmbeddedResource Include="Resources\Lit.vsh" Condition="'$(TargetFramework)' == 'net9-windows'" />
+    <EmbeddedResource Include="Resources\Unlit.psh" Condition="'$(TargetFramework)' == 'net9-windows'" />
+    <EmbeddedResource Include="Resources\Unlit.vsh" Condition="'$(TargetFramework)' == 'net9-windows'" />
+    <EmbeddedResource Include="Resources\Debugfont.lst" Condition="'$(TargetFramework)' == 'net9-windows'" />
+    <EmbeddedResource Include="Resources\Debugfont.png" Condition="'$(TargetFramework)' == 'net9-windows'" />
+    <EmbeddedResource Include="Resources\icon.ico" Condition="'$(TargetFramework)' == 'net9-windows'" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="NVorbis" Version="0.10.5" />
@@ -48,12 +48,12 @@
 	  <PackageReference Include="NAudio.Core" Version="2.2.1" /><!--Resolve reference confliction between NLayer.NAudioSupport and NAudio.Flac.Unknown.Mod-->
   </ItemGroup>
   <ItemGroup>
-	<PackageReference Condition="'$(TargetFramework)' != 'net9.0-android35.0'" Include="OpenTK" Version="3.3.3" />
+	<PackageReference Condition="'$(TargetFramework)' != 'net9-android'" Include="OpenTK" Version="3.3.3" />
 	<PackageReference Include="System.Net.Http" Version="4.3.4" />
 	<PackageReference Include="System.Private.Uri" Version="4.3.2" />
 	<PackageReference Include="System.Text.RegularExpressions" Version="4.3.1" />
 	<PackageReference Include="Tomlyn" Version="0.18.0" />
-    <Reference Include="OpenTK-1.0.2moded" Condition="'$(TargetFramework)' == 'net9.0-android35.0'">
+    <Reference Include="OpenTK-1.0.2moded" Condition="'$(TargetFramework)' == 'net9-android'">
       <HintPath>reference\OpenTK-1.0.2moded.dll</HintPath>
       <Private>True</Private>
     </Reference>
@@ -64,7 +64,7 @@
   <ItemGroup>
     <None Include=".editorconfig" />
   </ItemGroup>
-  <ItemGroup Condition="'$(TargetFramework)' == 'net9.0-windows'">
+  <ItemGroup Condition="'$(TargetFramework)' == 'net9-windows'">
     <PackageReference Include="System.Drawing.Common" Version="9.0.1" />
   </ItemGroup>
 </Project>

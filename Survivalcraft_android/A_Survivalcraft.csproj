@@ -8,7 +8,7 @@
 		<GenerateAssemblyInfo>true</GenerateAssemblyInfo>
 	</PropertyGroup>
 	<PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
-		<TargetFramework>net9.0-android</TargetFramework>
+		<TargetFramework>net9-android</TargetFramework>
 		<OutputType>Library</OutputType>
 		<DefineConstants>TRACE</DefineConstants>
 		<AllowUnsafeBlocks>true</AllowUnsafeBlocks>
