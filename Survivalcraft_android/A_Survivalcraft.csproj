@@ -1,6 +1,5 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 	<PropertyGroup>
-		<OutputType>Library</OutputType>
 		<GenerateAssemblyInfo>False</GenerateAssemblyInfo>
 		<AndroidResgenFile>Resources\Resource.designer.cs</AndroidResgenFile>
 		<AndroidUseLatestPlatformSdk>true</AndroidUseLatestPlatformSdk>
@@ -9,7 +8,8 @@
 		<GenerateAssemblyInfo>true</GenerateAssemblyInfo>
 	</PropertyGroup>
 	<PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
-		<TargetFramework>net9.0-android35.0</TargetFramework>
+		<TargetFramework>net9.0-android</TargetFramework>
+		<OutputType>Library</OutputType>
 		<DefineConstants>TRACE</DefineConstants>
 		<AllowUnsafeBlocks>true</AllowUnsafeBlocks>
 	</PropertyGroup>
@@ -1018,8 +1018,6 @@
 </Reference>
 	</ItemGroup>
 	<PropertyGroup>
-<TargetFramework>net9.0-android35</TargetFramework>
-<SupportedOSPlatformVersion>23.0</SupportedOSPlatformVersion>
 <RootNamespace>Game</RootNamespace>
 <ApplicationVersion>2.4.0.0</ApplicationVersion>
 <FileVersion>2.4.0.0</FileVersion>

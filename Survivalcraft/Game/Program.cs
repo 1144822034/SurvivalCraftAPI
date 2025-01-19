@@ -90,7 +90,6 @@ namespace Game
 			Window.HandleUri += HandleUriHandler;
 			Window.Deactivated += DeactivatedHandler;
 			Window.Frame += FrameHandler;
-			ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls13;
 			CultureInfo.DefaultThreadCurrentCulture = CultureInfo.InvariantCulture;
 			CultureInfo.DefaultThreadCurrentUICulture = CultureInfo.InvariantCulture;
 			string title = $"Survivalcraft {ModsManager.ShortGameVersion} - API {ModsManager.ApiVersionString}";

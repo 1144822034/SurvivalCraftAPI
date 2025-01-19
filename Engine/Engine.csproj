@@ -42,7 +42,6 @@
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="NVorbis" Version="0.10.5" />
-    <PackageReference Include="System.Drawing.Common" Version="9.0.0" Condition="'$(TargetFramework)' == 'net9.0-windows'" />
     <PackageReference Include="SixLabors.ImageSharp" Version="3.1.6" /><!--An powerful and popular audio libaury-->
 	<PackageReference Include="NLayer.NAudioSupport" Version="1.4.0" /><!--MP3 support-->
 	<PackageReference Include="NAudio.Flac.Unknown.Mod" Version="1.0.3" PrivateAssets="all" /><!--Source: https://github.com/XiaofengdiZhu/NAudio.Flac/ -->
@@ -64,5 +63,8 @@
   </ItemGroup>
   <ItemGroup>
     <None Include=".editorconfig" />
+  </ItemGroup>
+  <ItemGroup Condition="'$(TargetFramework)' == 'net9.0-windows'">
+    <PackageReference Include="System.Drawing.Common" Version="9.0.1" />
   </ItemGroup>
 </Project>
