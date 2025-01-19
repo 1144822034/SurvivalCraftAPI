@@ -68,11 +68,8 @@ namespace Engine.Media
 		public static IEnumerable<LegacyImage> GenerateMipmaps(LegacyImage image, int maxLevelsCount = int.MaxValue)
 		{
 			ArgumentNullException.ThrowIfNull(image);
-			if (maxLevelsCount < 0)
-			{
-				throw new ArgumentOutOfRangeException(nameof(maxLevelsCount));
-			}
-			if (maxLevelsCount == 0)
+            ArgumentOutOfRangeException.ThrowIfNegative(maxLevelsCount);
+            if (maxLevelsCount == 0)
 			{
 				yield break;
 			}

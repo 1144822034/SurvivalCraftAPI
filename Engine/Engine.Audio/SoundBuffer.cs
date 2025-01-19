@@ -1,4 +1,4 @@
-using System.Runtime.InteropServices;
+锘縰sing System.Runtime.InteropServices;
 using Engine.Media;
 using OpenTK.Audio.OpenAL;
 
@@ -82,7 +82,7 @@ namespace Engine.Audio
 		{
 			if (UseCount != 0)
 			{
-                throw new InvalidOperationException("无法处置正在使用的SoundBuffer");
+                throw new InvalidOperationException("鏃犳硶澶勭疆姝ｅ湪浣跨敤鐨凷oundBuffer");
 			}
 			InternalDispose();
 		}
@@ -138,7 +138,7 @@ namespace Engine.Audio
 			ArgumentNullException.ThrowIfNull(data);
 			if (startIndex + itemsCount > data.Length)
 			{
-				throw new ArgumentOutOfRangeException("itemsCount");
+				throw new ArgumentOutOfRangeException(nameof(itemsCount));
 			}
 		}
 

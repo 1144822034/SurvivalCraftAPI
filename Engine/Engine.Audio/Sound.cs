@@ -73,7 +73,7 @@ namespace Engine.Audio
                 AL.Source(m_source, ALSourceb.Looping, m_isLooped);
                 AL.SourcePlay(m_source);
             }
-            //Mixer.CheckALError();
+            Mixer.CheckALError();
 		}
 
 		internal override void InternalPause()
