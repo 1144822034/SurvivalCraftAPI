@@ -1,18 +1,18 @@
 ﻿using System.Reflection;
-using OpenTK.Audio;
-using OpenTK.Audio.OpenAL;
+using Silk.NET.OpenAL;
 
 namespace Engine.Audio
 {
 	public static class Mixer
-	{
+    {
+        public static AL AL;
 		private static float m_masterVolume = 1f;
 
 		public static readonly List<Sound> m_soundsToStop = [];
 
 		public static HashSet<Sound> m_soundsToStopPoll = [];
 
-		public static AudioContext m_audioContext;
+		public static ALContext m_audioContext;
 
 		public static bool m_isInitialized;
 
@@ -32,14 +32,23 @@ namespace Engine.Audio
 				}
 			}
 		}
-		internal static void Initialize()
+		internal static unsafe void Initialize()
 		{
 #if !ANDROID
 			//直接加载
 			string fullPath = Path.GetDirectoryName(RunPath.GetExecutablePath() == ""? RunPath.GetEntryPath(): RunPath.GetExecutablePath());//路径备选方案
 			Environment.SetEnvironmentVariable("PATH", fullPath + ";" + RunPath.GetEnvironmentPath(), EnvironmentVariableTarget.Process);
 #endif
-			m_audioContext = new AudioContext();
+			m_audioContext = ALContext.GetApi();
+            AL = AL.GetApi();
+            Device* device = m_audioContext.OpenDevice("");
+            if (device == null)
+            {
+                Console.WriteLine("Could not create device");
+                return;
+            }
+            var c = m_audioContext.CreateContext(device, null);
+            m_audioContext.MakeContextCurrent(c);
 			if (!CheckALErrorFull())
 			{
 				m_isInitialized = true;
@@ -57,9 +66,13 @@ namespace Engine.Audio
 		{
 			foreach (Sound item in m_soundsToStopPoll)
 			{
-				if (item.m_source != 0 && item.State == SoundState.Playing && AL.GetSourceState(item.m_source) == ALSourceState.Stopped)
-				{
-					m_soundsToStop.Add(item);
+				if (item.m_source != 0 && item.State == SoundState.Playing)
+                {
+                    AL.GetSourceProperty((uint)item.m_source, GetSourceInteger.SourceState, out int sourceState);
+                    if (sourceState == (int)SourceState.Stopped)
+                    {
+                        m_soundsToStop.Add(item);
+                    }
 				}
 			}
 			foreach (Sound item2 in m_soundsToStop)
@@ -77,7 +90,7 @@ namespace Engine.Audio
 		{
 			if (m_isInitialized)
 			{
-				AL.Listener(ALListenerf.Gain, volume);
+                AL.SetListenerProperty(ListenerFloat.Gain, volume);
 			}
 		}
 		/*
@@ -90,10 +103,10 @@ namespace Engine.Audio
 			//}
 		}*/
 		
-		public static ALError CheckALError()
+		public static AudioError CheckALError()
         {
-            ALError error = AL.GetError();
-			if (error != ALError.NoError)
+            AudioError error = AL.GetError();
+			if (error != AudioError.NoError)
 			{
 				Log.Error("OPENAL出错! " + error.ToString());
 			}
@@ -107,8 +120,8 @@ namespace Engine.Audio
 		{
 			try
 			{
-				ALError error = AL.GetError();
-				if (error != ALError.NoError)
+				AudioError error = AL.GetError();
+				if (error != AudioError.NoError)
 				{
 					Log.Error("OPENAL出错! " + error.ToString());
 					//throw new InvalidOperationException(AL.GetErrorString(error));

@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 using System.Xml.Linq;
-using OpenTK.Graphics.ES30;
+using Silk.NET.OpenGL;
 
 namespace Engine.Graphics
 {
@@ -248,44 +248,47 @@ namespace Engine.Graphics
 			ParseShaderMetadata(m_pixelShaderCode, dictionary, dictionary2);
 			string @string = PrependShaderMacros(m_vertexShaderCode, m_shaderMacros, isVertexShader: true);
             string string2 = PrependShaderMacros(m_pixelShaderCode, m_shaderMacros, isVertexShader: false);
-			m_vertexShader = GL.CreateShader(ShaderType.VertexShader);
-			GL.ShaderSource(m_vertexShader, @string);
-            GL.CompileShader(m_vertexShader);
-            GL.GetShader(m_vertexShader, OpenTK.Graphics.ES30.ShaderParameter.CompileStatus, out int @params);
+			uint vertexShader = GLWrapper.GL.CreateShader(ShaderType.VertexShader);
+            m_vertexShader = (int)vertexShader;
+			GLWrapper.GL.ShaderSource(vertexShader, @string);
+            GLWrapper.GL.CompileShader(vertexShader);
+            GLWrapper.GL.GetShader(vertexShader, ShaderParameterName.CompileStatus, out int @params);
 			if (@params != 1)
 			{
-				string shaderInfoLog = GL.GetShaderInfoLog(m_vertexShader);
+				string shaderInfoLog = GLWrapper.GL.GetShaderInfoLog(vertexShader);
 				throw new InvalidOperationException($"Error compiling vertex shader.\n{shaderInfoLog}");
 			}
-			m_pixelShader = GL.CreateShader(ShaderType.FragmentShader);
-			GL.ShaderSource(m_pixelShader, string2);
-			GL.CompileShader(m_pixelShader);
-			GL.GetShader(m_pixelShader, OpenTK.Graphics.ES30.ShaderParameter.CompileStatus, out int params2);
+			uint pixelShader = GLWrapper.GL.CreateShader(ShaderType.FragmentShader);
+            m_pixelShader = (int)pixelShader;
+			GLWrapper.GL.ShaderSource(pixelShader, string2);
+			GLWrapper.GL.CompileShader(pixelShader);
+			GLWrapper.GL.GetShader(pixelShader, ShaderParameterName.CompileStatus, out int params2);
 			if (params2 != 1)
 			{
-				string shaderInfoLog2 = GL.GetShaderInfoLog(m_pixelShader);
+				string shaderInfoLog2 = GLWrapper.GL.GetShaderInfoLog(pixelShader);
 				throw new InvalidOperationException($"Error compiling pixel shader.\n{shaderInfoLog2}");
 			}
-			m_program = GL.CreateProgram();
-			GL.AttachShader(m_program, m_vertexShader);
-			GL.AttachShader(m_program, m_pixelShader);
-			GL.LinkProgram(m_program);
-			GL.GetProgram(m_program, All.LinkStatus, out int params3);
+			uint program = GLWrapper.GL.CreateProgram();
+            m_program = (int)program;
+			GLWrapper.GL.AttachShader(program, vertexShader);
+			GLWrapper.GL.AttachShader(program, pixelShader);
+			GLWrapper.GL.LinkProgram(program);
+			GLWrapper.GL.GetProgram(program, ProgramPropertyARB.LinkStatus, out int params3);
             if (params3 != 1)
 			{
-				string programInfoLog = GL.GetProgramInfoLog(m_program);
+				string programInfoLog = GLWrapper.GL.GetProgramInfoLog(program);
 				throw new InvalidOperationException($"Error linking program.\n{programInfoLog}");
 			}
-			GL.GetProgram(m_program, All.ActiveAttributes, out int params4);
+			GLWrapper.GL.GetProgram(program, ProgramPropertyARB.ActiveAttributes, out int params4);
 			for (int i = 0; i < params4; i++)
 			{
 #if ANDROID
 				StringBuilder stringBuilder = new(256);
-				GL.GetActiveAttrib(m_program, i, stringBuilder.Capacity, out int _, out int _, out ActiveAttribType _, stringBuilder);
+				GLWrapper.GL.GetActiveAttrib(m_program, i, stringBuilder.Capacity, out int _, out int _, out ActiveAttribType _, stringBuilder);
 #else
-				GL.GetActiveAttrib(m_program, i, 256, out int _, out int _, out ActiveAttribType _,out string stringBuilder);
+				GLWrapper.GL.GetActiveAttrib(program, (uint)i, 256u, out uint _, out int _, out AttributeType _, out string stringBuilder);
 #endif
-				int attribLocation = GL.GetAttribLocation(m_program, stringBuilder.ToString());
+				int attribLocation = GLWrapper.GL.GetAttribLocation(program, stringBuilder.ToString());
 				if (!dictionary.TryGetValue(stringBuilder.ToString(), out string value))
 				{
 					throw new InvalidOperationException($"Attribute \"{stringBuilder.ToString()}\" has no semantic defined in shader metadata.");
@@ -296,7 +299,7 @@ namespace Engine.Graphics
 					Semantic = value
 				});
 			}
-			GL.GetProgram(m_program,All.ActiveUniforms, out int params5);
+			GLWrapper.GL.GetProgram(program,ProgramPropertyARB.ActiveUniforms, out int params5);
 			List<ShaderParameter> list = [];
 			Dictionary<string, ShaderParameter> dictionary3 = [];
 			for (int j = 0; j < params5; j++)
@@ -304,8 +307,8 @@ namespace Engine.Graphics
 
 #if ANDROID
 				StringBuilder stringBuilder2 = new(256);
-				GL.GetActiveUniform(m_program, j, stringBuilder2.Capacity, out int _, out int size2, out ActiveUniformType type2, stringBuilder2);
-								int uniformLocation = GL.GetUniformLocation(m_program, stringBuilder2.ToString());
+				GLWrapper.GL.GetActiveUniform(m_program, j, stringBuilder2.Capacity, out int _, out int size2, out UniformType type2, stringBuilder2);
+								int uniformLocation = GLWrapper.GL.GetUniformLocation(m_program, stringBuilder2.ToString());
 				ShaderParameterType shaderParameterType = GLWrapper.TranslateActiveUniformType(type2);
 				int num = stringBuilder2.ToString().IndexOf('[');
 				if (num >= 0)
@@ -313,8 +316,8 @@ namespace Engine.Graphics
 					stringBuilder2.Remove(num, stringBuilder2.Length - num);
 				}
 #else
-				GL.GetActiveUniform(m_program, j, 256, out int _, out int size2, out ActiveUniformType type2, out string stringBuilder2);
-				int uniformLocation = GL.GetUniformLocation(m_program, stringBuilder2.ToString());
+				GLWrapper.GL.GetActiveUniform(program, (uint)j, 256u, out uint _, out int size2, out UniformType type2, out string stringBuilder2);
+				int uniformLocation = GLWrapper.GL.GetUniformLocation(program, stringBuilder2.ToString());
 				ShaderParameterType shaderParameterType = GLWrapper.TranslateActiveUniformType(type2);
 				int num = stringBuilder2.ToString().IndexOf('[');
 				if (num >= 0)
@@ -368,27 +371,30 @@ namespace Engine.Graphics
 
         public virtual void DeleteShaders()
 		{
+            uint vertexShader = (uint)m_vertexShader;
+            uint pixelShader = (uint)m_pixelShader;
 			if (m_program != 0)
 			{
+                uint program = (uint)m_program;
 				if (m_vertexShader != 0)
 				{
-					GL.DetachShader(m_program, m_vertexShader);
+					GLWrapper.GL.DetachShader(program, vertexShader);
 				}
 				if (m_pixelShader != 0)
 				{
-					GL.DetachShader(m_program, m_pixelShader);
+					GLWrapper.GL.DetachShader(program, pixelShader);
 				}
 				GLWrapper.DeleteProgram(m_program);
 				m_program = 0;
 			}
 			if (m_vertexShader != 0)
 			{
-				GL.DeleteShader(m_vertexShader);
+				GLWrapper.GL.DeleteShader(vertexShader);
 				m_vertexShader = 0;
 			}
 			if (m_pixelShader != 0)
 			{
-				GL.DeleteShader(m_pixelShader);
+				GLWrapper.GL.DeleteShader(pixelShader);
 				m_pixelShader = 0;
 			}
 		}

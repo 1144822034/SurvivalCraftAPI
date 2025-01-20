@@ -1,6 +1,6 @@
 using System;
 using System.Runtime.InteropServices;
-using OpenTK.Graphics.ES30;
+using Silk.NET.OpenGL;
 
 namespace Engine.Graphics
 {
@@ -117,6 +117,8 @@ namespace Engine.Graphics
             }
         }
 
+        public static string DeviceDescription { get; set; }
+
         public static event Action DeviceLost;
 
         public static event Action DeviceReset;
@@ -133,7 +135,7 @@ namespace Engine.Graphics
                 GLWrapper.ApplyRasterizerState(RasterizerState);
                 GLWrapper.ApplyDepthStencilState(DepthStencilState);
                 GLWrapper.ApplyBlendState(BlendState);
-                GL.DrawArrays(GLWrapper.TranslatePrimitiveType(primitiveType), startVertex, verticesCount);
+                GLWrapper.GL.DrawArrays(GLWrapper.TranslatePrimitiveType(primitiveType), startVertex, (uint)verticesCount);
             }
             finally
             {
@@ -141,7 +143,7 @@ namespace Engine.Graphics
             }
         }
 
-        public static void DrawUserIndexed<T>(PrimitiveType primitiveType, Shader shader, VertexDeclaration vertexDeclaration, T[] vertexData, int startVertex, int verticesCount, int[] indexData, int startIndex, int indicesCount) where T : struct
+        public static unsafe void DrawUserIndexed<T>(PrimitiveType primitiveType, Shader shader, VertexDeclaration vertexDeclaration, T[] vertexData, int startVertex, int verticesCount, int[] indexData, int startIndex, int indicesCount) where T : struct
         {
             VerifyParametersDrawUserIndexed(primitiveType, shader, vertexDeclaration, vertexData, startVertex, verticesCount, indexData, startIndex, indicesCount);
             var gCHandle = GCHandle.Alloc(vertexData, GCHandleType.Pinned);
@@ -154,7 +156,7 @@ namespace Engine.Graphics
                 GLWrapper.ApplyRasterizerState(RasterizerState);
                 GLWrapper.ApplyDepthStencilState(DepthStencilState);
                 GLWrapper.ApplyBlendState(BlendState);
-                GL.DrawElements(GLWrapper.TranslatePrimitiveType(primitiveType), indicesCount, All.UnsignedInt, gCHandle2.AddrOfPinnedObject() + (4 * startIndex));
+                GLWrapper.GL.DrawElements(GLWrapper.TranslatePrimitiveType(primitiveType), (uint)indicesCount, DrawElementsType.UnsignedInt, (void*)(gCHandle2.AddrOfPinnedObject() + (4 * startIndex)));
             }
             finally
             {
@@ -172,12 +174,11 @@ namespace Engine.Graphics
             GLWrapper.ApplyRasterizerState(RasterizerState);
             GLWrapper.ApplyDepthStencilState(DepthStencilState);
             GLWrapper.ApplyBlendState(BlendState);
-            GL.DrawArrays(GLWrapper.TranslatePrimitiveType(primitiveType), startVertex, verticesCount);
+            GLWrapper.GL.DrawArrays(GLWrapper.TranslatePrimitiveType(primitiveType), startVertex, (uint)verticesCount);
         }
 
         public static void DrawIndexed(PrimitiveType primitiveType, Shader shader, VertexBuffer vertexBuffer, IndexBuffer indexBuffer, int startIndex, int indicesCount)
         {
-            Console.WriteLine("DrawIndexed");
             VerifyParametersDrawIndexed(primitiveType, shader, vertexBuffer, indexBuffer, startIndex, indicesCount);
             GLWrapper.ApplyRenderTarget(RenderTarget);
             GLWrapper.ApplyViewportScissor(Viewport, ScissorRectangle, RasterizerState.ScissorTestEnable);
@@ -185,7 +186,7 @@ namespace Engine.Graphics
             GLWrapper.ApplyRasterizerState(RasterizerState);
             GLWrapper.ApplyDepthStencilState(DepthStencilState);
             GLWrapper.ApplyBlendState(BlendState);
-            GL.DrawElements(GLWrapper.TranslatePrimitiveType(primitiveType), indicesCount, GLWrapper.TranslateIndexFormat(indexBuffer.IndexFormat), new IntPtr(startIndex * indexBuffer.IndexFormat.GetSize()));
+            GLWrapper.GL.DrawElements(GLWrapper.TranslatePrimitiveType(primitiveType), (uint)indicesCount, GLWrapper.TranslateIndexFormat(indexBuffer.IndexFormat), new IntPtr(startIndex * indexBuffer.IndexFormat.GetSize()));
         }
 
         public static void Clear(Vector4? color, float? depth = null, int? stencil = null)

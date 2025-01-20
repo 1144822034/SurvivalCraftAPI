@@ -2,15 +2,22 @@
 using Android.Content;
 using Android.OS;
 #else
-using OpenTK;
-using OpenTK.Graphics;
-using OpenTK.Graphics.ES30;
-using System.Drawing;
 using System.Reflection;
+using Silk.NET.Input;
+using Silk.NET.OpenGL;
+using Silk.NET.Windowing;
 #endif
+using System.Runtime.CompilerServices;
 using Engine.Audio;
 using Engine.Graphics;
 using Engine.Input;
+using Silk.NET.Core;
+using Silk.NET.Maths;
+using SixLabors.ImageSharp;
+using SixLabors.ImageSharp.PixelFormats;
+using Monitor = Silk.NET.Windowing.Monitor;
+using Point = System.Drawing.Point;
+using Size = System.Drawing.Size;
 
 namespace Engine
 {
@@ -113,7 +120,9 @@ namespace Engine
             }
         }
 #else
-        public static GameWindow m_gameWindow;
+        public static IWindow m_gameWindow;
+
+        public static IInputContext m_inputContext;
 
         private static bool m_closing;
 
@@ -130,10 +139,8 @@ namespace Engine
         {
             get
             {
-                DisplayDevice @default = DisplayDevice.Default;
-                return Configuration.RunningOnMacOS
-                    ? new Point2((int)MathF.Round(@default.Width * m_dpiScale), (int)MathF.Round(@default.Height * m_dpiScale))
-                    : new Point2(@default.Width, @default.Height);
+                var size = m_gameWindow?.Monitor?.Bounds.Size ?? Monitor.GetMainMonitor(null).Bounds.Size;
+                return new Point2(size.X, size.Y);
             }
         }
 
@@ -184,12 +191,12 @@ namespace Engine
             get
             {
                 VerifyWindowOpened();
-                return new Point2(m_gameWindow.Location.X, m_gameWindow.Location.Y);
+                return new Point2(m_gameWindow.Position.X, m_gameWindow.Position.Y);
             }
             set
             {
                 VerifyWindowOpened();
-                m_gameWindow.Location = new Point(value.X, value.Y);
+                m_gameWindow.Position = new (value.X, value.Y);
             }
         }
 
@@ -198,12 +205,12 @@ namespace Engine
             get
             {
                 VerifyWindowOpened();
-                return new Point2(m_gameWindow.ClientSize.Width, m_gameWindow.ClientSize.Height);
+                return new Point2(m_gameWindow.Size.X, m_gameWindow.Size.Y);
             }
             set
             {
                 VerifyWindowOpened();
-                m_gameWindow.ClientSize = new Size(value.X, value.Y);
+                m_gameWindow.Size = new (value.X, value.Y);
             }
         }
 
@@ -276,7 +283,7 @@ namespace Engine
                 VerifyWindowOpened();
                 if (!m_swapInterval.HasValue)
                 {
-                    m_swapInterval = m_gameWindow.Context.SwapInterval;
+                    m_swapInterval = m_gameWindow.VSync ? 1 : 0;
                 }
                 return m_swapInterval.Value;
             }
@@ -286,7 +293,7 @@ namespace Engine
                 value = Math.Clamp(value, 0, 4);
                 if (value != PresentationInterval)
                 {
-                    m_gameWindow.Context.SwapInterval = value;
+                    m_gameWindow.GLContext?.SwapInterval(value);
                     m_swapInterval = value;
                 }
             }
@@ -318,7 +325,6 @@ namespace Engine
         static Window()
         {
             m_dpiScale = 1f;
-            Toolkit.Init(new ToolkitOptions() { EnableHighResolution = true, Backend = PlatformBackend.PreferNative});
         }
 
         public static void Run(int width = 0, int height = 0, WindowMode windowMode = WindowMode.Fixed, string title = "")
@@ -343,38 +349,25 @@ namespace Engine
                     Environment.Exit(1);
                 }
             };
-            GraphicsMode mode = new(new OpenTK.Graphics.ColorFormat(24), 16, 0, 0, OpenTK.Graphics.ColorFormat.Empty, 2);
             width = (width == 0) ? (ScreenSize.X * 4 / 5) : width;
             height = (height == 0) ? (ScreenSize.Y * 4 / 5) : height;
-            m_gameWindow = new GameWindow(width, height, mode, title);
+            WindowOptions windowOptions = WindowOptions.Default with
+            {
+                Title = title,
+                PreferredDepthBufferBits = 24,
+                PreferredStencilBufferBits = 8,
+                API = new GraphicsAPI(ContextAPI.OpenGLES, ContextProfile.Compatability, ContextFlags.Debug, new APIVersion(3, 2)),
+                Size = new (width, height)
+            };
+            m_gameWindow = Silk.NET.Windowing.Window.Create(windowOptions);
             m_titlePrefix = title;
-#if WINDOWS
-            m_gameWindow.Icon = new Icon(typeof(Window).GetTypeInfo().Assembly.GetManifestResourceStream("Engine.Resources.icon.ico"), new Size(32, 32));
-#endif
-            m_dpiScale = m_gameWindow.ClientSize.Width / 400f;
-            m_gameWindow.ClientSize = new Size(width, height);
-            if (Configuration.RunningOnMacOS)
-            {
-                Point2 point = new((int)MathF.Round(ScreenSize.X / m_dpiScale), (int)MathF.Round(ScreenSize.Y / m_dpiScale));
-                m_gameWindow.Location = new Point(Math.Max((point.X - m_gameWindow.Size.Width) / 2, 0), Math.Max((point.Y - m_gameWindow.Size.Height) / 2, 0));
-            }
-            else
-            {
-                m_gameWindow.Location = new Point(Math.Max((ScreenSize.X - m_gameWindow.Size.Width) / 2, 0), Math.Max((ScreenSize.Y - m_gameWindow.Size.Height) / 2, 0));
-            }
+            m_gameWindow.Position = new (Math.Max((ScreenSize.X - m_gameWindow.Size.X) / 2, 0), Math.Max((ScreenSize.Y - m_gameWindow.Size.Y) / 2, 0));
             WindowMode = windowMode;
+            m_gameWindow.ShouldSwapAutomatically = false;
             m_gameWindow.Load += LoadHandler;
-            GL.GetInteger(GetPName.RedBits, out int data0);
-            GL.GetInteger(GetPName.GreenBits, out int data1);
-            GL.GetInteger(GetPName.BlueBits, out int data2);
-            GL.GetInteger(GetPName.AlphaBits, out int data3);
-            GL.GetInteger(GetPName.DepthBits, out int data4);
-            GL.GetInteger(GetPName.StencilBits, out int data5);
-            GL.GetInteger(GetPName.MajorVersion, out int data6);
-            GL.GetInteger(GetPName.MinorVersion, out int data7);
-            GL.GetInteger(GetPName.MaxTextureSize, out int data8);
-            Log.Information("OpenGL{6}.{7} framebuffer created, R={0} G={1} B={2} A={3}, D={4} S={5}, MaxTextureSize={8}", data0, data1, data2, data3, data4, data5,data6,data7,data8);
             m_gameWindow.Run();//会阻塞，不要放置在前边
+            GLWrapper.GL.Dispose();
+            m_gameWindow.Dispose();
         }
 
         public static void Close()
@@ -383,7 +376,7 @@ namespace Engine
             m_closing = true;
         }
 
-        private static void LoadHandler(object sender, EventArgs args)
+        private static void LoadHandler()
         {
             InitializeAll();
             SubscribeToEvents();
@@ -396,9 +389,9 @@ namespace Engine
             }
         }
 
-        private static void FocusedChangedHandler(object sender, EventArgs args)
+        private static void FocusedChangedHandler(bool focused)
         {
-            if (m_gameWindow.Focused)
+            if (focused)
             {
                 if (m_state == State.Inactive)
                 {
@@ -417,7 +410,7 @@ namespace Engine
             Touch.Clear();
         }
 
-        private static void ClosedHandler(object sender, EventArgs args)
+        private static void ClosedHandler()
         {
             if (m_state == State.Active)
             {
@@ -431,8 +424,6 @@ namespace Engine
             }
             UnsubscribeFromEvents();
             DisposeAll();
-            m_gameWindow.Dispose();
-            m_gameWindow = null;
         }
 #else
         public static void Run(int width = 0, int height = 0, WindowMode windowMode = WindowMode.Fullscreen, string title = "")
@@ -534,7 +525,7 @@ namespace Engine
         }
 #endif
 
-        private static void ResizeHandler(object sender, EventArgs args)
+        private static void ResizeHandler(Vector2D<int> _)
         {
 #if ANDROID
             if (m_state != 0)
@@ -564,14 +555,14 @@ namespace Engine
         }
 #endif
 #if !ANDROID
-        private static void RenderFrameHandler(object sender, EventArgs args)
+        private static void RenderFrameHandler(double _)
         {
             BeforeFrameAll();
             Frame?.Invoke();
             AfterFrameAll();
             if (!m_closing)
             {
-                m_gameWindow.Context.SwapBuffers();
+                m_gameWindow.GLContext?.SwapBuffers();
             }
             else
             {
@@ -589,18 +580,18 @@ namespace Engine
 
         private static void SubscribeToEvents()
         {
-            m_gameWindow.FocusedChanged += FocusedChangedHandler;
-            m_gameWindow.Closed += ClosedHandler;
+            m_gameWindow.FocusChanged += FocusedChangedHandler;
+            m_gameWindow.Closing += ClosedHandler;
             m_gameWindow.Resize += ResizeHandler;
-            m_gameWindow.RenderFrame += RenderFrameHandler;
+            m_gameWindow.Render += RenderFrameHandler;
         }
 
         private static void UnsubscribeFromEvents()
         {
-            m_gameWindow.FocusedChanged -= FocusedChangedHandler;
-            m_gameWindow.Closed -= ClosedHandler;
+            m_gameWindow.FocusChanged -= FocusedChangedHandler;
+            m_gameWindow.Closing -= ClosedHandler;
             m_gameWindow.Resize -= ResizeHandler;
-            m_gameWindow.RenderFrame -= RenderFrameHandler;
+            m_gameWindow.Render -= RenderFrameHandler;
         }
 
 #else
@@ -654,8 +645,15 @@ namespace Engine
         {
             try
 		    {
+#if WINDOWS
+                Image<Rgba32> image = SixLabors.ImageSharp.Image.Load<Rgba32>(Image.DefaultImageSharpDecoderOptions, typeof(Window).GetTypeInfo().Assembly.GetManifestResourceStream("Engine.Resources.icon.png"));
+                byte[] pixelBytes = new byte[image.Width * image.Height * Unsafe.SizeOf<Rgba32>()];
+                image.CopyPixelDataTo(pixelBytes);
+                m_gameWindow.SetWindowIcon([new RawImage(image.Width, image.Height, pixelBytes)]);
+#endif
               Dispatcher.Initialize();
                Display.Initialize();
+                m_inputContext = m_gameWindow.CreateInput();
               Keyboard.Initialize();
               Mouse.Initialize();
               Touch.Initialize();

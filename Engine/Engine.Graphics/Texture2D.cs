@@ -1,6 +1,6 @@
 using System.Runtime.InteropServices;
 using Engine.Media;
-using OpenTK.Graphics.ES30;
+using Silk.NET.OpenGL;
 using SixLabors.ImageSharp.PixelFormats;
 
 namespace Engine.Graphics
@@ -109,7 +109,7 @@ namespace Engine.Graphics
 					m_pixelType = PixelType.UnsignedShort5551;
 					break;
 				case ColorFormat.R8:
-					m_pixelFormat = PixelFormat.Luminance;
+					m_pixelFormat = (PixelFormat)6409;// GL_LUMINANCE
 					m_pixelType = PixelType.UnsignedByte;
 					break;
 				default:
@@ -150,9 +150,9 @@ namespace Engine.Graphics
             int height = MathUtils.Max(Height >> mipLevel, 1);
             GLWrapper.BindTexture(TextureTarget.Texture2D, m_texture, forceBind: false);
 #if ANDROID
-            GL.TexImage2D(TextureTarget.Texture2D, mipLevel, (PixelInternalFormat)m_pixelFormat, width, height, 0, m_pixelFormat, m_pixelType, source);
+            GLWrapper.GL.TexImage2D(TextureTarget.Texture2D, mipLevel, (PixelInternalFormat)m_pixelFormat, width, height, 0, m_pixelFormat, m_pixelType, source);
 #else
-            GL.TexImage2D(TextureTarget2d.Texture2D, mipLevel, (TextureComponentCount)m_pixelFormat, width, height, 0, m_pixelFormat, m_pixelType, source);
+            GLWrapper.GL.TexImage2D(TextureTarget.Texture2D, mipLevel, (InternalFormat)m_pixelFormat, (uint)width, (uint)height, 0, m_pixelFormat, m_pixelType, source);
 #endif
         }
 
@@ -162,7 +162,7 @@ namespace Engine.Graphics
 			source.DangerousTryGetSinglePixelMemory(out Memory<Rgba32> memory);
 			GLWrapper.BindTexture(TextureTarget.Texture2D, m_texture, false);
 #if ANDROID
-			GL.TexImage2D(
+			GLWrapper.GL.TexImage2D(
 				TextureTarget.Texture2D,
 				0,
 				(PixelInternalFormat)m_pixelFormat,
@@ -174,16 +174,16 @@ namespace Engine.Graphics
 				(IntPtr)memory.Pin().Pointer
 			);
 #else
-			GL.TexImage2D(
-				TextureTarget2d.Texture2D,
+			GLWrapper.GL.TexImage2D(
+                TextureTarget.Texture2D,
 				0,
-				(TextureComponentCount)m_pixelFormat,
-				source.Width,
-				source.Height,
+				(InternalFormat)m_pixelFormat,
+				(uint)source.Width,
+                (uint)source.Height,
 				0,
 				m_pixelFormat,
 				m_pixelType,
-				(IntPtr)memory.Pin().Pointer
+				memory.Pin().Pointer
 			);
 #endif
 		}
@@ -217,18 +217,19 @@ namespace Engine.Graphics
 			AllocateTexture();
 		}
 
-		public void AllocateTexture()
+		public unsafe void AllocateTexture()
 		{
-			GL.GenTextures(1, out m_texture);
+			GLWrapper.GL.GenTextures(1, out uint texture);
+            m_texture = (int)texture;
 			GLWrapper.BindTexture(TextureTarget.Texture2D, m_texture, forceBind: false);
 			for (int i = 0; i < MipLevelsCount; i++)
 			{
 				int width = MathUtils.Max(Width >> i, 1);
 				int height = MathUtils.Max(Height >> i, 1);
 #if ANDROID
-				GL.TexImage2D(TextureTarget.Texture2D, i, (PixelInternalFormat)m_pixelFormat, width, height, 0, m_pixelFormat, m_pixelType, IntPtr.Zero);
+				GLWrapper.GL.TexImage2D(TextureTarget.Texture2D, i, (PixelInternalFormat)m_pixelFormat, width, height, 0, m_pixelFormat, m_pixelType, IntPtr.Zero);
 #else
-				GL.TexImage2D(TextureTarget2d.Texture2D, i, (TextureComponentCount)m_pixelFormat, width, height, 0, m_pixelFormat, m_pixelType, IntPtr.Zero);
+				GLWrapper.GL.TexImage2D(TextureTarget.Texture2D, i, (InternalFormat)m_pixelFormat, (uint)width, (uint)height, 0, m_pixelFormat, m_pixelType, null);
 #endif
 			}
 		}
@@ -271,7 +272,7 @@ namespace Engine.Graphics
                 if (mipLevelsCount > 1)
                 {
                     GLWrapper.BindTexture(TextureTarget.Texture2D, texture2D.m_texture, forceBind: false);
-                    GL.GenerateMipmap(TextureTarget.Texture2D);
+                    GLWrapper.GL.GenerateMipmap(TextureTarget.Texture2D);
                 }
             }
             texture2D.Tag = image;
@@ -285,7 +286,7 @@ namespace Engine.Graphics
             if(mipLevelsCount > 1)
             {
                 GLWrapper.BindTexture(TextureTarget.Texture2D, texture2D.m_texture, forceBind: false);
-                GL.GenerateMipmap(TextureTarget.Texture2D);
+                GLWrapper.GL.GenerateMipmap(TextureTarget.Texture2D);
             }
             texture2D.Tag = image;
 			return texture2D;
@@ -298,7 +299,7 @@ namespace Engine.Graphics
             if (mipLevelsCount > 1)
             {
                 GLWrapper.BindTexture(TextureTarget.Texture2D, texture2D.m_texture, forceBind: false);
-                GL.GenerateMipmap(TextureTarget.Texture2D);
+                GLWrapper.GL.GenerateMipmap(TextureTarget.Texture2D);
             }
             texture2D.Tag = new Image(image);
             return texture2D;

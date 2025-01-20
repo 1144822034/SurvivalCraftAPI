@@ -1,5 +1,6 @@
+using System.Runtime.InteropServices;
 using Engine.Media;
-using OpenTK.Audio.OpenAL;
+using Silk.NET.OpenAL;
 
 namespace Engine.Audio
 {
@@ -85,12 +86,13 @@ namespace Engine.Audio
 			});
 		}
 
-        internal override void InternalPlay(OpenTK.Vector3 direction)
+        internal override void InternalPlay(Vector3 direction)
         {
             if (m_source != 0)
             {
-                AL.Source(m_source, ALSource3f.Position, ref direction);
-                AL.SourcePlay(m_source);
+                uint source = (uint)m_source;
+                Mixer.AL.SetSourceProperty(source, SourceVector3.Position, direction.X, direction.Y, direction.Z);
+                Mixer.AL.SourcePlay(source);
                 Mixer.CheckALError();
             }
         }
@@ -98,7 +100,7 @@ namespace Engine.Audio
 		{
             if (m_source != 0)
             {
-                AL.SourcePause(m_source);
+                Mixer.AL.SourcePause((uint)m_source);
                 Mixer.CheckALError();
             }
         }
@@ -107,7 +109,7 @@ namespace Engine.Audio
 		{
             if (m_source != 0)
             {
-                AL.SourceStop(m_source);
+                Mixer.AL.SourceStop((uint)m_source);
                 Mixer.CheckALError();
                 StreamingSource.Position = 0L;
                 m_noMoreData = false;
@@ -132,30 +134,32 @@ namespace Engine.Audio
 			base.InternalDispose();
 		}
 
-		private void StreamingThreadFunction()
+		private unsafe void StreamingThreadFunction()
 		{
-			int[] array = new int[3];
-			var list = new List<int>();
+			uint[] array = new uint[3];
+			var list = new List<uint>();
 			int millisecondsTimeout = Math.Clamp((int)(0.5f * m_bufferDuration / array.Length * 1000f), 1, 100);
 			byte[] array2 = new byte[2 * base.ChannelsCount * (int)(SamplingFrequency * m_bufferDuration / array.Length)];
 			for (int i = 0; i < array.Length; i++)
 			{
-				int num = AL.GenBuffer();
+				uint num = Mixer.AL.GenBuffer();
 				Mixer.CheckALError();
 				array[i] = num;
 				list.Add(num);
 			}
+            uint source = (uint)m_source;
 			do
 			{
 				lock (m_lock)
 				{
 					if (!m_noMoreData)
 					{
-						AL.GetSource(m_source, ALGetSourcei.BuffersProcessed, out int value);
+                        Mixer.AL.GetSourceProperty(source, GetSourceInteger.BuffersProcessed, out int value);
 						Mixer.CheckALError();
 						for (int j = 0; j < value; j++)
-						{
-							int item = AL.SourceUnqueueBuffer(m_source);
+                        {
+                            uint item = 0u;
+							Mixer.AL.SourceUnqueueBuffers(source, 1, &item);
 							Mixer.CheckALError();
 							list.Add(item);
 						}
@@ -165,41 +169,48 @@ namespace Engine.Audio
 							m_noMoreData = num2 < array2.Length;
 							if (num2 > 0)
 							{
-								int num3 = list[^1];
-								AL.BufferData(num3, (base.ChannelsCount == 1) ? ALFormat.Mono16 : ALFormat.Stereo16, array2, num2, base.SamplingFrequency);
+								uint num3 = list[^1];
+                                GCHandle gCHandle = GCHandle.Alloc(array2, GCHandleType.Pinned);
+                                Mixer.AL.BufferData(num3, (base.ChannelsCount == 1) ? BufferFormat.Mono16 : BufferFormat.Stereo16, (void*)(gCHandle.AddrOfPinnedObject()), num2, base.SamplingFrequency);
 								Mixer.CheckALError();
-								AL.SourceQueueBuffer(m_source, num3);
+                                Mixer.AL.SourceQueueBuffers(source, 1, &num3);
 								Mixer.CheckALError();
 								list.RemoveAt(list.Count - 1);
-								ALSourceState sourceState = AL.GetSourceState(m_source);
+                                Mixer.AL.GetSourceProperty(source,GetSourceInteger.SourceState, out int sourceState);
 								Mixer.CheckALError();
-								if (sourceState != ALSourceState.Playing)
+								if (sourceState != (int)SourceState.Playing)
 								{
-									AL.SourcePlay(m_source);
+                                    Mixer.AL.SourcePlay(source);
 									Mixer.CheckALError();
 								}
 							}
 						}
 					}
-					else if (AL.GetSourceState(m_source) == ALSourceState.Stopped)
-					{
-						Dispatcher.Dispatch(delegate
-						{
-							Stop();
-						});
-					}
-				}
+                    else
+                    {
+                        Mixer.AL.GetSourceProperty(source, GetSourceInteger.SourceState, out int sourceState);
+                        if (sourceState == (int)SourceState.Stopped)
+                        {
+                            Dispatcher.Dispatch(
+                                delegate
+                                {
+                                    Stop();
+                                }
+                            );
+                        }
+                    }
+                }
 			}
 			while (!m_stopTaskEvent.WaitOne(millisecondsTimeout));
-			AL.SourceStop(m_source);
+            Mixer.AL.SourceStop(source);
 			Mixer.CheckALError();
-			AL.Source(m_source, ALSourcei.Buffer, 0);
+            Mixer.AL.SetSourceProperty(source, SourceInteger.Buffer, 0);
 			Mixer.CheckALError();
 			for (int k = 0; k < array.Length; k++)
 			{
 				if (array[k] != 0)
 				{
-					AL.DeleteBuffer(array[k]);
+                    Mixer.AL.DeleteBuffer(array[k]);
 					Mixer.CheckALError();
 					array[k] = 0;
 				}

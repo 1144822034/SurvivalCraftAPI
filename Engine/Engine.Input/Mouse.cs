@@ -1,15 +1,17 @@
 ﻿using System;
 using System.Drawing;
-using OpenTK.Input;
+using Silk.NET.Input;
 
 namespace Engine.Input
 {
 	public static class Mouse
 	{
 #if !ANDROID
-		private static Point2? m_lastMousePosition;
+        public static IMouse m_mouse;
 
-		private static int? m_lastMouseWheelValue;
+		public static Point2? m_lastMousePosition;
+
+		public static int? m_lastMouseWheelValue;
 #endif
 		private static bool[] m_mouseButtonsDownArray;
 
@@ -54,17 +56,17 @@ namespace Engine.Input
 		public static void SetMousePosition(int x, int y)
 		{
 #if !ANDROID
-			Point point = Window.m_gameWindow.PointToScreen(new Point(x, y));
-			OpenTK.Input.Mouse.SetPosition(point.X, point.Y);
+            m_mouse.Position = new System.Numerics.Vector2(x, y);
 #endif
 		}
 
         internal static void Initialize()
 		{
 #if !ANDROID
-			Window.m_gameWindow.MouseDown += MouseDownHandler;
-			Window.m_gameWindow.MouseUp += MouseUpHandler;
-			Window.m_gameWindow.MouseMove += MouseMoveHandler;
+            m_mouse = Window.m_inputContext.Mice[0];
+            m_mouse.MouseDown += MouseDownHandler;
+            m_mouse.MouseUp += MouseUpHandler;
+            m_mouse.MouseMove += MouseMoveHandler;
 #endif
 		}
 
@@ -77,18 +79,19 @@ namespace Engine.Input
 #if !ANDROID
 			if (Window.IsActive)
 			{
-				Window.m_gameWindow.CursorVisible = IsMouseVisible;
-				MouseState state = OpenTK.Input.Mouse.GetState();
+                m_mouse.Cursor.CursorMode = IsMouseVisible ? CursorMode.Normal : CursorMode.Disabled;
+                Point2 position = new Point2((int)m_mouse.Position.X, (int)m_mouse.Position.Y);
+                int wheel = (int)m_mouse.ScrollWheels[0].Y;
 				if (m_lastMousePosition.HasValue)
 				{
-					MouseMovement = new Point2(state.X - m_lastMousePosition.Value.X, state.Y - m_lastMousePosition.Value.Y);
+					MouseMovement = new Point2(position.X - m_lastMousePosition.Value.X, position.Y - m_lastMousePosition.Value.Y);
 				}
 				if (m_lastMouseWheelValue.HasValue)
 				{
-					MouseWheelMovement = 120 * (state.Wheel - m_lastMouseWheelValue.Value);
+					MouseWheelMovement = 120 * wheel;
 				}
-				m_lastMousePosition = new Point2(state.X, state.Y);
-				m_lastMouseWheelValue = state.Wheel;
+				m_lastMousePosition = position;
+				m_lastMouseWheelValue = wheel;
 			}
 			else
 			{
@@ -99,38 +102,40 @@ namespace Engine.Input
 		}
 
 #if !ANDROID
-		private static void MouseDownHandler(object sender, MouseButtonEventArgs e)
+		private static void MouseDownHandler(IMouse mouse, Silk.NET.Input.MouseButton button)
 		{
-			MouseButton mouseButton = TranslateMouseButton(e.Button);
+			MouseButton mouseButton = TranslateMouseButton(button);
 			if (mouseButton != (MouseButton)(-1))
-			{
-				ProcessMouseDown(mouseButton, new Point2(e.Position.X, e.Position.Y));
+            {
+                var position = mouse.Position;
+				ProcessMouseDown(mouseButton, new Point2((int)position.X, (int)position.Y));
 			}
 		}
 
-		private static void MouseUpHandler(object sender, MouseButtonEventArgs e)
+		private static void MouseUpHandler(IMouse mouse, Silk.NET.Input.MouseButton button)
 		{
-			MouseButton mouseButton = TranslateMouseButton(e.Button);
+			MouseButton mouseButton = TranslateMouseButton(button);
 			if (mouseButton != (MouseButton)(-1))
 			{
-				ProcessMouseUp(mouseButton, new Point2(e.Position.X, e.Position.Y));
+                var position = mouse.Position;
+				ProcessMouseUp(mouseButton, new Point2((int)position.X, (int)position.Y));
 			}
 		}
 
-		private static void MouseMoveHandler(object sender, MouseMoveEventArgs e)
+		private static void MouseMoveHandler(IMouse mouse, System.Numerics.Vector2 position)
 		{
-			ProcessMouseMove(new Point2(e.Position.X, e.Position.Y));
+			ProcessMouseMove(new Point2((int)position.X, (int)position.Y));
 		}
 
-		public static MouseButton TranslateMouseButton(OpenTK.Input.MouseButton mouseButton)
+		public static MouseButton TranslateMouseButton(Silk.NET.Input.MouseButton mouseButton)
 		{
             return mouseButton switch
             {
-                OpenTK.Input.MouseButton.Left => MouseButton.Left,
-                OpenTK.Input.MouseButton.Right => MouseButton.Right,
-                OpenTK.Input.MouseButton.Middle => MouseButton.Middle,
-                OpenTK.Input.MouseButton.Button1=>MouseButton.Ext1,
-                OpenTK.Input.MouseButton.Button2 => MouseButton.Ext2,
+                Silk.NET.Input.MouseButton.Left => MouseButton.Left,
+                Silk.NET.Input.MouseButton.Right => MouseButton.Right,
+                Silk.NET.Input.MouseButton.Middle => MouseButton.Middle,
+                Silk.NET.Input.MouseButton.Button4=>MouseButton.Ext1,
+                Silk.NET.Input.MouseButton.Button5 => MouseButton.Ext2,
                 _ => (MouseButton)(-1),
             };
         }
@@ -190,17 +195,14 @@ namespace Engine.Input
                 }
 			}
 			if (!IsMouseVisible)
-			{
-				MousePosition = null;
+            {
+                MousePosition = null;
 #if !ANDROID
-                if (Window.m_gameWindow.Focused)
-                {
-                    Window.m_gameWindow.CursorGrabbed = true;
-                }
+                m_mouse.Cursor.CursorMode = Window.IsActive ? CursorMode.Disabled : CursorMode.Normal;
             }
             else
             {
-                Window.m_gameWindow.CursorGrabbed = false;
+                m_mouse.Cursor.CursorMode = CursorMode.Normal;
 #endif
             }
         }

@@ -1,6 +1,6 @@
 using System;
 using System.Runtime.InteropServices;
-using OpenTK.Graphics.ES30;
+using Silk.NET.OpenGL;
 
 namespace Engine.Graphics
 {
@@ -49,7 +49,7 @@ namespace Engine.Graphics
 			DeleteBuffer();
 		}
 
-		public void SetData<T>(T[] source, int sourceStartIndex, int sourceCount, int targetStartIndex = 0) where T : struct
+		public unsafe void SetData<T>(T[] source, int sourceStartIndex, int sourceCount, int targetStartIndex = 0) where T : struct
 		{
 			VerifyParametersSetData(source, sourceStartIndex, sourceCount, targetStartIndex);
 			var gCHandle = GCHandle.Alloc(source, GCHandleType.Pinned);
@@ -57,8 +57,8 @@ namespace Engine.Graphics
 			{
 				int num = Utilities.SizeOf<T>();
 				int vertexStride = VertexDeclaration.VertexStride;
-				GLWrapper.BindBuffer(BufferTarget.ArrayBuffer, m_buffer);
-				GL.BufferSubData(BufferTarget.ArrayBuffer, new IntPtr(targetStartIndex * vertexStride), new IntPtr(num * sourceCount), gCHandle.AddrOfPinnedObject() + (sourceStartIndex * num));
+				GLWrapper.BindBuffer(BufferTargetARB.ArrayBuffer, m_buffer);
+				GLWrapper.GL.BufferSubData(BufferTargetARB.ArrayBuffer, new IntPtr(targetStartIndex * vertexStride), new UIntPtr((uint)(num * sourceCount)), (void*)(gCHandle.AddrOfPinnedObject() + (sourceStartIndex * num)));
 			}
 			finally
 			{
@@ -76,18 +76,19 @@ namespace Engine.Graphics
 			AllocateBuffer();
 		}
 
-        public void AllocateBuffer()
+        public unsafe void AllocateBuffer()
 		{
-			GL.GenBuffers(1, out m_buffer);
-			GLWrapper.BindBuffer(BufferTarget.ArrayBuffer, m_buffer);
-			GL.BufferData(All.ArrayBuffer, new IntPtr(VertexDeclaration.VertexStride * VerticesCount), IntPtr.Zero, All.StaticDraw);
+			GLWrapper.GL.GenBuffers(1, out uint buffer);
+            m_buffer = (int)buffer;
+			GLWrapper.BindBuffer(BufferTargetARB.ArrayBuffer, m_buffer);
+            GLWrapper.GL.BufferData(BufferTargetARB.ArrayBuffer, new UIntPtr((uint)(VertexDeclaration.VertexStride * VerticesCount)), null, BufferUsageARB.StaticDraw);
 		}
 
         public void DeleteBuffer()
 		{
 			if (m_buffer != 0)
 			{
-				GLWrapper.DeleteBuffer(All.ArrayBuffer, m_buffer);
+				GLWrapper.DeleteBuffer(BufferTargetARB.ArrayBuffer, m_buffer);
 				m_buffer = 0;
 			}
 		}

@@ -4,13 +4,14 @@ using Android.Views;
 using Android.Widget;
 #endif
 
-using OpenTK;
-using OpenTK.Input;
+using Silk.NET.Input;
 
 namespace Engine.Input
 {
     public static class Keyboard
     {
+        public static IKeyboard m_keyboard;
+
         public static double m_keyFirstRepeatTime = 0.3;
 
         public static double m_keyNextRepeatTime = 0.04;
@@ -195,9 +196,10 @@ namespace Engine.Input
         internal static void Initialize()
         {
 #if !ANDROID
-            Window.m_gameWindow.KeyDown += KeyDownHandler;
-            Window.m_gameWindow.KeyUp += KeyUpHandler;
-            Window.m_gameWindow.KeyPress += KeyPressHandler;
+            m_keyboard = Window.m_inputContext.Keyboards[0];
+            m_keyboard.KeyDown += KeyDownHandler;
+            m_keyboard.KeyUp += KeyUpHandler;
+            m_keyboard.KeyChar += KeyPressHandler;
 #endif
         }
 
@@ -210,30 +212,30 @@ namespace Engine.Input
             cancel();
         }
 
-        private static void KeyDownHandler(object sender, KeyboardKeyEventArgs e)
+        private static void KeyDownHandler(IKeyboard keyboard, Silk.NET.Input.Key key, int scancode)
         {
-            if (e.Key == OpenTK.Input.Key.Back || e.Key == OpenTK.Input.Key.Delete) KeyboardInput.DeletePressed = true;
-            Key key = TranslateKey(e.Key);
-            if (key != (Key)(-1))
+            if (scancode == 270 || key == Silk.NET.Input.Key.Delete) KeyboardInput.DeletePressed = true;
+            Key translatedKey = TranslateKey(key);
+            if (translatedKey != (Key)(-1))
             {
-                ProcessKeyDown(key);
+                ProcessKeyDown(translatedKey);
             }
         }
 
-        private static void KeyUpHandler(object sender, KeyboardKeyEventArgs e)
+        private static void KeyUpHandler(IKeyboard keyboard, Silk.NET.Input.Key key, int scancode)
         {
-            Key key = TranslateKey(e.Key);
-            if (key != (Key)(-1))
+            Key translatedKey = TranslateKey(key);
+            if (translatedKey != (Key)(-1))
             {
-                ProcessKeyUp(key);
+                ProcessKeyUp(translatedKey);
             }
         }
 
-        private static void KeyPressHandler(object sender, KeyPressEventArgs e)
+        private static void KeyPressHandler(IKeyboard keyboard, char c)
         {
-            KeyboardInput.Chars.Add(e.KeyChar);
-            ProcessCharacterEntered(e.KeyChar);
-            LastString += e.KeyChar;
+            KeyboardInput.Chars.Add(c);
+            ProcessCharacterEntered(c);
+            LastString += c;
         }
 #else
         internal static void HandleKeyDown(Keycode keyCode)
@@ -260,167 +262,167 @@ namespace Engine.Input
         }
 
 #endif
-        public static Key TranslateKey(OpenTK.Input.Key key)
+        public static Key TranslateKey(Silk.NET.Input.Key key)
         {
             switch (key)
             {
-                case OpenTK.Input.Key.ShiftLeft:
+                case Silk.NET.Input.Key.ShiftLeft:
                     return Key.Shift;
-                case OpenTK.Input.Key.ShiftRight:
+                case Silk.NET.Input.Key.ShiftRight:
                     return Key.Shift;
-                case OpenTK.Input.Key.ControlLeft:
+                case Silk.NET.Input.Key.ControlLeft:
                     return Key.Control;
-                case OpenTK.Input.Key.ControlRight:
+                case Silk.NET.Input.Key.ControlRight:
                     return Key.Control;
-                case OpenTK.Input.Key.F1:
+                case Silk.NET.Input.Key.F1:
                     return Key.F1;
-                case OpenTK.Input.Key.F2:
+                case Silk.NET.Input.Key.F2:
                     return Key.F2;
-                case OpenTK.Input.Key.F3:
+                case Silk.NET.Input.Key.F3:
                     return Key.F3;
-                case OpenTK.Input.Key.F4:
+                case Silk.NET.Input.Key.F4:
                     return Key.F4;
-                case OpenTK.Input.Key.F5:
+                case Silk.NET.Input.Key.F5:
                     return Key.F5;
-                case OpenTK.Input.Key.F6:
+                case Silk.NET.Input.Key.F6:
                     return Key.F6;
-                case OpenTK.Input.Key.F7:
+                case Silk.NET.Input.Key.F7:
                     return Key.F7;
-                case OpenTK.Input.Key.F8:
+                case Silk.NET.Input.Key.F8:
                     return Key.F8;
-                case OpenTK.Input.Key.F9:
+                case Silk.NET.Input.Key.F9:
                     return Key.F9;
-                case OpenTK.Input.Key.F10:
+                case Silk.NET.Input.Key.F10:
                     return Key.F10;
-                case OpenTK.Input.Key.F11:
+                case Silk.NET.Input.Key.F11:
                     return Key.F11;
-                case OpenTK.Input.Key.F12:
+                case Silk.NET.Input.Key.F12:
                     return Key.F12;
-                case OpenTK.Input.Key.Up:
+                case Silk.NET.Input.Key.Up:
                     return Key.UpArrow;
-                case OpenTK.Input.Key.Down:
+                case Silk.NET.Input.Key.Down:
                     return Key.DownArrow;
-                case OpenTK.Input.Key.Left:
+                case Silk.NET.Input.Key.Left:
                     return Key.LeftArrow;
-                case OpenTK.Input.Key.Right:
+                case Silk.NET.Input.Key.Right:
                     return Key.RightArrow;
-                case OpenTK.Input.Key.Enter:
+                case Silk.NET.Input.Key.Enter:
                     return Key.Enter;
-                case OpenTK.Input.Key.KeypadEnter:
+                case Silk.NET.Input.Key.KeypadEnter:
                     return Key.Enter;
-                case OpenTK.Input.Key.Escape:
+                case Silk.NET.Input.Key.Escape:
                     return Key.Escape;
-                case OpenTK.Input.Key.Space:
+                case Silk.NET.Input.Key.Space:
                     return Key.Space;
-                case OpenTK.Input.Key.Tab:
+                case Silk.NET.Input.Key.Tab:
                     return Key.Tab;
-                case OpenTK.Input.Key.BackSpace:
+                case Silk.NET.Input.Key.Backspace:
                     return Key.BackSpace;
-                case OpenTK.Input.Key.Insert:
+                case Silk.NET.Input.Key.Insert:
                     return Key.Insert;
-                case OpenTK.Input.Key.Delete:
+                case Silk.NET.Input.Key.Delete:
                     return Key.Delete;
-                case OpenTK.Input.Key.PageUp:
+                case Silk.NET.Input.Key.PageUp:
                     return Key.PageUp;
-                case OpenTK.Input.Key.PageDown:
+                case Silk.NET.Input.Key.PageDown:
                     return Key.PageDown;
-                case OpenTK.Input.Key.Home:
+                case Silk.NET.Input.Key.Home:
                     return Key.Home;
-                case OpenTK.Input.Key.End:
+                case Silk.NET.Input.Key.End:
                     return Key.End;
-                case OpenTK.Input.Key.CapsLock:
+                case Silk.NET.Input.Key.CapsLock:
                     return Key.CapsLock;
-                case OpenTK.Input.Key.A:
+                case Silk.NET.Input.Key.A:
                     return Key.A;
-                case OpenTK.Input.Key.B:
+                case Silk.NET.Input.Key.B:
                     return Key.B;
-                case OpenTK.Input.Key.C:
+                case Silk.NET.Input.Key.C:
                     return Key.C;
-                case OpenTK.Input.Key.D:
+                case Silk.NET.Input.Key.D:
                     return Key.D;
-                case OpenTK.Input.Key.E:
+                case Silk.NET.Input.Key.E:
                     return Key.E;
-                case OpenTK.Input.Key.F:
+                case Silk.NET.Input.Key.F:
                     return Key.F;
-                case OpenTK.Input.Key.G:
+                case Silk.NET.Input.Key.G:
                     return Key.G;
-                case OpenTK.Input.Key.H:
+                case Silk.NET.Input.Key.H:
                     return Key.H;
-                case OpenTK.Input.Key.I:
+                case Silk.NET.Input.Key.I:
                     return Key.I;
-                case OpenTK.Input.Key.J:
+                case Silk.NET.Input.Key.J:
                     return Key.J;
-                case OpenTK.Input.Key.K:
+                case Silk.NET.Input.Key.K:
                     return Key.K;
-                case OpenTK.Input.Key.L:
+                case Silk.NET.Input.Key.L:
                     return Key.L;
-                case OpenTK.Input.Key.M:
+                case Silk.NET.Input.Key.M:
                     return Key.M;
-                case OpenTK.Input.Key.N:
+                case Silk.NET.Input.Key.N:
                     return Key.N;
-                case OpenTK.Input.Key.O:
+                case Silk.NET.Input.Key.O:
                     return Key.O;
-                case OpenTK.Input.Key.P:
+                case Silk.NET.Input.Key.P:
                     return Key.P;
-                case OpenTK.Input.Key.Q:
+                case Silk.NET.Input.Key.Q:
                     return Key.Q;
-                case OpenTK.Input.Key.R:
+                case Silk.NET.Input.Key.R:
                     return Key.R;
-                case OpenTK.Input.Key.S:
+                case Silk.NET.Input.Key.S:
                     return Key.S;
-                case OpenTK.Input.Key.T:
+                case Silk.NET.Input.Key.T:
                     return Key.T;
-                case OpenTK.Input.Key.U:
+                case Silk.NET.Input.Key.U:
                     return Key.U;
-                case OpenTK.Input.Key.V:
+                case Silk.NET.Input.Key.V:
                     return Key.V;
-                case OpenTK.Input.Key.W:
+                case Silk.NET.Input.Key.W:
                     return Key.W;
-                case OpenTK.Input.Key.X:
+                case Silk.NET.Input.Key.X:
                     return Key.X;
-                case OpenTK.Input.Key.Y:
+                case Silk.NET.Input.Key.Y:
                     return Key.Y;
-                case OpenTK.Input.Key.Z:
+                case Silk.NET.Input.Key.Z:
                     return Key.Z;
-                case OpenTK.Input.Key.Number0:
+                case Silk.NET.Input.Key.Number0:
                     return Key.Number0;
-                case OpenTK.Input.Key.Number1:
+                case Silk.NET.Input.Key.Number1:
                     return Key.Number1;
-                case OpenTK.Input.Key.Number2:
+                case Silk.NET.Input.Key.Number2:
                     return Key.Number2;
-                case OpenTK.Input.Key.Number3:
+                case Silk.NET.Input.Key.Number3:
                     return Key.Number3;
-                case OpenTK.Input.Key.Number4:
+                case Silk.NET.Input.Key.Number4:
                     return Key.Number4;
-                case OpenTK.Input.Key.Number5:
+                case Silk.NET.Input.Key.Number5:
                     return Key.Number5;
-                case OpenTK.Input.Key.Number6:
+                case Silk.NET.Input.Key.Number6:
                     return Key.Number6;
-                case OpenTK.Input.Key.Number7:
+                case Silk.NET.Input.Key.Number7:
                     return Key.Number7;
-                case OpenTK.Input.Key.Number8:
+                case Silk.NET.Input.Key.Number8:
                     return Key.Number8;
-                case OpenTK.Input.Key.Number9:
+                case Silk.NET.Input.Key.Number9:
                     return Key.Number9;
-                case OpenTK.Input.Key.Tilde:
+                case Silk.NET.Input.Key.GraveAccent:
                     return Key.Tilde;
-                case OpenTK.Input.Key.Minus:
+                case Silk.NET.Input.Key.Minus:
                     return Key.Minus;
-                case OpenTK.Input.Key.Plus:
+                case Silk.NET.Input.Key.Equal:
                     return Key.Plus;
-                case OpenTK.Input.Key.BracketLeft:
+                case Silk.NET.Input.Key.LeftBracket:
                     return Key.LeftBracket;
-                case OpenTK.Input.Key.BracketRight:
+                case Silk.NET.Input.Key.RightBracket:
                     return Key.RightBracket;
-                case OpenTK.Input.Key.Semicolon:
+                case Silk.NET.Input.Key.Semicolon:
                     return Key.Semicolon;
-                case OpenTK.Input.Key.Quote:
+                case Silk.NET.Input.Key.Apostrophe:
                     return Key.Quote;
-                case OpenTK.Input.Key.Comma:
+                case Silk.NET.Input.Key.Comma:
                     return Key.Comma;
-                case OpenTK.Input.Key.Period:
+                case Silk.NET.Input.Key.Period:
                     return Key.Period;
-                case OpenTK.Input.Key.Slash:
+                case Silk.NET.Input.Key.Slash:
                     return Key.Slash;
                 default:
                     return (Key)(-1);
