@@ -34,6 +34,7 @@ namespace Game
 
 		public float m_peckPhase;
 
+		public float m_kickPhase;
 		public float FlyPhase
 		{
 			get;
@@ -90,6 +91,33 @@ namespace Game
 				m_peckPhase = MathUtils.Remainder(Math.Min(m_peckPhase + (m_peckAnimationSpeed * dt), 1f), 1f);
 			}
 			FeedOrder = false;
+			IsAttackHitMoment = false;
+			if(AttackOrder)
+			{
+				m_peckAnimationSpeed = MathUtils.Min(m_peckAnimationSpeed + (2f * dt),1f);
+				float kickPhase = m_kickPhase;
+				m_kickPhase = MathUtils.Remainder(m_kickPhase + (dt * 2f),1f);
+				if(kickPhase < 0.5f && m_kickPhase >= 0.5f)
+				{
+					IsAttackHitMoment = true;
+				}
+			}
+			else
+			{
+				m_peckAnimationSpeed = MathUtils.Max(m_peckAnimationSpeed - (2f * dt),0f);
+				if(m_kickPhase != 0f)
+				{
+					if(m_kickPhase > 0.5f)
+					{
+						m_kickPhase = MathUtils.Remainder(MathUtils.Min(m_kickPhase + (dt * 2f),1f),1f);
+					}
+					else if(m_kickPhase > 0f)
+					{
+						m_kickPhase = MathUtils.Max(m_kickPhase - (dt * 2f),0f);
+					}
+				}
+			}
+			AttackOrder = false;
 			base.Update(dt);
 		}
 
@@ -139,7 +167,7 @@ namespace Game
 					num4 = 0.5f * MathF.Sin((float)Math.PI * 2f * MovementAnimationPhase / 2f);
 					num5 = 0f - num4;
 				}
-				float num6 = MathF.Cos((float)Math.PI * 2f * m_peckPhase);
+				float num6 = MathF.Cos((float)Math.PI * 2f * m_kickPhase!=0? m_kickPhase : m_peckPhase);
 				num4 -= 1.25f * (1f - ((num6 >= 0f) ? num6 : (-0.5f * num6)));
 				num4 += m_componentCreature.ComponentLocomotion.LookAngles.Y;
 				SetBoneTransform(m_bodyBone.Index, Matrix.CreateFromYawPitchRoll(vector.X, 0f, 0f) * Matrix.CreateTranslation(m_componentCreature.ComponentBody.Position + new Vector3(0f, Bob, 0f)));
