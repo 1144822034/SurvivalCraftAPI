@@ -52,6 +52,7 @@ namespace Game
 			{
 				bool num = m_componentCreature.Entity.FindComponent<ComponentOnFire>()?.IsOnFire ?? false;
 				m_lootDropped = true;
+				List<BlockDropValue> blockDropValues = new List<BlockDropValue>();
 				foreach (Loot item in num ? m_lootOnFireList : m_lootList)
 				{
 					if (m_random.Float(0f, 1f) < item.Probability)
@@ -59,11 +60,23 @@ namespace Game
 						int num2 = m_random.Int(item.MinCount, item.MaxCount);
 						for (int i = 0; i < num2; i++)
 						{
-							Vector3 position = (m_componentCreature.ComponentBody.BoundingBox.Min + m_componentCreature.ComponentBody.BoundingBox.Max) / 2f;
-							m_subsystemPickables.AddPickable(item.Value, 1, position, null, null, Entity);
+							blockDropValues.Add(new BlockDropValue{
+								Value = item.Value,
+								Count = 1 
+							});
 						}
 					}
 				}
+				ModsManager.HookAction("DecideLoot",loader => {
+					loader.DecideLoot(this, blockDropValues);
+					return false;
+				});
+				Vector3 position = (m_componentCreature.ComponentBody.BoundingBox.Min + m_componentCreature.ComponentBody.BoundingBox.Max) / 2f;
+				foreach(BlockDropValue blockDropValue in blockDropValues)
+				{
+					m_subsystemPickables.AddPickable(blockDropValue.Value, blockDropValue.Count, position,null,null,Entity);
+				}
+
 			}
 		}
 

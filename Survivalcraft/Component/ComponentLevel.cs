@@ -1,8 +1,10 @@
 using Engine;
 using GameEntitySystem;
+using Jint.Native;
 using System;
 using System.Collections.Generic;
 using TemplatesDatabase;
+using static Game.ComponentLevel;
 
 namespace Game
 {
@@ -13,6 +15,8 @@ namespace Game
 			public string Description;
 
 			public float Value;
+
+			public string Name;
 		}
 
 		public static string fName = "ComponentLevel";
@@ -73,150 +77,99 @@ namespace Game
 			}
 		}
 
-		public override float CalculateStrengthFactor(ICollection<Factor> factors)
+		/// <summary>
+		/// 生成玩家的所有关于力量的因素
+		/// </summary>
+		public override void GenerateStrengthFactors()
 		{
-			float num = (m_componentPlayer.PlayerData.PlayerClass == PlayerClass.Female) ? 0.8f : 1f;
-			float num2 = 1f * num;
-			Factor item;
-			if (factors != null)
+			base.GenerateStrengthFactors();
+			m_strengthFactors.Add(new Factor
 			{
-				item = new Factor
-				{
-					Value = num,
-					Description = m_componentPlayer.PlayerData.PlayerClass.ToString()
-				};
-				factors.Add(item);
-			}
+				Name = "PlayerClass",
+				Value = (m_componentPlayer.PlayerData.PlayerClass == PlayerClass.Female) ? 0.8f : 1f,
+				Description = m_componentPlayer.PlayerData.PlayerClass.ToString()
+			});
 			float level = m_componentPlayer.PlayerData.Level;
-			float num3 = 1f + (0.05f * MathF.Floor(Math.Clamp(level, 1f, 21f) - 1f));
-			float num4 = num2 * num3;
-			if (factors != null)
+			float num3 = 1f + (0.05f * MathF.Floor(Math.Clamp(level,1f,21f) - 1f));
+			m_strengthFactors.Add(new Factor
 			{
-				item = new Factor
-				{
-					Value = num3,
-					Description = string.Format(LanguageControl.Get(fName, 2), MathF.Floor(level).ToString())
-				};
-				factors.Add(item);
-			}
+				Name = "Level",
+				Value = num3,
+				Description = string.Format(LanguageControl.Get(fName,2),MathF.Floor(level).ToString())
+			});
 			float stamina = m_componentPlayer.ComponentVitalStats.Stamina;
 			float num5 = MathUtils.Lerp(0.5f, 1f, MathUtils.Saturate(4f * stamina)) * MathUtils.Lerp(0.9f, 1f, MathUtils.Saturate(stamina));
-			float num6 = num4 * num5;
-			if (factors != null)
+			m_strengthFactors.Add(new Factor
 			{
-				item = new Factor
-				{
-					Value = num5,
-					Description = string.Format(LanguageControl.Get(fName, 3), $"{stamina * 100f:0}")
-				};
-				factors.Add(item);
-			}
-			float num7 = m_componentPlayer.ComponentSickness.IsSick ? 0.75f : 1f;
-			float num8 = num6 * num7;
-			if (factors != null)
+				Name = "Stamina",
+				Value = num5,
+				Description = string.Format(LanguageControl.Get(fName,3),$"{stamina * 100f:0}")
+			});
+			m_strengthFactors.Add(new Factor
 			{
-				item = new Factor
-				{
-					Value = num7,
-					Description = m_componentPlayer.ComponentSickness.IsSick ? LanguageControl.Get(fName, 4) : LanguageControl.Get(fName, 5)
-				};
-				factors.Add(item);
-			}
-			float num9 = (!m_componentPlayer.ComponentSickness.IsPuking) ? 1 : 0;
-			float num10 = num8 * num9;
-			if (factors != null)
+				Name = "IsSick",
+				Value = m_componentPlayer.ComponentSickness.IsSick ? 0.75f : 1f,
+				Description = m_componentPlayer.ComponentSickness.IsSick ? LanguageControl.Get(fName,4) : LanguageControl.Get(fName,5)
+			});
+			m_strengthFactors.Add(new Factor
 			{
-				item = new Factor
-				{
-					Value = num9,
-					Description = m_componentPlayer.ComponentSickness.IsPuking ? LanguageControl.Get(fName, 6) : LanguageControl.Get(fName, 7)
-				};
-				factors.Add(item);
-			}
-			float num11 = m_componentPlayer.ComponentFlu.HasFlu ? 0.75f : 1f;
-			float num12 = num10 * num11;
-			if (factors != null)
+				Name = "IsPuking",
+				Value = (!m_componentPlayer.ComponentSickness.IsPuking) ? 1 : 0,
+				Description = m_componentPlayer.ComponentSickness.IsPuking ? LanguageControl.Get(fName,6) : LanguageControl.Get(fName,7)
+			});
+			m_strengthFactors.Add(new Factor
 			{
-				item = new Factor
-				{
-					Value = num11,
-					Description = m_componentPlayer.ComponentFlu.HasFlu ? LanguageControl.Get(fName, 8) : LanguageControl.Get(fName, 9)
-				};
-				factors.Add(item);
-			}
-			float num13 = (!m_componentPlayer.ComponentFlu.IsCoughing) ? 1 : 0;
-			float num14 = num12 * num13;
-			if (factors != null)
+				Name = "HasFlu",
+				Value = m_componentPlayer.ComponentFlu.HasFlu ? 0.75f : 1f,
+				Description = m_componentPlayer.ComponentFlu.HasFlu ? LanguageControl.Get(fName,8) : LanguageControl.Get(fName,9)
+			});
+			m_strengthFactors.Add(new Factor
 			{
-				item = new Factor
-				{
-					Value = num13,
-					Description = m_componentPlayer.ComponentFlu.IsCoughing ? LanguageControl.Get(fName, 10) : LanguageControl.Get(fName, 11)
-				};
-				factors.Add(item);
-			}
+				Name = "IsCoughing",
+				Value = (!m_componentPlayer.ComponentFlu.IsCoughing) ? 1 : 0,
+				Description = m_componentPlayer.ComponentFlu.IsCoughing ? LanguageControl.Get(fName,10) : LanguageControl.Get(fName,11)
+			});
 			float num15 = (m_subsystemGameInfo.WorldSettings.GameMode == GameMode.Harmless) ? 1.25f : 1f;
-			float result = num14 * num15;
-			if (factors != null)
+			m_strengthFactors.Add(new Factor
 			{
-				item = new Factor
-				{
-					Value = num15,
-					Description = string.Format(LanguageControl.Get(fName, 12), m_subsystemGameInfo.WorldSettings.GameMode.ToString())
-				};
-				factors.Add(item);
-			}
-			return result;
+				Name = "GameMode",
+				Value = num15,
+				Description = string.Format(LanguageControl.Get(fName,12),m_subsystemGameInfo.WorldSettings.GameMode.ToString())
+			});
 		}
 
-		public override float CalculateResilienceFactor(ICollection<Factor> factors)
+		/// <summary>
+		/// 生成玩家所有关于防御的因素
+		/// </summary>
+		public override void GenerateResilienceFactors()
 		{
-			float num = (m_componentPlayer.PlayerData.PlayerClass == PlayerClass.Female) ? 0.8f : 1f;
-			float num2 = 1f * num;
-			Factor item;
-			if (factors != null)
+			base.GenerateResilienceFactors();
+			m_resilienceFactors.Add(new Factor
 			{
-				item = new Factor
-				{
-					Value = num,
-					Description = m_componentPlayer.PlayerData.PlayerClass.ToString()
-				};
-				factors.Add(item);
-			}
+				Name = "PlayerClass",
+				Value = (m_componentPlayer.PlayerData.PlayerClass == PlayerClass.Female) ? 0.8f : 1f,
+				Description = m_componentPlayer.PlayerData.PlayerClass.ToString()
+			});
 			float level = m_componentPlayer.PlayerData.Level;
-			float num3 = 1f + (0.05f * MathF.Floor(Math.Clamp(level, 1f, 21f) - 1f));
-			float num4 = num2 * num3;
-			if (factors != null)
+			float num3 = 1f + (0.05f * MathF.Floor(Math.Clamp(level,1f,21f) - 1f));
+			m_resilienceFactors.Add(new Factor
 			{
-				item = new Factor
-				{
-					Value = num3,
-					Description = string.Format(LanguageControl.Get(fName, 2), MathF.Floor(level).ToString())
-				};
-				factors.Add(item);
-			}
-			float num5 = m_componentPlayer.ComponentSickness.IsSick ? 0.75f : 1f;
-			float num6 = num4 * num5;
-			if (factors != null)
+				Name = "Level",
+				Value = num3,
+				Description = string.Format(LanguageControl.Get(fName,2),MathF.Floor(level).ToString())
+			});
+			m_resilienceFactors.Add(new Factor
 			{
-				item = new Factor
-				{
-					Value = num5,
-					Description = m_componentPlayer.ComponentSickness.IsSick ? LanguageControl.Get(fName, 4) : LanguageControl.Get(fName, 5)
-				};
-				factors.Add(item);
-			}
-			float num7 = m_componentPlayer.ComponentFlu.HasFlu ? 0.75f : 1f;
-			float num8 = num6 * num7;
-			if (factors != null)
+				Name = "IsSick",
+				Value = m_componentPlayer.ComponentSickness.IsSick ? 0.75f : 1f,
+				Description = m_componentPlayer.ComponentSickness.IsSick ? LanguageControl.Get(fName,4) : LanguageControl.Get(fName,5)
+			});
+			m_resilienceFactors.Add(new Factor
 			{
-				item = new Factor
-				{
-					Value = num7,
-					Description = m_componentPlayer.ComponentFlu.HasFlu ? LanguageControl.Get(fName, 8) : LanguageControl.Get(fName, 9)
-				};
-				factors.Add(item);
-			}
+				Name = "HasFlu",
+				Value = m_componentPlayer.ComponentFlu.HasFlu ? 0.75f : 1f,
+				Description = m_componentPlayer.ComponentFlu.HasFlu ? LanguageControl.Get(fName,8) : LanguageControl.Get(fName,9)
+			});
 			float num9 = 1f;
 			if (m_subsystemGameInfo.WorldSettings.GameMode == GameMode.Harmless)
 			{
@@ -230,149 +183,105 @@ namespace Game
 			{
 				num9 = float.PositiveInfinity;
 			}
-			float result = num8 * num9;
-			if (factors != null)
+			m_resilienceFactors.Add(new Factor
 			{
-				item = new Factor
-				{
-					Value = num9,
-					Description = string.Format(LanguageControl.Get(fName, 12), m_subsystemGameInfo.WorldSettings.GameMode.ToString())
-				};
-				factors.Add(item);
-			}
-			return result;
+				Name = "GameMode",
+				Value = num9,
+				Description = string.Format(LanguageControl.Get(fName,12),m_subsystemGameInfo.WorldSettings.GameMode.ToString())
+			});
 		}
 
-		public override float CalculateSpeedFactor(ICollection<Factor> factors)
+		/// <summary>
+		/// 生成玩家所有关于速度的因素
+		/// </summary>
+		public override void GenerateSpeedFactors()
 		{
-			float num = 1f;
-			float num2 = (m_componentPlayer.PlayerData.PlayerClass == PlayerClass.Female) ? 1.03f : 1f;
-			num *= num2;
-			Factor item;
-			if (factors != null)
+			base.GenerateSpeedFactors();
+			m_speedFactors.Add(new Factor
 			{
-				item = new Factor
-				{
-					Value = num2,
-					Description = m_componentPlayer.PlayerData.PlayerClass.ToString()
-				};
-				factors.Add(item);
-			}
+				Name = "PlayerClass",
+				Value = (m_componentPlayer.PlayerData.PlayerClass == PlayerClass.Female) ? 1.03f : 1f,
+				Description = m_componentPlayer.PlayerData.PlayerClass.ToString()
+			});
 			float level = m_componentPlayer.PlayerData.Level;
 			float num3 = 1f + (0.02f * MathF.Floor(Math.Clamp(level, 1f, 21f) - 1f));
-			num *= num3;
-			if (factors != null)
+			m_speedFactors.Add(new Factor
 			{
-				item = new Factor
-				{
-					Value = num3,
-					Description = string.Format(LanguageControl.Get(fName, 2), MathF.Floor(level).ToString())
-				};
-				factors.Add(item);
-			}
+				Name = "Level",
+				Value = num3,
+				Description = string.Format(LanguageControl.Get(fName,2),MathF.Floor(level).ToString())
+			});
 			float clothingFactor = 1f;
 			foreach (int clothe in m_componentPlayer.ComponentClothing.GetClothes(ClothingSlot.Head))
 			{
-				AddClothingFactor(clothe, ref clothingFactor, factors);
+				GenerateClothingSpeedFactors(clothe);
 			}
 			foreach (int clothe2 in m_componentPlayer.ComponentClothing.GetClothes(ClothingSlot.Torso))
 			{
-				AddClothingFactor(clothe2, ref clothingFactor, factors);
+				GenerateClothingSpeedFactors(clothe2);
 			}
 			foreach (int clothe3 in m_componentPlayer.ComponentClothing.GetClothes(ClothingSlot.Legs))
 			{
-				AddClothingFactor(clothe3, ref clothingFactor, factors);
+				GenerateClothingSpeedFactors(clothe3);
 			}
 			foreach (int clothe4 in m_componentPlayer.ComponentClothing.GetClothes(ClothingSlot.Feet))
 			{
-				AddClothingFactor(clothe4, ref clothingFactor, factors);
+				GenerateClothingSpeedFactors(clothe4);
 			}
-			num *= clothingFactor;
 			float stamina = m_componentPlayer.ComponentVitalStats.Stamina;
 			float num4 = MathUtils.Lerp(0.5f, 1f, MathUtils.Saturate(4f * stamina)) * MathUtils.Lerp(0.9f, 1f, MathUtils.Saturate(stamina));
-			num *= num4;
-			if (factors != null)
+			m_speedFactors.Add(new Factor
 			{
-				item = new Factor
-				{
-					Value = num4,
-					Description = string.Format(LanguageControl.Get(fName, 3), $"{stamina * 100f:0}")
-				};
-				factors.Add(item);
-			}
-			float num5 = m_componentPlayer.ComponentSickness.IsSick ? 0.75f : 1f;
-			num *= num5;
-			if (factors != null)
+				Name = "Stamina",
+				Value = num4,
+				Description = string.Format(LanguageControl.Get(fName,3),$"{stamina * 100f:0}")
+			});
+			m_speedFactors.Add(new Factor
 			{
-				item = new Factor
-				{
-					Value = num5,
-					Description = m_componentPlayer.ComponentSickness.IsSick ? LanguageControl.Get(fName, 4) : LanguageControl.Get(fName, 5)
-				};
-				factors.Add(item);
-			}
-			float num6 = (!m_componentPlayer.ComponentSickness.IsPuking) ? 1 : 0;
-			num *= num6;
-			if (factors != null)
+				Name = "IsSick",
+				Value = m_componentPlayer.ComponentSickness.IsSick ? 0.75f : 1f,
+				Description = m_componentPlayer.ComponentSickness.IsSick ? LanguageControl.Get(fName,4) : LanguageControl.Get(fName,5)
+			});
+			m_speedFactors.Add(new Factor
 			{
-				item = new Factor
-				{
-					Value = num6,
-					Description = m_componentPlayer.ComponentSickness.IsPuking ? LanguageControl.Get(fName, 6) : LanguageControl.Get(fName, 7)
-				};
-				factors.Add(item);
-			}
-			float num7 = m_componentPlayer.ComponentFlu.HasFlu ? 0.75f : 1f;
-			num *= num7;
-			if (factors != null)
+				Name = "IsPuking",
+				Value = (!m_componentPlayer.ComponentSickness.IsPuking) ? 1 : 0,
+				Description = m_componentPlayer.ComponentSickness.IsPuking ? LanguageControl.Get(fName,6) : LanguageControl.Get(fName,7)
+			});
+			m_speedFactors.Add(new Factor
 			{
-				item = new Factor
-				{
-					Value = num7,
-					Description = m_componentPlayer.ComponentFlu.HasFlu ? LanguageControl.Get(fName, 8) : LanguageControl.Get(fName, 9)
-				};
-				factors.Add(item);
-			}
-			float num8 = (!m_componentPlayer.ComponentFlu.IsCoughing) ? 1 : 0;
-			num *= num8;
-			if (factors != null)
+				Name = "HasFlu",
+				Value = m_componentPlayer.ComponentFlu.HasFlu ? 0.75f : 1f,
+				Description = m_componentPlayer.ComponentFlu.HasFlu ? LanguageControl.Get(fName,8) : LanguageControl.Get(fName,9)
+			});
+			m_speedFactors.Add(new Factor
 			{
-				item = new Factor
-				{
-					Value = num8,
-					Description = m_componentPlayer.ComponentFlu.IsCoughing ? LanguageControl.Get(fName, 10) : LanguageControl.Get(fName, 11)
-				};
-				factors.Add(item);
-			}
-			return num;
+				Name = "IsCoughing",
+				Value = (!m_componentPlayer.ComponentFlu.IsCoughing) ? 1 : 0,
+				Description = m_componentPlayer.ComponentFlu.IsCoughing ? LanguageControl.Get(fName,10) : LanguageControl.Get(fName,11)
+			});
 		}
 
-		public override float CalculateHungerFactor(ICollection<Factor> factors)
+		/// <summary>
+		/// 生成玩家所有关于饥饿的因素
+		/// </summary>
+		public override void GenerateHungerFactors()
 		{
-			float num = (m_componentPlayer.PlayerData.PlayerClass == PlayerClass.Female) ? 0.7f : 1f;
-			float num2 = 1f * num;
-			Factor item;
-			if (factors != null)
+			base.GenerateHungerFactors();
+			m_hungerFactors.Add(new Factor
 			{
-				item = new Factor
-				{
-					Value = num,
-					Description = m_componentPlayer.PlayerData.PlayerClass.ToString()
-				};
-				factors.Add(item);
-			}
+				Name = "PlayerClass",
+				Value = (m_componentPlayer.PlayerData.PlayerClass == PlayerClass.Female) ? 0.7f : 1f,
+				Description = m_componentPlayer.PlayerData.PlayerClass.ToString()
+			});
 			float level = m_componentPlayer.PlayerData.Level;
 			float num3 = 1f - (0.01f * MathF.Floor(Math.Clamp(level, 1f, 21f) - 1f));
-			float num4 = num2 * num3;
-			if (factors != null)
+			m_hungerFactors.Add(new Factor
 			{
-				item = new Factor
-				{
-					Value = num3,
-					Description = string.Format(LanguageControl.Get(fName, 2), MathF.Floor(level).ToString())
-				};
-				factors.Add(item);
-			}
+				Name = "Level",
+				Value = num3,
+				Description = string.Format(LanguageControl.Get(fName,2),MathF.Floor(level).ToString())
+			});
 			float num5 = 1f;
 			if (m_subsystemGameInfo.WorldSettings.GameMode == GameMode.Harmless)
 			{
@@ -386,17 +295,12 @@ namespace Game
 			{
 				num5 = 0f;
 			}
-			float result = num4 * num5;
-			if (factors != null)
+			m_hungerFactors.Add(new Factor
 			{
-				item = new Factor
-				{
-					Value = num5,
-					Description = string.Format(LanguageControl.Get(fName, 12), m_subsystemGameInfo.WorldSettings.GameMode.ToString())
-				};
-				factors.Add(item);
-			}
-			return result;
+				Name = "GameMode",
+				Value = num5,
+				Description = string.Format(LanguageControl.Get(fName,12),m_subsystemGameInfo.WorldSettings.GameMode.ToString())
+			});
 		}
 
 		public override void Update(float dt)
@@ -425,6 +329,22 @@ namespace Game
 			m_componentPlayer = Entity.FindComponent<ComponentPlayer>(throwOnError: true);
 		}
 
+		public void GenerateClothingSpeedFactors(int clothingValue)
+		{
+			Block block = BlocksManager.Blocks[Terrain.ExtractContents(clothingValue)];
+			ClothingData clothingData = block.GetClothingData(clothingValue);
+			if(clothingData != null && clothingData.MovementSpeedFactor != 1f)
+			{
+				m_speedFactors.Add(new Factor
+				{
+					Name = "Clothing " + clothingValue.ToString(),
+					Value = clothingData.MovementSpeedFactor,
+					Description = clothingData.DisplayName
+				});
+			}
+		}
+
+		[Obsolete("Use GenerateClothingSpeedFactors.")]
 		public static void AddClothingFactor(int clothingValue, ref float clothingFactor, ICollection<Factor> factors)
 		{
 			Block block = BlocksManager.Blocks[Terrain.ExtractContents(clothingValue)];

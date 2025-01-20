@@ -4,6 +4,7 @@ using GameEntitySystem;
 using System.Collections.Generic;
 using System.Xml.Linq;
 using TemplatesDatabase;
+using static Game.ComponentLevel;
 
 namespace Game
 {
@@ -234,18 +235,20 @@ namespace Game
             return attackPower;
         }
 
-        /// <summary>
-        /// 等级组件更新时执行
-        /// </summary>
-        /// <param name="level"></param>
-        public virtual void OnLevelUpdate(ComponentLevel level)
+		/// <summary>
+		/// 等级组件更新时执行
+		/// </summary>
+		/// <param name="level"></param>
+		[Obsolete("Use OnFactorsGenerate instead.")]
+		public virtual void OnLevelUpdate(ComponentLevel level)
         {
         }
 
-        /// <summary>
-        /// 因素控制力量、抗性、速度、饥饿速率组件更新时执行
-        /// </summary>
-        /// <param name="componentFactors"></param>
+		/// <summary>
+		/// 因素控制力量、抗性、速度、饥饿速率组件更新时执行
+		/// </summary>
+		/// <param name="componentFactors"></param>
+		[Obsolete("Use OnFactorsGenerate instead.")]
         public virtual void OnFactorsUpdate(ComponentFactors componentFactors, float dt)
         {
         }
@@ -1565,6 +1568,31 @@ namespace Game
 
 		}
 		public virtual void UpdateChaseBehaviorChasing(ComponentChaseBehavior chaseBehavior)
+		{
+
+		}
+		/// <summary>
+		/// 修改生物的战利品。
+		/// 建议不要清空dropValues推倒重来，影响模组兼容性。
+		/// </summary>
+		/// <param name="componentLoot"></param>
+		/// <param name="dropValues">其中包含所有的战利品掉落物的方块值和数量</param>
+		public virtual void DecideLoot(ComponentLoot componentLoot, List<BlockDropValue> dropValues)
+		{
+
+		}
+
+		/// <summary>
+		/// 在计算一个生物的Factors执行。
+		/// ComponentFactors里面有四个List，这四个List储存了所有对该属性有影响的因子。模组可以修改其中的因子来实现自定义的操作。
+		/// public List<Factor> m_strengthFactors = [];
+		/// public List<Factor> m_speedFactors = [];
+		/// public List<Factor> m_hungerFactors = [];
+		/// public List<Factor> m_resilienceFactors = [];
+		/// 在执行这个接口后，游戏会根据这四个List计算出StrengthFactor、SpeedFactor、HungerFactor、ResilienceFactor的最终值
+		/// </summary>
+		/// <param name="componentFactors"></param>
+		public virtual void OnFactorsGenerate(ComponentFactors componentFactors)
 		{
 
 		}

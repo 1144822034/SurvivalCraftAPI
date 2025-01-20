@@ -82,7 +82,7 @@ namespace Game
 										}
 										catch(Exception e)
 										{
-											Log.Error(array[i].ToString() + " Poll " + BlocksManager.Blocks[num3].GetType().Name + " at " + string.Format("({0},{1},{2}) ", x, y, z) + "\n" + e);
+											Log.Error(array[i].ToString() + " Poll " + BlocksManager.Blocks[num3].GetType().Name + " " + cellValueFast + " at " + string.Format("({0},{1},{2}) ", x, y, z) + "\n" + e);
 										}
 									}
 								}
