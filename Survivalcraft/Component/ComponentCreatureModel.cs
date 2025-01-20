@@ -21,10 +21,6 @@ namespace Game
 		public Vector3 m_randomLookPoint;
 
 		public Random m_random = new();
-		/// <summary>
-		/// 模型透明度
-		/// </summary>
-		public float Transparent=1f;
 		public float Bob
 		{
 			get;

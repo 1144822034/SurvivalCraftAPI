@@ -21,7 +21,22 @@ namespace Game
 		public Matrix?[] m_boneTransforms;
 
 		public float m_boundingSphereRadius;
-
+		/// <summary>
+		/// 模型透明度
+		/// </summary>
+		public float Transparent
+		{
+			get;
+			set;
+		}
+		/// <summary>
+		/// 模型大小缩放
+		/// </summary>
+		public float ModelScale
+		{
+			get;
+			set;
+		}
 		public float? Opacity
 		{
 			get;
@@ -103,12 +118,13 @@ namespace Game
 
 		public virtual void SetBoneTransform(int boneIndex, Matrix? transformation)
 		{
-			m_boneTransforms[boneIndex] = transformation;
+			var canScale = Model.m_bones[boneIndex].Name == "Body";
+			m_boneTransforms[boneIndex] = canScale? Matrix.CreateScale(ModelScale) * transformation : transformation;
 		}
 
 		public virtual void CalculateAbsoluteBonesTransforms(Camera camera)
 		{
-			ProcessBoneHierarchy(Model.RootBone, camera.ViewMatrix, AbsoluteBoneTransformsForCamera);
+			ProcessBoneHierarchy(Model.RootBone,camera.ViewMatrix, AbsoluteBoneTransformsForCamera);
 		}
 
 		public virtual void CalculateIsVisible(Camera camera)
@@ -134,7 +150,7 @@ namespace Game
 
 		public virtual void Animate()
 		{
-
+			
 		}
 
 		public virtual void DrawExtras(Camera camera)
@@ -153,6 +169,8 @@ namespace Game
 			string value2 = valuesDictionary.GetValue<string>("TextureOverride");
 			TextureOverride = string.IsNullOrEmpty(value2) ? null : ContentManager.Get<Texture2D>(value2);
 			PrepareOrder = valuesDictionary.GetValue<int>("PrepareOrder");
+			Transparent = valuesDictionary.GetValue<float>("Transparent",1f);
+			ModelScale = valuesDictionary.GetValue<float>("ModelScale",1f);
 			m_boundingSphereRadius = valuesDictionary.GetValue<float>("BoundingSphereRadius");
 		}
 
