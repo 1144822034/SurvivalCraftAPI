@@ -10,7 +10,11 @@ namespace Game
 {
 	public class ComponentLevel : ComponentFactors, IUpdateable
 	{
-		public struct Factor
+		/// <summary>
+		/// 这里的Factor类型从struct改为class，是由于模组在修改Factor的时候，通常是需要修改引用的值。
+		/// 如果是struct则只能复制并修改值，不能修改引用。
+		/// </summary>
+		public class Factor
 		{
 			public string Description;
 
@@ -299,7 +303,7 @@ namespace Game
 			{
 				Name = "GameMode",
 				Value = num5,
-				Description = string.Format(LanguageControl.Get(fName,12),m_subsystemGameInfo.WorldSettings.GameMode.ToString())
+				Description = string.Format(LanguageControl.Get(fName,12),LanguageControl.Get("GameMode", m_subsystemGameInfo.WorldSettings.GameMode.ToString()))
 			});
 		}
 

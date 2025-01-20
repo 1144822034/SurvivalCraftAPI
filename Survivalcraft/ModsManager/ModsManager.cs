@@ -664,8 +664,10 @@ public static class ModsManager
         ModifiedElement["32d392de-69c1-4d04-9e0b-5c7463201892"] = "Game.SubsystemPickables";
         ModifiedElement["54a4f6d5-98dd-4dc3-bf6d-04dfd972c6b7"] = "Game.SubsystemTime";
 		ModifiedElement["b2e68ecd-49fc-4c05-b784-424da13f8550"] = "Game.ComponentDispenser";
+		ModifiedElement["f6b020bb-8994-6ae6-289b-a842e3eb9ca5"] = "Game.ComponentFactors";
+		ModifiedElement["a346c456-5087-48c4-835a-5829b3f35c68"] = "Game.ComponentLevel";
 
-    }
+	}
 
 	public static void CombineDataBase(XElement DataBaseXml, Stream Xdb)
 	{
