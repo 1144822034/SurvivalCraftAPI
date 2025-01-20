@@ -38,13 +38,13 @@ namespace Game
 
 		public Dictionary<int, SpawnEntityData> m_spawnEntityDatas = new Dictionary<int, SpawnEntityData>();
 
-		public const float MaxChunkAge = 76800f;
+		public float MaxChunkAge = 76800f;
 
-		public const float VisitedRadius = 8f;
+		public float VisitedRadius = 8f;
 
-		public const float SpawnRadius = 48f;
+		public float SpawnRadius = 48f;
 
-		public const float DespawnRadius = 60f;
+		public float DespawnRadius = 60f;
 
 		public Dictionary<ComponentSpawn, bool>.KeyCollection Spawns => m_spawns.Keys;
 
@@ -169,7 +169,7 @@ namespace Game
 			var list = new List<Point2>();
 			foreach (SpawnChunk value in m_chunks.Values)
 			{
-				if (!value.LastVisitedTime.HasValue || m_subsystemGameInfo.TotalElapsedGameTime - value.LastVisitedTime.Value > 76800.0)
+				if (!value.LastVisitedTime.HasValue || m_subsystemGameInfo.TotalElapsedGameTime - value.LastVisitedTime.Value > MaxChunkAge)
 				{
 					list.Add(value.Point);
 				}
@@ -185,8 +185,8 @@ namespace Game
 			foreach (ComponentPlayer componentPlayer in m_subsystemPlayers.ComponentPlayers)
 			{
 				var v = new Vector2(componentPlayer.ComponentBody.Position.X, componentPlayer.ComponentBody.Position.Z);
-				Vector2 p = v - new Vector2(8f);
-				Vector2 p2 = v + new Vector2(8f);
+				Vector2 p = v - new Vector2(VisitedRadius);
+				Vector2 p2 = v + new Vector2(VisitedRadius);
 				Point2 point = Terrain.ToChunk(p);
 				Point2 point2 = Terrain.ToChunk(p2);
 				for (int i = point.X; i <= point2.X; i++)
@@ -209,8 +209,8 @@ namespace Game
 			foreach (GameWidget gameWidget in m_subsystemViews.GameWidgets)
 			{
 				var v = new Vector2(gameWidget.ActiveCamera.ViewPosition.X, gameWidget.ActiveCamera.ViewPosition.Z);
-				Vector2 p = v - new Vector2(48f);
-				Vector2 p2 = v + new Vector2(48f);
+				Vector2 p = v - new Vector2(SpawnRadius);
+				Vector2 p2 = v + new Vector2(SpawnRadius);
 				Point2 point = Terrain.ToChunk(p);
 				Point2 point2 = Terrain.ToChunk(p2);
 				for (int i = point.X; i <= point2.X; i++)
@@ -218,7 +218,7 @@ namespace Game
 					for (int j = point.Y; j <= point2.Y; j++)
 					{
 						var v2 = new Vector2((i + 0.5f) * 16f, (j + 0.5f) * 16f);
-						if (Vector2.DistanceSquared(v, v2) < 2340f)
+						if (Vector2.DistanceSquared(v, v2) < SpawnRadius * SpawnRadius)
 						{
 							TerrainChunk chunkAtCell = m_subsystemTerrain.Terrain.GetChunkAtCell(Terrain.ToCell(v2.X), Terrain.ToCell(v2.Y));
 							if (chunkAtCell != null && chunkAtCell.State > TerrainChunkState.InvalidPropagatedLight)
@@ -261,7 +261,7 @@ namespace Game
 					{
 						Vector3 viewPosition = gameWidget.ActiveCamera.ViewPosition;
 						var v2 = new Vector2(viewPosition.X, viewPosition.Z);
-						if (Vector2.DistanceSquared(v, v2) <= 3600f)
+						if (Vector2.DistanceSquared(v, v2) <= DespawnRadius * DespawnRadius)
 						{
 							flag = false;
 							break;
