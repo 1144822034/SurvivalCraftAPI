@@ -14,9 +14,6 @@ namespace Game
 		public SubsystemSoundMaterials m_subsystemSoundMaterials;
 
 		public SubsystemMovingBlocks m_subsystemMovingBlocks;
-
-		public override int[] HandledBlocks => [6,7];//GravelBlock and SandBlock
-
 		public override void OnNeighborBlockChanged(int x, int y, int z, int neighborX, int neighborY, int neighborZ)
 		{
 			if (m_subsystemGameInfo.WorldSettings.EnvironmentBehaviorMode == EnvironmentBehaviorMode.Living)

@@ -16,9 +16,10 @@ namespace Game
         }
 
 		public override void GenerateTerrainVertices(BlockGeometryGenerator generator, TerrainGeometry geometry, int value, int x, int y, int z)
-		{
-            generator.GenerateCubeVertices(this, 111, x, y, z, Color.Magenta, geometry.OpaqueSubsetsByFace);
-        }
+		{ 
+			if(Terrain.ExtractContents(value) != 0)
+				generator.GenerateCubeVertices(BlocksManager.Blocks[111], 111, x, y, z, Color.Magenta, geometry.OpaqueSubsetsByFace);
+		}
 
         public override IEnumerable<int> GetCreativeValues()
         {

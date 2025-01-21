@@ -115,6 +115,15 @@ namespace Game
 			return num;
 		}
 
+		public override void DropAllItems(Vector3 position)
+		{
+			for(int i = 0; i < SlotsCount; i++)
+			{
+				if(i != ResultSlotIndex)
+					DropSlotItems(this,i,position,m_random.Float(5f,10f) * Vector3.Normalize(new Vector3(m_random.Float(-1f,1f),m_random.Float(1f,2f),m_random.Float(-1f,1f))));
+			}
+		}
+
 		public override void Load(ValuesDictionary valuesDictionary, IdToEntityMap idToEntityMap)
 		{
 			base.Load(valuesDictionary, idToEntityMap);
