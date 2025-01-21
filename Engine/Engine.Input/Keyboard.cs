@@ -2,15 +2,17 @@
 using Android.App;
 using Android.Views;
 using Android.Widget;
-#endif
-
+#else
 using Silk.NET.Input;
+#endif
 
 namespace Engine.Input
 {
     public static class Keyboard
     {
+#if !ANDROID
         public static IKeyboard m_keyboard;
+#endif
 
         public static double m_keyFirstRepeatTime = 0.3;
 
@@ -220,6 +222,10 @@ namespace Engine.Input
             {
                 ProcessKeyDown(translatedKey);
             }
+            else if (scancode == 270)
+            {
+                ProcessKeyDown(Key.Back);
+            }
         }
 
         private static void KeyUpHandler(IKeyboard keyboard, Silk.NET.Input.Key key, int scancode)
@@ -228,6 +234,10 @@ namespace Engine.Input
             if (translatedKey != (Key)(-1))
             {
                 ProcessKeyUp(translatedKey);
+            }
+            else if (scancode == 270)
+            {
+                ProcessKeyUp(Key.Back);
             }
         }
 
@@ -262,6 +272,7 @@ namespace Engine.Input
         }
 
 #endif
+#if !ANDROID
         public static Key TranslateKey(Silk.NET.Input.Key key)
         {
             switch (key)
@@ -428,7 +439,7 @@ namespace Engine.Input
                     return (Key)(-1);
             }
         }
-#if ANDROID
+#else
         public static Key TranslateKey(Keycode keyCode)
         {
             switch (keyCode)

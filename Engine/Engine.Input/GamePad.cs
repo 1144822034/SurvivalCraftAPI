@@ -1,15 +1,16 @@
-﻿using Silk.NET.Input;
-#if ANDROID
+﻿#if ANDROID
 
+using Axis = Android.Views.Axis;
 using Android.Views;
 using System.Collections.Generic;
 using System.Linq;
+#else
+using Silk.NET.Input;
 #endif
 namespace Engine.Input
 {
     public static class GamePad
     {
-        public static IGamepad[] m_gamepads;
         private class State
         {
             public bool IsConnected;
@@ -27,6 +28,8 @@ namespace Engine.Input
 #if ANDROID
 		public static Dictionary<int, int> m_deviceToIndex = [];
 		public static List<int> m_toRemove = [];
+#else
+        public static IGamepad[] m_gamepads;
 #endif
         public static double m_buttonFirstRepeatTime = 0.2;
 
@@ -41,7 +44,9 @@ namespace Engine.Input
         };
         internal static void Initialize()
         {
+#if !ANDROID
             m_gamepads = Window.m_inputContext.Gamepads.Take(4).ToArray();
+#endif
         }
         internal static void Dispose()
         {
@@ -207,7 +212,7 @@ namespace Engine.Input
                             IReadOnlyList<Thumbstick> thumbsticks = gamepad.Thumbsticks;
                             for (int i = 0; i < 2; i++)
                             {
-                                state.Sticks[i] = new Vector2(thumbsticks[i].X, thumbsticks[i].Y);
+                                state.Sticks[i] = new Vector2(thumbsticks[i].X, -thumbsticks[i].Y);
                             }
                             IReadOnlyList<Trigger> triggers = gamepad.Triggers;
                             for (int i = 0; i < 2; i++)

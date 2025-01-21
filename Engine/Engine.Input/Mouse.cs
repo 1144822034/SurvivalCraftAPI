@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Drawing;
+#if !ANDROID
 using Silk.NET.Input;
+#endif
 
 namespace Engine.Input
 {

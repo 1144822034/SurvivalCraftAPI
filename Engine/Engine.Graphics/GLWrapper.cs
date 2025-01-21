@@ -98,7 +98,11 @@ namespace Engine.Graphics
 
 		public static void Initialize()
         {
+#if ANDROID
+            GL = GL.GetApi(Window.m_view);
+#else
             GL = Window.m_gameWindow.CreateOpenGL();
+#endif
 #if DEBUG
             unsafe
             {
@@ -1058,28 +1062,16 @@ namespace Engine.Graphics
 
         public static InternalFormat TranslateDepthFormat(DepthFormat depthFormat)
 		{
-#if !ANDROID
 			return depthFormat switch
 			{
 				DepthFormat.Depth16 => InternalFormat.DepthComponent16,
+#if ANDROID
+                DepthFormat.Depth24Stencil8 => GL_OES_packed_depth_stencil ? InternalFormat.Depth24Stencil8 : InternalFormat.DepthComponent16,
+#else
 				DepthFormat.Depth24Stencil8 => InternalFormat.Depth24Stencil8,
+#endif
                 _ => throw new InvalidOperationException("Unsupported DepthFormat."),
 			};
-#else
-			switch (depthFormat)
-			{
-				case DepthFormat.Depth16:
-					return RenderbufferInternalFormat.DepthComponent16;
-				case DepthFormat.Depth24Stencil8:
-					if (GL_OES_packed_depth_stencil)
-					{
-						return RenderbufferInternalFormat.Depth24Stencil8;
-					}
-					return RenderbufferInternalFormat.DepthComponent16;
-				default:
-					throw new InvalidOperationException("Unsupported DepthFormat.");
-			}
-#endif
         }
 #if DEBUG
         static readonly DebugProc DebugMessageDelegate = (source, type, id, severity, length, pMessage, param) =>

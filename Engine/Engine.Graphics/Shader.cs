@@ -282,12 +282,7 @@ namespace Engine.Graphics
 			GLWrapper.GL.GetProgram(program, ProgramPropertyARB.ActiveAttributes, out int params4);
 			for (int i = 0; i < params4; i++)
 			{
-#if ANDROID
-				StringBuilder stringBuilder = new(256);
-				GLWrapper.GL.GetActiveAttrib(m_program, i, stringBuilder.Capacity, out int _, out int _, out ActiveAttribType _, stringBuilder);
-#else
 				GLWrapper.GL.GetActiveAttrib(program, (uint)i, 256u, out uint _, out int _, out AttributeType _, out string stringBuilder);
-#endif
 				int attribLocation = GLWrapper.GL.GetAttribLocation(program, stringBuilder.ToString());
 				if (!dictionary.TryGetValue(stringBuilder.ToString(), out string value))
 				{
@@ -305,17 +300,6 @@ namespace Engine.Graphics
 			for (int j = 0; j < params5; j++)
 			{
 
-#if ANDROID
-				StringBuilder stringBuilder2 = new(256);
-				GLWrapper.GL.GetActiveUniform(m_program, j, stringBuilder2.Capacity, out int _, out int size2, out UniformType type2, stringBuilder2);
-								int uniformLocation = GLWrapper.GL.GetUniformLocation(m_program, stringBuilder2.ToString());
-				ShaderParameterType shaderParameterType = GLWrapper.TranslateActiveUniformType(type2);
-				int num = stringBuilder2.ToString().IndexOf('[');
-				if (num >= 0)
-				{
-					stringBuilder2.Remove(num, stringBuilder2.Length - num);
-				}
-#else
 				GLWrapper.GL.GetActiveUniform(program, (uint)j, 256u, out uint _, out int size2, out UniformType type2, out string stringBuilder2);
 				int uniformLocation = GLWrapper.GL.GetUniformLocation(program, stringBuilder2.ToString());
 				ShaderParameterType shaderParameterType = GLWrapper.TranslateActiveUniformType(type2);
@@ -324,7 +308,6 @@ namespace Engine.Graphics
 				{
 					stringBuilder2 = stringBuilder2.Remove(num, stringBuilder2.Length - num);
 				}
-#endif
 
 				ShaderParameter shaderParameter = new(this, stringBuilder2.ToString(), shaderParameterType, size2);
 				shaderParameter.Location = uniformLocation;

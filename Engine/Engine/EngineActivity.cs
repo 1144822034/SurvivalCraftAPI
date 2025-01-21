@@ -1,13 +1,18 @@
 ﻿#if ANDROID
 using Android.Content;
 using Android.Content.PM;
+using Android.Media;
 using Android.OS;
+using Android.Runtime;
 using Android.Views;
+using Engine.Input;
+using Silk.NET.Windowing;
+using Silk.NET.Windowing.Sdl.Android;
 
 namespace Engine
 {
 
-    public class EngineActivity : Activity
+    public class EngineActivity : SilkActivity
     {
         internal static EngineActivity m_activity;
 
@@ -30,8 +35,8 @@ namespace Engine
         }
         protected override void OnCreate(Bundle savedInstanceState)
         {
-            base.OnCreate(savedInstanceState);
             RequestWindowFeature(WindowFeatures.NoTitle);
+            base.OnCreate(savedInstanceState);
             Window.AddFlags(WindowManagerFlags.Fullscreen);
             VolumeControlStream = Android.Media.Stream.Music;
             RequestedOrientation = ScreenOrientation.SensorLandscape;
@@ -66,6 +71,10 @@ namespace Engine
             NewIntent?.Invoke(intent);
         }
 
+        protected override void OnRun()
+        {
+        }
+
         protected override void OnDestroy()
         {
             try
@@ -80,21 +89,106 @@ namespace Engine
             }
         }
 
+        public override bool DispatchTouchEvent(MotionEvent e)
+        {
+            Touch.HandleTouchEvent(e);
+            return true;
+        }
+
         public override bool DispatchKeyEvent(KeyEvent e)
         {
+            System.Diagnostics.Debug.WriteLine($"[DispatchKeyEvent]action:{e.Action} keyCode:{e.KeyCode} unicodeChar:{e.UnicodeChar} flags:{e.Flags} metaState:{e.MetaState} source:{e.Source} deviceId:{e.DeviceId}");
             bool handled = false;
             var invocationList = OnDispatchKeyEvent?.GetInvocationList();
-            if (invocationList == null)
+            if (invocationList != null)
             {
-                return base.DispatchKeyEvent(e);
+                foreach (var invocation in invocationList)
+                {
+                    handled |= (bool)invocation.DynamicInvoke([e])!;
+                }
             }
-
-            foreach (var invocation in invocationList)
+            if (!handled)
             {
-                handled |= (bool)invocation.DynamicInvoke([e])!;
+                handled = e.Action switch
+                {
+                    KeyEventActions.Down => OnKeyDown(e.KeyCode, e),
+                    KeyEventActions.Up => OnKeyUp(e.KeyCode, e),
+                    _ => false
+                };
             }
 
             return handled || base.DispatchKeyEvent(e);
+        }
+
+        public override bool OnKeyDown(Keycode keyCode, KeyEvent e)
+        {
+            System.Diagnostics.Debug.WriteLine($"[OnKeyDown]keyCode:{keyCode}");
+            switch (keyCode)
+            {
+                case Keycode.VolumeUp:
+                    ((AudioManager)Context?.GetSystemService("audio"))?.AdjustStreamVolume(Android.Media.Stream.Music, Adjust.Raise, VolumeNotificationFlags.ShowUi);
+                    EnableImmersiveMode();
+                    break;
+                case Keycode.VolumeDown:
+                    ((AudioManager)Context?.GetSystemService("audio"))?.AdjustStreamVolume(Android.Media.Stream.Music, Adjust.Lower, VolumeNotificationFlags.ShowUi);
+                    EnableImmersiveMode();
+                    break;
+            }
+            if ((e.Source & InputSourceType.Gamepad) == InputSourceType.Gamepad || (e.Source & InputSourceType.Joystick) == InputSourceType.Joystick)
+            {
+                GamePad.HandleKeyDown(e.DeviceId, keyCode);
+            }
+            else
+            {
+                Keyboard.HandleKeyDown(keyCode);
+                if (e.UnicodeChar != 0)
+                {
+                    Keyboard.HandleKeyPress(e.UnicodeChar);
+                }
+            }
+            return true;
+        }
+
+        public override bool OnKeyUp(Keycode keyCode, KeyEvent e)
+        {
+            System.Diagnostics.Debug.WriteLine($"[OnKeyUp]keyCode:{keyCode}");
+            if ((e.Source & InputSourceType.Gamepad) == InputSourceType.Gamepad || (e.Source & InputSourceType.Joystick) == InputSourceType.Joystick)
+            {
+                GamePad.HandleKeyUp(e.DeviceId, keyCode);
+            }
+            else
+            {
+                Keyboard.HandleKeyUp(keyCode);
+            }
+            return true;
+        }
+
+        public override bool DispatchGenericMotionEvent(MotionEvent e)
+        {
+            System.Diagnostics.Debug.WriteLine($"[OnGenericMotionEvent]source:{e.Source} action:{e.Action}");
+            if (((e.Source & InputSourceType.Gamepad) == InputSourceType.Gamepad || (e.Source & InputSourceType.Joystick) == InputSourceType.Joystick) && e.Action == MotionEventActions.Move)
+            {
+                GamePad.HandleMotionEvent(e);
+                return true;
+            }
+            return base.OnGenericMotionEvent(e);
+        }
+
+        public void EnableImmersiveMode()
+        {
+            if (Build.VERSION.SdkInt >= (BuildVersionCodes)19)
+            {
+                try
+                {
+                    int value = 6150;
+                    IntPtr methodID = JNIEnv.GetMethodID(base.Class.Handle, "setSystemUiVisibility", "(I)V");
+                    JNIEnv.CallVoidMethod(base.Handle, methodID, new JValue(value));
+                }
+                catch (Exception ex)
+                {
+                    Log.Warning("Failed to enable immersive mode. Reason: {0}", ex.Message);
+                }
+            }
         }
     }
 }

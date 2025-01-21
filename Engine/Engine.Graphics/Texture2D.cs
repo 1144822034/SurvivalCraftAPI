@@ -149,11 +149,7 @@ namespace Engine.Graphics
             int width = MathUtils.Max(Width >> mipLevel, 1);
             int height = MathUtils.Max(Height >> mipLevel, 1);
             GLWrapper.BindTexture(TextureTarget.Texture2D, m_texture, forceBind: false);
-#if ANDROID
-            GLWrapper.GL.TexImage2D(TextureTarget.Texture2D, mipLevel, (PixelInternalFormat)m_pixelFormat, width, height, 0, m_pixelFormat, m_pixelType, source);
-#else
             GLWrapper.GL.TexImage2D(TextureTarget.Texture2D, mipLevel, (InternalFormat)m_pixelFormat, (uint)width, (uint)height, 0, m_pixelFormat, m_pixelType, source);
-#endif
         }
 
 		public unsafe void SetData(SixLabors.ImageSharp.Image<Rgba32> source)
@@ -161,19 +157,6 @@ namespace Engine.Graphics
 			VerifyParametersSetData(source);
 			source.DangerousTryGetSinglePixelMemory(out Memory<Rgba32> memory);
 			GLWrapper.BindTexture(TextureTarget.Texture2D, m_texture, false);
-#if ANDROID
-			GLWrapper.GL.TexImage2D(
-				TextureTarget.Texture2D,
-				0,
-				(PixelInternalFormat)m_pixelFormat,
-				source.Width,
-				source.Height,
-				0,
-				m_pixelFormat,
-				m_pixelType,
-				(IntPtr)memory.Pin().Pointer
-			);
-#else
 			GLWrapper.GL.TexImage2D(
                 TextureTarget.Texture2D,
 				0,
@@ -185,7 +168,6 @@ namespace Engine.Graphics
 				m_pixelType,
 				memory.Pin().Pointer
 			);
-#endif
 		}
 
         public static void Swap(Texture2D texture1, Texture2D texture2)
@@ -226,11 +208,7 @@ namespace Engine.Graphics
 			{
 				int width = MathUtils.Max(Width >> i, 1);
 				int height = MathUtils.Max(Height >> i, 1);
-#if ANDROID
-				GLWrapper.GL.TexImage2D(TextureTarget.Texture2D, i, (PixelInternalFormat)m_pixelFormat, width, height, 0, m_pixelFormat, m_pixelType, IntPtr.Zero);
-#else
 				GLWrapper.GL.TexImage2D(TextureTarget.Texture2D, i, (InternalFormat)m_pixelFormat, (uint)width, (uint)height, 0, m_pixelFormat, m_pixelType, null);
-#endif
 			}
 		}
 
