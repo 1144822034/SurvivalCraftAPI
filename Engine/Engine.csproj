@@ -19,12 +19,12 @@
 	<RepositoryType>Git</RepositoryType>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
-    <TargetFrameworks>net9.0windows;net9.0-android</TargetFrameworks>
+    <TargetFrameworks>net9.0-windows;net9.0-android</TargetFrameworks>
     <DefineConstants>DEBUG</DefineConstants>
     <WarningLevel>2</WarningLevel>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
-    <TargetFrameworks>net9.0;net9.0windows;net9.0-android</TargetFrameworks>
+    <TargetFrameworks>net9.0;net9.0-windows;net9.0-android</TargetFrameworks>
     <DebugType>none</DebugType>
     <DefineConstants>TRACE</DefineConstants>
   </PropertyGroup>
@@ -32,12 +32,12 @@
 	  <SupportedOSPlatformVersion>23.0</SupportedOSPlatformVersion>
   </PropertyGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Resources\Lit.psh" Condition="'$(TargetFramework)' == 'net9.0windows'" />
-    <EmbeddedResource Include="Resources\Lit.vsh" Condition="'$(TargetFramework)' == 'net9.0windows'" />
-    <EmbeddedResource Include="Resources\Unlit.psh" Condition="'$(TargetFramework)' == 'net9.0windows'" />
-    <EmbeddedResource Include="Resources\Unlit.vsh" Condition="'$(TargetFramework)' == 'net9.0windows'" />
-    <EmbeddedResource Include="Resources\Debugfont.lst" Condition="'$(TargetFramework)' == 'net9.0windows'" />
-    <EmbeddedResource Include="Resources\Debugfont.png" Condition="'$(TargetFramework)' == 'net9.0windows'" />
+    <EmbeddedResource Include="Resources\Lit.psh" Condition="'$(TargetFramework)' == 'net9.0-windows'" />
+    <EmbeddedResource Include="Resources\Lit.vsh" Condition="'$(TargetFramework)' == 'net9.0-windows'" />
+    <EmbeddedResource Include="Resources\Unlit.psh" Condition="'$(TargetFramework)' == 'net9.0-windows'" />
+    <EmbeddedResource Include="Resources\Unlit.vsh" Condition="'$(TargetFramework)' == 'net9.0-windows'" />
+    <EmbeddedResource Include="Resources\Debugfont.lst" Condition="'$(TargetFramework)' == 'net9.0-windows'" />
+    <EmbeddedResource Include="Resources\Debugfont.png" Condition="'$(TargetFramework)' == 'net9.0-windows'" />
     <None Remove="Resources\icon.png" />
     <EmbeddedResource Include="Resources\icon.png" />
   </ItemGroup>
@@ -64,7 +64,7 @@
   <ItemGroup>
     <None Include=".editorconfig" />
   </ItemGroup>
-  <ItemGroup Condition="'$(TargetFramework)' == 'net9.0windows'">
+  <ItemGroup Condition="'$(TargetFramework)' == 'net9.0-windows'">
     <PackageReference Include="System.Drawing.Common" Version="9.0.1" />
   </ItemGroup>
   <ItemGroup>

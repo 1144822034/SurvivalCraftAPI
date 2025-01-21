@@ -1,5 +1,6 @@
 ﻿#if ANDROID
 
+using System.Collections.Concurrent;
 using Axis = Android.Views.Axis;
 using Android.Views;
 using System.Collections.Generic;
@@ -26,8 +27,20 @@ namespace Engine.Input
             public double[] ButtonsRepeat = new double[14];
         }
 #if ANDROID
+        public struct KeyInfo
+        {
+            public int DeviceId;
+            public Keycode KeyCode;
+            public KeyEventActions Action;
+            public KeyInfo(int deviceId, Keycode keyCode, KeyEventActions action){
+                DeviceId = deviceId;
+                KeyCode = keyCode;
+                Action = action;
+            }
+        }
 		public static Dictionary<int, int> m_deviceToIndex = [];
 		public static List<int> m_toRemove = [];
+        public static ConcurrentQueue<KeyInfo> m_cachedKeyEvents = [];
 #else
         public static IGamepad[] m_gamepads;
 #endif
@@ -69,9 +82,29 @@ namespace Engine.Input
 					Disconnect(item);
 				}
 			}
+            while (!m_cachedKeyEvents.IsEmpty)
+            {
+                if (m_cachedKeyEvents.TryDequeue(out KeyInfo keyInfo))
+                {
+                    switch (keyInfo.Action)
+                    {
+                        case KeyEventActions.Down: HandleKeyDown(keyInfo.DeviceId, keyInfo.KeyCode); break;
+                        case KeyEventActions.Up: HandleKeyUp(keyInfo.DeviceId, keyInfo.KeyCode); break;
+                    }
+                }
+                else
+                {
+                    Thread.Yield();
+                }
+            }
 		}
 
-		internal static void HandleKeyDown(int deviceId, Keycode keyCode)
+        public static void HandleKeyEvent(KeyEvent e)
+        {
+            m_cachedKeyEvents.Enqueue(new KeyInfo(e.DeviceId, e.KeyCode, e.Action));
+        }
+
+        internal static void HandleKeyDown(int deviceId, Keycode keyCode)
 		{
 			int num = TranslateDeviceId(deviceId);
 			if (num < 0)

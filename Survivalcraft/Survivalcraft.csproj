@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
     <PropertyGroup>
-		<TargetFrameworks Condition=" '$(Configuration)' == 'Release' ">net9.0;net9.0windows</TargetFrameworks>
-		<TargetFramework Condition=" '$(Configuration)' == 'Debug' ">net9.0windows</TargetFramework>
+		<TargetFrameworks Condition=" '$(Configuration)' == 'Release' ">net9.0;net9.0-windows</TargetFrameworks>
+		<TargetFramework Condition=" '$(Configuration)' == 'Debug' ">net9.0-windows</TargetFramework>
 		<OutputType Condition="'$(TargetFramework)' == 'net9'">library</OutputType>
 		<NoWarn>1701;1702;CA1416;1591;1572;1573;1587</NoWarn>
 		<RootNamespace>Game</RootNamespace>
@@ -42,7 +42,7 @@
         <DefineConstants>TRACE</DefineConstants>
 
     </PropertyGroup>
-	<PropertyGroup Condition="'$(TargetFramework)' == 'net9.0windows'">
+	<PropertyGroup Condition="'$(TargetFramework)' == 'net9.0-windows'">
 		<OutputType>WinExe</OutputType>
 		<IncludeNativeLibrariesForSelfExtract>true</IncludeNativeLibrariesForSelfExtract>
 		<SupportedOSPlatformVersion>7.0</SupportedOSPlatformVersion>
@@ -51,7 +51,7 @@
 		<IncludeAllContentForSelfExtract>false</IncludeAllContentForSelfExtract>
 	</PropertyGroup>
     <PropertyGroup>
-        <StartupObject Condition="'$(TargetFramework)' == 'net9.0windows'">Game.Program</StartupObject>
+        <StartupObject Condition="'$(TargetFramework)' == 'net9.0-windows'">Game.Program</StartupObject>
         <ManifestCertificateThumbprint>7727A446B0580C16A300D429D1BE0ABCE78B88E4</ManifestCertificateThumbprint>
         <ManifestKeyFile>Survivalcraft_TemporaryKey.pfx</ManifestKeyFile>
         <GenerateManifests>false</GenerateManifests>
@@ -67,8 +67,8 @@
 		</None>
         <Content Include="Content\icon.ico" />
 
-        <PackageReference Include="TextCopy" Version="6.2.1" Condition="'$(TargetFramework)' == 'net9.0windows'" />
-        <PackageReference Include="ImeSharp.ImmOnly" Version="1.0.0" Condition="'$(TargetFramework)' == 'net9.0windows'" />
+        <PackageReference Include="TextCopy" Version="6.2.1" Condition="'$(TargetFramework)' == 'net9.0-windows'" />
+        <PackageReference Include="ImeSharp.ImmOnly" Version="1.0.0" Condition="'$(TargetFramework)' == 'net9.0-windows'" />
 
         <Compile Remove="SimpleJson\SimpleJson.Reflection\ReflectionUtils.cs" />
         <Using Include="System.IO" />
@@ -87,7 +87,7 @@
 			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 		</None>
     </ItemGroup>
-    <ItemGroup Condition="'$(Configuration)' == 'Debug' And '$(TargetFramework)' == 'net9.0windows'">
+    <ItemGroup Condition="'$(Configuration)' == 'Debug' And '$(TargetFramework)' == 'net9.0-windows'">
 		<EmbeddedResource Include="init.js">
 			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 		</EmbeddedResource>
@@ -95,12 +95,12 @@
 		  <CopyToOutputDirectory>Never</CopyToOutputDirectory>
 		</None>
     </ItemGroup>
-    <ItemGroup Condition="'$(Configuration)' == 'Release' And '$(TargetFramework)' == 'net9.0windows'">
+    <ItemGroup Condition="'$(Configuration)' == 'Release' And '$(TargetFramework)' == 'net9.0-windows'">
 		<EmbeddedResource Include="init.js">
 			<CopyToOutputDirectory>Never</CopyToOutputDirectory>
 		</EmbeddedResource>
     </ItemGroup>
-    <ItemGroup Condition="'$(TargetFramework)' == 'net9.0windows'">
+    <ItemGroup Condition="'$(TargetFramework)' == 'net9.0-windows'">
       <PackageReference Include="System.Configuration.ConfigurationManager" Version="9.0.1" />
     </ItemGroup>
     <PropertyGroup>
@@ -110,7 +110,7 @@
         <NeutralLanguage>zh-CN</NeutralLanguage>
         <GenerateDocumentationFile>True</GenerateDocumentationFile>
     </PropertyGroup>
-    <Target Name="PreBuild" BeforeTargets="PreBuildEvent" Condition="'$(TargetFramework)' == 'net9.0windows'">
+    <Target Name="PreBuild" BeforeTargets="PreBuildEvent" Condition="'$(TargetFramework)' == 'net9.0-windows'">
         <Exec Command="&quot;$(ProjectDir)7za.exe&quot; a -tzip -mx=9 -r &quot;$(ProjectDir)Content.zip&quot; &quot;$(ProjectDir)Content\*&quot;" />
     </Target>
 </Project>

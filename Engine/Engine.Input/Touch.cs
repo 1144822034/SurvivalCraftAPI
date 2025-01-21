@@ -1,5 +1,6 @@
 ﻿#if ANDROID
 
+using System.Collections.Concurrent;
 using Android.Views;
 
 #endif
@@ -12,6 +13,18 @@ namespace Engine.Input
 {
 	public static class Touch
 	{
+        public struct TouchInfo
+        {
+            public int PointerId;
+            public Vector2 Position;
+            public int ActionMasked;//1: down, 2: move, 3: up
+            public TouchInfo (int pointerId, Vector2 position, int actionMasked)
+            {
+                PointerId = pointerId;
+                Position = position;
+                ActionMasked = actionMasked;
+            }
+        }
 		private static List<TouchLocation> m_touchLocations = [];
 
 		public static ReadOnlyList<TouchLocation> TouchLocations => new(m_touchLocations);
@@ -31,33 +44,30 @@ namespace Engine.Input
 		}
 
 #if ANDROID
-
+        public static ConcurrentQueue<TouchInfo> m_cachedTouchEvents = [];
 		internal static void HandleTouchEvent(MotionEvent e)
-		{
-			if (e.ActionMasked == MotionEventActions.Down || e.ActionMasked == MotionEventActions.Pointer1Down)
-			{
-				int pointerId = e.GetPointerId(e.ActionIndex);
-				float x = e.GetX(e.ActionIndex);
-				float y = e.GetY(e.ActionIndex);
-				ProcessTouchPressed(pointerId, new Vector2(x, y));
-			}
-			else if (e.ActionMasked == MotionEventActions.Move)
-			{
-				for (int i = 0; i < e.PointerCount; i++)
-				{
-					int pointerId2 = e.GetPointerId(i);
-					float x2 = e.GetX(i);
-					float y2 = e.GetY(i);
-					ProcessTouchMoved(pointerId2, new Vector2(x2, y2));
-				}
-			}
-			else if (e.ActionMasked == MotionEventActions.Up || e.ActionMasked == MotionEventActions.Pointer1Up || e.ActionMasked == MotionEventActions.Cancel || e.ActionMasked == MotionEventActions.Outside)
-			{
-				int pointerId3 = e.GetPointerId(e.ActionIndex);
-				float x3 = e.GetX(e.ActionIndex);
-				float y3 = e.GetY(e.ActionIndex);
-				ProcessTouchReleased(pointerId3, new Vector2(x3, y3));
-			}
+        {
+            switch (e.ActionMasked)
+            {
+                case MotionEventActions.Down:
+                case MotionEventActions.Pointer1Down:
+                    m_cachedTouchEvents.Enqueue(new TouchInfo(e.GetPointerId(e.ActionIndex), new Vector2(e.GetX(e.ActionIndex), e.GetY(e.ActionIndex)), 1));
+                    break;
+                case MotionEventActions.Move:
+                    for (int i = 0; i < e.PointerCount; i++)
+                    {
+                        m_cachedTouchEvents.Enqueue(new TouchInfo(e.GetPointerId(i), new Vector2(e.GetX(i), e.GetY(i)), 2));
+                    }
+                    break;
+                case MotionEventActions.Up:
+                case MotionEventActions.Pointer1Up:
+                case MotionEventActions.Cancel:
+                case MotionEventActions.Outside:
+                    m_cachedTouchEvents.Enqueue(new TouchInfo(e.GetPointerId(e.ActionIndex), new Vector2(e.GetX(e.ActionIndex), e.GetY(e.ActionIndex)), 3));
+                    break;
+                default:
+                    return;
+            }
 		}
 
 #endif
@@ -69,6 +79,24 @@ namespace Engine.Input
 
 		internal static void BeforeFrame()
 		{
+#if ANDROID
+            while (!m_cachedTouchEvents.IsEmpty)
+            {
+                if (m_cachedTouchEvents.TryDequeue(out TouchInfo touchInfo))
+                {
+                    switch (touchInfo.ActionMasked)
+                    {
+                        case 1: ProcessTouchPressed(touchInfo.PointerId, touchInfo.Position); break;
+                        case 2: ProcessTouchMoved(touchInfo.PointerId, touchInfo.Position); break;
+                        case 3: ProcessTouchReleased(touchInfo.PointerId, touchInfo.Position); break;
+                    }
+                }
+                else
+                {
+                    Thread.Yield();
+                }
+            }
+#endif
 		}
 
 		internal static void AfterFrame()

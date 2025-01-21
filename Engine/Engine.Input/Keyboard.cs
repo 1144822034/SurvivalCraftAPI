@@ -1,4 +1,7 @@
-﻿#if ANDROID
+﻿
+using System.Diagnostics;
+#if ANDROID
+using System.Collections.Concurrent;
 using Android.App;
 using Android.Views;
 using Android.Widget;
@@ -10,7 +13,22 @@ namespace Engine.Input
 {
     public static class Keyboard
     {
-#if !ANDROID
+#if ANDROID
+        public struct KeyInfo
+        {
+            public Keycode KeyCode;
+            public KeyEventActions Action;
+            public int? UnicodeChar;
+            public KeyInfo(Keycode keyCode, KeyEventActions action, int? unicodeChar)
+            {
+                KeyCode = keyCode;
+                Action = action;
+                UnicodeChar = unicodeChar;
+            }
+        }
+
+        public static ConcurrentQueue<KeyInfo> m_cachedKeyEvents = [];
+#else
         public static IKeyboard m_keyboard;
 #endif
 
@@ -119,6 +137,29 @@ namespace Engine.Input
 
         internal static void BeforeFrame()
         {
+#if ANDROID
+            while (!m_cachedKeyEvents.IsEmpty)
+            {
+                if (m_cachedKeyEvents.TryDequeue(out KeyInfo keyInfo))
+                {
+                    switch (keyInfo.Action)
+                    {
+                        case KeyEventActions.Down:
+                            HandleKeyDown(keyInfo.KeyCode);
+                            if (keyInfo.UnicodeChar.HasValue)
+                            {
+                                HandleKeyPress(keyInfo.UnicodeChar.Value);
+                            }
+                            break;
+                        case KeyEventActions.Up: HandleKeyUp(keyInfo.KeyCode); break;
+                    }
+                }
+                else
+                {
+                    Thread.Yield();
+                }
+            }
+#endif
         }
 
         internal static void AfterFrame()
@@ -248,6 +289,11 @@ namespace Engine.Input
             LastString += c;
         }
 #else
+        public static void HandleKeyEvent(KeyEvent keyEvent)
+        {
+            m_cachedKeyEvents.Enqueue(new KeyInfo(keyEvent.KeyCode, keyEvent.Action, keyEvent.UnicodeChar));
+        }
+
         internal static void HandleKeyDown(Keycode keyCode)
         {
             Key key = TranslateKey(keyCode);

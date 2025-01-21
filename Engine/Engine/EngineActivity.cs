@@ -122,7 +122,6 @@ namespace Engine
 
         public override bool OnKeyDown(Keycode keyCode, KeyEvent e)
         {
-            System.Diagnostics.Debug.WriteLine($"[OnKeyDown]keyCode:{keyCode}");
             switch (keyCode)
             {
                 case Keycode.VolumeUp:
@@ -136,29 +135,24 @@ namespace Engine
             }
             if ((e.Source & InputSourceType.Gamepad) == InputSourceType.Gamepad || (e.Source & InputSourceType.Joystick) == InputSourceType.Joystick)
             {
-                GamePad.HandleKeyDown(e.DeviceId, keyCode);
+                GamePad.HandleKeyEvent(e);
             }
             else
             {
-                Keyboard.HandleKeyDown(keyCode);
-                if (e.UnicodeChar != 0)
-                {
-                    Keyboard.HandleKeyPress(e.UnicodeChar);
-                }
+                Keyboard.HandleKeyEvent(e);
             }
             return true;
         }
 
         public override bool OnKeyUp(Keycode keyCode, KeyEvent e)
         {
-            System.Diagnostics.Debug.WriteLine($"[OnKeyUp]keyCode:{keyCode}");
             if ((e.Source & InputSourceType.Gamepad) == InputSourceType.Gamepad || (e.Source & InputSourceType.Joystick) == InputSourceType.Joystick)
             {
-                GamePad.HandleKeyUp(e.DeviceId, keyCode);
+                GamePad.HandleKeyEvent(e);
             }
             else
             {
-                Keyboard.HandleKeyUp(keyCode);
+                Keyboard.HandleKeyEvent(e);
             }
             return true;
         }
