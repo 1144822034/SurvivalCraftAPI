@@ -69,7 +69,7 @@ namespace Engine.Audio
 			try
 			{
 				int num = Utilities.SizeOf<T>();
-                Mixer.AL.BufferData(buffer, (channelsCount == 1) ? BufferFormat.Mono16 : BufferFormat.Stereo16, (void*)(gCHandle.AddrOfPinnedObject() + (startIndex * num)), itemsCount * num, samplingFrequency);
+                Mixer.AL.BufferData(buffer, (channelsCount == 1) ? BufferFormat.Mono16 : BufferFormat.Stereo16, (gCHandle.AddrOfPinnedObject() + (startIndex * num)).ToPointer(), itemsCount * num, samplingFrequency);
 				Mixer.CheckALError();
 			}
 			finally

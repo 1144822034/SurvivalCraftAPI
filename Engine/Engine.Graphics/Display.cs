@@ -156,7 +156,7 @@ namespace Engine.Graphics
                 GLWrapper.ApplyRasterizerState(RasterizerState);
                 GLWrapper.ApplyDepthStencilState(DepthStencilState);
                 GLWrapper.ApplyBlendState(BlendState);
-                GLWrapper.GL.DrawElements(GLWrapper.TranslatePrimitiveType(primitiveType), (uint)indicesCount, DrawElementsType.UnsignedInt, (void*)(gCHandle2.AddrOfPinnedObject() + (4 * startIndex)));
+                GLWrapper.GL.DrawElements(GLWrapper.TranslatePrimitiveType(primitiveType), (uint)indicesCount, DrawElementsType.UnsignedInt, (gCHandle2.AddrOfPinnedObject() + (4 * startIndex)).ToPointer());
             }
             finally
             {
@@ -177,7 +177,7 @@ namespace Engine.Graphics
             GLWrapper.GL.DrawArrays(GLWrapper.TranslatePrimitiveType(primitiveType), startVertex, (uint)verticesCount);
         }
 
-        public static void DrawIndexed(PrimitiveType primitiveType, Shader shader, VertexBuffer vertexBuffer, IndexBuffer indexBuffer, int startIndex, int indicesCount)
+        public static unsafe void DrawIndexed(PrimitiveType primitiveType, Shader shader, VertexBuffer vertexBuffer, IndexBuffer indexBuffer, int startIndex, int indicesCount)
         {
             VerifyParametersDrawIndexed(primitiveType, shader, vertexBuffer, indexBuffer, startIndex, indicesCount);
             GLWrapper.ApplyRenderTarget(RenderTarget);
@@ -186,7 +186,7 @@ namespace Engine.Graphics
             GLWrapper.ApplyRasterizerState(RasterizerState);
             GLWrapper.ApplyDepthStencilState(DepthStencilState);
             GLWrapper.ApplyBlendState(BlendState);
-            GLWrapper.GL.DrawElements(GLWrapper.TranslatePrimitiveType(primitiveType), (uint)indicesCount, GLWrapper.TranslateIndexFormat(indexBuffer.IndexFormat), new IntPtr(startIndex * indexBuffer.IndexFormat.GetSize()));
+            GLWrapper.GL.DrawElements(GLWrapper.TranslatePrimitiveType(primitiveType), (uint)indicesCount, GLWrapper.TranslateIndexFormat(indexBuffer.IndexFormat), new IntPtr(startIndex * indexBuffer.IndexFormat.GetSize()).ToPointer());
         }
 
         public static void Clear(Vector4? color, float? depth = null, int? stencil = null)

@@ -81,7 +81,7 @@ namespace Engine.Graphics
         public unsafe void GetDataInternal(nint target, Rectangle sourceRectangle)
         {
             GLWrapper.BindFramebuffer(m_frameBuffer);
-            GLWrapper.GL.ReadPixels(sourceRectangle.Left, sourceRectangle.Top, (uint)sourceRectangle.Width, (uint)sourceRectangle.Height, PixelFormat.Rgba, PixelType.UnsignedByte, (void*)target);
+            GLWrapper.GL.ReadPixels(sourceRectangle.Left, sourceRectangle.Top, (uint)sourceRectangle.Width, (uint)sourceRectangle.Height, PixelFormat.Rgba, PixelType.UnsignedByte, target.ToPointer());
         }
 
         public void GenerateMipMaps()

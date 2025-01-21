@@ -58,7 +58,7 @@ namespace Engine.Graphics
 				int num = Utilities.SizeOf<T>();
 				int vertexStride = VertexDeclaration.VertexStride;
 				GLWrapper.BindBuffer(BufferTargetARB.ArrayBuffer, m_buffer);
-				GLWrapper.GL.BufferSubData(BufferTargetARB.ArrayBuffer, new IntPtr(targetStartIndex * vertexStride), new UIntPtr((uint)(num * sourceCount)), (void*)(gCHandle.AddrOfPinnedObject() + (sourceStartIndex * num)));
+				GLWrapper.GL.BufferSubData(BufferTargetARB.ArrayBuffer, new IntPtr(targetStartIndex * vertexStride), new UIntPtr((uint)(num * sourceCount)), (gCHandle.AddrOfPinnedObject() + (sourceStartIndex * num)).ToPointer());
 			}
 			finally
 			{

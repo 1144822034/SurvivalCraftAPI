@@ -100,8 +100,11 @@ namespace Engine.Graphics
         {
             GL = Window.m_gameWindow.CreateOpenGL();
 #if DEBUG
-            GL.DebugMessageCallback(DebugMessageDelegate, IntPtr.Zero);
-            GL.Enable(EnableCap.DebugOutput);
+            unsafe
+            {
+                GL.DebugMessageCallback(DebugMessageDelegate, IntPtr.Zero.ToPointer());
+                GL.Enable(EnableCap.DebugOutput);
+            }
 #endif
             int[] bits = new int[6];
             for (int i = 0; i < 6; i++)
@@ -650,7 +653,7 @@ namespace Engine.Graphics
 				{
 					if (vertexAttribData[i].Size != 0)
 					{
-						GL.VertexAttribPointer((uint)i, vertexAttribData[i].Size, vertexAttribData[i].Type, vertexAttribData[i].Normalize, (uint)vertexDeclaration.VertexStride, (void*)(vertexOffset + vertexAttribData[i].Offset));
+						GL.VertexAttribPointer((uint)i, vertexAttribData[i].Size, vertexAttribData[i].Type, vertexAttribData[i].Normalize, (uint)vertexDeclaration.VertexStride, (vertexOffset + vertexAttribData[i].Offset).ToPointer());
 						VertexAttribArray(i, enable: true);
 					}
 					else

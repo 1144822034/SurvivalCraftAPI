@@ -171,7 +171,7 @@ namespace Engine.Audio
 							{
 								uint num3 = list[^1];
                                 GCHandle gCHandle = GCHandle.Alloc(array2, GCHandleType.Pinned);
-                                Mixer.AL.BufferData(num3, (base.ChannelsCount == 1) ? BufferFormat.Mono16 : BufferFormat.Stereo16, (void*)(gCHandle.AddrOfPinnedObject()), num2, base.SamplingFrequency);
+                                Mixer.AL.BufferData(num3, (base.ChannelsCount == 1) ? BufferFormat.Mono16 : BufferFormat.Stereo16, gCHandle.AddrOfPinnedObject().ToPointer(), num2, base.SamplingFrequency);
 								Mixer.CheckALError();
                                 Mixer.AL.SourceQueueBuffers(source, 1, &num3);
 								Mixer.CheckALError();

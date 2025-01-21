@@ -59,7 +59,7 @@ namespace Engine.Graphics
 				int num = Utilities.SizeOf<T>();
 				int size = IndexFormat.GetSize();
 				GLWrapper.BindBuffer(BufferTargetARB.ElementArrayBuffer, m_buffer);
-				GLWrapper.GL.BufferSubData(BufferTargetARB.ElementArrayBuffer, new IntPtr(targetStartIndex * size), new UIntPtr((uint)(num * sourceCount)), (void*)(gCHandle.AddrOfPinnedObject() + (sourceStartIndex * num)));
+				GLWrapper.GL.BufferSubData(BufferTargetARB.ElementArrayBuffer, new IntPtr(targetStartIndex * size), new UIntPtr((uint)(num * sourceCount)), (gCHandle.AddrOfPinnedObject() + (sourceStartIndex * num)).ToPointer());
 			}
 			finally
 			{
