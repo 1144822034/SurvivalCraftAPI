@@ -42,7 +42,7 @@ namespace Engine.Input
 		public static List<int> m_toRemove = [];
         public static ConcurrentQueue<KeyInfo> m_cachedKeyEvents = [];
 #else
-        public static IGamepad[] m_gamepads;
+        public static IReadOnlyList<IGamepad> m_gamepads;
 #endif
         public static double m_buttonFirstRepeatTime = 0.2;
 
@@ -58,7 +58,7 @@ namespace Engine.Input
         internal static void Initialize()
         {
 #if !ANDROID
-            m_gamepads = Window.m_inputContext.Gamepads.Take(4).ToArray();
+            m_gamepads = Window.m_inputContext.Gamepads;
 #endif
         }
         internal static void Dispose()
@@ -224,7 +224,7 @@ namespace Engine.Input
 #else
             for (int padIndex = 0; padIndex < 4; padIndex++)
             {
-                if (padIndex >= m_gamepads.Length)
+                if (padIndex >= m_gamepads.Count)
                 {
                     break;
                 }
