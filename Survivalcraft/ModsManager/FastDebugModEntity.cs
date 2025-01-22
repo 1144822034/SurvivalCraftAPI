@@ -134,6 +134,9 @@ namespace Game
 		/// <returns></returns>
 		public override void GetFiles(string extension, Action<string, Stream> action)
 		{
+			bool skip = false;
+			Loader?.GetModFiles(extension,action,out skip);
+			if(skip) return;
 			foreach (var item in FModFiles)
 			{
 				if (item.Key.EndsWith(extension))
@@ -154,6 +157,10 @@ namespace Game
 		}
 		public override bool GetFile(string filename, Action<Stream> stream)
 		{
+			bool skip = false;
+			bool loaderReturns = false;
+			Loader?.GetModFile(filename,stream,out skip,out loaderReturns);
+			if(skip) return loaderReturns;
 			if (FModFiles.TryGetValue(filename, out FileInfo fileInfo))
 			{
 				using (Stream fs = fileInfo.OpenRead())
