@@ -64,7 +64,7 @@ namespace Game
 			{
 				if (c.EndsWith(".dll") && !(c.StartsWith("EntitySystem") || c.StartsWith("Engine") || c.StartsWith("Survivalcraft") || c.StartsWith("OpenTK")))
 				{
-					var assemblyStream = Storage.OpenFile(Storage.CombinePaths(ModsManager.ModsPath), OpenFileMode.Read);
+					var assemblyStream = Storage.OpenFile(Storage.CombinePaths(ModsManager.ModsPath, c), OpenFileMode.Read);
 					
 					assemblies.Add(Assembly.Load(ModsManager.StreamToBytes(assemblyStream)));
 				}
