@@ -79,8 +79,4 @@
 	<Using Include="Engine" />
 	<Using Include="Game" />
   </ItemGroup>
-  <ItemGroup>
-    <None Remove="libs\arm64-v8a\libopenal.so.1" />
-    <AndroidNativeLibrary Include="libs\arm64-v8a\libopenal.so.1" />
-  </ItemGroup>
 </Project>

@@ -44,7 +44,7 @@ namespace Engine.Audio
             Device* device = m_audioContext.OpenDevice("");
             if (device == null)
             {
-                Console.WriteLine("Could not create device");
+                Log.Error("Could not create audio device");
                 return;
             }
             var c = m_audioContext.CreateContext(device, null);
@@ -108,7 +108,7 @@ namespace Engine.Audio
             AudioError error = AL.GetError();
 			if (error != AudioError.NoError)
 			{
-				Log.Error("OPENAL出错! " + error.ToString());
+				Log.Error("OPENAL ERROR: " + error.ToString());
 			}
 			return error;
         }
@@ -123,7 +123,7 @@ namespace Engine.Audio
 				AudioError error = AL.GetError();
 				if (error != AudioError.NoError)
 				{
-					Log.Error("OPENAL出错! " + error.ToString());
+					Log.Error("OPENAL ERROR: " + error.ToString());
 					//throw new InvalidOperationException(AL.GetErrorString(error));
 					return true;
 				}
@@ -134,7 +134,7 @@ namespace Engine.Audio
 			}
 			catch (Exception e)
 			{
-				Log.Error("OPENAL无法调用 " + e.ToString());
+				Log.Error("Unable to load OPENAL: " + e.ToString());
 				return true;
 			}
 		}
