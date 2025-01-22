@@ -1081,7 +1081,7 @@ namespace Engine.Graphics
                 return;
             }
             string message = Marshal.PtrToStringAnsi(pMessage, length);
-            Console.WriteLine($"[type={type.ToString().Substring(9)}] {message}");
+            Console.WriteLine($"[{type.ToString().Substring(9)}] {message}");
             if (type == GLEnum.DebugTypeError)
             {
                 Debugger.Break();

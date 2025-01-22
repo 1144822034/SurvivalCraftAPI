@@ -117,7 +117,7 @@ namespace Engine
                 };
             }
 
-            return handled || base.DispatchKeyEvent(e);
+            return true;
         }
 
         public override bool OnKeyDown(Keycode keyCode, KeyEvent e)
@@ -163,25 +163,15 @@ namespace Engine
             if (((e.Source & InputSourceType.Gamepad) == InputSourceType.Gamepad || (e.Source & InputSourceType.Joystick) == InputSourceType.Joystick) && e.Action == MotionEventActions.Move)
             {
                 GamePad.HandleMotionEvent(e);
-                return true;
             }
-            return base.OnGenericMotionEvent(e);
+            return true;
         }
 
         public void EnableImmersiveMode()
         {
             if (Build.VERSION.SdkInt >= (BuildVersionCodes)19)
             {
-                try
-                {
-                    int value = 6150;
-                    IntPtr methodID = JNIEnv.GetMethodID(base.Class.Handle, "setSystemUiVisibility", "(I)V");
-                    JNIEnv.CallVoidMethod(base.Handle, methodID, new JValue(value));
-                }
-                catch (Exception ex)
-                {
-                    Log.Warning("Failed to enable immersive mode. Reason: {0}", ex.Message);
-                }
+                Window.DecorView.SystemUiVisibility = (StatusBarVisibility)6150;
             }
         }
     }

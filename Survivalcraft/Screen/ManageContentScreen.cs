@@ -200,6 +200,11 @@ public class ManageContentScreen : Screen
 				m_deleteButton.IsEnabled = !(selectedItem.ModEntity is SurvivalCraftModEntity || selectedItem.ModEntity is FastDebugModEntity);
 			}
 		}
+		else
+		{
+			m_deleteButton.IsEnabled = false;
+			m_uploadButton.IsEnabled = false;
+		}
 		m_filterLabel.Text = GetFilterDisplayName(m_filter);
 		if (m_deleteButton.IsClicked)
 		{
