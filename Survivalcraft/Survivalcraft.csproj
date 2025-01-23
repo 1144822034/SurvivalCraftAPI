@@ -21,7 +21,7 @@
         <PublishWizardCompleted>true</PublishWizardCompleted>
         <BootstrapperEnabled>False</BootstrapperEnabled>
         <GenerateAssemblyInfo>False</GenerateAssemblyInfo>
-        <UseWindowsForms>False</UseWindowsForms>
+        <UseWindowsForms>True</UseWindowsForms>
         <Configurations>Debug;Release</Configurations>
         <RuntimeIdentifier>win-x64</RuntimeIdentifier>
         <PackageId>SurvivalcraftAPI.Survivalcraft</PackageId>

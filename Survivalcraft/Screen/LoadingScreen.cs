@@ -6,6 +6,11 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Reflection;
 using System.Xml.Linq;
+#if ANDROID
+using Android.App;
+#else
+using System.Windows.Forms;
+#endif
 
 namespace Game
 {
@@ -28,6 +33,7 @@ namespace Game
 		private CanvasWidget Canvas = new();
 		private RectangleWidget Background = new() { FillColor = SettingsManager.DisplayLog ? Color.Black : Color.White, OutlineThickness = 0f, DepthWriteEnabled = true };
 		private static ListPanelWidget LogList = new() { Direction = LayoutDirection.Vertical, PlayClickSound = false };
+		public static bool m_isContentLoaded = false;
 		public const string fName = "LoadingScreen";
 		static LoadingScreen()
 		{
@@ -71,7 +77,7 @@ namespace Game
 			ClearChildren();
 			RectangleWidget rectangle1 = new() { FillColor = Color.White, OutlineColor = Color.Transparent, Size = new Vector2(256f), VerticalAlignment = WidgetAlignment.Center, HorizontalAlignment = WidgetAlignment.Center };
 			rectangle1.Subtexture = ContentManager.Get<Subtexture>("Textures/Gui/CandyRufusLogo");
-			RectangleWidget rectangle2 = new() { FillColor = Color.White, OutlineColor = Color.Transparent, Size = new Vector2(80), VerticalAlignment = WidgetAlignment.Far, HorizontalAlignment = WidgetAlignment.Far, Margin = new Vector2(10f) };
+			RectangleWidget rectangle2 = new() { FillColor = Color.White, OutlineColor = Color.Transparent, Size = new Vector2(80f, 50f), VerticalAlignment = WidgetAlignment.Far, HorizontalAlignment = WidgetAlignment.Far, Margin = new Vector2(10f) };
 			rectangle2.Subtexture = ContentManager.Get<Subtexture>("Textures/Gui/EngineLogo");
 			BusyBarWidget busyBar = new() { VerticalAlignment = WidgetAlignment.Far, HorizontalAlignment = WidgetAlignment.Center, Margin = new Vector2(0, 40) };
 			Canvas.AddChildren(Background);
@@ -80,6 +86,7 @@ namespace Game
 			Canvas.AddChildren(busyBar);
 			Canvas.AddChildren(LogList);
 			AddChildren(Canvas);
+			m_isContentLoaded = true;
 		}
 		//日志已经附带状态，不需要添加状态字符串
 		public static void Error(string mesg)
@@ -544,13 +551,11 @@ namespace Game
 		}
 		public override void Update()
 		{
-			if (Input.Back || Input.Cancel)
-				DialogsManager.ShowDialog(null, new MessageDialog(LanguageControl.Warning, "Quit? 退出？", LanguageControl.Ok,
-					LanguageControl.No, (vt) =>
-					{
-						if (vt == MessageDialogButton.Button1) Environment.Exit(0);
-						else DialogsManager.HideAllDialogs();
-					}));
+			if(Input.Back
+				|| Input.Cancel)
+			{
+				ConfirmQuit();
+			}
 			if (ModsManager.GetAllowContinue() == false) return;
 			if (ModLoadingActoins.Count > 0)
 			{
@@ -585,6 +590,33 @@ namespace Game
 					}
 				}
 			}
+		}
+
+		public void ConfirmQuit()
+		{
+			#if ANDROID
+			Window.Activity.RunOnUiThread(
+				() => {
+					new AlertDialog.Builder(Window.Activity).SetMessage("Exit 退出?")
+					.SetPositiveButton(
+						"Yes 是",
+						(sender,e) => {
+							Window.Close();
+						}
+					)
+					.SetNegativeButton("No 否",(_,_) => { })
+					.Show();
+				}
+			);
+			#else
+			Task.Run(() =>
+			{
+				if(MessageBox.Show("Exit 退出?","", MessageBoxButtons.YesNo) == DialogResult.Yes)
+				{
+					Window.Close();
+				}
+			});
+			#endif
 		}
 	}
 }

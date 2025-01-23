@@ -1,10 +1,14 @@
 ﻿using System.Diagnostics;
 using Android;
+using Android.Animation;
 using Android.Content;
 using Android.Content.PM;
 using Android.OS;
 using Android.Provider;
 using Android.Runtime;
+using Android.Views;
+using Android.Views.Animations;
+using Android.Window;
 using Environment = Android.OS.Environment;
 using Permission = Android.Content.PM.Permission;
 
@@ -137,6 +141,37 @@ namespace SC4Android
 			{
 				isPaused = false;
 				RunRequired = CheckAndRequestPermission();
+			}
+		}
+
+		protected override void OnCreate(Bundle savedInstanceState)
+		{
+			base.OnCreate(savedInstanceState);
+			Window.DecorView.ViewTreeObserver.AddOnPreDrawListener(new ViewTreeObserverListener());
+			if (Build.VERSION.SdkInt >= BuildVersionCodes.S)
+			{
+				SplashScreen?.SetOnExitAnimationListener(new SplashScreenOnExitAnimationListener());
+			}
+		}
+		public class ViewTreeObserverListener : Java.Lang.Object, ViewTreeObserver.IOnPreDrawListener
+		{
+			public bool OnPreDraw()
+			{
+				return Program.m_firstFramePrepared;
+			}
+		}
+		public class SplashScreenOnExitAnimationListener : Java.Lang.Object, ISplashScreenOnExitAnimationListener
+		{
+			public void OnSplashScreenExit(SplashScreenView view)
+			{
+				var slideUp = ObjectAnimator.OfFloat(view, "alpha", 1f, 0f);
+				slideUp.SetInterpolator(new AnticipateInterpolator());
+				slideUp.SetDuration(800L);
+				slideUp.AnimationEnd += (_, _) =>
+				{
+					view.Remove();
+				};
+				slideUp.Start();
 			}
 		}
 	}

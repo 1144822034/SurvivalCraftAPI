@@ -6,6 +6,7 @@ using System.Net;
 using System.Reflection;
 using System.Runtime.InteropServices;
 using Engine.Input;
+using Timer = System.Threading.Timer;
 
 #if WINDOWS
 using ImeSharp;
@@ -30,6 +31,9 @@ namespace Game
 		public static event Action<Uri> HandleUri;
 		private static Timer JamTimer = new(JamChecker,null,0,8266);
 		private static int JamCounter = 0;
+#if ANDROID
+		public static bool m_firstFramePrepared = false;
+#endif
 		
 #if WINDOWS
 		private static void Main(string[] args)
@@ -247,6 +251,15 @@ namespace Game
 				ExceptionManager.ReportExceptionToUser(null, e2);
 				ScreensManager.SwitchScreen("MainMenu");
 			}
+#if ANDROID
+			finally
+			{
+				if(LoadingScreen.m_isContentLoaded)
+				{
+					m_firstFramePrepared = true;
+				}
+			}
+#endif
 		}
 	}
 }

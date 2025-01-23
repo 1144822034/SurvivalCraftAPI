@@ -37,7 +37,8 @@ namespace Engine
         {
             RequestWindowFeature(WindowFeatures.NoTitle);
             base.OnCreate(savedInstanceState);
-            Window.AddFlags(WindowManagerFlags.Fullscreen);
+            Window.AddFlags(WindowManagerFlags.Fullscreen | WindowManagerFlags.TranslucentStatus | WindowManagerFlags.TranslucentNavigation);
+            EnableImmersiveMode();
             VolumeControlStream = Android.Media.Stream.Music;
             RequestedOrientation = ScreenOrientation.SensorLandscape;
         }
@@ -172,6 +173,7 @@ namespace Engine
             if (Build.VERSION.SdkInt >= (BuildVersionCodes)19)
             {
                 Window.DecorView.SystemUiVisibility = (StatusBarVisibility)6150;
+                Window.DecorView.SystemUiFlags = SystemUiFlags.Fullscreen | SystemUiFlags.HideNavigation | SystemUiFlags.Immersive | SystemUiFlags.ImmersiveSticky;
             }
         }
     }

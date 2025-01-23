@@ -655,16 +655,21 @@ namespace Engine.Input
             {
                 cancel();
             });
-            AlertDialog alertDialog = builder.Create();
-            alertDialog.DismissEvent += delegate
-            {
-                cancel();
-            };
-            alertDialog.CancelEvent += delegate
-            {
-                cancel();
-            };
-            alertDialog.Show();
+            Window.Activity.RunOnUiThread(
+                () =>
+                {
+                    AlertDialog alertDialog = builder.Create();
+                    alertDialog.DismissEvent += delegate
+                    {
+                        cancel();
+                    };
+                    alertDialog.CancelEvent += delegate
+                    {
+                        cancel();
+                    };
+                    alertDialog.Show();
+                }
+            );
         }
 #endif
 		}
