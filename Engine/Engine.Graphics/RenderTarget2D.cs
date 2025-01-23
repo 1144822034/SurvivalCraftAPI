@@ -2,7 +2,7 @@
 using System.IO;
 using System.Runtime.InteropServices;
 using Engine.Media;
-using OpenTK.Graphics.ES30;
+using Silk.NET.OpenGLES;
 using SixLabors.ImageSharp.PixelFormats;
 
 namespace Engine.Graphics
@@ -68,7 +68,7 @@ namespace Engine.Graphics
             SixLabors.ImageSharp.Image<Rgba32> image = new(Image.DefaultImageSharpConfiguration, sourceRectangle.Width, sourceRectangle.Height);
             image.DangerousTryGetSinglePixelMemory(out Memory<Rgba32> memory);
             GLWrapper.BindFramebuffer(m_frameBuffer);
-            GL.ReadPixels(sourceRectangle.Left, sourceRectangle.Top, sourceRectangle.Width, sourceRectangle.Height, PixelFormat.Rgba, PixelType.UnsignedByte, (IntPtr)memory.Pin().Pointer);
+            GLWrapper.GL.ReadPixels(sourceRectangle.Left, sourceRectangle.Top, (uint)sourceRectangle.Width, (uint)sourceRectangle.Height, PixelFormat.Rgba, PixelType.UnsignedByte, memory.Pin().Pointer);
             return new Image(image);
         }
 
@@ -78,16 +78,16 @@ namespace Engine.Graphics
             GetDataInternal(target, sourceRectangle);
         }
 
-        public void GetDataInternal(nint target, Rectangle sourceRectangle)
+        public unsafe void GetDataInternal(nint target, Rectangle sourceRectangle)
         {
             GLWrapper.BindFramebuffer(m_frameBuffer);
-            GL.ReadPixels(sourceRectangle.Left, sourceRectangle.Top, sourceRectangle.Width, sourceRectangle.Height, PixelFormat.Rgba, PixelType.UnsignedByte, target);
+            GLWrapper.GL.ReadPixels(sourceRectangle.Left, sourceRectangle.Top, (uint)sourceRectangle.Width, (uint)sourceRectangle.Height, PixelFormat.Rgba, PixelType.UnsignedByte, target.ToPointer());
         }
 
         public void GenerateMipMaps()
         {
             GLWrapper.BindTexture(TextureTarget.Texture2D, m_texture, forceBind: false);
-            GL.GenerateMipmap(TextureTarget.Texture2D);
+            GLWrapper.GL.GenerateMipmap(TextureTarget.Texture2D);
         }
 
         public override void HandleDeviceLost()
@@ -102,24 +102,32 @@ namespace Engine.Graphics
 
         public void AllocateRenderTarget()
         {
-            GL.GenFramebuffers(1, out m_frameBuffer);
+            GLWrapper.GL.GenFramebuffers(1u, out uint frameBuffer);
+            m_frameBuffer = (int)frameBuffer;
             GLWrapper.BindFramebuffer(m_frameBuffer);
-            GL.FramebufferTexture2D(All.Framebuffer, All.ColorAttachment0, All.Texture2D, m_texture, 0);
+            GLWrapper.GL.FramebufferTexture2D(
+                FramebufferTarget.Framebuffer,
+                FramebufferAttachment.ColorAttachment0,
+                TextureTarget.Texture2D,
+                (uint)m_texture,
+                0
+            );
             if (DepthFormat != 0)
             {
-                GL.GenRenderbuffers(1, out m_depthBuffer);
-                GL.BindRenderbuffer(RenderbufferTarget.Renderbuffer, m_depthBuffer);
-                GL.RenderbufferStorage(RenderbufferTarget.Renderbuffer, GLWrapper.TranslateDepthFormat(DepthFormat), base.Width, base.Height);
-                GL.FramebufferRenderbuffer(All.Framebuffer, All.DepthAttachment, All.Renderbuffer, m_depthBuffer);
-                GL.FramebufferRenderbuffer(All.Framebuffer, All.StencilAttachment, All.Renderbuffer, 0);
+                GLWrapper.GL.GenRenderbuffers(1u, out uint depthBuffer);
+                m_depthBuffer = (int)depthBuffer;
+                GLWrapper.GL.BindRenderbuffer(RenderbufferTarget.Renderbuffer, depthBuffer);
+                GLWrapper.GL.RenderbufferStorage(RenderbufferTarget.Renderbuffer, GLWrapper.TranslateDepthFormat(DepthFormat), (uint)base.Width, (uint)base.Height);
+                GLWrapper.GL.FramebufferRenderbuffer(FramebufferTarget.Framebuffer, FramebufferAttachment.DepthAttachment, RenderbufferTarget.Renderbuffer, depthBuffer);
+                GLWrapper.GL.FramebufferRenderbuffer(FramebufferTarget.Framebuffer, FramebufferAttachment.StencilAttachment, RenderbufferTarget.Renderbuffer, 0);
             }
             else
             {
-                GL.FramebufferRenderbuffer(All.Framebuffer, All.DepthAttachment, All.Renderbuffer, 0);
-                GL.FramebufferRenderbuffer(All.Framebuffer, All.StencilAttachment, All.Renderbuffer, 0);
+                GLWrapper.GL.FramebufferRenderbuffer(FramebufferTarget.Framebuffer, FramebufferAttachment.DepthAttachment, RenderbufferTarget.Renderbuffer, 0);
+                GLWrapper.GL.FramebufferRenderbuffer(FramebufferTarget.Framebuffer, FramebufferAttachment.StencilAttachment, RenderbufferTarget.Renderbuffer, 0);
             }
-            FramebufferErrorCode framebufferErrorCode = GL.CheckFramebufferStatus(FramebufferTarget.Framebuffer);
-            if (framebufferErrorCode != FramebufferErrorCode.FramebufferComplete)
+            GLEnum framebufferErrorCode = GLWrapper.GL.CheckFramebufferStatus(FramebufferTarget.Framebuffer);
+            if (framebufferErrorCode != GLEnum.FramebufferComplete)
             {
                 throw new InvalidOperationException($"Error creating framebuffer ({framebufferErrorCode.ToString()}).");
             }
@@ -129,7 +137,7 @@ namespace Engine.Graphics
         {
             if (m_depthBuffer != 0)
             {
-                GL.DeleteRenderbuffers(1, ref m_depthBuffer);
+                GLWrapper.GL.DeleteRenderbuffers(1, (uint)m_depthBuffer);
                 m_depthBuffer = 0;
             }
             if (m_frameBuffer != 0)

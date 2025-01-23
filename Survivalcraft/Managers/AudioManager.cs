@@ -22,7 +22,7 @@ namespace Game
 					{
                         SoundBuffer soundBuffer = ContentManager.Get<SoundBuffer>(name);
                         Sound sound = new(soundBuffer, num, ToEnginePitch(pitch), pan, isLooped: false, disposeOnStop: true);
-						sound.Play(new OpenTK.Vector3(vector.X,vector.Y,vector.Z));
+						sound.Play(new Vector3(vector.X,vector.Y,vector.Z));
 					}
 					catch (Exception)
 					{

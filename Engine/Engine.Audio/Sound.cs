@@ -1,6 +1,6 @@
 ﻿using System;
 using Engine.Media;
-using OpenTK.Audio.OpenAL;
+using Silk.NET.OpenAL;
 
 namespace Engine.Audio
 {
@@ -32,7 +32,7 @@ namespace Engine.Audio
 			ArgumentNullException.ThrowIfNull(soundBuffer);
             if (Mixer.m_isInitialized)
             {
-                AL.Source(m_source, ALSourcei.Buffer, soundBuffer.m_buffer);
+                Mixer.AL.SetSourceProperty((uint)m_source, SourceInteger.Buffer, soundBuffer.m_buffer);
                 Mixer.CheckALError();
             }
             Initialize(soundBuffer);
@@ -49,7 +49,7 @@ namespace Engine.Audio
 		public Sound(StreamingSource streamingSource, SoundBuffer soundBuffer, float volume = 1f, float pitch = 1f, float pan = 0f, bool isLooped = false, bool disposeOnStop = false)
 		{
 			ArgumentNullException.ThrowIfNull(soundBuffer);
-			AL.Source(m_source, ALSourcei.Buffer, soundBuffer.m_buffer);
+            Mixer.AL.SetSourceProperty((uint)m_source, SourceInteger.Buffer, soundBuffer.m_buffer);
 			Mixer.CheckALError();
 			Initialize(soundBuffer);
 			base.ChannelsCount = soundBuffer.ChannelsCount;
@@ -65,13 +65,14 @@ namespace Engine.Audio
         /// 在指定位置播放音频
         /// </summary>
         /// <param name="direction">相对于玩家的相对位置</param>
-		internal override void InternalPlay(OpenTK.Vector3 direction)
+		internal override unsafe void InternalPlay(Vector3 direction)
 		{
             if (m_source != 0)
             {
-                AL.Source(m_source, ALSource3f.Position, ref direction);
-                AL.Source(m_source, ALSourceb.Looping, m_isLooped);
-                AL.SourcePlay(m_source);
+                uint source = (uint)m_source;
+                Mixer.AL.SetSourceProperty(source, SourceVector3.Position, direction.X, direction.Y, direction.Z);
+                Mixer.AL.SetSourceProperty(source, SourceBoolean.Looping, m_isLooped);
+                Mixer.AL.SourcePlay(source);
             }
             Mixer.CheckALError();
 		}
@@ -80,7 +81,7 @@ namespace Engine.Audio
 		{
             if (m_source != 0)
             {
-                AL.SourcePause(m_source);
+                Mixer.AL.SourcePause((uint)m_source);
                 Mixer.CheckALError();
             }
         }
@@ -89,7 +90,7 @@ namespace Engine.Audio
 		{
             if (m_source != 0)
             {
-                AL.SourceRewind(m_source);
+                Mixer.AL.SourceRewind((uint)m_source);
                 Mixer.CheckALError();
             }
         }

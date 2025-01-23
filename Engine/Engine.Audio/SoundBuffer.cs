@@ -1,6 +1,6 @@
 ﻿using System.Runtime.InteropServices;
 using Engine.Media;
-using OpenTK.Audio.OpenAL;
+using Silk.NET.OpenAL;
 
 namespace Engine.Audio
 {
@@ -54,21 +54,22 @@ namespace Engine.Audio
 		{
 			if (m_buffer != 0)
 			{
-				AL.DeleteBuffer(m_buffer);
+				Mixer.AL.DeleteBuffer((uint)m_buffer);
 				Mixer.CheckALError();
 				m_buffer = 0;
 			}
 		}
 
-		private void CreateBuffer<T>(T[] data, int startIndex, int itemsCount, int channelsCount, int samplingFrequency)
+		private unsafe void CreateBuffer<T>(T[] data, int startIndex, int itemsCount, int channelsCount, int samplingFrequency)
 		{
-			m_buffer = AL.GenBuffer();
+			uint buffer = Mixer.AL.GenBuffer();
+            m_buffer = (int)buffer;
 			Mixer.CheckALError();
 			GCHandle gCHandle = GCHandle.Alloc(data, GCHandleType.Pinned);
 			try
 			{
 				int num = Utilities.SizeOf<T>();
-				AL.BufferData(m_buffer, (channelsCount == 1) ? ALFormat.Mono16 : ALFormat.Stereo16, gCHandle.AddrOfPinnedObject() + (startIndex * num), itemsCount * num, samplingFrequency);
+                Mixer.AL.BufferData(buffer, (channelsCount == 1) ? BufferFormat.Mono16 : BufferFormat.Stereo16, (gCHandle.AddrOfPinnedObject() + (startIndex * num)).ToPointer(), itemsCount * num, samplingFrequency);
 				Mixer.CheckALError();
 			}
 			finally

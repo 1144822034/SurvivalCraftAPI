@@ -6,12 +6,17 @@
 		<AndroidUseAapt2>true</AndroidUseAapt2>
 		<Configurations>Release</Configurations>
 		<GenerateAssemblyInfo>true</GenerateAssemblyInfo>
+		<AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+	</PropertyGroup>
+	<PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
+		<TargetFramework>net9.0-android</TargetFramework>
+		<DefineConstants>DEBUG</DefineConstants>
+		<WarningLevel>2</WarningLevel>
 	</PropertyGroup>
 	<PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
-		<TargetFramework>net9-android</TargetFramework>
+		<TargetFramework>net9.0-android</TargetFramework>
 		<OutputType>Library</OutputType>
 		<DefineConstants>TRACE</DefineConstants>
-		<AllowUnsafeBlocks>true</AllowUnsafeBlocks>
 	</PropertyGroup>
 	<ItemGroup>
 		<ProjectReference Include="..\EntitySystem\EntitySystem.csproj" />
@@ -1011,11 +1016,6 @@
 		<Compile Include="..\Survivalcraft\Game\VrControllerButton.cs"/>
 		<Compile Include="..\Survivalcraft\Game\VrEye.cs"/>
 		<Compile Include="..\Survivalcraft\Managers\VrManager.cs"/>
-	</ItemGroup>
-	<ItemGroup>
-<Reference Include="OpenTK-1.0.2moded">
-<HintPath>..\Engine\reference\OpenTK-1.0.2moded.dll</HintPath>
-</Reference>
 	</ItemGroup>
 	<PropertyGroup>
 <RootNamespace>Game</RootNamespace>

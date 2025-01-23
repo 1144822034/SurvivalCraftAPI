@@ -2,7 +2,7 @@ using Engine;
 using Engine.Graphics;
 using Engine.Media;
 using Jint.Native;
-using OpenTK.Graphics.ES30;
+using Silk.NET.OpenGLES;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
@@ -348,7 +348,7 @@ namespace Game
 
 		public void CreateRenderTarget()
 		{
-			GL.GetInteger(GetPName.MaxTextureSize, out int maxTextureSize);
+			GLWrapper.GL.GetInteger(GetPName.MaxTextureSize, out int maxTextureSize);
 			int height = (int)m_font.GlyphHeight * 4 * 32;
 			if(height > maxTextureSize)
 			{

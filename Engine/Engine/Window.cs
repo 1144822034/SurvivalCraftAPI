@@ -2,15 +2,20 @@
 using Android.Content;
 using Android.OS;
 #else
-using OpenTK;
-using OpenTK.Graphics;
-using OpenTK.Graphics.ES30;
-using System.Drawing;
 using System.Reflection;
+using SixLabors.ImageSharp;
+using SixLabors.ImageSharp.PixelFormats;
+using Silk.NET.Input;
 #endif
+using Monitor = Silk.NET.Windowing.Monitor;
+using System.Runtime.CompilerServices;
 using Engine.Audio;
 using Engine.Graphics;
 using Engine.Input;
+using Silk.NET.Windowing;
+using Silk.NET.Core;
+using Silk.NET.Maths;
+using Environment = System.Environment;
 
 namespace Engine
 {
@@ -24,100 +29,18 @@ namespace Engine
         }
 
         private static State m_state;
+
+        public static IView m_view;
+
 #if ANDROID
-        public static bool m_contextLost;
-
-        internal static bool m_focusRegained;
-
-        public static int m_presentationInterval = 1;
-
-        public static double m_frameStartTime;
-
-        public static bool IsCreated => m_state != State.Uncreated;
-
-        public static bool IsActive => m_state == State.Active;
-
         public static EngineActivity Activity => EngineActivity.m_activity;
-
-        public static EngineView View
-        {
-            get;
-            set;
-        }
-
-        public static Point2 ScreenSize => new(EngineActivity.m_activity.Resources.DisplayMetrics.WidthPixels, EngineActivity.m_activity.Resources.DisplayMetrics.HeightPixels);
-
-        public static WindowMode WindowMode
-        {
-            get
-            {
-                VerifyWindowOpened();
-                return WindowMode.Fullscreen;
-            }
-            set
-            {
-                VerifyWindowOpened();
-            }
-        }
-
-        public static Point2 Position
-        {
-            get
-            {
-                VerifyWindowOpened();
-                return Point2.Zero;
-            }
-            set
-            {
-                VerifyWindowOpened();
-            }
-        }
-
-        public static Point2 Size
-        {
-            get
-            {
-                VerifyWindowOpened();
-                return new Point2(View.Size.Width, View.Size.Height);
-            }
-            set
-            {
-                VerifyWindowOpened();
-            }
-        }
-
-        public static string Title
-        {
-            get
-            {
-                VerifyWindowOpened();
-                return string.Empty;
-            }
-            set
-            {
-                VerifyWindowOpened();
-            }
-        }
-
-        public static int PresentationInterval
-        {
-            get
-            {
-                VerifyWindowOpened();
-                return m_presentationInterval;
-            }
-            set
-            {
-                VerifyWindowOpened();
-                m_presentationInterval = Math.Clamp(value, 1, 4);
-            }
-        }
 #else
-        public static GameWindow m_gameWindow;
+        public static IWindow m_gameWindow;
+
+        public static IInputContext m_inputContext;
+#endif
 
         private static bool m_closing;
-
-        public static float m_dpiScale;
 
         private static int? m_swapInterval;
 
@@ -126,14 +49,19 @@ namespace Engine
 
         public static string m_titleSuffix = string.Empty;
 
+        public static float m_lastRenderDelta;
+
+
         public static Point2 ScreenSize
         {
             get
             {
-                DisplayDevice @default = DisplayDevice.Default;
-                return Configuration.RunningOnMacOS
-                    ? new Point2((int)MathF.Round(@default.Width * m_dpiScale), (int)MathF.Round(@default.Height * m_dpiScale))
-                    : new Point2(@default.Width, @default.Height);
+                #if ANDROID
+                return new Point2(m_view.Size.X, m_view.Size.Y);
+#else
+                var size = m_gameWindow?.Monitor?.Bounds.Size ?? Monitor.GetMainMonitor(null).Bounds.Size;
+                return new Point2(size.X, size.Y);
+#endif
             }
         }
 
@@ -141,13 +69,20 @@ namespace Engine
         {
             get
             {
+#if ANDROID
+                return WindowMode.Fullscreen;
+#else
                 VerifyWindowOpened();
                 return m_gameWindow.WindowState == WindowState.Fullscreen
                     ? WindowMode.Fullscreen
                     : m_gameWindow.WindowBorder != 0 ? WindowMode.Fixed : WindowMode.Resizable;
+#endif
             }
             set
             {
+#if ANDROID
+                return;
+#else
                 VerifyWindowOpened();
                 switch (value)
                 {
@@ -176,6 +111,7 @@ namespace Engine
                         m_gameWindow.WindowState = WindowState.Fullscreen;
                         break;
                 }
+#endif
             }
         }
 
@@ -184,12 +120,20 @@ namespace Engine
             get
             {
                 VerifyWindowOpened();
-                return new Point2(m_gameWindow.Location.X, m_gameWindow.Location.Y);
+#if ANDROID
+                return Point2.Zero;
+#else
+                return new Point2(m_gameWindow.Position.X, m_gameWindow.Position.Y);
+#endif
             }
             set
             {
+#if ANDROID
+                return;
+#else
                 VerifyWindowOpened();
-                m_gameWindow.Location = new Point(value.X, value.Y);
+                m_gameWindow.Position = new (value.X, value.Y);
+#endif
             }
         }
 
@@ -198,12 +142,16 @@ namespace Engine
             get
             {
                 VerifyWindowOpened();
-                return new Point2(m_gameWindow.ClientSize.Width, m_gameWindow.ClientSize.Height);
+                return new Point2(m_view.Size.X, m_view.Size.Y);
             }
             set
             {
+#if ANDROID
+                return;
+#else
                 VerifyWindowOpened();
-                m_gameWindow.ClientSize = new Size(value.X, value.Y);
+                m_gameWindow.Size = new (value.X, value.Y);
+#endif
             }
         }
 
@@ -217,9 +165,11 @@ namespace Engine
             }
             set
             {
+#if !ANDROID
                 VerifyWindowOpened();
                 m_titlePrefix = value;
                 m_gameWindow.Title = $"{m_titlePrefix}{m_titleSuffix}";
+#endif
             }
         }
 
@@ -232,9 +182,11 @@ namespace Engine
             }
             set
             {
+#if !ANDROID
                 VerifyWindowOpened();
                 m_titleSuffix = value;
                 m_gameWindow.Title = $"{m_titlePrefix}{m_titleSuffix}";
+#endif
             }
         }
 
@@ -242,32 +194,23 @@ namespace Engine
         {
             get
             {
+#if ANDROID
+                return String.Empty;
+#else
                 VerifyWindowOpened();
                 return m_gameWindow.Title;
+#endif
             }
             set
             {
+#if !ANDROID
                 VerifyWindowOpened();
                 m_gameWindow.Title = value;
                 m_titlePrefix = value;
                 m_titleSuffix = string.Empty;
+#endif
             }
         }
-        /*
-		public static Icon Icon
-		{
-			get
-			{
-				VerifyWindowOpened();
-				return m_gameWindow.Icon;
-			}
-			set
-			{
-				VerifyWindowOpened();
-				m_gameWindow.Icon = value;
-			}
-		}
-		*/
 
         public static int PresentationInterval
         {
@@ -276,7 +219,7 @@ namespace Engine
                 VerifyWindowOpened();
                 if (!m_swapInterval.HasValue)
                 {
-                    m_swapInterval = m_gameWindow.Context.SwapInterval;
+                    m_swapInterval = m_view.VSync ? 1 : 0;
                 }
                 return m_swapInterval.Value;
             }
@@ -286,7 +229,7 @@ namespace Engine
                 value = Math.Clamp(value, 0, 4);
                 if (value != PresentationInterval)
                 {
-                    m_gameWindow.Context.SwapInterval = value;
+                    m_view.GLContext?.SwapInterval(value);
                     m_swapInterval = value;
                 }
             }
@@ -294,7 +237,6 @@ namespace Engine
         
         public static bool IsCreated => m_state != State.Uncreated;
         public static bool IsActive => m_state == State.Active;
-#endif
 
         public static event Action Created;
 
@@ -313,17 +255,17 @@ namespace Engine
         public static event Action<Uri> HandleUri;
 
         public static event Action LowMemory;
-#if !ANDROID
 
-        static Window()
-        {
-            m_dpiScale = 1f;
-            Toolkit.Init(new ToolkitOptions() { EnableHighResolution = true, Backend = PlatformBackend.PreferNative});
-        }
+#if ANDROID
+        public const string WindowingLibrary = "Silk.NET.Windowing.Sdl";
+#else
+        public const string WindowingLibrary = "Silk.NET.Windowing.Glfw";
+        public const string InputLibrary = "Silk.NET.Input.Glfw";
+#endif
 
         public static void Run(int width = 0, int height = 0, WindowMode windowMode = WindowMode.Fixed, string title = "")
         {
-            if (m_gameWindow != null)
+            if (m_view != null)
             {
                 throw new InvalidOperationException("Window is already opened.");
             }
@@ -343,38 +285,50 @@ namespace Engine
                     Environment.Exit(1);
                 }
             };
-            GraphicsMode mode = new(new OpenTK.Graphics.ColorFormat(24), 16, 0, 0, OpenTK.Graphics.ColorFormat.Empty, 2);
+            Silk.NET.Windowing.Window.ShouldLoadFirstPartyPlatforms(false);
+            Silk.NET.Windowing.Window.TryAdd(WindowingLibrary);
+#if DEBUG
+            GraphicsAPI api = new GraphicsAPI(ContextAPI.OpenGLES, ContextProfile.Compatability, ContextFlags.Debug, new APIVersion(3, 2));
+#else
+            GraphicsAPI api = new GraphicsAPI(ContextAPI.OpenGLES, new APIVersion(3, 2));
+#endif
+#if ANDROID
+            Log.Information("Android.OS.Build.Display: " + Build.Display);
+            Log.Information("Android.OS.Build.Device: " + Build.Device);
+            Log.Information("Android.OS.Build.Hardware: " + Build.Hardware);
+            Log.Information("Android.OS.Build.Manufacturer: " + Build.Manufacturer);
+            Log.Information("Android.OS.Build.Model: " + Build.Model);
+            Log.Information("Android.OS.Build.Product: " + Build.Product);
+            Log.Information("Android.OS.Build.Brand: " + Build.Brand);
+            Log.Information("Android.OS.Build.VERSION.SdkInt: " + ((int)Build.VERSION.SdkInt).ToString());
+            ViewOptions options = ViewOptions.Default with { API = api };
+            m_view = Silk.NET.Windowing.Window.GetView(options);
+            Activity.Paused += PausedHandler;
+            Activity.Resumed += ResumedHandler;
+            Activity.Destroyed += DestroyedHandler;
+            Activity.NewIntent += NewIntentHandler;
+#else
             width = (width == 0) ? (ScreenSize.X * 4 / 5) : width;
             height = (height == 0) ? (ScreenSize.Y * 4 / 5) : height;
-            m_gameWindow = new GameWindow(width, height, mode, title);
+            WindowOptions windowOptions = WindowOptions.Default with
+            {
+                Title = title,
+                PreferredDepthBufferBits = 24,
+                PreferredStencilBufferBits = 8,
+                API = api,
+                Size = new (width, height)
+            };
+            m_gameWindow = Silk.NET.Windowing.Window.Create(windowOptions);
+            m_view = m_gameWindow;
             m_titlePrefix = title;
-#if WINDOWS
-            m_gameWindow.Icon = new Icon(typeof(Window).GetTypeInfo().Assembly.GetManifestResourceStream("Engine.Resources.icon.ico"), new Size(32, 32));
-#endif
-            m_dpiScale = m_gameWindow.ClientSize.Width / 400f;
-            m_gameWindow.ClientSize = new Size(width, height);
-            if (Configuration.RunningOnMacOS)
-            {
-                Point2 point = new((int)MathF.Round(ScreenSize.X / m_dpiScale), (int)MathF.Round(ScreenSize.Y / m_dpiScale));
-                m_gameWindow.Location = new Point(Math.Max((point.X - m_gameWindow.Size.Width) / 2, 0), Math.Max((point.Y - m_gameWindow.Size.Height) / 2, 0));
-            }
-            else
-            {
-                m_gameWindow.Location = new Point(Math.Max((ScreenSize.X - m_gameWindow.Size.Width) / 2, 0), Math.Max((ScreenSize.Y - m_gameWindow.Size.Height) / 2, 0));
-            }
+            Position = new Point2(Math.Max((ScreenSize.X - m_gameWindow.Size.X) / 2, 0), Math.Max((ScreenSize.Y - m_gameWindow.Size.Y) / 2, 0));
             WindowMode = windowMode;
-            m_gameWindow.Load += LoadHandler;
-            GL.GetInteger(GetPName.RedBits, out int data0);
-            GL.GetInteger(GetPName.GreenBits, out int data1);
-            GL.GetInteger(GetPName.BlueBits, out int data2);
-            GL.GetInteger(GetPName.AlphaBits, out int data3);
-            GL.GetInteger(GetPName.DepthBits, out int data4);
-            GL.GetInteger(GetPName.StencilBits, out int data5);
-            GL.GetInteger(GetPName.MajorVersion, out int data6);
-            GL.GetInteger(GetPName.MinorVersion, out int data7);
-            GL.GetInteger(GetPName.MaxTextureSize, out int data8);
-            Log.Information("OpenGL{6}.{7} framebuffer created, R={0} G={1} B={2} A={3}, D={4} S={5}, MaxTextureSize={8}", data0, data1, data2, data3, data4, data5,data6,data7,data8);
-            m_gameWindow.Run();//会阻塞，不要放置在前边
+#endif
+            m_view.ShouldSwapAutomatically = false;
+            m_view.Load += LoadHandler;
+            m_view.Run();//会阻塞，不要放置在前边
+            GLWrapper.GL.Dispose();
+            m_view?.Dispose();
         }
 
         public static void Close()
@@ -383,7 +337,7 @@ namespace Engine
             m_closing = true;
         }
 
-        private static void LoadHandler(object sender, EventArgs args)
+        private static void LoadHandler()
         {
             InitializeAll();
             SubscribeToEvents();
@@ -396,9 +350,9 @@ namespace Engine
             }
         }
 
-        private static void FocusedChangedHandler(object sender, EventArgs args)
+        private static void FocusedChangedHandler(bool focused)
         {
-            if (m_gameWindow.Focused)
+            if (focused)
             {
                 if (m_state == State.Inactive)
                 {
@@ -417,7 +371,7 @@ namespace Engine
             Touch.Clear();
         }
 
-        private static void ClosedHandler(object sender, EventArgs args)
+        private static void ClosedHandler()
         {
             if (m_state == State.Active)
             {
@@ -431,64 +385,43 @@ namespace Engine
             }
             UnsubscribeFromEvents();
             DisposeAll();
-            m_gameWindow.Dispose();
-            m_gameWindow = null;
         }
+
+        private static void ResizeHandler(Vector2D<int> _)
+        {
+#if ANDROID
+            if (m_state != 0)
+            {
+                Display.Resize();
+                Resized?.Invoke();
+            }
 #else
-        public static void Run(int width = 0, int height = 0, WindowMode windowMode = WindowMode.Fullscreen, string title = "")
+			Display.Resize();
+			Resized?.Invoke();
+#endif
+		}
+
+        private static void RenderFrameHandler(double lastRenderDelta)
         {
-            if (View != null)
+            m_lastRenderDelta = (float)lastRenderDelta;
+            BeforeFrameAll();
+            Frame?.Invoke();
+            AfterFrameAll();
+            if (!m_closing)
             {
-                throw new InvalidOperationException("Window is already opened.");
+                m_view.GLContext?.SwapBuffers();
             }
-            AppDomain.CurrentDomain.UnhandledException += delegate (object sender, UnhandledExceptionEventArgs args)
+            else
             {
-                if (Window.UnhandledException != null)
-                {
-                    Exception ex = args.ExceptionObject as Exception;
-                    if (ex == null)
-                    {
-                        ex = new Exception($"Unknown exception. Additional information: {args.ExceptionObject}");
-                    }
-                    Window.UnhandledException(new UnhandledExceptionInfo(ex));
-                }
-            };
-            Log.Information("Android.OS.Build.Display: " + Build.Display);
-            Log.Information("Android.OS.Build.Device: " + Build.Device);
-            Log.Information("Android.OS.Build.Hardware: " + Build.Hardware);
-            Log.Information("Android.OS.Build.Manufacturer: " + Build.Manufacturer);
-            Log.Information("Android.OS.Build.Model: " + Build.Model);
-            Log.Information("Android.OS.Build.Product: " + Build.Product);
-            Log.Information("Android.OS.Build.Brand: " + Build.Brand);
-            Log.Information("Android.OS.Build.VERSION.SdkInt: " + ((int)Build.VERSION.SdkInt).ToString());
-            View = new EngineView(Activity);
-            View.ContextSet += ContextSetHandler;
-            View.Resize += ResizeHandler;
-            View.ContextLost += ContextLostHandler;
-            View.RenderFrame += RenderFrameHandler;
-            Activity.Paused += PausedHandler;
-            Activity.Resumed += ResumedHandler;
-            Activity.Destroyed += DestroyedHandler;
-            Activity.NewIntent += NewIntentHandler;
-            Activity.SetContentView(View);
-            View.RequestFocus();
-            View.Run();
-        }
-
-        public static void Close()
-        {
-            VerifyWindowOpened();
-            Activity.Finish();
-        }
-
-        public static void VerifyWindowOpened()
-        {
-            if (View == null)
-            {
-                throw new InvalidOperationException("Window is not opened.");
+#if ANDROID
+                Activity.Finish();
+#else
+                m_gameWindow.Close();
+#endif
             }
         }
 
+#if ANDROID
         public static void PausedHandler()
         {
             if (m_state == State.Active)
@@ -504,7 +437,7 @@ namespace Engine
             if (m_state == State.Inactive)
             {
                 m_state = State.Active;
-                View.EnableImmersiveMode();
+                Activity.EnableImmersiveMode();
                 Activated?.Invoke();
             }
         }
@@ -532,113 +465,6 @@ namespace Engine
                 }
             }
         }
-#endif
-
-        private static void ResizeHandler(object sender, EventArgs args)
-        {
-#if ANDROID
-            if (m_state != 0)
-            {
-                Display.Resize();
-                Resized?.Invoke();
-            }
-#else
-			Display.Resize();
-			Resized?.Invoke();
-#endif
-		}
-#if ANDROID
-        public static void ContextSetHandler(object sender, EventArgs args)
-        {
-            if (m_contextLost)
-            {
-                m_contextLost = false;
-                Display.HandleDeviceReset();
-            }
-        }
-
-        public static void ContextLostHandler(object sender, EventArgs args)
-        {
-            m_contextLost = true;
-            Display.HandleDeviceLost();
-        }
-#endif
-#if !ANDROID
-        private static void RenderFrameHandler(object sender, EventArgs args)
-        {
-            BeforeFrameAll();
-            Frame?.Invoke();
-            AfterFrameAll();
-            if (!m_closing)
-            {
-                m_gameWindow.Context.SwapBuffers();
-            }
-            else
-            {
-                m_gameWindow.Close();
-            }
-        }
-
-        private static void VerifyWindowOpened()
-        {
-            if (m_gameWindow == null)
-            {
-                throw new InvalidOperationException("Window is not opened.");
-            }
-        }
-
-        private static void SubscribeToEvents()
-        {
-            m_gameWindow.FocusedChanged += FocusedChangedHandler;
-            m_gameWindow.Closed += ClosedHandler;
-            m_gameWindow.Resize += ResizeHandler;
-            m_gameWindow.RenderFrame += RenderFrameHandler;
-        }
-
-        private static void UnsubscribeFromEvents()
-        {
-            m_gameWindow.FocusedChanged -= FocusedChangedHandler;
-            m_gameWindow.Closed -= ClosedHandler;
-            m_gameWindow.Resize -= ResizeHandler;
-            m_gameWindow.RenderFrame -= RenderFrameHandler;
-        }
-
-#else
-        private static void RenderFrameHandler(object sender, EventArgs args)
-        {
-            if (m_state == State.Uncreated)
-            {
-                InitializeAll();
-                m_state = State.Inactive;
-                Created?.Invoke();
-                m_state = State.Active;
-                Activated?.Invoke();
-                NewIntentHandler(Activity.Intent);
-            }
-            if (m_state != State.Active)
-            {
-                return;
-            }
-            BeforeFrameAll();
-            Frame?.Invoke();
-            AfterFrameAll();
-            View.GraphicsContext.SwapBuffers();
-            if (m_presentationInterval >= 2)
-            {
-                double num = Time.RealTime - m_frameStartTime;
-                int num2 = (int)(1000.0 * ((double)((float)m_presentationInterval / 60f) - num));
-                if (num2 > 0)
-                {
-                    Task.Delay(num2).Wait();
-                }
-            }
-            m_frameStartTime = Time.RealTime;
-            if (m_focusRegained)
-            {
-                m_focusRegained = false;
-                View.EnableImmersiveMode();
-            }
-        }
 
         public static Uri GetUriFromIntent(Intent intent)
         {
@@ -650,12 +476,48 @@ namespace Engine
             return result;
         }
 #endif
+
+        private static void VerifyWindowOpened()
+        {
+            if(m_view == null)
+            {
+                throw new InvalidOperationException("Window is not opened.");
+            }
+        }
+
+        private static void SubscribeToEvents()
+        {
+            m_view.FocusChanged += FocusedChangedHandler;
+            m_view.Closing += ClosedHandler;
+            m_view.Resize += ResizeHandler;
+            m_view.Render += RenderFrameHandler;
+        }
+
+        private static void UnsubscribeFromEvents()
+        {
+            m_view.FocusChanged -= FocusedChangedHandler;
+            m_view.Closing -= ClosedHandler;
+            m_view.Resize -= ResizeHandler;
+            m_view.Render -= RenderFrameHandler;
+        }
+
 		private static void InitializeAll()
         {
             try
 		    {
+#if WINDOWS
+                Image<Rgba32> image = SixLabors.ImageSharp.Image.Load<Rgba32>(Image.DefaultImageSharpDecoderOptions, typeof(Window).GetTypeInfo().Assembly.GetManifestResourceStream("Engine.Resources.icon.png"));
+                byte[] pixelBytes = new byte[image.Width * image.Height * Unsafe.SizeOf<Rgba32>()];
+                image.CopyPixelDataTo(pixelBytes);
+                m_gameWindow.SetWindowIcon([new RawImage(image.Width, image.Height, pixelBytes)]);
+#endif
               Dispatcher.Initialize();
                Display.Initialize();
+#if !ANDROID
+                InputWindowExtensions.ShouldLoadFirstPartyPlatforms(false);
+                InputWindowExtensions.TryAdd(InputLibrary);
+                m_inputContext = m_view.CreateInput();
+#endif
               Keyboard.Initialize();
               Mouse.Initialize();
               Touch.Initialize();
@@ -664,7 +526,7 @@ namespace Engine
             }
             catch (Exception ex)
             {
-                Log.Error("初始化时出错: " + ex.Message);
+                Log.Error("Error occupies in InitializeAll: " + ex);
             }
 
         }

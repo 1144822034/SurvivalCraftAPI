@@ -19,9 +19,9 @@ namespace SC4Android
 		private static bool GraterThanAndroid11 { get; } = (int)Build.VERSION.SdkInt >= (int)BuildVersionCodes.R;
 		private static bool GraterThanAndroid6 { get; } = (int)Build.VERSION.SdkInt >= (int)BuildVersionCodes.M;
 		
-		private void CheckAndRequestPermission(out bool arePermissionsGranted)
+		private bool CheckAndRequestPermission()
 		{
-			arePermissionsGranted = true;
+			bool arePermissionsGranted = true;
 			
 			if(GraterThanAndroid11)
 			{
@@ -33,7 +33,7 @@ namespace SC4Android
 					StartActivity(new Intent(Settings.ActionManageAllFilesAccessPermission));
 				}
 
-				return;
+				return arePermissionsGranted;
 			}
 			
 			if(GraterThanAndroid6)
@@ -58,6 +58,7 @@ namespace SC4Android
 					RequestPermissions([Manifest.Permission.WriteExternalStorage],1);
 				}
 			}
+			return arePermissionsGranted;
 		}
 
 		private bool isPermissionGranted()
@@ -73,12 +74,15 @@ namespace SC4Android
 			return true;
 		}
 
-		private Thread m_thread = null!;
-		protected override void OnCreate(Bundle? savedInstanceState)
+		protected override void OnRun()
 		{
-			base.OnCreate(savedInstanceState);
-			
-			m_thread = new(() =>
+			base.OnRun();
+
+			if(CheckAndRequestPermission())
+			{
+				RunRequired = true;
+			}
+			else
 			{
 				while (true)
 				{
@@ -96,16 +100,9 @@ namespace SC4Android
 						}
 					}
 				}
-				RunOnUiThread(Program.EntryPoint);
-			});
-			
-			GC.KeepAlive(m_thread);
-			m_thread.Start();
-			
-			CheckAndRequestPermission(out var granted);
-			RunRequired = granted;
+			}
+			Program.EntryPoint();
 		}
-
 		private static bool RunRequired { get; set; }
 		public override void OnRequestPermissionsResult(int requestCode,string[] permissions,[GeneratedEnum] Permission[] grantResults)
 		{
@@ -136,11 +133,10 @@ namespace SC4Android
 		protected override void OnResume()
 		{
 			base.OnResume();
-			if(isPaused)
+			if(isPaused && !RunRequired)
 			{
 				isPaused = false;
-				CheckAndRequestPermission(out bool granted);
-				RunRequired = granted;
+				RunRequired = CheckAndRequestPermission();
 			}
 		}
 	}

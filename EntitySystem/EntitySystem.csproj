@@ -16,12 +16,12 @@
 		<RepositoryType>Git</RepositoryType>
 	</PropertyGroup>
 	<PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
-		<TargetFramework>net9-windows</TargetFramework>
+		<TargetFrameworks>net9.0-windows;net9.0-android</TargetFrameworks>
 		<DefineConstants>DEBUG</DefineConstants>
 		<WarningLevel>2</WarningLevel>
 	</PropertyGroup>
 	<PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
-		<TargetFrameworks>net9;net9-windows;net9-android</TargetFrameworks>
+		<TargetFrameworks>net9.0;net9.0-windows;net9.0-android</TargetFrameworks>
 		<DebugType>none</DebugType>
 		<DefineConstants>TRACE</DefineConstants>
 	</PropertyGroup>

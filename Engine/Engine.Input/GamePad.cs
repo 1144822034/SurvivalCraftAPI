@@ -1,9 +1,12 @@
-﻿using OpenTK.Input;
-#if ANDROID
+﻿#if ANDROID
 
+using System.Collections.Concurrent;
+using Axis = Android.Views.Axis;
 using Android.Views;
 using System.Collections.Generic;
 using System.Linq;
+#else
+using Silk.NET.Input;
 #endif
 namespace Engine.Input
 {
@@ -24,8 +27,22 @@ namespace Engine.Input
             public double[] ButtonsRepeat = new double[14];
         }
 #if ANDROID
+        public struct KeyInfo
+        {
+            public int DeviceId;
+            public Keycode KeyCode;
+            public KeyEventActions Action;
+            public KeyInfo(int deviceId, Keycode keyCode, KeyEventActions action){
+                DeviceId = deviceId;
+                KeyCode = keyCode;
+                Action = action;
+            }
+        }
 		public static Dictionary<int, int> m_deviceToIndex = [];
 		public static List<int> m_toRemove = [];
+        public static ConcurrentQueue<KeyInfo> m_cachedKeyEvents = [];
+#else
+        public static IReadOnlyList<IGamepad> m_gamepads;
 #endif
         public static double m_buttonFirstRepeatTime = 0.2;
 
@@ -40,6 +57,9 @@ namespace Engine.Input
         };
         internal static void Initialize()
         {
+#if !ANDROID
+            m_gamepads = Window.m_inputContext.Gamepads;
+#endif
         }
         internal static void Dispose()
         {
@@ -62,9 +82,29 @@ namespace Engine.Input
 					Disconnect(item);
 				}
 			}
+            while (!m_cachedKeyEvents.IsEmpty)
+            {
+                if (m_cachedKeyEvents.TryDequeue(out KeyInfo keyInfo))
+                {
+                    switch (keyInfo.Action)
+                    {
+                        case KeyEventActions.Down: HandleKeyDown(keyInfo.DeviceId, keyInfo.KeyCode); break;
+                        case KeyEventActions.Up: HandleKeyUp(keyInfo.DeviceId, keyInfo.KeyCode); break;
+                    }
+                }
+                else
+                {
+                    Thread.Yield();
+                }
+            }
 		}
 
-		internal static void HandleKeyDown(int deviceId, Keycode keyCode)
+        public static void HandleKeyEvent(KeyEvent e)
+        {
+            m_cachedKeyEvents.Enqueue(new KeyInfo(e.DeviceId, e.KeyCode, e.Action));
+        }
+
+        internal static void HandleKeyDown(int deviceId, Keycode keyCode)
 		{
 			int num = TranslateDeviceId(deviceId);
 			if (num < 0)
@@ -182,47 +222,63 @@ namespace Engine.Input
 			}
 		}
 #else
-            int padIndex = 0;
-            int usablePadNum = 0;
-            while (usablePadNum < 4)
+            for (int padIndex = 0; padIndex < 4; padIndex++)
             {
-                GamePadState state = OpenTK.Input.GamePad.GetState(padIndex);
-                string name = OpenTK.Input.GamePad.GetName(padIndex);
+                if (padIndex >= m_gamepads.Count)
+                {
+                    break;
+                }
+                IGamepad gamepad = m_gamepads[padIndex];
+                if (gamepad == null)
+                {
+                    continue;
+                }
+                string name = gamepad.Name;
                 if (!name.Contains("Unmapped"))
                 {
-                    if (state.IsConnected)
+                    State state = m_states[padIndex];
+                    if (gamepad.IsConnected)
                     {
-                        m_states[usablePadNum].IsConnected = true;
+                        state.IsConnected = true;
                         if (Window.IsActive)
                         {
-                            m_states[usablePadNum].Sticks[0] = new Vector2(state.ThumbSticks.Left.X, state.ThumbSticks.Left.Y);
-                            m_states[usablePadNum].Sticks[1] = new Vector2(state.ThumbSticks.Right.X, state.ThumbSticks.Right.Y);
-                            m_states[usablePadNum].Triggers[0] = state.Triggers.Left;
-                            m_states[usablePadNum].Triggers[1] = state.Triggers.Right;
-                            m_states[usablePadNum].Buttons[0] = state.Buttons.A == ButtonState.Pressed;
-                            m_states[usablePadNum].Buttons[1] = state.Buttons.B == ButtonState.Pressed;
-                            m_states[usablePadNum].Buttons[2] = state.Buttons.X == ButtonState.Pressed;
-                            m_states[usablePadNum].Buttons[3] = state.Buttons.Y == ButtonState.Pressed;
-                            m_states[usablePadNum].Buttons[4] = state.Buttons.Back == ButtonState.Pressed;
-                            m_states[usablePadNum].Buttons[5] = state.Buttons.Start == ButtonState.Pressed;
-                            m_states[usablePadNum].Buttons[6] = state.Buttons.LeftStick == ButtonState.Pressed;
-                            m_states[usablePadNum].Buttons[7] = state.Buttons.RightStick == ButtonState.Pressed;
-                            m_states[usablePadNum].Buttons[8] = state.Buttons.LeftShoulder == ButtonState.Pressed;
-                            m_states[usablePadNum].Buttons[9] = state.Buttons.RightShoulder == ButtonState.Pressed;
-                            m_states[usablePadNum].Buttons[10] = state.DPad.Left == ButtonState.Pressed;
-                            m_states[usablePadNum].Buttons[12] = state.DPad.Right == ButtonState.Pressed;
-                            m_states[usablePadNum].Buttons[11] = state.DPad.Up == ButtonState.Pressed;
-                            m_states[usablePadNum].Buttons[13] = state.DPad.Down == ButtonState.Pressed;
+                            IReadOnlyList<Thumbstick> thumbsticks = gamepad.Thumbsticks;
+                            for (int i = 0; i < 2; i++)
+                            {
+                                state.Sticks[i] = new Vector2(thumbsticks[i].X, -thumbsticks[i].Y);
+                            }
+                            IReadOnlyList<Trigger> triggers = gamepad.Triggers;
+                            for (int i = 0; i < 2; i++)
+                            {
+                                state.Triggers[i] = triggers[i].Position;
+                            }
+                            foreach (Button button in gamepad.Buttons)
+                            {
+                                switch (button.Name)
+                                {
+                                    case ButtonName.A: state.Buttons[0] = button.Pressed; break;
+                                    case ButtonName.B: state.Buttons[1] = button.Pressed; break;
+                                    case ButtonName.X: state.Buttons[2] = button.Pressed; break;
+                                    case ButtonName.Y: state.Buttons[3] = button.Pressed; break;
+                                    case ButtonName.Back: state.Buttons[4] = button.Pressed; break;
+                                    case ButtonName.Start: state.Buttons[5] = button.Pressed; break;
+                                    case ButtonName.LeftStick: state.Buttons[6] = button.Pressed; break;
+                                    case ButtonName.RightStick: state.Buttons[7] = button.Pressed; break;
+                                    case ButtonName.LeftBumper: state.Buttons[8] = button.Pressed; break;
+                                    case ButtonName.RightBumper: state.Buttons[9] = button.Pressed; break;
+                                    case ButtonName.DPadLeft: state.Buttons[10] = button.Pressed; break;
+                                    case ButtonName.DPadRight: state.Buttons[11] = button.Pressed; break;
+                                    case ButtonName.DPadUp: state.Buttons[12] = button.Pressed; break;
+                                    case ButtonName.DPadDown: state.Buttons[13] = button.Pressed; break;
+                                }
+                            }
                         }
                     }
                     else
                     {
-                        m_states[usablePadNum].IsConnected = false;
+                        state.IsConnected = false;
                     }
-                    usablePadNum++;
                 }
-
-                padIndex++;
             }
         }
 #endif

@@ -1,4 +1,4 @@
-using OpenTK.Audio.OpenAL;
+using Silk.NET.OpenAL;
 
 namespace Engine.Audio
 {
@@ -133,11 +133,11 @@ namespace Engine.Audio
 				if (State == SoundState.Stopped || State == SoundState.Paused)
 				{
 					State = SoundState.Playing;
-					InternalPlay(OpenTK.Vector3.Zero);
+					InternalPlay(Vector3.Zero);
 				}
 			}
 		}
-        public void Play(OpenTK.Vector3 direction)
+        public void Play(Vector3 direction)
         {
             lock (m_lock)
             {
@@ -187,9 +187,10 @@ namespace Engine.Audio
 
 		internal BaseSound()
 		{
-			m_source = AL.GenSource();
+			uint source = Mixer.AL.GenSource();
+            m_source = (int)source;
 			Mixer.CheckALError();
-			AL.DistanceModel(ALDistanceModel.None);
+            Mixer.AL.DistanceModel(DistanceModel.None);
 			Mixer.CheckALError();
 		}
 
@@ -197,7 +198,7 @@ namespace Engine.Audio
 		{
 			if (m_source != 0)
 			{
-				AL.Source(m_source, ALSourcef.Gain, volume);
+                Mixer.AL.SetSourceProperty((uint)m_source, SourceFloat.Gain, volume);
 				Mixer.CheckALError();
 			}
 		}
@@ -206,7 +207,7 @@ namespace Engine.Audio
 		{
 			if (m_source != 0)
 			{
-				AL.Source(m_source, ALSourcef.Pitch, pitch);
+                Mixer.AL.SetSourceProperty((uint)m_source, SourceFloat.Pitch, pitch);
 				Mixer.CheckALError();
 			}
 		}
@@ -217,12 +218,12 @@ namespace Engine.Audio
 			{
 				float value = 0f;
 				float value2 = -0.1f;
-				AL.Source(m_source, ALSource3f.Position, pan, value, value2);
+                Mixer.AL.SetSourceProperty((uint)m_source, SourceVector3.Position, pan, value, value2);
 				Mixer.CheckALError();
 			}
 		}
 
-        internal abstract void InternalPlay(OpenTK.Vector3 direction);
+        internal abstract void InternalPlay(Vector3 direction);
 		internal abstract void InternalPause();
 
 		internal abstract void InternalStop();
@@ -231,9 +232,10 @@ namespace Engine.Audio
 		{
 			if (m_source != 0)
 			{
-				AL.SourceStop(m_source);
+                uint source = (uint)m_source;
+                Mixer.AL.SourceStop(source);
 				Mixer.CheckALError();
-				AL.DeleteSource(m_source);
+                Mixer.AL.DeleteSource(source);
 				Mixer.CheckALError();
 				m_source = 0;
 			}

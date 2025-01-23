@@ -25,8 +25,13 @@
 	<PublishTrimmed>False</PublishTrimmed><!--切记不要修改，如果修改会导致运行时不完整-->
 	<TrimMode>partial</TrimMode>
   </PropertyGroup>
+	<PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
+		<TargetFramework>net9.0-android</TargetFramework>
+		<DefineConstants>DEBUG</DefineConstants>
+		<WarningLevel>2</WarningLevel>
+	</PropertyGroup>
 	<PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
-		<TargetFramework>net9-android</TargetFramework>
+		<TargetFramework>net9.0-android</TargetFramework>
 		<DebugType>none</DebugType>
 		<DefineConstants>TRACE</DefineConstants>
 	</PropertyGroup>
@@ -35,8 +40,7 @@
 	  <AndroidDexTool>d8</AndroidDexTool>
 	  <AndroidEnableSGenConcurrent>false</AndroidEnableSGenConcurrent>
 	  <AndroidLinkMode>None</AndroidLinkMode>
-	  <AndroidLinkTool>r8</AndroidLinkTool>
-	  <AndroidLintEnabled>true</AndroidLintEnabled>
+	  <AndroidLintEnabled>false</AndroidLintEnabled>
 	  <AndroidPackageFormat>apk</AndroidPackageFormat>
 	  <AndroidStripILAfterAOT>true</AndroidStripILAfterAOT>
 	  <AndroidUseInterpreter>false</AndroidUseInterpreter>
@@ -68,6 +72,7 @@
 	<AndroidAsset Include="..\Survivalcraft\Content.zip">
 	  <Link>Assets\Content.zip</Link>
 	</AndroidAsset>
+	<PackageReference Include="Silk.NET.Windowing.Sdl" Version="2.22.0" />
 	<PackageReference Include="System.Net.Http" Version="4.3.4" />
 	<PackageReference Include="System.Text.RegularExpressions" Version="4.3.1" />
 	<ProjectReference Include="..\Survivalcraft_android\A_Survivalcraft.csproj" />
