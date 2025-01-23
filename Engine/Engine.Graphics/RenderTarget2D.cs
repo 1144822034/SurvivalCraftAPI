@@ -2,7 +2,7 @@
 using System.IO;
 using System.Runtime.InteropServices;
 using Engine.Media;
-using Silk.NET.OpenGL;
+using Silk.NET.OpenGLES;
 using SixLabors.ImageSharp.PixelFormats;
 
 namespace Engine.Graphics

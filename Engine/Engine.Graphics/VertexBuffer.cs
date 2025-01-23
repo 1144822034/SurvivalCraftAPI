@@ -1,6 +1,6 @@
 using System;
 using System.Runtime.InteropServices;
-using Silk.NET.OpenGL;
+using Silk.NET.OpenGLES;
 
 namespace Engine.Graphics
 {

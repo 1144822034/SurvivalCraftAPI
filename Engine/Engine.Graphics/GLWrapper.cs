@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Runtime.InteropServices;
-using Silk.NET.OpenGL;
+using Silk.NET.OpenGLES;
 
 namespace Engine.Graphics
 {
@@ -101,7 +101,7 @@ namespace Engine.Graphics
 #if ANDROID
             GL = GL.GetApi(Window.m_view);
 #else
-            GL = Window.m_gameWindow.CreateOpenGL();
+            GL = Window.m_gameWindow.CreateOpenGLES();
 #endif
 #if DEBUG
             unsafe
@@ -890,14 +890,14 @@ namespace Engine.Graphics
 			};
 		}
 
-		public static Silk.NET.OpenGL.PrimitiveType TranslatePrimitiveType(PrimitiveType primitiveType)
+		public static Silk.NET.OpenGLES.PrimitiveType TranslatePrimitiveType(PrimitiveType primitiveType)
 		{
 			return primitiveType switch
 			{
-				PrimitiveType.LineList => Silk.NET.OpenGL.PrimitiveType.Lines,
-				PrimitiveType.LineStrip => Silk.NET.OpenGL.PrimitiveType.LineStrip,
-				PrimitiveType.TriangleList => Silk.NET.OpenGL.PrimitiveType.Triangles,
-				PrimitiveType.TriangleStrip => Silk.NET.OpenGL.PrimitiveType.TriangleStrip,
+				PrimitiveType.LineList => Silk.NET.OpenGLES.PrimitiveType.Lines,
+				PrimitiveType.LineStrip => Silk.NET.OpenGLES.PrimitiveType.LineStrip,
+				PrimitiveType.TriangleList => Silk.NET.OpenGLES.PrimitiveType.Triangles,
+				PrimitiveType.TriangleStrip => Silk.NET.OpenGLES.PrimitiveType.TriangleStrip,
 				_ => throw new InvalidOperationException("Unsupported primitive type."),
 			};
 		}

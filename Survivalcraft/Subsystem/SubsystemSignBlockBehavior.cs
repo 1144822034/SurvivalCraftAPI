@@ -2,7 +2,7 @@ using Engine;
 using Engine.Graphics;
 using Engine.Media;
 using Jint.Native;
-using Silk.NET.OpenGL;
+using Silk.NET.OpenGLES;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;

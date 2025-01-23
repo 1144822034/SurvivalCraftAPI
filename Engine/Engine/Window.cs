@@ -49,6 +49,8 @@ namespace Engine
 
         public static string m_titleSuffix = string.Empty;
 
+        public static float m_lastRenderDelta;
+
 
         public static Point2 ScreenSize
         {
@@ -399,8 +401,9 @@ namespace Engine
 #endif
 		}
 
-        private static void RenderFrameHandler(double _)
+        private static void RenderFrameHandler(double lastRenderDelta)
         {
+            m_lastRenderDelta = (float)lastRenderDelta;
             BeforeFrameAll();
             Frame?.Invoke();
             AfterFrameAll();
