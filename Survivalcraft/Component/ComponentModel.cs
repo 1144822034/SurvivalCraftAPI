@@ -37,6 +37,22 @@ namespace Game
 			get;
 			set;
 		}
+		/// <summary>
+		/// 纹理路径
+		/// </summary>
+		public string TextureRoute
+		{
+			get;
+			set;
+		}
+		/// <summary>
+		/// 纹理路径
+		/// </summary>
+		public string ModelRoute
+		{
+			get;
+			set;
+		}
 		public float? Opacity
 		{
 			get;
@@ -161,13 +177,13 @@ namespace Game
 		{
 			m_subsystemSky = Project.FindSubsystem<SubsystemSky>(throwOnError: true);
 			m_componentFrame = Entity.FindComponent<ComponentFrame>(throwOnError: true);
-			string value = valuesDictionary.GetValue<string>("ModelName");
+			ModelRoute = valuesDictionary.GetValue<string>("ModelName","");
 			string modeltype = valuesDictionary.GetValue<string>("ModelType", "Engine.Graphics.Model");
 			Type type = Engine.Serialization.TypeCache.FindType(modeltype, true, true);
-			Model = (Model)ContentManager.Get(type, value);
+			Model = (Model)ContentManager.Get(type,ModelRoute);
 			CastsShadow = valuesDictionary.GetValue<bool>("CastsShadow");
-			string value2 = valuesDictionary.GetValue<string>("TextureOverride");
-			TextureOverride = string.IsNullOrEmpty(value2) ? null : ContentManager.Get<Texture2D>(value2);
+			TextureRoute = valuesDictionary.GetValue<string>("TextureOverride","");
+			TextureOverride = string.IsNullOrEmpty(TextureRoute) ? null : ContentManager.Get<Texture2D>(TextureRoute);
 			PrepareOrder = valuesDictionary.GetValue<int>("PrepareOrder");
 			Transparent = valuesDictionary.GetValue<float>("Transparent",1f);
 			ModelScale = valuesDictionary.GetValue<float>("ModelScale",1f);
