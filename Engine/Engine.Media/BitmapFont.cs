@@ -148,10 +148,14 @@ namespace Engine.Media
 		/// <param name="GlyphsStream">位图数据的输入流</param>
 		public static BitmapFont Initialize(Stream TextureStream, Stream GlyphsStream, Vector2? customGlyphOffset = null)
 		{
-			try
+			return Initialize(Texture2D.Load(TextureStream), GlyphsStream, customGlyphOffset);
+		}
+
+        public static BitmapFont Initialize(Texture2D texture, Stream GlyphsStream, Vector2? customGlyphOffset = null)
+        {
+            try
 			{
                 char[] splitters = [(char)0x20, (char)0x09];// 空格和制表符
-				Texture2D texture = Texture2D.Load(TextureStream);
 				BitmapFont bitmapFont = new();
 				StreamReader streamReader = new(GlyphsStream);
 				int num = int.Parse(streamReader.ReadLine());

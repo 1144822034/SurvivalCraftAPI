@@ -1,5 +1,7 @@
 ﻿using Engine;
+using Engine.Graphics;
 using Engine.Media;
+using System.Diagnostics;
 
 namespace Game.IContentReader
 {
@@ -9,9 +11,13 @@ namespace Game.IContentReader
 		public override string[] DefaultSuffix => ["lst", "webp", "png"];
 		public override object Get(ContentInfo[] contents)
 		{
-			return contents.Length != 2
-				? throw new System.Exception("not matches content count")
-				: (object)BitmapFont.Initialize(contents[1].Duplicate(), contents[0].Duplicate(), new Vector2(0f, -3f));
+			if(contents.Length != 2)
+			{
+				throw new System.Exception("not matches content count");
+			}
+			ContentInfo contentInfo = contents[1];
+			Texture2D texture2D = ContentManager.Get<Texture2D>(contentInfo.ContentPath, contentInfo.ContentSuffix);
+			return BitmapFont.Initialize(texture2D, contents[0].Duplicate(), Vector2.Zero);
 		}
 	}
 }

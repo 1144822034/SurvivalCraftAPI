@@ -1,4 +1,5 @@
-﻿using Engine.Graphics;
+﻿using Engine;
+using Engine.Graphics;
 namespace Game.IContentReader
 {
 	public class Texture2DReader : IContentReader
@@ -7,7 +8,8 @@ namespace Game.IContentReader
 		public override string[] DefaultSuffix => new string[] { "webp", "png", "jpg", "jpeg" };
 		public override object Get(ContentInfo[] contents)
 		{
-			return Texture2D.Load(contents[0].Duplicate());
+			ContentInfo contentInfo = contents[0];
+			return Texture2D.Load(ContentManager.Get<Image>(contentInfo.ContentPath, contentInfo.ContentSuffix));
 		}
 	}
 }

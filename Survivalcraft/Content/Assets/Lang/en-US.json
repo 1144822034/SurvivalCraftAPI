@@ -233,7 +233,8 @@
     "3": "Loading database.",
     "4": "Initializing BlocksManager.",
     "5": "Loading mod settings.",
-    "6": "Executing OnLoadingFinished mission."
+    "6": "Executing OnLoadingFinished mission.",
+    "7": "Initializing incidentals."
   },
   "ModEntity": {
     "1": "Loading .csv blocksdata files.",

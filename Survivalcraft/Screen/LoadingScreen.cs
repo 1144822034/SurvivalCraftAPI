@@ -88,6 +88,10 @@ namespace Game
 			Canvas.AddChildren(LogList);
 			AddChildren(Canvas);
 			m_isContentLoaded = true;
+			Task.Run(
+				() => {
+					_ = ContentManager.Get<Image>("Fonts/Pericles", ".webp");
+				});
 		}
 		//日志已经附带状态，不需要添加状态字符串
 		public static void Error(string mesg)
@@ -349,9 +353,9 @@ namespace Game
 			{ //初始化合成谱
 				CraftingRecipesManager.Initialize();
 			});
-			InitScreens();
 			AddLoadAction(delegate
 			{
+				Info(LanguageControl.Get(fName,"7"));
 				BlocksTexturesManager.Initialize();
 				CharacterSkinsManager.Initialize();
 				CommunityContentManager.Initialize();
@@ -379,6 +383,7 @@ namespace Game
 					}
 				}
 			});
+			InitScreens();
 			AddLoadAction(delegate
 			{
 				ModsManager.ModListAllDo(
