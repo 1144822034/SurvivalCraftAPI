@@ -235,9 +235,12 @@ namespace Game
 				Display.RenderTarget = null;
 				if (ExceptionManager.Error == null)
 				{
-					ScreensManager.Draw();
-					PerformanceManager.Draw();
-					ScreenCaptureManager.Run();
+					if(LoadingScreen.m_isContentLoaded)
+					{
+						ScreensManager.Draw();
+						PerformanceManager.Draw();
+						ScreenCaptureManager.Run();
+					}
 				}
 				else
 				{

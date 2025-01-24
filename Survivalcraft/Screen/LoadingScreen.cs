@@ -3,12 +3,13 @@ using Engine.Graphics;
 using System;
 using System.Linq;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Globalization;
 using System.Reflection;
 using System.Xml.Linq;
 #if ANDROID
 using Android.App;
-#else
+#elif WINDOWS
 using System.Windows.Forms;
 #endif
 
@@ -557,24 +558,26 @@ namespace Game
 				ConfirmQuit();
 			}
 			if (ModsManager.GetAllowContinue() == false) return;
-			if (ModLoadingActoins.Count > 0)
+			Stopwatch sw = Stopwatch.StartNew();
+			while(!m_isContentLoaded || sw.ElapsedMilliseconds < 100)
 			{
-				try
+				if (ModLoadingActoins.Count > 0)
 				{
-					ModLoadingActoins[0].Invoke();
+					try
+					{
+						ModLoadingActoins[0].Invoke();
+					}
+					catch (Exception e)
+					{
+						Error(e.ToString());
+						break;
+					}
+					finally
+					{
+						ModLoadingActoins.RemoveAt(0);
+					}
 				}
-				catch (Exception e)
-				{
-					Error(e.ToString());
-				}
-				finally
-				{
-					ModLoadingActoins.RemoveAt(0);
-				}
-			}
-			else
-			{
-				if (LoadingActoins.Count > 0)
+				else if (LoadingActoins.Count > 0)
 				{
 					try
 					{
@@ -583,13 +586,19 @@ namespace Game
 					catch (Exception e)
 					{
 						Error(e.ToString());
+						break;
 					}
 					finally
 					{
 						LoadingActoins.RemoveAt(0);
 					}
 				}
+				else
+				{
+					break;
+				}
 			}
+			sw.Stop();
 		}
 
 		public void ConfirmQuit()
