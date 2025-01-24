@@ -667,6 +667,7 @@ namespace Engine.Input
                     {
                         cancel();
                     };
+                    alertDialog.Window.Attributes.Gravity = GravityFlags.Center;
                     alertDialog.Show();
                 }
             );

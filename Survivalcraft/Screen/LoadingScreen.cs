@@ -608,7 +608,7 @@ namespace Game
 					.Show();
 				}
 			);
-			#else
+			#elif WINDOWS
 			Task.Run(() =>
 			{
 				if(MessageBox.Show("Exit 退出?","", MessageBoxButtons.YesNo) == DialogResult.Yes)

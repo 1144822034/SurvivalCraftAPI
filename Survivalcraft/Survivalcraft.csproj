@@ -21,7 +21,6 @@
         <PublishWizardCompleted>true</PublishWizardCompleted>
         <BootstrapperEnabled>False</BootstrapperEnabled>
         <GenerateAssemblyInfo>False</GenerateAssemblyInfo>
-        <UseWindowsForms>True</UseWindowsForms>
         <Configurations>Debug;Release</Configurations>
         <RuntimeIdentifier>win-x64</RuntimeIdentifier>
         <PackageId>SurvivalcraftAPI.Survivalcraft</PackageId>
@@ -49,6 +48,7 @@
 		<ImportWindowsDesktopTargets>true</ImportWindowsDesktopTargets>
 		<IncludeNativeLibrariesForSelfExtract>true</IncludeNativeLibrariesForSelfExtract>
 		<IncludeAllContentForSelfExtract>false</IncludeAllContentForSelfExtract>
+		<UseWindowsForms>True</UseWindowsForms>
 	</PropertyGroup>
     <PropertyGroup>
         <StartupObject Condition="'$(TargetFramework)' == 'net9.0-windows'">Game.Program</StartupObject>
