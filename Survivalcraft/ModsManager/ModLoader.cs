@@ -1592,6 +1592,7 @@ namespace Game
 		/// 在执行这个接口后，游戏会根据这四个List计算出StrengthFactor、SpeedFactor、HungerFactor、ResilienceFactor的最终值
 		/// </summary>
 		/// <param name="componentFactors"></param>
+		[Obsolete("You can update your factors in your mod components.")]
 		public virtual void OnFactorsGenerate(ComponentFactors componentFactors)
 		{
 

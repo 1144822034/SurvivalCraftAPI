@@ -32,29 +32,29 @@ namespace Game
 
         public static string fName = "ComponentFactors";
 
-        public float StrengthFactor
-        {
-            get;
-            set;
-        }
+		public float StrengthFactor
+		{
+			get;
+			set;
+		} = 1f;
 
-        public float ResilienceFactor
-        {
-            get;
-            set;
-        }
+		public float ResilienceFactor
+		{
+			get;
+			set;
+		} = 1f;
 
-        public float SpeedFactor
-        {
-            get;
-            set;
-        }
+		public float SpeedFactor
+		{
+			get;
+			set;
+		} = 1f;
 
-        public float HungerFactor
-        {
-            get;
-            set;
-        }
+		public float HungerFactor
+		{
+			get;
+			set;
+		} = 1f;
 
         public override void Load(ValuesDictionary valuesDictionary, IdToEntityMap idToEntityMap)
         {
@@ -67,7 +67,7 @@ namespace Game
             ResilienceFactor = 1f;
         }
 
-		public float CalculateFactorCount(ICollection<Factor> factors)
+		public static float CalculateFactorsResult(ICollection<Factor> factors)
 		{
 			float ans = 1f;
 			foreach(var factor in factors)
@@ -105,47 +105,49 @@ namespace Game
 		{
 			m_hungerFactors.Clear();
 		}
+		#region Obsolete CalculateFactor
+		[Obsolete("Get m_strengthFactors and StrengthFactor instead.")]
         public virtual float CalculateStrengthFactor(ICollection<Factor> factors) {
 			if(factors is List<Factor> factorsList) factorsList.AddRange(m_strengthFactors);
-            return CalculateFactorCount(m_strengthFactors);
+            return CalculateFactorsResult(m_strengthFactors);
         }
-        public virtual float CalculateResilienceFactor(ICollection<Factor> factors)
+		[Obsolete("Get m_resilienceFactors and ResilienceFactor instead.")]
+		public virtual float CalculateResilienceFactor(ICollection<Factor> factors)
         {
 			if(factors is List<Factor> factorsList) factorsList.AddRange(m_resilienceFactors);
-			return CalculateFactorCount(m_resilienceFactors);
+			return CalculateFactorsResult(m_resilienceFactors);
         }
-        public virtual float CalculateSpeedFactor(ICollection<Factor> factors)
+		[Obsolete("Get m_speedFactors and SpeedFactor instead.")]
+		public virtual float CalculateSpeedFactor(ICollection<Factor> factors)
         {
 			if(factors is List<Factor> factorsList) factorsList.AddRange(m_speedFactors);
-			return CalculateFactorCount(m_speedFactors);
+			return CalculateFactorsResult(m_speedFactors);
         }
-        public virtual float CalculateHungerFactor(ICollection<Factor> factors)
+		[Obsolete("Get m_hungerFactors and HungerFactor instead.")]
+		public virtual float CalculateHungerFactor(ICollection<Factor> factors)
         {
 			if(factors is List<Factor> factorsList) factorsList.AddRange(m_hungerFactors);
-			return CalculateFactorCount(m_hungerFactors);
+			return CalculateFactorsResult(m_hungerFactors);
         }
+		#endregion
 
 		/// <summary>
 		/// 对等级系统的更新进行了调整。
-		/// 第一步是GenerateFactors对四个属性进行生成，此时四个m_xxxFactors会拥有初始值
-		/// 第二步在ModLoader接口控制四个m_xxxFactors的值。模组此时可以对这些Factors进行增删改
-		/// 第三步是计算这些Factors的最终结果，并进行赋值
+		/// 第一步是计算上一帧Factors的最终结果，并进行赋值。此时已经经过了所有模组的修改。
+		/// 第二步是GenerateFactors对四个属性进行生成，此时四个m_xxxFactors会拥有初始值。
+		/// 再往后面则是各模组对Factors的增删改。
 		/// </summary>
 		/// <param name="dt"></param>
-        public virtual void Update(float dt)
+		public virtual void Update(float dt)
 		{
+			StrengthFactor = CalculateFactorsResult(m_strengthFactors);
+			SpeedFactor = CalculateFactorsResult(m_speedFactors);
+			HungerFactor = CalculateFactorsResult(m_hungerFactors);
+			ResilienceFactor = CalculateFactorsResult(m_resilienceFactors);
 			GenerateStrengthFactors();
 			GenerateResilienceFactors();
 			GenerateSpeedFactors();
 			GenerateHungerFactors();
-			ModsManager.HookAction("OnFactorsGenerate",loader => {
-				loader.OnFactorsGenerate(this);
-				return false;
-			});
-			StrengthFactor = CalculateStrengthFactor(null);
-            SpeedFactor = CalculateSpeedFactor(null);
-            HungerFactor = CalculateHungerFactor(null);
-            ResilienceFactor = CalculateResilienceFactor(null);
 			ModsManager.HookAction("OnFactorsUpdate",Loader => {
 				Loader.OnFactorsUpdate(this,dt);
 				return false;
