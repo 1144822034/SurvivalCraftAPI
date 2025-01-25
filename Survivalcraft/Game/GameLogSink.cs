@@ -38,9 +38,10 @@ namespace Game
 					}
 					else
 					{
-						m_stream = fileInfo.Open(FileMode.Append);
+						m_stream = fileInfo.Open(FileMode.Open, FileAccess.ReadWrite);
 					}
 				}
+				m_stream.Position = m_stream.Length;
 				m_writer = new StreamWriter(m_stream);
 			}
 			catch (Exception ex)

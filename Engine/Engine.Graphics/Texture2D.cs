@@ -247,11 +247,6 @@ namespace Engine.Graphics
 			else
 			{
 			    texture2D.SetData(0, image.Pixels);
-                if (mipLevelsCount > 1)
-                {
-                    GLWrapper.BindTexture(TextureTarget.Texture2D, texture2D.m_texture, forceBind: false);
-                    GLWrapper.GL.GenerateMipmap(TextureTarget.Texture2D);
-                }
             }
             texture2D.Tag = image;
 			return texture2D;

@@ -124,7 +124,8 @@ namespace Game {
                     HorizontalAlignment = WidgetAlignment.Near,
                     VerticalAlignment = WidgetAlignment.Center,
                     FontScale = 0.6f,
-                    Color = color
+                    Color = color,
+                    Ellipsis = true
                 };
             };
             List<string> recentLogLines = GameLogSink.GetRecentLogLines(131072);

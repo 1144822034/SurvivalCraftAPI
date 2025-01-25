@@ -9,6 +9,10 @@ namespace Game.IContentReader
 		public override object Get(ContentInfo[] contents)
 		{
 			ContentInfo contentInfo = contents[0];
+			if(contentInfo.ContentPath == "Fonts/Pericles")
+			{
+				return Texture2D.Load(ContentManager.Get<Image>(contentInfo.ContentPath, contentInfo.ContentSuffix), 3);
+			}
 			return Texture2D.Load(ContentManager.Get<Image>(contentInfo.ContentPath, contentInfo.ContentSuffix));
 		}
 	}
