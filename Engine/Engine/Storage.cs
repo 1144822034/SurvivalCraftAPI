@@ -364,5 +364,27 @@ namespace Engine
         {
             Directory.Delete(ProcessPath(path, writeAccess: true, failIfApp: false));
         }
+
+        public static DirectoryInfo GetDirectoryInfo(string path)
+        {
+            return new DirectoryInfo(ProcessPath(path, writeAccess: true, failIfApp: false));
+        }
+
+        public static FileInfo GetFileInfo(string path)
+        {
+            return new FileInfo(ProcessPath(path, writeAccess: true, failIfApp: false));
+        }
+
+        public static string SanitizeFileName(string filename, string replacement = "-")
+        {
+            StringBuilder sanitized = new StringBuilder();
+            char[] invalidChars = Path.GetInvalidFileNameChars();
+            foreach (char c in filename)
+            {
+                sanitized.Append(invalidChars.Contains(c) ? replacement : c);
+            }
+
+            return sanitized.ToString();
+        }
     }
 }

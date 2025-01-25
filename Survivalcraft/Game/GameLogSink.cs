@@ -1,6 +1,7 @@
 using Engine;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
 
 namespace Game
@@ -19,16 +20,27 @@ namespace Game
 				{
 					throw new InvalidOperationException("GameLogSink already created.");
 				}
-
-				string path = Storage.CombinePaths(ModsManager.LogPath, "Game.log");
 				Storage.CreateDirectory(ModsManager.LogPath);
-				m_stream = Storage.OpenFile(path, OpenFileMode.CreateOrOpen);
-				if (m_stream.Length > 10485760)
+				string path = Storage.CombinePaths(ModsManager.LogPath, "Game.log");
+				FileInfo fileInfo = Storage.GetFileInfo(path);
+				if(!fileInfo.Exists)
 				{
-					m_stream.Dispose();
-					m_stream = Storage.OpenFile(path, OpenFileMode.Create);
+					m_stream = fileInfo.Create();
 				}
-				m_stream.Position = m_stream.Length;
+				else
+				{
+					if(fileInfo.Length > 2097152)//2MiB
+					{
+						CultureInfo cultureInfo = Program.SystemLanguage ==null ? CultureInfo.CurrentCulture : new CultureInfo(Program.SystemLanguage);
+						string destination = Storage.ProcessPath(Storage.CombinePaths(ModsManager.LogPath, Storage.SanitizeFileName($"Game {DateTime.Now.ToString(cultureInfo)}.log")), true, false);
+						fileInfo.MoveTo(destination, true);
+						m_stream = Storage.OpenFile(path, OpenFileMode.CreateOrOpen);
+					}
+					else
+					{
+						m_stream = fileInfo.Open(FileMode.Append);
+					}
+				}
 				m_writer = new StreamWriter(m_stream);
 			}
 			catch (Exception ex)

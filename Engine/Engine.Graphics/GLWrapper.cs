@@ -898,6 +898,9 @@ namespace Engine.Graphics
 				PrimitiveType.LineStrip => Silk.NET.OpenGLES.PrimitiveType.LineStrip,
 				PrimitiveType.TriangleList => Silk.NET.OpenGLES.PrimitiveType.Triangles,
 				PrimitiveType.TriangleStrip => Silk.NET.OpenGLES.PrimitiveType.TriangleStrip,
+                PrimitiveType.Points => Silk.NET.OpenGLES.PrimitiveType.Points,
+                PrimitiveType.LineLoop => Silk.NET.OpenGLES.PrimitiveType.LineLoop,
+                PrimitiveType.TriangleFan => Silk.NET.OpenGLES.PrimitiveType.TriangleFan,
 				_ => throw new InvalidOperationException("Unsupported primitive type."),
 			};
 		}

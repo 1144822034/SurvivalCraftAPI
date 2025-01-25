@@ -5,6 +5,9 @@ namespace Engine.Graphics
 		LineList,
 		LineStrip,
 		TriangleList,
-		TriangleStrip
+		TriangleStrip,
+        Points,
+        LineLoop,
+        TriangleFan
 	}
 }
