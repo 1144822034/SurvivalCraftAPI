@@ -72,7 +72,19 @@ namespace Game
 			float ans = 1f;
 			foreach(var factor in factors)
 			{
-				ans *= factor.Value;
+				switch(factor.FactorAdditionType)
+				{
+					case FactorAdditionType.Multiply:
+					{
+                        ans *= factor.Value;
+						break;
+					}
+					case FactorAdditionType.Add:
+					{
+                        ans += factor.Value;
+                        break;
+					}
+				}
 			}
 			return ans;
 		}

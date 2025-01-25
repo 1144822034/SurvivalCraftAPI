@@ -8,6 +8,11 @@ using static Game.ComponentLevel;
 
 namespace Game
 {
+	public enum FactorAdditionType
+	{
+		Multiply,
+		Add
+	}
 	public class ComponentLevel : ComponentFactors, IUpdateable
 	{
 		/// <summary>
@@ -21,6 +26,8 @@ namespace Game
 			public float Value;
 
 			public string Name;
+
+			public FactorAdditionType FactorAdditionType = FactorAdditionType.Multiply;
 		}
 
 		public static string fName = "ComponentLevel";
