@@ -749,10 +749,7 @@ namespace Game
         {
             var dictionary = new Dictionary<Block, bool>();
             data = data.Replace("\r", string.Empty);
-            string[] array = data.Split(new char[1]
-            {
-                '\n'
-            }, StringSplitOptions.RemoveEmptyEntries);
+            string[] array = data.Split('\n', StringSplitOptions.RemoveEmptyEntries);
             string[] firstLine = array[0].Split(';');
             string[] array2 = new string[firstLine.Length - 1];
             Array.Copy(firstLine, 1, array2, 0, firstLine.Length - 1);

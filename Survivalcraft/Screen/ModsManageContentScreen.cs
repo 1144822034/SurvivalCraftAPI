@@ -930,7 +930,7 @@ public class ModsManageContentScreen : Screen
 			ZipArchive zipArchive = ZipArchive.Open(stream, false);
 			foreach (ZipArchiveEntry zipArchiveEntry in zipArchive.ReadCentralDir())
 			{
-				if (zipArchiveEntry.FilenameInZip == "icon.png")
+				if (Path.GetFileNameWithoutExtension(zipArchiveEntry.FilenameInZip) == "icon")//兼容多种格式
 				{
 					MemoryStream memoryStream = new();
 					zipArchive.ExtractFile(zipArchiveEntry, memoryStream);

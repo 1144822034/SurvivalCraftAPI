@@ -10,7 +10,7 @@ using System.Xml.Linq;
 #if ANDROID
 using Android.App;
 #elif WINDOWS
-using System.Windows.Forms;
+//using System.Windows.Forms;
 #endif
 
 namespace Game
@@ -623,13 +623,14 @@ namespace Game
 				}
 			);
 			#elif WINDOWS
+			/*
 			Task.Run(() =>
 			{
 				if(MessageBox.Show("Exit 退出?","", MessageBoxButtons.YesNo) == DialogResult.Yes)
 				{
 					Window.Close();
 				}
-			});
+			});*/
 			#endif
 		}
 	}
