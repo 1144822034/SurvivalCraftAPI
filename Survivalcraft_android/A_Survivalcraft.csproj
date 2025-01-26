@@ -740,6 +740,7 @@
 		<Compile Include="..\Survivalcraft\IContentReader\SubtextureReader.cs"/>
 		<Compile Include="..\Survivalcraft\IContentReader\Texture2DReader.cs"/>
 		<Compile Include="..\Survivalcraft\IContentReader\XmlReader.cs"/>
+		<Compile Include="..\Survivalcraft\IContentReader\ContentStreamReader.cs"/>
 		<Compile Include="..\Survivalcraft\Managers\AudioManager.cs"/>
 		<Compile Include="..\Survivalcraft\Managers\BlocksTexturesManager.cs"/>
 		<Compile Include="..\Survivalcraft\Managers\CharacterSkinsManager.cs"/>

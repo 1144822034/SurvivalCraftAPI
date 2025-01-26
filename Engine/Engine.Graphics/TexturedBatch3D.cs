@@ -65,18 +65,5 @@ namespace Engine.Graphics
 			TriangleIndices.Array[count2 + 4] = count + 3;
 			TriangleIndices.Array[count2 + 5] = count;
 		}
-
-		public void TransformTriangles(Matrix matrix, int start = 0, int end = -1)
-		{
-			VertexPositionColorTexture[] array = TriangleVertices.Array;
-			if (end < 0)
-			{
-				end = TriangleVertices.Count;
-			}
-			for (int i = start; i < end; i++)
-			{
-				Vector3.Transform(ref array[i].Position, ref matrix, out array[i].Position);
-			}
-		}
 	}
 }
