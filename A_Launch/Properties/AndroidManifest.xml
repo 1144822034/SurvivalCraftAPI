@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<manifest xmlns:android="http://schemas.android.com/apk/res/android" android:versionCode="18010" android:versionName="API1.80" package="com.candy.survivalcraftAPI1_8">
+<manifest xmlns:android="http://schemas.android.com/apk/res/android" android:versionCode="18101" android:versionName="API1.81" package="com.candy.survivalcraftAPI1_8">
 	<application android:label="@string/ApiTitle" android:theme="@style/MainTheme" android:requestLegacyExternalStorage="true" android:icon="@mipmap/icon" android:roundIcon="@mipmap/icon_round" android:usesCleartextTraffic="true" android:localeConfig="@xml/locales_config" android:appCategory="game" android:isGame="true" />
 	<uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 	<uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />

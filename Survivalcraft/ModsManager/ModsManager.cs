@@ -17,7 +17,7 @@ using System.IO.Compression;
 public static class ModsManager
 {
 	public static string ModSuffix = ".scmod";
-	public static string ApiVersionString = "1.80";
+	public static string ApiVersionString = "1.81";
 	public static string GameVersion = "2.4.0.0";
 	public static string ShortGameVersion = "2.4";
 	public static string ReportLink = "https://gitee.com/THPRC/survivalcraft-api/issues";
