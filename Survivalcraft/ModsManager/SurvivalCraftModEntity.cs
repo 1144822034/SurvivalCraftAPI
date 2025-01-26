@@ -34,7 +34,8 @@ namespace Game
 				new IContentReader.StringReader(),
 				new SubtextureReader(),
 				new Texture2DReader(),
-				new XmlReader()
+				new XmlReader(),
+				new ContentStreamReader()
 			});
 			for (int i = 0; i < readers.Count; i++)
 			{

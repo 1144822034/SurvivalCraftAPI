@@ -224,38 +224,6 @@ namespace Engine.Graphics
 			TriangleIndices.Array[count2 + 5] = count;
 		}
 
-		public void TransformLines(Matrix matrix, int start = 0, int end = -1)
-		{
-			VertexPositionColor[] array = LineVertices.Array;
-			if (end < 0)
-			{
-				end = LineVertices.Count;
-			}
-			for (int i = start; i < end; i++)
-			{
-				Vector2 v = array[i].Position.XY;
-				Vector2.Transform(ref v, ref matrix, out v);
-				array[i].Position.X = v.X;
-				array[i].Position.Y = v.Y;
-			}
-		}
-
-		public void TransformTriangles(Matrix matrix, int start = 0, int end = -1)
-		{
-			VertexPositionColor[] array = TriangleVertices.Array;
-			if (end < 0)
-			{
-				end = TriangleVertices.Count;
-			}
-			for (int i = start; i < end; i++)
-			{
-				Vector2 v = array[i].Position.XY;
-				Vector2.Transform(ref v, ref matrix, out v);
-				array[i].Position.X = v.X;
-				array[i].Position.Y = v.Y;
-			}
-		}
-
 		public void Flush(bool clearAfterFlush = true)
 		{
 			Flush(PrimitivesRenderer2D.ViewportMatrix(), clearAfterFlush);
