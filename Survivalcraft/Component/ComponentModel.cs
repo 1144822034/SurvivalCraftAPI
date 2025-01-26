@@ -22,6 +22,14 @@ namespace Game
 
 		public float m_boundingSphereRadius;
 		/// <summary>
+		/// 模型偏移
+		/// </summary>
+		public Vector3 ModelOffset
+		{
+			get;
+			set;
+		}
+		/// <summary>
 		/// 模型透明度
 		/// </summary>
 		public float Transparent
@@ -46,7 +54,7 @@ namespace Game
 			set;
 		}
 		/// <summary>
-		/// 纹理路径
+		/// 模型路径
 		/// </summary>
 		public string ModelRoute
 		{
@@ -135,7 +143,8 @@ namespace Game
 		public virtual void SetBoneTransform(int boneIndex, Matrix? transformation)
 		{
 			var canScale = Model.m_bones[boneIndex].Name == "Body";
-			m_boneTransforms[boneIndex] = canScale? Matrix.CreateScale(ModelScale) * transformation : transformation;
+			var tf = canScale ? Matrix.CreateScale(ModelScale) * transformation : transformation;
+			m_boneTransforms[boneIndex] = tf * Matrix.CreateTranslation(ModelOffset);
 		}
 
 		public virtual void CalculateAbsoluteBonesTransforms(Camera camera)
