@@ -1,4 +1,4 @@
-using Engine;
+﻿using Engine;
 
 namespace Game
 {
@@ -86,7 +86,7 @@ namespace Game
 				data = 1;
 			}
 			BlockPlacementData result = default;
-			result.Value = Terrain.ReplaceData(Terrain.ReplaceContents(0, 45), data);
+			result.Value = Terrain.ReplaceData(Terrain.ReplaceContents( 45), data);
 			result.CellFace = raycastResult.CellFace;
 			return result;
 		}

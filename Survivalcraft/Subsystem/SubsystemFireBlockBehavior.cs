@@ -1,4 +1,4 @@
-using Engine;
+﻿using Engine;
 using System.Collections.Generic;
 using TemplatesDatabase;
 
@@ -107,7 +107,7 @@ namespace Game
 					int num3 = (num2 == 104) ? Terrain.ExtractData(cellValue2) : 0;
 					int num4 = CellFace.OppositeFace(i);
 					num3 |= (1 << num4) & 0xF;
-					cellValue = Terrain.ReplaceData(Terrain.ReplaceContents(0, 104), num3);
+					cellValue = Terrain.ReplaceData(Terrain.ReplaceContents( 104), num3);
 					AddFire(x + point.X, y + point.Y, z + point.Z, fireExpandability);
 					SubsystemTerrain.ChangeCell(x + point.X, y + point.Y, z + point.Z, cellValue);
 					result = true;
@@ -231,7 +231,7 @@ namespace Game
 				{
 					Point3 key = item.Key;
 					float value2 = item.Value;
-					SubsystemTerrain.ChangeCell(key.X, key.Y, key.Z, Terrain.ReplaceContents(0, 0));
+					SubsystemTerrain.ChangeCell(key.X, key.Y, key.Z, Terrain.ReplaceContents( 0));
 					if (value2 > 0.25f)
 					{
 						for (int i = 0; i < 5; i++)
@@ -309,7 +309,7 @@ namespace Game
 			{
 				contents = 0;
 			}
-			int value2 = Terrain.ReplaceData(Terrain.ReplaceContents(0, contents), num);
+			int value2 = Terrain.ReplaceData(Terrain.ReplaceContents( contents), num);
 			SubsystemTerrain.ChangeCell(x, y, z, value2);
 		}
 

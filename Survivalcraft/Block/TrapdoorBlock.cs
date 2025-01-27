@@ -1,4 +1,4 @@
-using Engine;
+﻿using Engine;
 using Engine.Graphics;
 using System;
 
@@ -80,7 +80,7 @@ namespace Game
 			}
 			int data = SetOpen(SetRotation(SetUpsideDown(0, upsideDown), rotation), open: false);
 			BlockPlacementData result = default;
-			result.Value = Terrain.ReplaceData(Terrain.ReplaceContents(0, BlockIndex), data);
+			result.Value = Terrain.ReplaceData(Terrain.ReplaceContents( BlockIndex), data);
 			result.CellFace = raycastResult.CellFace;
 			return result;
 		}

@@ -1,4 +1,4 @@
-using Engine;
+﻿using Engine;
 using System;
 using System.Reflection;
 
@@ -133,7 +133,7 @@ namespace Game
 		public override BlockPlacementData GetPlacementValue(SubsystemTerrain subsystemTerrain, ComponentMiner componentMiner, int value, TerrainRaycastResult raycastResult)
 		{
 			BlockPlacementData result = default;
-			result.Value = Terrain.ReplaceData(Terrain.ReplaceContents(0, BlockIndex), 0);
+			result.Value = Terrain.ReplaceData(Terrain.ReplaceContents( BlockIndex), 0);
 			result.CellFace = raycastResult.CellFace;
 			return result;
 		}

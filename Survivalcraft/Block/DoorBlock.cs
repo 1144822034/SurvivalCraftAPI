@@ -1,4 +1,4 @@
-using Engine;
+﻿using Engine;
 using Engine.Graphics;
 using System;
 
@@ -124,7 +124,7 @@ namespace Game
 			}
 			int data = SetRightHanded(SetOpen(SetRotation(0, num5), open: false), rightHanded);
 			BlockPlacementData result = default;
-			result.Value = Terrain.ReplaceData(Terrain.ReplaceContents(0, BlockIndex), data);
+			result.Value = Terrain.ReplaceData(Terrain.ReplaceContents( BlockIndex), data);
 			result.CellFace = raycastResult.CellFace;
 			return result;
 		}

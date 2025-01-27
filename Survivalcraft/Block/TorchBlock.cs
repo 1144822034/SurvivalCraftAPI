@@ -1,4 +1,4 @@
-using Engine;
+﻿using Engine;
 using Engine.Graphics;
 using System;
 
@@ -67,23 +67,23 @@ namespace Game
 			int value2 = 0;
 			if (raycastResult.CellFace.Face == 0)
 			{
-				value2 = Terrain.ReplaceData(Terrain.ReplaceContents(0, 31), 0);
+				value2 = Terrain.ReplaceData(Terrain.ReplaceContents( 31), 0);
 			}
 			if (raycastResult.CellFace.Face == 1)
 			{
-				value2 = Terrain.ReplaceData(Terrain.ReplaceContents(0, 31), 1);
+				value2 = Terrain.ReplaceData(Terrain.ReplaceContents( 31), 1);
 			}
 			if (raycastResult.CellFace.Face == 2)
 			{
-				value2 = Terrain.ReplaceData(Terrain.ReplaceContents(0, 31), 2);
+				value2 = Terrain.ReplaceData(Terrain.ReplaceContents( 31), 2);
 			}
 			if (raycastResult.CellFace.Face == 3)
 			{
-				value2 = Terrain.ReplaceData(Terrain.ReplaceContents(0, 31), 3);
+				value2 = Terrain.ReplaceData(Terrain.ReplaceContents( 31), 3);
 			}
 			if (raycastResult.CellFace.Face == 4)
 			{
-				value2 = Terrain.ReplaceData(Terrain.ReplaceContents(0, 31), 4);
+				value2 = Terrain.ReplaceData(Terrain.ReplaceContents( 31), 4);
 			}
 			BlockPlacementData result = default;
 			result.Value = value2;

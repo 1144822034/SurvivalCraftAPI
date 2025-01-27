@@ -1057,7 +1057,7 @@ namespace Game
 							{
 								if (Terrain.ExtractContents(chunk.GetCellValueFast(k)) != 0)
 								{
-									int value = Terrain.ReplaceContents(0, num8);
+									int value = Terrain.ReplaceContents(num8);
 									chunk.SetCellValueFast(k, value);
 								}
 							}

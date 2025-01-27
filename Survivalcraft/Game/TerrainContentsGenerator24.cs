@@ -1,4 +1,4 @@
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using Engine;
 
 namespace Game;
@@ -758,7 +758,7 @@ public class TerrainContentsGenerator24 : ITerrainContentsGenerator
 						{
 							if (Terrain.ExtractContents(chunk.GetCellValueFast(k)) != 0)
 							{
-								int value = Terrain.ReplaceContents(0, num7);
+								int value = Terrain.ReplaceContents( num7);
 								chunk.SetCellValueFast(k, value);
 							}
 						}
@@ -1806,7 +1806,6 @@ public class TerrainContentsGenerator24 : ITerrainContentsGenerator
 					}
 				}
 				break;
-				continue;
 				end_IL_01a0:
 				break;
 			}

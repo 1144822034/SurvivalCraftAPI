@@ -1,4 +1,4 @@
-using Engine;
+﻿using Engine;
 using Engine.Graphics;
 using System;
 using System.Collections.Generic;
@@ -183,7 +183,7 @@ namespace Game
 			int data2 = Terrain.ExtractData(cellValue2);
 			int data3 = SetRightHanded(rightHanded: (block is FenceGateBlock && GetRotation(data) == num5) || ((!(block2 is FenceGateBlock) || GetRotation(data2) != num5) && !block.IsCollidable_(cellValue)), data: SetOpen(SetRotation(Terrain.ExtractData(value), num5), open: false));
 			BlockPlacementData result = default;
-			result.Value = Terrain.ReplaceData(Terrain.ReplaceContents(0, BlockIndex), data3);
+			result.Value = Terrain.ReplaceData(Terrain.ReplaceContents( BlockIndex), data3);
 			result.CellFace = raycastResult.CellFace;
 			return result;
 		}

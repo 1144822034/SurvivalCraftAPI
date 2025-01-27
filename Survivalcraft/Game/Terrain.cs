@@ -425,10 +425,19 @@ namespace Game
 		{
 			return (value & 0xF00) >> 8;
 		}
-
+		/// <summary>
+		/// 方块值的最低10位，替换为目标Content
+		/// </summary>
 		public static int ReplaceContents(int value, int contents)
 		{
 			return value ^ ((value ^ contents) & 0x3FF);
+		}
+		/// <summary>
+		/// 方块值的最低10位，替换为目标Content(value始终为0时)
+		/// </summary>
+		public static int ReplaceContents(int contents)
+		{
+			return contents & 0x3FF;
 		}
 
 		public static int ReplaceLight(int value, int light)
@@ -468,22 +477,22 @@ namespace Game
 
 		public virtual int GetSeasonalTemperature(int x, int z)
 		{
-			return MathUtils.Max(GetTemperature(x, z) + SeasonTemperature, 0);
+			return Math.Max(GetTemperature(x, z) + SeasonTemperature, 0);
 		}
 
 		public virtual int GetSeasonalTemperature(int shaftValue)
 		{
-			return MathUtils.Max(ExtractTemperature(shaftValue) + SeasonTemperature, 0);
+			return Math.Max(ExtractTemperature(shaftValue) + SeasonTemperature, 0);
 		}
 
 		public virtual int GetSeasonalHumidity(int x, int z)
 		{
-			return MathUtils.Max(GetHumidity(x, z) + SeasonHumidity, 0);
+			return Math.Max(GetHumidity(x, z) + SeasonHumidity, 0);
 		}
 
 		public virtual int GetSeasonalHumidity(int shaftValue)
 		{
-			return MathUtils.Max(ExtractHumidity(shaftValue) + SeasonHumidity, 0);
+			return Math.Max(ExtractHumidity(shaftValue) + SeasonHumidity, 0);
 		}
 	}
 }
