@@ -8,57 +8,38 @@ namespace Game
 
 		public override int GetFaceTextureSlot(int face, int value)
 		{
-			switch (face)
+			return face switch
 			{
-				case 4:
-					return 42;
-				case 5:
-					return 42;
-				default:
-					switch (Terrain.ExtractData(value))
+				4 => 42,
+				5 => 42,
+				_ => Terrain.ExtractData(value) switch
+				{
+					0 => face switch
 					{
-						case 0:
-							switch (face)
-							{
-								case 0:
-									return 27;
-								case 2:
-									return 26;
-								default:
-									return 25;
-							}
-						case 1:
-							switch (face)
-							{
-								case 1:
-									return 27;
-								case 3:
-									return 26;
-								default:
-									return 25;
-							}
-						case 2:
-							switch (face)
-							{
-								case 2:
-									return 27;
-								case 0:
-									return 26;
-								default:
-									return 25;
-							}
-						default:
-							switch (face)
-							{
-								case 3:
-									return 27;
-								case 1:
-									return 26;
-								default:
-									return 25;
-							}
-					}
-			}
+						0 => 27,
+						2 => 26,
+						_ => 25,
+					},
+					1 => face switch
+					{
+						1 => 27,
+						3 => 26,
+						_ => 25,
+					},
+					2 => face switch
+					{
+						2 => 27,
+						0 => 26,
+						_ => 25,
+					},
+					_ => face switch
+					{
+						3 => 27,
+						1 => 26,
+						_ => 25,
+					},
+				},
+			};
 		}
 
 		public override BlockPlacementData GetPlacementValue(SubsystemTerrain subsystemTerrain, ComponentMiner componentMiner, int value, TerrainRaycastResult raycastResult)
@@ -68,20 +49,20 @@ namespace Game
 			float num2 = Vector3.Dot(forward, Vector3.UnitX);
 			float num3 = Vector3.Dot(forward, -Vector3.UnitZ);
 			float num4 = Vector3.Dot(forward, -Vector3.UnitX);
-			int data = 0;
+			int data;
 			if (num == MathUtils.Max(num, num2, num3, num4))
 			{
 				data = 2;
 			}
-			else if (num2 == MathUtils.Max(num, num2, num3, num4))
+			else if (num2 == MathUtils.Max(num2, num3, num4))
 			{
 				data = 3;
 			}
-			else if (num3 == MathUtils.Max(num, num2, num3, num4))
+			else if (num3 == MathUtils.Max(num3, num4))
 			{
 				data = 0;
 			}
-			else if (num4 == MathUtils.Max(num, num2, num3, num4))
+			else
 			{
 				data = 1;
 			}

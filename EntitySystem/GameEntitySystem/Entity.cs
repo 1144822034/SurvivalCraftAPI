@@ -1,4 +1,4 @@
-using Engine;
+﻿using Engine;
 using Engine.Serialization;
 using System;
 using System.Collections;
@@ -63,8 +63,7 @@ namespace GameEntitySystem
 			{
 				while (m_index < m_entity.m_components.Count)
 				{
-					T val = m_entity.m_components[m_index++] as T;
-					if (val != null)
+					if(m_entity.m_components[m_index++] is T val)
 					{
 						m_current = val;
 						return true;
