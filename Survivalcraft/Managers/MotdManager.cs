@@ -310,7 +310,7 @@ namespace Game
 		{
 			try
 			{
-				string time = m_bulletin.Time.Contains("$") ? m_bulletin.Time.Split(new char[] { '$' }, StringSplitOptions.RemoveEmptyEntries)[1] : string.Empty;
+				string time = m_bulletin.Time.Contains('$') ? m_bulletin.Time.Split('$', StringSplitOptions.RemoveEmptyEntries)[1] : string.Empty;
 				if (!string.IsNullOrEmpty(time)) time = (IsCNLanguageType() ? "公告发布时间: " : "Time: ") + time;
 				string title = IsCNLanguageType() ? m_bulletin.Title : m_bulletin.EnTitle;
 				string content = IsCNLanguageType() ? m_bulletin.Content : m_bulletin.EnContent;
@@ -337,7 +337,7 @@ namespace Game
 									m_bulletin.EnTitle = titleLabel.Text;
 									m_bulletin.EnContent = contentLabel.Text;
 								}
-								string languageType = (!ModsManager.Configs.ContainsKey("Language")) ? "zh-CN" : ModsManager.Configs["Language"];
+								string languageType = (!ModsManager.Configs.TryGetValue("Language",out string value)) ? "zh-CN" : value;
 								m_bulletin.Time = languageType + "$" + DateTime.Now.ToString();
 							}
 						}, delegate (TextBoxWidget textBox)
@@ -410,13 +410,13 @@ namespace Game
 
 		public static bool IsCNLanguageType()
 		{
-			string languageType = (!ModsManager.Configs.ContainsKey("Language")) ? "zh-CN" : ModsManager.Configs["Language"];
+			string languageType = (!ModsManager.Configs.TryGetValue("Language",out string value)) ? "zh-CN" : value;
 			return languageType == "zh-CN";
 		}
 
 		public static string GetMotdUrl()
 		{
-			string languageType = (!ModsManager.Configs.ContainsKey("Language")) ? "zh-CN" : ModsManager.Configs["Language"];
+			string languageType = (!ModsManager.Configs.TryGetValue("Language",out string value)) ? "zh-CN" : value;
 			return string.Format(SettingsManager.MotdUpdateUrl, VersionsManager.SerializationVersion, languageType);
 		}
 	}

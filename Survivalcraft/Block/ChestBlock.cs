@@ -49,23 +49,10 @@ namespace Game
 			float num2 = Vector3.Dot(forward, Vector3.UnitX);
 			float num3 = Vector3.Dot(forward, -Vector3.UnitZ);
 			float num4 = Vector3.Dot(forward, -Vector3.UnitX);
-			int data;
-			if (num == MathUtils.Max(num, num2, num3, num4))
-			{
-				data = 2;
-			}
-			else if (num2 == MathUtils.Max(num2, num3, num4))
-			{
-				data = 3;
-			}
-			else if (num3 == MathUtils.Max(num3, num4))
-			{
-				data = 0;
-			}
-			else
-			{
-				data = 1;
-			}
+			int data = num == MathUtils.Max(num, num2, num3, num4)
+				? 2: num2 == MathUtils.Max(num2,num3,num4)
+				? 3 : num3 == Math.Max(num3,num4)
+				? 0 : 1;
 			BlockPlacementData result = default;
 			result.Value = Terrain.ReplaceData(Terrain.ReplaceContents( 45), data);
 			result.CellFace = raycastResult.CellFace;

@@ -1,4 +1,4 @@
-using Engine;
+﻿using Engine;
 using Engine.Graphics;
 using System;
 using System.Collections.Generic;
@@ -293,6 +293,10 @@ namespace Game
 			}
 			return DefaultDisplayName;
 		}
+		/// <summary>
+		/// 设置材质(正方形)单行格子(分割后每个材质)数,对放置后的方块无效
+		/// </summary>
+		/// <param name="value">材质(正方形)单行格子(分割后每个材质)数</param>
 		public virtual int GetTextureSlotCount(int value)
 		{
 			return 16;
@@ -449,12 +453,30 @@ namespace Game
 		{
 			return DefaultSoundMaterialName;
 		}
-
+		/// <summary>
+		/// 生成地形顶点(用于绘制放置的方块)
+		/// </summary>
+		/// <param name="generator"></param>
+		/// <param name="geometry"></param>
+		/// <param name="value"></param>
+		/// <param name="x"></param>
+		/// <param name="y"></param>
+		/// <param name="z"></param>
 		public abstract void GenerateTerrainVertices(BlockGeometryGenerator generator, TerrainGeometry geometry, int value, int x, int y, int z);
 		public virtual void GenerateTerrainVertices(BlockGeometryGenerator generator, TerrainGeometrySubset geometry, int value, int x, int y, int z) { }
-
+		/// <summary>
+		/// 绘制方块_用于绘制方块物品形态
+		/// </summary>
+		/// <param name="primitivesRenderer"></param>
+		/// <param name="value"></param>
+		/// <param name="color"></param>
+		/// <param name="size"></param>
+		/// <param name="matrix"></param>
+		/// <param name="environmentData"></param>
 		public abstract void DrawBlock(PrimitivesRenderer3D primitivesRenderer, int value, Color color, float size, ref Matrix matrix, DrawBlockEnvironmentData environmentData);
-
+		/// <summary>
+		/// 方块放置方向
+		/// </summary>
 		public virtual BlockPlacementData GetPlacementValue(SubsystemTerrain subsystemTerrain, ComponentMiner componentMiner, int value, TerrainRaycastResult raycastResult)
 		{
 			BlockPlacementData result = default;
