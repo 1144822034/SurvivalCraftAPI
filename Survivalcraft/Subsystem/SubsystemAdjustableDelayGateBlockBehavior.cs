@@ -20,7 +20,7 @@ namespace Game
 				if (num != value)
 				{
 					inventory.RemoveSlotItems(slotIndex, count);
-					inventory.AddSlotItems(slotIndex, num, 1);
+					inventory.AddSlotItems(slotIndex, num, count);
 				}
 			}));
 			return true;

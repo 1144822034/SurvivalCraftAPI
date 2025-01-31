@@ -6,20 +6,20 @@ using static Game.ComponentLevel;
 
 namespace Game
 {
-    public class ComponentFactors : Component, IUpdateable
-    {
-        public Random m_random = new();
+	public class ComponentFactors : Component, IUpdateable
+	{
+		public Random m_random = new();
 
-        public SubsystemGameInfo m_subsystemGameInfo;
+		public SubsystemGameInfo m_subsystemGameInfo;
 
-        public SubsystemAudio m_subsystemAudio;
+		public SubsystemAudio m_subsystemAudio;
 
-        public SubsystemTime m_subsystemTime;
+		public SubsystemTime m_subsystemTime;
 
 		/// <summary>
 		/// 模组如果有自定义的Factors，可以使用这个OtherFactors。例如使用OtherFactors["AttackRate"]来定义攻击频率。
 		/// </summary>
-        public Dictionary<string, List<Factor>> OtherFactors = new Dictionary<string, List<Factor>>();
+		public Dictionary<string,List<Factor>> OtherFactors = new Dictionary<string,List<Factor>>();
 
 		/// <summary>
 		/// 这四个Factors是可以调整的影响因素
@@ -28,31 +28,35 @@ namespace Game
 		public List<Factor> m_speedFactors = [];
 		public List<Factor> m_hungerFactors = [];
 		public List<Factor> m_resilienceFactors = [];
-        public UpdateOrder UpdateOrder => UpdateOrder.Default;
+		public UpdateOrder UpdateOrder => UpdateOrder.Default;
 
-        public static string fName = "ComponentFactors";
+		public static string fName = "ComponentFactors";
 
 		public float StrengthFactor
 		{
 			get;
+			[Obsolete("模组调整StrengthFactor的具体数值，需要通过m_strengthFactors里面增删改里面的Factor")]
 			set;
 		} = 1f;
 
 		public float ResilienceFactor
 		{
 			get;
+			[Obsolete("模组调整ResilienceFactor的具体数值，需要通过m_resilienceFactors里面增删改里面的Factor")]
 			set;
 		} = 1f;
 
 		public float SpeedFactor
 		{
 			get;
+			[Obsolete("模组调整SpeedFactor的具体数值，需要通过m_speedFactors里面增删改里面的Factor")]
 			set;
 		} = 1f;
 
 		public float HungerFactor
 		{
 			get;
+			[Obsolete("模组调整HungerFactor的具体数值，需要通过m_hungerFactors里面增删改里面的Factor")]
 			set;
 		} = 1f;
 

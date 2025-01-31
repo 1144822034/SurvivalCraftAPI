@@ -18,6 +18,10 @@ namespace Game
 		/// <summary>
 		/// 这里的Factor类型从struct改为class，是由于模组在修改Factor的时候，通常是需要修改引用的值。
 		/// 如果是struct则只能复制并修改值，不能修改引用。
+		/// Description: 在玩家信息面板上显示影响因素的名称，如“未患流感”
+		/// Value：该影响因素的具体数值
+		/// Name：该Factor的索引名称，模组使用Name来在m_xxxFactors列表中查找对应的Factor
+		/// FactorAdditionType：该影响因子是乘算还是加算
 		/// </summary>
 		public class Factor
 		{
