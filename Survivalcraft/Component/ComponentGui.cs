@@ -323,6 +323,15 @@ namespace Game
 			m_messageWidget = guiWidget.Children.Find<MessageWidget>("Message");
 			m_keyboardHelpMessageShown = valuesDictionary.GetValue<bool>("KeyboardHelpMessageShown");
 			m_gamepadHelpMessageShown = valuesDictionary.GetValue<bool>("GamepadHelpMessageShown");
+
+			var worldSettings = m_subsystemGameInfo.WorldSettings;
+			var gameMode = worldSettings.GameMode;
+			var isCreative = gameMode == GameMode.Creative;
+			m_creativeFlyButtonWidget.IsVisible = isCreative;
+			m_timeOfDayButtonWidget.IsVisible = isCreative;
+			m_lightningButtonWidget.IsVisible = isCreative;
+			m_precipitationButtonWidget.IsVisible = isCreative && worldSettings.AreWeatherEffectsEnabled;
+			m_fogButtonWidget.IsVisible = isCreative && worldSettings.AreWeatherEffectsEnabled;
 		}
 
 		public override void Save(ValuesDictionary valuesDictionary, EntityToIdMap entityToIdMap)
@@ -463,11 +472,7 @@ namespace Game
 			FoodBarWidget.IsVisible = gameMode != 0 && worldSettings.AreAdventureSurvivalMechanicsEnabled;
 			TemperatureBarWidget.IsVisible = gameMode != 0 && worldSettings.AreAdventureSurvivalMechanicsEnabled;
 			LevelLabelWidget.IsVisible = gameMode != 0 && worldSettings.AreAdventureSurvivalMechanicsEnabled;
-			m_creativeFlyButtonWidget.IsVisible = gameMode == GameMode.Creative;
-			m_timeOfDayButtonWidget.IsVisible = gameMode == GameMode.Creative;
-			m_lightningButtonWidget.IsVisible = gameMode == GameMode.Creative;
-			m_precipitationButtonWidget.IsVisible = gameMode == GameMode.Creative && worldSettings.AreWeatherEffectsEnabled;
-			m_fogButtonWidget.IsVisible = gameMode == GameMode.Creative && worldSettings.AreWeatherEffectsEnabled;
+			
 			m_moveButtonsContainerWidget.IsVisible = SettingsManager.MoveControlMode == MoveControlMode.Buttons;
 			m_movePadContainerWidget.IsVisible = SettingsManager.MoveControlMode == MoveControlMode.Pad;
 			if (SettingsManager.LeftHandedLayout)
@@ -690,7 +695,7 @@ namespace Game
 					}
 				}
 			}
-			if (m_subsystemGameInfo.WorldSettings.GameMode == GameMode.Creative && (m_creativeFlyButtonWidget.IsClicked || playerInput.ToggleCreativeFly) && componentRider.Mount == null)
+			if ((m_creativeFlyButtonWidget.IsClicked || playerInput.ToggleCreativeFly) && componentRider.Mount == null)
 			{
 				bool isCreativeFlyEnabled = m_componentPlayer.ComponentLocomotion.IsCreativeFlyEnabled;
 				m_componentPlayer.ComponentLocomotion.IsCreativeFlyEnabled = !isCreativeFlyEnabled;
@@ -725,12 +730,12 @@ namespace Game
 					DisplaySmallMessage(LanguageControl.Get(fName, 14), Color.White, blinking: false, playNotificationSound: false);
 				});
 			}
-			if (m_subsystemGameInfo.WorldSettings.GameMode == GameMode.Creative && (m_lightningButtonWidget.IsClicked || playerInput.Lighting))
+			if (m_lightningButtonWidget.IsClicked || playerInput.Lighting)
 			{
 				var matrix = Matrix.CreateFromQuaternion(m_componentPlayer.ComponentCreatureModel.EyeRotation);
 				m_subsystemWeather.ManualLightingStrike(m_componentPlayer.ComponentCreatureModel.EyePosition, matrix.Forward);
 			}
-			if (m_subsystemGameInfo.WorldSettings.GameMode == GameMode.Creative && (m_precipitationButtonWidget.IsClicked || playerInput.Precipitation))
+			if (m_precipitationButtonWidget.IsClicked || playerInput.Precipitation)
 			{
 				if (m_subsystemWeather.IsPrecipitationStarted)
 				{
@@ -743,7 +748,7 @@ namespace Game
 					DisplaySmallMessage(LanguageControl.Get(fName, 21), Color.White, blinking: false, playNotificationSound: false);
 				}
 			}
-			if (m_subsystemGameInfo.WorldSettings.GameMode == GameMode.Creative && (m_fogButtonWidget.IsClicked || playerInput.Fog))
+			if (m_fogButtonWidget.IsClicked || playerInput.Fog)
 			{
 				if (m_subsystemWeather.IsFogStarted)
 				{
@@ -756,7 +761,7 @@ namespace Game
 					DisplaySmallMessage(LanguageControl.Get(fName, 23), Color.White, blinking: false, playNotificationSound: false);
 				}
 			}
-			if (m_subsystemGameInfo.WorldSettings.GameMode == GameMode.Creative && (m_timeOfDayButtonWidget.IsClicked || playerInput.TimeOfDay))
+			if (m_timeOfDayButtonWidget.IsClicked || playerInput.TimeOfDay)
 			{
 				float num2 = IntervalUtils.Interval(m_subsystemTimeOfDay.TimeOfDay, m_subsystemTimeOfDay.Middawn);
 				float num3 = IntervalUtils.Interval(m_subsystemTimeOfDay.TimeOfDay, m_subsystemTimeOfDay.Midday);
