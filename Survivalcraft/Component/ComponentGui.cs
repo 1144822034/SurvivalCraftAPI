@@ -325,8 +325,8 @@ namespace Game
 			m_gamepadHelpMessageShown = valuesDictionary.GetValue<bool>("GamepadHelpMessageShown");
 
 			var worldSettings = m_subsystemGameInfo.WorldSettings;
-			var gameMode = worldSettings.GameMode;
-			var isCreative = gameMode == GameMode.Creative;
+			var gameMode = worldSettings.GameMode;//只在 load 执行一次，防止修改的 IsVisible 字段被改回
+			var isCreative = gameMode == GameMode.Creative;//如果此 isCreative 是全局变量而不是局部变量，模组也可在此开启显示
 			m_creativeFlyButtonWidget.IsVisible = isCreative;
 			m_timeOfDayButtonWidget.IsVisible = isCreative;
 			m_lightningButtonWidget.IsVisible = isCreative;
