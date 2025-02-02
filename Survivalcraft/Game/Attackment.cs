@@ -61,6 +61,7 @@ namespace Game
         public string CauseOfDeath = String.Empty;
         public bool EnableArmorProtection = true;
         public bool EnableResilienceFactor = true;
+        public bool EnableHitValueParticleSystem = true;
         public string AttackSoundName = "Audio/Impacts/Body";
         public float AttackSoundVolume = 1f;
         public float AttackSoundPitch = 0f;
@@ -98,6 +99,7 @@ namespace Game
 
         public virtual void AddHitValueParticleSystem(float damage)
         {
+			if(!EnableHitValueParticleSystem) return;
             ComponentBody attackerBody = Attacker?.FindComponent<ComponentBody>();
             ComponentPlayer attackerComponentPlayer = Attacker?.FindComponent<ComponentPlayer>();
             ComponentHealth attackedComponentHealth = Target?.FindComponent<ComponentHealth>();
@@ -124,7 +126,8 @@ namespace Game
             componentHealth.Injure(new AttackInjury(injuryAmount, this));
             if (injuryAmount > 0f)
             {
-                Target.Project.FindSubsystem<SubsystemAudio>()?.PlayRandomSound(AttackSoundName, AttackSoundVolume, AttackSoundPitch, componentBody.Position, 4f, autoDelay: false);
+				if(AttackSoundName != "")
+					Target.Project.FindSubsystem<SubsystemAudio>()?.PlayRandomSound(AttackSoundName, AttackSoundVolume, AttackSoundPitch, componentBody.Position, 4f, autoDelay: false);
                 //显示粒子效果的攻击，不需要一定是玩家攻击
                 float num2 = (healthBeforeAttack - componentHealth.Health) * componentHealth.AttackResilience;
                 AddHitValueParticleSystem(num2);
@@ -142,7 +145,7 @@ namespace Game
             componentDamage.Damage(injuryAmount);
             float damage = (hitPointsBeforeAttack - componentDamage.Hitpoints) * componentDamage.AttackResilience;
             AddHitValueParticleSystem(damage);
-            if (injuryAmount > 0f)
+            if (injuryAmount > 0f&& AttackSoundName!="")
             {
                 Target.Project.FindSubsystem<SubsystemAudio>()?.PlayRandomSound(AttackSoundName, AttackSoundVolume, AttackSoundPitch, componentBody.Position, 4f, autoDelay: false);
             }
