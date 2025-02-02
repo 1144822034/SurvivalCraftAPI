@@ -85,9 +85,9 @@ namespace Game
 
 		public ButtonWidget m_lightningButtonWidget;
 
-		private ButtonWidget m_precipitationButtonWidget;
+		public ButtonWidget m_precipitationButtonWidget;
 
-		private ButtonWidget m_fogButtonWidget;
+		public ButtonWidget m_fogButtonWidget;
 
 		public ButtonWidget m_photoButtonWidget;
 
