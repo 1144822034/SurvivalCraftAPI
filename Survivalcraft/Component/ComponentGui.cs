@@ -325,8 +325,8 @@ namespace Game
 			m_gamepadHelpMessageShown = valuesDictionary.GetValue<bool>("GamepadHelpMessageShown");
 
 			var worldSettings = m_subsystemGameInfo.WorldSettings;
-			var gameMode = worldSettings.GameMode;//Ö»ÔÚ load Ö´ÐÐÒ»´Î£¬·ÀÖ¹ÐÞ¸ÄµÄ IsVisible ×Ö¶Î±»¸Ä»Ø
-			var isCreative = gameMode == GameMode.Creative;//Èç¹û´Ë isCreative ÊÇÈ«¾Ö±äÁ¿¶ø²»ÊÇ¾Ö²¿±äÁ¿£¬Ä£×éÒ²¿ÉÔÚ´Ë¿ªÆôÏÔÊ¾
+			var gameMode = worldSettings.GameMode;//åªåœ¨ load æ‰§è¡Œä¸€æ¬¡ï¼Œé˜²æ­¢ä¿®æ”¹çš„ IsVisible å­—æ®µè¢«æ”¹å›ž
+			var isCreative = gameMode == GameMode.Creative;//å¦‚æžœæ­¤ isCreative æ˜¯å…¨å±€å˜é‡è€Œä¸æ˜¯å±€éƒ¨å˜é‡ï¼Œæ¨¡ç»„ä¹Ÿå¯åœ¨æ­¤å¼€å¯æ˜¾ç¤º
 			m_creativeFlyButtonWidget.IsVisible = isCreative;
 			m_timeOfDayButtonWidget.IsVisible = isCreative;
 			m_lightningButtonWidget.IsVisible = isCreative;
@@ -712,7 +712,7 @@ namespace Game
 					}
 				}
 			}
-			if (m_cameraButtonWidget.IsClicked || playerInput.SwitchCameraMode /*|| input.IsKeyDownOnce(Engine.Input.Key.V) Õâ¶Î»áµ¼ÖÂ´ò×ÖÊ±µãv´¥·¢Ïà»ú*/|| input.IsPadButtonDownOnce(Engine.Input.GamePadButton.RightThumb) || input.IsPadButtonDownOnce(Engine.Input.GamePadButton.DPadDown))
+			if (m_cameraButtonWidget.IsClicked || playerInput.SwitchCameraMode /*|| input.IsKeyDownOnce(Engine.Input.Key.V) è¿™æ®µä¼šå¯¼è‡´æ‰“å­—æ—¶ç‚¹vè§¦å‘ç›¸æœº*/|| input.IsPadButtonDownOnce(Engine.Input.GamePadButton.RightThumb) || input.IsPadButtonDownOnce(Engine.Input.GamePadButton.DPadDown))
 			{
 				ModsManager.HookAction("OnCameraChange", modLoader =>
 				{

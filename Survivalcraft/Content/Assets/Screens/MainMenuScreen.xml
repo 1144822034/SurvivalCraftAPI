@@ -25,7 +25,7 @@
 			</StackPanelWidget>
 			<StackPanelWidget HorizontalAlignment="Center">
 				<BevelledButtonWidget Name="Settings" Style="{Styles/ButtonStyle_310x60}" HorizontalAlignment="Center" VerticalAlignment="Center" Text="[MainMenuScreen:4]" />
-				<BevelledButtonWidget Name="Manage" Style="{Styles/ButtonStyle_310x60}" HorizontalAlignment="Center" VerticalAlignment="Center" Text="[MainMenuScreen:5]" />
+				<BevelledButtonWidget Name="Help" Style="{Styles/ButtonStyle_310x60}" HorizontalAlignment="Center" VerticalAlignment="Center" Text="[MainMenuScreen:5]" />
 			</StackPanelWidget>
 			<BevelledButtonWidget Name="Buy" Style="{Styles/ButtonStyle_310x60}" HorizontalAlignment="Center" VerticalAlignment="Center" Text="[MainMenuScreen:6]" IsVisible="false" />
 		</StackPanelWidget>
@@ -49,6 +49,16 @@
 
 	</StackPanelWidget>
 
-	<BitmapButtonWidget Name="LanguageSwitchButton" Size="51, 48" NormalSubtexture="{Textures/Gui/Earth}" ClickedSubtexture="{Textures/Gui/Earth}" Margin="24, 24" IsAutoCheckingEnabled="false" VerticalAlignment="Far" HorizontalAlignment="Near"/>
-	<BitmapButtonWidget Name="Help" Size="51, 48" NormalSubtexture="{Textures/Atlas/HelpButton}" ClickedSubtexture="{Textures/Atlas/HelpButton}" Margin="24, 24" IsAutoCheckingEnabled="false" VerticalAlignment="Far" HorizontalAlignment="Far"/>
+	<StackPanelWidget Name="LeftBottomBar" HorizontalAlignment="Near" VerticalAlignment="Far" Direction="Vertical" Margin="8, 8">
+		<BevelledButtonWidget Size="60, 60" Text="" Name="LanguageSwitchButton">
+			<RectangleWidget Size="28, 28" TextureLinearFilter="true" HorizontalAlignment="Center" VerticalAlignment="Center" Subtexture="{Textures/Gui/Earth}" OutlineColor="0, 0, 0, 0" FillColor="255, 255, 255" IsVisible="true" />
+		</BevelledButtonWidget>
+		<BevelledButtonWidget Size="60, 60" Text="" Name="ResourcesManagement">
+			<RectangleWidget Size="28, 28" TextureLinearFilter="true" HorizontalAlignment="Center" VerticalAlignment="Center" Subtexture="{Textures/Gui/ResourcesManagement}" OutlineColor="0, 0, 0, 0" FillColor="255, 255, 255" IsVisible="true" />
+		</BevelledButtonWidget>
+	</StackPanelWidget>
+
+	<StackPanelWidget Name="RightBottomBar" HorizontalAlignment="Far" VerticalAlignment="Far" Direction="Vertical" Margin="8, 8">
+	</StackPanelWidget>
+
 </Screen>

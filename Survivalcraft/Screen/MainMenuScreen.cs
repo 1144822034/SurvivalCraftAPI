@@ -20,6 +20,10 @@ namespace Game
 
 		public ButtonWidget m_languageSwitchButton;
 
+		public StackPanelWidget m_leftBottomBar;
+
+		public StackPanelWidget m_rightBottomBar;
+
 		public const string fName = "MainMenuScreen";
 
 		public MainMenuScreen()
@@ -30,9 +34,13 @@ namespace Game
 			m_bulletinStackPanel = Children.Find<StackPanelWidget>("BulletinStackPanel");
 			m_copyrightLabel = Children.Find<LabelWidget>("CopyrightLabel");
 			m_languageSwitchButton = Children.Find<ButtonWidget>("LanguageSwitchButton");
+			m_leftBottomBar = Children.Find<StackPanelWidget>("LeftBottomBar");
+			m_rightBottomBar = Children.Find<StackPanelWidget>("RightBottomBar");
 			string languageType = ModsManager.Configs.GetValueOrDefault("Language", "zh-CN");
 			m_bulletinStackPanel.IsVisible = languageType == "zh-CN";
 			m_copyrightLabel.IsVisible = languageType != "zh-CN";
+
+			ModsManager.HookAction("OnMainMenuScreenCreated",loader => { loader.OnMainMenuScreenCreated(this, m_leftBottomBar, m_rightBottomBar); return false; });
 		}
 
 		public override void Enter(object[] parameters)
@@ -92,7 +100,7 @@ namespace Game
 			{
 				MarketplaceManager.ShowMarketplace();
 			}
-			if(Children.Find<BevelledButtonWidget>("Manage").IsClicked)
+			if(Children.Find<ButtonWidget>("ResourcesManagement").IsClicked)
 			{
 				ScreensManager.m_screens.TryGetValue("Content",out Screen screen);
 				ContentScreen contentScreen = screen as ContentScreen;
