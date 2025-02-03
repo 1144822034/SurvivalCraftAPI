@@ -2623,15 +2623,11 @@
             "Title": "Dropbox"
         },
         "39": {
-            "value": "Transfer.sh позволяет выгружать содержимое на несколько дней без создания учётных записей",
-            "Title": "Transfer.sh"
-        },
-        "40": {
             "value": "Содержимое можно добавлять из папки Android/data/com.candyrufusgames.survivalcraft2/files (SurvivalCraft2.3/files для API) и в неё",
             "Title": "Карта памяти",
             "DisabledPlatforms": "Ios, Windows81, WindowsPhone81, Desktop"
         },
-        "41": {
+        "40": {
             "value": "Содержимое сообщества позволяет загружать содержимое из списка размещаемых пользователями ссылок",
             "Title": "Содержимое сообщества"
         }

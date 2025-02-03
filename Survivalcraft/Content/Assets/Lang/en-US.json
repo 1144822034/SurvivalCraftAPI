@@ -2649,15 +2649,11 @@
       "Title": "Dropbox"
     },
     "39": {
-      "value": "\\n The game uses transfer.sh anonymous file service to allow you to upload data from your device without the hassle of creating any user accounts.\\n \\n\\n\\n Use the link provided after the upload to access the data.\\n Transfer.sh keeps the data for a few days only, after that it is automatically deleted.\\n \\n\\n\\n Do not use these temporary links for Community Content uploads, your item will be deleted by the service and Community Content item will stop working.\\n \\n\\n\\n It is not possible to see the list of items you uploaded, the sole access to data is through the links.\\n \\n\\n\\n See https:\/\/transfer.sh website for more details.\\n \\n\\n\\n Big Kudos to The Dutch Coders!\\n ",
-      "Title": "Transfer.sh"
-    },
-    "40": {
       "value": "\\n The game allows you to import and export worlds to SD Card for sharing and backup purposes.\\n \\n\\n\\n If your device does not have an SD Card, generic external storage folder will be used.\\n The location of the data on the device is normally \/sdcard\/Survivalcraft\\n ",
       "Title": "SD Card",
       "DisabledPlatforms": "Ios, Windows81, WindowsPhone81, Desktop"
     },
-    "41": {
+    "40": {
       "value": "\\n The game allows you to browse a list of worlds, block textures and other items published by other Survivalcraft community members, and download them.\\n \\n\\n\\n Once you make something interesting, you can also publish it through this service, and it will appear on the list for anyone to download.\\n \\n\\n\\n To publish something, first you need to put it on the internet, so that it's accessible to everyone.\\n The easiest place to use is Dropbox, although you can use any other provider.\\n Once it's done, you can publish the link to it through \"Publish Link\" dialog in the game.\\n \\n\\n\\n Note: the server does not store your content, only the link.\\n Just like a search engine.\\n You are responsible for keeping the data accessible through the published link.\\n Watch out for exceeding bandwidth limits of your provider, having a link near top of the list will make your content receive many thousands of downloads in a short time.\\n ",
       "Title": "Community Content"
     }
