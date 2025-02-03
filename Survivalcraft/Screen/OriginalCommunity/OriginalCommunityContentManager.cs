@@ -311,8 +311,7 @@ public static class OriginalCommunityContentManager
 
 	private static string CalculateContentHashString(byte[] data)
 	{
-		using SHA1 sHA = SHA1.Create();
-		return Convert.ToBase64String(sHA.ComputeHash(data));
+		return Convert.ToBase64String(SHA1.HashData(data));
 	}
 
 	private static string MakeFeedbackCacheKey(string address, string feedback, string userId)
