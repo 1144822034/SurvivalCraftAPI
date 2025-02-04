@@ -13,7 +13,7 @@ namespace Game
 
 		public Random m_random = new();
 
-		public override int[] HandledBlocks => new int[0];
+		
 
 		public override bool OnHitAsProjectile(CellFace? cellFace, ComponentBody componentBody, WorldItem worldItem)
 		{

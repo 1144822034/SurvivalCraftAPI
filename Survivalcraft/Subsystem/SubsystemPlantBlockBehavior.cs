@@ -34,6 +34,17 @@ namespace Game
 			204
 		};
 
+		/// <summary>
+		/// 该方法进行封装，不再允许覆盖
+		/// 如果需要添加能种植植物的土质方块，修改方块的IsSuitableForPlants属性即可
+		/// 如果需要添加新植物，则需要开发者自己为模组植物编写BlockBehavior
+		/// </summary>
+		/// <param name="x"></param>
+		/// <param name="y"></param>
+		/// <param name="z"></param>
+		/// <param name="neighborX"></param>
+		/// <param name="neighborY"></param>
+		/// <param name="neighborZ"></param>
 		public sealed override void OnNeighborBlockChanged(int x, int y, int z, int neighborX, int neighborY, int neighborZ)
 		{
 			bool destroyCell = false;

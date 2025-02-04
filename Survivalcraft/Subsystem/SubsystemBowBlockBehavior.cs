@@ -30,7 +30,7 @@ namespace Game
 			ArrowBlock.ArrowType.FireArrow
 		};
 
-		public override int[] HandledBlocks => new int[0];
+		
 
 		public override bool OnEditInventoryItem(IInventory inventory, int slotIndex, ComponentPlayer componentPlayer)
 		{

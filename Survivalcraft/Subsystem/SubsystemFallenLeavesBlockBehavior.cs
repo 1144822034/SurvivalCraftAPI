@@ -10,7 +10,7 @@ public class SubsystemFallenLeavesBlockBehavior : SubsystemPollableBlockBehavior
 
 	private Random m_random = new Random();
 
-	public override int[] HandledBlocks => new int[0];
+	
 
 	public override void OnNeighborBlockChanged(int x, int y, int z, int neighborX, int neighborY, int neighborZ)
 	{

@@ -28,7 +28,7 @@ namespace Game
 
 		public UpdateOrder UpdateOrder => UpdateOrder.Default;
 
-		public override int[] HandledBlocks => new int[0];
+		
 
 		public void Update(float dt)
 		{

@@ -43,7 +43,7 @@ namespace Game
 
 		public UpdateOrder UpdateOrder => m_subsystemMovingBlocks.UpdateOrder + 1;
 
-		public override int[] HandledBlocks => new int[0];
+		
 
 		public void AdjustPiston(Point3 position, int length)
 		{

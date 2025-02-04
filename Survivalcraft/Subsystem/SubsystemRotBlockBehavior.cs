@@ -19,7 +19,7 @@ namespace Game
 
 		public bool m_isRotEnabled;
 
-		public override int[] HandledBlocks => new int[0];
+		
 
 		public override void Load(ValuesDictionary valuesDictionary)
 		{

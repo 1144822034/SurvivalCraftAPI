@@ -18,7 +18,7 @@ namespace Game
 
 		public HashSet<Point3> m_leavesToCheck = [];
 
-		public override int[] HandledBlocks => new int[0];
+		
 
 		public UpdateOrder UpdateOrder => UpdateOrder.Default;
 

@@ -5,7 +5,7 @@ namespace Game
 {
 	public class SubsystemBottomSuckerBlockBehavior : SubsystemInWaterBlockBehavior
 	{
-		public override int[] HandledBlocks => new int[0];
+		
 
 		public int m_seaUrchinBlockValue;
         public override void Load(ValuesDictionary valuesDictionary)
