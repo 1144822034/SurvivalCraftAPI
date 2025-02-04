@@ -31,7 +31,7 @@ namespace Game
 
 		public Dictionary<Point3, List<FireParticleSystem>> m_particleSystemsByCell = [];
 
-		
+		public override int[] HandledBlocks => new int[0];
 
 		public ReadOnlyList<FurnitureSet> FurnitureSets => new(m_furnitureSets);
 

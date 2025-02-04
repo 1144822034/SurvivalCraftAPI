@@ -32,7 +32,7 @@ public class SubsystemDeciduousLeavesBlockBehavior : SubsystemPollableBlockBehav
 
 	private DynamicArray<LeafParticles> m_tmpLeafParticles = new DynamicArray<LeafParticles>();
 
-	
+	public override int[] HandledBlocks => new int[0];
 
 	UpdateOrder IUpdateable.UpdateOrder => UpdateOrder.Default;
 

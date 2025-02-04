@@ -9,7 +9,7 @@ namespace Game
 
 		public Random m_random = new();
 
-		
+		public override int[] HandledBlocks => new int[0];
 
 		public override void OnFiredAsProjectile(Projectile projectile)
 		{

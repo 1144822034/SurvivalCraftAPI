@@ -36,7 +36,7 @@ namespace Game
 
 		public UpdateOrder UpdateOrder => UpdateOrder.Default;
 
-		
+		public override int[] HandledBlocks => new int[0];
 
 		public bool IgniteFuse(int x, int y, int z)
 		{

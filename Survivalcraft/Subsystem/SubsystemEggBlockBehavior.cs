@@ -17,7 +17,7 @@ namespace Game
 
 		public const string fName = "SubsystemEggBlockBehavior";
 
-		
+		public override int[] HandledBlocks => new int[0];
 
         public override bool OnHitAsProjectile(CellFace? cellFace, ComponentBody componentBody, WorldItem worldItem)
         {

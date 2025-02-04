@@ -19,7 +19,7 @@ namespace Game
 
 		public Dictionary<Projectile, bool> m_projectiles = [];
 
-		
+		public override int[] HandledBlocks => new int[0];
 
 		public UpdateOrder UpdateOrder => UpdateOrder.Default;
 

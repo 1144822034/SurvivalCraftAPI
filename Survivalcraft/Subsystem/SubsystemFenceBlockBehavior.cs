@@ -2,7 +2,7 @@ namespace Game
 {
 	public class SubsystemFenceBlockBehavior : SubsystemBlockBehavior
 	{
-		
+		public override int[] HandledBlocks => new int[0];
 
 		public override void OnNeighborBlockChanged(int x, int y, int z, int neighborX, int neighborY, int neighborZ)
 		{

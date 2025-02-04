@@ -7,7 +7,7 @@ namespace Game
 	{
 		public SubsystemFurnitureBlockBehavior m_subsystemFurnitureBlockBehavior;
 
-		
+		public override int[] HandledBlocks => new int[0];
 
 		public override bool OnUse(Ray3 ray, ComponentMiner componentMiner)
 		{
