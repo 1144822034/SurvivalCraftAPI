@@ -34,6 +34,17 @@ namespace Game
 			204
 		};
 
+		/// <summary>
+		/// 该方法进行封装，不再允许覆盖
+		/// 添加新的放置植物的逻辑：
+		/// 如果是添加新植物，则
+		/// </summary>
+		/// <param name="x"></param>
+		/// <param name="y"></param>
+		/// <param name="z"></param>
+		/// <param name="neighborX"></param>
+		/// <param name="neighborY"></param>
+		/// <param name="neighborZ"></param>
 		public sealed override void OnNeighborBlockChanged(int x, int y, int z, int neighborX, int neighborY, int neighborZ)
 		{
 			bool destroyCell = false;

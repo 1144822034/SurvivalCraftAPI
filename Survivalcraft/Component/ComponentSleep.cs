@@ -46,7 +46,14 @@ namespace Game
 		public bool m_wakeUpWhenAttacked = true;
 		public float MaxSleepBlackoutFactor = 1f;
 
-		public virtual bool CanSleep(out string reason)
+		/// <summary>
+		/// 为了模组间兼容性，该方法不再建议覆盖。
+		/// 控制睡觉需要的条件，需要通过控制m_conditionsToSleep更改，具体查看Load()中的添加。
+		/// 模组作者可以在自己的Component中添加对应的m_conditionsToSleep
+		/// </summary>
+		/// <param name="reason"></param>
+		/// <returns></returns>
+		public bool CanSleep(out string reason)
 		{
 			foreach(string condition in m_conditionsToSleep.Keys)
 			{
