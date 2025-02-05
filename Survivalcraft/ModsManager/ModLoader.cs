@@ -78,6 +78,15 @@ namespace Game
             Hitted = false;
         }
 
+		/// <summary>
+		/// 在生物攻击时执行
+		/// </summary>
+		/// <param name="componentMiner">攻击者</param>
+		/// <param name="componentBody">被攻击方的ComponentBody</param>
+		/// <param name="hitPoint">命中点</param>
+		/// <param name="hitDirection">命中时的击退方向</param>
+		/// <param name="durabilityReduction">攻击后，手中武器掉的耐久量</param>
+		/// <param name="attackment">发起的攻击</param>
         public virtual void OnMinerHit2(ComponentMiner componentMiner, ComponentBody componentBody, Vector3 hitPoint, Vector3 hitDirection, ref int durabilityReduction, ref Attackment attackment)
         {
 
@@ -350,6 +359,14 @@ namespace Game
 
         }
         
+		/// <summary>
+		/// 生物等实体在遭受爆炸时执行
+		/// </summary>
+		/// <param name="componentBody">遭受爆炸的实体Body</param>
+		/// <param name="explosionInjury">该爆炸的Injuty</param>
+		/// <param name="Impulse">爆炸的击退力</param>
+		/// <param name="SetOnFire">爆炸是否会让实体着火</param>
+		/// <param name="Fluctuation">爆炸的击退、伤害浮动系数。目前只对非生物的船等实体有效</param>
         public virtual void OnComponentBodyExploded(ComponentBody componentBody, ref Injury explosionInjury, ref Vector3 Impulse, ref bool SetOnFire, ref float Fluctuation)
         {
 
@@ -885,7 +902,8 @@ namespace Game
         }
 
         /// <summary>
-        /// 执行动物的Update操作。为防止多次覆盖更新，当多个mod试图执行的时候，只有一个mod能够执行，其他mod会返回Exception。
+        /// 执行动物的Update操作。
+		/// 建议只在对自己模组的动物才进行带skip的覆盖原版的操作；对原版和其他模组的动物，请不要过多干涉覆盖原有的操作
         /// </summary>
         /// <param name="componentBody"></param>
         /// <param name="dt">动物位置</param>
@@ -1310,7 +1328,7 @@ namespace Game
         /// <param name="componentDispenser">该发射器的Component</param>
         /// <param name="pickable">要发射的掉落物</param>
         /// <param name="RemoveSlotCount">移除发射器物品栏中物品数量</param>
-        public virtual void OnDispenserDispense(ComponentDispenser componentDispenser, ref Pickable pickable, ref int RemoveSlotCount)
+        public virtual void OnDispenserDispensePickable(ComponentDispenser componentDispenser, ref Pickable pickable, ref int RemoveSlotCount)
         {
 
         }

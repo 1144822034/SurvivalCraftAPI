@@ -477,6 +477,16 @@ namespace Game
 			return false;
 		}
 
+		/// <summary>
+		/// 发出射线检测，检测玩家点击到的目标
+		/// </summary>
+		/// <param name="ray"></param>
+		/// <param name="mode">发出射线的意图</param>
+		/// <param name="raycastTerrain">该射线是否和地形交互，为false时则忽略地形</param>
+		/// <param name="raycastBodies">该射线是否和生物等实体交互，为false时则忽略实体</param>
+		/// <param name="raycastMovingBlocks">该射线是否和移动方块交互，为false时则忽略移动方块</param>
+		/// <param name="Reach">进行Raycast的距离</param>
+		/// <returns></returns>
 		public virtual object Raycast(Ray3 ray, RaycastMode mode, bool raycastTerrain = true, bool raycastBodies = true, bool raycastMovingBlocks = true, float? Reach = null)
 		{
 			float reach = (m_subsystemGameInfo.WorldSettings.GameMode == GameMode.Creative) ? SettingsManager.CreativeReach : 5f;

@@ -8,6 +8,7 @@ namespace Game
 {
     public class ChunkGenerationStep
     {
+		//TODO:可以根据名字来查找
         public bool ShouldGenerate = true;
         public int GenerateOrder = 1600;
 

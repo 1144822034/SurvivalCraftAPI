@@ -37,7 +37,8 @@ namespace Game
 		/// <summary>
 		/// 该方法进行封装，不再允许覆盖
 		/// 添加新的放置植物的逻辑：
-		/// 如果是添加新植物，则
+		/// 如果是添加新植物，则建议自己添加新的ModPlantBlockBehavior，只负责属于自己模组的植物的生长
+		/// 如果是添加新的能种植植物的土质（如黑土），则调整该土质方块的IsSuitableForPlants属性即可
 		/// </summary>
 		/// <param name="x"></param>
 		/// <param name="y"></param>

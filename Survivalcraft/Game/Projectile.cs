@@ -71,7 +71,10 @@ namespace Game
 
         public bool StopTrailParticleInFluid = true;
 
-        public int DamageToPickable = 1;//弹射物结算时掉的耐久
+		/// <summary>
+		/// 弹射物结算时掉的耐久
+		/// </summary>
+		public int DamageToPickable = 1;
 
 		public int? TurnIntoPickableBlockValue = null;
 
@@ -110,7 +113,10 @@ namespace Game
             }
         }
 
-        public List<ComponentBody> BodiesToIgnore = new List<ComponentBody>();//弹射物飞行的时候会忽略List中的ComponentBody
+		/// <summary>
+		/// 弹射物飞行的时候会忽略List中的ComponentBody
+		/// </summary>
+		public List<ComponentBody> BodiesToIgnore = new List<ComponentBody>();
         protected SubsystemPickables m_subsystemPickables => SubsystemProjectiles?.m_subsystemPickables;
         protected SubsystemParticles m_subsystemParticles => SubsystemProjectiles?.m_subsystemParticles;
         protected SubsystemAudio m_subsystemAudio => SubsystemProjectiles?.m_subsystemAudio;

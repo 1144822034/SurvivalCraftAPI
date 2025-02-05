@@ -82,7 +82,7 @@ namespace Game
 				Pickable pickable = m_subsystemPickables.CreatePickable(value, 1, position, s * (vector + m_random.Vector3(0.2f)), null, Entity);
                 ModsManager.HookAction("OnDispenserDispensePickable", loader =>
 				{
-					loader.OnDispenserDispense(this, ref pickable, ref removeSlotCount);
+					loader.OnDispenserDispensePickable(this, ref pickable, ref removeSlotCount);
 					return false;
                 });
 				if (pickable != null) {

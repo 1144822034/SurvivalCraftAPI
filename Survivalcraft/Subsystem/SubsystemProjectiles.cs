@@ -206,8 +206,9 @@ namespace Game
 		{
 			m_drawBlockEnvironmentData.SubsystemTerrain = m_subsystemTerrain;
 			m_drawBlockEnvironmentData.InWorldMatrix = Matrix.Identity;
-			foreach (Projectile projectile in m_projectiles)
+			for(int i = 0; i < m_projectiles.Count; i++)
 			{
+				Projectile projectile = m_projectiles[i];
 				try
 				{
 					projectile.SubsystemProjectiles = this;
