@@ -22,8 +22,7 @@ namespace Game
 
 		public int m_visibleSlotsCount = 10;
 
-		public const int m_largeNumber = 9999;
-
+		public const int m_largeNumber = 0x1fffffff;
 		public int OpenSlotsCount
 		{
 			get;
@@ -159,7 +158,7 @@ namespace Game
 				{
 					return 0;
 				}
-				return 9999;
+				return m_largeNumber;
 			}
 			return 0;
 		}
@@ -172,14 +171,14 @@ namespace Game
 			}
 			if (slotIndex >= 0 && slotIndex < OpenSlotsCount)
 			{
-				return 99980001;
+				return m_largeNumber << 1;
 			}
 			int num = Terrain.ExtractContents(value);
 			if (BlocksManager.Blocks[num].IsNonDuplicable_(value))
 			{
-				return 9999;
+				return m_largeNumber;
 			}
-			return 99980001;
+			return m_largeNumber << 1;
 		}
 
 		public virtual int GetSlotProcessCapacity(int slotIndex, int value)
@@ -202,7 +201,7 @@ namespace Game
 			{
 				return 0;
 			}
-			return 9999;
+			return m_largeNumber;
 		}
 
 		public virtual void AddSlotItems(int slotIndex, int value, int count)
@@ -253,7 +252,7 @@ namespace Game
 					m_slots[slotIndex] = 0;
 					return 1;
 				}
-				if (count >= 9999)
+				if (count >= m_largeNumber)
 				{
 					m_slots[slotIndex] = 0;
 					return 1;

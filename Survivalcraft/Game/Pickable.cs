@@ -131,7 +131,7 @@ namespace Game
 				for(int i = 0; i < blockBehaviors.Length; i++)
 				{
 					if(isMovingRaycastDominant) blockBehaviors[i].OnHitByProjectile(movingBlocksRaycastResult.Value.MovingBlock,this); 
-					else blockBehaviors[i].OnHitByProjectile(terrainRaycastResult.Value.CellFace,this);
+					else if(terrainRaycastResult.HasValue) blockBehaviors[i].OnHitByProjectile(terrainRaycastResult.Value.CellFace,this);
 				}
 
 				if (terrainRaycastResult.HasValue)

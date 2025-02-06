@@ -12,7 +12,7 @@ namespace Game
 
 		public List<int> m_slots = [];
 
-		public const int m_largeNumber = 9999;
+		public const int m_largeNumber = 0x1fffffff;
 
 		public int PageIndex
 		{
@@ -107,14 +107,14 @@ namespace Game
 				{
 					return 0;
 				}
-				return 9999;
+				return m_largeNumber;
 			}
 			return 0;
 		}
 
 		public virtual int GetSlotCapacity(int slotIndex, int value)
 		{
-			return 99980001;
+			return m_largeNumber << 1;
 		}
 
 		public virtual int GetSlotProcessCapacity(int slotIndex, int value)
@@ -133,7 +133,7 @@ namespace Game
 					}
 				}
 			}
-			return 9999;
+			return m_largeNumber;
 		}
 
 		public virtual void AddSlotItems(int slotIndex, int value, int count)
