@@ -415,7 +415,7 @@ public class TerrainContentsGenerator24 : ITerrainContentsGenerator
 	{
 		foreach(ChunkGenerationStep step in ChunkGenerationStep1)
 		{
-			if(step.ShouldGenerate) step.GenerateAction(chunk);
+			CallChunkGenerationStepAction(step,chunk);
 		}
 	}
 
@@ -423,7 +423,7 @@ public class TerrainContentsGenerator24 : ITerrainContentsGenerator
 	{
 		foreach(ChunkGenerationStep step in ChunkGenerationStep2)
 		{
-			if(step.ShouldGenerate) step.GenerateAction(chunk);
+			CallChunkGenerationStepAction(step,chunk);
 		}
 	}
 
@@ -431,7 +431,7 @@ public class TerrainContentsGenerator24 : ITerrainContentsGenerator
 	{
 		foreach(ChunkGenerationStep step in ChunkGenerationStep3)
 		{
-			if(step.ShouldGenerate) step.GenerateAction(chunk);
+			CallChunkGenerationStepAction(step,chunk);
 		}
 	}
 
@@ -439,7 +439,7 @@ public class TerrainContentsGenerator24 : ITerrainContentsGenerator
 	{
 		foreach(ChunkGenerationStep step in ChunkGenerationStep4)
 		{
-			if(step.ShouldGenerate) step.GenerateAction(chunk);
+			CallChunkGenerationStepAction(step,chunk);
 		}
 	}
 
@@ -2472,5 +2472,22 @@ public class TerrainContentsGenerator24 : ITerrainContentsGenerator
 			loader.OnTerrainBrushesCreated();
 			return false;
 		});
+	}
+
+	public virtual void CallChunkGenerationStepAction(ChunkGenerationStep step, TerrainChunk chunk)
+	{
+		try
+		{
+			if(step.ShouldGenerate) step.GenerateAction(chunk);
+		}
+		catch(Exception e)
+		{
+			if(!step.ErrorLogged)
+			{
+				Log.Error("ChunkGenerationStep \"" + step.Name + "\" at generateOrder " + step.GenerateOrder);
+				Log.Error(e);
+			}
+			step.ErrorLogged = true;
+		}
 	}
 }
