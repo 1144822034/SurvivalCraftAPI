@@ -39,7 +39,7 @@ namespace Game
 				Blinking = blinking;
 			}
 
-			public void Update()
+			public virtual void Update()
 			{
 				float num;
 				if (Blinking)
@@ -72,9 +72,14 @@ namespace Game
 		{
 			if (!string.IsNullOrEmpty(text))
 			{
-				AddMessage(new Message(text, color, blinking,fontScale));
-				RemoveOldMessages();
+				DisplayMessage(new Message(text,color,blinking,fontScale));
 			}
+		}
+
+		public void DisplayMessage(Message message)
+		{
+			AddMessage(message);
+			RemoveOldMessages();
 		}
 
 		public override void Update()

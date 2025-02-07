@@ -236,12 +236,24 @@ namespace Game
 				StartTime = Time.RealTime + delay
 			};
 		}
-		public virtual void DisplaySmallMessage(string text, Color color, bool blinking, bool playNotificationSound,float fontScale=1f)
+		public virtual void DisplaySmallMessage(string text, Color color, bool blinking, bool playNotificationSound, float fontScale=1f)
 		{
-			m_messageWidget.DisplayMessage(text, color, blinking,fontScale);
-			if (playNotificationSound)
+			MessageWidget.Message message = new(text,color,blinking,fontScale); 
+			DisplaySmallMessage(message, playNotificationSound);
+		}
+
+
+		/// <summary>
+		/// 模组如果需要自定义类型的DisplaySmallMessage，比如彩虹渐变色的Message，可以自己建立对应的Message类型，并调用这个接口
+		/// </summary>
+		/// <param name="message"></param>
+		/// <param name="playNotificationSound"></param>
+		public virtual void DisplaySmallMessage(MessageWidget.Message message, bool playNotificationSound)
+		{
+			m_messageWidget.DisplayMessage(message);
+			if(playNotificationSound)
 			{
-				m_subsystemAudio.PlaySound("Audio/UI/Message", 1f, 0f, 0f, 0f);
+				m_subsystemAudio.PlaySound("Audio/UI/Message",1f,0f,0f,0f);
 			}
 		}
 

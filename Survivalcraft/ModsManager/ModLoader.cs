@@ -103,6 +103,22 @@ namespace Game
             Digged = false;
         }
 
+
+		/// <summary>
+		/// 在人物放置时执行，在OnMinerPlace之前
+		/// </summary>
+		/// <param name="componentMiner"></param>
+		/// <param name="terrainRaycastResult"></param>
+		/// <param name="x">放置方块的坐标x</param>
+		/// <param name="y">放置方块的坐标y</param>
+		/// <param name="z">放置方块的坐标z</param>
+		/// <param name="placementData">包含放置方块的方块表面等信息</param>
+		/// <param name="PlacementNotAllowed">返回true则玩家不能放置方块</param>
+		public virtual void BeforeMinerPlace(ComponentMiner componentMiner, TerrainRaycastResult terrainRaycastResult, int x, int y, int z, BlockPlacementData placementData, out bool PlacementNotAllowed)
+		{
+			PlacementNotAllowed = false;
+		}
+
         /// <summary>
         /// 当人物放置时执行，若Placed为true则不执行原放置操作
         /// </summary>
@@ -1571,7 +1587,7 @@ namespace Game
 		}
 
 		/// <summary>
-		/// 生物在选择追捕对象时，对被追捕对象的评分。评分越高，则会被选中。
+		/// 生物在选择追击对象时，对被追击对象的评分。评分越高，则会被选中。
 		/// </summary>
 		/// <param name="chaseBehavior"></param>
 		/// <param name="creatureToBeTarget">被评估的对象</param>

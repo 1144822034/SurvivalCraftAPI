@@ -261,6 +261,13 @@ namespace Game
 					int num3 = placementData.CellFace.Y + point.Y;
 					int num4 = placementData.CellFace.Z + point.Z;
 					bool placed = false;
+					bool placementNotAllowed_ = false;
+					ModsManager.HookAction("BeforeMinerPlace",loader => {
+						loader.BeforeMinerPlace(this, raycastResult, num2, num3, num4, placementData, out bool placementNotAllowed);
+						placementNotAllowed_ |= placementNotAllowed;
+						return false;
+					});
+					if(placementNotAllowed_) return false;
 					ModsManager.HookAction("OnMinerPlace", modLoader =>
 					{
 						modLoader.OnMinerPlace(this, raycastResult, num2, num3, num4, value, out bool Placed);
@@ -406,7 +413,7 @@ namespace Game
             ModsManager.HookAction("OnMinerHit", modLoader =>
 			{
 				modLoader.OnMinerHit(this, componentBody, hitPoint, hitDirection, ref num, ref num2, ref num3, out bool Hitted);
-				return Hitted;
+				return false;
 			});
 
 			if (ComponentPlayer != null)
