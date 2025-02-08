@@ -1,6 +1,3 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Reflection;
 using System.Runtime.CompilerServices;
 
@@ -388,7 +385,7 @@ namespace Engine.Serialization
 			}
             throw new InvalidOperationException("Serialization methods not found in " + serializerType.Name);
 		}
-
+        /*
 		private static SerializeData CreateSerializeDataForSerializableHelper<T>() where T : ISerializable
 		{
             SerializeData<T> serializeData = new SerializeData<T>();
@@ -413,7 +410,7 @@ namespace Engine.Serialization
             {
                 serializeData.Read = delegate(InputArchive archive, ref object value)
                 {
-                    ((T)value/*cast due to .constrained prefix*/).Serialize(archive);
+                    ((T)value $cast due to .constrained prefix$ ).Serialize(archive);
                 };
             }
             serializeData.Write = delegate (OutputArchive archive, object value)
@@ -423,7 +420,7 @@ namespace Engine.Serialization
             serializeData.AutoConstruct = AutoConstructMode.Yes;
 			return serializeData;
 		}
-
+        
         private static SerializeData CreateSerializeDataForSerializerHelper<T>(Delegate readDelegate, Delegate writeDelegate)
         {
             ReadDelegateGeneric<T> readDelegateGeneric = (ReadDelegateGeneric<T>)readDelegate;
@@ -444,7 +441,7 @@ namespace Engine.Serialization
                 }
             };
         }
-
+        */
         private static void ApplySerializationOptionsAttribute(SerializeData serializeData, TypeInfo attributeTarget)
         {
             SerializationOptionsAttribute serializationOptionsAttribute = (SerializationOptionsAttribute)attributeTarget.GetCustomAttribute(typeof(SerializationOptionsAttribute));

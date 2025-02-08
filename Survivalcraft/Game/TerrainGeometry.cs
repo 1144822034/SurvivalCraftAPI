@@ -78,7 +78,7 @@ namespace Game
 
         public virtual TerrainGeometry GetGeometry(Texture2D texture)
         {
-            if (Draws == null) Draws = new ();
+            Draws ??= [];
             if (Draws.TryGetValue(texture, out var geometries)) return geometries;
             else
             {

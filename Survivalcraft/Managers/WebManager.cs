@@ -104,7 +104,6 @@ namespace Game
 								client.DefaultRequestHeaders.Add(header.Key, header.Value);
 							}
 						}
-						ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls13;
 						HttpResponseMessage responseMessage = await client.GetAsync(requestUri, HttpCompletionOption.ResponseHeadersRead, progress.CancellationToken);
 						await VerifyResponse(responseMessage);
 						long? contentLength = responseMessage.Content.Headers.ContentLength;
