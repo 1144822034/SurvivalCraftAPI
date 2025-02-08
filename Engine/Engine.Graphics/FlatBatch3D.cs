@@ -2,8 +2,8 @@ using System.Collections.Generic;
 
 namespace Engine.Graphics
 {
-	public  class FlatBatch3D : BaseFlatBatch
-	{
+    public class FlatBatch3D : BaseFlatBatch
+    {
         public FlatBatch3D()
         {
             base.DepthStencilState = DepthStencilState.Default;
@@ -133,6 +133,42 @@ namespace Engine.Graphics
                 }
             }
         }
+        /// <summary>
+        /// 绘制圆柱
+        /// </summary>
+        public void QueueCurvedCylinder(Vector3 start, Vector3 end, float radius, Color color, int segments = 12, bool drawTopAndBottom = true)
+        {
+            // 计算圆柱的高度
+            float height = Vector3.Distance(start, end);
+
+            // 计算圆柱的方向
+            Vector3 direction = Vector3.Normalize(end - start);
+
+            // 计算圆柱的基准点
+            Vector3 baseCenter = start + (direction * (height / 2));
+
+            // 绘制圆柱的侧面
+            for (int i = 0; i < segments; i++)
+            {
+                float angle1 = (float)(2 * Math.PI * i / segments);
+                float angle2 = (float)(2 * Math.PI * (i + 1) / segments);
+
+                Vector3 point1 = baseCenter + new Vector3(radius * MathF.Cos(angle1), -height / 2, radius * MathF.Sin(angle1));
+                Vector3 point2 = baseCenter + new Vector3(radius * MathF.Cos(angle2), -height / 2, radius * MathF.Sin(angle2));
+                Vector3 point3 = baseCenter + new Vector3(radius * MathF.Cos(angle1), height / 2, radius * MathF.Sin(angle1));
+                Vector3 point4 = baseCenter + new Vector3(radius * MathF.Cos(angle2), height / 2, radius * MathF.Sin(angle2));
+
+                // 绘制侧面
+                QueueTriangle(point1, point2, point3, color);
+                QueueTriangle(point2, point4, point3, color);
+            }
+            if (drawTopAndBottom)
+            {
+                // 绘制圆柱的顶部和底部
+                QueueCircle(baseCenter + new Vector3(0, height / 2, 0), radius, segments, color);
+                QueueCircle(baseCenter + new Vector3(0, -height / 2, 0), radius, segments, color);
+            }
+        }
 
         public void QueueBatchTriangles(FlatBatch3D batch, Matrix? matrix = null, Color? color = null)
         {
@@ -181,108 +217,126 @@ namespace Engine.Graphics
             QueueBatchLines(batch, matrix, color);
             QueueBatchTriangles(batch, matrix, color);
         }
-		public void QueueLine(Vector3 p1, Vector3 p2, Color color)
-		{
-			int count = LineVertices.Count;
-			LineVertices.Add(new VertexPositionColor(p1, color));
-			LineVertices.Add(new VertexPositionColor(p2, color));
-			LineIndices.Add(count);
-			LineIndices.Add(count + 1);
-		}
+        public void QueueLine(Vector3 p1, Vector3 p2, Color color)
+        {
+            int count = LineVertices.Count;
+            LineVertices.Add(new VertexPositionColor(p1, color));
+            LineVertices.Add(new VertexPositionColor(p2, color));
+            LineIndices.Add(count);
+            LineIndices.Add(count + 1);
+        }
 
-		public void QueueLine(Vector3 p1, Vector3 p2, Color color1, Color color2)
-		{
-			int count = LineVertices.Count;
-			LineVertices.Add(new VertexPositionColor(p1, color1));
-			LineVertices.Add(new VertexPositionColor(p2, color2));
-			LineIndices.Add(count);
-			LineIndices.Add(count + 1);
-		}
+        public void QueueLine(Vector3 p1, Vector3 p2, Color color1, Color color2)
+        {
+            int count = LineVertices.Count;
+            LineVertices.Add(new VertexPositionColor(p1, color1));
+            LineVertices.Add(new VertexPositionColor(p2, color2));
+            LineIndices.Add(count);
+            LineIndices.Add(count + 1);
+        }
 
-		public void QueueLineStrip(IEnumerable<Vector3> points, Color color)
-		{
-			int count = LineVertices.Count;
-			int num = 0;
-			foreach (Vector3 point in points)
-			{
-				LineVertices.Add(new VertexPositionColor(point, color));
-				num++;
-			}
-			for (int i = 0; i < num - 1; i++)
-			{
-				LineIndices.Add(count + i);
-				LineIndices.Add(count + i + 1);
-			}
-		}
+        public void QueueLineStrip(IEnumerable<Vector3> points, Color color)
+        {
+            int count = LineVertices.Count;
+            int num = 0;
+            foreach (Vector3 point in points)
+            {
+                LineVertices.Add(new VertexPositionColor(point, color));
+                num++;
+            }
+            for (int i = 0; i < num - 1; i++)
+            {
+                LineIndices.Add(count + i);
+                LineIndices.Add(count + i + 1);
+            }
+        }
 
-		public void QueueTriangle(Vector3 p1, Vector3 p2, Vector3 p3, Color color)
-		{
-			int count = TriangleVertices.Count;
-			TriangleVertices.Add(new VertexPositionColor(p1, color));
-			TriangleVertices.Add(new VertexPositionColor(p2, color));
-			TriangleVertices.Add(new VertexPositionColor(p3, color));
-			TriangleIndices.Add(count);
-			TriangleIndices.Add(count + 1);
-			TriangleIndices.Add(count + 2);
-		}
+        public void QueueTriangle(Vector3 p1, Vector3 p2, Vector3 p3, Color color)
+        {
+            int count = TriangleVertices.Count;
+            TriangleVertices.Add(new VertexPositionColor(p1, color));
+            TriangleVertices.Add(new VertexPositionColor(p2, color));
+            TriangleVertices.Add(new VertexPositionColor(p3, color));
+            TriangleIndices.Add(count);
+            TriangleIndices.Add(count + 1);
+            TriangleIndices.Add(count + 2);
+        }
 
-		public void QueueTriangle(Vector3 p1, Vector3 p2, Vector3 p3, Color color1, Color color2, Color color3)
-		{
-			int count = TriangleVertices.Count;
-			TriangleVertices.Add(new VertexPositionColor(p1, color1));
-			TriangleVertices.Add(new VertexPositionColor(p2, color2));
-			TriangleVertices.Add(new VertexPositionColor(p3, color3));
-			TriangleIndices.Add(count);
-			TriangleIndices.Add(count + 1);
-			TriangleIndices.Add(count + 2);
-		}
+        public void QueueTriangle(Vector3 p1, Vector3 p2, Vector3 p3, Color color1, Color color2, Color color3)
+        {
+            int count = TriangleVertices.Count;
+            TriangleVertices.Add(new VertexPositionColor(p1, color1));
+            TriangleVertices.Add(new VertexPositionColor(p2, color2));
+            TriangleVertices.Add(new VertexPositionColor(p3, color3));
+            TriangleIndices.Add(count);
+            TriangleIndices.Add(count + 1);
+            TriangleIndices.Add(count + 2);
+        }
+        /// <summary>
+        /// 绘制矩形(支持渐变)
+        /// </summary>
+        public void QueueQuad(Vector3 p1, Vector3 p2, Vector3 p3, Vector3 p4, Color color1, Color color2, Color color3, Color color4)
+        {
+            int count = TriangleVertices.Count;
+            TriangleVertices.Add(new VertexPositionColor(p1, color1)); // 左上
+            TriangleVertices.Add(new VertexPositionColor(p2, color2)); // 右上
+            TriangleVertices.Add(new VertexPositionColor(p3, color3)); // 左下
+            TriangleVertices.Add(new VertexPositionColor(p4, color4)); // 右下
 
-		public void QueueQuad(Vector3 p1, Vector3 p2, Vector3 p3, Vector3 p4, Color color)
-		{
-			int count = TriangleVertices.Count;
-			TriangleVertices.Add(new VertexPositionColor(p1, color));
-			TriangleVertices.Add(new VertexPositionColor(p2, color));
-			TriangleVertices.Add(new VertexPositionColor(p3, color));
-			TriangleVertices.Add(new VertexPositionColor(p4, color));
-			TriangleIndices.Add(count);
-			TriangleIndices.Add(count + 1);
-			TriangleIndices.Add(count + 2);
-			TriangleIndices.Add(count + 2);
-			TriangleIndices.Add(count + 3);
-			TriangleIndices.Add(count);
-		}
+            TriangleIndices.Add(count);
+            TriangleIndices.Add(count + 1);
+            TriangleIndices.Add(count + 2);
 
-		public void QueueBoundingBox(BoundingBox boundingBox, Color color)
-		{
-			QueueLine(new Vector3(boundingBox.Min.X, boundingBox.Min.Y, boundingBox.Min.Z), new Vector3(boundingBox.Max.X, boundingBox.Min.Y, boundingBox.Min.Z), color);
-			QueueLine(new Vector3(boundingBox.Max.X, boundingBox.Min.Y, boundingBox.Min.Z), new Vector3(boundingBox.Max.X, boundingBox.Max.Y, boundingBox.Min.Z), color);
-			QueueLine(new Vector3(boundingBox.Max.X, boundingBox.Max.Y, boundingBox.Min.Z), new Vector3(boundingBox.Min.X, boundingBox.Max.Y, boundingBox.Min.Z), color);
-			QueueLine(new Vector3(boundingBox.Min.X, boundingBox.Max.Y, boundingBox.Min.Z), new Vector3(boundingBox.Min.X, boundingBox.Min.Y, boundingBox.Min.Z), color);
-			QueueLine(new Vector3(boundingBox.Min.X, boundingBox.Min.Y, boundingBox.Max.Z), new Vector3(boundingBox.Max.X, boundingBox.Min.Y, boundingBox.Max.Z), color);
-			QueueLine(new Vector3(boundingBox.Max.X, boundingBox.Min.Y, boundingBox.Max.Z), new Vector3(boundingBox.Max.X, boundingBox.Max.Y, boundingBox.Max.Z), color);
-			QueueLine(new Vector3(boundingBox.Max.X, boundingBox.Max.Y, boundingBox.Max.Z), new Vector3(boundingBox.Min.X, boundingBox.Max.Y, boundingBox.Max.Z), color);
-			QueueLine(new Vector3(boundingBox.Min.X, boundingBox.Max.Y, boundingBox.Max.Z), new Vector3(boundingBox.Min.X, boundingBox.Min.Y, boundingBox.Max.Z), color);
-			QueueLine(new Vector3(boundingBox.Min.X, boundingBox.Min.Y, boundingBox.Min.Z), new Vector3(boundingBox.Min.X, boundingBox.Min.Y, boundingBox.Max.Z), color);
-			QueueLine(new Vector3(boundingBox.Min.X, boundingBox.Max.Y, boundingBox.Min.Z), new Vector3(boundingBox.Min.X, boundingBox.Max.Y, boundingBox.Max.Z), color);
-			QueueLine(new Vector3(boundingBox.Max.X, boundingBox.Max.Y, boundingBox.Min.Z), new Vector3(boundingBox.Max.X, boundingBox.Max.Y, boundingBox.Max.Z), color);
-			QueueLine(new Vector3(boundingBox.Max.X, boundingBox.Min.Y, boundingBox.Min.Z), new Vector3(boundingBox.Max.X, boundingBox.Min.Y, boundingBox.Max.Z), color);
-		}
+            TriangleIndices.Add(count + 2);
+            TriangleIndices.Add(count + 1);
+            TriangleIndices.Add(count + 3);
+        }
+        public void QueueQuad(Vector3 p1, Vector3 p2, Vector3 p3, Vector3 p4, Color color)
+        {
+            int count = TriangleVertices.Count;
+            TriangleVertices.Add(new VertexPositionColor(p1, color));
+            TriangleVertices.Add(new VertexPositionColor(p2, color));
+            TriangleVertices.Add(new VertexPositionColor(p3, color));
+            TriangleVertices.Add(new VertexPositionColor(p4, color));
+            TriangleIndices.Add(count);
+            TriangleIndices.Add(count + 1);
+            TriangleIndices.Add(count + 2);
+            TriangleIndices.Add(count + 2);
+            TriangleIndices.Add(count + 3);
+            TriangleIndices.Add(count);
+        }
 
-		public void QueueBoundingFrustum(BoundingFrustum boundingFrustum, Color color)
-		{
+        public void QueueBoundingBox(BoundingBox boundingBox, Color color)
+        {
+            QueueLine(new Vector3(boundingBox.Min.X, boundingBox.Min.Y, boundingBox.Min.Z), new Vector3(boundingBox.Max.X, boundingBox.Min.Y, boundingBox.Min.Z), color);
+            QueueLine(new Vector3(boundingBox.Max.X, boundingBox.Min.Y, boundingBox.Min.Z), new Vector3(boundingBox.Max.X, boundingBox.Max.Y, boundingBox.Min.Z), color);
+            QueueLine(new Vector3(boundingBox.Max.X, boundingBox.Max.Y, boundingBox.Min.Z), new Vector3(boundingBox.Min.X, boundingBox.Max.Y, boundingBox.Min.Z), color);
+            QueueLine(new Vector3(boundingBox.Min.X, boundingBox.Max.Y, boundingBox.Min.Z), new Vector3(boundingBox.Min.X, boundingBox.Min.Y, boundingBox.Min.Z), color);
+            QueueLine(new Vector3(boundingBox.Min.X, boundingBox.Min.Y, boundingBox.Max.Z), new Vector3(boundingBox.Max.X, boundingBox.Min.Y, boundingBox.Max.Z), color);
+            QueueLine(new Vector3(boundingBox.Max.X, boundingBox.Min.Y, boundingBox.Max.Z), new Vector3(boundingBox.Max.X, boundingBox.Max.Y, boundingBox.Max.Z), color);
+            QueueLine(new Vector3(boundingBox.Max.X, boundingBox.Max.Y, boundingBox.Max.Z), new Vector3(boundingBox.Min.X, boundingBox.Max.Y, boundingBox.Max.Z), color);
+            QueueLine(new Vector3(boundingBox.Min.X, boundingBox.Max.Y, boundingBox.Max.Z), new Vector3(boundingBox.Min.X, boundingBox.Min.Y, boundingBox.Max.Z), color);
+            QueueLine(new Vector3(boundingBox.Min.X, boundingBox.Min.Y, boundingBox.Min.Z), new Vector3(boundingBox.Min.X, boundingBox.Min.Y, boundingBox.Max.Z), color);
+            QueueLine(new Vector3(boundingBox.Min.X, boundingBox.Max.Y, boundingBox.Min.Z), new Vector3(boundingBox.Min.X, boundingBox.Max.Y, boundingBox.Max.Z), color);
+            QueueLine(new Vector3(boundingBox.Max.X, boundingBox.Max.Y, boundingBox.Min.Z), new Vector3(boundingBox.Max.X, boundingBox.Max.Y, boundingBox.Max.Z), color);
+            QueueLine(new Vector3(boundingBox.Max.X, boundingBox.Min.Y, boundingBox.Min.Z), new Vector3(boundingBox.Max.X, boundingBox.Min.Y, boundingBox.Max.Z), color);
+        }
+
+        public void QueueBoundingFrustum(BoundingFrustum boundingFrustum, Color color)
+        {
             ReadOnlyList<Vector3> array = boundingFrustum.Corners;
-			QueueLine(array[0], array[1], color);
-			QueueLine(array[1], array[2], color);
-			QueueLine(array[2], array[3], color);
-			QueueLine(array[3], array[0], color);
-			QueueLine(array[4], array[5], color);
-			QueueLine(array[5], array[6], color);
-			QueueLine(array[6], array[7], color);
-			QueueLine(array[7], array[4], color);
-			QueueLine(array[0], array[4], color);
-			QueueLine(array[1], array[5], color);
-			QueueLine(array[2], array[6], color);
-			QueueLine(array[3], array[7], color);
-		}
-	}
+            QueueLine(array[0], array[1], color);
+            QueueLine(array[1], array[2], color);
+            QueueLine(array[2], array[3], color);
+            QueueLine(array[3], array[0], color);
+            QueueLine(array[4], array[5], color);
+            QueueLine(array[5], array[6], color);
+            QueueLine(array[6], array[7], color);
+            QueueLine(array[7], array[4], color);
+            QueueLine(array[0], array[4], color);
+            QueueLine(array[1], array[5], color);
+            QueueLine(array[2], array[6], color);
+            QueueLine(array[3], array[7], color);
+        }
+    }
 }
