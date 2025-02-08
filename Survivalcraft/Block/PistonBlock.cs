@@ -76,6 +76,10 @@ namespace Game
 			}
 			return false;
 		}
+		public override bool IsFaceNonAttachable(SubsystemTerrain subsystemTerrain,int face,int value,int attachBlockValue)
+		{
+			return IsFaceTransparent(subsystemTerrain,face,value);
+		}
 
 		public override void GenerateTerrainVertices(BlockGeometryGenerator generator, TerrainGeometry geometry, int value, int x, int y, int z)
 		{

@@ -45,6 +45,11 @@ namespace Game
 			return face != GetFace(data);
 		}
 
+		public override bool IsFaceNonAttachable(SubsystemTerrain subsystemTerrain,int face,int value,int attachBlockValue)
+		{
+			return IsFaceTransparent(subsystemTerrain,face,value);
+		}
+
 		public override int GetShadowStrength(int value)
 		{
 			if (!GetIsShaft(Terrain.ExtractData(value)))

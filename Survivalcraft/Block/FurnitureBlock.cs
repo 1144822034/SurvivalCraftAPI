@@ -540,7 +540,7 @@ namespace Game
 				{
 					Point3 point = CellFace.FaceToPoint3(face);
 					int cellValue = terrain.Terrain.GetCellValue(x - point.X, y - point.Y, z - point.Z);
-					if (true)
+					if (!BlocksManager.Blocks[Terrain.ExtractContents(cellValue)].IsFaceNonAttachable(terrain, CellFace.OppositeFace(num), cellValue, value))
 					{
 						if (design.InteractionMode == FurnitureInteractionMode.Multistate || design.InteractionMode == FurnitureInteractionMode.ConnectedMultistate)
 						{
