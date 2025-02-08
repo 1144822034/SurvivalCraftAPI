@@ -241,10 +241,8 @@ namespace Game
 			MessageWidget.Message message = new(text,color,blinking,fontScale); 
 			DisplaySmallMessage(message, playNotificationSound);
 		}
-
-
 		/// <summary>
-		/// 模组如果需要自定义类型的DisplaySmallMessage，比如彩虹渐变色的Message，可以自己建立对应的Message类型，并调用这个接口
+		/// 模组如果需要自定义类型的DisplaySmallMessage，比如彩虹渐变色的Message，可以自己建立对应的Message类型，并调用这个方法
 		/// </summary>
 		/// <param name="message"></param>
 		/// <param name="playNotificationSound"></param>

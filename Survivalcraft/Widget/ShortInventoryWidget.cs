@@ -9,6 +9,12 @@ namespace Game
 
 		public IInventory m_inventory;
 
+		public int MinVisibleSlotsCount = 7;
+
+		public int MaxVisibleSlotsCount = 7;
+
+		public int MaxVisibleSlotsCountInCreative = 10;
+
 		public ShortInventoryWidget()
 		{
 			XElement node = ContentManager.Get<XElement>("Widgets/ShortInventoryWidget");
@@ -27,8 +33,8 @@ namespace Game
 
 		public override void MeasureOverride(Vector2 parentAvailableSize)
 		{
-			int max = (m_inventory is ComponentCreativeInventory) ? 10 : 7;
-			m_inventory.VisibleSlotsCount = Math.Clamp((int)((parentAvailableSize.X - 320f - 25f) / 72f), 7, max);
+			int max = (m_inventory is ComponentCreativeInventory) ? MaxVisibleSlotsCountInCreative : MaxVisibleSlotsCount;
+			m_inventory.VisibleSlotsCount = Math.Clamp((int)((parentAvailableSize.X - 320f - 25f) / 72f), MinVisibleSlotsCount, max);
 			if (m_inventory.VisibleSlotsCount != m_inventoryGrid.Children.Count)
 			{
 				m_inventoryGrid.Children.Clear();
