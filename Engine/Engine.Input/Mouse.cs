@@ -12,8 +12,6 @@ namespace Engine.Input
         public static IMouse m_mouse;
 
 		public static Point2? m_lastMousePosition;
-
-		public static int? m_lastMouseWheelValue;
 #endif
 		private static bool[] m_mouseButtonsDownArray;
 
@@ -69,6 +67,7 @@ namespace Engine.Input
             m_mouse.MouseDown += MouseDownHandler;
             m_mouse.MouseUp += MouseUpHandler;
             m_mouse.MouseMove += MouseMoveHandler;
+            m_mouse.Scroll += MouseWheelHandler;
 #endif
 		}
 
@@ -88,17 +87,11 @@ namespace Engine.Input
 				{
 					MouseMovement = new Point2(position.X - m_lastMousePosition.Value.X, position.Y - m_lastMousePosition.Value.Y);
 				}
-				if (m_lastMouseWheelValue.HasValue)
-				{
-					MouseWheelMovement = 120 * wheel;
-				}
 				m_lastMousePosition = position;
-				m_lastMouseWheelValue = wheel;
 			}
 			else
 			{
 				m_lastMousePosition = null;
-				m_lastMouseWheelValue = null;
 			}
 #endif
 		}
@@ -128,6 +121,11 @@ namespace Engine.Input
 		{
 			ProcessMouseMove(new Point2((int)position.X, (int)position.Y));
 		}
+
+        private static void MouseWheelHandler(IMouse mouse, ScrollWheel scrollWheel)
+        {
+            ProcessMouseWheel(scrollWheel.Y);
+        }
 
 		public static MouseButton TranslateMouseButton(Silk.NET.Input.MouseButton mouseButton)
 		{
@@ -207,6 +205,7 @@ namespace Engine.Input
                 m_mouse.Cursor.CursorMode = CursorMode.Normal;
 #endif
             }
+            MouseWheelMovement = 0;
         }
 
         public static void ProcessMouseDown(MouseButton mouseButton, Point2 position)
@@ -270,5 +269,14 @@ namespace Engine.Input
 				});
 			}
 		}
+
+        public static void ProcessMouseWheel(float value)
+        {
+            if (Window.IsActive
+                && !Keyboard.IsKeyboardVisible)
+            {
+                MouseWheelMovement += (int)(120 * value);
+            }
+        }
 	}
 }
