@@ -2,7 +2,7 @@
     <PropertyGroup>
 		<TargetFrameworks Condition=" '$(Configuration)' == 'Release' ">net9.0;net9.0-windows</TargetFrameworks>
 		<TargetFramework Condition=" '$(Configuration)' == 'Debug' ">net9.0-windows</TargetFramework>
-		<OutputType Condition="'$(TargetFramework)' == 'net9'">library</OutputType>
+		<OutputType Condition="'$(TargetFramework)' == 'net9.0'">library</OutputType>
 		<NoWarn>1701;1702;CA1416;1591;1572;1573;1587</NoWarn>
 		<RootNamespace>Game</RootNamespace>
         <IsWebBootstrapper>false</IsWebBootstrapper>
@@ -98,9 +98,6 @@
 		<EmbeddedResource Include="init.js">
 			<CopyToOutputDirectory>Never</CopyToOutputDirectory>
 		</EmbeddedResource>
-    </ItemGroup>
-    <ItemGroup Condition="'$(TargetFramework)' == 'net9.0-windows'">
-      <PackageReference Include="System.Configuration.ConfigurationManager" Version="9.0.1" />
     </ItemGroup>
     <PropertyGroup>
         <AssemblyVersion>2.4.0.0</AssemblyVersion>

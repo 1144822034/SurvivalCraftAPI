@@ -34,10 +34,10 @@ namespace Game
 					{
 						case ScreenshotSize.ScreenSize:
 							{
-								num = MathUtils.Max(Window.ScreenSize.X, Window.ScreenSize.Y);
-								height = MathUtils.Min(Window.ScreenSize.X, Window.ScreenSize.Y);
+								num = Math.Max(Window.ScreenSize.X, Window.ScreenSize.Y);
+								height = Math.Min(Window.ScreenSize.X, Window.ScreenSize.Y);
 								float num2 = num / (float)height;
-								num = MathUtils.Min(num, 2048);
+								num = Math.Min(num, 2048);
 								height = (int)MathF.Round(num / num2);
 								break;
 							}
@@ -126,7 +126,7 @@ namespace Game
 						Storage.CreateDirectory(ScreenshotDir);
 					using (Stream stream = Storage.OpenFile(Storage.CombinePaths(ScreenshotDir, filename), OpenFileMode.CreateOrOpen))
 					{
-						Image.Save(renderTarget2D.GetData(new Rectangle(0, 0, renderTarget2D.Width, renderTarget2D.Height)), stream, ImageFileFormat.Jpg, saveAlpha: false);
+						Image.Save(renderTarget2D.GetData(new Rectangle(0, 0, renderTarget2D.Width, renderTarget2D.Height)), stream, ImageFileFormat.Png, saveAlpha: false);
 					}
 #else
 					string path = Storage.CombinePaths(ModsManager.ScreenCapturePath, filename);
@@ -145,3 +145,4 @@ namespace Game
 		}
 	}
 }
+//修复Image问题后将54、129、136行修改为WebP
