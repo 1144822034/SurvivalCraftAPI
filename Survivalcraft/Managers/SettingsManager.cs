@@ -518,7 +518,7 @@ namespace Game
 				GamepadCursorSpeed = 1f;
 				CreativeDigTime = 0.33f;
 				CreativeReach = 7.5f;
-				MinimumHoldDuration = 0.15f;
+				MinimumHoldDuration = 0.25f;
 				MinimumDragDistance = 10f;
 				HorizontalCreativeFlight = false;
 				DropboxAccessToken = string.Empty;

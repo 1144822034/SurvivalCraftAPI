@@ -94,7 +94,7 @@
 
           <UniformSpacingPanelWidget Direction="Horizontal" Margin="0, 3">
             <LabelWidget Text="[SettingsControlsScreen:13]"  HorizontalAlignment="Far" VerticalAlignment="Center" Margin="20, 0" />
-            <SliderWidget Name="HoldDurationSlider" Size="Infinity, 60" VerticalAlignment="Center" Margin="20, 0" MinValue="0.3" MaxValue="0.7" Granularity="0.05" />
+            <SliderWidget Name="HoldDurationSlider" Size="Infinity, 60" VerticalAlignment="Center" Margin="20, 0" MinValue="0.15" MaxValue="0.7" Granularity="0.05" />
           </UniformSpacingPanelWidget>
 
           <UniformSpacingPanelWidget Direction="Horizontal" Margin="0, 3">
