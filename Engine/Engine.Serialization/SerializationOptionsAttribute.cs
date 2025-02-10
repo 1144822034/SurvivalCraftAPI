@@ -1,4 +1,4 @@
-﻿namespace Engine.Serialization
+namespace Engine.Serialization
 {
     [AttributeUsage(AttributeTargets.Class | AttributeTargets.Struct | AttributeTargets.Interface)]
     public class SerializationOptionsAttribute : Attribute

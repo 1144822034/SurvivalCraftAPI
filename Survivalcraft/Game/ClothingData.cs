@@ -40,15 +40,15 @@ namespace Game
 		public int PlayerLevelRequired;
 
 		/// <summary>
-		/// 装备
+		/// 瑁呭
 		/// </summary>
 		public Action<int, ComponentClothing> Mount;
 		/// <summary>
-		/// 卸载
+		/// 鍗歌浇
 		/// </summary>
 		public Action<int, ComponentClothing> Dismount;
 		/// <summary>
-		/// 更新
+		/// 鏇存柊
 		/// </summary>
 		public Action<int, ComponentClothing> Update;
 

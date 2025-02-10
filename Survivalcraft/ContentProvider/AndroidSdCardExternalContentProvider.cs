@@ -1,4 +1,4 @@
-﻿#if ANDROID
+#if ANDROID
 using Engine;
 using Game;
 using System.IO;

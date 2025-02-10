@@ -1,4 +1,4 @@
-﻿using Engine;
+using Engine;
 using GameEntitySystem;
 using System;
 using TemplatesDatabase;

@@ -373,7 +373,7 @@ namespace Game
 					m_viewFogDensity = 0f;
 					m_viewFogBottom = 0f;
 					m_viewFogTop = 1f;
-					m_viewFogColor = Color.MultiplyColorOnly(c, 0.66f * num2 * num3);//ÔÚË®ÖÐµÄÊÓÍ¼ÎíÑÕÉ«
+					m_viewFogColor = Color.MultiplyColorOnly(c, 0.66f * num2 * num3);//åœ¨æ°´ä¸­çš„è§†å›¾é›¾é¢œè‰²
 					VisibilityRangeYMultiplier = 1f;
 					m_viewIsSkyVisible = false;
 				}
@@ -384,7 +384,7 @@ namespace Game
 					m_viewFogDensity = 0f;
 					m_viewFogBottom = 0f;
 					m_viewFogTop = 1f;
-					m_viewFogColor = new Color(255, 80, 0);//ÔÚÑÒ½¬ÖÐµÄÊÓÍ¼ÎíÑÕÉ«
+					m_viewFogColor = new Color(255, 80, 0);//åœ¨å²©æµ†ä¸­çš„è§†å›¾é›¾é¢œè‰²
 					VisibilityRangeYMultiplier = 1f;
 					m_viewIsSkyVisible = false;
 				}
@@ -411,7 +411,7 @@ namespace Game
 					Color color4 = CalculateSkyColor(new Vector3(0f, 0f, -1f), seasonalTemperature);
 					Color c2 = 0.25f * color + 0.25f * color2 + 0.25f * color3 + 0.25f * color4;
 					Color c3 = CalculateSkyColor(new Vector3(camera.ViewDirection.X, 0f, camera.ViewDirection.Z), seasonalTemperature);
-					//ÔÚÕý³£Çé¿öÏÂ£¨¿ÕÆøÖÐ£©ÊÓÍ¼Îí
+					//åœ¨æ­£å¸¸æƒ…å†µä¸‹ï¼ˆç©ºæ°”ä¸­ï¼‰è§†å›¾é›¾
 					m_viewFogColor = Color.Lerp(c3, c2, CalculateSkyFog(camera.ViewPosition));
 					VisibilityRangeYMultiplier = MathUtils.Lerp(VisibilityRange / num6, VisibilityRange / num7, MathF.Pow(m_subsystemWeather.PrecipitationIntensity, 4f));
 					m_viewIsSkyVisible = true;

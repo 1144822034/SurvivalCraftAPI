@@ -1,4 +1,4 @@
-﻿namespace Engine.Serialization
+namespace Engine.Serialization
 {
     public enum AutoConstructMode
     {

@@ -27,7 +27,7 @@ namespace Engine.Media
                 {
                     if (m_reader.CanSeek)
                     {
-                        long num = value * ChannelsCount * 4;//NLayer»ñÈ¡µ½µÄÊÇ32Î»float²ğ·Ö³ÉµÄ8Î»byteÊı×é
+                        long num = value * ChannelsCount * 4;//NLayerè·å–åˆ°çš„æ˜¯32ä½floatæ‹†åˆ†æˆçš„8ä½byteæ•°ç»„
                         if (num < 0 || num > BytesCount)
                         {
                             throw new ArgumentOutOfRangeException();
@@ -76,7 +76,7 @@ namespace Engine.Media
                 return num / 2;
             }
 			/// <summary>
-			/// ¸´ÖÆ³öÒ»¸öĞÂµÄÁ÷
+			/// å¤åˆ¶å‡ºä¸€ä¸ªæ–°çš„æµ
 			/// </summary>
 			/// <returns></returns>
 			public override StreamingSource Duplicate()

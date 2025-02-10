@@ -1,4 +1,4 @@
-﻿#if WINDOWS
+#if WINDOWS
 using Microsoft.Win32;
 
 namespace Game.Managers

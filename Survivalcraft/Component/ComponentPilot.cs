@@ -268,20 +268,20 @@ namespace Game
 
 		public virtual bool IsTerrainSafeToGo(Vector3 position, Vector3 direction)
 		{
-			//vectorÊÇ×Ô¼ºÅĞ¶ÏÒÆ¶¯ºóµÄÎ»ÖÃ
+			//vectoræ˜¯è‡ªå·±åˆ¤æ–­ç§»åŠ¨åçš„ä½ç½®
 			Vector3 vector = position + new Vector3(0f, 0.1f, 0f) + ((direction.LengthSquared() < 1.2f) ? new Vector3(direction.X, 0f, direction.Z) : (1.2f * Vector3.Normalize(new Vector3(direction.X, 0f, direction.Z))));
             Vector3 vector2 = position + new Vector3(0f, 0.1f, 0f) + ((direction.LengthSquared() < 1f) ? new Vector3(direction.X, 0f, direction.Z) : (1f * Vector3.Normalize(new Vector3(direction.X, 0f, direction.Z))));
             for (int i = -1; i <= 1; i++)
 			{
 				for (int j = -1; j <= 1; j++)
 				{
-					//Ö»ÓĞÏòÇ°µÄÏòÁ¿²Å±»¼ÆÈë
+					//åªæœ‰å‘å‰çš„å‘é‡æ‰è¢«è®¡å…¥
 					if (!(Vector3.Dot(direction, new Vector3(i, 0f, j)) > 0f))
 					{
 						continue;
 					}
-					//¼ì²éÆ÷Î»ÖÃµÄ·½¿é¡¢ÏÂÃæÒ»¸ñµÄ·½¿é¡¢ÏÂÃæÁ½¸ñµÄ·½¿é¡£
-					//Åöµ½Î£ÏÕ·½¿éÔò·µ»Ø²»ÊÇ°²È«·½Ïò£»Åöµ½·ÇÎ£ÏÕµÄ¿ÉÅö×²·½¿éÔòÊÇ°²È«·½Ïò
+					//æ£€æŸ¥å™¨ä½ç½®çš„æ–¹å—ã€ä¸‹é¢ä¸€æ ¼çš„æ–¹å—ã€ä¸‹é¢ä¸¤æ ¼çš„æ–¹å—ã€‚
+					//ç¢°åˆ°å±é™©æ–¹å—åˆ™è¿”å›ä¸æ˜¯å®‰å…¨æ–¹å‘ï¼›ç¢°åˆ°éå±é™©çš„å¯ç¢°æ’æ–¹å—åˆ™æ˜¯å®‰å…¨æ–¹å‘
 					for (int num = 0; num >= -2; num--)
 					{
 						int cellValue = m_subsystemTerrain.Terrain.GetCellValue(Terrain.ToCell(vector.X) + i, Terrain.ToCell(vector.Y) + num, Terrain.ToCell(vector.Z) + j);
@@ -298,7 +298,7 @@ namespace Game
 				}
 			}
 			bool isBlockBeneathDangerous = true;
-			//num2ÊÇ¼ÆËãµÄË¤Âä¸ß¶È
+			//num2æ˜¯è®¡ç®—çš„æ‘”è½é«˜åº¦
 			int num2 = TakeRisks ? m_maxFallHeightRisk : m_maxFallHeight;
 			for (int num3 = 0; num3 >= -num2 && vector2.Y + num3 >= 0; num3--)
 			{

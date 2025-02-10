@@ -11,7 +11,7 @@ namespace Engine.Graphics
             base.BlendState = BlendState.AlphaBlend;
         }
         /// <summary>
-        /// »æÖÆÇò
+        /// ç»˜åˆ¶çƒ
         /// </summary>
         public void QueueSphere(Vector3 center, float radius, int slices, int stacks, Color color)
         {
@@ -33,23 +33,23 @@ namespace Engine.Graphics
                     var b1 = lon * longitudeStep;
                     var b2 = (lon + 1) * longitudeStep;
 
-                    // ÉÏ°ëÇò¶¥µã
+                    // ä¸ŠåŠçƒé¡¶ç‚¹
                     var v1 = center + new Vector3((float)(Math.Sin(a1) * Math.Cos(b1)) * radius, (float)(Math.Cos(a1)) * radius, (float)(Math.Sin(a1) * Math.Sin(b1)) * radius);
                     var v2 = center + new Vector3((float)(Math.Sin(a2) * Math.Cos(b1)) * radius, (float)(Math.Cos(a2)) * radius, (float)(Math.Sin(a2) * Math.Sin(b1)) * radius);
                     var v3 = center + new Vector3((float)(Math.Sin(a1) * Math.Cos(b2)) * radius, (float)(Math.Cos(a1)) * radius, (float)(Math.Sin(a1) * Math.Sin(b2)) * radius);
                     var v4 = center + new Vector3((float)(Math.Sin(a2) * Math.Cos(b2)) * radius, (float)(Math.Cos(a2)) * radius, (float)(Math.Sin(a2) * Math.Sin(b2)) * radius);
 
-                    // ÏÂ°ëÇò¶¥µã
+                    // ä¸‹åŠçƒé¡¶ç‚¹
                     var v5 = center - new Vector3((float)(Math.Sin(-a1) * Math.Cos(b1)) * radius, (float)(Math.Cos(-a1)) * radius, (float)(Math.Sin(-a1) * Math.Sin(b1)) * radius);
                     var v6 = center - new Vector3((float)(Math.Sin(-a1) * Math.Cos(b2)) * radius, (float)(Math.Cos(-a1)) * radius, (float)(Math.Sin(-a1) * Math.Sin(b2)) * radius);
                     var v7 = center - new Vector3((float)(Math.Sin(-a2) * Math.Cos(b2)) * radius, (float)(Math.Cos(-a2)) * radius, (float)(Math.Sin(-a2) * Math.Sin(b2)) * radius);
                     var v8 = center - new Vector3((float)(Math.Sin(-a2) * Math.Cos(b1)) * radius, (float)(Math.Cos(-a2)) * radius, (float)(Math.Sin(-a2) * Math.Sin(b1)) * radius);
 
 
-                    // ÉÏ°ëÇòÈı½ÇĞÎ
+                    // ä¸ŠåŠçƒä¸‰è§’å½¢
                     QueueTriangle(v1, v2, v3, color);
                     QueueTriangle(v2, v4, v3, color);
-                    // ÏÂ°ëÇòÈı½ÇĞÎ
+                    // ä¸‹åŠçƒä¸‰è§’å½¢
                     QueueTriangle(v5, v6, v7, color);
                     QueueTriangle(v5, v7, v8, color);
 
@@ -57,13 +57,13 @@ namespace Engine.Graphics
             }
         }
         /// <summary>
-        /// »æÖÆÇòÏß¿ò
+        /// ç»˜åˆ¶çƒçº¿æ¡†
         /// </summary>
-        /// <param name="center">ÇòĞÄ</param>
-        /// <param name="radius">°ë¾¶</param>
-        /// <param name="longitudeLines">¾­¶ÈÏß</param>
-        /// <param name="latitudeLines">Î³¶ÈÏß</param>
-        /// <param name="draw">0±íÊ¾È«²¿»æÖÆ£¬1±íÊ¾Ö»»æÖÆÎ³ÏßÇò£¬2±íÊ¾Ö»»æÖÆ¾­ÏßÇò</param>
+        /// <param name="center">çƒå¿ƒ</param>
+        /// <param name="radius">åŠå¾„</param>
+        /// <param name="longitudeLines">ç»åº¦çº¿</param>
+        /// <param name="latitudeLines">çº¬åº¦çº¿</param>
+        /// <param name="draw">0è¡¨ç¤ºå…¨éƒ¨ç»˜åˆ¶ï¼Œ1è¡¨ç¤ºåªç»˜åˆ¶çº¬çº¿çƒï¼Œ2è¡¨ç¤ºåªç»˜åˆ¶ç»çº¿çƒ</param>
         public void QueueSphereWithLines(Vector3 center, Color color, float radius = 1, int longitudeLines = 20, int latitudeLines = 20, int draw = 0)
         {
             if (longitudeLines < 3)
@@ -72,21 +72,21 @@ namespace Engine.Graphics
                 latitudeLines = 2;
             if (draw == 1 || draw == 0)
             {
-                // »æÖÆÎ³ÏßÇò
+                // ç»˜åˆ¶çº¬çº¿çƒ
                 for (int lat = 0; lat <= latitudeLines; lat++)
                 {
                     var angle = (float)(Math.PI / 2 - lat * Math.PI / latitudeLines);
-                    var radiusAtLatitude = radius * (float)Math.Cos(angle); // ¼ÆËãÎ³¶ÈÉÏµÄÔ²°ë¾¶
+                    var radiusAtLatitude = radius * (float)Math.Cos(angle); // è®¡ç®—çº¬åº¦ä¸Šçš„åœ†åŠå¾„
                     var offset = new Vector3(0, (float)(Math.Sin(angle) * radius), 0);
                     QueueCircle(center + offset, radiusAtLatitude, longitudeLines, color);
                 }
             }
             if (draw == 2 || draw == 0)
             {
-                // »æÖÆ¾­ÏßÇò
-                for (int lon = 0; lon < longitudeLines; lon++) // ×¢Òâ£ºÕâÀï²»ĞèÒª°üÀ¨×îºóÒ»¸ö¾­¶ÈÏß£¬ÒòÎªËü»áºÍµÚÒ»¸ö¾­¶ÈÏßÖØºÏ
+                // ç»˜åˆ¶ç»çº¿çƒ
+                for (int lon = 0; lon < longitudeLines; lon++) // æ³¨æ„ï¼šè¿™é‡Œä¸éœ€è¦åŒ…æ‹¬æœ€åä¸€ä¸ªç»åº¦çº¿ï¼Œå› ä¸ºå®ƒä¼šå’Œç¬¬ä¸€ä¸ªç»åº¦çº¿é‡åˆ
                 {
-                    var longitudeAngle = lon * 2 * (float)Math.PI / longitudeLines; // ¾­¶È½Ç¶È
+                    var longitudeAngle = lon * 2 * (float)Math.PI / longitudeLines; // ç»åº¦è§’åº¦
                     var points = new List<Vector3>();
 
                     for (int lat = 0; lat <= latitudeLines; lat++)
@@ -97,13 +97,13 @@ namespace Engine.Graphics
                             (float)(Math.Sin(latitudeAngle)) * radius,
                             (float)(Math.Cos(latitudeAngle) * Math.Sin(longitudeAngle)) * radius));
                     }
-                    // »æÖÆ¾­Ïß
+                    // ç»˜åˆ¶ç»çº¿
                     QueueLineStrip(points, color);
                 }
             }
         }
         /// <summary>
-        /// »æÖÆÔ²
+        /// ç»˜åˆ¶åœ†
         /// </summary>
         public void QueueCircle(Vector3 center, float radius, int segments, Color color, bool useLineStrip = true)
         {
@@ -134,20 +134,20 @@ namespace Engine.Graphics
             }
         }
         /// <summary>
-        /// »æÖÆÔ²Öù
+        /// ç»˜åˆ¶åœ†æŸ±
         /// </summary>
         public void QueueCurvedCylinder(Vector3 start, Vector3 end, float radius, Color color, int segments = 12, bool drawTopAndBottom = true)
         {
-            // ¼ÆËãÔ²ÖùµÄ¸ß¶È
+            // è®¡ç®—åœ†æŸ±çš„é«˜åº¦
             float height = Vector3.Distance(start, end);
 
-            // ¼ÆËãÔ²ÖùµÄ·½Ïò
+            // è®¡ç®—åœ†æŸ±çš„æ–¹å‘
             Vector3 direction = Vector3.Normalize(end - start);
 
-            // ¼ÆËãÔ²ÖùµÄ»ù×¼µã
+            // è®¡ç®—åœ†æŸ±çš„åŸºå‡†ç‚¹
             Vector3 baseCenter = start + (direction * (height / 2));
 
-            // »æÖÆÔ²ÖùµÄ²àÃæ
+            // ç»˜åˆ¶åœ†æŸ±çš„ä¾§é¢
             for (int i = 0; i < segments; i++)
             {
                 float angle1 = (float)(2 * Math.PI * i / segments);
@@ -158,13 +158,13 @@ namespace Engine.Graphics
                 Vector3 point3 = baseCenter + new Vector3(radius * MathF.Cos(angle1), height / 2, radius * MathF.Sin(angle1));
                 Vector3 point4 = baseCenter + new Vector3(radius * MathF.Cos(angle2), height / 2, radius * MathF.Sin(angle2));
 
-                // »æÖÆ²àÃæ
+                // ç»˜åˆ¶ä¾§é¢
                 QueueTriangle(point1, point2, point3, color);
                 QueueTriangle(point2, point4, point3, color);
             }
             if (drawTopAndBottom)
             {
-                // »æÖÆÔ²ÖùµÄ¶¥²¿ºÍµ×²¿
+                // ç»˜åˆ¶åœ†æŸ±çš„é¡¶éƒ¨å’Œåº•éƒ¨
                 QueueCircle(baseCenter + new Vector3(0, height / 2, 0), radius, segments, color);
                 QueueCircle(baseCenter + new Vector3(0, -height / 2, 0), radius, segments, color);
             }
@@ -273,15 +273,15 @@ namespace Engine.Graphics
             TriangleIndices.Add(count + 2);
         }
         /// <summary>
-        /// »æÖÆ¾ØĞÎ(Ö§³Ö½¥±ä)
+        /// ç»˜åˆ¶çŸ©å½¢(æ”¯æŒæ¸å˜)
         /// </summary>
         public void QueueQuad(Vector3 p1, Vector3 p2, Vector3 p3, Vector3 p4, Color color1, Color color2, Color color3, Color color4)
         {
             int count = TriangleVertices.Count;
-            TriangleVertices.Add(new VertexPositionColor(p1, color1)); // ×óÉÏ
-            TriangleVertices.Add(new VertexPositionColor(p2, color2)); // ÓÒÉÏ
-            TriangleVertices.Add(new VertexPositionColor(p3, color3)); // ×óÏÂ
-            TriangleVertices.Add(new VertexPositionColor(p4, color4)); // ÓÒÏÂ
+            TriangleVertices.Add(new VertexPositionColor(p1, color1)); // å·¦ä¸Š
+            TriangleVertices.Add(new VertexPositionColor(p2, color2)); // å³ä¸Š
+            TriangleVertices.Add(new VertexPositionColor(p3, color3)); // å·¦ä¸‹
+            TriangleVertices.Add(new VertexPositionColor(p4, color4)); // å³ä¸‹
 
             TriangleIndices.Add(count);
             TriangleIndices.Add(count + 1);

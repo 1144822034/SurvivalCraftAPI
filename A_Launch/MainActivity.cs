@@ -1,4 +1,4 @@
-﻿using System.Diagnostics;
+using System.Diagnostics;
 using Android;
 using Android.Animation;
 using Android.Content;

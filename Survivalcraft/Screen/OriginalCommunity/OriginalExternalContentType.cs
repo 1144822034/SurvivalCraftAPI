@@ -1,4 +1,4 @@
-﻿namespace Game
+namespace Game
 {
 	public enum OriginalExternalContentType {
 		Unknown,

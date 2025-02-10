@@ -1,4 +1,4 @@
-﻿using Acornima.Ast;
+using Acornima.Ast;
 using Engine;
 using System.Xml.Linq;
 

@@ -338,13 +338,13 @@ namespace Game
             int cellContents = m_subsystemTerrain.Terrain.GetCellContents(Terrain.ToCell(position.X), Terrain.ToCell(position.Y), Terrain.ToCell(position.Z));
             return BlocksManager.Blocks[cellContents] is FluidBlock;
         }
-		[Obsolete("SubsystemProjectiles²»ÔÙÌá¹©Éäµ¯¸üÐÂ£¬Çë×ªÒÆµ½Projectile.Update()ÖÐ")]
+		[Obsolete("SubsystemProjectilesä¸å†æä¾›å°„å¼¹æ›´æ–°ï¼Œè¯·è½¬ç§»åˆ°Projectile.Update()ä¸­")]
         public virtual bool IsMagma(Vector3 position)
         {
             int cellContents = m_subsystemTerrain.Terrain.GetCellContents(Terrain.ToCell(position.X), Terrain.ToCell(position.Y), Terrain.ToCell(position.Z));
             return BlocksManager.Blocks[cellContents] is MagmaBlock;
         }
-		[Obsolete("SubsystemProjectiles²»ÔÙÌá¹©Éäµ¯¸üÐÂ£¬Çë×ªÒÆµ½Projectile.Update()ÖÐ")]
+		[Obsolete("SubsystemProjectilesä¸å†æä¾›å°„å¼¹æ›´æ–°ï¼Œè¯·è½¬ç§»åˆ°Projectile.Update()ä¸­")]
         public virtual void MakeProjectileNoise(Projectile projectile)
         {
             if (m_subsystemTime.GameTime - projectile.LastNoiseTime > 0.5)

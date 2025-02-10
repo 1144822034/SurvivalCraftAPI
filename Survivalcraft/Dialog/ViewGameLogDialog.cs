@@ -1,4 +1,4 @@
-﻿using Engine;
+using Engine;
 using Engine.Media;
 using System.IO;
 using System.Xml.Linq;

@@ -1,4 +1,4 @@
-﻿using GameEntitySystem;
+using GameEntitySystem;
 using Engine;
 using TemplatesDatabase;
 using System.Reflection;

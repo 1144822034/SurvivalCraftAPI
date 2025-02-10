@@ -151,7 +151,7 @@ namespace Game
 								RemainsCount = 1,
 								RemainsValue = Terrain.MakeBlockValue(90),
 								RequiredHeatLevel = 0f,
-								Description = "ÖÆ×÷ÑÌ»¨"
+								Description = "Ã–Ã†Ã—Ã·Ã‘ÃŒÂ»Â¨"
 							};
 							if (shape == 0)
 							{

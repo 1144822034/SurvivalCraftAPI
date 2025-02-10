@@ -22,7 +22,7 @@ namespace Game
 
 		public float m_boundingSphereRadius;
 		/// <summary>
-		/// Ä£ĞÍÆ«ÒÆ
+		/// æ¨¡å‹åç§»
 		/// </summary>
 		public Vector3 ModelOffset
 		{
@@ -30,7 +30,7 @@ namespace Game
 			set;
 		}
 		/// <summary>
-		/// Ä£ĞÍÍ¸Ã÷¶È
+		/// æ¨¡å‹é€æ˜åº¦
 		/// </summary>
 		public float Transparent
 		{
@@ -38,7 +38,7 @@ namespace Game
 			set;
 		}
 		/// <summary>
-		/// Ä£ĞÍ´óĞ¡Ëõ·Å
+		/// æ¨¡å‹å¤§å°ç¼©æ”¾
 		/// </summary>
 		public float ModelScale
 		{
@@ -46,7 +46,7 @@ namespace Game
 			set;
 		}
 		/// <summary>
-		/// ÎÆÀíÂ·¾¶
+		/// çº¹ç†è·¯å¾„
 		/// </summary>
 		public string TextureRoute
 		{
@@ -54,7 +54,7 @@ namespace Game
 			set;
 		}
 		/// <summary>
-		/// Ä£ĞÍÂ·¾¶
+		/// æ¨¡å‹è·¯å¾„
 		/// </summary>
 		public string ModelRoute
 		{

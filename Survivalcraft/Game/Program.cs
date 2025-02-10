@@ -1,4 +1,4 @@
-﻿using System.Diagnostics;
+using System.Diagnostics;
 using Engine;
 using Engine.Graphics;
 using System.Globalization;

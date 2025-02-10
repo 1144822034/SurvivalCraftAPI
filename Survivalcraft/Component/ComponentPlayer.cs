@@ -33,7 +33,7 @@ namespace Game
 
 		public bool m_isDigBlocked;
 
-		public bool m_doAimBlockLook = true;//ÊÖ»ú¶ËÔÚÖ´ÐÐAim²Ù×÷µÄÊ±ºò£¬ÔÊÐíÐý×ªÆÁÄ»£¬±ÈÈçRYSHµÄºÈË®¡¢ÎäÆ÷µÄ¸ñµ²
+		public bool m_doAimBlockLook = true;//æ‰‹æœºç«¯åœ¨æ‰§è¡ŒAimæ“ä½œçš„æ—¶å€™ï¼Œå…è®¸æ—‹è½¬å±å¹•ï¼Œæ¯”å¦‚RYSHçš„å–æ°´ã€æ­¦å™¨çš„æ ¼æŒ¡
 
 		public bool m_allowAddLookOrder = true;
 
@@ -351,7 +351,7 @@ namespace Game
 				});
 				if(!flag && m_subsystemTime.GameTime - m_lastActionTime > timeIntervalLastActionTime)
 				{
-					//´¦ÀíÈýÕßµÄ¹ØÏµ£¬ÓÅÏÈ¼¶×î¸ßµÄÓÅÏÈÖ´ÐÐ
+					//å¤„ç†ä¸‰è€…çš„å…³ç³»ï¼Œä¼˜å…ˆçº§æœ€é«˜çš„ä¼˜å…ˆæ‰§è¡Œ
 					DealWithPlayerInteract(priorityUse,priorityPlace,priorityInteract,playerInput,terrainRaycastResult,movingBlocksRaycastResult,out flag);
 					m_lastActionTime = timeIntervalLastActionTime;
 				}

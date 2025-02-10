@@ -168,7 +168,7 @@ namespace Game
         {
             if(UpdateTimeDebug)
 			{
-				Engine.Log.Information("======SubsystemUpdate性能分析======");
+				Engine.Log.Information("======SubsystemUpdate鎬ц兘鍒嗘瀽======");
 				var list = m_updateTicksCount.Keys.ToList();
 				int maxLength = 0;
 				for (int i = 0; i < list.Count; i++)
@@ -186,7 +186,7 @@ namespace Game
 					string updateTimeInfo2 = "TimeOfUpdate: " + String.Format("{0, -10}", (updateTickExists ? updateTick : "Error") + "ms");
                     Engine.Log.Information(updateName + updateTimeInfo + updateTimeInfo2);
 				}
-                Engine.Log.Information("======SubsystemUpdate性能分析======");
+                Engine.Log.Information("======SubsystemUpdate鎬ц兘鍒嗘瀽======");
 				m_updateTicksCount.Clear();
 				m_updateTimesCount.Clear();
             }

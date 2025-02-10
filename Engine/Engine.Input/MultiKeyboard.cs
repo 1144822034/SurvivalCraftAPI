@@ -1,4 +1,4 @@
-﻿using Engine;
+using Engine;
 using Engine.Input;
 
 public static class MultiKeyboard

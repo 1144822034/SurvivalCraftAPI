@@ -1,4 +1,4 @@
-﻿namespace Game.IContentReader
+namespace Game.IContentReader
 {
 	public abstract class IContentReader
 	{

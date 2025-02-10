@@ -1,4 +1,4 @@
-﻿//通常用于下载并解析git平台在线接口的json文件
+//通常用于下载并解析git平台在线接口的json文件
 namespace Game
 {/*
     class OnlineJsonReader

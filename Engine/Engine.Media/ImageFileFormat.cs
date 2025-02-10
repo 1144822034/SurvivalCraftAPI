@@ -3,11 +3,11 @@ namespace Engine.Media
 	public enum ImageFileFormat
 	{
         RawRgba,//Not Support
-		Bmp,//нчя╧кУнчкП╦Яй╫
-		Png,//спя╧кУнчкП╦Яй╫
-		Jpg,//спя╧кУспкП╦Яй╫
+		Bmp,//Ф≈═Е▌▀Г╪╘Ф≈═Ф█÷Ф═╪Е╪▐
+		Png,//Ф°┴Е▌▀Г╪╘Ф≈═Ф█÷Ф═╪Е╪▐
+		Jpg,//Ф°┴Е▌▀Г╪╘Ф°┴Ф█÷Ф═╪Е╪▐
         Gif,
-        Pbm,//╢©╨з╟в╦Яй╫
+        Pbm,//Г╨╞И╩▒Г≥╫Ф═╪Е╪▐
         Qoi,
         Tiff,
         Tga,

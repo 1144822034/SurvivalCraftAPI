@@ -320,7 +320,7 @@ namespace Game
 		public void Update(float dt)
 		{
 			SlipSpeed = null;
-			/* ½ûÓÃ´´ÔìÄ£Ê½·ÉĞĞµÄ²Ù×÷Ö»ÔÚ¿ªÊ¼µÄÊ±ºòÖ´ĞĞÒ»´Î
+			/* ç¦ç”¨åˆ›é€ æ¨¡å¼é£è¡Œçš„æ“ä½œåªåœ¨å¼€å§‹çš„æ—¶å€™æ‰§è¡Œä¸€æ¬¡
 			 * if (m_subsystemGameInfo.WorldSettings.GameMode != 0)
 			{
 				IsCreativeFlyEnabled = false;

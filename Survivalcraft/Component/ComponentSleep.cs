@@ -47,9 +47,9 @@ namespace Game
 		public float MaxSleepBlackoutFactor = 1f;
 
 		/// <summary>
-		/// Ϊ��ģ�������ԣ��÷������ٽ��鸲�ǡ�
-		/// ����˯����Ҫ����������Ҫͨ������m_conditionsToSleep���ģ�����鿴Load()�е����ӡ�
-		/// ģ�����߿������Լ���Component�����Ӷ�Ӧ��m_conditionsToSleep
+		/// 为了模组间兼容性，该方法不再建议覆盖。
+		/// 控制睡觉需要的条件，需要通过控制m_conditionsToSleep更改，具体查看Load()中的添加。
+		/// 模组作者可以在自己的Component中添加对应的m_conditionsToSleep
 		/// </summary>
 		/// <param name="reason"></param>
 		/// <returns></returns>

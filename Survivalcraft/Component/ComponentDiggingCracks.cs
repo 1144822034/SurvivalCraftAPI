@@ -28,7 +28,7 @@ namespace Game
 
 		public static int[] m_drawOrders = new int[1]
 		{
-			200//Ô­°æÊÇ1
+			200//åŸç‰ˆæ˜¯1
 		};
 
 		public int[] DrawOrders => m_drawOrders;
@@ -43,7 +43,7 @@ namespace Game
 			Block block = BlocksManager.Blocks[Terrain.ExtractContents(cellValue)];
 			if (m_geometry == null || cellValue != m_value || point != m_point)
             {
-                m_geometry = new Geometry(m_textures[0]);//ÕâÀïËæ±ãÄ¬ÈÏÒ»¸öÎÆÀí¾ÍĞĞ
+                m_geometry = new Geometry(m_textures[0]);//è¿™é‡Œéšä¾¿é»˜è®¤ä¸€ä¸ªçº¹ç†å°±è¡Œ
 				block.GenerateTerrainVertices(m_subsystemTerrain.BlockGeometryGenerator, m_geometry, cellValue, point.X, point.Y, point.Z);
 				m_point = point;
 				m_value = cellValue;

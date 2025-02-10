@@ -1,4 +1,4 @@
-﻿using Engine;
+using Engine;
 using System.Globalization;
 using System.IO;
 using System.Security.Cryptography;

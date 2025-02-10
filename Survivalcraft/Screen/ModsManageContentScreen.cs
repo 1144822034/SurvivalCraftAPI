@@ -1,4 +1,4 @@
-﻿using Engine;
+using Engine;
 using Engine.Graphics;
 using Game;
 using System;

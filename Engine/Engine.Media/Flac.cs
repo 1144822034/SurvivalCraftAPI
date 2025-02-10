@@ -66,7 +66,7 @@ namespace Engine.Media
                 return num;
             }
 			/// <summary>
-			/// 复制出一个新的流
+			/// 澶嶅埗鍑轰竴涓柊鐨勬祦
 			/// </summary>
 			/// <returns></returns>
 			public override StreamingSource Duplicate()

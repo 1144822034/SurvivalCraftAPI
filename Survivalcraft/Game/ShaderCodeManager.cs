@@ -1,4 +1,4 @@
-﻿using Engine;
+using Engine;
 using System;
 using System.IO;
 using System.Text.RegularExpressions;

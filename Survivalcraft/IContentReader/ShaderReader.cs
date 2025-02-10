@@ -1,4 +1,4 @@
-﻿using Engine.Graphics;
+using Engine.Graphics;
 using System.IO;
 
 namespace Game.IContentReader

@@ -26,11 +26,11 @@ namespace Game
 
 		public const int MinResolution = 2;
 
-		public const int maxDesign = 4096;//¼Ò¾ßÉÏÏŞÊıÁ¿
+		public const int maxDesign = 4096;//å®¶å…·ä¸Šé™æ•°é‡
 
-		public const int MaxResolution = 256;//¼Ò¾ß¸ñ·Ö±æÂÊ
+		public const int MaxResolution = 256;//å®¶å…·æ ¼åˆ†è¾¨ç‡
 
-		public const int MaxTriangles = 65536; //¼Ò¾ß¸´ÔÓ¶È
+		public const int MaxTriangles = 65536; //å®¶å…·å¤æ‚åº¦
 
 		public const int MaxNameLength = 100;
 

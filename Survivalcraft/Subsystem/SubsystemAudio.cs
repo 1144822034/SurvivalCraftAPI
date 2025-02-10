@@ -1,4 +1,4 @@
-﻿using Engine;
+using Engine;
 using Engine.Audio;
 using GameEntitySystem;
 using System.Collections.Generic;

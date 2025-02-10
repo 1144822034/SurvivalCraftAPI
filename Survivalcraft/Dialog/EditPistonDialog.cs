@@ -41,10 +41,10 @@ namespace Game
 
 		public static string[] m_speedCNNames = new string[4]
 		{
-			"¿ì",
-			"ÖĞ",
-			"Âı",
-			"·Ç³£Âı"
+			"å¿«",
+			"ä¸­",
+			"æ…¢",
+			"éå¸¸æ…¢"
 		};
 
 		public string m_languageType;

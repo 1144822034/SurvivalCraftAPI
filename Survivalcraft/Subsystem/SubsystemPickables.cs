@@ -31,7 +31,7 @@ namespace Game
 
 		public SubsystemFluidBlockBehavior m_subsystemFluidBlockBehavior;
 
-		[Obsolete("¸Ã×Ö¶ÎÒÑÆúÓÃ£¬µôÂäÎï±»Íæ¼ÒµÄÊ°È¡Âß¼­±»×ªÒÆµ½ComponentPickableGathererPlayerÖĞ")]
+		[Obsolete("è¯¥å­—æ®µå·²å¼ƒç”¨ï¼Œæ‰è½ç‰©è¢«ç©å®¶çš„æ‹¾å–é€»è¾‘è¢«è½¬ç§»åˆ°ComponentPickableGathererPlayerä¸­")]
 		public List<ComponentPlayer> m_tmpPlayers = [];
 
 		public List<Pickable> m_pickables = [];

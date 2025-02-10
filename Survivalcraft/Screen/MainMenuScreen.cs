@@ -1,4 +1,4 @@
-﻿using Engine;
+using Engine;
 using Engine.Input;
 using System.Collections.Generic;
 using System.Globalization;

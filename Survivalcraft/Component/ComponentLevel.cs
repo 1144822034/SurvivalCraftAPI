@@ -16,12 +16,12 @@ namespace Game
 	public class ComponentLevel : ComponentFactors, IUpdateable
 	{
 		/// <summary>
-		/// ÕâÀïµÄFactorÀàĞÍ´Óstruct¸ÄÎªclass£¬ÊÇÓÉÓÚÄ£×éÔÚĞŞ¸ÄFactorµÄÊ±ºò£¬Í¨³£ÊÇĞèÒªĞŞ¸ÄÒıÓÃµÄÖµ¡£
-		/// Èç¹ûÊÇstructÔòÖ»ÄÜ¸´ÖÆ²¢ĞŞ¸ÄÖµ£¬²»ÄÜĞŞ¸ÄÒıÓÃ¡£
-		/// Description: ÔÚÍæ¼ÒĞÅÏ¢Ãæ°åÉÏÏÔÊ¾Ó°ÏìÒòËØµÄÃû³Æ£¬Èç¡°Î´»¼Á÷¸Ğ¡±
-		/// Value£º¸ÃÓ°ÏìÒòËØµÄ¾ßÌåÊıÖµ
-		/// Name£º¸ÃFactorµÄË÷ÒıÃû³Æ£¬Ä£×éÊ¹ÓÃNameÀ´ÔÚm_xxxFactorsÁĞ±íÖĞ²éÕÒ¶ÔÓ¦µÄFactor
-		/// FactorAdditionType£º¸ÃÓ°ÏìÒò×ÓÊÇ³ËËã»¹ÊÇ¼ÓËã
+		/// è¿™é‡Œçš„Factorç±»å‹ä»structæ”¹ä¸ºclassï¼Œæ˜¯ç”±äºæ¨¡ç»„åœ¨ä¿®æ”¹Factorçš„æ—¶å€™ï¼Œé€šå¸¸æ˜¯éœ€è¦ä¿®æ”¹å¼•ç”¨çš„å€¼ã€‚
+		/// å¦‚æœæ˜¯structåˆ™åªèƒ½å¤åˆ¶å¹¶ä¿®æ”¹å€¼ï¼Œä¸èƒ½ä¿®æ”¹å¼•ç”¨ã€‚
+		/// Description: åœ¨ç©å®¶ä¿¡æ¯é¢æ¿ä¸Šæ˜¾ç¤ºå½±å“å› ç´ çš„åç§°ï¼Œå¦‚â€œæœªæ‚£æµæ„Ÿâ€
+		/// Valueï¼šè¯¥å½±å“å› ç´ çš„å…·ä½“æ•°å€¼
+		/// Nameï¼šè¯¥Factorçš„ç´¢å¼•åç§°ï¼Œæ¨¡ç»„ä½¿ç”¨Nameæ¥åœ¨m_xxxFactorsåˆ—è¡¨ä¸­æŸ¥æ‰¾å¯¹åº”çš„Factor
+		/// FactorAdditionTypeï¼šè¯¥å½±å“å› å­æ˜¯ä¹˜ç®—è¿˜æ˜¯åŠ ç®—
 		/// </summary>
 		public class Factor
 		{
@@ -93,7 +93,7 @@ namespace Game
 		}
 
 		/// <summary>
-		/// Éú³ÉÍæ¼ÒµÄËùÓĞ¹ØÓÚÁ¦Á¿µÄÒòËØ
+		/// ç”Ÿæˆç©å®¶çš„æ‰€æœ‰å…³äºåŠ›é‡çš„å› ç´ 
 		/// </summary>
 		public override void GenerateStrengthFactors()
 		{
@@ -154,7 +154,7 @@ namespace Game
 		}
 
 		/// <summary>
-		/// Éú³ÉÍæ¼ÒËùÓĞ¹ØÓÚ·ÀÓùµÄÒòËØ
+		/// ç”Ÿæˆç©å®¶æ‰€æœ‰å…³äºé˜²å¾¡çš„å› ç´ 
 		/// </summary>
 		public override void GenerateResilienceFactors()
 		{
@@ -207,7 +207,7 @@ namespace Game
 		}
 
 		/// <summary>
-		/// Éú³ÉÍæ¼ÒËùÓĞ¹ØÓÚËÙ¶ÈµÄÒòËØ
+		/// ç”Ÿæˆç©å®¶æ‰€æœ‰å…³äºé€Ÿåº¦çš„å› ç´ 
 		/// </summary>
 		public override void GenerateSpeedFactors()
 		{
@@ -278,7 +278,7 @@ namespace Game
 		}
 
 		/// <summary>
-		/// Éú³ÉÍæ¼ÒËùÓĞ¹ØÓÚ¼¢¶öµÄÒòËØ
+		/// ç”Ÿæˆç©å®¶æ‰€æœ‰å…³äºé¥¥é¥¿çš„å› ç´ 
 		/// </summary>
 		public override void GenerateHungerFactors()
 		{

@@ -45,7 +45,7 @@ namespace Game
 						ResultCount = 1,
 						ResultValue = 251,
 						RequiredHeatLevel = 1f,
-						Description = "Åëâ¿ÄÏ¹ÏÖà"
+						Description = "Ã…Ã«Ã¢Â¿Ã„ÃÂ¹ÃÃ–Ã "
 					};
 					int data = BasePumpkinBlock.SetIsDead(BasePumpkinBlock.SetSize(0, 7), isDead != 0);
 					int value = SetDamage(Terrain.MakeBlockValue(131, 0, data), rot);

@@ -288,7 +288,7 @@ namespace Game
 			return null;
 		}
 
-		//·Ö³ÉÁË1~4¡¢17~18Î»´¢´æ
+		//åˆ†æˆäº†1~4ã€17~18ä½å‚¨å­˜
 		public static int GetClothingIndex(int data)
 		{
 			return (data & 0xFF) | ((data >> 8) & 0x300);

@@ -81,7 +81,7 @@ namespace Game
 
 		public void Draw(Camera camera, int drawOrder)
 		{
-			//×¼±¸Ä£ÐÍ
+			//å‡†å¤‡æ¨¡åž‹
 			if (drawOrder == m_drawOrders[0])
 			{
 				bool skipped = false;
@@ -130,7 +130,7 @@ namespace Game
 				});
 				if (!skipped)
 				{
-                    if (drawOrder == m_drawOrders[1])//»æÖÆÀàÐÍÎªAlphaThresholdµÄModel
+                    if (drawOrder == m_drawOrders[1])//ç»˜åˆ¶ç±»åž‹ä¸ºAlphaThresholdçš„Model
                     {
                         Display.DepthStencilState = DepthStencilState.Default;
                         Display.RasterizerState = RasterizerState.CullCounterClockwiseScissor;
@@ -141,14 +141,14 @@ namespace Game
                         Display.RasterizerState = RasterizerState.CullCounterClockwiseScissor;
                         m_primitivesRenderer.Flush(camera.ProjectionMatrix, clearAfterFlush: true, 0);
                     }
-                    else if (drawOrder == m_drawOrders[2])//»æÖÆTransparentBeforeWaterµÄModel
+                    else if (drawOrder == m_drawOrders[2])//ç»˜åˆ¶TransparentBeforeWaterçš„Model
                     {
                         Display.DepthStencilState = DepthStencilState.Default;
                         Display.RasterizerState = RasterizerState.CullNoneScissor;
                         Display.BlendState = BlendState.AlphaBlend;
                         DrawModels(camera, m_modelsToDraw[2], null);
                     }
-                    else if (drawOrder == m_drawOrders[3])//»æÖÆTransparentAfterWaterµÄModel
+                    else if (drawOrder == m_drawOrders[3])//ç»˜åˆ¶TransparentAfterWaterçš„Model
                     {
                         Display.DepthStencilState = DepthStencilState.Default;
                         Display.RasterizerState = RasterizerState.CullNoneScissor;
@@ -276,7 +276,7 @@ namespace Game
 				InstancedModelData instancedModelData = InstancedModelsManager.GetInstancedModelData(componentModel.Model, componentModel.MeshDrawOrders);
 				Display.DrawIndexed(PrimitiveType.TriangleList, modelShader, instancedModelData.VertexBuffer, instancedModelData.IndexBuffer, 0, instancedModelData.IndexBuffer.IndicesCount);
 				ModelsDrawn++;
-				//»­Ãû³Æ
+				//ç”»åç§°
 				ModsManager.HookAction("OnModelRendererDrawExtra", modLoader =>
 				{
 					modLoader.OnModelRendererDrawExtra(this, modelsDatum, camera, alphaThreshold);
@@ -316,7 +316,7 @@ namespace Game
 			return LightingManager.CalculateSmoothLight(m_subsystemTerrain, p);
 		}
 
-		//ÒõÓ°»æÖÆ
+		//é˜´å½±ç»˜åˆ¶
 		public void ShadowDraw(SubsystemShadows subsystemShadows, Camera camera, Vector3 shadowPosition, float shadowDiameter, float alpha)
 		{
 			if (!SettingsManager.ObjectsShadowsEnabled)
@@ -330,7 +330,7 @@ namespace Game
 			}
 			float num2 = MathF.Sqrt(num);
 			float num3 = MathUtils.Saturate(4f * (1f - (num2 / 32f)));
-			float num4 = shadowDiameter / 2f;  //ÒõÓ°Ö±¾¶/2
+			float num4 = shadowDiameter / 2f;  //é˜´å½±ç›´å¾„/2
 			int num5 = Terrain.ToCell(shadowPosition.X - num4);
 			int num6 = Terrain.ToCell(shadowPosition.Z - num4);
 			int num7 = Terrain.ToCell(shadowPosition.X + num4);

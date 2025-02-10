@@ -1,4 +1,4 @@
-﻿#nullable enable
+#nullable enable
 using Engine;
 using Engine.Graphics;
 using Engine.Media;

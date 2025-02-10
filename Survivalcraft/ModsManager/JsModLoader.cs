@@ -1,4 +1,4 @@
-﻿using Engine;
+using Engine;
 using GameEntitySystem;
 using Jint;
 using Jint.Native.Function;

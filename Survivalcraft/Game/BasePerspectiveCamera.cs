@@ -41,7 +41,7 @@ namespace Game
 
 		public override Vector3 ViewRight => m_viewRight;
 
-		public override Matrix ViewMatrix//ÊÓÍ¼¾ØÕó£¬°üº¬¹Û²âµÄÎ»ÖÃ£¬·½Ïò£¬´¹Ö±Y·½Ïò
+		public override Matrix ViewMatrix//è§†å›¾çŸ©é˜µï¼ŒåŒ…å«è§‚æµ‹çš„ä½ç½®ï¼Œæ–¹å‘ï¼Œå‚ç›´Yæ–¹å‘
 		{
 			get
 			{
@@ -53,7 +53,7 @@ namespace Game
 			}
 		}
 
-		public override Matrix InvertedViewMatrix//×ªÖÃÊÓÍ¼¾ØÕó
+		public override Matrix InvertedViewMatrix//è½¬ç½®è§†å›¾çŸ©é˜µ
 		{
 			get
 			{
@@ -124,11 +124,11 @@ namespace Game
 			{
 				if (!m_viewProjectionMatrix.HasValue)
 				{
-					//ÊÀ½ç×ø±ê¾ØÕó * Í¶Ó°¾ØÕóµÃµ½ÆÁÄ»¾ØÕó£¬¼´½«ÊÀ½çµÄ×ø±ê×ª»»µ½ÆÁÄ»µÄ×ø±ê
+					//ä¸–ç•Œåæ ‡çŸ©é˜µ * æŠ•å½±çŸ©é˜µå¾—åˆ°å±å¹•çŸ©é˜µï¼Œå³å°†ä¸–ç•Œçš„åæ ‡è½¬æ¢åˆ°å±å¹•çš„åæ ‡
 					m_viewProjectionMatrix = ViewMatrix * ProjectionMatrix;
 					/*
-                    //²âÊÔ£¬½«ÆÁÄ»×ø±ê×ª»Øµ½ÊÀ½ç×ø±ê
-                    //½«ÆÁÄ»×ø±êµÄ0,0×ª»»µ½ÊÀ½çµÄ×ø±êÖĞ
+                    //æµ‹è¯•ï¼Œå°†å±å¹•åæ ‡è½¬å›åˆ°ä¸–ç•Œåæ ‡
+                    //å°†å±å¹•åæ ‡çš„0,0è½¬æ¢åˆ°ä¸–ç•Œçš„åæ ‡ä¸­
                     Vector3 vector = Vector3.Transform(Vector3.Zero, InvertedProjectionMatrix);
                     vector = Vector3.Transform(vector,InvertedViewMatrix);
                     */
@@ -223,7 +223,7 @@ namespace Game
 			m_viewRight = Vector3.Normalize(Vector3.Cross(m_viewDirection, m_viewUp));
 		}
 		/// <summary>
-		/// ¼ÆËã»ù´¡Í¶Ó°¾ØÕó£¬´´½¨Í¸ÊÓÊÓÒ°
+		/// è®¡ç®—åŸºç¡€æŠ•å½±çŸ©é˜µï¼Œåˆ›å»ºé€è§†è§†é‡
 		/// </summary>
 		/// <returns></returns>
 		public virtual Matrix CalculateBaseProjectionMatrix()
@@ -232,8 +232,8 @@ namespace Game
 			{
 				float num = 80f * SettingsManager.ViewAngle;
 				ViewWidget viewWidget = base.GameWidget.ViewWidget;
-				float num3 = viewWidget.ActualSize.X / viewWidget.ActualSize.Y; //ÊÓÒ°³¤¿í±È
-				float num4 = MathF.Min(num * num3,num); //¸ù¾İ³¤¿í±È»ñÈ¡Öµ£¬×î´ó90f
+				float num3 = viewWidget.ActualSize.X / viewWidget.ActualSize.Y; //è§†é‡é•¿å®½æ¯”
+				float num4 = MathF.Min(num * num3,num); //æ ¹æ®é•¿å®½æ¯”è·å–å€¼ï¼Œæœ€å¤§90f
 				float num5 = num4 * num3;
 				if(num5 < 90f)
 				{
@@ -243,8 +243,8 @@ namespace Game
 				{
 					num4 *= 175f / num5;
 				}
-				//²Â²â£¬½«ÊÀ½ç×ø±ê×ª»»ÎªÆÁÄ»×ø±êµÄ¾ØÕó
-				return Matrix.CreatePerspectiveFieldOfView(MathUtils.DegToRad(num4),num3,0.1f,2048f); //²ÎÊı1ÊÓÒ°Y¿í¶È£¬²ÎÊı2×İºá±È£¬²ÎÊı3½üÆ½Ãæ£¬²ÎÊı4Ô¶Æ½Ãæ
+				//çŒœæµ‹ï¼Œå°†ä¸–ç•Œåæ ‡è½¬æ¢ä¸ºå±å¹•åæ ‡çš„çŸ©é˜µ
+				return Matrix.CreatePerspectiveFieldOfView(MathUtils.DegToRad(num4),num3,0.1f,2048f); //å‚æ•°1è§†é‡Yå®½åº¦ï¼Œå‚æ•°2çºµæ¨ªæ¯”ï¼Œå‚æ•°3è¿‘å¹³é¢ï¼Œå‚æ•°4è¿œå¹³é¢
 			}
 			return VrManager.GetProjectionMatrix(base.Eye.Value, 0.1f, 2048f);
 		}

@@ -586,10 +586,10 @@ namespace Game
 			int IndexI3 = designIndex >> 10;
 			int IndexI10 = designIndex & 1023;
 
-			data = (data & 3) | ((IndexI10 & 1023) << 2);//ÉèÖÃÐý×ª£¬ºÍ·½¿éË÷ÒýÇ°10Î»
-			data = (data & 4095) | ((shadowStrengthFactor & 3) << 12);//ÉèÖÃ¹âÇ¿
-			data = (data & 16383) | ((isLightEmitter ? 1 : 0) << 14);//ÉèÖÃÊÇ·ñ·¢¹â
-			data = (data & 32767) | (IndexI3 << 15);//ÉèÖÃË÷Òýºó3Î»
+			data = (data & 3) | ((IndexI10 & 1023) << 2);//è®¾ç½®æ—‹è½¬ï¼Œå’Œæ–¹å—ç´¢å¼•å‰10ä½
+			data = (data & 4095) | ((shadowStrengthFactor & 3) << 12);//è®¾ç½®å…‰å¼º
+			data = (data & 16383) | ((isLightEmitter ? 1 : 0) << 14);//è®¾ç½®æ˜¯å¦å‘å…‰
+			data = (data & 32767) | (IndexI3 << 15);//è®¾ç½®ç´¢å¼•åŽ3ä½
 
 			return data;
 		}

@@ -1,4 +1,4 @@
-﻿using Engine.Audio;
+using Engine.Audio;
 
 namespace Game.IContentReader
 {

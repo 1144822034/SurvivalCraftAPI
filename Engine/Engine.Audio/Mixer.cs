@@ -1,4 +1,4 @@
-﻿using System.Reflection;
+using System.Reflection;
 using Silk.NET.OpenAL;
 
 namespace Engine.Audio

@@ -99,7 +99,7 @@ namespace Game
 			string languageType = ModsManager.Configs.ContainsKey("Language") ? ModsManager.Configs["Language"] : "zh-CN";
 			if (languageType == "zh-CN")
 			{
-				m_titleLabel.Text = $"{m_componentPlayer.PlayerData.Name}, µÈ¼¶ {MathF.Floor(m_componentPlayer.PlayerData.Level)}  " + ((m_componentPlayer.PlayerData.PlayerClass == PlayerClass.Male) ? "ÄÐÐÔ" : "Å®ÐÔ");
+				m_titleLabel.Text = $"{m_componentPlayer.PlayerData.Name}, ç­‰çº§ {MathF.Floor(m_componentPlayer.PlayerData.Level)}  " + ((m_componentPlayer.PlayerData.PlayerClass == PlayerClass.Male) ? "ç”·æ€§" : "å¥³æ€§");
 			}
 			else
 			{

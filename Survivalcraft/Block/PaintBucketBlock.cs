@@ -62,7 +62,7 @@ namespace Game
 					{
 						var craftingRecipe = new CraftingRecipe
 						{
-							Description = $"÷∆◊˜ {SubsystemPalette.GetName(null, num, null)} —’¡œ",
+							Description = $"√ñ√Ü√ó√∑ {SubsystemPalette.GetName(null, num, null)} √ë√ï√Å√è",
 							ResultValue = Terrain.MakeBlockValue(129, 0, num),
 							ResultCount = 1,
 							RequiredHeatLevel = 1f

@@ -1,4 +1,4 @@
-﻿namespace Engine
+namespace Engine
 {
     public struct Line2 : IEquatable<Line2>
     {

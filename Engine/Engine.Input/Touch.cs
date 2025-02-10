@@ -1,4 +1,4 @@
-﻿#if ANDROID
+#if ANDROID
 
 using System.Collections.Concurrent;
 using Android.Views;

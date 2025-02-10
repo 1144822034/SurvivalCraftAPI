@@ -1,4 +1,4 @@
-﻿namespace Engine.Serialization
+namespace Engine.Serialization
 {
     internal class Enum32Serializer<T> where T : unmanaged, Enum
     {

@@ -1,4 +1,4 @@
-﻿using Engine;
+using Engine;
 using System.Globalization;
 using System.Text.Json;
 using System.IO;
