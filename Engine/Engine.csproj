@@ -1,68 +1,71 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
-  <PropertyGroup>
-	 <NoWarn>$(NoWarn);CA1416;1591;1573</NoWarn>
-    <ImplicitUsings>enable</ImplicitUsings>
-    <RootNamespace>Engine</RootNamespace>
-	<GenerateAssemblyInfo>false</GenerateAssemblyInfo>
-	<GenerateDocumentationFile>True</GenerateDocumentationFile>
-	<ProduceReferenceAssembly>True</ProduceReferenceAssembly>
-	<RootNamespace>Engine</RootNamespace>
-	<Version>2.4.0.0</Version>
-	<WarningLevel>2</WarningLevel>
-	<AssemblyName>Engine</AssemblyName>
-	<AllowUnsafeBlocks>true</AllowUnsafeBlocks>
-	<PackageId>SurvivalcraftAPI.Engine</PackageId>
-	<Title>SurvivalcraftAPI.Engine</Title><!--For NuGet Package-->
-	<Version>1.8.0.0</Version><!--For NuGet Package-->
-	<PackageProjectUrl>https://gitee.com/THPRC/survivalcraft-api</PackageProjectUrl>
-	<RepositoryUrl>https://gitee.com/THPRC/survivalcraft-api</RepositoryUrl>
-	<RepositoryType>Git</RepositoryType>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
-    <TargetFrameworks>net9.0-windows</TargetFrameworks>
-    <DefineConstants>DEBUG</DefineConstants>
-    <WarningLevel>2</WarningLevel>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
-    <TargetFrameworks>net9.0;net9.0-windows</TargetFrameworks>
-    <DebugType>none</DebugType>
-    <DefineConstants>TRACE</DefineConstants>
-  </PropertyGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="Resources\Lit.psh" Condition="'$(TargetFramework)' == 'net9.0-windows'" />
-    <EmbeddedResource Include="Resources\Lit.vsh" Condition="'$(TargetFramework)' == 'net9.0-windows'" />
-    <EmbeddedResource Include="Resources\Unlit.psh" Condition="'$(TargetFramework)' == 'net9.0-windows'" />
-    <EmbeddedResource Include="Resources\Unlit.vsh" Condition="'$(TargetFramework)' == 'net9.0-windows'" />
-    <EmbeddedResource Include="Resources\Debugfont.lst" Condition="'$(TargetFramework)' == 'net9.0-windows'" />
-    <EmbeddedResource Include="Resources\Debugfont.png" Condition="'$(TargetFramework)' == 'net9.0-windows'" />
-    <None Remove="Resources\icon.png" />
-    <EmbeddedResource Include="Resources\icon.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <PackageReference Include="NVorbis" Version="0.10.5" />
-    <PackageReference Include="SixLabors.ImageSharp" Version="3.1.6" /><!--An powerful and popular audio libaury-->
-	<PackageReference Include="NLayer.NAudioSupport" Version="1.4.0" /><!--MP3 support-->
-	<PackageReference Include="NAudio.Flac.Unknown.Mod" Version="1.0.3" PrivateAssets="all" /><!--Source: https://github.com/XiaofengdiZhu/NAudio.Flac/ -->
-	  <PackageReference Include="NAudio.Core" Version="2.2.1" /><!--Resolve reference confliction between NLayer.NAudioSupport and NAudio.Flac.Unknown.Mod-->
+	<PropertyGroup>
+		<NoWarn>$(NoWarn);CA1416;1591;1573</NoWarn>
+		<ImplicitUsings>enable</ImplicitUsings>
+		<RootNamespace>Engine</RootNamespace>
+		<GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+		<GenerateDocumentationFile>True</GenerateDocumentationFile>
+		<ProduceReferenceAssembly>True</ProduceReferenceAssembly>
+		<RootNamespace>Engine</RootNamespace>
+		<Version>2.4.0.0</Version>
+		<WarningLevel>2</WarningLevel>
+		<AssemblyName>Engine</AssemblyName>
+		<AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+		<PackageId>SurvivalcraftAPI.Engine</PackageId>
+		<Title>SurvivalcraftAPI.Engine</Title><!--For NuGet Package-->
+		<Version>1.8.0.0</Version><!--For NuGet Package-->
+		<PackageProjectUrl>https://gitee.com/THPRC/survivalcraft-api</PackageProjectUrl>
+		<RepositoryUrl>https://gitee.com/THPRC/survivalcraft-api</RepositoryUrl>
+		<RepositoryType>Git</RepositoryType>
+	</PropertyGroup>
+	<PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
+		<TargetFrameworks>net9.0-windows;net9.0-android</TargetFrameworks>
+		<DefineConstants>DEBUG</DefineConstants>
+		<WarningLevel>2</WarningLevel>
+	</PropertyGroup>
+	<PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
+		<TargetFrameworks>net9.0;net9.0-windows;net9.0-android</TargetFrameworks>
+		<DebugType>none</DebugType>
+		<DefineConstants>TRACE</DefineConstants>
+	</PropertyGroup>
+	<PropertyGroup Condition="'$(TargetFramework)' == 'net9.0-android'">
+		<SupportedOSPlatformVersion>23.0</SupportedOSPlatformVersion>
+	</PropertyGroup>
+	<ItemGroup>
+		<EmbeddedResource Include="Resources\Lit.psh" Condition="'$(TargetFramework)' == 'net9.0-windows'" />
+		<EmbeddedResource Include="Resources\Lit.vsh" Condition="'$(TargetFramework)' == 'net9.0-windows'" />
+		<EmbeddedResource Include="Resources\Unlit.psh" Condition="'$(TargetFramework)' == 'net9.0-windows'" />
+		<EmbeddedResource Include="Resources\Unlit.vsh" Condition="'$(TargetFramework)' == 'net9.0-windows'" />
+		<EmbeddedResource Include="Resources\Debugfont.lst" Condition="'$(TargetFramework)' == 'net9.0-windows'" />
+		<EmbeddedResource Include="Resources\Debugfont.png" Condition="'$(TargetFramework)' == 'net9.0-windows'" />
+		<None Remove="Resources\icon.png" />
+		<EmbeddedResource Include="Resources\icon.png" />
+	</ItemGroup>
+	<ItemGroup>
+		<PackageReference Include="NVorbis" Version="0.10.5" />
+		<PackageReference Include="SixLabors.ImageSharp" Version="3.1.6" /><!--An powerful and popular audio libaury-->
+		<PackageReference Include="NLayer.NAudioSupport" Version="1.4.0" /><!--MP3 support-->
+		<PackageReference Include="NAudio.Flac.Unknown.Mod" Version="1.0.3" PrivateAssets="all" /><!--Source: https://github.com/XiaofengdiZhu/NAudio.Flac/ -->
+		<PackageReference Include="NAudio.Core" Version="2.2.1" /><!--Resolve reference confliction between NLayer.NAudioSupport and NAudio.Flac.Unknown.Mod-->
 		<PackageReference Include="Silk.NET.Windowing" Version="2.22.0" />
 		<PackageReference Include="Silk.NET.OpenGLES" Version="2.22.0" />
 		<PackageReference Include="Silk.NET.OpenAL" Version="2.22.0" />
-		<PackageReference Include="Silk.NET.Input" Version="2.22.0" />
+		<PackageReference Include="Silk.NET.Input" Version="2.22.0" Condition="'$(TargetFramework)' != 'net9.0-android'" />
 	</ItemGroup>
-  <ItemGroup>
-	<PackageReference Include="System.Net.Http" Version="4.3.4" />
-	<PackageReference Include="System.Private.Uri" Version="4.3.2" />
-	<PackageReference Include="System.Text.RegularExpressions" Version="4.3.1" />
-	<PackageReference Include="Tomlyn" Version="0.18.0" />
-  </ItemGroup>
-  <ItemGroup>
-    <EditorConfigFiles Remove=".editorconfig" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include=".editorconfig" />
-  </ItemGroup>
-  <ItemGroup>
-    <Compile Remove="Engine\EngineView.cs" />
-    <Compile Remove="Engine\Window_old.cs" />
-  </ItemGroup>
+	<ItemGroup>
+		<PackageReference Include="System.Net.Http" Version="4.3.4" />
+		<PackageReference Include="System.Private.Uri" Version="4.3.2" />
+		<PackageReference Include="System.Text.RegularExpressions" Version="4.3.1" />
+		<PackageReference Include="Tomlyn" Version="0.18.0" />
+	</ItemGroup>
+	<ItemGroup>
+		<EditorConfigFiles Remove=".editorconfig" />
+	</ItemGroup>
+	<ItemGroup>
+		<None Include=".editorconfig" />
+	</ItemGroup>
+	<ItemGroup>
+		<Compile Remove="Engine\EngineView.cs" />
+		<Compile Remove="Engine\Window_old.cs" />
+	</ItemGroup>
 </Project>
