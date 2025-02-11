@@ -702,6 +702,8 @@ namespace Game
 
 		private byte[] m_compressBuffer = new byte[WorstCaseChunkDataSize];
 
+		private bool m_ioExceptionDealt = false;
+
 		public TerrainSerializer23(string directoryName, string suffix = "")
 		{
 			m_storage = new RegionFileStorage();
@@ -729,12 +731,29 @@ namespace Game
 				_ = Time.RealTime;
 				try
 				{
-					int num = m_storage.Load(chunk.Coords, m_storageBuffer);
-					if (num < 0)
+					int num = m_storage.Load(chunk.Coords,m_storageBuffer);
+					if(num < 0)
 					{
 						return false;
 					}
-					DecompressChunkData(chunk, m_storageBuffer, num);
+					DecompressChunkData(chunk,m_storageBuffer,num);
+				}
+				catch(IOException e)
+				{
+					Dispatcher.Dispatch(
+						() => {
+							if(m_ioExceptionDealt)
+							{
+								return;
+							}
+							m_ioExceptionDealt = true;
+							GameManager.DisposeProject();
+							ScreensManager.SwitchScreen("Play");
+							ViewGameLogDialog dialog = new();
+							dialog.SetErrorHead(11, 14);
+							DialogsManager.ShowDialog(null, dialog);
+						});
+					return false;
 				}
 				catch (Exception e)
 				{

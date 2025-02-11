@@ -12,6 +12,8 @@ namespace Game
 
 		public static StreamWriter m_writer;
 
+		public const string fName = "GameLogSink";
+
 		public GameLogSink()
 		{
 			try
@@ -54,7 +56,7 @@ namespace Game
 		{
 			if (m_stream == null)
 			{
-				return string.Empty;
+				return LanguageControl.Get(fName, "1");
 			}
 			lock (m_stream)
 			{
@@ -74,7 +76,7 @@ namespace Game
 		{
 			if (m_stream == null)
 			{
-				return [];
+				return [LanguageControl.Get(fName, "1")];
 			}
 			lock (m_stream)
 			{

@@ -10,8 +10,10 @@
     <BevelledRectangleWidget Style="{Styles/DialogArea}" />    
 		<StackPanelWidget Direction="Vertical" >
 			<CanvasWidget>
+				<ListPanelWidget Name="ViewGameLogDialog.ListPanel" ItemSize="16" Direction="Vertical" Margin="3, 5" />
+			</CanvasWidget>
+			<CanvasWidget Size="Infinity, 2">
 				<RectangleWidget FillColor="0, 0, 0, 0" OutlineColor="128, 128, 128, 255" OutlineThickness="2" />
-				<ListPanelWidget Name="ViewGameLogDialog.ListPanel" ItemSize="16" Direction="Vertical" Margin="3, 3" />
 			</CanvasWidget>
 
 			<CanvasWidget Size="0, 10" />

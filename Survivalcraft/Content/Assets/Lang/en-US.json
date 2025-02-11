@@ -314,7 +314,8 @@
     "10": "Contact mod developers with Log file to Solve the problem.",
     "11": "Error loading world",
     "12": "Error Spawning Player",
-    "13": "Copy This log"
+    "13": "Copy This log",
+    "14": "The world files may be occupied by another program."
   },
   "MoreCommunityLinkDialog": {
     "1": "No User",
@@ -971,6 +972,9 @@
   "CRMessage": {
     "0": "Make a stone axe instead",
     "1": "Make a wooden rake instead"
+  },
+  "GameLogSink":{
+    "1": "The log file may be occupied by another program, resulting in a failed load."
   },
   "BasePumpkinBlock": {
     "1": "Pumpkin",
