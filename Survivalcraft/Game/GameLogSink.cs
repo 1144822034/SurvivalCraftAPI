@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
+using System.Runtime.InteropServices;
 
 namespace Game
 {
@@ -48,7 +49,16 @@ namespace Game
 			}
 			catch (Exception ex)
 			{
+#if WINDOWS
+				AllocConsole();
+				Window.Closed += () => FreeConsole();
+				Console.Title = "Logs of Survivalcraft API";
+				Engine.Log.RemoveAllLogSinks();
+				Engine.Log.AddLogSink(new ConsoleLogSink());
+				Engine.Log.Information("Error creating GameLogSink, and a console window for viewing logs is created. Reason: {0}", ex.Message);
+#else
 				Engine.Log.Error("Error creating GameLogSink. Reason: {0}", ex.Message);
+#endif
 			}
 		}
 
@@ -139,5 +149,13 @@ namespace Game
 				}
 			}
 		}
+
+#if WINDOWS
+		[DllImport("kernel32.dll", SetLastError = true)]
+		static extern bool AllocConsole();
+
+		[DllImport("kernel32.dll", SetLastError = true)]
+		static extern bool FreeConsole();
+#endif
 	}
 }
