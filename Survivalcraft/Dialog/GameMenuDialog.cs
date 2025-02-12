@@ -78,7 +78,7 @@ namespace Game
 			{
 				AddStat(stackPanelWidget, LanguageControl.Get(fName, 96), subsystemGameInfo.WorldSettings.YearDays + LanguageControl.Get(fName, "23"));
 			}
-			string value0 = (subsystemGameInfo.WorldSettings.AreSeasonsChanging ? "" : "(fixed season)");
+			string value0 = (subsystemGameInfo.WorldSettings.AreSeasonsChanging ? "" : LanguageControl.Get(fName, 98));
 			AddStat(stackPanelWidget, LanguageControl.Get(fName, 97), SubsystemSeasons.GetTimeOfYearName(subsystemGameInfo.WorldSettings.TimeOfYear), value0, SubsystemSeasons.GetTimeOfYearColor(subsystemGameInfo.WorldSettings.TimeOfYear));
 			int num = 0;
 			for (int i = 0; i < FurnitureDesign.maxDesign; i++)

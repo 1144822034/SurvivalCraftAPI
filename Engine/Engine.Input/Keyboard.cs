@@ -637,6 +637,9 @@ namespace Engine.Input
                     return Key.F11;
                 case Keycode.F12:
                     return Key.F12;
+                case Keycode.AltLeft:
+                case Keycode.AltRight:
+                        return Key.Alt;
                 default:
                     return (Key)(-1);
             }

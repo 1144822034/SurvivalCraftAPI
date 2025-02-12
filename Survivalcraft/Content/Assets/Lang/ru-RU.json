@@ -309,7 +309,8 @@
     "10": "Пожалуйста, свяжитесь с разработчиком модуля и предоставьте журнал регистрации игр",
     "11": "Мир загружен неправильно",
     "12": "Ошибка генератора игрока",
-    "13": "Скопируй этот журнал"
+    "13": "Скопируй этот журнал",
+    "14": "The world files may be occupied by another program."
   },
     "MoreCommunityLinkDialog": {
         "1": "No User",
@@ -485,7 +486,8 @@
         "93": "Мужчина",
         "94": "Женщина",
         "96": "Length Of Year",
-        "97": "Season"
+        "97": "Season",
+        "98": "(fixed season)"
     },
     "BlocksManager": {
         "1": "Нет {0}",
@@ -962,6 +964,9 @@
     "CRMessage": {
         "0": "Вместо этого делается каменный топор",
         "1": "Вместо этого делаются деревянные грабли"
+    },
+    "GameLogSink":{
+        "1": "The log file may be occupied by another program, resulting in a failed load."
     },
     "BasePumpkinBlock": {
         "1": "Pumpkin",

@@ -493,7 +493,8 @@
     "94": "Female",
     "95": "Run Javascript",
     "96": "Length Of Year",
-    "97": "Season"
+    "97": "Season",
+    "98": "(fixed season)"
   },
   "BlocksManager": {
     "1": "Block with type {0} not found.",
