@@ -1,4 +1,4 @@
-<Database>
+<Database xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="Database.xsd">
 	<DatabaseObjectTypes>
 		<DatabaseObjectType Name="Root" DefaultInstanceName="Root" IconName="" Order="0" SupportsValue="False" MustInherit="False" NameLengthLimit="256" SaveStandalone="False" AllowedNestingParents="" AllowedInheritanceParents="" NestedValueType="" />
 		<DatabaseObjectType Name="Folder" DefaultInstanceName="Folder" IconName="Folder" Order="1" SupportsValue="False" MustInherit="False" NameLengthLimit="256" SaveStandalone="False" AllowedNestingParents="Root,Folder" AllowedInheritanceParents="" NestedValueType="" />
