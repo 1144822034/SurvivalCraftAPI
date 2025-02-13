@@ -136,6 +136,10 @@ namespace Engine
         public static void Error(Exception e)
         {
             Write(LogType.Error, e.Message + "↓");
+            if (e is NullReferenceException e_null)
+            {
+                Write(LogType.Error, $"NullReferenceException: {e_null.TargetSite?.DeclaringType?.Name}.{e_null.TargetSite?.Name} is null");
+            }
             Write(LogType.Error, e.ToString());
         }
         public static void AddLogSink(ILogSink logSink)

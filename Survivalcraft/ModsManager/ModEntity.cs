@@ -297,23 +297,11 @@ namespace Game
 				{
 					blockTypes.Add(type);
 				}
-			}
-			/*for (int i = 0; i < blocks.Count; i++)
-			{
-				Type type = blocks[i];
-                var block = (Block)Activator.CreateInstance(type.GetTypeInfo().AsType());
-                FieldInfo fieldInfo = type.GetRuntimeFields().FirstOrDefault(p => p.Name == "Index" && p.IsPublic && p.IsStatic);
-				if (fieldInfo != null && fieldInfo.FieldType == typeof(int))
+				if (type.Namespace == "Game")
 				{
-					int staticIndex = (int)fieldInfo.GetValue(null);
-					block.BlockIndex = staticIndex;
+					Log.Warning("\"Game\" is not recommended as a namespace for mod class. It is only for Survivalcraft itself. " + type.AssemblyQualifiedName);
 				}
-				else
-				{
-					block.BlockIndex = -1;
-                }
-                Blocks.Add(type);
-            }*/
+			}
 			BlockTypes.AddRange(blockTypes);
 		}
 		public virtual void LoadJs()

@@ -171,7 +171,7 @@ namespace Game
 				CenterColor = Color.Transparent
 			};
 			list.Add(m_rectangleWidget);
-			//不知道做什么的
+			//方块背景色
 			m_highlightWidget = new RectangleWidget
 			{
 				FillColor = Color.Transparent,
