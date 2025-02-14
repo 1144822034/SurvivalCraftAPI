@@ -41,7 +41,7 @@ namespace Game
 					}
 					else
 					{
-						m_stream = fileInfo.Open(FileMode.Open, FileAccess.ReadWrite);
+						m_stream = fileInfo.Open(FileMode.Open, FileAccess.ReadWrite, FileShare.Read);
 					}
 				}
 				m_stream.Position = m_stream.Length;
