@@ -147,7 +147,9 @@ namespace Game
 				ExternalContentManager.Initialize();
 				MusicManager.Initialize();
 				ScreensManager.Initialize();
-				//Log.Information(OnlineJsonReader.GetLatestAPIVersion().Result);
+				OnlineJsonReader.GetLatestAPIVersion().Wait();
+				Log.Information(OnlineJsonReader.GetLatestAPIVersion().Result);
+				//OnlineJsonReader.GetLatestAPIVersion().ContinueWith(xxx)
 				Log.Information("Program Initialize Success");
 			}
 			catch (Exception e)

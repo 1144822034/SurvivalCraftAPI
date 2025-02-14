@@ -12,21 +12,30 @@ namespace Game
 		/// <returns>API统一链接发布的最新版本</returns>
 		public static async Task<bool> GetLatestAPIVersion()
 		{
-			string url = "https://gitee.com/api/v5/repos/THPRC/survivalcraft-api/releases";
-			return await GetLatestVersion(url)> float.Parse(ModsManager.ApiVersionString);
+			string url = "https://gitee.com/api/v5/repos/THPRC/survivalcraft-api/releases/latest";
+			return await GetLatestVersion(url,true)>float.Parse(ModsManager.ApiVersionString);
 		}
+		/*public static async Task<bool> GetLatestAPIVersion()
+		{
+			string url = "https://gitee.com/api/v5/repos/THPRC/survivalcraft-api/releases";
+			return await GetLatestVersion(url,false) > float.Parse(ModsManager.ApiVersionString);
+		}*/
 		/// <summary>
 		/// 获取 Gitee release最后一个版本
 		/// </summary>
 		/// <param name="url">平台Json文件的API链接</param>
 		/// <returns>最新版本号</returns>
-		public static async Task<float> GetLatestVersion(string url)
+		//当 direct 为真，将获取的 json 直接当做数组中的一个元素
+		//常用于链接自带 latest 标识的情况
+		public static async Task<float> GetLatestVersion(string url,bool direct)
 		{
 			using(JsonDocument remoteDoc = await GetJsonFromUrlAsync(url))
 			{
 				JsonElement root = remoteDoc.RootElement;
 				// 假设 API 返回的版本信息在第一个 release 的 tag_name 字段
-				var input = root[root.GetArrayLength()-1].GetProperty("tag_name").GetString();
+				string input = direct
+					? root.GetProperty("tag_name").GetString() 
+					: root[root.GetArrayLength() - 1].GetProperty("tag_name").GetString();
 				if(input.StartsWith("API",StringComparison.OrdinalIgnoreCase))
 				{
 					string versionPart = input.Substring(3);
