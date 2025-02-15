@@ -1,46 +1,46 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
-    <PropertyGroup>
+	<PropertyGroup>
 		<TargetFrameworks Condition=" '$(Configuration)' == 'Release' ">net9.0;net9.0-windows</TargetFrameworks>
 		<TargetFramework Condition=" '$(Configuration)' == 'Debug' ">net9.0-windows</TargetFramework>
 		<OutputType Condition="'$(TargetFramework)' == 'net9.0'">library</OutputType>
 		<NoWarn>1701;1702;CA1416;1591;1572;1573;1587</NoWarn>
 		<RootNamespace>Game</RootNamespace>
-        <IsWebBootstrapper>false</IsWebBootstrapper>
-        <PublishUrl>publish\</PublishUrl>
-        <Install>true</Install>
-        <InstallFrom>Disk</InstallFrom>
-        <UpdateEnabled>false</UpdateEnabled>
-        <UpdateMode>Foreground</UpdateMode>
-        <UpdateInterval>7</UpdateInterval>
-        <UpdateIntervalUnits>Days</UpdateIntervalUnits>
-        <UpdatePeriodically>false</UpdatePeriodically>
-        <UpdateRequired>false</UpdateRequired>
-        <MapFileExtensions>true</MapFileExtensions>
-        <ApplicationVersion>2.4.0.0</ApplicationVersion>
-        <UseApplicationTrust>false</UseApplicationTrust>
-        <PublishWizardCompleted>true</PublishWizardCompleted>
-        <BootstrapperEnabled>False</BootstrapperEnabled>
-        <GenerateAssemblyInfo>False</GenerateAssemblyInfo>
-        <Configurations>Debug;Release</Configurations>
-        <RuntimeIdentifier>win-x64</RuntimeIdentifier>
-        <PackageId>SurvivalcraftAPI.Survivalcraft</PackageId>
-        <Title>SurvivalcraftAPI.Survivalcraft</Title><!--For NuGet Package-->
-        <Version>1.8.0.0</Version><!--For NuGet Package-->
-        <PackageProjectUrl>https://gitee.com/THPRC/survivalcraft-api</PackageProjectUrl>
-        <RepositoryUrl>https://gitee.com/THPRC/survivalcraft-api</RepositoryUrl>
-        <RepositoryType>Git</RepositoryType>
+		<IsWebBootstrapper>false</IsWebBootstrapper>
+		<PublishUrl>publish\</PublishUrl>
+		<Install>true</Install>
+		<InstallFrom>Disk</InstallFrom>
+		<UpdateEnabled>false</UpdateEnabled>
+		<UpdateMode>Foreground</UpdateMode>
+		<UpdateInterval>7</UpdateInterval>
+		<UpdateIntervalUnits>Days</UpdateIntervalUnits>
+		<UpdatePeriodically>false</UpdatePeriodically>
+		<UpdateRequired>false</UpdateRequired>
+		<MapFileExtensions>true</MapFileExtensions>
+		<ApplicationVersion>2.4.0.0</ApplicationVersion>
+		<UseApplicationTrust>false</UseApplicationTrust>
+		<PublishWizardCompleted>true</PublishWizardCompleted>
+		<BootstrapperEnabled>False</BootstrapperEnabled>
+		<GenerateAssemblyInfo>False</GenerateAssemblyInfo>
+		<Configurations>Debug;Release</Configurations>
+		<RuntimeIdentifier>win-x64</RuntimeIdentifier>
+		<PackageId>SurvivalcraftAPI.Survivalcraft</PackageId>
+		<Title>SurvivalcraftAPI.Survivalcraft</Title><!--For NuGet Package-->
+		<Version>1.8.0.0</Version><!--For NuGet Package-->
+		<PackageProjectUrl>https://gitee.com/THPRC/survivalcraft-api</PackageProjectUrl>
+		<RepositoryUrl>https://gitee.com/THPRC/survivalcraft-api</RepositoryUrl>
+		<RepositoryType>Git</RepositoryType>
 		<AllowUnsafeBlocks>true</AllowUnsafeBlocks>
 		<GenerateSerializationAssemblies>Off</GenerateSerializationAssemblies>
-    </PropertyGroup>
-    <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
-        <DefineConstants>DEBUG</DefineConstants>
-        <Optimize>True</Optimize>
-    </PropertyGroup>
-    <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
-        <DebugType>none</DebugType>
-        <DefineConstants>TRACE</DefineConstants>
+	</PropertyGroup>
+	<PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
+		<DefineConstants>DEBUG</DefineConstants>
+		<Optimize>True</Optimize>
+	</PropertyGroup>
+	<PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
+		<DebugType>none</DebugType>
+		<DefineConstants>TRACE</DefineConstants>
 
-    </PropertyGroup>
+	</PropertyGroup>
 	<PropertyGroup Condition="'$(TargetFramework)' == 'net9.0-windows'">
 		<OutputType>WinExe</OutputType>
 		<IncludeNativeLibrariesForSelfExtract>true</IncludeNativeLibrariesForSelfExtract>
@@ -50,34 +50,33 @@
 		<IncludeAllContentForSelfExtract>false</IncludeAllContentForSelfExtract>
 		<UseWindowsForms>False</UseWindowsForms>
 	</PropertyGroup>
-    <PropertyGroup>
-        <StartupObject Condition="'$(TargetFramework)' == 'net9.0-windows'">Game.Program</StartupObject>
-        <ManifestCertificateThumbprint>7727A446B0580C16A300D429D1BE0ABCE78B88E4</ManifestCertificateThumbprint>
-        <ManifestKeyFile>Survivalcraft_TemporaryKey.pfx</ManifestKeyFile>
-        <GenerateManifests>false</GenerateManifests>
-        <SignManifests>false</SignManifests>
-        <ApplicationIcon>Content\icon.ico</ApplicationIcon>
-        <TargetZone>LocalIntranet</TargetZone>
-        <ApplicationManifest>Properties\app.manifest</ApplicationManifest>
-        <AutoGenerateBindingRedirects>false</AutoGenerateBindingRedirects>
-    </PropertyGroup>
-    <ItemGroup>
+	<PropertyGroup>
+		<StartupObject Condition="'$(TargetFramework)' == 'net9.0-windows'">Game.Program</StartupObject>
+		<ManifestCertificateThumbprint>7727A446B0580C16A300D429D1BE0ABCE78B88E4</ManifestCertificateThumbprint>
+		<ManifestKeyFile>Survivalcraft_TemporaryKey.pfx</ManifestKeyFile>
+		<GenerateManifests>false</GenerateManifests>
+		<SignManifests>false</SignManifests>
+		<ApplicationIcon>Content\icon.ico</ApplicationIcon>
+		<TargetZone>LocalIntranet</TargetZone>
+		<ApplicationManifest>Properties\app.manifest</ApplicationManifest>
+		<AutoGenerateBindingRedirects>false</AutoGenerateBindingRedirects>
+	</PropertyGroup>
+	<ItemGroup>
 		<None Include="Content.zip">
 			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 		</None>
-        <Content Include="Content\icon.ico" />
+		<Content Include="Content\icon.ico" />
 
-        <PackageReference Include="TextCopy" Version="6.2.1" Condition="'$(TargetFramework)' == 'net9.0-windows'" />
-        <PackageReference Include="ImeSharp.ImmOnly" Version="1.0.0" Condition="'$(TargetFramework)' == 'net9.0-windows'" />
+		<PackageReference Include="TextCopy" Version="6.2.1" Condition="'$(TargetFramework)' == 'net9.0-windows'" />
+		<PackageReference Include="ImeSharp.ImmOnly" Version="1.0.0" Condition="'$(TargetFramework)' == 'net9.0-windows'" />
 
-        <Compile Remove="SimpleJson\SimpleJson.Reflection\ReflectionUtils.cs" />
-        <Using Include="System.IO" />
-        <ProjectReference Include="..\Engine\Engine.csproj" />
-        <ProjectReference Include="..\EntitySystem\EntitySystem.csproj" />
-        <PackageReference Include="Jint" Version="4.2.0" />
-        <PackageReference Include="System.Net.Http" Version="4.3.4" />
-        <PackageReference Include="System.Private.Uri" Version="4.3.2" />
-        <PackageReference Include="System.Text.RegularExpressions" Version="4.3.1" />
+		<Compile Remove="SimpleJson\SimpleJson.Reflection\ReflectionUtils.cs" />
+		<Using Include="System.IO" />
+		<ProjectReference Include="..\EntitySystem\EntitySystem.csproj" />
+		<PackageReference Include="Jint" Version="4.2.0" />
+		<PackageReference Include="System.Net.Http" Version="4.3.4" />
+		<PackageReference Include="System.Private.Uri" Version="4.3.2" />
+		<PackageReference Include="System.Text.RegularExpressions" Version="4.3.1" />
 		<PackageReference Include="NAudio.Flac.Unknown.Mod" Version="1.0.3" />
 		<PackageReference Include="Tomlyn" Version="0.18.0" />
 		<None Update="openal32.dll">
@@ -86,34 +85,31 @@
 		<None Update="wrap_oal.dll">
 			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 		</None>
-		<None Update="Content\Assets\Textures\Gui\ResourcesManagement.webp">
-		  <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-		</None>
-    </ItemGroup>
-    <ItemGroup Condition="'$(Configuration)' == 'Debug' And '$(TargetFramework)' == 'net9.0-windows'">
+	</ItemGroup>
+	<ItemGroup Condition="'$(Configuration)' == 'Debug' And '$(TargetFramework)' == 'net9.0-windows'">
 		<EmbeddedResource Include="init.js">
 			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 		</EmbeddedResource>
 		<None Update="Content\Assets\Textures\Gui\Earth.webp">
-		  <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+			<CopyToOutputDirectory>Never</CopyToOutputDirectory>
 		</None>
-    </ItemGroup>
-    <ItemGroup Condition="'$(Configuration)' == 'Release' And '$(TargetFramework)' == 'net9.0-windows'">
+	</ItemGroup>
+	<ItemGroup Condition="'$(Configuration)' == 'Release' And '$(TargetFramework)' == 'net9.0-windows'">
 		<EmbeddedResource Include="init.js">
 			<CopyToOutputDirectory>Never</CopyToOutputDirectory>
 		</EmbeddedResource>
-    </ItemGroup>
-    <PropertyGroup>
-        <AssemblyVersion>2.4.0.0</AssemblyVersion>
-        <FileVersion>2.4.0.0</FileVersion>
-        <ImplicitUsings>enable</ImplicitUsings>
-        <NeutralLanguage>zh-CN</NeutralLanguage>
-        <GenerateDocumentationFile>True</GenerateDocumentationFile>
-    </PropertyGroup>
-    <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
-      <DebugType>embedded</DebugType>
-    </PropertyGroup>
-    <Target Name="PreBuild" BeforeTargets="PreBuildEvent" Condition="'$(TargetFramework)' == 'net9.0-windows'">
-        <Exec Command="&quot;$(ProjectDir)7za.exe&quot; a -tzip -mx=9 -r &quot;$(ProjectDir)Content.zip&quot; &quot;$(ProjectDir)Content\*&quot;" />
-    </Target>
+	</ItemGroup>
+	<PropertyGroup>
+		<AssemblyVersion>2.4.0.0</AssemblyVersion>
+		<FileVersion>2.4.0.0</FileVersion>
+		<ImplicitUsings>enable</ImplicitUsings>
+		<NeutralLanguage>zh-CN</NeutralLanguage>
+		<GenerateDocumentationFile>True</GenerateDocumentationFile>
+	</PropertyGroup>
+	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+		<DebugType>embedded</DebugType>
+	</PropertyGroup>
+	<Target Name="PreBuild" BeforeTargets="PreBuildEvent" Condition="'$(TargetFramework)' == 'net9.0-windows'">
+		<Exec Command="&quot;$(ProjectDir)7za.exe&quot; a -tzip -mx=9 -r &quot;$(ProjectDir)Content.zip&quot; &quot;$(ProjectDir)Content\*&quot;" />
+	</Target>
 </Project>
