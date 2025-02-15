@@ -121,7 +121,11 @@
     },
     "MainMenuScreen": {
         "1": "Failed to Get Announcement",
-        "2": "There is no announcement now.\nOr connecting to the server is failed."
+        "2": "There is no announcement now.\nOr connecting to the server is failed.",
+        "3": "Текущая версия не требует обновлений",
+        "4": "Найдена новая версия: {0}\nТекущая версия: {1}\nХотите перейти на страницу загрузки API?",
+        "5": "Перейти",
+        "6": "Получение обновлений..."
     },
     "SubsystemFurnitureBlockBehavior": {
         "0": "Превращение в мебель не поддерживается",

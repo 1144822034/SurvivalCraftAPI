@@ -1,4 +1,5 @@
 using Engine;
+using Engine.Graphics;
 using Engine.Input;
 using System.Collections.Generic;
 using System.Globalization;
@@ -20,6 +21,14 @@ namespace Game
 
 		public ButtonWidget m_languageSwitchButton;
 
+		public ButtonWidget m_updateCheckButton;
+
+		public Subtexture m_needToUpdateIcon;
+
+		public Subtexture m_dontNeedUpdateIcon;
+
+		public RectangleWidget m_updateButtonIcon;
+
 		public StackPanelWidget m_leftBottomBar;
 
 		public StackPanelWidget m_rightBottomBar;
@@ -36,6 +45,10 @@ namespace Game
 			m_languageSwitchButton = Children.Find<ButtonWidget>("LanguageSwitchButton");
 			m_leftBottomBar = Children.Find<StackPanelWidget>("LeftBottomBar");
 			m_rightBottomBar = Children.Find<StackPanelWidget>("RightBottomBar");
+			m_updateCheckButton = Children.Find<ButtonWidget>("UpdateCheckButton");
+			m_updateButtonIcon = Children.Find<RectangleWidget>("UpdateIcon");
+			m_needToUpdateIcon = ContentManager.Get<Subtexture>("Textures/Gui/NeedToUpdate");
+			m_dontNeedUpdateIcon = ContentManager.Get<Subtexture>("Textures/Gui/UpdateChecking");
 			string languageType = ModsManager.Configs.GetValueOrDefault("Language", "zh-CN");
 			m_bulletinStackPanel.IsVisible = languageType == "zh-CN";
 			m_copyrightLabel.IsVisible = languageType != "zh-CN";
@@ -80,6 +93,37 @@ namespace Game
 					LanguageControl.ChangeLanguage(((KeyValuePair<string, CultureInfo>)item).Key);
 				}));
 			}
+			//更新控制
+			if (!APIUpdateManager.IsNeedUpdate.HasValue)
+			{
+				float angle = (float)Time.RealTime * 2;//获取更新时旋转图标
+				float scale = (angle + MathF.PI / 4) / (MathF.PI / 2);
+				scale -= MathF.Round(scale);
+				scale *= (MathF.PI / 2);
+				scale = new Vector2(1,MathF.Tan(scale)).Length() / MathF.Sqrt(2);
+				m_updateButtonIcon.LayoutTransform = Matrix.CreateRotationZ(angle) * Matrix.CreateScale(scale);
+			}
+			else
+			{
+				m_updateButtonIcon.LayoutTransform = Matrix.CreateRotationZ(0) * Matrix.CreateScale(1);
+				m_updateButtonIcon.Subtexture = APIUpdateManager.IsNeedUpdate.Value ? m_needToUpdateIcon : m_dontNeedUpdateIcon;
+			}
+			if (m_updateCheckButton.IsClicked)
+			{
+				if (!APIUpdateManager.IsNeedUpdate.HasValue) DialogsManager.ShowDialog(this, new MessageDialog(string.Empty, LanguageControl.Get(fName, 6), LanguageControl.Ok, null, null));
+				else
+				{
+					if(APIUpdateManager.IsNeedUpdate.Value)
+						DialogsManager.ShowDialog(this,new MessageDialog(string.Empty,string.Format(LanguageControl.Get(fName,4),APIUpdateManager.LatestVersion,APIUpdateManager.CurrentVersion),LanguageControl.Get(fName,5),LanguageControl.Cancel,
+								(button) => {
+									if(button == MessageDialogButton.Button2)
+									{
+										WebBrowserManager.LaunchBrowser(ModsManager.APIReleaseLink_Client);
+									}
+								}));
+					else DialogsManager.ShowDialog(this,new MessageDialog(string.Empty,LanguageControl.Get(fName,3),LanguageControl.Ok,null,null));
+				}
+			}
 			if (Children.Find<ButtonWidget>("Play").IsClicked)
 			{
 				ScreensManager.SwitchScreen("Play");
@@ -100,7 +144,7 @@ namespace Game
 			{
 				MarketplaceManager.ShowMarketplace();
 			}
-			if(Children.Find<ButtonWidget>("ResourcesManagement").IsClicked)
+			if (Children.Find<ButtonWidget>("ResourcesManagement").IsClicked)
 			{
 				ScreensManager.m_screens.TryGetValue("Content",out Screen screen);
 				ContentScreen contentScreen = screen as ContentScreen;

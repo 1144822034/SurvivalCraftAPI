@@ -52,7 +52,7 @@ namespace Game
 		/// 获取 Gitee release最后一个版本的Json文件数据
 		/// </summary>
 		/// <returns></returns>
-		public static async Task<JsonDocument> GetLatestAPIJsonDocument() => await OnlineJsonReader.GetJsonFromUrlAsync(ModsManager.APIReleaseLink);
+		public static async Task<JsonDocument> GetLatestAPIJsonDocument() => await OnlineJsonReader.GetJsonFromUrlAsync(ModsManager.APIReleaseLink_API);
 
 		/// <summary>
 		/// 将API版本字符串转为浮点数
