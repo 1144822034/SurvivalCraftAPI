@@ -290,7 +290,7 @@ namespace Game
 			XmlUtils.SetAttributeValue(xElement, "Guid", databaseObject.Guid);
 			XmlUtils.SetAttributeValue(xElement, "Name", "GameProject");
 			XmlUtils.SetAttributeValue(xElement, "Version", VersionsManager.SerializationVersion);
-            XmlUtils.SetAttributeValue(xElement, "APIVersion", ModsManager.ApiVersionString);
+            XmlUtils.SetAttributeValue(xElement, "APIVersion", ModsManager.APIVersionString);
             var xElement2 = new XElement("Subsystems");
 			xElement.Add(xElement2);
             var xElement3 = new XElement("Values");

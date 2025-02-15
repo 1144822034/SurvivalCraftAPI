@@ -70,7 +70,7 @@ namespace Game
 			Canvas.AddChildren(Background);
 			Canvas.AddChildren(LogList);
 			AddChildren(Canvas);
-			Info("Initializing Mods Manager. Api Version: " + ModsManager.ApiVersionString);
+			Info("Initializing Mods Manager. Api Version: " + ModsManager.APIVersionString);
 		}
 		public void ContentLoaded()
 		{
@@ -287,7 +287,7 @@ namespace Game
 				}
 				ModsManager.ModListAllDo((modEntity) => { modEntity.LoadLauguage(); });
 #if WINDOWS
-				string title = $"{LanguageControl.Get("Usual", "gameName")} {ModsManager.ShortGameVersion} - {LanguageControl.Get("Usual", "api")} {ModsManager.ApiVersionString}";
+				string title = $"{LanguageControl.Get("Usual", "gameName")} {ModsManager.ShortGameVersion} - {LanguageControl.Get("Usual", "api")} {ModsManager.APIVersionString}";
 #if DEBUG
 				title = $"[{LanguageControl.Get("Usual","debug")}]{title}";
 #endif

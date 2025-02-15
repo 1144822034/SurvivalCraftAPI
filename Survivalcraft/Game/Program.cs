@@ -96,7 +96,7 @@ namespace Game
 			Window.Frame += FrameHandler;
 			CultureInfo.DefaultThreadCurrentCulture = CultureInfo.InvariantCulture;
 			CultureInfo.DefaultThreadCurrentUICulture = CultureInfo.InvariantCulture;
-			string title = $"Survivalcraft {ModsManager.ShortGameVersion} - API {ModsManager.ApiVersionString}";
+			string title = $"Survivalcraft {ModsManager.ShortGameVersion} - API {ModsManager.APIVersionString}";
 			Log.RemoveAllLogSinks();
 			Log.AddLogSink(new GameLogSink());
 #if DEBUG
@@ -140,16 +140,14 @@ namespace Game
 		public static void Initialize()
 		{
 			Log.Information(
-				$"Survivalcraft starting up at {DateTime.Now}, GameVersion={VersionsManager.Version}, BuildConfiguration={VersionsManager.BuildConfiguration}, Platform={VersionsManager.PlatformString}, Storage.AvailableFreeSpace={Storage.FreeSpace / 1024 / 1024}MB, ApproximateScreenDpi={ScreenResolutionManager.ApproximateScreenDpi:0.0}, ApproxScreenInches={ScreenResolutionManager.ApproximateScreenInches:0.0}, ScreenResolution={Window.Size}, ProcessorsCount={Environment.ProcessorCount}, APIVersion={ModsManager.ApiVersionString}, 64bit={Environment.Is64BitProcess}");
+				$"Survivalcraft starting up at {DateTime.Now}, GameVersion={VersionsManager.Version}, BuildConfiguration={VersionsManager.BuildConfiguration}, Platform={VersionsManager.PlatformString}, Storage.AvailableFreeSpace={Storage.FreeSpace / 1024 / 1024}MB, ApproximateScreenDpi={ScreenResolutionManager.ApproximateScreenDpi:0.0}, ApproxScreenInches={ScreenResolutionManager.ApproximateScreenInches:0.0}, ScreenResolution={Window.Size}, ProcessorsCount={Environment.ProcessorCount}, APIVersion={ModsManager.APIVersionString}, 64bit={Environment.Is64BitProcess}");
 			try
 			{
 				SettingsManager.Initialize();
 				ExternalContentManager.Initialize();
 				MusicManager.Initialize();
 				ScreensManager.Initialize();
-				OnlineJsonReader.GetLatestAPIVersion().Wait();
-				Log.Information(OnlineJsonReader.GetLatestAPIVersion().Result);
-				//OnlineJsonReader.GetLatestAPIVersion().ContinueWith(xxx)
+				APIUpdateManager.Initialize();
 				Log.Information("Program Initialize Success");
 			}
 			catch (Exception e)

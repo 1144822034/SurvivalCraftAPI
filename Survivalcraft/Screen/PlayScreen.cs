@@ -171,7 +171,7 @@ namespace Game
 				{
 					foreach (var value in MotdManager.FilterModAll)
 					{
-						if (value.FilterAPIVersion == ModsManager.ApiVersionString && value.PackageName == modEntity.modInfo.PackageName && CompareVersion(value.Version, modEntity.modInfo.Version))
+						if (value.FilterAPIVersion == ModsManager.APIVersionString && value.PackageName == modEntity.modInfo.PackageName && CompareVersion(value.Version, modEntity.modInfo.Version))
 						{
 							tips += string.Format("{0}.{1}(v{2})  {3}\n", num, modEntity.modInfo.Name, modEntity.modInfo.Version, value.Explanation);
 							num++;

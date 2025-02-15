@@ -77,7 +77,7 @@ namespace Game
 			dictionary.Add("SortOrder", sortOrder ?? string.Empty);
 			dictionary.Add("Platform", VersionsManager.PlatformString);
 			dictionary.Add("Version", VersionsManager.Version);
-			dictionary.Add("APIVersion", ModsManager.ApiVersionString);
+			dictionary.Add("APIVersion", ModsManager.APIVersionString);
 			dictionary.Add("key", keySearch);
 			dictionary.Add("SearchType", searchType);
 			WebManager.Post(m_scResDirAddress, null, Header, WebManager.UrlParametersToStream(dictionary), progress, delegate (byte[] result)

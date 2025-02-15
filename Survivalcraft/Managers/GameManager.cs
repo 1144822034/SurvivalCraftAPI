@@ -122,7 +122,7 @@ namespace Game
 						});
 						projectData.Save(xElement);
 						XmlUtils.SetAttributeValue(xElement, "Version", VersionsManager.SerializationVersion);
-                        XmlUtils.SetAttributeValue(xElement, "APIVersion", ModsManager.ApiVersionString);
+                        XmlUtils.SetAttributeValue(xElement, "APIVersion", ModsManager.APIVersionString);
                         Storage.CreateDirectory(subsystemGameInfo.DirectoryName);
 						ModsManager.HookAction("OnProjectXmlSaved",loader => {
 							loader.OnProjectXmlSaved(xElement);

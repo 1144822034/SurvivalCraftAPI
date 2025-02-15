@@ -17,10 +17,11 @@ using System.IO.Compression;
 public static class ModsManager
 {
 	public static string ModSuffix = ".scmod";
-	public static string ApiVersionString = "1.81";
+	public static string APIVersionString = "1.81";
 	public static string GameVersion = "2.4.0.0";
 	public static string ShortGameVersion = "2.4";
 	public static string ReportLink = "https://gitee.com/THPRC/survivalcraft-api/issues";
+	public static string APIReleaseLink = "https://gitee.com/api/v5/repos/THPRC/survivalcraft-api/releases/latest";
 	public static string fName = "ModsManager";
 	[Obsolete("使用ApiVersionString")]
 	public enum ApiVersionEnum//不准确，弃用

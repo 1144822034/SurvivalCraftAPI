@@ -92,7 +92,7 @@ namespace Game
 
 		public static void UpdateVersion()
 		{
-			string url = string.Format(SettingsManager.MotdUpdateCheckUrl, VersionsManager.SerializationVersion, VersionsManager.PlatformString, ModsManager.ApiVersionString, LanguageControl.LName());
+			string url = string.Format(SettingsManager.MotdUpdateCheckUrl, VersionsManager.SerializationVersion, VersionsManager.PlatformString, ModsManager.APIVersionString, LanguageControl.LName());
 			WebManager.Get(url, null, null, new CancellableProgress(), data =>
 			{
 				UpdateResult = JsonDocument.Parse(data);
