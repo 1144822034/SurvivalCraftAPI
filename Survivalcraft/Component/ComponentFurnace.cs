@@ -43,7 +43,7 @@ namespace Game
 		public CraftingRecipe m_smeltingRecipe;
 
 		public float m_smeltingProgress;
-		private float epsilon => Math.Min(m_subsystemTime.GameTimeDelta, 0.1f);
+		protected float epsilon => Math.Min(m_subsystemTime.GameTimeDelta, 0.1f);
 		public int RemainsSlotIndex => SlotsCount - 1;
 		public int ResultSlotIndex => SlotsCount - 2;
 		public int FuelSlotIndex => SlotsCount - 3;
@@ -52,8 +52,7 @@ namespace Game
 		public float SmeltingProgress => m_smeltingProgress;
 
 		public UpdateOrder UpdateOrder => UpdateOrder.Default;
-
-		public float FireTimeRemaining
+		public float m_fireTimeRemaining
 		{
 			get
 			{
@@ -62,6 +61,7 @@ namespace Game
 			}
 			set => m_fuelEndTime = (float)m_subsystemGameInfo.TotalElapsedGameTime + value;
 		}
+		public float FireTimeRemaining => m_fireTimeRemaining;
 
 		public override int GetSlotCapacity(int slotIndex, int value)
 		{

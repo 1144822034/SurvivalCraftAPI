@@ -30,7 +30,7 @@ namespace GameEntitySystem
 					{
 						throw ex;
 					}
-					Log.Warning("Ignoring invalid entity. Reason: {0}", ex.Message);
+					Log.Warning("Ignoring invalid entity. Reason: {0}", ex);
 				}
 			}
 		}
