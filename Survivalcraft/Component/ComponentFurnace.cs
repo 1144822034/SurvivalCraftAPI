@@ -34,13 +34,7 @@ namespace Game
 
 		public string[] m_matchedIngredients = new string[9];
 
-		[Obsolete("Use m_fireTimeRemaining instead")]
-		public float m_fuelEndTime
-		{
-			get => m_fireTimeRemaining;
-			set => m_fireTimeRemaining = value;
-		}
-		public float m_fireTimeRemaining;
+		public float m_fuelEndTime;
 
 		public float m_heatLevel;
 
@@ -63,7 +57,7 @@ namespace Game
 		{
 			get
 			{
-				float ans = m_fireTimeRemaining - (float)m_subsystemGameInfo.TotalElapsedGameTime;
+				float ans = m_fuelEndTime - (float)m_subsystemGameInfo.TotalElapsedGameTime;
 				return ans > -epsilon ? ans + epsilon : 0f;
 			}
 		}
@@ -109,8 +103,8 @@ namespace Game
                 else if (block.GetFuelHeatLevel(slot2.Value) > 0f)
                 {
                     slot2.Count--;
-					if (m_heatLevel == 0f) m_fireTimeRemaining = (float)m_subsystemGameInfo.TotalElapsedGameTime;
-                    m_fireTimeRemaining = m_fireTimeRemaining + block.GetFuelFireDuration(slot2.Value) * FuelTimeEfficiency;
+					if (m_heatLevel == 0f) m_fuelEndTime = (float)m_subsystemGameInfo.TotalElapsedGameTime;
+                    m_fuelEndTime = m_fuelEndTime + block.GetFuelFireDuration(slot2.Value) * FuelTimeEfficiency;
                     m_heatLevel = block.GetFuelHeatLevel(slot2.Value);
 					return true;
                 }
@@ -147,7 +141,7 @@ namespace Game
 		public virtual void StopSmelting(bool resetProgress)
 		{
             m_heatLevel = 0f;
-			m_fireTimeRemaining = 0f;
+			m_fuelEndTime = 0f;
             m_smeltingRecipe = null;
             if(resetProgress) m_smeltingProgress = 0f;
         }
@@ -157,7 +151,7 @@ namespace Game
 			if (m_heatLevel > 0f)
 			{
 				int fuelAdded = 0;
-				while (m_fireTimeRemaining + epsilon < (float)m_subsystemGameInfo.TotalElapsedGameTime)
+				while (m_fuelEndTime + epsilon < (float)m_subsystemGameInfo.TotalElapsedGameTime)
 				{
 					if (m_smeltingRecipe != null && UseFuel()){
 						fuelAdded++;
@@ -243,7 +237,7 @@ namespace Game
 				throw new InvalidOperationException("Invalid furnace size.");
 			}
 			float fireTimeRemaining = valuesDictionary.GetValue<float>("FireTimeRemaining");
-			m_fireTimeRemaining = (float)m_subsystemGameInfo.TotalElapsedGameTime + fireTimeRemaining;
+			m_fuelEndTime = (float)m_subsystemGameInfo.TotalElapsedGameTime + fireTimeRemaining;
 			m_heatLevel = valuesDictionary.GetValue<float>("HeatLevel");
 			m_updateSmeltingRecipe = true;
 			if(m_heatLevel > 0f)
@@ -253,7 +247,7 @@ namespace Game
 		public override void Save(ValuesDictionary valuesDictionary, EntityToIdMap entityToIdMap)
 		{
 			base.Save(valuesDictionary, entityToIdMap);
-			float fireTimeRemaining = m_fireTimeRemaining - (float)m_subsystemGameInfo.TotalElapsedGameTime;
+			float fireTimeRemaining = m_fuelEndTime - (float)m_subsystemGameInfo.TotalElapsedGameTime;
 			if(fireTimeRemaining < 0) fireTimeRemaining = 0 ;
             valuesDictionary.SetValue("FireTimeRemaining", fireTimeRemaining);
 			valuesDictionary.SetValue("HeatLevel", m_heatLevel);
