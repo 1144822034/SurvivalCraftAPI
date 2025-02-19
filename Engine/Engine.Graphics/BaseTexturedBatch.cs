@@ -43,7 +43,7 @@ namespace Engine.Graphics
 			TriangleIndices.Clear();
 		}
 
-        public void Flush(Matrix matrix, bool clearAfterFlush = true)
+        public virtual void Flush(Matrix matrix, bool clearAfterFlush = true)
         {
             Flush(matrix, Vector4.One, clearAfterFlush);
         }
