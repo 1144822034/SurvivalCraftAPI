@@ -34,6 +34,12 @@ namespace Game
 
 		public string[] m_matchedIngredients = new string[9];
 
+		[Obsolete("Use m_fireTimeRemaining instead")]
+		public float m_fuelEndTime
+		{
+			get => m_fireTimeRemaining;
+			set => m_fireTimeRemaining = value;
+		}
 		public float m_fireTimeRemaining;
 
 		public float m_heatLevel;
