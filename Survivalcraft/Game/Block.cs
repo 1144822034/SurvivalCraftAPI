@@ -27,7 +27,7 @@ namespace Game
 
 		public Vector3 FirstPersonOffset = Vector3.Zero;
 
-		public bool StaticBlockIndex = false;
+		public virtual bool StaticBlockIndex { get; set; } = false;
 
 		public bool CanBeBuiltIntoFurniture = false;
 
