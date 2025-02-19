@@ -156,6 +156,18 @@ namespace Game
 				StopMusic();
 			};
 #endif
+			Window.Closed += delegate
+			{
+				try
+				{
+					Utilities.Dispose(ref m_sound);
+					Utilities.Dispose(ref m_fadeSound);
+				}
+				catch
+				{
+					// ignored
+				}
+			};
 		}
 
 		public static void PlayMusic(string name, float startPercentage)

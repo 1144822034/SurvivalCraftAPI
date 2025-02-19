@@ -120,6 +120,10 @@ namespace Game
 
         public static void Initialize()
         {
+	        GameManager.ProjectDisposed += delegate
+	        {
+		        m_imageExtrusionsCache.Clear();
+	        };
             InitializeCategories();
             CalculateSlotTexCoordTables();
             InitializeBlocks(null);
@@ -418,10 +422,6 @@ namespace Game
                     AddCategory(category);
                 }
             }
-            GameManager.ProjectDisposed += delegate
-            {
-                m_imageExtrusionsCache.Clear();
-            };
             ModsManager.HookAction("BlocksInitalized", modLoader =>
             {
                 modLoader.BlocksInitalized();

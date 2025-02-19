@@ -488,7 +488,7 @@ namespace Game
 				m_resolutionMode = ResolutionMode.High;
 				VisibilityRange = 128;
 				ViewAngle = 1f;
-				TerrainMipmapsEnabled = true;
+				TerrainMipmapsEnabled = false;
 				SkyRenderingMode = SkyRenderingMode.Full;
 				ObjectsShadowsEnabled = true;
 				PresentationInterval = 1;
