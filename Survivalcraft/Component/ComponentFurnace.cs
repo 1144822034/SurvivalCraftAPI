@@ -60,6 +60,7 @@ namespace Game
 				float ans = m_fuelEndTime - (float)m_subsystemGameInfo.TotalElapsedGameTime;
 				return ans > -epsilon ? ans + epsilon : 0f;
 			}
+			set => m_fuelEndTime = (float)m_subsystemGameInfo.TotalElapsedGameTime + value;
 		}
 
 		public override int GetSlotCapacity(int slotIndex, int value)
