@@ -61,22 +61,8 @@ namespace Game
 		public List<int> m_clothesList = [];
 
 		public Dictionary<ClothingSlot, List<int>> m_clothes = [];
-
-		public static ClothingSlot[] m_innerSlotsOrder = new ClothingSlot[4]
-		{
-			ClothingSlot.Head,
-			ClothingSlot.Torso,
-			ClothingSlot.Feet,
-			ClothingSlot.Legs
-		};
-
-		public static ClothingSlot[] m_outerSlotsOrder = new ClothingSlot[4]
-		{
-			ClothingSlot.Head,
-			ClothingSlot.Torso,
-			ClothingSlot.Legs,
-			ClothingSlot.Feet
-		};
+		public static ClothingSlot[] m_innerSlotsOrder => ClothingSlot.ClothingSlotsByInt.Values.ToArray();
+		public static ClothingSlot[] m_outerSlotsOrder => ClothingSlot.ClothingSlotsByInt.Values.ToArray();
 
 		public static bool ShowClothedTexture = false;
 
@@ -86,7 +72,7 @@ namespace Game
 
 		public Texture2D OuterClothedTexture => m_outerClothedTexture;
 
-		public List<float> InsulationBySlots = new List<float>();
+		public Dictionary<ClothingSlot, float> InsulationBySlots = [];
 		public float Insulation
 		{
 			get;
@@ -109,7 +95,7 @@ namespace Game
 
 		Project IInventory.Project => Project;
 
-		public int SlotsCount => 4;
+		public int SlotsCount => ClothingSlot.ClothingSlots.Count;
 
 		public int VisibleSlotsCount
 		{
@@ -166,7 +152,10 @@ namespace Game
 				float densityModiferAppliedBefore = m_densityModifierApplied;
 				m_densityModifierApplied = 0f;
 				SteedMovementSpeedFactor = 1f;
-				InsulationBySlots = new List<float>([2f,0.2f,0.4f,2f]);
+				foreach(ClothingSlot clothingSlot in ClothingSlot.ClothingSlots.Values)
+				{
+					InsulationBySlots[clothingSlot] = clothingSlot.BasicInsulation;
+				}
 				foreach (KeyValuePair<ClothingSlot, List<int>> clothe in m_clothes)
 				{
 					foreach (int item in clothe.Value)
@@ -286,15 +275,15 @@ namespace Game
 			SteedMovementSpeedFactor = 1f;
 			Insulation = 0f;
 			LeastInsulatedSlot = ClothingSlot.Feet;
-			m_clothes[ClothingSlot.Head] = [];
-			m_clothes[ClothingSlot.Torso] = [];
-			m_clothes[ClothingSlot.Legs] = [];
-			m_clothes[ClothingSlot.Feet] = [];
+			foreach(ClothingSlot clothingSlot in m_innerSlotsOrder)
+			{
+				m_clothes[clothingSlot] = [];
+			}
 			ValuesDictionary value = valuesDictionary.GetValue<ValuesDictionary>("Clothes");
-			SetClothes(ClothingSlot.Head, HumanReadableConverter.ValuesListFromString<int>(';', value.GetValue<string>("Head")));
-			SetClothes(ClothingSlot.Torso, HumanReadableConverter.ValuesListFromString<int>(';', value.GetValue<string>("Torso")));
-			SetClothes(ClothingSlot.Legs, HumanReadableConverter.ValuesListFromString<int>(';', value.GetValue<string>("Legs")));
-			SetClothes(ClothingSlot.Feet, HumanReadableConverter.ValuesListFromString<int>(';', value.GetValue<string>("Feet")));
+			foreach(string key in ClothingSlot.ClothingSlots.Keys)
+			{
+				SetClothes(ClothingSlot.ClothingSlots[key], HumanReadableConverter.ValuesListFromString<int>(';',value.GetValue<string>(key)));
+			}
 			Display.DeviceReset += Display_DeviceReset;
 		}
 
@@ -302,10 +291,10 @@ namespace Game
 		{
 			var valuesDictionary2 = new ValuesDictionary();
 			valuesDictionary.SetValue("Clothes", valuesDictionary2);
-			valuesDictionary2.SetValue("Head", HumanReadableConverter.ValuesListToString(';', m_clothes[ClothingSlot.Head].ToArray()));
-			valuesDictionary2.SetValue("Torso", HumanReadableConverter.ValuesListToString(';', m_clothes[ClothingSlot.Torso].ToArray()));
-			valuesDictionary2.SetValue("Legs", HumanReadableConverter.ValuesListToString(';', m_clothes[ClothingSlot.Legs].ToArray()));
-			valuesDictionary2.SetValue("Feet", HumanReadableConverter.ValuesListToString(';', m_clothes[ClothingSlot.Feet].ToArray()));
+			foreach(string key in ClothingSlot.ClothingSlots.Keys)
+			{
+				valuesDictionary2.SetValue(key, HumanReadableConverter.ValuesListToString(';',m_clothes[ClothingSlot.ClothingSlots[key]].ToArray()));
+			}
 		}
 
 		public override void Dispose()

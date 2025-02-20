@@ -227,21 +227,12 @@ namespace Game
 				Description = string.Format(LanguageControl.Get(fName,2),MathF.Floor(level).ToString())
 			});
 			float clothingFactor = 1f;
-			foreach (int clothe in m_componentPlayer.ComponentClothing.GetClothes(ClothingSlot.Head))
+			foreach(ClothingSlot clothingSlot in ClothingSlot.ClothingSlots.Values)
 			{
-				GenerateClothingSpeedFactors(clothe);
-			}
-			foreach (int clothe2 in m_componentPlayer.ComponentClothing.GetClothes(ClothingSlot.Torso))
-			{
-				GenerateClothingSpeedFactors(clothe2);
-			}
-			foreach (int clothe3 in m_componentPlayer.ComponentClothing.GetClothes(ClothingSlot.Legs))
-			{
-				GenerateClothingSpeedFactors(clothe3);
-			}
-			foreach (int clothe4 in m_componentPlayer.ComponentClothing.GetClothes(ClothingSlot.Feet))
-			{
-				GenerateClothingSpeedFactors(clothe4);
+				foreach(int clothe in m_componentPlayer.ComponentClothing.GetClothes(clothingSlot))
+				{
+					GenerateClothingSpeedFactors(clothe);
+				}
 			}
 			float stamina = m_componentPlayer.ComponentVitalStats.Stamina;
 			float num4 = MathUtils.Lerp(0.5f, 1f, MathUtils.Saturate(4f * stamina)) * MathUtils.Lerp(0.9f, 1f, MathUtils.Saturate(stamina));

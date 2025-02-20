@@ -167,7 +167,7 @@ namespace Game
 		/// <param name="componentClothing"></param>
 		public virtual void OnClotheSet(ComponentClothing componentClothing)
 		{
-			componentClothing.InsulationBySlots[(int)Slot] += Insulation;
+			componentClothing.InsulationBySlots[Slot] += Insulation;
 			componentClothing.SteedMovementSpeedFactor *= SteedMovementSpeedFactor;
 			componentClothing.m_densityModifierApplied += DensityModifier;
 		}

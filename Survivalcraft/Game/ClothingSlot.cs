@@ -27,6 +27,11 @@ namespace Game
 			ClothingSlots["Torso"].MessageWhenLeastInsulated = LanguageControl.Get(ComponentVitalStats.fName,42);
 			ClothingSlots["Legs"].MessageWhenLeastInsulated = LanguageControl.Get(ComponentVitalStats.fName,43);
 			ClothingSlots["Feet"].MessageWhenLeastInsulated = LanguageControl.Get(ComponentVitalStats.fName,44);
+			ClothingSlots["Head"].BasicInsulation = 2f;
+			ClothingSlots["Torso"].BasicInsulation = 0.2f;
+			ClothingSlots["Legs"].BasicInsulation = 0.4f;
+			ClothingSlots["Feet"].BasicInsulation = 2f;
+
 			ModsManager.HookAction("InitializeClothingSlots",loader => {
 				loader.InitializeClothingSlots();
 				return false;
@@ -34,6 +39,8 @@ namespace Game
 		}
 		
 		public int StableId;
+
+		public float BasicInsulation = 1e8f;
 
 		public string Name;
 		public virtual string MessageWhenLeastInsulated { get; set; } = string.Empty;
