@@ -79,7 +79,7 @@ namespace Game
                 ComponentClothing componentClothing = Target.FindComponent<ComponentClothing>();
                 if (componentClothing != null)
                 {
-                    attackPower = componentClothing.ApplyArmorProtection(attackPower);
+                    attackPower = componentClothing.ApplyArmorProtection(this);
                 }
             }
             if (EnableResilienceFactor)

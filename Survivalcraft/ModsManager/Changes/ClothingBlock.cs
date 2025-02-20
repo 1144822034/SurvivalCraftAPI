@@ -1,5 +1,6 @@
 using Engine;
 using Engine.Graphics;
+using Engine.Serialization;
 using System.Collections.Generic;
 using System.Linq;
 using System.Xml.Linq;
@@ -27,42 +28,28 @@ namespace Game
 			Matrix.CreateTranslation(0f, -0.1f, 0f) * Matrix.CreateScale(2.7f)
 		};
 
-		public void LoadClothingData(XElement item)
+		public virtual void LoadClothingData(XElement item)
 		{
 			if (item.Name.LocalName == "ClothingData")
 			{
 				int.TryParse(item.Attribute("Index").Value, out int ClothIndex);
 				ClothIndex &= 0x3FF;
-                string newDescription = item.Attribute("Description")?.Value;
-				string newDisplayName = item.Attribute("DisplayName")?.Value;
-				if (newDescription != null && newDescription.StartsWith("[") && newDescription.EndsWith("]") && LanguageControl.TryGetBlock(string.Format("{0}:{1}", GetType().Name, ClothIndex), "Description", out var d))
+				ClothingData clothingData = new ClothingData(item);
+				string className = item.Attribute("Class")?.Value ?? typeof(ClothingData).FullName;
+				if(!string.IsNullOrEmpty(className))
 				{
-					newDescription = d;
+					try
+					{
+						Type type = TypeCache.FindType(className,false,true);
+						clothingData = (ClothingData)Activator.CreateInstance(type: type,args: new object[] { item });
+						if(clothingData == null) throw new Exception("ClothingData is not assignable to Game.ClothingData.");
+					}
+					catch(Exception ex)
+					{
+						Log.Error("ClothingData from class " + className + " create failed! " + ex);
+					}
 				}
-				if (newDisplayName != null && newDisplayName.StartsWith("[") && newDisplayName.EndsWith("]") && LanguageControl.TryGetBlock(string.Format("{0}:{1}", GetType().Name, ClothIndex), "DisplayName", out string n))
-				{
-					newDisplayName = n;
-				}
-				var clothingData = new ClothingData
-				{
-					Index = ClothIndex,
-					DisplayIndex = num,
-					DisplayName = newDisplayName,
-					Slot = XmlUtils.GetAttributeValue<ClothingSlot>(item, "Slot"),
-					ArmorProtection = XmlUtils.GetAttributeValue<float>(item, "ArmorProtection"),
-					Sturdiness = XmlUtils.GetAttributeValue<float>(item, "Sturdiness"),
-					Insulation = XmlUtils.GetAttributeValue<float>(item, "Insulation"),
-					MovementSpeedFactor = XmlUtils.GetAttributeValue<float>(item, "MovementSpeedFactor"),
-					SteedMovementSpeedFactor = XmlUtils.GetAttributeValue<float>(item, "SteedMovementSpeedFactor"),
-					DensityModifier = XmlUtils.GetAttributeValue<float>(item, "DensityModifier"),
-					IsOuter = XmlUtils.GetAttributeValue<bool>(item, "IsOuter"),
-					CanBeDyed = XmlUtils.GetAttributeValue<bool>(item, "CanBeDyed"),
-					Layer = XmlUtils.GetAttributeValue<int>(item, "Layer"),
-					PlayerLevelRequired = XmlUtils.GetAttributeValue<int>(item, "PlayerLevelRequired"),
-					Texture = ContentManager.Get<Texture2D>(XmlUtils.GetAttributeValue<string>(item, "TextureName")),
-					ImpactSoundsFolder = XmlUtils.GetAttributeValue<string>(item, "ImpactSoundsFolder"),
-					Description = newDescription
-				};
+				clothingData.DisplayIndex = num;
 				m_clothingData[ClothIndex] = clothingData;
 			}
 			num++;

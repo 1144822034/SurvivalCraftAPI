@@ -248,12 +248,13 @@ namespace Game
             Skip = false;
         }
 
-        /// <summary>
-        /// 计算护甲免伤时执行
-        /// </summary>
-        /// <param name="componentClothing"></param>
-        /// <param name="attackPower">未计算免伤前的伤害</param>
-        /// <returns>免伤后的伤害，当多个mod都有免伤计算时，取最小值</returns>
+		/// <summary>
+		/// 计算护甲免伤时执行
+		/// </summary>
+		/// <param name="componentClothing"></param>
+		/// <param name="attackPower">未计算免伤前的伤害</param>
+		/// <returns>免伤后的伤害，当多个mod都有免伤计算时，取最小值</returns>
+		[Obsolete("护甲系统调整，该接口不再适用。对于调整护甲的结算顺序，请调用DecideArmorProtectionSequence接口；对于调整单件护甲的防御效果，请给被调整的护甲创建新的ClothingData。")]
         public virtual float ApplyArmorProtection(ComponentClothing componentClothing, float attackPower, bool appliedByOtherMods, out bool Applied)
         {
             Applied = false;
@@ -1640,6 +1641,41 @@ namespace Game
 		[Obsolete("You can update your factors in your mod components.")]
 		public virtual void OnFactorsGenerate(ComponentFactors componentFactors)
 		{
+
+		}
+
+		/// <summary>
+		/// 计算护甲防御时，修改参与护甲防御的衣物列表
+		/// </summary>
+		/// <param name="componentClothing">挨打者的护甲组件</param>
+		/// <param name="attackment">导致该护甲结算的攻击</param>
+		/// <param name="randomNumber">原版用来计算损伤部位的随机数</param>
+		/// <param name="clothesList">参与护甲防御的衣物列表</param>
+		public virtual void DecideArmorProtectionSequence(ComponentClothing componentClothing, Attackment attackment, float randomNumber, List<int> clothesList)
+		{
+
+		}
+
+		/// <summary>
+		/// 在计算护甲防御前，自定义新的结算
+		/// 例如：玩家携带力场护盾时，优先使用力场护盾进行防御
+		/// </summary>
+		/// <param name="componentClothing">挨打者的护甲组件</param>
+		/// <param name="attackment">导致该护甲结算的攻击</param>
+		/// <param name="attackPowerAfteProtection">结算护甲后的攻击力</param>
+		public virtual void ApplyProtectionBeforeClothes(ComponentClothing componentClothing, Attackment attackment, ref float attackPowerAfteProtection)
+		{
+
+		}
+
+		/// <summary>
+		/// 在计算护甲防御后，自定义新的结算
+		/// </summary>
+		/// <param name="componentClothing">挨打者的护甲组件</param>
+		/// <param name="attackment">导致该护甲结算的攻击</param>
+		/// <param name="attackPowerAfteProtection">结算护甲后的攻击力</param>
+		public virtual void ApplyProtectionAfterClothes(ComponentClothing componentClothing,Attackment attackment,ref float attackPowerAfteProtection)
+		{ 
 
 		}
 	}

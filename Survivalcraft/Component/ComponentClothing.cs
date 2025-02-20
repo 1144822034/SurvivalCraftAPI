@@ -2,6 +2,7 @@ using Engine;
 using Engine.Graphics;
 using Engine.Serialization;
 using GameEntitySystem;
+using Jint.Native;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -227,65 +228,75 @@ namespace Game
             });
         }
 
+		[Obsolete("Use ApplyArmorProtection(Attackment attackment) instead.")]
 		public float ApplyArmorProtection(float attackPower)
 		{
+			return ApplyArmorProtection(new Attackment(Entity,null,Vector3.Zero,Vector3.UnitY,attackPower));
+		}
+
+		public float ApplyArmorProtection(Attackment attackment)
+		{
 			bool Applied = false;
-			ModsManager.HookAction("ApplyArmorProtection", modLoader =>
+			float attackPowerAfterProtection = attackment.AttackPower;
+			//ApplyArmorProtection接口废弃，并且只有在下面的接口都没有模组用的时候，才允许模组用这个接口。
+			if(!ModsManager.ModHooks.ContainsKey("DecideArmorProtectionSequence") && !ModsManager.ModHooks.ContainsKey("ApplyProtectionBeforeClothes") &&!!ModsManager.ModHooks.ContainsKey("ApplyProtectionAfterClothes"))
 			{
-				attackPower = modLoader.ApplyArmorProtection(this, attackPower, Applied, out bool flag2);
-				Applied |= flag2;
-				return false;
-			});
+				ModsManager.HookAction("ApplyArmorProtection",modLoader =>
+				{
+					attackment.AttackPower = modLoader.ApplyArmorProtection(this,attackment.AttackPower,Applied,out bool flag2);
+					Applied |= flag2;
+					return false;
+				});
+			}
 			if (Applied == false)
 			{
+				//决定参与结算的衣物列表
 				float num = m_random.Float(0f, 1f);
 				ClothingSlot slot = (num < 0.1f) ? ClothingSlot.Feet : ((num < 0.3f) ? ClothingSlot.Legs : ((num < 0.9f) ? ClothingSlot.Torso : ClothingSlot.Head));
-				List<int> list = new(GetClothes(slot));
-				for (int i = 0; i < list.Count; i++)
+				List<int> listAfterProtection = new(GetClothes(slot));
+				List<int> listBeforeProtection = new List<int>(listAfterProtection);
+				ModsManager.HookAction("ApplyProtectionBeforeClothes",loader => {
+					loader.ApplyProtectionBeforeClothes(this,attackment,ref attackPowerAfterProtection);
+					return false;
+				});
+				ModsManager.HookAction("DecideArmorProtectionSequence",loader => {
+					loader.DecideArmorProtectionSequence(this,attackment, num, listBeforeProtection);
+					return false;
+				});
+				//对每件衣物，结算护甲
+				for (int i = 0; i < listBeforeProtection.Count; i++)
 				{
-					int value = list[i];
+					int value = listBeforeProtection[i];
 					Block block = BlocksManager.Blocks[Terrain.ExtractContents(value)];
-					float num2 = block.GetDurability(value) + 1;
 					ClothingData clothingData = block.GetClothingData(value);
 					if(clothingData == null)
 					{
 						continue;
 					}
-					float x = (num2 - block.GetDamage(value)) / num2 * clothingData.Sturdiness;
-					float num3 = MathF.Min(attackPower * MathUtils.Saturate(clothingData.ArmorProtection), x);
-					if (num3 > 0f)
-					{
-						attackPower -= num3;
-						if (m_subsystemGameInfo.WorldSettings.GameMode != 0)
-						{
-							float x2 = (num3 / clothingData.Sturdiness * num2) + 0.001f;
-							int damageCount = (int)(MathF.Floor(x2) + (m_random.Bool(MathUtils.Remainder(x2, 1f)) ? 1 : 0));
-							list[i] = BlocksManager.DamageItem(value, damageCount, Entity);
-						}
-						if (!string.IsNullOrEmpty(clothingData.ImpactSoundsFolder))
-						{
-							m_subsystemAudio.PlayRandomSound(clothingData.ImpactSoundsFolder, 1f, m_random.Float(-0.3f, 0.3f), m_componentBody.Position, 4f, 0.15f);
-						}
-					}
+					clothingData.ApplyArmorProtection(this, listBeforeProtection, listAfterProtection, i, attackment, ref attackPowerAfterProtection);
 				}
+				//移除护甲结算后，破损衣物
 				int num4 = 0;
-				while (num4 < list.Count)
+				while (num4 < listAfterProtection.Count)
 				{
-					Block block = BlocksManager.Blocks[Terrain.ExtractContents(list[num4])];
-					if (!block.CanWear(list[num4]))
+					Block block = BlocksManager.Blocks[Terrain.ExtractContents(listAfterProtection[num4])];
+					if (!block.CanWear(listAfterProtection[num4]))
 					{
-						list.RemoveAt(num4);
-						m_subsystemParticles.AddParticleSystem(new BlockDebrisParticleSystem(m_subsystemTerrain, m_componentBody.Position + (m_componentBody.StanceBoxSize / 2f), 1f, 1f, Color.White, 0));
+						listAfterProtection.RemoveAt(num4);
 					}
 					else
 					{
 						num4++;
 					}
 				}
-				SetClothes(slot, list);
-
+				//最后SetClothes
+				SetClothes(slot, listAfterProtection);
 			}
-			return MathF.Max(attackPower, 0f);
+			ModsManager.HookAction("ApplyProtectionAfterClothes",loader => {
+				loader.ApplyProtectionAfterClothes(this,attackment,ref attackPowerAfterProtection);
+				return false;
+			});
+			return MathF.Max(attackPowerAfterProtection, 0f);
 		}
 
 		public override void Load(ValuesDictionary valuesDictionary, IdToEntityMap idToEntityMap)
