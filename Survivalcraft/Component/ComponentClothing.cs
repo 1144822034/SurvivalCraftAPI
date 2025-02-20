@@ -61,15 +61,18 @@ namespace Game
 		public List<int> m_clothesList = [];
 
 		public Dictionary<ClothingSlot, List<int>> m_clothes = [];
-		public static ClothingSlot[] m_innerSlotsOrder => ClothingSlot.ClothingSlotsByInt.Values.ToArray();
-		public static ClothingSlot[] m_outerSlotsOrder => ClothingSlot.ClothingSlotsByInt.Values.ToArray();
+		public static ClothingSlot[] m_innerSlotsOrder => m_innerSlotsOrderList.ToArray();
+		public static ClothingSlot[] m_outerSlotsOrder => m_outerSlotsOrderList.ToArray();
+
+		public static List<ClothingSlot> m_innerSlotsOrderList = new List<ClothingSlot>();
+
+		public static List<ClothingSlot> m_outerSlotsOrderList = new List<ClothingSlot>();
 
 		public static bool ShowClothedTexture = false;
 
 		public static bool DrawClothedTexture = true;
 
 		public Texture2D InnerClothedTexture => m_innerClothedTexture;
-
 		public Texture2D OuterClothedTexture => m_outerClothedTexture;
 
 		public Dictionary<ClothingSlot, float> InsulationBySlots = [];
@@ -259,6 +262,11 @@ namespace Game
 
 		public override void Load(ValuesDictionary valuesDictionary, IdToEntityMap idToEntityMap)
 		{
+			m_innerSlotsOrderList.Clear();
+			m_innerSlotsOrderList.AddRange(ClothingSlot.ClothingSlots.Values);
+			m_innerSlotsOrderList.Reverse(2,2);//让Legs显示在feet之前
+			m_outerSlotsOrderList.Clear();
+			m_outerSlotsOrderList.AddRange(ClothingSlot.ClothingSlots.Values);
 			m_subsystemGameInfo = Project.FindSubsystem<SubsystemGameInfo>(throwOnError: true);
 			m_subsystemParticles = Project.FindSubsystem<SubsystemParticles>(throwOnError: true);
 			m_subsystemAudio = Project.FindSubsystem<SubsystemAudio>(throwOnError: true);
