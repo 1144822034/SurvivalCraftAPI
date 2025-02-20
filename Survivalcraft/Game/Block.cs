@@ -27,7 +27,9 @@ namespace Game
 
 		public Vector3 FirstPersonOffset = Vector3.Zero;
 
-		public virtual bool StaticBlockIndex { get; set; } = false;
+		[Obsolete("overrode \"UseConstIndex\" instead.")]
+		public bool StaticBlockIndex = false;
+		public virtual bool UseConstIndex => StaticBlockIndex;
 
 		public bool CanBeBuiltIntoFurniture = false;
 

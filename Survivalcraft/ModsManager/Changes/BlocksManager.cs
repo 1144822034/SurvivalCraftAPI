@@ -307,7 +307,7 @@ namespace Game
                             Block = block,
                             Index = 0,
                             Allocated = false,
-                            StaticBlockIndex = (block.StaticBlockIndex || entity == ModsManager.SurvivalCraftModEntity || staticBlockIndexBefore),
+                            StaticBlockIndex = (block.UseConstIndex || entity == ModsManager.SurvivalCraftModEntity || staticBlockIndexBefore),
                             ModEntity = entity
                         });
                     }
