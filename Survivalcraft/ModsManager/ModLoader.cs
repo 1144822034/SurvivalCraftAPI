@@ -1450,6 +1450,16 @@ namespace Game
         }
 
         /// <summary>
+        /// 在配方表加载完成后执行
+        /// </summary>
+        /// <param name="recipes">已经加载的配方</param>
+        /// <param name="sort">是否在删除后重新排序</param>
+        public virtual void CraftingRecipesManagerInitialized()
+        {
+
+        }
+
+        /// <summary>
         /// 在游戏游玩过程中时放音乐
         /// </summary>
         public virtual void PlayInGameMusic()

@@ -39,6 +39,11 @@ namespace Game
 				int x = r2.Ingredients.Count((string s) => !string.IsNullOrEmpty(s));
 				return Comparer<int>.Default.Compare(x, y);
 			});
+			ModsManager.HookAction("CraftingRecipesManagerInitialized", loader =>
+			{
+				loader.CraftingRecipesManagerInitialized();
+				return false;
+			});
 		}
 		public static void LoadData(XElement item)
 		{
