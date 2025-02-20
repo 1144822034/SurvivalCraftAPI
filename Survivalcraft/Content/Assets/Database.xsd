@@ -70,6 +70,13 @@
         <xs:attribute name="Description" type="xs:string" />
     </xs:attributeGroup>
 
+    <xs:attributeGroup name="BaseAttributesGuidNoRequired">
+        <xs:attribute name="Name" type="xs:string" use="required" />
+        <xs:attribute name="Guid" type="Guid" />
+        <xs:attribute name="InheritanceParent" type="Guid" />
+        <xs:attribute name="Description" type="xs:string" />
+    </xs:attributeGroup>
+
     <xs:group name="Parameters">
         <xs:choice>
             <xs:element ref="Parameter" />
@@ -103,7 +110,7 @@
     <xs:element name="MemberSubsystemTemplate">
         <xs:complexType>
             <xs:group ref="Parameters" minOccurs="0" maxOccurs="unbounded" />
-            <xs:attributeGroup ref="BaseAttributes" />
+            <xs:attributeGroup ref="BaseAttributesGuidNoRequired" />
         </xs:complexType>
     </xs:element>
 
@@ -134,13 +141,13 @@
     <xs:element name="MemberComponentTemplate">
         <xs:complexType>
             <xs:group ref="Parameters" minOccurs="0" maxOccurs="unbounded" />
-            <xs:attributeGroup ref="BaseAttributes" />
+            <xs:attributeGroup ref="BaseAttributesGuidNoRequired" />
         </xs:complexType>
     </xs:element>
 
     <xs:element name="Parameter">
         <xs:complexType>
-            <xs:attributeGroup ref="BaseAttributes" />
+            <xs:attributeGroup ref="BaseAttributesGuidNoRequired" />
             <xs:attribute name="Value" type="xs:string" />
             <xs:attribute name="new-Value" type="xs:string" />
             <xs:attribute name="Type" type="xs:string" use="required" />
@@ -152,7 +159,7 @@
             <xs:sequence>
                 <xs:element ref="Parameter" minOccurs="0" maxOccurs="unbounded" />
             </xs:sequence>
-            <xs:attributeGroup ref="BaseAttributes" />
+            <xs:attributeGroup ref="BaseAttributesGuidNoRequired" />
         </xs:complexType>
     </xs:element>
 
