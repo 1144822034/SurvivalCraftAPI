@@ -24,7 +24,8 @@ namespace Game
 			}
 			Index = ClothIndex;
 			DisplayName = newDisplayName;
-			Slot = XmlUtils.GetAttributeValue<ClothingSlot>(item,"Slot");
+			string slotName = XmlUtils.GetAttributeValue<string>(item,"Slot");
+			Slot = ClothingSlot.ClothingSlots[slotName];
 			ArmorProtection = XmlUtils.GetAttributeValue<float>(item,"ArmorProtection");
 			Sturdiness = XmlUtils.GetAttributeValue<float>(item,"Sturdiness");
 			Insulation = XmlUtils.GetAttributeValue<float>(item,"Insulation");

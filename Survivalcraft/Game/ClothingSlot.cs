@@ -1,10 +1,45 @@
 namespace Game
 {
-	public enum ClothingSlot
+	public class ClothingSlot
 	{
-		Head,
-		Torso,
-		Legs,
-		Feet
+		public static Dictionary<string,ClothingSlot> ClothingSlots = new Dictionary<string, ClothingSlot>();
+		public static Dictionary<int, ClothingSlot> ClothingSlotsByInt = new Dictionary<int, ClothingSlot>();
+		public static ClothingSlot Head => ClothingSlotsByInt[0];
+		public static ClothingSlot Torso => ClothingSlotsByInt[1];
+		public static ClothingSlot Legs => ClothingSlotsByInt[2];
+		public static ClothingSlot Feet => ClothingSlotsByInt[3];
+		public static void AddClothingSlot(string name)
+		{
+			ClothingSlots[name] = new ClothingSlot
+			{
+				Name = name,
+				StableId = ClothingSlots.Count
+			};
+			ClothingSlotsByInt[ClothingSlots[name].StableId] = ClothingSlots[name];
+		}
+		public static void Initialize()
+		{
+			AddClothingSlot("Head");
+			AddClothingSlot("Torso");
+			AddClothingSlot("Legs");
+			AddClothingSlot("Feet");
+			ClothingSlots["Head"].MessageWhenLeastInsulated = LanguageControl.Get(ComponentVitalStats.fName,41);
+			ClothingSlots["Torso"].MessageWhenLeastInsulated = LanguageControl.Get(ComponentVitalStats.fName,42);
+			ClothingSlots["Legs"].MessageWhenLeastInsulated = LanguageControl.Get(ComponentVitalStats.fName,43);
+			ClothingSlots["Feet"].MessageWhenLeastInsulated = LanguageControl.Get(ComponentVitalStats.fName,44);
+			ModsManager.HookAction("InitializeClothingSlots",loader => {
+				loader.InitializeClothingSlots();
+				return false;
+			});
+		}
+		
+		public int StableId;
+
+		public string Name;
+		public virtual string MessageWhenLeastInsulated { get; set; } = string.Empty;
+
+		// ÏÔÊ½×ª»»²Ù×÷·û
+		public static explicit operator int(ClothingSlot slot) => slot.StableId;
+		public static implicit operator ClothingSlot(int id) => ClothingSlotsByInt.TryGetValue(id,out var slot) ? slot : null;
 	}
 }

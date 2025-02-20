@@ -1688,5 +1688,13 @@ namespace Game
 		{ 
 
 		}
+
+		/// <summary>
+		/// 初始化ClothingSlot的时候执行。在此接口添加脖子、手臂等新的可穿戴部位。
+		/// </summary>
+		public virtual void InitializeClothingSlots()
+		{
+
+		}
 	}
 }

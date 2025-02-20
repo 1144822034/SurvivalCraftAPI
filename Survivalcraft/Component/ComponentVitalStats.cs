@@ -504,22 +504,9 @@ namespace Game
 			{
 				num = (num * 1.5f) + 1f;
 			}
-			string arg;
-			switch (m_componentPlayer.ComponentClothing.LeastInsulatedSlot)
-			{
-				case ClothingSlot.Head:
-					arg = LanguageControl.Get(fName, 41);
-					break;
-				case ClothingSlot.Torso:
-					arg = LanguageControl.Get(fName, 42);
-					break;
-				case ClothingSlot.Legs:
-					arg = LanguageControl.Get(fName, 43);
-					break;
-				default:
-					arg = LanguageControl.Get(fName, 44);
-					break;
-			}
+			string arg = string.Empty;
+			ClothingSlot leastInsulatedSlot = m_componentPlayer.ComponentClothing.LeastInsulatedSlot;
+			arg = leastInsulatedSlot.MessageWhenLeastInsulated;
 			if (m_subsystemTime.PeriodicGameTimeEvent(1.0, 1.0 * ((double)(GetHashCode() % 1000) / 1000.0)))
 			{
 				int x = Terrain.ToCell(m_componentPlayer.ComponentBody.Position.X);

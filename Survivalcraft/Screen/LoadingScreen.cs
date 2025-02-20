@@ -315,6 +315,10 @@ namespace Game
 				}
 			});
 			AddLoadAction(delegate
+			{
+				ClothingSlot.Initialize();
+			});
+			AddLoadAction(delegate
 			{//初始化TextureAtlas
 				Info(LanguageControl.Get(fName, "2"));
 				TextureAtlasManager.Initialize();
