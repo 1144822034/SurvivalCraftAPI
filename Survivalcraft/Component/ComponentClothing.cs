@@ -1,4 +1,4 @@
-using Engine;
+ï»¿using Engine;
 using Engine.Graphics;
 using Engine.Serialization;
 using GameEntitySystem;
@@ -192,7 +192,7 @@ namespace Game
 		{
 			bool Applied = false;
 			float attackPowerAfterProtection = attackment.AttackPower;
-			//ApplyArmorProtection½Ó¿Ú·ÏÆú£¬²¢ÇÒÖ»ÓĞÔÚÏÂÃæµÄ½Ó¿Ú¶¼Ã»ÓĞÄ£×éÓÃµÄÊ±ºò£¬²ÅÔÊĞíÄ£×éÓÃÕâ¸ö½Ó¿Ú¡£
+			//ApplyArmorProtectionæ¥å£åºŸå¼ƒï¼Œå¹¶ä¸”åªæœ‰åœ¨ä¸‹é¢çš„æ¥å£éƒ½æ²¡æœ‰æ¨¡ç»„ç”¨çš„æ—¶å€™ï¼Œæ‰å…è®¸æ¨¡ç»„ç”¨è¿™ä¸ªæ¥å£ã€‚
 			if(!ModsManager.ModHooks.ContainsKey("DecideArmorProtectionSequence") && !ModsManager.ModHooks.ContainsKey("ApplyProtectionBeforeClothes") &&!!ModsManager.ModHooks.ContainsKey("ApplyProtectionAfterClothes"))
 			{
 				ModsManager.HookAction("ApplyArmorProtection",modLoader =>
@@ -204,7 +204,7 @@ namespace Game
 			}
 			if (Applied == false)
 			{
-				//¾ö¶¨²ÎÓë½áËãµÄÒÂÎïÁĞ±í
+				//å†³å®šå‚ä¸ç»“ç®—çš„è¡£ç‰©åˆ—è¡¨
 				float num = m_random.Float(0f, 1f);
 				ClothingSlot slot = (num < 0.1f) ? ClothingSlot.Feet : ((num < 0.3f) ? ClothingSlot.Legs : ((num < 0.9f) ? ClothingSlot.Torso : ClothingSlot.Head));
 				List<int> listAfterProtection = new(GetClothes(slot));
@@ -217,7 +217,7 @@ namespace Game
 					loader.DecideArmorProtectionSequence(this,attackment, num, listBeforeProtection);
 					return false;
 				});
-				//¶ÔÃ¿¼şÒÂÎï£¬½áËã»¤¼×
+				//å¯¹æ¯ä»¶è¡£ç‰©ï¼Œç»“ç®—æŠ¤ç”²
 				for (int i = 0; i < listBeforeProtection.Count; i++)
 				{
 					int value = listBeforeProtection[i];
@@ -236,7 +236,7 @@ namespace Game
 						Log.Error("ClothingData of clothing" + clothingData.DisplayName + " applies armor protection error: " + e);
 					}
 				}
-				//ÒÆ³ı»¤¼×½áËãºó£¬ÆÆËğÒÂÎï
+				//ç§»é™¤æŠ¤ç”²ç»“ç®—åï¼Œç ´æŸè¡£ç‰©
 				int num4 = 0;
 				while (num4 < listAfterProtection.Count)
 				{
@@ -250,7 +250,7 @@ namespace Game
 						num4++;
 					}
 				}
-				//×îºóSetClothes
+				//æœ€åSetClothes
 				SetClothes(slot, listAfterProtection);
 			}
 			ModsManager.HookAction("ApplyProtectionAfterClothes",loader => {
@@ -264,7 +264,7 @@ namespace Game
 		{
 			m_innerSlotsOrderList.Clear();
 			m_innerSlotsOrderList.AddRange(ClothingSlot.ClothingSlots.Values);
-			m_innerSlotsOrderList.Reverse(2,2);//ÈÃLegsÏÔÊ¾ÔÚfeetÖ®Ç°
+			m_innerSlotsOrderList.Reverse(2,2);//è®©Legsæ˜¾ç¤ºåœ¨feetä¹‹å‰
 			m_outerSlotsOrderList.Clear();
 			m_outerSlotsOrderList.AddRange(ClothingSlot.ClothingSlots.Values);
 			m_subsystemGameInfo = Project.FindSubsystem<SubsystemGameInfo>(throwOnError: true);
@@ -328,7 +328,7 @@ namespace Game
 
 		public void Update(float dt)
 		{
-			//´¥·¢ClothingData.Update
+			//è§¦å‘ClothingData.Update
 			foreach (ClothingSlot slot in m_innerSlotsOrder)
 			{
 				foreach (int clothe in GetClothes(slot))
@@ -347,14 +347,14 @@ namespace Game
 					clothingData?.Update?.Invoke(clothe, this);
 				}
 			}
-			//Éú´æÄ£Ê½Ã¿0.5ÃëÖ´ĞĞÒ»´Î£¬²»ÔÊĞíÍæ¼ÒÔ½¼¶´©ÒÂÎï
+			//ç”Ÿå­˜æ¨¡å¼æ¯0.5ç§’æ‰§è¡Œä¸€æ¬¡ï¼Œä¸å…è®¸ç©å®¶è¶Šçº§ç©¿è¡£ç‰©
 			if (m_subsystemGameInfo.WorldSettings.GameMode != 0 && m_subsystemGameInfo.WorldSettings.AreAdventureSurvivalMechanicsEnabled && m_subsystemTime.PeriodicGameTimeEvent(0.5, 0.0))
 			{
-				foreach (int enumValue in EnumUtils.GetEnumValues(typeof(ClothingSlot)))
+				foreach (ClothingSlot clothingSlot in ClothingSlot.ClothingSlots.Values)
 				{
 					bool flag = false;
 					m_clothesList.Clear();
-					m_clothesList.AddRange(GetClothes((ClothingSlot)enumValue));
+					m_clothesList.AddRange(GetClothes(clothingSlot));
 					int num = 0;
 					while (num < m_clothesList.Count)
 					{
@@ -380,7 +380,7 @@ namespace Game
 					}
 					if (flag)
 					{
-						SetClothes((ClothingSlot)enumValue, m_clothesList);
+						SetClothes(clothingSlot, m_clothesList);
 					}
 				}
 			}
@@ -389,11 +389,11 @@ namespace Game
 			{
 				if(m_lastTotalElapsedGameTime.HasValue)
 				{
-					foreach(int enumValue2 in EnumUtils.GetEnumValues(typeof(ClothingSlot)))
+					foreach(ClothingSlot clothingSlot in ClothingSlot.ClothingSlots.Values)
 					{
 						bool setClothesNeeded = false;
 						m_clothesList.Clear();
-						m_clothesList.AddRange(GetClothes((ClothingSlot)enumValue2));
+						m_clothesList.AddRange(GetClothes(clothingSlot));
 						for(int i = 0; i < m_clothesList.Count; i++)
 						{
 							int value2 = m_clothesList[i];
@@ -407,7 +407,7 @@ namespace Game
 							if(m_clothesList[i] != value2)
 								setClothesNeeded = true;
 						}
-						//ÒÆ³ıÒÑ¾­Ëğ»µµÄÒÂÎï
+						//ç§»é™¤å·²ç»æŸåçš„è¡£ç‰©
 						int num4 = 0;
 						while(num4 < m_clothesList.Count)
 						{
@@ -423,7 +423,7 @@ namespace Game
 						}
 						if(setClothesNeeded)
 						{
-							SetClothes((ClothingSlot)enumValue2,m_clothesList);
+							SetClothes(clothingSlot, m_clothesList);
 						}
 					}
 				}

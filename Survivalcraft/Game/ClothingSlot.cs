@@ -1,7 +1,10 @@
-namespace Game
+﻿namespace Game
 {
 	public class ClothingSlot
 	{
+		/// <summary>
+		/// 调用自定义部位（比如手臂）的ClothingSlot，可以用ClothingSlot.ClothingSlots["Arms"]
+		/// </summary>
 		public static Dictionary<string,ClothingSlot> ClothingSlots = new Dictionary<string, ClothingSlot>();
 		public static Dictionary<int, ClothingSlot> ClothingSlotsByInt = new Dictionary<int, ClothingSlot>();
 		public static ClothingSlot Head => ClothingSlotsByInt[0];
@@ -45,7 +48,7 @@ namespace Game
 		public string Name;
 		public virtual string MessageWhenLeastInsulated { get; set; } = string.Empty;
 
-		// ��ʽת��������
+		// 显式转换操作符
 		public static explicit operator int(ClothingSlot slot) => slot.StableId;
 		public static implicit operator ClothingSlot(int id) => ClothingSlotsByInt.TryGetValue(id,out var slot) ? slot : null;
 	}
