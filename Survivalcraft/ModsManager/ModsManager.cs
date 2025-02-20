@@ -668,6 +668,7 @@ public static class ModsManager
 		ModifiedElement["b2e68ecd-49fc-4c05-b784-424da13f8550"] = "Game.ComponentDispenser";
 		ModifiedElement["f6b020bb-8994-6ae6-289b-a842e3eb9ca5"] = "Game.ComponentFactors";
 		ModifiedElement["a346c456-5087-48c4-835a-5829b3f35c68"] = "Game.ComponentLevel";
+		ModifiedElement["1df4e627-c959-4e6a-bfa2-b7ee3ef08c99"] = "Game.ComponentClothing";
 
 	}
 

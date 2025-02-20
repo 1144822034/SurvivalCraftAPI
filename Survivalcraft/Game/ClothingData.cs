@@ -83,7 +83,7 @@ namespace Game
 		/// </summary>
 		public Action<int, ComponentClothing> Dismount;
 		/// <summary>
-		/// 更新
+		/// ComponentClothing更新时触发。
 		/// </summary>
 		public Action<int, ComponentClothing> Update;
 
@@ -124,6 +124,51 @@ namespace Game
 					componentClothing.m_subsystemAudio.PlayRandomSound(ImpactSoundsFolder,1f,componentClothing.m_random.Float(-0.3f,0.3f),componentClothing.m_componentBody.Position,4f,0.15f);
 				}
 			}
+		}
+
+		/// <summary>
+		/// 在ComponentClothing中每帧都会调用的UpdateGraduallyDamagedOverTime()，主要用于控制衣物随时间逐渐损坏
+		/// </summary>
+		/// <param name="componentClothing"></param>
+		/// <param name="dt"></param>
+		public virtual void UpdateGraduallyDamagedOverTime(ComponentClothing componentClothing, int indexInClothesList, float dt)
+		{
+			try
+			{
+				if(componentClothing.m_subsystemGameInfo.WorldSettings.GameMode == 0 || !componentClothing.m_subsystemGameInfo.WorldSettings.AreAdventureSurvivalMechanicsEnabled) return;
+				{
+					float num2 = (componentClothing.m_componentVitalStats.Wetness > 0f) ? (10f * Sturdiness) : (20f * Sturdiness);
+					double num3 = Math.Floor(componentClothing.m_lastTotalElapsedGameTime.Value / num2);
+					if(Math.Floor(componentClothing.m_subsystemGameInfo.TotalElapsedGameTime / num2) > num3 && componentClothing.m_random.Float(0f,1f) < 0.75f)
+					{
+						componentClothing.m_clothesList[indexInClothesList] =
+							BlocksManager.DamageItem(componentClothing.m_clothesList[indexInClothesList],1,componentClothing.Entity);
+						//检查衣服是否已损坏
+						int damagedClothingBlockValue = componentClothing.m_clothesList[indexInClothesList];
+						Block clothingBlock = BlocksManager.Blocks[Terrain.ExtractContents(damagedClothingBlockValue)];
+						if(!clothingBlock.CanWear(damagedClothingBlockValue))
+						{
+							componentClothing.m_subsystemParticles.AddParticleSystem(new BlockDebrisParticleSystem(componentClothing.m_subsystemTerrain,componentClothing.m_componentBody.Position + (componentClothing.m_componentBody.StanceBoxSize / 2f),1f,1f,Color.White,0));
+							componentClothing.m_componentGui.DisplaySmallMessage(LanguageControl.Get(typeof(ComponentClothing).Name,2),Color.White,blinking: true,playNotificationSound: true);
+						}
+					}
+				}
+			}
+			catch(Exception ex)
+			{
+				Log.Error(ex);
+			}
+		}
+
+		/// <summary>
+		/// 在ComponentClothing执行SetClothes()时触发，用于调整ComponentClothing中的一些参数
+		/// </summary>
+		/// <param name="componentClothing"></param>
+		public virtual void OnClotheSet(ComponentClothing componentClothing)
+		{
+			componentClothing.InsulationBySlots[(int)Slot] += Insulation;
+			componentClothing.SteedMovementSpeedFactor *= SteedMovementSpeedFactor;
+			componentClothing.m_densityModifierApplied += DensityModifier;
 		}
 	}
 }

@@ -86,6 +86,7 @@ namespace Game
 
 		public Texture2D OuterClothedTexture => m_outerClothedTexture;
 
+		public List<float> InsulationBySlots = new List<float>();
 		public float Insulation
 		{
 			get;
@@ -137,6 +138,24 @@ namespace Game
 			return new ReadOnlyList<int>(m_clothes[slot]);
 		}
 
+		public float CalculateInsulationFromSlots()
+		{
+			float x = 0f;
+			float leastSlotInsulation = InsulationBySlots[0];
+			int leastInsulatedSlot = 0;
+			for(int i = 0; i < SlotsCount && i < InsulationBySlots.Count; i++)
+			{
+				x += 1f / InsulationBySlots[i];
+				if(leastSlotInsulation > InsulationBySlots[i])
+				{
+					leastInsulatedSlot = i;
+					leastSlotInsulation = InsulationBySlots[i];
+				}
+			}
+			Insulation = 1f / x;
+			LeastInsulatedSlot = (ClothingSlot)leastInsulatedSlot;
+			return Insulation;
+		}
 		public virtual void SetClothes(ClothingSlot slot, IEnumerable<int> clothes)
 		{
 			if (!m_clothes[slot].SequenceEqual(clothes))
@@ -144,82 +163,25 @@ namespace Game
 				m_clothes[slot].Clear();
 				m_clothes[slot].AddRange(clothes);
 				m_clothedTexturesValid = false;
-				float num = 0f;
+				float densityModiferAppliedBefore = m_densityModifierApplied;
+				m_densityModifierApplied = 0f;
+				SteedMovementSpeedFactor = 1f;
+				InsulationBySlots = new List<float>([2f,0.2f,0.4f,2f]);
 				foreach (KeyValuePair<ClothingSlot, List<int>> clothe in m_clothes)
 				{
 					foreach (int item in clothe.Value)
 					{
 						Block block = BlocksManager.Blocks[Terrain.ExtractContents(item)];
 						ClothingData clothingData = block.GetClothingData(item);
-						num += clothingData?.DensityModifier ?? 0f;
+						if(clothingData != null)
+						{
+							clothingData.OnClotheSet(this);
+						}
 					}
 				}
-				float num2 = num - m_densityModifierApplied;
-				m_densityModifierApplied += num2;
+				float num2 = m_densityModifierApplied - densityModiferAppliedBefore;
 				m_componentBody.Density += num2;
-				SteedMovementSpeedFactor = 1f;
-				float num3 = 2f;
-				float num4 = 0.2f;
-				float num5 = 0.4f;
-				float num6 = 2f;
-				foreach (int clothe2 in GetClothes(ClothingSlot.Head))
-				{
-					Block block = BlocksManager.Blocks[Terrain.ExtractContents(clothe2)];
-					ClothingData clothingData2 = block.GetClothingData(clothe2);
-					if (clothingData2 != null)
-					{
-						num3 += clothingData2.Insulation;
-						SteedMovementSpeedFactor *= clothingData2.SteedMovementSpeedFactor;
-					}
-				}
-				foreach (int clothe3 in GetClothes(ClothingSlot.Torso))
-				{
-					Block block = BlocksManager.Blocks[Terrain.ExtractContents(clothe3)];
-					ClothingData clothingData3 = block.GetClothingData(clothe3);
-					if (clothingData3 != null)
-					{
-						num4 += clothingData3.Insulation;
-						SteedMovementSpeedFactor *= clothingData3.SteedMovementSpeedFactor;
-					}
-				}
-				foreach (int clothe4 in GetClothes(ClothingSlot.Legs))
-				{
-					Block block = BlocksManager.Blocks[Terrain.ExtractContents(clothe4)];
-					ClothingData clothingData4 = block.GetClothingData(clothe4);
-					if (clothingData4 != null)
-					{
-						num5 += clothingData4.Insulation;
-						SteedMovementSpeedFactor *= clothingData4.SteedMovementSpeedFactor;
-					}
-				}
-				foreach (int clothe5 in GetClothes(ClothingSlot.Feet))
-				{
-					Block block = BlocksManager.Blocks[Terrain.ExtractContents(clothe5)];
-					ClothingData clothingData5 = block.GetClothingData(clothe5);
-					if (clothingData5 != null)
-					{
-						num6 += clothingData5.Insulation;
-						SteedMovementSpeedFactor *= clothingData5.SteedMovementSpeedFactor;
-					}
-				}
-				Insulation = 1f / ((1f / num3) + (1f / num4) + (1f / num5) + (1f / num6));
-				float num7 = MathUtils.Min(num3, num4, num5, num6);
-				if (num3 == num7)
-				{
-					LeastInsulatedSlot = ClothingSlot.Head;
-				}
-				else if (num4 == num7)
-				{
-					LeastInsulatedSlot = ClothingSlot.Torso;
-				}
-				else if (num5 == num7)
-				{
-					LeastInsulatedSlot = ClothingSlot.Legs;
-				}
-				else if (num6 == num7)
-				{
-					LeastInsulatedSlot = ClothingSlot.Feet;
-				}
+				CalculateInsulationFromSlots();
 			}
             ModsManager.HookAction("SetClothes", loader =>
             {
@@ -273,7 +235,14 @@ namespace Game
 					{
 						continue;
 					}
-					clothingData.ApplyArmorProtection(this, listBeforeProtection, listAfterProtection, i, attackment, ref attackPowerAfterProtection);
+					try
+					{
+						clothingData.ApplyArmorProtection(this,listBeforeProtection,listAfterProtection,i,attackment,ref attackPowerAfterProtection);
+					}
+					catch(Exception e)
+					{
+						Log.Error("ClothingData of clothing" + clothingData.DisplayName + " applies armor protection error: " + e);
+					}
 				}
 				//移除护甲结算后，破损衣物
 				int num4 = 0;
@@ -362,6 +331,7 @@ namespace Game
 
 		public void Update(float dt)
 		{
+			//触发ClothingData.Update
 			foreach (ClothingSlot slot in m_innerSlotsOrder)
 			{
 				foreach (int clothe in GetClothes(slot))
@@ -380,7 +350,7 @@ namespace Game
 					clothingData?.Update?.Invoke(clothe, this);
 				}
 			}
-
+			//生存模式每0.5秒执行一次，不允许玩家越级穿衣物
 			if (m_subsystemGameInfo.WorldSettings.GameMode != 0 && m_subsystemGameInfo.WorldSettings.AreAdventureSurvivalMechanicsEnabled && m_subsystemTime.PeriodicGameTimeEvent(0.5, 0.0))
 			{
 				foreach (int enumValue in EnumUtils.GetEnumValues(typeof(ClothingSlot)))
@@ -401,7 +371,6 @@ namespace Game
 						}
 						if (clothingData.PlayerLevelRequired > m_componentPlayer.PlayerData.Level)
 						{
-
 							m_componentGui.DisplaySmallMessage(string.Format(LanguageControl.Get(fName, 1), clothingData.PlayerLevelRequired, clothingData.DisplayName), Color.White, blinking: true, playNotificationSound: true);
 							m_subsystemPickables.AddPickable(value, 1, m_componentBody.Position, null, null, Entity);
 							m_clothesList.RemoveAt(num);
@@ -418,50 +387,46 @@ namespace Game
 					}
 				}
 			}
-			if (m_subsystemGameInfo.WorldSettings.GameMode != 0 && m_subsystemGameInfo.WorldSettings.AreAdventureSurvivalMechanicsEnabled && m_subsystemTime.PeriodicGameTimeEvent(2.0, 0.0) && ((m_componentLocomotion.LastWalkOrder.HasValue && m_componentLocomotion.LastWalkOrder.Value != Vector2.Zero) || (m_componentLocomotion.LastSwimOrder.HasValue && m_componentLocomotion.LastSwimOrder.Value != Vector3.Zero) || m_componentLocomotion.LastJumpOrder != 0f))
+
+			if(m_subsystemTime.PeriodicGameTimeEvent(2.0,0.0) && ((m_componentLocomotion.LastWalkOrder.HasValue && m_componentLocomotion.LastWalkOrder.Value != Vector2.Zero) || (m_componentLocomotion.LastSwimOrder.HasValue && m_componentLocomotion.LastSwimOrder.Value != Vector3.Zero) || m_componentLocomotion.LastJumpOrder != 0f))
 			{
-				if (m_lastTotalElapsedGameTime.HasValue)
+				if(m_lastTotalElapsedGameTime.HasValue)
 				{
-					foreach (int enumValue2 in EnumUtils.GetEnumValues(typeof(ClothingSlot)))
+					foreach(int enumValue2 in EnumUtils.GetEnumValues(typeof(ClothingSlot)))
 					{
-						bool flag2 = false;
+						bool setClothesNeeded = false;
 						m_clothesList.Clear();
 						m_clothesList.AddRange(GetClothes((ClothingSlot)enumValue2));
-						for (int i = 0; i < m_clothesList.Count; i++)
+						for(int i = 0; i < m_clothesList.Count; i++)
 						{
 							int value2 = m_clothesList[i];
 							Block block2 = BlocksManager.Blocks[Terrain.ExtractContents(value2)];
 							ClothingData clothingData2 = block2.GetClothingData(value2);
-							if (clothingData2 == null)
+							if(clothingData2 == null)
 							{
 								continue;
 							}
-							float num2 = (m_componentVitalStats.Wetness > 0f) ? (10f * clothingData2.Sturdiness) : (20f * clothingData2.Sturdiness);
-							double num3 = Math.Floor(m_lastTotalElapsedGameTime.Value / num2);
-							if (Math.Floor(m_subsystemGameInfo.TotalElapsedGameTime / num2) > num3 && m_random.Float(0f, 1f) < 0.75f)
-							{
-								m_clothesList[i] = BlocksManager.DamageItem(value2, 1, Entity);
-								flag2 = true;
-							}
+							clothingData2.UpdateGraduallyDamagedOverTime(this,i,dt);
+							if(m_clothesList[i] != value2)
+								setClothesNeeded = true;
 						}
+						//移除已经损坏的衣物
 						int num4 = 0;
-						while (num4 < m_clothesList.Count)
+						while(num4 < m_clothesList.Count)
 						{
 							Block block = BlocksManager.Blocks[Terrain.ExtractContents(m_clothesList[num4])];
-							if (!block.CanWear(m_clothesList[num4]))
+							if(!block.CanWear(m_clothesList[num4]))
 							{
 								m_clothesList.RemoveAt(num4);
-								m_subsystemParticles.AddParticleSystem(new BlockDebrisParticleSystem(m_subsystemTerrain, m_componentBody.Position + (m_componentBody.StanceBoxSize / 2f), 1f, 1f, Color.White, 0));
-								m_componentGui.DisplaySmallMessage(LanguageControl.Get(fName, 2), Color.White, blinking: true, playNotificationSound: true);
 							}
 							else
 							{
 								num4++;
 							}
 						}
-						if (flag2)
+						if(setClothesNeeded)
 						{
-							SetClothes((ClothingSlot)enumValue2, m_clothesList);
+							SetClothes((ClothingSlot)enumValue2,m_clothesList);
 						}
 					}
 				}
