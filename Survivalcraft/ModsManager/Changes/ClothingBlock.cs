@@ -166,7 +166,11 @@ namespace Game
 		{
 			int data = Terrain.ExtractData(value);
 			int num = GetClothingIndex(data);
-			return num < m_clothingData.Count ? m_clothingData[num] : null;
+			if(m_clothingData.TryGetValue(num,out ClothingData clothingData))
+			{
+				return clothingData;
+			}
+			return null;
 		}
 		public override IEnumerable<int> GetCreativeValues()
 		{
