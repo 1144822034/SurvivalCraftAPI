@@ -73,8 +73,6 @@ namespace Game
 
 		public override void Update()
 		{
-			ModsManager.HookAction("OnMainMenuScreenUpdate",loader => { loader.OnMainMenuScreenUpdate(this,m_leftBottomBar,m_rightBottomBar); return false; });
-
 			Keyboard.BackButtonQuitsApp = !MarketplaceManager.IsTrialMode;
 			if (string.IsNullOrEmpty(m_versionString) || MarketplaceManager.IsTrialMode != m_versionStringTrial)
 			{
@@ -176,6 +174,7 @@ namespace Game
 			{
 				ScreensManager.SwitchScreen("ExternalContent");
 			}
+			ModsManager.HookAction("OnMainMenuScreenUpdate",loader => { loader.OnMainMenuScreenUpdate(this,m_leftBottomBar,m_rightBottomBar); return false; });
 		}
 	}
 }
