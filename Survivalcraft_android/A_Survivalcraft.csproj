@@ -43,6 +43,8 @@
 		<Compile Include="..\Survivalcraft\Managers\WebManager.cs"/>
 		<Compile Include="..\Survivalcraft\Screen\ExternalContentScreen.cs"/>
 		<Compile Include="..\Survivalcraft\Widget\TreeViewWidget.cs"/>
+		<Compile Include="..\Survivalcraft\ModsManager\APIUpdateManager.cs"/>
+		<Compile Include="..\Survivalcraft\ModsManager\OnlineJsonReader.cs"/>
 		<Compile Include="..\Survivalcraft\ModsManager\ModListManager.cs"/>
 		<Compile Include="..\Survivalcraft\Screen\LoadingFailedScreen.cs"/>
 		<Compile Include="..\Survivalcraft\ModsManager\JsModLoader.cs"/>
