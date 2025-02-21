@@ -52,8 +52,6 @@ namespace Game
 			string languageType = ModsManager.Configs.GetValueOrDefault("Language", "zh-CN");
 			m_bulletinStackPanel.IsVisible = languageType == "zh-CN";
 			m_copyrightLabel.IsVisible = languageType != "zh-CN";
-
-			ModsManager.HookAction("OnMainMenuScreenCreated",loader => { loader.OnMainMenuScreenCreated(this, m_leftBottomBar, m_rightBottomBar); return false; });
 		}
 
 		public override void Enter(object[] parameters)
@@ -75,6 +73,8 @@ namespace Game
 
 		public override void Update()
 		{
+			ModsManager.HookAction("OnMainMenuScreenUpdate",loader => { loader.OnMainMenuScreenUpdate(this,m_leftBottomBar,m_rightBottomBar); return false; });
+
 			Keyboard.BackButtonQuitsApp = !MarketplaceManager.IsTrialMode;
 			if (string.IsNullOrEmpty(m_versionString) || MarketplaceManager.IsTrialMode != m_versionStringTrial)
 			{

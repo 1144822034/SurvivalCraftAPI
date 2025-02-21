@@ -1633,11 +1633,20 @@ namespace Game
 		/// <param name="mainMenuScreen">初始化完毕后的主界面</param>
 		/// <param name="leftBottomBar">主界面左下角的按钮栏，里面有着API的切换语言和资源管理按钮</param>
 		/// <param name="rightBottomBar">主界面右下角的按钮栏，Mod作者们可以在这里面放入想要的按钮（例如Mod设置按钮、Mod作者介绍按钮等）</param>
+		[Obsolete("该方法已过时，请使用OnMainMenuScreenUpdate")]
 		public virtual void OnMainMenuScreenCreated(MainMenuScreen mainMenuScreen, StackPanelWidget leftBottomBar, StackPanelWidget rightBottomBar)
 		{
 
 		}
+		/// <summary>
+		/// 在主界面更新
+		/// </summary>
+		/// <param name="leftBottomBar">主界面左下角的按钮栏，里面有着API的切换语言和资源管理按钮</param>
+		/// <param name="rightBottomBar">主界面右下角的按钮栏，Mod作者们可以在这里面放入想要的按钮（例如Mod设置按钮、Mod作者介绍按钮等）</param>
+		public virtual void OnMainMenuScreenUpdate(MainMenuScreen mainMenuScreen,StackPanelWidget leftBottomBar,StackPanelWidget rightBottomBar)
+		{
 
+		}
 		/// <summary>
 		/// 在计算一个生物的Factors执行。
 		/// ComponentFactors里面有四个List，这四个List储存了所有对该属性有影响的因子。模组可以修改其中的因子来实现自定义的操作。
