@@ -6,8 +6,10 @@ using Android.OS;
 using Android.Runtime;
 using Android.Views;
 using Engine.Input;
+using Org.Libsdl.App;
 using Silk.NET.Windowing;
 using Silk.NET.Windowing.Sdl.Android;
+using Debug = System.Diagnostics.Debug;
 
 namespace Engine
 {
@@ -164,6 +166,11 @@ namespace Engine
             if (((e.Source & InputSourceType.Gamepad) == InputSourceType.Gamepad || (e.Source & InputSourceType.Joystick) == InputSourceType.Joystick) && e.Action == MotionEventActions.Move)
             {
                 GamePad.HandleMotionEvent(e);
+            }
+            if ((e.Source & InputSourceType.Mouse) == InputSourceType.Mouse || (e.Source & InputSourceType.ClassPointer) == InputSourceType.ClassPointer || (e.Source & InputSourceType.MouseRelative) == InputSourceType.MouseRelative)
+            {
+                Mouse.HandleMotionEvent(e);
+                return true;
             }
             return true;
         }

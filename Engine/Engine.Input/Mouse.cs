@@ -1,6 +1,10 @@
 using System;
 using System.Drawing;
-#if !ANDROID
+#if ANDROID
+using Android.OS;
+using Android.Views;
+using Org.Libsdl.App;
+#else
 using Silk.NET.Input;
 #endif
 
@@ -8,7 +12,13 @@ namespace Engine.Input
 {
 	public static class Mouse
 	{
-#if !ANDROID
+#if ANDROID
+        private static Vector2 m_queuedMouseMovement;
+
+        private static float m_queuedMouseWheelMovement;
+
+        private static bool m_pointerCaptureRequested;
+#else
         public static IMouse m_mouse;
 
 		public static Point2? m_lastMousePosition;
@@ -77,7 +87,32 @@ namespace Engine.Input
 
 		internal static void BeforeFrame()
 		{
-#if !ANDROID
+#if ANDROID
+            if (Build.VERSION.SdkInt < BuildVersionCodes.O)
+            {
+                return;
+            }
+            if (IsMouseVisible)
+            {
+                if (m_pointerCaptureRequested)
+                {
+                    m_pointerCaptureRequested = false;
+                    //Window.View.ReleasePointerCapture();
+                }
+            }
+            else
+            {
+                if (!m_pointerCaptureRequested)
+                {
+                    m_pointerCaptureRequested = true;
+                    //Window.View.RequestPointerCapture();
+                }
+                MouseMovement = Round(m_queuedMouseMovement.X, m_queuedMouseMovement.Y);
+                m_queuedMouseMovement = Vector2.Zero;
+            }
+            MouseWheelMovement = (int)MathUtils.Round(m_queuedMouseWheelMovement) * 120;
+            m_queuedMouseWheelMovement = 0f;
+#else
 			if (Window.IsActive)
 			{
                 m_mouse.Cursor.CursorMode = IsMouseVisible ? CursorMode.Normal : CursorMode.Disabled;
@@ -96,7 +131,50 @@ namespace Engine.Input
 #endif
 		}
 
-#if !ANDROID
+#if ANDROID
+        internal static void HandleMotionEvent(MotionEvent e)
+        {
+            if (e.Action == MotionEventActions.Move)
+            {
+                for (int num = e.HistorySize - 1; num >= 0; num--)
+                {
+                    m_queuedMouseMovement += new Vector2(e.GetHistoricalX(num), e.GetHistoricalY(num));
+                }
+                m_queuedMouseMovement += new Vector2(e.GetX(), e.GetY());
+            }
+            else if (e.Action == MotionEventActions.HoverMove)
+            {
+                MousePosition = Round(e.GetX(), e.GetY());
+            }
+            else if (e.Action == MotionEventActions.ButtonPress)
+            {
+                ProcessMouseDown(TranslateMouseButton(e.ActionButton), Round(e.GetX(), e.GetY()));
+            }
+            else if (e.Action == MotionEventActions.ButtonRelease)
+            {
+                ProcessMouseUp(TranslateMouseButton(e.ActionButton), Round(e.GetX(), e.GetY()));
+            }
+            else if (e.Action == MotionEventActions.PointerIdShift)
+            {
+                for (int num2 = e.HistorySize - 1; num2 >= 0; num2--)
+                {
+                    m_queuedMouseWheelMovement += MathUtils.Sign(e.GetHistoricalAxisValue(Axis.Vscroll, num2));
+                }
+                m_queuedMouseWheelMovement += MathUtils.Sign(e.GetAxisValue(Axis.Vscroll));
+            }
+        }
+
+        private static MouseButton TranslateMouseButton(MotionEventButtonState state)
+        {
+            return state switch
+            {
+                MotionEventButtonState.Primary => MouseButton.Left,
+                MotionEventButtonState.Secondary => MouseButton.Right,
+                MotionEventButtonState.Tertiary => MouseButton.Middle,
+                _ => MouseButton.Left,
+            };
+        }
+#else
 		private static void MouseDownHandler(IMouse mouse, Silk.NET.Input.MouseButton button)
 		{
 			MouseButton mouseButton = TranslateMouseButton(button);
@@ -277,6 +355,11 @@ namespace Engine.Input
             {
                 MouseWheelMovement += (int)(120 * value);
             }
+        }
+
+        private static Point2 Round(float x, float y)
+        {
+            return new Point2((int)MathF.Round(x), (int)MathF.Round(y));
         }
 	}
 }
