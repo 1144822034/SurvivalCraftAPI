@@ -3168,7 +3168,10 @@
       "Resilience": "Resilience",
       "Speed": "Speed",
       "Hunger": "Hunger",
-      "Choked": "Choked"
+      "Choked": "Choked",
+      "PlayerLevel": "{0}, Level {1}  {2}",
+      "Male": "Male",
+      "Female": "Female"
     },
     "EditMemoryBankDialogAPI": [
       "Edit MemoryBank",

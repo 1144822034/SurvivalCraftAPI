@@ -3156,7 +3156,10 @@
             "Resilience": "Устойчивость",
             "Speed": "Скорость",
             "Hunger": "Голод",
-            "Choked": "Задохнулся(ась)"
+            "Choked": "Задохнулся(ась)",
+            "PlayerLevel": "{0}, Уровень {1}  {2}",
+            "Male": "Мужской",
+            "Female": "Женский"
         },
         "EditMemoryBankDialogAPI": [
             "Банк памяти",

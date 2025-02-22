@@ -53,14 +53,14 @@ namespace Game
 				Description = (string)((TomlTable)model["packageinfo"]!)["Description"]
 			};
 			if(((TomlTable)model["requisite"]).Count!=0){
-				String 整合包模组路径 = ModsManager.ProcessModListPath + '/' + packageInfo.PackageName;
-				Storage.CreateDirectory(整合包模组路径);
+				string packagePath = ModsManager.ProcessModListPath + '/' + packageInfo.PackageName;
+				Storage.CreateDirectory(packagePath);
 				foreach(var item in ((TomlTable)model["requisite"]!))
 				{
 					Log.Information(item.Key);
 					Log.Information(item.Value);
 				}
-				return 整合包模组路径;
+				return packagePath;
 			}
 			else
 			{

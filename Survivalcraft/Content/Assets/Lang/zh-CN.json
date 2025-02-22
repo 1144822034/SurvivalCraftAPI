@@ -2958,7 +2958,10 @@
 			"Resilience": "恢复力",
 			"Speed": "速度",
 			"Hunger": "饥饿",
-			"Choked": "窒息"
+			"Choked": "窒息",
+			"PlayerLevel": "{0}, 等级 {1}  {2}",
+			"Male": "男性",
+			"Female": "女性"
 		},
 		"EditMemoryBankDialogAPI": [
 			"存储器编辑器",

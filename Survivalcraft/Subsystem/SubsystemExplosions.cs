@@ -50,9 +50,9 @@ namespace Game
 				if (x >= 0 && x < 256 && y >= 0 && y < 256 && z >= 0 && z < 256)
 				{
 					int num = x >> 4;
-					int 爆炸强度 = y >> 4;
+					int explosionPower = y >> 4;
 					int num3 = z >> 4;
-					int num4 = num + (爆炸强度 << 4) + (num3 << 4 << 4);
+					int num4 = num + (explosionPower << 4) + (num3 << 4 << 4);
 					T[] array = m_data[num4];
 					if (array != null)
 					{
@@ -75,9 +75,9 @@ namespace Game
 				if (x >= 0 && x < 256 && y >= 0 && y < 256 && z >= 0 && z < 256)
 				{
 					int num = x >> 4;
-					int 爆炸强度 = y >> 4;
+					int explosionPower = y >> 4;
 					int num3 = z >> 4;
-					int num4 = num + (爆炸强度 << 4) + (num3 << 4 << 4);
+					int num4 = num + (explosionPower << 4) + (num3 << 4 << 4);
 					T[] array = m_data[num4];
 					if (array == null)
 					{
@@ -111,7 +111,7 @@ namespace Game
 						continue;
 					}
 					int num = m_originX + ((i & 0xF) << 4);
-					int 爆炸强度 = m_originY + (((i >> 4) & 0xF) << 4);
+					int explosionPower = m_originY + (((i >> 4) & 0xF) << 4);
 					int num3 = m_originZ + (((i >> 8) & 0xF) << 4);
 					for (int j = 0; j < array.Length; j++)
 					{
@@ -120,7 +120,7 @@ namespace Game
 							int num4 = j & 0xF;
 							int num5 = (j >> 4) & 0xF;
 							int num6 = (j >> 8) & 0xF;
-							dictionary.Add(new Point3(num + num4, 爆炸强度 + num5, num3 + num6), array[j]);
+							dictionary.Add(new Point3(num + num4, explosionPower + num5, num3 + num6), array[j]);
 						}
 					}
 				}
@@ -340,7 +340,7 @@ namespace Game
 			var list2 = new List<ProcessPoint>();
 			var list3 = new List<ProcessPoint>();
 			TryAddPoint(x, y, z, -1, pressure, isIncendiary, list, processed);
-			int 爆炸强度 = 0;
+			int explosionPower = 0;
 			int num3 = 0;
 			if (Terrain.ExtractContents(explosionPointValue) != 0)
 			{
@@ -348,10 +348,10 @@ namespace Game
 			}
 			while (list.Count > 0 || list2.Count > 0)
 			{
-				爆炸强度 += list.Count;
+				explosionPower += list.Count;
 				num3++;
 				float num4 = 5f * MathUtils.Max(num3 - 7, 0);
-				float num5 = pressure / (MathF.Pow(爆炸强度, 0.66f) + num4);
+				float num5 = pressure / (MathF.Pow(explosionPower, 0.66f) + num4);
 				if (num5 >= num)
 				{
 					foreach (ProcessPoint item in list)
@@ -415,9 +415,9 @@ namespace Game
 			int num = Terrain.ExtractContents(cellValue);
 			if (num != 0)
 			{
-				int 爆炸强度 = (int)(MathUtils.Hash((uint)(x + (913 * y) + (217546 * z))) % 100u);
-				float num3 = MathUtils.Lerp(1f, 2f, 爆炸强度 / 100f);
-				if (爆炸强度 % 8 == 0)
+				int explosionPower = (int)(MathUtils.Hash((uint)(x + (913 * y) + (217546 * z))) % 100u);
+				float num3 = MathUtils.Lerp(1f, 2f, explosionPower / 100f);
+				if (explosionPower % 8 == 0)
 				{
 					num3 *= 3f;
 				}
