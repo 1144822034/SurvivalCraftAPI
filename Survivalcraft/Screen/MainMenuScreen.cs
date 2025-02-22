@@ -108,18 +108,18 @@ namespace Game
 			}
 			if (m_updateCheckButton.IsClicked)
 			{
-				if (!APIUpdateManager.IsNeedUpdate.HasValue) DialogsManager.ShowDialog(this, new MessageDialog(string.Empty, LanguageControl.Get(fName, 6), LanguageControl.Ok, null, null));
+				if (!APIUpdateManager.IsNeedUpdate.HasValue) DialogsManager.ShowDialog(this, new MessageDialog(LanguageControl.Get(fName,7), LanguageControl.Get(fName, 6), LanguageControl.Ok, null, null));
 				else
 				{
 					if(APIUpdateManager.IsNeedUpdate.Value)
-						DialogsManager.ShowDialog(this,new MessageDialog(string.Empty,string.Format(LanguageControl.Get(fName,4),APIUpdateManager.LatestVersion,APIUpdateManager.CurrentVersion),LanguageControl.Get(fName,5),LanguageControl.Cancel,
+						DialogsManager.ShowDialog(this,new MessageDialog(LanguageControl.Get(fName,7),string.Format(LanguageControl.Get(fName,4),APIUpdateManager.LatestVersion,APIUpdateManager.CurrentVersion),LanguageControl.Get(fName,5),LanguageControl.Cancel,
 								(button) => {
 									if(button == MessageDialogButton.Button2)
 									{
 										WebBrowserManager.LaunchBrowser(ModsManager.APIReleaseLink_Client);
 									}
 								}));
-					else DialogsManager.ShowDialog(this,new MessageDialog(string.Empty,LanguageControl.Get(fName,3),LanguageControl.Ok,null,null));
+					else DialogsManager.ShowDialog(this,new MessageDialog(LanguageControl.Get(fName,7),LanguageControl.Get(fName,3),LanguageControl.Ok,null,null));
 				}
 			}
 			if (Children.Find<ButtonWidget>("Play").IsClicked)
