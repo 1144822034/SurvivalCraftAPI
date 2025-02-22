@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using TemplatesDatabase;
+using Engine.Serialization;
 
 namespace Game
 {
@@ -293,23 +294,25 @@ namespace Game
 			m_subsystemFireBlockBehavior = Project.FindSubsystem<SubsystemFireBlockBehavior>(throwOnError: true);
 			foreach (ValuesDictionary item in valuesDictionary.GetValue<ValuesDictionary>("Projectiles").Values.Where((object v) => v is ValuesDictionary))
 			{
-				var projectile = new Projectile();
-				projectile.Value = item.GetValue<int>("Value");
-				projectile.Position = item.GetValue<Vector3>("Position");
-				projectile.Velocity = item.GetValue<Vector3>("Velocity");
-				projectile.CreationTime = item.GetValue<double>("CreationTime");
-				projectile.ProjectileStoppedAction = item.GetValue("ProjectileStoppedAction", projectile.ProjectileStoppedAction);
-				int ownerEntityID = item.GetValue("OwnerID", 0);
-				if(ownerEntityID != 0)
+				try
 				{
-					projectile.OwnerEntity = Project.FindEntity(ownerEntityID);
+					string className = item.GetValue("Class",typeof(Projectile).FullName);
+					Type type = TypeCache.FindType(className,false,true);
+					var projectile = (Projectile)Activator.CreateInstance(type);
+					projectile.SubsystemProjectiles = this;
+					projectile.SubsystemTerrain = m_subsystemTerrain;
+					projectile.Load(item);
+					ModsManager.HookAction("OnProjectileAdded",loader => {
+						loader.OnProjectileAdded(this,ref projectile,item);
+						return false;
+					});
+					m_projectiles.Add(projectile);
 				}
-                ModsManager.HookAction("OnProjectileAdded", loader =>
-                {
-                    loader.OnProjectileAdded(this, ref projectile, item);
-                    return false;
-                });
-                m_projectiles.Add(projectile);
+				catch(Exception ex)
+				{
+					Log.Error("Projectile Loaded Error");
+					Log.Error(ex);
+				}
 			}
 		}
 

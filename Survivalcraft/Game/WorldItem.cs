@@ -1,4 +1,5 @@
 using Engine;
+using TemplatesDatabase;
 
 namespace Game
 {
@@ -20,11 +21,19 @@ namespace Game
 
 		public bool IsFireProof = false;//该弹射物和掉落物防火，不会被火焰或熔岩烧毁
 
-        public float? MaxTimeExist;
+		public float? MaxTimeExist;
 
-        public float ExplosionMass = 20f;
+		public float ExplosionMass = 20f;
 
 		public bool LogDrawError = true;
-		public virtual void UnderExplosion(Vector3 impulse, float damage) { }
-    }
+
+		/// <summary>
+		/// 模组可以向Dictionary里面添加内容，另一个模组可以从Dictionary读取内容，以实现模组联动效果
+		/// </summary>
+		public Dictionary<string,object> DictionaryForOtherMods = new Dictionary<string,object>();
+		public virtual void UnderExplosion(Vector3 impulse,float damage) { }
+		public virtual void Load(ValuesDictionary valuesDictionary)
+		{
+		}
+	}
 }

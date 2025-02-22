@@ -84,8 +84,25 @@ namespace Game
 
         public float? m_attackPower = null;
         
+		/// <summary>
+		/// 在进入加载存档时执行
+		/// </summary>
+		public override void Load(ValuesDictionary valuesDictionary)
+		{
+			Value = valuesDictionary.GetValue<int>("Value");
+			Position = valuesDictionary.GetValue<Vector3>("Position");
+			Velocity = valuesDictionary.GetValue<Vector3>("Velocity");
+			CreationTime = valuesDictionary.GetValue<double>("CreationTime");
+			ProjectileStoppedAction = valuesDictionary.GetValue("ProjectileStoppedAction", ProjectileStoppedAction);
+			int ownerEntityID = valuesDictionary.GetValue("OwnerID",0);
+			if(ownerEntityID != 0)
+			{
+				OwnerEntity = SubsystemProjectiles.Project.FindEntity(ownerEntityID);
+			}
+		}
         public virtual void Save(SubsystemProjectiles subsystemProjectiles, ValuesDictionary valuesDictionary)
         {
+			valuesDictionary.SetValue("Class",GetType().FullName);
             valuesDictionary.SetValue("Value", Value);
             valuesDictionary.SetValue("Position", Position);
             valuesDictionary.SetValue("Velocity", Velocity);

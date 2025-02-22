@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using TemplatesDatabase;
+using Engine.Serialization;
 namespace Game
 {
 	public class SubsystemPickables : Subsystem, IDrawable, IUpdateable
@@ -193,30 +194,28 @@ namespace Game
 			m_subsystemFluidBlockBehavior = Project.FindSubsystem<SubsystemFluidBlockBehavior>(throwOnError: true);
 			foreach (ValuesDictionary item in valuesDictionary.GetValue<ValuesDictionary>("Pickables").Values.Where((object v) => v is ValuesDictionary))
 			{
-				var pickable = new Pickable();
-				pickable.Value = item.GetValue<int>("Value");
-				pickable.Count = item.GetValue<int>("Count");
-				pickable.Position = item.GetValue<Vector3>("Position");
-				pickable.Velocity = item.GetValue<Vector3>("Velocity");
-				pickable.CreationTime = item.GetValue("CreationTime", 0.0);
-				if (item.ContainsKey("StuckMatrix"))
+				try
 				{
-					pickable.StuckMatrix = item.GetValue<Matrix>("StuckMatrix");
+					string className = item.GetValue("Class",typeof(Pickable).FullName);
+					Type type = TypeCache.FindType(className,false,true);
+					var pickable = (Pickable)Activator.CreateInstance(type);
+					pickable.SubsystemTerrain = m_subsystemTerrain;
+					pickable.SubsystemPickables = this;
+					pickable.Load(item);
+					ModsManager.HookAction("OnPickableAdded",loader => {
+						loader.OnPickableAdded(this,ref pickable,item);
+						return false;
+					});
+					lock(m_pickables)
+					{
+						m_pickables.Add(pickable);
+					}
 				}
-                int ownerEntityID = item.GetValue("OwnerID", 0);
-                if (ownerEntityID != 0)
-                {
-                    pickable.OwnerEntity = Project.FindEntity(ownerEntityID);
-                }
-                ModsManager.HookAction("OnPickableAdded", loader =>
-                {
-                    loader.OnPickableAdded(this, ref pickable, item);
-                    return false;
-                });
-				lock (m_pickables)
+				catch(Exception ex)
 				{
-                    m_pickables.Add(pickable);
-                }
+					Log.Error("Pickable Loaded Error");
+					Log.Error(ex);
+				}
 			}
 		}
 

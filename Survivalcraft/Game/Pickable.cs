@@ -46,6 +46,23 @@ namespace Game
 						return m_subsystemMovingBlocks; }
 		}
 
+		public override void Load(ValuesDictionary valuesDictionary)
+		{
+			Value = valuesDictionary.GetValue<int>("Value");
+			Count = valuesDictionary.GetValue<int>("Count");
+			Position = valuesDictionary.GetValue<Vector3>("Position");
+			Velocity = valuesDictionary.GetValue<Vector3>("Velocity");
+			CreationTime = valuesDictionary.GetValue("CreationTime",0.0);
+			if(valuesDictionary.ContainsKey("StuckMatrix"))
+			{
+				StuckMatrix = valuesDictionary.GetValue<Matrix>("StuckMatrix");
+			}
+			int ownerEntityID = valuesDictionary.GetValue("OwnerID",0);
+			if(ownerEntityID != 0)
+			{
+				OwnerEntity = SubsystemPickables.Project.FindEntity(ownerEntityID);
+			}
+		}
 		public virtual void Initialize(int value, int count, Vector3 position, Vector3? velocity, Matrix? stuckMatrix, Entity owner)
         {
             Value = value;
@@ -365,8 +382,9 @@ namespace Game
 			}
 		}
         public virtual void Save(ValuesDictionary valuesDictionary)
-        {
-            valuesDictionary.SetValue("Value", Value);
+		{
+			valuesDictionary.SetValue("Class",GetType().FullName);
+			valuesDictionary.SetValue("Value", Value);
             valuesDictionary.SetValue("Count", Count);
             valuesDictionary.SetValue("Position", Position);
             valuesDictionary.SetValue("Velocity", Velocity);

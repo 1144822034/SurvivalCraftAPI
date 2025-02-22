@@ -69,7 +69,11 @@ namespace Game
 		public bool AllowImpulseAndStunWhenDamageIsZero = true;
 
 		public float? m_injuryAmount = null;
-        public virtual float CalculateInjuryAmount()
+		/// <summary>
+		/// 模组可以向Dictionary里面添加内容，另一个模组可以从Dictionary读取内容，以实现模组联动效果
+		/// </summary>
+		public Dictionary<string,object> DictionaryForOtherMods = new Dictionary<string,object>();
+		public virtual float CalculateInjuryAmount()
         {
 			if(m_injuryAmount != null) return m_injuryAmount.Value;
             if (AttackPower <= 0f) return AttackPower;

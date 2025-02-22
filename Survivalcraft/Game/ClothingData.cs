@@ -22,6 +22,7 @@ namespace Game
 			{
 				newDisplayName = n;
 			}
+			xElement = item;
 			Index = ClothIndex;
 			DisplayName = newDisplayName;
 			string slotName = XmlUtils.GetAttributeValue<string>(item,"Slot");
@@ -40,6 +41,8 @@ namespace Game
 			ImpactSoundsFolder = XmlUtils.GetAttributeValue<string>(item,"ImpactSoundsFolder");
 			Description = newDescription;
 		}
+
+		public XElement xElement;
 
 		public int Index;
 
@@ -87,6 +90,11 @@ namespace Game
 		/// ComponentClothing更新时触发。
 		/// </summary>
 		public Action<int, ComponentClothing> Update;
+
+		/// <summary>
+		/// 模组可以向Dictionary里面添加特殊数据，另一个模组可以从Dictionary读取数据，以实现模组联动效果
+		/// </summary>
+		public Dictionary<string,object> DictionaryForOtherMods = new Dictionary<string,object>();
 
 		/// <summary>
 		/// 计算单件护甲的防御

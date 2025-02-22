@@ -128,7 +128,7 @@ namespace Game
 			}
 		}
 
-		public struct ExplosionData
+		public class ExplosionData
 		{
 			public int X;
 
