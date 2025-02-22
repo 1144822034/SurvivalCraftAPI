@@ -30,7 +30,7 @@ namespace Game
 		/// <summary>
 		/// 模组可以向Dictionary里面添加内容，另一个模组可以从Dictionary读取内容，以实现模组联动效果
 		/// </summary>
-		public Dictionary<string,object> DictionaryForOtherMods = new Dictionary<string,object>();
+		public ValuesDictionary DictionaryForOtherMods = new ValuesDictionary();
 		public virtual void UnderExplosion(Vector3 impulse,float damage) { }
 		public virtual void Load(ValuesDictionary valuesDictionary)
 		{

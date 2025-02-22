@@ -1,6 +1,7 @@
 using Engine;
 using GameEntitySystem;
 using System.Globalization;
+using TemplatesDatabase;
 
 namespace Game
 {
@@ -72,7 +73,7 @@ namespace Game
 		/// <summary>
 		/// 模组可以向Dictionary里面添加内容，另一个模组可以从Dictionary读取内容，以实现模组联动效果
 		/// </summary>
-		public Dictionary<string,object> DictionaryForOtherMods = new Dictionary<string,object>();
+		public ValuesDictionary DictionaryForOtherMods = new ValuesDictionary();
 		public virtual float CalculateInjuryAmount()
         {
 			if(m_injuryAmount != null) return m_injuryAmount.Value;

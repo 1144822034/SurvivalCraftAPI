@@ -3,6 +3,7 @@ using System;
 using Engine;
 using System.Xml.Linq;
 using XmlUtilities;
+using TemplatesDatabase;
 
 namespace Game
 {
@@ -94,7 +95,7 @@ namespace Game
 		/// <summary>
 		/// 模组可以向Dictionary里面添加特殊数据，另一个模组可以从Dictionary读取数据，以实现模组联动效果
 		/// </summary>
-		public Dictionary<string,object> DictionaryForOtherMods = new Dictionary<string,object>();
+		public ValuesDictionary DictionaryForOtherMods = new ValuesDictionary();
 
 		/// <summary>
 		/// 计算单件护甲的防御
