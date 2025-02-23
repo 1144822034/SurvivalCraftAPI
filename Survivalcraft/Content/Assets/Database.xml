@@ -1,4 +1,4 @@
-<Database xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="Database.xsd">
+﻿<Database xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="Database.xsd">
 	<DatabaseObjectTypes>
 		<DatabaseObjectType Name="Root" DefaultInstanceName="Root" IconName="" Order="0" SupportsValue="False" MustInherit="False" NameLengthLimit="256" SaveStandalone="False" AllowedNestingParents="" AllowedInheritanceParents="" NestedValueType="" />
 		<DatabaseObjectType Name="Folder" DefaultInstanceName="Folder" IconName="Folder" Order="1" SupportsValue="False" MustInherit="False" NameLengthLimit="256" SaveStandalone="False" AllowedNestingParents="Root,Folder" AllowedInheritanceParents="" NestedValueType="" />
@@ -3407,6 +3407,9 @@
 				<SubsystemTemplate Name="BlocksManager" Guid="0d8a840a-b29e-e22c-f884-33970a877afc" InheritanceParent="fefb9590-4972-4893-b02a-76063611b745">
 					<Parameter Name="Class" Guid="46dcfceb-86d7-b4d4-0fb8-8abbf3db0f06" Value="Game.SubsystemBlocksManager" Type="string" />
 				</SubsystemTemplate>
+				<SubsystemTemplate Name="UsedMods" Guid="3154ece6-9389-5059-21c7-aaac6a81b1a0" InheritanceParent="fefb9590-4972-4893-b02a-76063611b745">
+					<Parameter Name="Class" Guid="61231118-2d97-acb0-ed01-622ecd8cb257" Value="Game.SubsystemUsedMods" Type="string" />
+				</SubsystemTemplate>
 				<SubsystemTemplate Name="ButtonBlockBehavior" Guid="0302cf98-4263-466a-8d01-985fa3d9b002" InheritanceParent="fefb9590-4972-4893-b02a-76063611b745">
 					<Parameter Name="Class" Guid="4407e30b-89ee-40c7-b1d2-eb100c2b8ac4" Value="Game.SubsystemButtonBlockBehavior" Type="string" />
 				</SubsystemTemplate>
@@ -4316,6 +4319,7 @@
 		<Folder Name="Abstract" Guid="c6ba6a30-5042-4d3d-9bea-199cd4acc3fa">
 			<ProjectTemplate Name="Project" Guid="85023bf8-1c90-4dd1-9442-e6c13691d078">
 				<MemberSubsystemTemplate Name="BlocksManager" Guid="a6e38fe2-d626-74cc-a4bc-6691556e63f0" InheritanceParent="0d8a840a-b29e-e22c-f884-33970a877afc" />
+				<MemberSubsystemTemplate Name="UsedMods" Guid="b4fb02e2-4121-9051-3665-1deac9b13446" InheritanceParent="3154ece6-9389-5059-21c7-aaac6a81b1a0" />
 				<MemberSubsystemTemplate Name="FenceBlockBehavior" Guid="00f400d3-adc4-41e1-b3ff-ee46631571b5" InheritanceParent="b9a7f98e-b2fd-4902-9e37-d2c0a73909c4" />
 				<MemberSubsystemTemplate Name="PlayerStats" Guid="0d9c91b0-9f70-4754-b2dd-2667600eee95" InheritanceParent="c829cb1d-879e-47c4-8597-1507cdac7629" />
 				<MemberSubsystemTemplate Name="EntityBlockBehavior" Guid="192396e5-213a-ac2c-5393-12943c2350ff" InheritanceParent="3adb82ac-b42c-485d-b393-4b017aba88d0" />

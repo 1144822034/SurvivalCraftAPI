@@ -1,4 +1,4 @@
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 
 namespace Game
 {
@@ -21,6 +21,12 @@ namespace Game
 					  PackageName;
 		public int LoadOrder = 0;
 		public List<string> Dependencies = [];
+
+		/// <summary>
+		/// 该项为true表示：在存档中不记录该模组的modInfo，当玩家在未装载该模组，并运行之前带有该模组的存档时，不报错
+		/// 适用于不在存档中存储特殊信息的辅助模组
+		/// </summary>
+		public bool NonPersistentMod = false;
 		public override int GetHashCode()
 		{
 			return HashCode.Combine(Name, PackageName, Version);

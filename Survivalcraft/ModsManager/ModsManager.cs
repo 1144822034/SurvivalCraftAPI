@@ -1,4 +1,4 @@
-// Game.ModsManager
+﻿// Game.ModsManager
 
 using Engine;
 using Game;
@@ -261,7 +261,11 @@ public static class ModsManager
 			modInfo.LoadOrder = loadOrder.GetInt32();
 			//Log.Information("获取模组的Order：" + modInfo.LoadOrder);
         }
-        return modInfo;
+		if(jsonElement.TryGetProperty("NonPersistentMod",out JsonElement nonPersistentMod) && packageName.ValueKind == JsonValueKind.True)
+		{
+			modInfo.NonPersistentMod = true;
+		}
+		return modInfo;
     }
     public static void SaveModSettings(XElement xElement)
 	{
