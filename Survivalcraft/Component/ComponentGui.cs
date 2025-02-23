@@ -342,6 +342,13 @@ namespace Game
 			m_lightningButtonWidget.IsVisible = isCreative;
 			m_precipitationButtonWidget.IsVisible = isCreative && worldSettings.AreWeatherEffectsEnabled;
 			m_fogButtonWidget.IsVisible = isCreative && worldSettings.AreWeatherEffectsEnabled;
+
+			//启动冒险模式
+			var adventureEnabled = worldSettings.AreAdventureSurvivalMechanicsEnabled;
+			HealthBarWidget.IsVisible = !isCreative;
+			FoodBarWidget.IsVisible = !isCreative && adventureEnabled;
+			TemperatureBarWidget.IsVisible = !isCreative && adventureEnabled;
+			LevelLabelWidget.IsVisible = !isCreative && adventureEnabled;
 		}
 
 		public override void Save(ValuesDictionary valuesDictionary, EntityToIdMap entityToIdMap)
@@ -478,11 +485,7 @@ namespace Game
 			m_lookPadContainerWidget.IsVisible = !SettingsManager.HideMoveLookPads && ShowTouchWidget;
 			MoveRoseWidget.IsVisible = ShowTouchWidget;
 			m_moreContentsWidget.IsVisible = m_moreButtonWidget.IsChecked;
-			HealthBarWidget.IsVisible = gameMode != GameMode.Creative;
-			FoodBarWidget.IsVisible = gameMode != 0 && worldSettings.AreAdventureSurvivalMechanicsEnabled;
-			TemperatureBarWidget.IsVisible = gameMode != 0 && worldSettings.AreAdventureSurvivalMechanicsEnabled;
-			LevelLabelWidget.IsVisible = gameMode != 0 && worldSettings.AreAdventureSurvivalMechanicsEnabled;
-			
+		
 			m_moveButtonsContainerWidget.IsVisible = SettingsManager.MoveControlMode == MoveControlMode.Buttons;
 			m_movePadContainerWidget.IsVisible = SettingsManager.MoveControlMode == MoveControlMode.Pad;
 			if (SettingsManager.LeftHandedLayout)
