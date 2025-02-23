@@ -1,4 +1,4 @@
-using Engine;
+﻿using Engine;
 using Engine.Serialization;
 using System;
 using System.Collections.Generic;
@@ -402,17 +402,25 @@ namespace Game
 
         public static XElement GetSubsystemNode(XElement projectNode, string subsystemName)
         {
-            XElement xElement = (from n in projectNode.Element("Subsystems").Elements("Values")
-                                 where XmlUtils.GetAttributeValue(n, "Name", string.Empty) == subsystemName
-                                 select n).FirstOrDefault();
-            if (xElement != null)
-            {
-                return xElement;
-            }
-            throw new InvalidOperationException(subsystemName + " node not found in project.");
+			return GetSubsystemNode(projectNode,subsystemName,true);
         }
+		/// <summary>
+		/// 保证和旧引用的兼容性，这里不使用默认参数
+		/// </summary>
+		public static XElement GetSubsystemNode(XElement projectNode,string subsystemName, bool throwOnError)
+		{
+			XElement xElement = (from n in projectNode.Element("Subsystems").Elements("Values")
+								 where XmlUtils.GetAttributeValue(n,"Name",string.Empty) == subsystemName
+								 select n).FirstOrDefault();
+			if(xElement != null)
+			{
+				return xElement;
+			}
+			if(throwOnError) throw new InvalidOperationException(subsystemName + " node not found in project.");
+			return null;
+		}
 
-        public static XElement GetPlayersNode(XElement projectNode)
+		public static XElement GetPlayersNode(XElement projectNode)
 		{
 			XElement xElement = (from n in projectNode.Element("Subsystems").Elements("Values")
 								 where XmlUtils.GetAttributeValue(n, "Name", string.Empty) == "Players"
@@ -423,7 +431,26 @@ namespace Game
 			}
 			throw new InvalidOperationException("Players node not found in project.");
 		}
-
+		public static XElement GetProjectNode(WorldInfo worldInfo)
+		{
+			string text = Storage.CombinePaths(worldInfo.DirectoryName,"Project.xml");
+			try
+			{
+				if(Storage.FileExists(text))
+				{
+					using(Stream stream = Storage.OpenFile(text,OpenFileMode.Read))
+					{
+						XElement xElement = XmlUtils.LoadXmlFromStream(stream,null,throwOnError: true);
+						return xElement;
+					}
+				}
+				return null;
+			}
+			catch(Exception e3)
+			{
+				return null;
+			}
+		}
 		public static void PackWorld(string directoryName, Stream targetStream, Func<string, bool> filter, bool embedExternalContent)
 		{
 			WorldInfo worldInfo = GetWorldInfo(directoryName);

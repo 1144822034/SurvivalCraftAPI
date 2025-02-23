@@ -593,8 +593,11 @@ namespace Game
         }
 
         /// <summary>
-        /// 存档开始加载前执行
-        /// </summary>
+		/// 存档开始加载前执行
+		/// </summary>
+		/// <param name="playScreen">世界选择界面</param>
+		/// <param name="item">类型为WorldInfo，存储即将进入的存档信息</param>
+		/// <returns>返回类型应当保证为WorldInfo，返回null可以阻止玩家进入存档</returns>
         public virtual object BeforeGameLoading(PlayScreen playScreen, object item)
         {
             return item;

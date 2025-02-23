@@ -25,6 +25,7 @@ namespace Game
 				modsDict.SetValue(i.ToString(),modInfoDict);
 				i++;
 			}
+			valuesDictionary.SetValue("ModsCount",i);
 			valuesDictionary.SetValue("Mods",modsDict);
 		}
 	}

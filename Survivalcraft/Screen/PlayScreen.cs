@@ -5,6 +5,7 @@ using System.Linq;
 using System.Reflection.Metadata.Ecma335;
 using System.Threading.Tasks;
 using System.Xml.Linq;
+using TemplatesDatabase;
 
 namespace Game
 {
@@ -24,10 +25,6 @@ namespace Game
 
 		public static string fName = "PlayScreen";
 
-		/// <summary>
-		/// 在世界列表点击时执行，使用实名方法以便模组移除
-		/// </summary>
-		/// <param name="item"></param>
 		public virtual void OnWorldsListWidgetItemClicked(Object item)
 		{
 			if(item != null && m_worldsListWidget.SelectedItem == item)
@@ -144,16 +141,71 @@ namespace Game
 			}
 		}
 
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="item">实际类型为WorldInfo</param>
 		public void Play(object item)
 		{
 			bool flag = false;
+			WorldInfo worldInfo = item as WorldInfo;
 			string languageType = (!ModsManager.Configs.ContainsKey("Language")) ? "zh-CN" : ModsManager.Configs["Language"];
 			if (languageType == "zh-CN" && Time.RealTime - m_modTipsTime > 3600f)
 			{
 				m_modTipsTime = Time.RealTime;
-				flag = ShowTips(item);
+				flag |= ShowTips(item);
 			}
-			if (!flag) GameLoad(item);
+			List<ValuesDictionary> modsNotLoaded = new List<ValuesDictionary>();
+			List<ValuesDictionary> modsVersionNotCapable = new List<ValuesDictionary>();
+			if(worldInfo != null)
+			{
+				XElement projectNode = WorldsManager.GetProjectNode(worldInfo);
+				if(projectNode != null)
+				{
+					XElement subsystemUsedModsNode = WorldsManager.GetSubsystemNode(projectNode, "UsedMods", false);
+					if(subsystemUsedModsNode != null)
+					{
+						ValuesDictionary subsystemValuesDictionary = new ValuesDictionary();
+						subsystemValuesDictionary.ApplyOverrides(subsystemUsedModsNode);
+						int modsCount = subsystemValuesDictionary.GetValue("ModsCount",0);
+						ValuesDictionary valuesDictionary = subsystemValuesDictionary.GetValue<ValuesDictionary>("Mods",null);
+						if(valuesDictionary != null)
+						{
+							for(int i = 0; i < modsCount; i++)
+							{
+								ValuesDictionary modDictionary = valuesDictionary.GetValue<ValuesDictionary>(i.ToString(),null);
+								if(modDictionary == null) continue;
+								bool entityGotten = ModsManager.GetModEntity(modDictionary.GetValue("PackageName",string.Empty),out ModEntity modEntity);
+								if(!entityGotten)
+								{
+									modsNotLoaded.Add(modDictionary);
+								}
+								//TODO:还需要实现模组版本匹配
+							}
+						}
+					}
+				}
+			}
+			if(!flag)
+			{
+				if(modsNotLoaded.Count > 0)
+				{
+					string text = string.Empty;
+					foreach(ValuesDictionary modDictionary in modsNotLoaded)
+					{
+						text += string.Format("模组名：{0}, 版本号：{1}\n",modDictionary.GetValue("Name", "?"),modDictionary.GetValue("Version", "?"));
+					}
+					text += "你确定要继续吗？";
+					DialogsManager.ShowDialog(this,new MessageDialog("Mod缺失",text,LanguageControl.Yes,LanguageControl.No,delegate (MessageDialogButton button)
+					{
+						if(button == MessageDialogButton.Button1)
+						{
+							GameLoad(item);
+						}
+					}));
+				}
+				else GameLoad(item);
+			}
 		}
 
 		public void GameLoad(object item)
@@ -161,9 +213,10 @@ namespace Game
 			ModsManager.HookAction("BeforeGameLoading", loader =>
 			{
 				item = loader.BeforeGameLoading(this, item);
-				return true;
+				return false;
 			});
-			ScreensManager.SwitchScreen("GameLoading", item, null);
+			if(item != null)
+				ScreensManager.SwitchScreen("GameLoading", item, null);
 			m_worldsListWidget.SelectedItem = null;
 		}
 
