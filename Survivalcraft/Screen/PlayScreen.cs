@@ -1,4 +1,4 @@
-using Engine;
+﻿using Engine;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -23,6 +23,18 @@ namespace Game
 		public double m_modTipsTime;
 
 		public static string fName = "PlayScreen";
+
+		/// <summary>
+		/// 在世界列表点击时执行，使用实名方法以便模组移除
+		/// </summary>
+		/// <param name="item"></param>
+		public virtual void OnWorldsListWidgetItemClicked(Object item)
+		{
+			if(item != null && m_worldsListWidget.SelectedItem == item)
+			{
+				Play(item);
+			}
+		}
 
 		public Widget WorldInfoWidget(Object item)
 		{
@@ -61,13 +73,7 @@ namespace Game
 			worldsListWidget.ItemWidgetFactory = (Func<object, Widget>)Delegate.Combine(worldsListWidget.ItemWidgetFactory, WorldInfoWidget);
 			m_worldsListWidget.ScrollPosition = 0f;
 			m_worldsListWidget.ScrollSpeed = 0f;
-			m_worldsListWidget.ItemClicked += delegate (object item)
-			{
-				if (item != null && m_worldsListWidget.SelectedItem == item)
-				{
-					Play(item);
-				}
-			};
+			m_worldsListWidget.ItemClicked += OnWorldsListWidgetItemClicked;
 			m_modTipsTime = -10000000f;
 		}
 

@@ -1,4 +1,4 @@
-using System.Text.Json;
+﻿using System.Text.Json;
 using System.Text.Json.Nodes;
 using System.Xml.Linq;
 
@@ -18,6 +18,17 @@ namespace Game
 
 		public Dictionary<string, HelpTopic> m_topics = [];
 
+		/// <summary>
+		/// 点击帮助条目时执行
+		/// </summary>
+		public virtual void OnTopicsListItemClicked(object item)
+		{
+			var helpTopic2 = item as HelpTopic;
+			if(helpTopic2 != null)
+			{
+				ShowTopic(helpTopic2);
+			}
+		}
 		public HelpScreen()
 		{
 			XElement node = ContentManager.Get<XElement>("Screens/HelpScreen");
@@ -34,14 +45,7 @@ namespace Game
 				obj.Children.Find<LabelWidget>("HelpTopicItem.Title").Text = helpTopic3.Title;
 				return obj;
 			};
-			m_topicsList.ItemClicked += delegate (object item)
-			{
-				var helpTopic2 = item as HelpTopic;
-				if (helpTopic2 != null)
-				{
-					ShowTopic(helpTopic2);
-				}
-			};
+			m_topicsList.ItemClicked += OnTopicsListItemClicked;
             foreach (var item in LanguageControl.jsonNode["Help"].AsObject())
 			{
 				JsonNode item3 = item.Value;
