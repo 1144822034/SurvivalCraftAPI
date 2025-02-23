@@ -1,4 +1,4 @@
-using Engine;
+﻿using Engine;
 using Engine.Graphics;
 using GameEntitySystem;
 using System.Collections.Generic;
@@ -265,7 +265,7 @@ namespace Game
 		/// 等级组件更新时执行
 		/// </summary>
 		/// <param name="level"></param>
-		[Obsolete("Use OnFactorsGenerate instead.")]
+		[Obsolete("You can update your factors in your mod components")]
 		public virtual void OnLevelUpdate(ComponentLevel level)
         {
         }
@@ -274,7 +274,7 @@ namespace Game
 		/// 因素控制力量、抗性、速度、饥饿速率组件更新时执行
 		/// </summary>
 		/// <param name="componentFactors"></param>
-		[Obsolete("Use OnFactorsGenerate instead.")]
+		[Obsolete("You can update your factors in your mod components")]
         public virtual void OnFactorsUpdate(ComponentFactors componentFactors, float dt)
         {
         }
@@ -1450,10 +1450,8 @@ namespace Game
         }
 
         /// <summary>
-        /// 在配方表加载完成后执行
+        /// 在配方表加载完成后执行，在排序完成后执行
         /// </summary>
-        /// <param name="recipes">已经加载的配方</param>
-        /// <param name="sort">是否在删除后重新排序</param>
         public virtual void CraftingRecipesManagerInitialized()
         {
 
@@ -1557,7 +1555,7 @@ namespace Game
 		/// 进入Screen时执行
 		/// </summary>
 		/// <param name="screen">进入的Screen</param>
-		/// <param name="screenParameters">进入Screen时传入的参数</param>
+		/// <param name="screenParameters">进入Screen时传入的参数，参数的详细信息需要去查阅对应screen的代码</param>
 		public virtual void OnScreenEntered(Screen screen,object[] screenParameters)
 		{
 
@@ -1572,7 +1570,8 @@ namespace Game
 		}
 
 		/// <summary>
-		/// 在Widget即将执行Update()时执行
+		/// 在Widget即将执行Update()时执行，能用于修改游戏中已有按钮的功能
+		/// 并且可以通过一定的操作，拦截原版按钮的功能
 		/// </summary>
 		/// <param name="widget"></param>
 		public virtual void BeforeWidgetUpdate(Widget widget)
@@ -1581,7 +1580,7 @@ namespace Game
 		}
 
 		/// <summary>
-		/// 在Widget完成Update()后立即执行
+		/// 在Widget完成Update()后立即执行，能用于修改游戏中已有按钮的功能
 		/// </summary>
 		/// <param name="widget"></param>
 		public virtual void AfterWidgetUpdate(Widget widget)
@@ -1599,6 +1598,7 @@ namespace Game
 
 		/// <summary>
 		/// 生物在选择追击对象时，对被追击对象的评分。评分越高，则会被选中。
+		/// 仅建议在该生物为本模组生物，或目标生物为本模组生物时，修改追击权重。
 		/// </summary>
 		/// <param name="chaseBehavior"></param>
 		/// <param name="creatureToBeTarget">被评估的对象</param>
@@ -1618,7 +1618,7 @@ namespace Game
 		}
 		/// <summary>
 		/// 修改生物的战利品。
-		/// 建议不要清空dropValues推倒重来，影响模组兼容性。
+		/// 建议不要清空dropValues推倒重来，不利于模组兼容性。
 		/// </summary>
 		/// <param name="componentLoot"></param>
 		/// <param name="dropValues">其中包含所有的战利品掉落物的方块值和数量</param>
@@ -1633,7 +1633,18 @@ namespace Game
 		/// <param name="mainMenuScreen">初始化完毕后的主界面</param>
 		/// <param name="leftBottomBar">主界面左下角的按钮栏，里面有着API的切换语言和资源管理按钮</param>
 		/// <param name="rightBottomBar">主界面右下角的按钮栏，Mod作者们可以在这里面放入想要的按钮（例如Mod设置按钮、Mod作者介绍按钮等）</param>
+		[Obsolete("建议在OnLoadingFinished()中，使用ScreensManager.FindScreen<MainMenuScreen>()查找到主菜单界面，再对其修改")]
 		public virtual void OnMainMenuScreenCreated(MainMenuScreen mainMenuScreen, StackPanelWidget leftBottomBar, StackPanelWidget rightBottomBar)
+		{
+
+		}
+		/// <summary>
+		/// 在主界面更新
+		/// </summary>
+		/// <param name="leftBottomBar">主界面左下角的按钮栏，里面有着API的切换语言和资源管理按钮</param>
+		/// <param name="rightBottomBar">主界面右下角的按钮栏，Mod作者们可以在这里面放入想要的按钮（例如Mod设置按钮、Mod作者介绍按钮等）</param>
+		[Obsolete("建议在AfterWidgetUpdate()中使用if(widget is MainMenuScreen mainMenuScreen){//Your Code}")]
+		public virtual void OnMainMenuScreenUpdate(MainMenuScreen mainMenuScreen,StackPanelWidget leftBottomBar,StackPanelWidget rightBottomBar)
 		{
 
 		}

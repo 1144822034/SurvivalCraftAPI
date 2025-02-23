@@ -1,4 +1,4 @@
-using Engine;
+﻿using Engine;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -35,6 +35,21 @@ namespace Game
 
 		public int m_listCategoryIndex = -1;
 
+		/// <summary>
+		/// 在方块项目被点击时执行
+		/// 改用实名方法，便于模组删除或禁用
+		/// </summary>
+		/// <param name="item"></param>
+		public virtual void OnBlocksListItemClicked(object item)
+		{
+			if(m_blocksList.SelectedItem == item && item is int)
+			{
+				int value = (int)item;
+				Block block = BlocksManager.Blocks[Terrain.ExtractContents(value)];
+				ScreensManager.m_screens["RecipaediaDescription"] = block.GetBlockDescriptionScreen(value);
+				ScreensManager.SwitchScreen("RecipaediaDescription",item,m_blocksList.Items.Cast<int>().ToList());
+			}
+		}
 		public RecipaediaScreen()
 		{
 			XElement node = ContentManager.Get<XElement>("Screens/RecipaediaScreen");
@@ -61,16 +76,7 @@ namespace Game
 				obj.Children.Find<LabelWidget>("RecipaediaItem.Details").Text = description;
 				return obj;
 			};
-			m_blocksList.ItemClicked += delegate (object item)
-			{
-				if (m_blocksList.SelectedItem == item && item is int)
-				{
-					int value = (int)item;
-                    Block block = BlocksManager.Blocks[Terrain.ExtractContents(value)];
-                    ScreensManager.m_screens["RecipaediaDescription"] = block.GetBlockDescriptionScreen(value);
-					ScreensManager.SwitchScreen("RecipaediaDescription", item, m_blocksList.Items.Cast<int>().ToList());
-				}
-			};
+			m_blocksList.ItemClicked += OnBlocksListItemClicked;
 		}
 
 		public override void Enter(object[] parameters)

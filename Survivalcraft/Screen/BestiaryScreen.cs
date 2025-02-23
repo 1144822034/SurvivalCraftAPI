@@ -1,4 +1,4 @@
-using Engine;
+﻿using Engine;
 using Engine.Graphics;
 using System;
 using System.Collections.Generic;
@@ -14,6 +14,10 @@ namespace Game
 
 		public Screen m_previousScreen;
 
+		public virtual void OnCreaturesListItemClicked(object item)
+		{
+			ScreensManager.SwitchScreen("BestiaryDescription",item,m_creaturesList.Items.Cast<BestiaryCreatureInfo>().ToList());
+		}
 		public BestiaryScreen()
 		{
 			XElement node = ContentManager.Get<XElement>("Screens/BestiaryScreen");
@@ -35,10 +39,7 @@ namespace Game
 				});
 				return obj;
 			};
-			m_creaturesList.ItemClicked += delegate (object item)
-			{
-				ScreensManager.SwitchScreen("BestiaryDescription", item, m_creaturesList.Items.Cast<BestiaryCreatureInfo>().ToList());
-			};
+			m_creaturesList.ItemClicked += OnCreaturesListItemClicked;
 			var list = new List<BestiaryCreatureInfo>();
 			foreach (ValuesDictionary entitiesValuesDictionary in DatabaseManager.EntitiesValuesDictionaries)
 			{
