@@ -1626,24 +1626,14 @@ namespace Game
 		{
 
 		}
-
 		/// <summary>
 		/// 在主界面初始化后执行，你可以通过这个给主界面加些你想要的按钮或者文字等
+		/// 不过建议开发者使用BeforeWidgetUpdate和AfterWidgetUpdate这两个接口实现
 		/// </summary>
 		/// <param name="mainMenuScreen">初始化完毕后的主界面</param>
 		/// <param name="leftBottomBar">主界面左下角的按钮栏，里面有着API的切换语言和资源管理按钮</param>
 		/// <param name="rightBottomBar">主界面右下角的按钮栏，Mod作者们可以在这里面放入想要的按钮（例如Mod设置按钮、Mod作者介绍按钮等）</param>
-		[Obsolete("该方法已过时，请使用OnMainMenuScreenUpdate")]
 		public virtual void OnMainMenuScreenCreated(MainMenuScreen mainMenuScreen, StackPanelWidget leftBottomBar, StackPanelWidget rightBottomBar)
-		{
-
-		}
-		/// <summary>
-		/// 在主界面更新
-		/// </summary>
-		/// <param name="leftBottomBar">主界面左下角的按钮栏，里面有着API的切换语言和资源管理按钮</param>
-		/// <param name="rightBottomBar">主界面右下角的按钮栏，Mod作者们可以在这里面放入想要的按钮（例如Mod设置按钮、Mod作者介绍按钮等）</param>
-		public virtual void OnMainMenuScreenUpdate(MainMenuScreen mainMenuScreen,StackPanelWidget leftBottomBar,StackPanelWidget rightBottomBar)
 		{
 
 		}
