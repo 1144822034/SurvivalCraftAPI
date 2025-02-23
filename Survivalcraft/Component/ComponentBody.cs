@@ -12,6 +12,8 @@ namespace Game
 	{
 		public struct CollisionBox
 		{
+			public CollisionBox() { }
+
 			public int BlockValue;
 
 			public Vector3 BlockVelocity;
@@ -19,6 +21,11 @@ namespace Game
 			public ComponentBody ComponentBody;
 
 			public BoundingBox Box;
+
+			/// <summary>
+			/// 模组如果需要添加或使用额外信息，可以在这个ValuesDictionary读写元素
+			/// </summary>
+			public ValuesDictionary ValuesDictionaryForMods = new ValuesDictionary();
 		}
 
 		public SubsystemTime m_subsystemTime;

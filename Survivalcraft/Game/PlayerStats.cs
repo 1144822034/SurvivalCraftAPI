@@ -17,12 +17,18 @@ namespace Game
 
 		public struct DeathRecord
 		{
+			public DeathRecord() { }
+			public DeathRecord(double day, Vector3 location, string cause)
+			{
+				Day = day;
+				Location = location;
+				Cause = cause;
+			}
 			public double Day;
 
 			public Vector3 Location;
 
 			public string Cause;
-
 			public void Load(string s)
 			{
 				string[] array = s.Split(',', StringSplitOptions.RemoveEmptyEntries);
@@ -51,6 +57,12 @@ namespace Game
 				stringBuilder.Append(Cause);
 				return stringBuilder.ToString();
 			}
+
+			/// <summary>
+			/// 模组如果需要添加或使用额外信息，可以在这个ValuesDictionary读写元素
+			/// 目前API暂不支持直接保存到存档死亡信息中，建议模组自行保存额外死亡信息到自己的Subsystem中
+			/// </summary>
+			public ValuesDictionary ValuesDictionaryForMods = new ValuesDictionary();
 		}
 
 		public List<DeathRecord> m_deathRecords = [];
@@ -177,6 +189,11 @@ namespace Game
 		}
 
 		public ReadOnlyList<DeathRecord> DeathRecords => new(m_deathRecords);
+		/// <summary>
+		/// 模组如果需要添加或使用额外信息，可以在这个ValuesDictionary读写元素
+		/// 目前API暂不支持直接保存到存档中，建议模组自行保存额外信息到自己的Subsystem中
+		/// </summary>
+		public ValuesDictionary ValuesDictionaryForMods = new ValuesDictionary();
 
 		public void AddDeathRecord(DeathRecord deathRecord)
 		{

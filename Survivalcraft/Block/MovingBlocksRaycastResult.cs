@@ -1,9 +1,12 @@
 using Engine;
+using TemplatesDatabase;
 
 namespace Game
 {
 	public struct MovingBlocksRaycastResult
 	{
+		public MovingBlocksRaycastResult() { }
+
 		public Ray3 Ray;
 
 		public IMovingBlockSet MovingBlockSet;
@@ -27,5 +30,9 @@ namespace Game
 				return MovingBlock?.Value ?? -1;
 			}
 		}
+		/// <summary>
+		/// 模组如果需要添加或使用额外信息，可以在这个ValuesDictionary读写元素
+		/// </summary>
+		public ValuesDictionary ValuesDictionaryForMods = new ValuesDictionary();
 	}
 }

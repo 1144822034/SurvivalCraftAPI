@@ -1,9 +1,11 @@
 using Engine;
+using TemplatesDatabase;
 
 namespace Game
 {
 	public struct PlayerInput
 	{
+		public PlayerInput() { }
 		public Vector2 Look;
 
 		public Vector3 Move;
@@ -65,5 +67,9 @@ namespace Game
 		public bool Drop;
 
 		public int? SelectInventorySlot;
+		/// <summary>
+		/// 模组如果需要添加或使用额外信息，可以在这个ValuesDictionary读写元素
+		/// </summary>
+		public ValuesDictionary ValuesDictionaryForMods = new ValuesDictionary();
 	}
 }

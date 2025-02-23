@@ -128,8 +128,10 @@ namespace Game
 			}
 		}
 
-		public class ExplosionData
+		public struct ExplosionData
 		{
+			public ExplosionData() { }
+
 			public int X;
 
 			public int Y;
@@ -141,6 +143,11 @@ namespace Game
 			public bool IsIncendiary;
 
 			public bool NoExplosionSound;
+
+			/// <summary>
+			/// 模组如果需要添加或使用额外信息，可以在这个ValuesDictionary读写元素
+			/// </summary>
+			public ValuesDictionary ValuesDictionaryForMods = new ValuesDictionary();
 		}
 
 		public struct ProcessPoint
