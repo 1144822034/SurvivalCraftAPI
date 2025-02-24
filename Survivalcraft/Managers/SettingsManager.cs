@@ -506,8 +506,8 @@ namespace Game
 				LookControlMode = LookControlMode.EntireScreen;
 				FlipVerticalAxis = false;
 #if ANDROID
-			UIScale = 0.9f;
-			AutoJump = true;
+				UIScale = 0.9f;
+				AutoJump = true;
 #else
 				UIScale = 0.75f;
 				AutoJump = false;
@@ -561,13 +561,26 @@ namespace Game
 		{
 			try
 			{
+				//加载Config
+				if(Storage.FileExists(ModsManager.ConfigsPath))//TODO: 将Config加载与保存与原生设置加载与保存分离
+				{
+					using(Stream stream = Storage.OpenFile(ModsManager.ConfigsPath,OpenFileMode.Read))
+					{
+						XElement xElement = XmlUtils.LoadXmlFromStream(stream, null, throwOnError: true);
+						ModsManager.LoadConfigs(xElement);
+					}
+				}
+				//加载原生设置
 				if (Storage.FileExists(ModsManager.SettingPath))
 				{
 					using (Stream stream = Storage.OpenFile(ModsManager.SettingPath, OpenFileMode.Read))
 					{
 						ModsManager.DisabledMods.Clear();
 						XElement xElement = XmlUtils.LoadXmlFromStream(stream, null, throwOnError: true);
-						ModsManager.LoadSettings(xElement);
+						if(xElement.Elements("Configs").Any())//往下适配低版本Settings.xml
+						{
+							ModsManager.LoadConfigs(xElement);
+						}
 						foreach (XElement item in xElement.Elements())
 						{
 							string name = "<unknown>";
@@ -628,6 +641,7 @@ namespace Game
 		{
 			try
 			{
+				//原生设置
 				var xElement = new XElement("Settings");
 				foreach (PropertyInfo item in from pi in typeof(SettingsManager).GetRuntimeProperties()
 											  where pi.GetMethod.IsStatic && pi.GetMethod.IsPublic && pi.SetMethod.IsPublic
@@ -649,8 +663,8 @@ namespace Game
 						]));
 					}
 				}
+				//禁用mod设置
 				var xElement1 = new XElement("DisableMods");
-				var xElement2 = new XElement("ModSettings");
 				foreach (ModEntity modEntity in ModsManager.ModListAll)
 				{
 					if (ModsManager.DisabledMods.Contains(modEntity.modInfo))
@@ -662,8 +676,13 @@ namespace Game
 					}
 				}
 				xElement.Add(xElement1);
-				ModsManager.SaveSettings(xElement);
+				//配置设置
+				var configsXmlElement = new XElement("Configs");
+				ModsManager.SaveConfigs(configsXmlElement);
+				//Mod设置
+				var xElement2 = new XElement("ModSettings");
 				ModsManager.SaveModSettings(xElement2);
+				//保存
 				using (Stream stream = Storage.OpenFile(ModsManager.SettingPath, OpenFileMode.Create))
 				{
 					XmlUtils.SaveXmlToStream(xElement, stream,Encoding.UTF8, throwOnError: true);
@@ -671,6 +690,10 @@ namespace Game
 				using (Stream stream = Storage.OpenFile(ModsManager.ModsSetPath, OpenFileMode.Create))
 				{
 					XmlUtils.SaveXmlToStream(xElement2,stream,Encoding.UTF8,throwOnError: true);
+				}
+				using (Stream stream = Storage.OpenFile(ModsManager.ConfigsPath, OpenFileMode.Create))
+				{
+					XmlUtils.SaveXmlToStream(configsXmlElement,stream,Encoding.UTF8,throwOnError: true);
 				}
 				Log.Information("Saved settings");
 			}

@@ -57,6 +57,7 @@ public static class ModsManager
 	public static string OriginalCommunityContentCachePath { get; } = DocPath + "/OriginalCommunityContentCache.xml";
 	public static string ModsSetPath { get; } = DocPath + "/ModSettings.xml";
 	public static string SettingPath { get; } = DocPath + "/Settings.xml";
+	public static string ConfigsPath { get; } = DocPath + "/Configs.xml";
 	public static string ModDisPath { get; } = ExternalPath + "/DisabledMods";
 	public static string LogPath { get; } = ExternalPath + "/Bugs";
 	public static string ModsPath  = ExternalPath + "/Mods";
@@ -274,7 +275,7 @@ public static class ModsManager
 			modEntity.SaveSettings(xElement);
 		}
 	}
-	public static void SaveSettings(XElement xElement)
+	public static void SaveConfigs(XElement xElement)
 	{
 		XElement element = new("Configs");
 		foreach (var c in Configs)
@@ -283,7 +284,7 @@ public static class ModsManager
 		}
 		xElement.Add(element);
 	}
-	public static void LoadSettings(XElement xElement)
+	public static void LoadConfigs(XElement xElement)
 	{
 		foreach (var c in xElement.Element("Configs").Attributes())
 		{
