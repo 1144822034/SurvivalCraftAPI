@@ -111,6 +111,8 @@ public static class ModsManager
 	public static List<ModEntity> ModListAll = [];
 	public static List<ModEntity> ModList = [];
 	public static List<ModLoader> ModLoaders = [];
+	[Obsolete("This field has been abolished, no working anymore.")]
+	public static List<ModInfo> DisabledMods = [];
 	public static Dictionary<string, ModHook> ModHooks = [];
 	public static Dictionary<string, Assembly> Dlls = [];
 
