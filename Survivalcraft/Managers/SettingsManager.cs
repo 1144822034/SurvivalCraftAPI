@@ -621,6 +621,7 @@ namespace Game
 		public static void SaveSettings()
 		{
 			ModsManager.SaveConfigs();
+			ModSettingsManager.SaveModSettings();
 			try
 			{
 				//原生设置
@@ -645,17 +646,10 @@ namespace Game
 						]));
 					}
 				}
-				//Mod设置
-				var xElement2 = new XElement("ModSettings");
-				ModsManager.SaveModSettings(xElement2);
 				//保存
 				using (Stream stream = Storage.OpenFile(ModsManager.SettingPath, OpenFileMode.Create))
 				{
 					XmlUtils.SaveXmlToStream(xElement, stream,Encoding.UTF8, throwOnError: true);
-				}
-				using (Stream stream = Storage.OpenFile(ModsManager.ModsSetPath, OpenFileMode.Create))
-				{
-					XmlUtils.SaveXmlToStream(xElement2,stream,Encoding.UTF8,throwOnError: true);
 				}
 				Log.Information("Saved settings");
 			}

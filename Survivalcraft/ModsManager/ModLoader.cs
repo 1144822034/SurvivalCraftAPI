@@ -621,15 +621,17 @@ namespace Game
         }
 
         /// <summary>
-        /// 游戏设置数据保存时执行
+        /// 模组设置保存时执行
         /// </summary>
-        /// <param name="xElement"></param>
+        /// <param name="xElement">一个空容器，模组作者需将自己的设置信息存入这个空容器内</param>
         public virtual void SaveSettings(XElement xElement)
         {
         }
 
         /// <summary>
-        /// 游戏设置数据加载时执行
+        /// 模组设置加载时执行
+        /// 模组作者有必要在读取模组设置后将设置数据放入自己的类或结构中
+        /// API在运行时不会保存着模组设置
         /// </summary>
         /// <param name="xElement"></param>
         public virtual void LoadSettings(XElement xElement)

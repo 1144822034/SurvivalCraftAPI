@@ -55,7 +55,7 @@ public static class ModsManager
 	public static string BlockTexturesDirectoryName { get; } = DocPath + "/TexturePacks";
 	public static string CommunityContentCachePath { get; } = DocPath + "/CommunityContentCache.xml";
 	public static string OriginalCommunityContentCachePath { get; } = DocPath + "/OriginalCommunityContentCache.xml";
-	public static string ModsSetPath { get; } = DocPath + "/ModSettings.xml";
+	public static string ModsSettingsPath { get; } = DocPath + "/ModSettings.xml";
 	public static string SettingPath { get; } = DocPath + "/Settings.xml";
 	public static string ConfigsPath { get; } = DocPath + "/Configs.xml";
 	public static string ModDisPath { get; } = ExternalPath + "/DisabledMods";

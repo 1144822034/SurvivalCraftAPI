@@ -373,19 +373,7 @@ namespace Game
 			AddLoadAction(delegate
 			{
 				Info(LanguageControl.Get(fName, "5"));
-				if (Storage.FileExists(ModsManager.ModsSetPath))
-				{
-					using System.IO.Stream stream = Storage.OpenFile(ModsManager.ModsSetPath, OpenFileMode.Read);
-					try
-					{
-						XElement element = XElement.Load(stream);
-						ModsManager.LoadModSettings(element);
-					}
-					catch (Exception e)
-					{
-						Warning(e.ToString());
-					}
-				}
+				ModSettingsManager.LoadModSettings();
 			});
 			InitScreens();
 			AddLoadAction(delegate
