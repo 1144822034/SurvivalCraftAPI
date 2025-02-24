@@ -275,18 +275,35 @@ public static class ModsManager
 			modEntity.SaveSettings(xElement);
 		}
 	}
-	public static void SaveConfigs(XElement xElement)
+	public static void SaveConfigs()
 	{
 		XElement element = new("Configs");
 		foreach (var c in Configs)
 		{
 			element.SetAttributeValue(c.Key, c.Value);
 		}
-		xElement.Add(element);
+		using (Stream stream = Storage.OpenFile(ModsManager.ConfigsPath, OpenFileMode.Create))
+		{
+			XmlUtils.SaveXmlToStream(element,stream,Encoding.UTF8,throwOnError: true);
+		}
 	}
-	public static void LoadConfigs(XElement xElement)
+
+	public static void LoadConfigs()
 	{
-		foreach (var c in xElement.Element("Configs").Attributes())
+		//加载Config
+		if(Storage.FileExists(ConfigsPath))
+		{
+			using(Stream stream = Storage.OpenFile(ConfigsPath,OpenFileMode.Read))
+			{
+				XElement xElement = XmlUtils.LoadXmlFromStream(stream, null, throwOnError: true);
+				LoadConfigsFromXml(xElement);
+			}
+		}
+	}
+	public static void LoadConfigsFromXml(XElement xElement)
+	{
+		if (xElement.Name != "Configs") return;
+		foreach (var c in xElement.Attributes())
 		{
 			if (!Configs.ContainsKey(c.Name.LocalName)) SetConfig(c.Name.LocalName, c.Value);
 		}

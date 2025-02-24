@@ -559,17 +559,9 @@ namespace Game
 		/// </summary>
 		public static bool LoadSettings()
 		{
+			ModsManager.LoadConfigs();
 			try
 			{
-				//加载Config
-				if(Storage.FileExists(ModsManager.ConfigsPath))//TODO: 将Config加载与保存与原生设置加载与保存分离
-				{
-					using(Stream stream = Storage.OpenFile(ModsManager.ConfigsPath,OpenFileMode.Read))
-					{
-						XElement xElement = XmlUtils.LoadXmlFromStream(stream, null, throwOnError: true);
-						ModsManager.LoadConfigs(xElement);
-					}
-				}
 				//加载原生设置
 				if (Storage.FileExists(ModsManager.SettingPath))
 				{
@@ -579,7 +571,7 @@ namespace Game
 						XElement xElement = XmlUtils.LoadXmlFromStream(stream, null, throwOnError: true);
 						if(xElement.Elements("Configs").Any())//往下适配低版本Settings.xml
 						{
-							ModsManager.LoadConfigs(xElement);
+							ModsManager.LoadConfigsFromXml(xElement);
 						}
 						foreach (XElement item in xElement.Elements())
 						{
@@ -639,6 +631,7 @@ namespace Game
 
 		public static void SaveSettings()
 		{
+			ModsManager.SaveConfigs();
 			try
 			{
 				//原生设置
@@ -676,9 +669,6 @@ namespace Game
 					}
 				}
 				xElement.Add(xElement1);
-				//配置设置
-				var configsXmlElement = new XElement("Configs");
-				ModsManager.SaveConfigs(configsXmlElement);
 				//Mod设置
 				var xElement2 = new XElement("ModSettings");
 				ModsManager.SaveModSettings(xElement2);
@@ -690,10 +680,6 @@ namespace Game
 				using (Stream stream = Storage.OpenFile(ModsManager.ModsSetPath, OpenFileMode.Create))
 				{
 					XmlUtils.SaveXmlToStream(xElement2,stream,Encoding.UTF8,throwOnError: true);
-				}
-				using (Stream stream = Storage.OpenFile(ModsManager.ConfigsPath, OpenFileMode.Create))
-				{
-					XmlUtils.SaveXmlToStream(configsXmlElement,stream,Encoding.UTF8,throwOnError: true);
 				}
 				Log.Information("Saved settings");
 			}
