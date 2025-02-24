@@ -567,7 +567,6 @@ namespace Game
 				{
 					using (Stream stream = Storage.OpenFile(ModsManager.SettingPath, OpenFileMode.Read))
 					{
-						ModsManager.DisabledMods.Clear();
 						XElement xElement = XmlUtils.LoadXmlFromStream(stream, null, throwOnError: true);
 						if(xElement.Elements("Configs").Any())//往下适配低版本Settings.xml
 						{
@@ -591,16 +590,6 @@ namespace Game
 										propertyInfo.SetValue(null, value, null);
 									}
 
-								}
-								else if (item.Name.LocalName == "DisableMods")
-								{
-									foreach (XElement xElement1 in item.Elements())
-									{
-										var modInfo = new ModInfo();
-										modInfo.PackageName = xElement1.Attribute("PackageName").Value;
-										modInfo.Version = xElement1.Attribute("Version").Value;
-										ModsManager.DisabledMods.Add(modInfo);
-									}
 								}
 							}
 							catch (Exception ex)
@@ -656,19 +645,6 @@ namespace Game
 						]));
 					}
 				}
-				//禁用mod设置
-				var xElement1 = new XElement("DisableMods");
-				foreach (ModEntity modEntity in ModsManager.ModListAll)
-				{
-					if (ModsManager.DisabledMods.Contains(modEntity.modInfo))
-					{
-						var element = new XElement("Mod");
-						element.SetAttributeValue("PackageName", modEntity.modInfo.PackageName);
-						element.SetAttributeValue("Version", modEntity.modInfo.Version);
-						xElement1.Add(element);
-					}
-				}
-				xElement.Add(xElement1);
 				//Mod设置
 				var xElement2 = new XElement("ModSettings");
 				ModsManager.SaveModSettings(xElement2);

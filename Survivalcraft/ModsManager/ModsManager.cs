@@ -111,7 +111,6 @@ public static class ModsManager
 	public static List<ModEntity> ModListAll = [];
 	public static List<ModEntity> ModList = [];
 	public static List<ModLoader> ModLoaders = [];
-	public static List<ModInfo> DisabledMods = [];
 	public static Dictionary<string, ModHook> ModHooks = [];
 	public static Dictionary<string, Assembly> Dlls = [];
 
@@ -373,21 +372,18 @@ public static class ModsManager
 		ModListAll.Add(FastDebug);
 		GetScmods(ModsPath);
 		ModListAll.Sort((x, y) => x.modInfo.LoadOrder.CompareTo(y.modInfo.LoadOrder));
-		List<ModInfo> ToDisable = [.. DisabledMods];
-		DisabledMods.Clear();
 		//float api = float.Parse(APIVersion);
-		List<ModEntity> ToRemove = [];
 		//读取SCMOD文件到ModListAll列表
 		foreach (ModEntity modEntity1 in ModListAll)
 		{
 			ModInfo modInfo = modEntity1.modInfo;
-			ModInfo disabledmod = ToDisable.Find(l => l.PackageName == modInfo.PackageName);
-			if (disabledmod != null && disabledmod.PackageName != SurvivalCraftModEntity.modInfo.PackageName && disabledmod.PackageName != FastDebug.modInfo.PackageName)
-			{
-				ToDisable.Add(modInfo);
-				ToRemove.Add(modEntity1);
-				continue;
-			}
+			//ModInfo disabledmod = ToDisable.Find(l => l.PackageName == modInfo.PackageName);
+			//if (disabledmod != null && disabledmod.PackageName != SurvivalCraftModEntity.modInfo.PackageName && disabledmod.PackageName != FastDebug.modInfo.PackageName)
+			//{
+			//	ToDisable.Add(modInfo);
+			//	ToRemove.Add(modEntity1);
+			//	continue;
+			//}
 			//float.TryParse(modInfo.ApiVersionString, out float curr);
 			//if (curr < api)
 			//{//api版本检测
@@ -397,15 +393,6 @@ public static class ModsManager
 			//}
 			List<ModEntity> modEntities = ModListAll.FindAll(px => px.modInfo.PackageName == modInfo.PackageName);
 			if (modEntities.Count > 1) AddException(new Exception($"Multiple installed [{modInfo.PackageName}], please keep only one."));
-		}
-		DisabledMods.Clear();
-		foreach (var item in ToDisable)
-		{
-			DisabledMods.Add(item);
-		}
-		foreach (var item in ToRemove)
-		{
-			ModListAll.Remove(item);
 		}
 		AppDomain.CurrentDomain.AssemblyResolve += (sender, args) =>
 		{

@@ -342,8 +342,6 @@ public class ManageContentScreen : Screen
 		{
 			foreach (ModEntity modEntity in ModsManager.ModListAll)
 			{
-				string dis = string.Empty;
-				if (ModsManager.DisabledMods.Contains(modEntity.modInfo)) dis = "[已禁用]";
 				string author = string.IsNullOrEmpty(modEntity.modInfo.Author) ? "无" : modEntity.modInfo.Author;
 				list.Add(new ListItem
 				{
