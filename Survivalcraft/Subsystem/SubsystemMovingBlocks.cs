@@ -651,6 +651,12 @@ namespace Game
 							int num6 = Terrain.ExtractContents(cellValueFast);
 							if (num6 != 0)
 							{
+								if (m_blockGeometryGenerator.Terrain.GetChunkAtCell(n + 1, num5) == null) {
+									m_blockGeometryGenerator.Terrain.AllocateChunk((n + 1) >> 4, num5 >> 4);
+								}
+								if (m_blockGeometryGenerator.Terrain.GetChunkAtCell(n, num5 + 1) == null) {
+									m_blockGeometryGenerator.Terrain.AllocateChunk(n >> 4, (num5 + 1) >> 4);
+								}
 								BlocksManager.Blocks[num6].GenerateTerrainVertices(m_blockGeometryGenerator, movingBlockSet.Geometry, cellValueFast, n, num4 + num, num5);
 							}
 						}
