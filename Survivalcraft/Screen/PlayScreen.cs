@@ -179,8 +179,15 @@ namespace Game
 								if(!entityGotten)
 								{
 									modsNotLoaded.Add(modDictionary);
+									continue;
 								}
-								//TODO:还需要实现模组版本匹配
+								bool versionComparePass = modEntity?.Loader.CompareModVersion(modEntity.modInfo.Version,modDictionary.GetValue("Version","?")) ?? true;
+								modDictionary.SetValue("CurrentVersion",modEntity.modInfo.Version);
+								if(!versionComparePass)
+								{
+									modsVersionNotCapable.Add(modDictionary);
+									continue;
+								}
 							}
 						}
 					}
@@ -188,12 +195,18 @@ namespace Game
 			}
 			if(!flag)
 			{
-				if(modsNotLoaded.Count > 0)
+				if(modsNotLoaded.Count > 0 || modsVersionNotCapable.Count > 0)
 				{
 					string text = string.Empty;
+					if(modsNotLoaded.Count > 0) text += "缺少以下模组：\n";
 					foreach(ValuesDictionary modDictionary in modsNotLoaded)
 					{
 						text += string.Format("模组名：{0}, 版本号：{1}\n",modDictionary.GetValue("Name", "?"),modDictionary.GetValue("Version", "?"));
+					}
+					if(modsVersionNotCapable.Count > 0) text += "以下模组版本不兼容：\n";
+					foreach(ValuesDictionary modDictionary in modsVersionNotCapable)
+					{
+						text += string.Format("模组名：{0}，需求版本号：{1}，当前版本号：{2}\n",modDictionary.GetValue("Name","?"),modDictionary.GetValue("Version","?"),modDictionary.GetValue("CurrentVersion","?"));
 					}
 					text += "你确定要继续吗？";
 					DialogsManager.ShowDialog(this,new MessageDialog("Mod缺失",text,LanguageControl.Yes,LanguageControl.No,delegate (MessageDialogButton button)

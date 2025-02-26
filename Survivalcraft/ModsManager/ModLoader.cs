@@ -45,6 +45,18 @@ namespace Game
 			fileFound = false;
 		}
 
+		/// <summary>
+		/// 在加载存档前，比较当前模组的版本和存档上次使用模组的版本
+		/// 仅比较本模组
+		/// </summary>
+		/// <param name="currentVersion">当前模组的版本</param>
+		/// <param name="lastVersion">存档上一次使用模组的版本</param>
+		/// <returns>返回true表示当前版本模组能加载目标版本模组的存档，返回false则不加载</returns>
+		public virtual bool CompareModVersion(string currentVersion, string lastVersion)
+		{
+			return true;
+		}
+
         /// <summary>
         /// Mod被卸载时执行
         /// </summary>

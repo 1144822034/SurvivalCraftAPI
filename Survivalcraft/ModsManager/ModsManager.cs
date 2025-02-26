@@ -263,7 +263,7 @@ public static class ModsManager
 			modInfo.LoadOrder = loadOrder.GetInt32();
 			//Log.Information("获取模组的Order：" + modInfo.LoadOrder);
         }
-		if(jsonElement.TryGetProperty("NonPersistentMod",out JsonElement nonPersistentMod) && packageName.ValueKind == JsonValueKind.True)
+		if(jsonElement.TryGetProperty("NonPersistentMod",out JsonElement nonPersistentMod) && nonPersistentMod.ValueKind == JsonValueKind.True)
 		{
 			modInfo.NonPersistentMod = true;
 		}

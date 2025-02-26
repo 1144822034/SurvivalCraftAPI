@@ -297,10 +297,10 @@ namespace Game
 				{
 					blockTypes.Add(type);
 				}
-				if (type.Namespace == "Game")
+				/*if (type.Namespace == "Game")
 				{
 					Log.Warning("\"Game\" is not recommended as a namespace for mod class. It is only for Survivalcraft itself. " + type.AssemblyQualifiedName);
-				}
+				}*/
 			}
 			BlockTypes.AddRange(blockTypes);
 		}
