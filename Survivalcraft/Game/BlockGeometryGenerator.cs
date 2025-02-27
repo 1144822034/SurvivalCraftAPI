@@ -70,7 +70,14 @@ namespace Game
 		{
 			m_cornerLightsPosition = new Point3(2147483647);
 		}
-
+		public static void SetupCornerVertex(float x, float y, float z, Color color, int light, int face, int textureSlot, int textureSlotCount, int corner, ref TerrainVertex vertex)
+		{
+			float num = LightingManager.LightIntensityByLightValueAndFace[light + (16 * face)];
+			Color color2 = new((byte)((float)(int)color.R * num), (byte)((float)(int)color.G * num), (byte)((float)(int)color.B * num), color.A);
+			float tx = (m_textureCoordinates[corner].X + (float)(textureSlot % textureSlotCount)) / textureSlotCount;
+			float ty = (m_textureCoordinates[corner].Y + (float)(textureSlot / textureSlotCount)) / textureSlotCount;
+			SetupVertex(x, y, z, color2, tx, ty, ref vertex);
+		}
 		public static void SetupLitCornerVertex(float x, float y, float z, Color color, int textureSlot, int corner, ref TerrainVertex vertex)
 		{
 			SetupLitCornerVertex(x, y, z, color, textureSlot, 16, corner, ref vertex);
@@ -990,62 +997,44 @@ namespace Game
 
         public virtual void SetupCubeVertexFace0(int x, int y, int z, float height, int corner, int textureSlot, int textureSlotCount, Color color, ref TerrainVertex vertex)
 		{
-			int num = CalculateVertexLightFace0(x, y, z);
-			float num2 = LightingManager.LightIntensityByLightValueAndFace[num];
-			Color color2 = new Color((byte)((float)(int)color.R * num2), (byte)((float)(int)color.G * num2), (byte)((float)(int)color.B * num2), color.A);
-			float tx = (m_textureCoordinates[corner].X + (float)(textureSlot % 16)) / 16f;
-			float ty = (m_textureCoordinates[corner].Y + (1f - height) + (float)(textureSlot / 16)) / 16f;
-			SetupVertex(x, (float)y + height - 1f, z, color2, tx, ty, ref vertex);
+			float y2 = (float)y + height - 1f;
+			int light = CalculateVertexLightFace0(x, y, z);
+			SetupCornerVertex(x, y2, z, color, light, 0, textureSlot, textureSlotCount, corner, ref vertex);
 		}
 
         public virtual void SetupCubeVertexFace1(int x, int y, int z, float height, int corner, int textureSlot, int textureSlotCount, Color color, ref TerrainVertex vertex)
 		{
-			int num = CalculateVertexLightFace1(x, y, z);
-			float num2 = LightingManager.LightIntensityByLightValueAndFace[num + 16];
-			Color color2 = new Color((byte)((float)(int)color.R * num2), (byte)((float)(int)color.G * num2), (byte)((float)(int)color.B * num2), color.A);
-			float tx = (m_textureCoordinates[corner].X + (float)(textureSlot % 16)) / 16f;
-			float ty = (m_textureCoordinates[corner].Y + (1f - height) + (float)(textureSlot / 16)) / 16f;
-			SetupVertex(x, (float)y + height - 1f, z, color2, tx, ty, ref vertex);
+			float y2 = (float)y + height - 1f;
+			int light = CalculateVertexLightFace1(x, y, z);
+			SetupCornerVertex(x, y2, z, color, light, 1, textureSlot, textureSlotCount, corner, ref vertex);
 		}
 
         public virtual void SetupCubeVertexFace2(int x, int y, int z, float height, int corner, int textureSlot, int textureSlotCount, Color color, ref TerrainVertex vertex)
 		{
-			int num = CalculateVertexLightFace2(x, y, z);
-			float num2 = LightingManager.LightIntensityByLightValueAndFace[num + 32];
-			Color color2 = new Color((byte)((float)(int)color.R * num2), (byte)((float)(int)color.G * num2), (byte)((float)(int)color.B * num2), color.A);
-			float tx = (m_textureCoordinates[corner].X + (float)(textureSlot % 16)) / 16f;
-			float ty = (m_textureCoordinates[corner].Y + (1f - height) + (float)(textureSlot / 16)) / 16f;
-			SetupVertex(x, (float)y + height - 1f, z, color2, tx, ty, ref vertex);
+			float y2 = (float)y + height - 1f;
+			int light = CalculateVertexLightFace2(x, y, z);
+			SetupCornerVertex(x, y2, z, color, light, 2, textureSlot, textureSlotCount, corner, ref vertex);
 		}
 
         public virtual void SetupCubeVertexFace3(int x, int y, int z, float height, int corner, int textureSlot, int textureSlotCount, Color color, ref TerrainVertex vertex)
 		{
-			int num = CalculateVertexLightFace3(x, y, z);
-			float num2 = LightingManager.LightIntensityByLightValueAndFace[num + 48];
-			Color color2 = new Color((byte)((float)(int)color.R * num2), (byte)((float)(int)color.G * num2), (byte)((float)(int)color.B * num2), color.A);
-			float tx = (m_textureCoordinates[corner].X + (float)(textureSlot % 16)) / 16f;
-			float ty = (m_textureCoordinates[corner].Y + (1f - height) + (float)(textureSlot / 16)) / 16f;
-			SetupVertex(x, (float)y + height - 1f, z, color2, tx, ty, ref vertex);
+			float y2 = (float)y + height - 1f;
+			int light = CalculateVertexLightFace3(x, y, z);
+			SetupCornerVertex(x, y2, z, color, light, 3, textureSlot, textureSlotCount, corner, ref vertex);
 		}
 
         public virtual void SetupCubeVertexFace4(int x, int y, int z, float height, int corner, int textureSlot, int textureSlotCount, Color color, ref TerrainVertex vertex)
 		{
-			int num = CalculateVertexLightFace4(x, y, z);
-			float num2 = LightingManager.LightIntensityByLightValueAndFace[num + 64];
-			Color color2 = new Color((byte)((float)(int)color.R * num2), (byte)((float)(int)color.G * num2), (byte)((float)(int)color.B * num2), color.A);
-			float tx = (m_textureCoordinates[corner].X + (float)(textureSlot % 16)) / 16f;
-			float ty = (m_textureCoordinates[corner].Y + (float)(textureSlot / 16)) / 16f;
-			SetupVertex(x, (float)y + height - 1f, z, color2, tx, ty, ref vertex);
+			float y2 = (float)y + height - 1f;
+			int light = CalculateVertexLightFace4(x, y, z);
+			SetupCornerVertex(x, y2, z, color, light, 4, textureSlot, textureSlotCount, corner, ref vertex);
 		}
 
         public virtual void SetupCubeVertexFace5(int x, int y, int z, float height, int corner, int textureSlot, int textureSlotCount, Color color, ref TerrainVertex vertex)
 		{
-			int num = CalculateVertexLightFace5(x, y, z);
-			float num2 = LightingManager.LightIntensityByLightValueAndFace[num + 80];
-			Color color2 = new Color((byte)((float)(int)color.R * num2), (byte)((float)(int)color.G * num2), (byte)((float)(int)color.B * num2), color.A);
-			float tx = (m_textureCoordinates[corner].X + (float)(textureSlot % 16)) / 16f;
-			float ty = (m_textureCoordinates[corner].Y + (float)(textureSlot / 16)) / 16f;
-			SetupVertex(x, (float)y + height - 1f, z, color2, tx, ty, ref vertex);
+			float y2 = (float)y + height - 1f;
+			int light = CalculateVertexLightFace5(x, y, z);
+			SetupCornerVertex(x, y2, z, color, light, 5, textureSlot, textureSlotCount, corner, ref vertex);
 		}
 
 		public static Vector3 GetRandomWireOffset(Vector3 position, Vector3 normal)

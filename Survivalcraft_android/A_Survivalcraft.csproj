@@ -781,6 +781,7 @@
 		<Compile Include="..\Survivalcraft\ModsManager\ModInfo.cs"/>
 		<Compile Include="..\Survivalcraft\ModsManager\ModLoader.cs"/>
 		<Compile Include="..\Survivalcraft\ModsManager\ModsManager.cs"/>
+		<Compile Include="..\Survivalcraft\ModsManager\ModSettingsManager.cs"/>
 		<Compile Include="..\Survivalcraft\ModsManager\MtllibStruct.cs"/>
 		<Compile Include="..\Survivalcraft\ModsManager\ObjModelReader.cs"/>
 		<Compile Include="..\Survivalcraft\ModsManager\SurvivalCraftModEntity.cs"/>
@@ -923,6 +924,7 @@
 		<Compile Include="..\Survivalcraft\Subsystem\SubsystemTreasureGeneratorBlockBehavior.cs"/>
 		<Compile Include="..\Survivalcraft\Subsystem\SubsystemTruthTableCircuitBlockBehavior.cs"/>
 		<Compile Include="..\Survivalcraft\Subsystem\SubsystemUpdate.cs"/>
+		<Compile Include="..\Survivalcraft\Subsystem\SubsystemUsedMods.cs"/>
 		<Compile Include="..\Survivalcraft\Subsystem\SubsystemWaterBlockBehavior.cs"/>
 		<Compile Include="..\Survivalcraft\Subsystem\SubsystemWaterPlantBlockBehavior.cs"/>
 		<Compile Include="..\Survivalcraft\Subsystem\SubsystemWeather.cs"/>
