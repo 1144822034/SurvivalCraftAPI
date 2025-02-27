@@ -160,14 +160,15 @@ namespace Game
 			{
 				var val = new Stack<Point3>();
 				val.Push(start.Point);
+				HashSet<Point3> scannedPoints = [];
 				while (val.Count > 0)
 				{
 					Point3 key = val.Pop();
-					if (valuesDictionary.ContainsKey(key))
+					if (valuesDictionary.ContainsKey(key) || !SubsystemTerrain.Terrain.IsCellValid(key.X, key.Y, key.Z))
 					{
 						continue;
 					}
-					int cellValue = SubsystemTerrain.Terrain.GetCellValue(key.X, key.Y, key.Z);
+					int cellValue = SubsystemTerrain.Terrain.GetCellValueFast(key.X, key.Y, key.Z);
 					if (IsValueDisallowed(cellValue))
 					{
 						componentMiner.ComponentPlayer?.ComponentGui.DisplaySmallMessage(LanguageControl.Get(fName, 1), Color.White, blinking: true, playNotificationSound: false);
@@ -211,12 +212,36 @@ namespace Game
 							return;
 						}
 						valuesDictionary[key] = cellValue;
-						val.Push(new Point3(key.X - 1, key.Y, key.Z));
-						val.Push(new Point3(key.X + 1, key.Y, key.Z));
-						val.Push(new Point3(key.X, key.Y - 1, key.Z));
-						val.Push(new Point3(key.X, key.Y + 1, key.Z));
-						val.Push(new Point3(key.X, key.Y, key.Z - 1));
-						val.Push(new Point3(key.X, key.Y, key.Z + 1));
+						Point3 p1 = new(key.X - 1,key.Y,key.Z);
+						if(scannedPoints.Add(p1))
+						{
+							val.Push(p1);
+						}
+						Point3 p2 = new(key.X + 1,key.Y,key.Z);
+						if (scannedPoints.Add(p2))
+						{
+							val.Push(p2);
+						}
+						Point3 p3 = new(key.X,key.Y - 1,key.Z);
+						if (scannedPoints.Add(p3))
+						{
+							val.Push(p3);
+						}
+						Point3 p4 = new(key.X,key.Y + 1,key.Z);
+						if (scannedPoints.Add(p4))
+						{
+							val.Push(p4);
+						}
+						Point3 p5 = new(key.X,key.Y,key.Z - 1);
+						if (scannedPoints.Add(p5))
+						{
+							val.Push(p5);
+						}
+						Point3 p6 = new(key.X,key.Y,key.Z + 1);
+						if (scannedPoints.Add(p6))
+						{
+							val.Push(p6);
+						}
 					}
 				}
 				if (valuesDictionary.Count == 0)
