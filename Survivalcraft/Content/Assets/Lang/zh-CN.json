@@ -622,8 +622,8 @@
 		"High": "高"
 	},
 	"WindowMode": {
-		"Resizable": "最小化",
-		"Fixed": "自适应",
+		"Resizable": "窗口化",
+		"Fixed": "固定大小",
 		"Fullscreen": "全屏",
 		"Borderless": "无边框"
 	},
