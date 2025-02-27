@@ -123,7 +123,7 @@ namespace Game
 					clothesAfterProtection[sequence] = BlocksManager.DamageItem(value,damageCount,componentClothing.Entity);
 
 					Block blockDamaged = BlocksManager.Blocks[Terrain.ExtractContents(clothesAfterProtection[sequence])];
-					if(!blockDamaged.CanWear(value))
+					if(!blockDamaged.CanWear(clothesAfterProtection[sequence]))
 					{
 						componentClothing.m_subsystemParticles.AddParticleSystem(new BlockDebrisParticleSystem(
 							componentClothing.m_subsystemTerrain,componentClothing.m_componentBody.Position + (componentClothing.m_componentBody.StanceBoxSize / 2f),1f,1f,Color.White,0));

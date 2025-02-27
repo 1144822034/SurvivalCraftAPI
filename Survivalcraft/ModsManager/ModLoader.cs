@@ -1711,7 +1711,7 @@ namespace Game
 		/// <param name="componentClothing">挨打者的护甲组件</param>
 		/// <param name="attackment">导致该护甲结算的攻击</param>
 		/// <param name="attackPowerAfteProtection">结算护甲后的攻击力</param>
-		public virtual void ApplyProtectionAfterClothes(ComponentClothing componentClothing,Attackment attackment,ref float attackPowerAfteProtection)
+		public virtual void ApplyProtectionAfterClothes(ComponentClothing componentClothing, Attackment attackment, List<int> listAfterProtection, ref float attackPowerAfteProtection)
 		{ 
 
 		}

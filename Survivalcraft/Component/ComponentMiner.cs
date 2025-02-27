@@ -499,18 +499,19 @@ namespace Game
 			float reach = (m_subsystemGameInfo.WorldSettings.GameMode == GameMode.Creative) ? SettingsManager.CreativeReach : 5f;
 			if(Reach.HasValue) reach = Reach.Value;
 			reach = Math.Min(reach, SettingsManager.VisibilityRange);
+			Vector3 creaturePosition = ComponentCreature.ComponentCreatureModel.EyePosition;
 			Vector3 start = ray.Position;
 			var direction = Vector3.Normalize(ray.Direction);
 			Vector3 end = ray.Position + (direction * (reach + 1f));
 			Point3 startCell = Terrain.ToCell(start);
 			BodyRaycastResult? bodyRaycastResult = null;
-			if(raycastBodies) bodyRaycastResult = m_subsystemBodies.Raycast(start, end, 0.35f, (ComponentBody body, float distance) => Vector3.DistanceSquared(start + (distance * direction), start) <= reach * reach && body.Entity != Entity && !body.IsChildOfBody(ComponentCreature.ComponentBody) && !ComponentCreature.ComponentBody.IsChildOfBody(body) && Vector3.Dot(Vector3.Normalize(body.BoundingBox.Center() - start), direction) > 0.7f);
+			if(raycastBodies) bodyRaycastResult = m_subsystemBodies.Raycast(start, end, 0.35f, (ComponentBody body, float distance) => Vector3.DistanceSquared(start + (distance * direction), creaturePosition) <= reach * reach && body.Entity != Entity && !body.IsChildOfBody(ComponentCreature.ComponentBody) && !ComponentCreature.ComponentBody.IsChildOfBody(body) && Vector3.Dot(Vector3.Normalize(body.BoundingBox.Center() - start), direction) > 0.7f);
 			MovingBlocksRaycastResult? movingBlocksRaycastResult = null;
 			if(raycastMovingBlocks) movingBlocksRaycastResult = m_subsystemMovingBlocks.Raycast(start, end, extendToFillCells: true);
 			TerrainRaycastResult? terrainRaycastResult = null;
 			if(raycastTerrain) terrainRaycastResult = m_subsystemTerrain.Raycast(start, end, useInteractionBoxes: true, skipAirBlocks: true, delegate (int value, float distance)
 			{
-				if (Vector3.DistanceSquared(start + (distance * direction), start) <= reach * reach)
+				if (Vector3.DistanceSquared(start + (distance * direction), creaturePosition) <= reach * reach)
 				{
 					Block block = BlocksManager.Blocks[Terrain.ExtractContents(value)];
 					if (distance == 0f && block is CrossBlock && Vector3.Dot(direction, new Vector3(startCell) + new Vector3(0.5f) - start) < 0f)

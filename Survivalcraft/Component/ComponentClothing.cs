@@ -207,8 +207,7 @@ namespace Game
 				//决定参与结算的衣物列表
 				float num = m_random.Float(0f, 1f);
 				ClothingSlot slot = (num < 0.1f) ? ClothingSlot.Feet : ((num < 0.3f) ? ClothingSlot.Legs : ((num < 0.9f) ? ClothingSlot.Torso : ClothingSlot.Head));
-				List<int> listAfterProtection = new(GetClothes(slot));
-				List<int> listBeforeProtection = new List<int>(listAfterProtection);
+				List<int> listBeforeProtection = new(GetClothes(slot));
 				ModsManager.HookAction("ApplyProtectionBeforeClothes",loader => {
 					loader.ApplyProtectionBeforeClothes(this,attackment,ref attackPowerAfterProtection);
 					return false;
@@ -217,6 +216,7 @@ namespace Game
 					loader.DecideArmorProtectionSequence(this,attackment, num, listBeforeProtection);
 					return false;
 				});
+				List<int> listAfterProtection = new List<int>(listBeforeProtection);
 				//对每件衣物，结算护甲
 				for (int i = 0; i < listBeforeProtection.Count; i++)
 				{
@@ -250,13 +250,19 @@ namespace Game
 						num4++;
 					}
 				}
+				listAfterProtection.Sort((a,b) =>
+				{
+					ClothingData clothingDataA = BlocksManager.Blocks[Terrain.ExtractContents(a)].GetClothingData(a);
+					ClothingData clothingDataB = BlocksManager.Blocks[Terrain.ExtractContents(b)].GetClothingData(b);
+					return (clothingDataA?.Layer ?? 0) - (clothingDataB?.Layer ?? 0);
+				});
+				ModsManager.HookAction("ApplyProtectionAfterClothes",loader => {
+					loader.ApplyProtectionAfterClothes(this,attackment, listAfterProtection, ref attackPowerAfterProtection);
+					return false;
+				});
 				//最后SetClothes
 				SetClothes(slot, listAfterProtection);
 			}
-			ModsManager.HookAction("ApplyProtectionAfterClothes",loader => {
-				loader.ApplyProtectionAfterClothes(this,attackment,ref attackPowerAfterProtection);
-				return false;
-			});
 			return MathF.Max(attackPowerAfterProtection, 0f);
 		}
 
