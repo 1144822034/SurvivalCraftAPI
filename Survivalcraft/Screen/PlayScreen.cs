@@ -181,7 +181,7 @@ namespace Game
 									modsNotLoaded.Add(modDictionary);
 									continue;
 								}
-								bool versionComparePass = modEntity?.Loader.CompareModVersion(modEntity.modInfo.Version,modDictionary.GetValue("Version","?")) ?? true;
+								bool versionComparePass = modEntity?.Loader?.CompareModVersion(modEntity.modInfo.Version,modDictionary.GetValue("Version","?")) ?? true;
 								modDictionary.SetValue("CurrentVersion",modEntity.modInfo.Version);
 								if(!versionComparePass)
 								{

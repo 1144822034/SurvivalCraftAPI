@@ -103,11 +103,11 @@ namespace Game
 				{
 					WakeUp();
 				}
-				if (m_wakeUpWhenWet && m_componentPlayer.ComponentHealth.HealthChange < 0f && (m_componentPlayer.ComponentHealth.Health < 0.5f || m_componentPlayer.ComponentVitalStats.Sleep > 0.5f))
+				if (m_wakeUpWhenInjured && m_componentPlayer.ComponentHealth.HealthChange < 0f && (m_componentPlayer.ComponentHealth.Health < 0.5f || m_componentPlayer.ComponentVitalStats.Sleep > 0.5f))
 				{
 					WakeUp();
 				}
-				if (m_wakeUpWhenInjured && m_componentPlayer.ComponentVitalStats.Wetness > m_minWetness + 0.05f && m_componentPlayer.ComponentVitalStats.Sleep > 0.2f)
+				if (m_wakeUpWhenWet && m_componentPlayer.ComponentVitalStats.Wetness > m_minWetness + 0.05f && m_componentPlayer.ComponentVitalStats.Sleep > 0.2f)
 				{
 					WakeUp();
 					m_subsystemTime.QueueGameTimeDelayedExecution(m_subsystemTime.GameTime + 1.0, delegate

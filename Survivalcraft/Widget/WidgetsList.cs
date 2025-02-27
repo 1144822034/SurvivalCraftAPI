@@ -35,10 +35,10 @@ namespace Game
 
 			public bool MoveNext()
 			{
-				if (m_collection.m_version != m_version)
+				/*if (m_collection.m_version != m_version)
 				{
 					throw new InvalidOperationException("WidgetsList was modified, enumeration cannot continue.");
-				}
+				}*/
 				if (m_index < m_collection.m_widgets.Count)
 				{
 					m_current = m_collection.m_widgets[m_index];
