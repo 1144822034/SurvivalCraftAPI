@@ -122,8 +122,10 @@ namespace Game
 		public bool m_gamepadHelpMessageShown;
 
 		public static Func<Widget> OpenClothingWidget;
-
-
+		/// <summary>
+		/// 启用创造模式限制
+		/// </summary>
+		public bool EnableCreateMode;
 		public ContainerWidget ControlsContainerWidget
 		{
 			get;
@@ -335,14 +337,14 @@ namespace Game
 			m_gamepadHelpMessageShown = valuesDictionary.GetValue<bool>("GamepadHelpMessageShown");
 
 			var worldSettings = m_subsystemGameInfo.WorldSettings;
-			var gameMode = worldSettings.GameMode;//只在 load 执行一次，防止修改的 IsVisible 字段被改回
-			var isCreative = gameMode == GameMode.Creative;//如果此 isCreative 是全局变量而不是局部变量，模组也可在此开启显示
+			var gameMode = worldSettings.GameMode;
+			var isCreative = gameMode == GameMode.Creative;
+			EnableCreateMode = isCreative;
 			m_creativeFlyButtonWidget.IsVisible = isCreative;
 			m_timeOfDayButtonWidget.IsVisible = isCreative;
 			m_lightningButtonWidget.IsVisible = isCreative;
 			m_precipitationButtonWidget.IsVisible = isCreative && worldSettings.AreWeatherEffectsEnabled;
 			m_fogButtonWidget.IsVisible = isCreative && worldSettings.AreWeatherEffectsEnabled;
-
 			//启动冒险模式
 			var adventureEnabled = worldSettings.AreAdventureSurvivalMechanicsEnabled;
 			HealthBarWidget.IsVisible = !isCreative;
@@ -708,7 +710,7 @@ namespace Game
 					}
 				}
 			}
-			if ((m_creativeFlyButtonWidget.IsClicked || playerInput.ToggleCreativeFly) && componentRider.Mount == null)
+			if (EnableCreateMode && (m_creativeFlyButtonWidget.IsClicked || playerInput.ToggleCreativeFly) && componentRider.Mount == null)
 			{
 				bool isCreativeFlyEnabled = m_componentPlayer.ComponentLocomotion.IsCreativeFlyEnabled;
 				m_componentPlayer.ComponentLocomotion.IsCreativeFlyEnabled = !isCreativeFlyEnabled;
@@ -743,12 +745,12 @@ namespace Game
 					DisplaySmallMessage(LanguageControl.Get(fName, 14), Color.White, blinking: false, playNotificationSound: false);
 				});
 			}
-			if (m_lightningButtonWidget.IsClicked || playerInput.Lighting)
+			if (EnableCreateMode && (m_lightningButtonWidget.IsClicked || playerInput.Lighting))
 			{
 				var matrix = Matrix.CreateFromQuaternion(m_componentPlayer.ComponentCreatureModel.EyeRotation);
 				m_subsystemWeather.ManualLightingStrike(m_componentPlayer.ComponentCreatureModel.EyePosition, matrix.Forward);
 			}
-			if (m_precipitationButtonWidget.IsClicked || playerInput.Precipitation)
+			if (EnableCreateMode && (m_precipitationButtonWidget.IsClicked || playerInput.Precipitation))
 			{
 				if (m_subsystemWeather.IsPrecipitationStarted)
 				{
@@ -761,7 +763,7 @@ namespace Game
 					DisplaySmallMessage(LanguageControl.Get(fName, 21), Color.White, blinking: false, playNotificationSound: false);
 				}
 			}
-			if (m_fogButtonWidget.IsClicked || playerInput.Fog)
+			if (EnableCreateMode && (m_fogButtonWidget.IsClicked || playerInput.Fog))
 			{
 				if (m_subsystemWeather.IsFogStarted)
 				{
@@ -774,7 +776,7 @@ namespace Game
 					DisplaySmallMessage(LanguageControl.Get(fName, 23), Color.White, blinking: false, playNotificationSound: false);
 				}
 			}
-			if (m_timeOfDayButtonWidget.IsClicked || playerInput.TimeOfDay)
+			if (EnableCreateMode && (m_timeOfDayButtonWidget.IsClicked || playerInput.TimeOfDay))
 			{
 				float num2 = IntervalUtils.Interval(m_subsystemTimeOfDay.TimeOfDay, m_subsystemTimeOfDay.Middawn);
 				float num3 = IntervalUtils.Interval(m_subsystemTimeOfDay.TimeOfDay, m_subsystemTimeOfDay.Midday);
