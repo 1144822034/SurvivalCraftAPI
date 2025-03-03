@@ -11,14 +11,28 @@ namespace Game;
 public static class VersionsManager
 {
 	public static List<VersionConverter> m_versionConverters;
-	public static string PlatformString
+	public enum Platform
+	{
+		Windows,Android,Linux,Other
+	}
+	public static string PlatformString//TODO 建议：这个属性要么改为通过Platform枚举的ToString方法获得PlatformString，要么直接弃用Platform的枚举
 	{
 		get
 		{
 			if(OperatingSystem.IsWindows()) return "Windows";
-			else if(OperatingSystem.IsAndroid()) return "Android";
-			else if(OperatingSystem.IsLinux()) return "Linux";
-			else return "Other";
+			if(OperatingSystem.IsAndroid()) return "Android";
+			if(OperatingSystem.IsLinux()) return "Linux";
+			return "Other";
+		}
+	}
+	public static Platform CurrentPlatform
+	{
+		get
+		{
+			if(OperatingSystem.IsWindows()) return Platform.Windows;
+			if(OperatingSystem.IsAndroid()) return Platform.Android;
+			if(OperatingSystem.IsLinux()) return Platform.Linux;
+			return Platform.Other;
 		}
 	}
 	/// <summary>
