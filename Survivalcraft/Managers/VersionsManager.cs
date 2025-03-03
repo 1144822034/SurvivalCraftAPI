@@ -15,14 +15,11 @@ public static class VersionsManager
 	{
 		Windows,Android,Linux,Other
 	}
-	public static string PlatformString//TODO 建议：这个属性要么改为通过Platform枚举的ToString方法获得PlatformString，要么直接弃用Platform的枚举
+	public static string PlatformString
 	{
 		get
 		{
-			if(OperatingSystem.IsWindows()) return "Windows";
-			if(OperatingSystem.IsAndroid()) return "Android";
-			if(OperatingSystem.IsLinux()) return "Linux";
-			return "Other";
+			return CurrentPlatform.ToString();
 		}
 	}
 	public static Platform CurrentPlatform

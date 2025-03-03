@@ -26,10 +26,7 @@ namespace Game
 			for (int i = 0; i < m_blockBehaviorsByContents.Length; i++)
 			{
 				dictionary[i] = [];
-				string[] array = BlocksManager.Blocks[i].Behaviors.Split(new char[1]
-				{
-					','
-				}, StringSplitOptions.RemoveEmptyEntries);
+				string[] array = BlocksManager.Blocks[i].Behaviors.Split(',', StringSplitOptions.RemoveEmptyEntries);
 				foreach (string text in array)
 				{
 					SubsystemBlockBehavior item = base.Project.FindSubsystem<SubsystemBlockBehavior>(text.Trim(), throwOnError: true);
