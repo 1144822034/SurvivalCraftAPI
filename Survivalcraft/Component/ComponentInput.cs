@@ -59,7 +59,34 @@ namespace Game
 		}
 
 		public UpdateOrder UpdateOrder => UpdateOrder.Input;
-
+		public bool IsKeyDown(string keyName)
+		{
+			WidgetInput input = m_componentPlayer.GameWidget.Input;
+			object key = SettingsManager.KeyboardMappingSettings.GetValue(keyName,default(object));
+			if(key is MouseButton mouseButton)
+			{
+				return input.IsMouseButtonDown(mouseButton);
+			}
+			if(key is Key key1)
+			{
+				return input.IsKeyDown(key1);
+			}
+			return false;
+		}
+		public bool IsKeyDownOnce(string keyName)
+		{
+			WidgetInput input = m_componentPlayer.GameWidget.Input;
+			object key = SettingsManager.KeyboardMappingSettings.GetValue(keyName, default(object));
+			if(key is MouseButton mouseButton)
+			{
+				return input.IsMouseButtonDownOnce(mouseButton);
+			}
+			if(key is Key key1)
+			{
+				return input.IsKeyDownOnce(key1);
+			}
+			return false;
+		}
 		public virtual void SetSplitSourceInventoryAndSlot(IInventory inventory, int slotIndex)
 		{
 			SplitSourceInventory = inventory;
@@ -173,39 +200,40 @@ namespace Game
 						IsControlledByTouch = false;
 					}
 				}
-				Vector3 vector = default(Vector3) + (Vector3.UnitX * (input.IsKeyDown(Key.D) ? 1 : 0));
-				vector += -Vector3.UnitZ * (input.IsKeyDown(Key.S) ? 1 : 0);
-				vector += Vector3.UnitZ * (input.IsKeyDown(Key.W) ? 1 : 0);
-				vector += -Vector3.UnitX * (input.IsKeyDown(Key.A) ? 1 : 0);
-				vector += Vector3.UnitY * (input.IsKeyDown(Key.Space) ? 1 : 0);
-				vector += -Vector3.UnitY * (input.IsKeyDown(Key.Shift) ? 1 : 0);
+				Vector3 vector = default(Vector3);
+				vector += -Vector3.UnitX * (IsKeyDown("MoveLeft") ? 1 : 0);
+				vector += (Vector3.UnitX * (IsKeyDown( "MoveRight") ? 1 : 0));
+				vector += Vector3.UnitY * (IsKeyDown("MoveUp") ? 1 : 0);
+				vector += -Vector3.UnitY * (IsKeyDown("MoveDown") ? 1 : 0);
+				vector += -Vector3.UnitZ * (IsKeyDown( "MoveBack") ? 1 : 0);
+				vector += Vector3.UnitZ * (IsKeyDown("MoveFront") ? 1 : 0);
 				m_playerInput.Look += new Vector2(Math.Clamp(zero.X, -15f, 15f), Math.Clamp(zero.Y, -15f, 15f));
 				m_playerInput.Move += vector;
 				m_playerInput.CrouchMove += vector;
-				m_playerInput.Jump |= input.IsKeyDownOnce(Key.Space);
+				m_playerInput.Jump |= IsKeyDownOnce( "Jump");
 				m_playerInput.ScrollInventory -= num;
-				m_playerInput.Dig = input.IsMouseButtonDown(MouseButton.Left) ? new Ray3?(new Ray3(viewPosition, viewDirection)) : m_playerInput.Dig;
-				m_playerInput.Hit = input.IsMouseButtonDownOnce(MouseButton.Left) ? new Ray3?(new Ray3(viewPosition, viewDirection)) : m_playerInput.Hit;
-				m_playerInput.Aim = input.IsMouseButtonDown(MouseButton.Right) ? new Ray3?(new Ray3(viewPosition, viewDirection)) : m_playerInput.Aim;
-				m_playerInput.Interact = input.IsMouseButtonDownOnce(MouseButton.Right) ? new Ray3?(new Ray3(viewPosition, viewDirection)) : m_playerInput.Interact;
-				m_playerInput.ToggleCrouch |= input.IsKeyDownOnce(Key.Shift);
-				m_playerInput.ToggleMount |= input.IsKeyDownOnce(Key.R);
-				m_playerInput.ToggleCreativeFly |= input.IsKeyDownOnce(Key.F);
-				m_playerInput.PickBlockType = input.IsMouseButtonDownOnce(MouseButton.Middle) ? new Ray3?(new Ray3(viewPosition, viewDirection)) : m_playerInput.PickBlockType;
+				m_playerInput.Dig = IsKeyDown( "Dig") ? new Ray3?(new Ray3(viewPosition, viewDirection)) : m_playerInput.Dig;
+				m_playerInput.Hit = IsKeyDownOnce( "Hit") ? new Ray3?(new Ray3(viewPosition, viewDirection)) : m_playerInput.Hit;
+				m_playerInput.Aim = IsKeyDown("Aim") ? new Ray3?(new Ray3(viewPosition, viewDirection)) : m_playerInput.Aim;
+				m_playerInput.Interact = IsKeyDownOnce( "Interact") ? new Ray3?(new Ray3(viewPosition, viewDirection)) : m_playerInput.Interact;
+				m_playerInput.ToggleCrouch |= IsKeyDownOnce("ToggleCrouch");
+				m_playerInput.ToggleMount |= IsKeyDownOnce("ToggleMount");
+				m_playerInput.ToggleCreativeFly |= IsKeyDownOnce("ToggleFly");
+				m_playerInput.PickBlockType = IsKeyDown("PickBlockType") ? new Ray3?(new Ray3(viewPosition, viewDirection)) : m_playerInput.PickBlockType;
 			}
 			if (!DialogsManager.HasDialogs(m_componentPlayer.GuiWidget) && AllowHandleInput)
 			{
-				m_playerInput.ToggleInventory |= input.IsKeyDownOnce(Key.E);
-				m_playerInput.ToggleClothing |= input.IsKeyDownOnce(Key.C);
-				m_playerInput.TakeScreenshot |= input.IsKeyDownOnce(Key.P);
-				m_playerInput.SwitchCameraMode |= input.IsKeyDownOnce(Key.V);
-				m_playerInput.TimeOfDay |= input.IsKeyDownOnce(Key.T);
-				m_playerInput.Lighting |= input.IsKeyDownOnce(Key.L);
-				m_playerInput.Precipitation |= input.IsKeyDownOnce(Key.K);
-				m_playerInput.Fog |= input.IsKeyDownOnce(Key.J);
-				m_playerInput.Drop |= input.IsKeyDownOnce(Key.Q);
-				m_playerInput.EditItem |= input.IsKeyDownOnce(Key.G);
-				m_playerInput.KeyboardHelp |= input.IsKeyDownOnce(Key.H);
+				m_playerInput.ToggleInventory |= IsKeyDownOnce("ToggleInventory");
+				m_playerInput.ToggleClothing |= IsKeyDownOnce("ToggleClothing");
+				m_playerInput.TakeScreenshot |= IsKeyDownOnce("TakeScreenshot");
+				m_playerInput.SwitchCameraMode |= IsKeyDownOnce("SwitchCameraMode");
+				m_playerInput.TimeOfDay |= IsKeyDownOnce( "TimeOfDay");
+				m_playerInput.Lighting |= IsKeyDownOnce("Lightning");
+				m_playerInput.Precipitation |= IsKeyDownOnce("Precipitation");
+				m_playerInput.Fog |= IsKeyDownOnce("Fog");
+				m_playerInput.Drop |= IsKeyDownOnce("Drop");
+				m_playerInput.EditItem |= IsKeyDownOnce("EditItem");
+				m_playerInput.KeyboardHelp |= IsKeyDownOnce("KeyboardHelp");
 				if (input.IsKeyDownOnce(Key.Number1))
 				{
 					m_playerInput.SelectInventorySlot = 0;

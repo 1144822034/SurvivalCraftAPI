@@ -6,7 +6,9 @@ using System.Linq;
 using System.Reflection;
 using System.Text;
 using System.Xml.Linq;
+using TemplatesDatabase;
 using XmlUtilities;
+using Engine.Input;
 namespace Game
 {
 	public static class SettingsManager
@@ -479,7 +481,37 @@ namespace Game
 		public static float MoveWidgetSize {  get; set; }
 
         public static event Action<string> SettingChanged;
-
+		public static ValuesDictionary KeyboardMappingSettings { get; set; }
+		public static void InitializeKeyboardMappingSettings()
+		{
+			KeyboardMappingSettings = new ValuesDictionary();
+			KeyboardMappingSettings.SetValue("MoveLeft", Key.A);
+			KeyboardMappingSettings.SetValue("MoveRight", Key.D);
+			KeyboardMappingSettings.SetValue("MoveFront", Key.W);
+			KeyboardMappingSettings.SetValue("MoveBack", Key.S);
+			KeyboardMappingSettings.SetValue("MoveUp", Key.Space);
+			KeyboardMappingSettings.SetValue("MoveDown", Key.Shift);
+			KeyboardMappingSettings.SetValue("Jump", Key.Space);
+			KeyboardMappingSettings.SetValue("Dig", MouseButton.Left);
+			KeyboardMappingSettings.SetValue("Hit", MouseButton.Left);
+			KeyboardMappingSettings.SetValue("Interact", MouseButton.Right);
+			KeyboardMappingSettings.SetValue("Aim", MouseButton.Right);
+			KeyboardMappingSettings.SetValue("ToggleCrouch", Key.Shift);
+			KeyboardMappingSettings.SetValue("ToggleMount", Key.R);
+			KeyboardMappingSettings.SetValue("ToggleFly", Key.F);
+			KeyboardMappingSettings.SetValue("PickBlockType", MouseButton.Middle);
+			KeyboardMappingSettings.SetValue("ToggleInventory", Key.E);
+			KeyboardMappingSettings.SetValue("ToggleClothing", Key.C);
+			KeyboardMappingSettings.SetValue("TakeScreenshot", Key.P);
+			KeyboardMappingSettings.SetValue("SwitchCameraMode", Key.V);
+			KeyboardMappingSettings.SetValue("TimeOfDay", Key.T);
+			KeyboardMappingSettings.SetValue("Lightning", Key.L);
+			KeyboardMappingSettings.SetValue("Precipitation", Key.K);
+			KeyboardMappingSettings.SetValue("Fog", Key.J);
+			KeyboardMappingSettings.SetValue("Drop", Key.Q);
+			KeyboardMappingSettings.SetValue("EditItem", Key.G);
+			KeyboardMappingSettings.SetValue("KeyboardHelp", Key.H);
+		}
 		public static void Initialize()
 		{
 			{
@@ -547,6 +579,7 @@ namespace Game
 				MoveWidgetSize = 1f;
 				MoveWidgetMarginX = 0f;
 				MoveWidgetMarginY = 0f;
+				InitializeKeyboardMappingSettings();
 			}
 			LoadSettings();
 			Window.Deactivated += delegate
@@ -572,35 +605,34 @@ namespace Game
 						{
 							ModsManager.LoadConfigsFromXml(xElement);
 						}
-						foreach (XElement item in xElement.Elements())
+						else
 						{
-							string name = "<unknown>";
-							try
+							ValuesDictionary valuesDictionary = new ValuesDictionary();
+							valuesDictionary.ApplyOverrides(xElement);
+							foreach(string name in valuesDictionary.Keys)
 							{
-								if (item.Name.LocalName == "Setting")
+								try
 								{
-									name = XmlUtils.GetAttributeValue<string>(item, "Name");
-									string attributeValue = XmlUtils.GetAttributeValue<string>(item, "Value");
 									PropertyInfo propertyInfo = (from pi in typeof(SettingsManager).GetRuntimeProperties()
 																 where pi.Name == name && pi.GetMethod.IsStatic && pi.GetMethod.IsPublic && pi.SetMethod.IsPublic
 																 select pi).FirstOrDefault();
-									if (propertyInfo is not null)
+									if(propertyInfo is not null)
 									{
-										object value = HumanReadableConverter.ConvertFromString(propertyInfo.PropertyType, attributeValue);
-										propertyInfo.SetValue(null, value, null);
+										object value = valuesDictionary.GetValue<object>(name);
+										propertyInfo.SetValue(null,value,null);
 									}
-
+								}
+								catch(Exception ex)
+								{
+									Log.Warning(string.Format("Setting \"{0}\" could not be loaded. Reason: {1}",new object[2]
+									{
+									name,
+									ex.ToString()
+									}));
 								}
 							}
-							catch (Exception ex)
-							{
-								Log.Warning(string.Format("Setting \"{0}\" could not be loaded. Reason: {1}", new object[2]
-								{
-									name,
-									ex.Message
-								}));
-							}
 						}
+						
 
 					}
 					Log.Information("Loaded settings.");
@@ -624,6 +656,7 @@ namespace Game
 			ModSettingsManager.SaveModSettings();
 			try
 			{
+				ValuesDictionary settingsValuesDictionary = new ValuesDictionary();
 				//原生设置
 				var xElement = new XElement("Settings");
 				foreach (PropertyInfo item in from pi in typeof(SettingsManager).GetRuntimeProperties()
@@ -632,20 +665,19 @@ namespace Game
 				{
 					try
 					{
-						string value = HumanReadableConverter.ConvertToString(item.GetValue(null, null));
-						XElement node = XmlUtils.AddElement(xElement, "Setting");
-						XmlUtils.SetAttributeValue(node, "Name", item.Name);
-						XmlUtils.SetAttributeValue(node, "Value", value);
+						var value = item.GetValue(null,null);
+						settingsValuesDictionary.SetValue(item.Name,value);
 					}
 					catch (Exception ex)
 					{
 						Log.Warning(string.Format("Setting \"{0}\" could not be saved. Reason: {1}",
 						[
 							item.Name,
-							ex.Message
+							ex
 						]));
 					}
 				}
+				settingsValuesDictionary.Save(xElement);
 				//保存
 				using (Stream stream = Storage.OpenFile(ModsManager.SettingPath, OpenFileMode.Create))
 				{
