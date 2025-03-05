@@ -89,6 +89,13 @@ namespace Game
         {
             Hitted = false;
         }
+		/// <summary>
+		/// 设置伤害间隔
+		/// </summary>
+		public virtual void SetHitInterval(ComponentMiner miner,ref double hitInterval)
+        {
+
+        }
 
 		/// <summary>
 		/// 在生物攻击时执行

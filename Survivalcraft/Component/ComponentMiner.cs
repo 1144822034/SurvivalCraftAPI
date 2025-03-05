@@ -42,8 +42,22 @@ namespace Game
 		public float m_lastPokingPhase;
 
 		private double m_lastToolHintTime;
+		/// <summary>
+		/// 伤害间隔(原版为0.66f)
+		/// </summary>
+		public virtual double HitInterval 
+		{
+			get
+			{
+				return m_hitInterval * ComponentFactors.HitIntervalFactor;
+			}
+			set
+			{
+				m_hitInterval = value;
+			}
+		}
+		private double m_hitInterval;
 
-		public virtual double HitInterval { get; set; }
 		public ComponentCreature ComponentCreature
 		{
 			get;
@@ -382,7 +396,12 @@ namespace Game
 
 		public void Hit(ComponentBody componentBody, Vector3 hitPoint, Vector3 hitDirection)
 		{
-			if (!(m_subsystemTime.GameTime - m_lastHitTime > HitInterval))
+			var hitInterval = HitInterval;
+			ModsManager.HookAction("SetHitInterval",modLoader => {
+				modLoader.SetHitInterval(this,ref hitInterval);
+				return false;
+			});
+			if (!(m_subsystemTime.GameTime - m_lastHitTime > hitInterval))
 			{
 				return;
 			}
