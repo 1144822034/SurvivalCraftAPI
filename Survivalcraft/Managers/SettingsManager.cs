@@ -511,6 +511,7 @@ namespace Game
 			KeyboardMappingSettings.SetValue("Drop", Key.Q);
 			KeyboardMappingSettings.SetValue("EditItem", Key.G);
 			KeyboardMappingSettings.SetValue("KeyboardHelp", Key.H);
+			KeyboardMappingSettings.SetValue("GameMenu",Key.Escape);
 		}
 		public static void Initialize()
 		{
@@ -619,7 +620,12 @@ namespace Game
 									if(propertyInfo is not null)
 									{
 										object value = valuesDictionary.GetValue<object>(name);
-										propertyInfo.SetValue(null,value,null);
+										if(propertyInfo.PropertyType == typeof(ValuesDictionary) && (value is ValuesDictionary vd2))
+										{
+											ValuesDictionary vd3 = propertyInfo.GetValue(null) as ValuesDictionary;
+											vd3.ApplyOverrides(vd2);
+										}
+										else propertyInfo.SetValue(null,value,null);
 									}
 								}
 								catch(Exception ex)

@@ -1,0 +1,26 @@
+<Screen xmlns="runtime-namespace:Game">
+
+  <PanoramaWidget />
+
+  <StackPanelWidget Direction="Horizontal">
+
+    <CanvasWidget Style="{Widgets/TopBarContents}" >
+      <LabelWidget Name="TopBar.Label" Text="[KeyboardMappingScreen:0]" />
+    </CanvasWidget>
+
+	  <StackPanelWidget Direction="Vertical" HorizontalAlignment="Center">
+
+		  <CanvasWidget Size="Infinity, 10" />
+		  <CanvasWidget Margin="10, 20">
+			  <BevelledRectangleWidget Style="{Styles/Area}" />
+			  <ListPanelWidget Name="KeysList" Direction="Vertical" HorizontalAlignment="Center" Margin="3, 3" ItemSize="56" SelectionColor="10, 70, 0, 90"/>
+		  </CanvasWidget>
+
+		  <StackPanelWidget Direction="Horizontal" HorizontalAlignment="Center" Margin="4, 10">
+			  <BevelledButtonWidget Name="SetKey" Style="{Styles/ButtonStyle_310x60}" Text="[KeyboardMappingScreen:SetKey]" VerticalAlignment="Center" />
+			  <BevelledButtonWidget Name="DisableKey" Style="{Styles/ButtonStyle_310x60}" Text="[KeyboardMappingScreen:DisableKey]" VerticalAlignment="Center" />
+		  </StackPanelWidget>
+	  </StackPanelWidget>
+	</StackPanelWidget>
+
+</Screen>

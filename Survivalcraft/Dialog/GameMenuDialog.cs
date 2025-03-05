@@ -291,7 +291,7 @@ namespace Game
 				});
 				DialogsManager.ShowDialog(ParentWidget, dialog);
 			}
-			if (Input.Back || Input.Cancel || Children.Find<ButtonWidget>("Resume").IsClicked)
+			if (Input.Back || Input.Cancel || m_componentPlayer.ComponentInput.IsKeyDownOnce("GameMenu") ||Children.Find<ButtonWidget>("Resume").IsClicked)
 			{
 				DialogsManager.HideDialog(this);
 			}

@@ -515,6 +515,10 @@ namespace Game
 			{
 				AddScreen("Player", new PlayerScreen());
 			});
+			AddLoadAction(delegate
+			{
+				AddScreen("KeyboardMapping", new KeyboardMappingScreen());
+			});
 		}
 		public void AddScreen(string name, Screen screen)
 		{

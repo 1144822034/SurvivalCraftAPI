@@ -46,6 +46,8 @@ namespace Game
 
 		public SliderWidget m_moveWidgetMarginXSlider;
 		public SliderWidget m_moveWidgetMarginYSlider;
+
+		public ButtonWidget m_keyboardMappingEntry;
 		public SettingsControlsScreen()
 		{
 			XElement node = ContentManager.Get<XElement>("Screens/SettingsControlsScreen");
@@ -71,6 +73,7 @@ namespace Game
 			m_MemoryBankStyle = Children.Find<ButtonWidget>("MemoryBankStyle");
 			m_moveWidgetMarginXSlider = Children.Find<SliderWidget>("MoveWidgetMarginXSlider");
 			m_moveWidgetMarginYSlider = Children.Find<SliderWidget>("MoveWidgetMarginYSlider");
+			m_keyboardMappingEntry = Children.Find<ButtonWidget>("KeyboardMappingEntry");
 			m_horizontalCreativeFlightPanel.IsVisible = true;
 		}
 
@@ -152,6 +155,10 @@ namespace Game
 			{
 				SettingsManager.MoveWidgetMarginY = m_moveWidgetMarginYSlider.Value;
 			}
+			if(m_keyboardMappingEntry.IsClicked)
+			{
+				ScreensManager.SwitchScreen("KeyboardMapping");
+			}
 			if (m_AllowInitialIntro.IsClicked) SettingsManager.AllowInitialIntro = !SettingsManager.AllowInitialIntro;
 			m_moveControlModeButton.Text = LanguageControl.Get("MoveControlMode", SettingsManager.MoveControlMode.ToString());
 			m_lookControlModeButton.Text = LanguageControl.Get("LookControlMode", SettingsManager.LookControlMode.ToString());
@@ -185,7 +192,7 @@ namespace Game
 			m_moveWidgetMarginYSlider.Text = String.Format("{0:F0}%", SettingsManager.MoveWidgetMarginY * 100f);
 			if (Input.Back || Input.Cancel || Children.Find<ButtonWidget>("TopBar.Back").IsClicked)
 			{
-				ScreensManager.SwitchScreen(ScreensManager.PreviousScreen);
+				ScreensManager.SwitchScreen("Settings");
 			}
 		}
 	}

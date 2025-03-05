@@ -2933,7 +2933,8 @@
       "Drag Half Stack Of Blocks In Split:",
       "Touch Screen Joystick Offset",
       "Touch Screen Joystick Offset X",
-      "Touch Screen Joystick Offset Y"
+      "Touch Screen Joystick Offset Y",
+      "Keyboard Settings"
     ],
     "SettingsGraphicsScreen": {
       "1": "Adjust Graphics Settings",

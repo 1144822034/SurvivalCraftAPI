@@ -122,6 +122,8 @@ namespace Game
 		public bool m_gamepadHelpMessageShown;
 
 		public static Func<Widget> OpenClothingWidget;
+
+		public ComponentInput m_componentInput;
 	
 		public ContainerWidget ControlsContainerWidget
 		{
@@ -287,6 +289,7 @@ namespace Game
 			m_subsystemWeather = base.Project.FindSubsystem<SubsystemWeather>(throwOnError: true);
 			m_subsystemBlockBehaviors = Project.FindSubsystem<SubsystemBlockBehaviors>(throwOnError: true);
 			m_componentPlayer = Entity.FindComponent<ComponentPlayer>(throwOnError: true);
+			m_componentInput = Entity.FindComponent<ComponentInput>();
 			ContainerWidget guiWidget = m_componentPlayer.GuiWidget;
 			m_backButtonWidget = guiWidget.Children.Find<ButtonWidget>("BackButton");
 			m_inventoryButtonWidget = guiWidget.Children.Find<ButtonWidget>("InventoryButton");
@@ -807,7 +810,7 @@ namespace Game
 					ModalPanelWidget = null;
 				}
 			}
-			else if (input.Back || m_backButtonWidget.IsClicked)
+			else if ((m_componentInput?.IsKeyDownOnce("GameMenu") ?? false) || m_backButtonWidget.IsClicked)
 			{
 				DialogsManager.ShowDialog(m_componentPlayer.GuiWidget, new GameMenuDialog(m_componentPlayer));
 			}

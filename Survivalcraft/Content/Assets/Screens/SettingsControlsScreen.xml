@@ -107,10 +107,16 @@
 				<SliderWidget Name="MoveWidgetMarginXSlider" Granularity="0.01" MinValue="0" MaxValue="0.3" Size="Infinity, 60" VerticalAlignment="Center" Margin="20, 0" />
 			</UniformSpacingPanelWidget>
 
+		    <UniformSpacingPanelWidget Direction="Horizontal" Margin="0, 3">
+			    <LabelWidget Text="[SettingsControlsScreen:21]"  HorizontalAlignment="Far" VerticalAlignment="Center" Margin="20, 0" />
+			    <SliderWidget Name="MoveWidgetMarginYSlider" Granularity="0.01" MinValue="0" MaxValue="0.3" Size="Infinity, 60" VerticalAlignment="Center" Margin="20, 0" />
+		    </UniformSpacingPanelWidget>
+
 			<UniformSpacingPanelWidget Direction="Horizontal" Margin="0, 3">
-				<LabelWidget Text="[SettingsControlsScreen:21]"  HorizontalAlignment="Far" VerticalAlignment="Center" Margin="20, 0" />
-				<SliderWidget Name="MoveWidgetMarginYSlider" Granularity="0.01" MinValue="0" MaxValue="0.3" Size="Infinity, 60" VerticalAlignment="Center" Margin="20, 0" />
+				<LabelWidget Text="[SettingsControlsScreen:22]"  HorizontalAlignment="Far" VerticalAlignment="Center" Margin="20, 0" />
+				<BevelledButtonWidget Name="KeyboardMappingEntry" Text ="[SettingsControlsScreen:22]" Style="{Styles/ButtonStyle_310x60}" VerticalAlignment="Center" Margin="20, 0" />
 			</UniformSpacingPanelWidget>
+			
         </StackPanelWidget>
       </ScrollPanelWidget>
     </CanvasWidget>
