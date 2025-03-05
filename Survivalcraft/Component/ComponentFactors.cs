@@ -1,4 +1,4 @@
-using GameEntitySystem;
+﻿using GameEntitySystem;
 using Engine;
 using TemplatesDatabase;
 using System.Reflection;
@@ -20,7 +20,7 @@ namespace Game
 		/// 模组如果有自定义的Factors，可以使用这个OtherFactors。例如使用OtherFactors["AttackRate"]来定义攻击频率。
 		/// </summary>
 		public Dictionary<string,List<Factor>> OtherFactors = new Dictionary<string,List<Factor>>();
-
+		public Dictionary<string,float> OtherFactorsResults = new Dictionary<string,float>();
 		/// <summary>
 		/// 这四个Factors是可以调整的影响因素
 		/// </summary>
@@ -28,19 +28,10 @@ namespace Game
 		public List<Factor> m_speedFactors = [];
 		public List<Factor> m_hungerFactors = [];
 		public List<Factor> m_resilienceFactors = [];
-		public List<Factor> m_hitIntervalFactors = [];
 		public UpdateOrder UpdateOrder => UpdateOrder.Default;
 
 		public static string fName = "ComponentFactors";
-		/// <summary>
-		/// 伤害间隔因素
-		/// </summary>
-		public float HitIntervalFactor
-		{
-			get;
-			[Obsolete("模组调整HitIntervalFactor的具体数值，需要通过m_hitIntervalFactors里面增删改里面的Factor")]
-			set;
-		} = 1f;
+
 		public float StrengthFactor
 		{
 			get;
@@ -69,17 +60,15 @@ namespace Game
 			set;
 		} = 1f;
 
-        public override void Load(ValuesDictionary valuesDictionary, IdToEntityMap idToEntityMap)
-        {
-            m_subsystemGameInfo = Project.FindSubsystem<SubsystemGameInfo>(throwOnError: true);
-            m_subsystemTime = Project.FindSubsystem<SubsystemTime>(throwOnError: true);
-            m_subsystemAudio = Project.FindSubsystem<SubsystemAudio>(throwOnError: true);
-            StrengthFactor = 1f;
-            SpeedFactor = 1f;
-            HungerFactor = 1f;
-            ResilienceFactor = 1f;
-			HitIntervalFactor = 1f;
-        }
+		public override void Load(ValuesDictionary valuesDictionary,IdToEntityMap idToEntityMap)
+		{
+			m_subsystemGameInfo = Project.FindSubsystem<SubsystemGameInfo>(throwOnError: true);
+			m_subsystemTime = Project.FindSubsystem<SubsystemTime>(throwOnError: true);
+			m_subsystemAudio = Project.FindSubsystem<SubsystemAudio>(throwOnError: true);
+			OtherFactors["AttackSpeed"] = new List<Factor>();
+			OtherFactors["DigSpeed"] = new List<Factor>();
+			CalculateOtherFactorsResult();
+		}
 
 		public static float CalculateFactorsResult(ICollection<Factor> factors)
 		{
@@ -90,17 +79,24 @@ namespace Game
 				{
 					case FactorAdditionType.Multiply:
 					{
-                        ans *= factor.Value;
+						ans *= factor.Value;
 						break;
 					}
 					case FactorAdditionType.Add:
 					{
-                        ans += factor.Value;
-                        break;
+						ans += factor.Value;
+						break;
 					}
 				}
 			}
 			return ans;
+		}
+		public virtual void CalculateOtherFactorsResult()
+		{
+			foreach(var key in OtherFactors.Keys)
+			{
+				OtherFactorsResults[key] = CalculateFactorsResult(OtherFactors[key]);
+			}
 		}
 
 		public virtual void GenerateStrengthFactors()
@@ -119,34 +115,38 @@ namespace Game
 		{
 			m_hungerFactors.Clear();
 		}
-		public virtual void GenerateHitIntervalFactors()
+		public virtual void GenerateOtherFactors()
 		{
-			m_hitIntervalFactors.Clear();
+			foreach(var key in OtherFactors.Keys)
+			{
+				OtherFactors[key].Clear();
+			}
 		}
 		#region Obsolete CalculateFactor
 		[Obsolete("Get m_strengthFactors and StrengthFactor instead.")]
-        public virtual float CalculateStrengthFactor(ICollection<Factor> factors) {
+		public virtual float CalculateStrengthFactor(ICollection<Factor> factors)
+		{
 			if(factors is List<Factor> factorsList) factorsList.AddRange(m_strengthFactors);
-            return CalculateFactorsResult(m_strengthFactors);
-        }
+			return CalculateFactorsResult(m_strengthFactors);
+		}
 		[Obsolete("Get m_resilienceFactors and ResilienceFactor instead.")]
 		public virtual float CalculateResilienceFactor(ICollection<Factor> factors)
-        {
+		{
 			if(factors is List<Factor> factorsList) factorsList.AddRange(m_resilienceFactors);
 			return CalculateFactorsResult(m_resilienceFactors);
-        }
+		}
 		[Obsolete("Get m_speedFactors and SpeedFactor instead.")]
 		public virtual float CalculateSpeedFactor(ICollection<Factor> factors)
-        {
+		{
 			if(factors is List<Factor> factorsList) factorsList.AddRange(m_speedFactors);
 			return CalculateFactorsResult(m_speedFactors);
-        }
+		}
 		[Obsolete("Get m_hungerFactors and HungerFactor instead.")]
 		public virtual float CalculateHungerFactor(ICollection<Factor> factors)
-        {
+		{
 			if(factors is List<Factor> factorsList) factorsList.AddRange(m_hungerFactors);
 			return CalculateFactorsResult(m_hungerFactors);
-        }
+		}
 		#endregion
 
 		/// <summary>
@@ -162,15 +162,16 @@ namespace Game
 			SpeedFactor = CalculateFactorsResult(m_speedFactors);
 			HungerFactor = CalculateFactorsResult(m_hungerFactors);
 			ResilienceFactor = CalculateFactorsResult(m_resilienceFactors);
+			CalculateOtherFactorsResult();
 			GenerateStrengthFactors();
 			GenerateResilienceFactors();
 			GenerateSpeedFactors();
 			GenerateHungerFactors();
-			GenerateHitIntervalFactors();
+			GenerateOtherFactors();
 			ModsManager.HookAction("OnFactorsUpdate",Loader => {
 				Loader.OnFactorsUpdate(this,dt);
 				return false;
 			});
 		}
-    }
+	}
 }

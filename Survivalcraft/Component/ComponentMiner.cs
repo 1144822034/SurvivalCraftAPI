@@ -1,4 +1,4 @@
-using Engine;
+﻿using Engine;
 using GameEntitySystem;
 using System.Globalization;
 using TemplatesDatabase;
@@ -49,14 +49,15 @@ namespace Game
 		{
 			get
 			{
-				return m_hitInterval * ComponentFactors.HitIntervalFactor;
+				return m_basicHitInterval / ComponentFactors.OtherFactorsResults["AttackSpeed"];
 			}
+			[Obsolete("Do not set the added hit interval, set m_basicHitInterval instead.")]
 			set
 			{
-				m_hitInterval = value;
+				m_basicHitInterval = value;
 			}
 		}
-		private double m_hitInterval;
+		public double m_basicHitInterval;
 
 		public ComponentCreature ComponentCreature
 		{
@@ -109,7 +110,23 @@ namespace Game
 				return ComponentFactors?.StrengthFactor ?? 1;
 			}
 		}
-
+		/// <summary>
+		/// 挖掘速度是否受玩家力量属性加成
+		/// </summary>
+		public bool m_digSpeedBasedOnStrengthFactor = true;
+		public float DigSpeedFactor
+		{
+			get
+			{
+				float ans = 1f;
+				if(m_digSpeedBasedOnStrengthFactor) ans *= StrengthFactor;
+				if(ComponentFactors?.OtherFactorsResults.TryGetValue("DigSpeed", out var result) ?? false)
+				{
+					ans *= result;
+				}
+				return ans;
+			}
+		}
 		public float PokingPhase
 		{
 			get;
@@ -792,7 +809,7 @@ namespace Game
 			{
 				num2 = HackPower;
 			}
-			num2 *= StrengthFactor;
+			num2 *= DigSpeedFactor;
 			if (!(num2 > 0f))
 			{
 				return float.PositiveInfinity;

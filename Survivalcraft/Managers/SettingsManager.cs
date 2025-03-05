@@ -565,7 +565,7 @@ namespace Game
 				CommunityContentMode = CommunityContentMode.Normal;
 				OriginalCommunityContentMode = CommunityContentMode.Normal;
 				MultithreadedTerrainUpdate = true;
-				NewYearCelebrationLastYear = 2035;
+				NewYearCelebrationLastYear = 2025;
 				ScreenLayout1 = ScreenLayout.Single;
 				ScreenLayout2 = (Window.ScreenSize.X / (float)Window.ScreenSize.Y > 1.33333337f) ? ScreenLayout.DoubleVertical : ScreenLayout.DoubleHorizontal;
 				ScreenLayout3 = (Window.ScreenSize.X / (float)Window.ScreenSize.Y > 1.33333337f) ? ScreenLayout.TripleVertical : ScreenLayout.TripleHorizontal;

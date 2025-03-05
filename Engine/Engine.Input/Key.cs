@@ -79,6 +79,7 @@ namespace Engine.Input
 		Comma,
 		Period,
 		Slash,
-        Alt
+        Alt,
+        Null = -1
 	}
 }
