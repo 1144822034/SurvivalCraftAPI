@@ -28,10 +28,19 @@ namespace Game
 		public List<Factor> m_speedFactors = [];
 		public List<Factor> m_hungerFactors = [];
 		public List<Factor> m_resilienceFactors = [];
+		public List<Factor> m_hitIntervalFactors = [];
 		public UpdateOrder UpdateOrder => UpdateOrder.Default;
 
 		public static string fName = "ComponentFactors";
-
+		/// <summary>
+		/// 伤害间隔因素
+		/// </summary>
+		public float HitIntervalFactor
+		{
+			get;
+			[Obsolete("模组调整HitIntervalFactor的具体数值，需要通过m_hitIntervalFactors里面增删改里面的Factor")]
+			set;
+		} = 1f;
 		public float StrengthFactor
 		{
 			get;
@@ -69,6 +78,7 @@ namespace Game
             SpeedFactor = 1f;
             HungerFactor = 1f;
             ResilienceFactor = 1f;
+			HitIntervalFactor = 1f;
         }
 
 		public static float CalculateFactorsResult(ICollection<Factor> factors)
@@ -108,6 +118,10 @@ namespace Game
 		public virtual void GenerateHungerFactors()
 		{
 			m_hungerFactors.Clear();
+		}
+		public virtual void GenerateHitIntervalFactors()
+		{
+			m_hitIntervalFactors.Clear();
 		}
 		#region Obsolete CalculateFactor
 		[Obsolete("Get m_strengthFactors and StrengthFactor instead.")]
@@ -152,6 +166,7 @@ namespace Game
 			GenerateResilienceFactors();
 			GenerateSpeedFactors();
 			GenerateHungerFactors();
+			GenerateHitIntervalFactors();
 			ModsManager.HookAction("OnFactorsUpdate",Loader => {
 				Loader.OnFactorsUpdate(this,dt);
 				return false;
