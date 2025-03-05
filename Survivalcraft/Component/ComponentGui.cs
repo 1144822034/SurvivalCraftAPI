@@ -577,18 +577,7 @@ namespace Game
 			}
 			if (playerInput.KeyboardHelp)
 			{
-				if (m_keyboardHelpDialog == null)
-				{
-					m_keyboardHelpDialog = new KeyboardHelpDialog();
-				}
-				if (m_keyboardHelpDialog.ParentWidget != null)
-				{
-					DialogsManager.HideDialog(m_keyboardHelpDialog);
-				}
-				else
-				{
-					DialogsManager.ShowDialog(m_componentPlayer.GuiWidget, m_keyboardHelpDialog);
-				}
+				ScreensManager.SwitchScreen("KeyboardMapping");
 			}
 			if (playerInput.GamepadHelp)
 			{

@@ -8,13 +8,15 @@ namespace Game
 {
 	public class KeyboardMappingScreen : Screen
 	{
+		public const string fName = "KeyboardMappingScreen";
+		public const string keyName = "KeyboardMappingScreenKeys";
 		public Widget KeyInfoWidget(Object item)
 		{
 			XElement node = ContentManager.Get<XElement>("Widgets/KeyboardMappingItem");
 			var containerWidget = (ContainerWidget)LoadWidget(this,node,null);
 			LabelWidget labelWidget = containerWidget.Children.Find<LabelWidget>("Name");
 			LabelWidget labelWidget2 = containerWidget.Children.Find<LabelWidget>("BoundKey");
-			labelWidget.Text = item.ToString();
+			labelWidget.Text = LanguageControl.Get(fName, item.ToString());
 			labelWidget2.Text = HumanReadableConverter.ConvertToString(SettingsManager.KeyboardMappingSettings.GetValue(item.ToString(), default(object)));
 			m_widgetsByString[item.ToString()] = containerWidget;
 			return containerWidget;
@@ -23,7 +25,6 @@ namespace Game
 		public ListPanelWidget m_keysList;
 		public BevelledButtonWidget m_setKeyButton;
 		public BevelledButtonWidget m_disableKeyButton;
-		public static string fName = "KeyboardMappingScreen";
 		public bool IsWaitingForKeyInput = false;
 		public Dictionary<string, ContainerWidget> m_widgetsByString = new Dictionary<string, ContainerWidget>();
 		public KeyboardMappingScreen()
@@ -64,7 +65,15 @@ namespace Game
 				LabelWidget labelWidget = m_widgetsByString[key].Children.Find<LabelWidget>("BoundKey");
 				object value = SettingsManager.KeyboardMappingSettings.GetValue(key,default(object));
 				if(value is Key valueKey && valueKey == Key.Null) labelWidget.Text = string.Empty;
-				else labelWidget.Text = HumanReadableConverter.ConvertToString(value);
+				else
+				{
+					string text = LanguageControl.Get(keyName,HumanReadableConverter.ConvertToString(value));
+					if(text.StartsWith(keyName + ":"))
+					{
+						text =  text.Substring((keyName + ":").Length);
+					}
+					labelWidget.Text = text;
+				}
 			}
 			if(m_disableKeyButton.IsClicked)
 			{

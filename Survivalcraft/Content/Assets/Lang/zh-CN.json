@@ -871,6 +871,46 @@
 		"7": "昼夜交替",
 		"8": " 天"
 	},
+	"KeyboardMappingScreen": {
+		"MoveLeft": "左移",
+		"MoveRight": "右移",
+		"MoveUp": "上升",
+		"MoveDown": "下降",
+		"MoveFront": "前移",
+		"MoveBack": "后移",
+		"Jump": "跳跃",
+		"Dig": "挖掘",
+		"Hit": "攻击",
+		"Aim": "瞄准",
+		"Interact": "交互，放置",
+		"ToggleCrouch": "蹲下",
+		"ToggleMount": "骑乘",
+		"ToggleFly": "飞行",
+		"PickBlockType": "创造模式选取方块",
+		"ToggleInventory": "打开物品栏",
+		"ToggleClothing": "打开衣物栏",
+		"TackScreenshot": "截屏",
+		"SwitchCameraMode": "切换视角",
+		"TimeOfDay": "更改时间",
+		"Lightning": "召唤闪电",
+		"Precipitation": "开关 雨/雪",
+		"Fog": "开关雾",
+		"Drop": "丢弃物品",
+		"EditItem": "编辑物品",
+		"KeyboardHelp": "键盘设置",
+		"GameMenu": "退出游戏"
+	},
+	"KeyboardMappingScreenKeys": {
+		"Left": "鼠标左键",
+		"Right": "鼠标右键",
+		"Middle": "鼠标中键",
+		"Ext1": "鼠标其他按键1",
+		"Ext2": "鼠标其他按键2",
+		"LeftArrow": "←",
+		"RightArrow": "→",
+		"UpArrow": "↑",
+		"DownArrow": "↓"
+	},
 	"ComponentSickness": {
 		"1": "患病",
 		"2": "你觉得恶心"
@@ -983,7 +1023,7 @@
 		"0": "请制作石斧来代替",
 		"1": "请制作木耙来代替"
 	},
-	"GameLogSink":{
+	"GameLogSink": {
 		"1": "日志文件可能正在被其他程序占用，加载失败"
 	},
 	"BasePumpkinBlock": {
@@ -998,8 +1038,8 @@
 	"BulletBlock": [ "子弹", "铅弹", "铅弹丸" ],
 	"PressurePlateBlock": [ "木质压力板", "石质压力板" ],
 	"PistonBlock": [ "活塞", "粘性活塞", "严格粘性活塞" ],
-	"DeciduousLeavesBlock": [ "夏季", "秋季", "冬季", "春季"],
-	"SubsystemSeasons": ["立夏", "盛夏", "末夏", "初秋", "桂秋", "深秋", "开冬", "仲冬", "腊冬", "新春", "春半", "暮春"],
+	"DeciduousLeavesBlock": [ "夏季", "秋季", "冬季", "春季" ],
+	"SubsystemSeasons": [ "立夏", "盛夏", "末夏", "初秋", "桂秋", "深秋", "开冬", "仲冬", "腊冬", "新春", "春半", "暮春" ],
 	"Blocks": {
 		"AirBlock:0": {
 			"DisplayName": "空气",
@@ -3452,6 +3492,10 @@
 			"触屏摇杆纵向偏移",
 			"键位设置"
 		],
+		"KeyboardMappingScreen": {
+			"SetKey": "设置按键",
+			"DisableKey": "禁用按键"
+		},
 		"SettingsGraphicsScreen": {
 			"1": "调整图像设置",
 			"2": "虚拟现实(VR技术)",

@@ -271,7 +271,7 @@ namespace Game
 				{
 					list.Add(new Tuple<string, Action>(LanguageControl.Get(fName, 90), delegate
 					{
-						DialogsManager.ShowDialog(ParentWidget, new KeyboardHelpDialog());
+						ScreensManager.SwitchScreen("KeyboardMapping");
 					}));
 				}
 				if ((Input.Devices & WidgetInputDevice.Gamepads) != 0)

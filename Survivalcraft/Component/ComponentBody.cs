@@ -103,6 +103,7 @@ namespace Game
 		public static bool ResetVelocityOnProjectLoad = true;
 		public virtual Vector3 StanceBoxSize => new(BoxSize.X, ((CrouchFactor >= 0.8f) ? 0.5f : 1f) * BoxSize.Y, BoxSize.Z);
 
+		public virtual bool CanBePushedByOtherBodies { get; set; } = true;
 		public virtual Vector3 BoxSize { get; set; }
 
 		public virtual float Mass { get; set; }
@@ -905,26 +906,29 @@ namespace Game
 					return;
 				}
 				ComponentBody componentBody = pushingCollisionBox2.ComponentBody;
-				switch (axis)
+				if(CanBePushedByOtherBodies)
 				{
-					case 0:
-						InelasticCollision(m_velocity.X, componentBody.m_velocity.X, Mass, componentBody.Mass, 0.5f, out m_velocity.X, out componentBody.m_velocity.X);
+					switch(axis)
+					{
+						case 0:
+						InelasticCollision(m_velocity.X,componentBody.m_velocity.X,Mass,componentBody.Mass,0.5f,out m_velocity.X,out componentBody.m_velocity.X);
 						position.X += num2;
 						break;
-					case 1:
-						InelasticCollision(m_velocity.Y, componentBody.m_velocity.Y, Mass, componentBody.Mass, 0.5f, out m_velocity.Y, out componentBody.m_velocity.Y);
+						case 1:
+						InelasticCollision(m_velocity.Y,componentBody.m_velocity.Y,Mass,componentBody.Mass,0.5f,out m_velocity.Y,out componentBody.m_velocity.Y);
 						position.Y += num2;
-						if (move < 0f)
+						if(move < 0f)
 						{
 							StandingOnValue = pushingCollisionBox2.BlockValue;
 							StandingOnBody = pushingCollisionBox2.ComponentBody;
-							StandingOnVelocity = new Vector3(componentBody.m_velocity.X, 0f, componentBody.m_velocity.Z);
+							StandingOnVelocity = new Vector3(componentBody.m_velocity.X,0f,componentBody.m_velocity.Z);
 						}
 						break;
-					default:
-						InelasticCollision(m_velocity.Z, componentBody.m_velocity.Z, Mass, componentBody.Mass, 0.5f, out m_velocity.Z, out componentBody.m_velocity.Z);
+						default:
+						InelasticCollision(m_velocity.Z,componentBody.m_velocity.Z,Mass,componentBody.Mass,0.5f,out m_velocity.Z,out componentBody.m_velocity.Z);
 						position.Z += num2;
 						break;
+					}
 				}
 				CollidedWithBody?.Invoke(componentBody);
 				componentBody.CollidedWithBody?.Invoke(this);

@@ -5,7 +5,7 @@
   <StackPanelWidget Direction="Horizontal">
 
     <CanvasWidget Style="{Widgets/TopBarContents}" >
-      <LabelWidget Name="TopBar.Label" Text="[KeyboardMappingScreen:0]" />
+      <LabelWidget Name="TopBar.Label" Text="[SettingsControlsScreen:22]" />
     </CanvasWidget>
 
 	  <StackPanelWidget Direction="Vertical" HorizontalAlignment="Center">

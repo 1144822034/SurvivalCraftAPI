@@ -24,6 +24,7 @@ namespace Game
 
 		public Vector2 m_vrSmoothLook;
 
+		public bool ToggleFlyInDoubleJump { get; set; } = true;
 		public PlayerInput PlayerInput => m_playerInput;
 #if ANDROID
 		public bool IsControlledByTouch { get; set; } = true;
@@ -107,7 +108,7 @@ namespace Game
 			UpdateInputFromWidgets(m_componentPlayer.GameWidget.Input);
 			if (m_playerInput.Jump)
 			{
-				if (Time.RealTime - m_lastJumpTime < 0.3)
+				if (Time.RealTime - m_lastJumpTime < 0.3 && ToggleFlyInDoubleJump)
 				{
 					m_playerInput.ToggleCreativeFly = true;
 					m_lastJumpTime = 0.0;
