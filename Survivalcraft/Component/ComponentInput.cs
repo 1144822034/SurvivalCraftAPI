@@ -68,7 +68,7 @@ namespace Game
 			{
 				return input.IsMouseButtonDown(mouseButton);
 			}
-			if(key is Key key1)
+			if(key is Key key1 && key1 != Key.Null)
 			{
 				return input.IsKeyDown(key1);
 			}
@@ -82,7 +82,7 @@ namespace Game
 			{
 				return input.IsMouseButtonDownOnce(mouseButton);
 			}
-			if(key is Key key1)
+			if(key is Key key1 && key1 != Key.Null)
 			{
 				return input.IsKeyDownOnce(key1);
 			}

@@ -889,7 +889,7 @@
 		"PickBlockType": "创造模式选取方块",
 		"ToggleInventory": "打开物品栏",
 		"ToggleClothing": "打开衣物栏",
-		"TackScreenshot": "截屏",
+		"TakeScreenshot": "截屏",
 		"SwitchCameraMode": "切换视角",
 		"TimeOfDay": "更改时间",
 		"Lightning": "召唤闪电",
