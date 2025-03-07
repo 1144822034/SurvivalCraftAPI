@@ -602,7 +602,7 @@ namespace Game
 			}
 			else
 			{
-				m_componentPlayer.ComponentGui.TemperatureBarWidget.BarSubtexture = m_environmentTemperature > 2f
+				m_componentPlayer.ComponentGui.TemperatureBarWidget.BarSubtexture = m_targetTemperature > 2f
 					? ContentManager.Get<Subtexture>("Textures/Atlas/Temperature1")
 					: ContentManager.Get<Subtexture>("Textures/Atlas/Temperature0");
 			}

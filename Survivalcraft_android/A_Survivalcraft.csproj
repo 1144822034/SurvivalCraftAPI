@@ -825,6 +825,7 @@
 		<Compile Include="..\Survivalcraft\Screen\SettingsUiScreen.cs"/>
 		<Compile Include="..\Survivalcraft\Screen\TrialEndedScreen.cs"/>
 		<Compile Include="..\Survivalcraft\Screen\WorldOptionsScreen.cs"/>
+		<Compile Include="..\Survivalcraft\Screen\KeyboardMappingScreen.cs"/>
 		<Compile Include="..\Survivalcraft\Subsystem\SubsystemAdjustableDelayGateBlockBehavior.cs"/>
 		<Compile Include="..\Survivalcraft\Subsystem\SubsystemAmbientSounds.cs"/>
 		<Compile Include="..\Survivalcraft\Subsystem\SubsystemAnimatedTextures.cs"/>
