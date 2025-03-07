@@ -435,7 +435,14 @@ namespace Game
 			}
 			set
 			{
-				Window.WindowMode = value ? WindowMode.Fullscreen : WindowMode.Resizable;
+				if(value && Window.WindowMode != WindowMode.Fullscreen)
+				{
+					Window.WindowMode = WindowMode.Fullscreen;
+				}
+				else if(!value && Window.WindowMode == WindowMode.Fullscreen)
+				{
+					Window.WindowMode = WindowMode.Resizable;
+				}
 				ModsManager.HookAction("WindowModeChanged", loader =>
 				{
 					loader.WindowModeChanged(WindowMode);

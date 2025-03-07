@@ -88,26 +88,28 @@ namespace Engine
                 {
                     case WindowMode.Fixed:
                         m_gameWindow.WindowBorder = WindowBorder.Fixed;
-                        if (m_gameWindow.WindowState == WindowState.Fullscreen)
+                        if (m_gameWindow.WindowState != WindowState.Normal)
                         {
                             m_gameWindow.WindowState = WindowState.Normal;
                         }
                         break;
                     case WindowMode.Resizable:
                         m_gameWindow.WindowBorder = WindowBorder.Resizable;
-                        if (m_gameWindow.WindowState == WindowState.Fullscreen)
+                        if (m_gameWindow.WindowState != WindowState.Normal)
                         {
                             m_gameWindow.WindowState = WindowState.Normal;
                         }
                         break;
                     case WindowMode.Borderless:
                         m_gameWindow.WindowBorder = WindowBorder.Hidden;
-                        if (m_gameWindow.WindowState == WindowState.Fullscreen)
+                        if (m_gameWindow.WindowState != WindowState.Normal)
                         {
                             m_gameWindow.WindowState = WindowState.Normal;
                         }
                         break;
                     case WindowMode.Fullscreen:
+                        m_gameWindow.WindowBorder = WindowBorder.Resizable;
+                        m_gameWindow.WindowState = WindowState.Normal;
                         m_gameWindow.WindowState = WindowState.Fullscreen;
                         break;
                 }
