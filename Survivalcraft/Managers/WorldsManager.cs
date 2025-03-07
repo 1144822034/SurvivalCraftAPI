@@ -511,6 +511,10 @@ namespace Game
 			using var zipArchive = ZipArchive.Open(sourceStream,keepStreamOpen: true);
 			foreach(ZipArchiveEntry item in zipArchive.ReadCentralDir())
 			{
+				if(item.FileSize == 0)
+				{
+					continue;
+				}
 				string text = item.FilenameInZip.Replace('\\','/');
 				string extension = Storage.GetExtension(text);
 				if(text.StartsWith("EmbeddedContent"))
