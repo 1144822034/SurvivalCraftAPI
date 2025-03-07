@@ -60,6 +60,13 @@ namespace Game
 			set;
 		} = 1f;
 
+		/// <summary>
+		/// AttackSpeed: 生物攻速
+		/// DigSpeed: 挖掘速度
+		/// ChaseRange: 非玩家生物的仇恨距离
+		/// </summary>
+		/// <param name="valuesDictionary"></param>
+		/// <param name="idToEntityMap"></param>
 		public override void Load(ValuesDictionary valuesDictionary,IdToEntityMap idToEntityMap)
 		{
 			m_subsystemGameInfo = Project.FindSubsystem<SubsystemGameInfo>(throwOnError: true);
@@ -67,6 +74,7 @@ namespace Game
 			m_subsystemAudio = Project.FindSubsystem<SubsystemAudio>(throwOnError: true);
 			OtherFactors["AttackSpeed"] = new List<Factor>();
 			OtherFactors["DigSpeed"] = new List<Factor>();
+			OtherFactors["ChaseRange"] = new List<Factor>();
 			CalculateOtherFactorsResult();
 		}
 

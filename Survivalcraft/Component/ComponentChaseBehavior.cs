@@ -37,6 +37,8 @@ namespace Game
 
 		public StateMachine m_stateMachine = new();
 
+		public ComponentFactors m_componentFactors;
+
 		public float m_dayChaseRange;
 
 		public float m_nightChaseRange;
@@ -206,6 +208,7 @@ namespace Game
 			m_componentMiner = Entity.FindComponent<ComponentMiner>(throwOnError: true);
 			m_componentFeedBehavior = Entity.FindComponent<ComponentRandomFeedBehavior>();
 			m_componentCreatureModel = Entity.FindComponent<ComponentCreatureModel>(throwOnError: true);
+			m_componentFactors = Entity.FindComponent<ComponentFactors>(throwOnError: true);
 			m_dayChaseRange = valuesDictionary.GetValue<float>("DayChaseRange");
 			m_nightChaseRange = valuesDictionary.GetValue<float>("NightChaseRange");
 			m_dayChaseTime = valuesDictionary.GetValue<float>("DayChaseTime");
@@ -277,6 +280,7 @@ namespace Game
 					if(!Suppressed && m_autoChaseSuppressionTime <= 0f && (m_target == null || ScoreTarget(m_target) <= 0f) && m_componentCreature.ComponentHealth.Health > MinHealthToAttackActively)
 					{
 						m_range = (m_subsystemSky.SkyLightIntensity < 0.2f) ? m_nightChaseRange : m_dayChaseRange;
+						m_range *= m_componentFactors.OtherFactorsResults["ChaseRange"];
 						ComponentCreature componentCreature = FindTarget();
 						if(componentCreature != null)
 						{
