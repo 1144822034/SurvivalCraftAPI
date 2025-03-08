@@ -16,7 +16,7 @@
 		<RepositoryType>Git</RepositoryType>
 	</PropertyGroup>
 	<PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
-		<TargetFrameworks>net9.0-windows;net9.0-android</TargetFrameworks>
+		<TargetFrameworks>net9.0-windows;net10.0-android</TargetFrameworks>
 		<DefineConstants>DEBUG</DefineConstants>
 		<WarningLevel>2</WarningLevel>
 	</PropertyGroup>
