@@ -48,7 +48,7 @@ namespace Game
 			{
 				if (terrainChunk.State <= TerrainChunkState.InvalidContents4)
 				{
-					m_pollShaftsCount -= 26f;
+					m_pollShaftsCount -= 256f;
 				}
 				else
 				{
@@ -97,7 +97,7 @@ namespace Game
 					m_pollX = 0;
 				}
 				ScanningChunkCompleted?.Invoke(terrainChunk);
-				terrainChunk = terrain.LoopChunks(terrainChunk.Coords.X + 1, terrainChunk.Coords.Y, true, out var hasLooped);
+				terrainChunk = terrain.LoopChunks(terrainChunk.Coords.X, terrainChunk.Coords.Y, true, out var hasLooped);
 				if (terrainChunk == null)
 				{
 					break;
