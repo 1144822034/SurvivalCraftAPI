@@ -76,7 +76,7 @@ namespace Game
 			if(ComponentHealth.Health > 0f)
             {
                 AddPlayerStats();
-                Health = MathUtils.Saturate(Health - Amount);
+                Health = MathUtils.Max(Health - Amount, 0f);
             }
         }
     }

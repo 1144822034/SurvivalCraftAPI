@@ -8,7 +8,7 @@ namespace Game
 {
 	public class SubsystemBlocksScanner : Subsystem, IUpdateable
 	{
-		public const float ScanPeriod = 60f;
+		public float ScanPeriod = 60f;
 
 		public SubsystemPollableBlockBehavior[][] m_pollableBehaviorsByContents;
 
@@ -27,18 +27,18 @@ namespace Game
 		public SubsystemTerrain m_subsystemTerrain;
 
 		public SubsystemBlockBehaviors m_subsystemBlockBehaviors;
-
+		/// <summary>
+		/// 每帧会进行多少xz格的方块检查
+		/// </summary>
+		public float MaxShaftsToPollPerFrame = 500f;
 		public UpdateOrder UpdateOrder => UpdateOrder.BlocksScanner;
 
 		public virtual Action<TerrainChunk> ScanningChunkCompleted { get; set; }
 		public void Update(float dt)
 		{
 			Terrain terrain = m_subsystemTerrain.Terrain;
-			m_pollShaftsCount += terrain.AllocatedChunks.Length * 16 * 16 * dt / 60f;
-			if (m_subsystemTime.GameTimeFactor <= 1f)
-			{
-				m_pollShaftsCount = Math.Clamp(m_pollShaftsCount, 0f, 500f);
-			}
+			m_pollShaftsCount += terrain.AllocatedChunks.Length * 16 * 16 * dt / ScanPeriod;
+			m_pollShaftsCount = Math.Clamp(m_pollShaftsCount,0f,MaxShaftsToPollPerFrame);
 			TerrainChunk terrainChunk = terrain.LoopChunks(m_pollChunkCoordinates.X, m_pollChunkCoordinates.Y, false);
 			if (terrainChunk == null)
 			{
