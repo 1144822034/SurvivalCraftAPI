@@ -53,7 +53,7 @@ SCAPI1.8已跟进2.4原版，建议换到1.8x
 1. 首先使用 Git 克隆此仓库
    
    ```bat
-   git clone https://gitee.com/THPRC/survivalcraft-api.git
+   git clone https://gitee.com/SC-SPM/SurvivalcraftApi.git
    ```
    
    > 还没有 Git？[官网下载](https://git-scm.com/downloads)
