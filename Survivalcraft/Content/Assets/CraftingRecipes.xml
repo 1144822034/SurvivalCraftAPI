@@ -1,4 +1,4 @@
-<Recipes>
+<Recipes xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="CraftingRecipes.xsd">
   <Smelting>
     <Recipe Result="CoalChunkBlock" ResultCount="1" RequiredHeatLevel="1" a="wood" Description="[0]">
       "aa"
