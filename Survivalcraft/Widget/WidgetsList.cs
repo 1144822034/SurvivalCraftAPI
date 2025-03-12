@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Reflection;
@@ -35,10 +35,6 @@ namespace Game
 
 			public bool MoveNext()
 			{
-				/*if (m_collection.m_version != m_version)
-				{
-					throw new InvalidOperationException("WidgetsList was modified, enumeration cannot continue.");
-				}*/
 				if (m_index < m_collection.m_widgets.Count)
 				{
 					m_current = m_collection.m_widgets[m_index];
@@ -51,10 +47,6 @@ namespace Game
 
 			public void Reset()
 			{
-				if (m_collection.m_version != m_version)
-				{
-					throw new InvalidOperationException("SortedMultiCollection was modified, enumeration cannot continue.");
-				}
 				m_index = 0;
 				m_current = null;
 			}
@@ -97,7 +89,7 @@ namespace Game
 		{
 			if (m_widgets.Contains(widget))
 			{
-				throw new InvalidOperationException("Child widget already present in container.");
+				return;
 			}
 			if (index < 0 || index > m_widgets.Count)
 			{
@@ -137,7 +129,6 @@ namespace Game
 				RemoveAt(num);
 				return;
 			}
-			throw new InvalidOperationException("Child widget not present in container.");
 		}
 
 		public void RemoveAt(int index)
