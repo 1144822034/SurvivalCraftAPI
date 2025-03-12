@@ -19,6 +19,8 @@ namespace Engine.Graphics
 
 		public ReadOnlyList<ModelMesh> Meshes => new(m_meshes);
 
+        public ModelData ModelData {  get; set; }
+
 		public ModelBone FindBone(string name, bool throwIfNotFound = true)
 		{
 			foreach (ModelBone bone in m_bones)
@@ -184,6 +186,7 @@ namespace Engine.Graphics
 
 		internal void Initialize(ModelData modelData, bool keepSourceVertexDataInTags)
 		{
+            ModelData = modelData;
 			ArgumentNullException.ThrowIfNull(modelData);
 			InternalDispose();
 			var array = new VertexBuffer[modelData.Buffers.Count];

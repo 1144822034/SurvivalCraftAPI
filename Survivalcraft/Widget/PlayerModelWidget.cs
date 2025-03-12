@@ -1,4 +1,4 @@
-using Engine;
+﻿using Engine;
 using Engine.Graphics;
 using System;
 
@@ -196,6 +196,10 @@ namespace Game
 				m_modelWidget.SetBoneTransform(PlayerModel, PlayerModel.FindBone("Hand1").Index, value2);
 				m_modelWidget.SetBoneTransform(PlayerModel, PlayerModel.FindBone("Hand2").Index, value3);
 			}
+			ModsManager.HookAction("OnPlayerModelWidgetMeasureOverride",loader => {
+				loader.OnPlayerModelWidgetMeasureOverride(this);
+				return false;
+			});
 			base.MeasureOverride(parentAvailableSize);
 		}
 

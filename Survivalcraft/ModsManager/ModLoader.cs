@@ -1730,5 +1730,14 @@ namespace Game
 		{
 
 		}
+
+		/// <summary>
+		/// 在绘制人物界面中的人物模型的时候执行，可以通过在playerModelWidget.m_modelWidget中增删元素来在人物界面绘制新模型
+		/// </summary>
+		/// <param name="playerModelWidget"></param>
+		public virtual void OnPlayerModelWidgetMeasureOverride(PlayerModelWidget playerModelWidget)
+		{
+
+		}
 	}
 }
