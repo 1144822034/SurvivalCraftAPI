@@ -90,6 +90,17 @@ namespace Game
 			set;
 		}
 
+		public Model OuterClothingModel
+		{
+			get;
+			set;
+		}
+		public Model PlayerModel
+		{
+			get;
+			set;
+		}
+
 		public PlayerModelWidget()
 		{
 			m_modelWidget = new ModelWidget
@@ -97,6 +108,10 @@ namespace Game
 				UseAlphaThreshold = true,
 				IsPerspective = true
 			};
+			OuterClothingModel = CharacterSkinsManager.GetOuterClothingModel(PlayerClass);
+			PlayerModel = CharacterSkinsManager.GetPlayerModel(PlayerClass);
+			m_modelWidget.AddModel(PlayerModel);
+			m_modelWidget.AddModel(OuterClothingModel);
 			Children.Add(m_modelWidget);
 			IsHitTestVisible = false;
 			m_publicCharacterSkinsCache = new CharacterSkinsCache();
@@ -136,7 +151,7 @@ namespace Game
 
 		public override void MeasureOverride(Vector2 parentAvailableSize)
 		{
-			m_modelWidget.Model = OuterClothing ? CharacterSkinsManager.GetOuterClothingModel(PlayerClass) : CharacterSkinsManager.GetPlayerModel(PlayerClass);
+			if(OuterClothing) return;
 			if (CameraShot == Shot.Body)
 			{
 				m_modelWidget.ViewPosition = (PlayerClass == PlayerClass.Male) ? new Vector3(0f, 1.46f, -3.2f) : new Vector3(0f, 1.39f, -3.04f);
@@ -153,9 +168,8 @@ namespace Game
 				m_modelWidget.ViewTarget = (PlayerClass == PlayerClass.Male) ? new Vector3(0f, 1.5f, 0f) : new Vector3(0f, 1.43f, 0f);
 				m_modelWidget.ViewFov = 0.57f;
 			}
-			m_modelWidget.TextureOverride = OuterClothing
-				? OuterClothingTexture
-				: (CharacterSkinName != null) ? CharacterSkinsCache.GetTexture(CharacterSkinName) : CharacterSkinTexture;
+			m_modelWidget.Textures[OuterClothingModel] = OuterClothingTexture;
+			m_modelWidget.Textures[PlayerModel] = CharacterSkinTexture;
 			if (AnimateHeadSeed != 0)
 			{
 				int num = (AnimateHeadSeed < 0) ? GetHashCode() : AnimateHeadSeed;
@@ -164,9 +178,10 @@ namespace Game
 				vector.X = MathUtils.Lerp(-0.75f, 0.75f, SimplexNoise.OctavedNoise(num2 + 100f, 0.2f, 1, 2f, 0.5f));
 				vector.Y = MathUtils.Lerp(-0.5f, 0.5f, SimplexNoise.OctavedNoise(num2 + 200f, 0.17f, 1, 2f, 0.5f));
 				Matrix value = Matrix.CreateRotationX(vector.Y) * Matrix.CreateRotationZ(vector.X);
-				m_modelWidget.SetBoneTransform(m_modelWidget.Model.FindBone("Head").Index, value);
+				m_modelWidget.SetBoneTransform(OuterClothingModel, OuterClothingModel.FindBone("Head").Index, value);
+				m_modelWidget.SetBoneTransform(PlayerModel, PlayerModel.FindBone("Head").Index,value);
 			}
-			if (!OuterClothing && AnimateHandsSeed != 0)
+			if (AnimateHandsSeed != 0)
 			{
 				int num3 = (AnimateHandsSeed < 0) ? GetHashCode() : AnimateHandsSeed;
 				float num4 = (float)MathUtils.Remainder(Time.FrameStartTime + (1000.0 * num3), 10000.0);
@@ -178,8 +193,8 @@ namespace Game
 				vector3.Y = MathUtils.Lerp(-0.3f, 0.3f, SimplexNoise.OctavedNoise(num4 + 400f, 0.7f, 1, 2f, 0.5f));
 				Matrix value2 = Matrix.CreateRotationX(vector2.Y) * Matrix.CreateRotationY(vector2.X);
 				Matrix value3 = Matrix.CreateRotationX(vector3.Y) * Matrix.CreateRotationY(vector3.X);
-				m_modelWidget.SetBoneTransform(m_modelWidget.Model.FindBone("Hand1").Index, value2);
-				m_modelWidget.SetBoneTransform(m_modelWidget.Model.FindBone("Hand2").Index, value3);
+				m_modelWidget.SetBoneTransform(PlayerModel, PlayerModel.FindBone("Hand1").Index, value2);
+				m_modelWidget.SetBoneTransform(PlayerModel, PlayerModel.FindBone("Hand2").Index, value3);
 			}
 			base.MeasureOverride(parentAvailableSize);
 		}
@@ -188,9 +203,9 @@ namespace Game
 		{
 			if (RootWidget == null)
 			{
-				if (m_publicCharacterSkinsCache.ContainsTexture(m_modelWidget.TextureOverride))
+				if(m_publicCharacterSkinsCache.ContainsTexture(m_modelWidget.Textures[PlayerModel]))
 				{
-					m_modelWidget.TextureOverride = null;
+					m_modelWidget.Textures[PlayerModel] = null;
 				}
 				m_publicCharacterSkinsCache.Clear();
 			}

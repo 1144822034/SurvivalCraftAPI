@@ -15,6 +15,7 @@ namespace Game
 
 		public PlayerModelWidget m_innerClothingModelWidget;
 
+		[Obsolete("m_innerClothingModelWidget contains all clothes, including outer clothes.")]
 		public PlayerModelWidget m_outerClothingModelWidget;
 
 		public ComponentPlayer m_componentPlayer;
@@ -67,8 +68,7 @@ namespace Game
 			}
 			m_innerClothingModelWidget.PlayerClass = componentPlayer.PlayerData.PlayerClass;
 			m_innerClothingModelWidget.CharacterSkinTexture = m_componentPlayer.ComponentClothing.InnerClothedTexture;
-			m_outerClothingModelWidget.PlayerClass = componentPlayer.PlayerData.PlayerClass;
-			m_outerClothingModelWidget.OuterClothingTexture = m_componentPlayer.ComponentClothing.OuterClothedTexture;
+			m_innerClothingModelWidget.OuterClothingTexture = m_componentPlayer.ComponentClothing.OuterClothedTexture;
 		}
 
 		public override void Update()

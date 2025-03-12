@@ -1,5 +1,6 @@
 using Engine;
 using Engine.Graphics;
+using Jint.Native;
 
 namespace Game
 {
@@ -9,11 +10,13 @@ namespace Game
 
 		public static LitShader m_shaderAlpha = new(1, useEmissionColor: false, useVertexColor: false, useTexture: true, useFog: false, useAlphaThreshold: true);
 
-		public Model m_model;
+		public List<Model> Models = new();
 
-		public Matrix?[] m_boneTransforms;
+		public Dictionary<Model, Matrix?[]> m_boneTransforms = new();
 
-		public Matrix[] m_absoluteBoneTransforms;
+		public Dictionary<Model, Matrix[]> m_absoluteBoneTransforms = new();
+
+		public Dictionary<Model, Texture2D> Textures = new();
 
 		public Vector2 Size
 		{
@@ -76,35 +79,39 @@ namespace Game
 			set;
 		}
 
+		[Obsolete("A ModelWidget may contains multiple models. Model only represents the first model and cannot be set.")]
 		public Model Model
 		{
 			get
 			{
-				return m_model;
+				return Models[0];
 			}
 			set
 			{
-				if (value != m_model)
-				{
-					m_model = value;
-					if (m_model != null)
-					{
-						m_boneTransforms = new Matrix?[m_model.Bones.Count];
-						m_absoluteBoneTransforms = new Matrix[m_model.Bones.Count];
-					}
-					else
-					{
-						m_boneTransforms = null;
-						m_absoluteBoneTransforms = null;
-					}
-				}
+				AddModel(value);
 			}
 		}
 
+		public void AddModel(Model value)
+		{
+			if(value != null)
+			{
+				Models.Add(value);
+				m_boneTransforms[value] = new Matrix?[value.Bones.Count];
+				m_absoluteBoneTransforms[value] = new Matrix[value.Bones.Count];
+			}
+		}
+		[Obsolete("A ModelWidget may contains multiple models. TextureOverride only represents the texture of the first model.")]
 		public Texture2D TextureOverride
 		{
-			get;
-			set;
+			get
+			{
+				return Textures[Models[0]];
+			}
+			set
+			{
+				Textures[Models[0]] = value;
+			}
 		}
 
 		public ModelWidget()
@@ -120,24 +127,23 @@ namespace Game
 			OrthographicFrustumSize = new Vector3(0f, 10f, 10f);
 		}
 
-		public Matrix? GetBoneTransform(int boneIndex)
+		public Matrix? GetBoneTransform(Model model, int boneIndex)
 		{
-			return m_boneTransforms[boneIndex];
+			return m_boneTransforms[model][boneIndex];
 		}
 
-		public void SetBoneTransform(int boneIndex, Matrix? transformation)
+		public void SetBoneTransform(Model model, int boneIndex, Matrix? transformation)
 		{
-			m_boneTransforms[boneIndex] = transformation;
+			m_boneTransforms[model][boneIndex] = transformation;
 		}
 
 		public override void Draw(DrawContext dc)
 		{
-			if (Model == null)
+			if (Models.Count == 0)
 			{
 				return;
 			}
 			LitShader litShader = UseAlphaThreshold ? m_shaderAlpha : m_shader;
-			litShader.Texture = TextureOverride;
 			litShader.SamplerState = SamplerState.PointClamp;
 			litShader.MaterialColor = new Vector4(Color * GlobalColorTransform);
 			litShader.AmbientLightColor = new Vector3(0.66f, 0.66f, 0.66f);
@@ -170,17 +176,24 @@ namespace Game
 			Display.DepthStencilState = DepthStencilState.Default;
 			Display.BlendState = BlendState.AlphaBlend;
 			Display.RasterizerState = RasterizerState.CullNoneScissor;
-			ProcessBoneHierarchy(Model.RootBone, Matrix.Identity, m_absoluteBoneTransforms);
+			foreach(Model model in Models)
+			{
+				ProcessBoneHierarchy(model.RootBone,Matrix.Identity);
+			}
 			float num2 = (float)Time.RealTime + (GetHashCode() % 1000 / 100f);
 			Matrix m = (AutoRotationVector.LengthSquared() > 0f) ? Matrix.CreateFromAxisAngle(Vector3.Normalize(AutoRotationVector), AutoRotationVector.Length() * num2) : Matrix.Identity;
-			foreach (ModelMesh mesh in Model.Meshes)
+			foreach(Model model in Models)
 			{
-				litShader.Transforms.World[0] = m_absoluteBoneTransforms[mesh.ParentBone.Index] * ModelMatrix * m;
-				foreach (ModelMeshPart meshPart in mesh.MeshParts)
+				litShader.Texture = Textures[model];
+				foreach(ModelMesh mesh in model.Meshes)
 				{
-					if (meshPart.IndicesCount > 0)
+					litShader.Transforms.World[0] = m_absoluteBoneTransforms[mesh.ParentBone.Model][mesh.ParentBone.Index] * ModelMatrix * m;
+					foreach(ModelMeshPart meshPart in mesh.MeshParts)
 					{
-						Display.DrawIndexed(PrimitiveType.TriangleList, litShader, meshPart.VertexBuffer, meshPart.IndexBuffer, meshPart.StartIndex, meshPart.IndicesCount);
+						if(meshPart.IndicesCount > 0)
+						{
+							Display.DrawIndexed(PrimitiveType.TriangleList,litShader,meshPart.VertexBuffer,meshPart.IndexBuffer,meshPart.StartIndex,meshPart.IndicesCount);
+						}
 					}
 				}
 			}
@@ -188,18 +201,19 @@ namespace Game
 
 		public override void MeasureOverride(Vector2 parentAvailableSize)
 		{
-			IsDrawRequired = Model != null;
+			IsDrawRequired = (Models.Count > 0);
 			DesiredSize = Size;
 		}
 
-		public void ProcessBoneHierarchy(ModelBone modelBone, Matrix currentTransform, Matrix[] transforms)
+		public void ProcessBoneHierarchy(ModelBone modelBone, Matrix currentTransform)
 		{
+			Matrix[] transforms = m_absoluteBoneTransforms[modelBone.Model];
 			Matrix m = modelBone.Transform;
-			if (m_boneTransforms[modelBone.Index].HasValue)
+			if (m_boneTransforms[modelBone.Model][modelBone.Index].HasValue)
 			{
 				Vector3 translation = m.Translation;
 				m.Translation = Vector3.Zero;
-				m *= m_boneTransforms[modelBone.Index].Value;
+				m *= m_boneTransforms[modelBone.Model][modelBone.Index].Value;
 				m.Translation += translation;
 				Matrix.MultiplyRestricted(ref m, ref currentTransform, out transforms[modelBone.Index]);
 			}
@@ -209,7 +223,7 @@ namespace Game
 			}
 			foreach (ModelBone childBone in modelBone.ChildBones)
 			{
-				ProcessBoneHierarchy(childBone, transforms[modelBone.Index], transforms);
+				ProcessBoneHierarchy(childBone, transforms[modelBone.Index]);
 			}
 		}
 	}
