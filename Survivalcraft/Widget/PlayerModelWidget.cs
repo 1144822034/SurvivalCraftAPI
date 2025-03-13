@@ -168,8 +168,11 @@ namespace Game
 				m_modelWidget.ViewTarget = (PlayerClass == PlayerClass.Male) ? new Vector3(0f, 1.5f, 0f) : new Vector3(0f, 1.43f, 0f);
 				m_modelWidget.ViewFov = 0.57f;
 			}
+			m_modelWidget.Textures[PlayerModel] = (CharacterSkinName != null) ? CharacterSkinsCache.GetTexture(CharacterSkinName) : CharacterSkinTexture;
+			if(OuterClothingTexture == null)
+				OuterClothingTexture = new RenderTarget2D(m_modelWidget.Textures[PlayerModel].Width,m_modelWidget.Textures[PlayerModel].Height,1,ColorFormat.Rgba8888,DepthFormat.None);
 			m_modelWidget.Textures[OuterClothingModel] = OuterClothingTexture;
-			m_modelWidget.Textures[PlayerModel] = CharacterSkinTexture;
+			
 			if (AnimateHeadSeed != 0)
 			{
 				int num = (AnimateHeadSeed < 0) ? GetHashCode() : AnimateHeadSeed;

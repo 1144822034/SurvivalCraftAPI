@@ -88,7 +88,17 @@ namespace Game
 			}
 			set
 			{
-				AddModel(value);
+				if(value != null)
+				{
+					if(Models.Count == 0) Models.Add(value);
+					else Models[0] = value;
+					m_boneTransforms[value] = new Matrix?[value.Bones.Count];
+					m_absoluteBoneTransforms[value] = new Matrix[value.Bones.Count];
+				}
+				else
+				{
+					Models.RemoveAt(0);
+				}
 			}
 		}
 
