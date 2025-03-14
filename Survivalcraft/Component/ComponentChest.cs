@@ -10,7 +10,10 @@ namespace Game
 		{
 			base.Load(valuesDictionary, idToEntityMap);
 			m_componentBlockEntity = Entity.FindComponent<ComponentBlockEntity>();
-			m_componentBlockEntity.m_inventoryToGatherPickable = this;
+			if(m_componentBlockEntity != null)
+			{
+				m_componentBlockEntity.m_inventoryToGatherPickable = this;
+			}
 		}
 	}
 }

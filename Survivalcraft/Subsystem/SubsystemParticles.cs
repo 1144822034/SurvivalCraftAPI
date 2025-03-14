@@ -74,8 +74,16 @@ namespace Game
 				m_endedParticleSystems.Clear();
 				foreach (ParticleSystemBase key in m_particleSystems.Keys)
 				{
-					if (key.Simulate(m_subsystemTime.GameTimeDelta))
+					try
 					{
+						if(key.Simulate(m_subsystemTime.GameTimeDelta))
+						{
+							m_endedParticleSystems.Add(key);
+						}
+					}
+					catch(Exception e)
+					{
+						Log.Error(e);
 						m_endedParticleSystems.Add(key);
 					}
 				}
@@ -92,7 +100,14 @@ namespace Game
 			{
 				foreach (ParticleSystemBase key in m_particleSystems.Keys)
 				{
-					key.Draw(camera);
+					try
+					{
+						key.Draw(camera);
+					}
+					catch(Exception e)
+					{
+						Log.Error(e);
+					}
 				}
 				Shader shader = ContentManager.Get<Shader>("Shaders/AlphaTested");
 				shader.GetParameter("u_origin").SetValue(Vector2.Zero);
