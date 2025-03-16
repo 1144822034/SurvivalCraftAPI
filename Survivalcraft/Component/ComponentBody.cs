@@ -906,29 +906,27 @@ namespace Game
 					return;
 				}
 				ComponentBody componentBody = pushingCollisionBox2.ComponentBody;
-				if(CanBePushedByOtherBodies)
+				var targetMass = componentBody.CanBePushedByOtherBodies ? componentBody.Mass : 1e9f;				
+			    switch(axis)
 				{
-					switch(axis)
+					case 0:
+					InelasticCollision(m_velocity.X,componentBody.m_velocity.X,Mass,targetMass,0.5f,out m_velocity.X,out componentBody.m_velocity.X);
+					position.X += num2;
+					break;
+					case 1:
+					InelasticCollision(m_velocity.Y,componentBody.m_velocity.Y,Mass,targetMass,0.5f,out m_velocity.Y,out componentBody.m_velocity.Y);
+					position.Y += num2;
+					if(move < 0f)
 					{
-						case 0:
-						InelasticCollision(m_velocity.X,componentBody.m_velocity.X,Mass,componentBody.Mass,0.5f,out m_velocity.X,out componentBody.m_velocity.X);
-						position.X += num2;
-						break;
-						case 1:
-						InelasticCollision(m_velocity.Y,componentBody.m_velocity.Y,Mass,componentBody.Mass,0.5f,out m_velocity.Y,out componentBody.m_velocity.Y);
-						position.Y += num2;
-						if(move < 0f)
-						{
-							StandingOnValue = pushingCollisionBox2.BlockValue;
-							StandingOnBody = pushingCollisionBox2.ComponentBody;
-							StandingOnVelocity = new Vector3(componentBody.m_velocity.X,0f,componentBody.m_velocity.Z);
-						}
-						break;
-						default:
-						InelasticCollision(m_velocity.Z,componentBody.m_velocity.Z,Mass,componentBody.Mass,0.5f,out m_velocity.Z,out componentBody.m_velocity.Z);
-						position.Z += num2;
-						break;
+						StandingOnValue = pushingCollisionBox2.BlockValue;
+						StandingOnBody = pushingCollisionBox2.ComponentBody;
+						StandingOnVelocity = new Vector3(componentBody.m_velocity.X,0f,componentBody.m_velocity.Z);
 					}
+					break;
+					default:
+					InelasticCollision(m_velocity.Z,componentBody.m_velocity.Z,Mass,targetMass,0.5f,out m_velocity.Z,out componentBody.m_velocity.Z);
+					position.Z += num2;
+					break;
 				}
 				CollidedWithBody?.Invoke(componentBody);
 				componentBody.CollidedWithBody?.Invoke(this);
