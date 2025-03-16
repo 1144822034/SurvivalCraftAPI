@@ -762,17 +762,23 @@ namespace Game
             ContentMusicPath = string.Empty;
         }
 
-        /// <summary>
-        /// 摇人行为
-        /// </summary>
-        /// <param name="herdBehavior"></param>
-        /// <param name="target"></param>
-        /// <param name="maxRange"></param>
-        /// <param name="maxChaseTime"></param>
-        /// <param name="isPersistent"></param>
-        public virtual void CallNearbyCreaturesHelp(ComponentHerdBehavior herdBehavior, ComponentCreature target, float maxRange, float maxChaseTime, bool isPersistent)
+		/// <summary>
+		/// 摇人行为
+		/// </summary>
+		/// <param name="skipVanilla">是否跳过原版逻辑</param>
+		public virtual void CallNearbyCreaturesHelp(ComponentHerdBehavior herdBehavior, ComponentCreature target, float maxRange, float maxChaseTime, bool isPersistent,out bool skipVanilla)
         {
-        }
+			skipVanilla = false;
+		}
+		/// <summary>
+		/// ComponentHerdBehavior组件接口
+		/// 用于生物寻找大部队中心点
+		/// </summary>
+		/// <param name="skipVanilla">是否跳过原版逻辑</param>
+		public virtual void FindHerdCenter(ComponentCreature componentCreature,out bool skipVanilla)
+        {
+			skipVanilla = false;
+		}
 
         /// <summary>
         /// 挖掘触发宝物生成时，注意这里能获取到上个Mod生成宝物的情况

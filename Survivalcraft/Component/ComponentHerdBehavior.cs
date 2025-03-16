@@ -1,5 +1,6 @@
 using Engine;
 using GameEntitySystem;
+using Jint.Native;
 using TemplatesDatabase;
 
 namespace Game
@@ -41,6 +42,12 @@ namespace Game
 		public void CallNearbyCreaturesHelp(ComponentCreature target, float maxRange, float maxChaseTime, bool isPersistent)
 		{
 			if (target == null) return;
+			var skipVanilla = false;
+			ModsManager.HookAction("CallNearbyCreaturesHelp",(modLoader) => {
+				modLoader.CallNearbyCreaturesHelp(this,target,maxRange,maxChaseTime,isPersistent,out skipVanilla);
+				return false;
+			});
+			if(skipVanilla) return;
 			Vector3 position = target.ComponentBody.Position;
 			foreach (ComponentCreature creature in m_subsystemCreatureSpawn.Creatures)
 			{
@@ -57,17 +64,16 @@ namespace Game
 					}
 				}
 			}
-
-			ModsManager.HookAction("CallNearbyCreaturesHelp", (modLoader) =>
-			{
-				modLoader.CallNearbyCreaturesHelp(this, target, maxRange, maxChaseTime, isPersistent);
-				return false;
-			});
-
 		}
 
 		public Vector3? FindHerdCenter()
 		{
+			var skipVanilla = false;
+			ModsManager.HookAction("FindHerdCenter",(modLoader) => {
+				modLoader.FindHerdCenter(m_componentCreature,out skipVanilla);
+				return false;
+			});
+			if(skipVanilla) return null;
 			if (string.IsNullOrEmpty(HerdName))
 			{
 				return null;
