@@ -41,13 +41,12 @@ namespace Game
 
 		public void CallNearbyCreaturesHelp(ComponentCreature target, float maxRange, float maxChaseTime, bool isPersistent)
 		{
-			if (target == null) return;
 			var skipVanilla = false;
 			ModsManager.HookAction("CallNearbyCreaturesHelp",(modLoader) => {
 				modLoader.CallNearbyCreaturesHelp(this,target,maxRange,maxChaseTime,isPersistent,out skipVanilla);
 				return false;
 			});
-			if(skipVanilla) return;
+			if(skipVanilla || target == null) return;
 			Vector3 position = target.ComponentBody.Position;
 			foreach (ComponentCreature creature in m_subsystemCreatureSpawn.Creatures)
 			{
@@ -69,11 +68,12 @@ namespace Game
 		public Vector3? FindHerdCenter()
 		{
 			var skipVanilla = false;
+			Vector3? herdCenterFromMod = null;
 			ModsManager.HookAction("FindHerdCenter",(modLoader) => {
-				modLoader.FindHerdCenter(m_componentCreature,out skipVanilla);
+				modLoader.FindHerdCenter(m_componentCreature, out Vector3? herdCenterFromMod, out skipVanilla);
 				return false;
 			});
-			if(skipVanilla) return null;
+			if(skipVanilla) return herdCenterFromMod;
 			if (string.IsNullOrEmpty(HerdName))
 			{
 				return null;

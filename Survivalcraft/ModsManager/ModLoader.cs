@@ -763,7 +763,8 @@ namespace Game
         }
 
 		/// <summary>
-		/// 摇人行为
+		/// 摇人行为。
+		/// 仅建议对自己模组的生物使用，不要干涉其他模组生物的行为。
 		/// </summary>
 		/// <param name="skipVanilla">是否跳过原版逻辑</param>
 		public virtual void CallNearbyCreaturesHelp(ComponentHerdBehavior herdBehavior, ComponentCreature target, float maxRange, float maxChaseTime, bool isPersistent,out bool skipVanilla)
@@ -771,12 +772,15 @@ namespace Game
 			skipVanilla = false;
 		}
 		/// <summary>
-		/// ComponentHerdBehavior组件接口
-		/// 用于生物寻找大部队中心点
+		/// ComponentHerdBehavior组件接口，
+		/// 用于生物寻找大部队中心点。
+		/// 仅建议对自己模组的生物使用，不要干涉其他模组生物的行为。
 		/// </summary>
 		/// <param name="skipVanilla">是否跳过原版逻辑</param>
-		public virtual void FindHerdCenter(ComponentCreature componentCreature,out bool skipVanilla)
+		/// <param name="herdCenter">生物的大部队中心点，返回null则表示其行为不受大部队中心点约束</param>
+		public virtual void FindHerdCenter(ComponentCreature componentCreature, out Vector3? herdCenter, out bool skipVanilla)
         {
+			herdCenter = null;
 			skipVanilla = false;
 		}
 
