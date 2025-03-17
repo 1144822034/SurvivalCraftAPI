@@ -220,7 +220,7 @@ namespace Game
 				m_playerInput.ToggleCrouch |= IsKeyDownOnce("ToggleCrouch");
 				m_playerInput.ToggleMount |= IsKeyDownOnce("ToggleMount");
 				m_playerInput.ToggleCreativeFly |= IsKeyDownOnce("ToggleFly");
-				m_playerInput.PickBlockType = IsKeyDown("PickBlockType") ? new Ray3?(new Ray3(viewPosition, viewDirection)) : m_playerInput.PickBlockType;
+				m_playerInput.PickBlockType = IsKeyDownOnce("PickBlockType") ? new Ray3?(new Ray3(viewPosition, viewDirection)) : m_playerInput.PickBlockType;
 			}
 			if (!DialogsManager.HasDialogs(m_componentPlayer.GuiWidget) && AllowHandleInput)
 			{
