@@ -346,12 +346,11 @@ namespace Game
 		public virtual void UpdateStamina()
 		{
 			float gameTimeDelta = m_subsystemTime.GameTimeDelta;
-			float num = m_componentPlayer.ComponentLocomotion.LastWalkOrder.HasValue ? m_componentPlayer.ComponentLocomotion.LastWalkOrder.Value.Length() : 0f;
+			float lastWalkOrder = m_componentPlayer.ComponentLocomotion.LastWalkOrder.HasValue ? m_componentPlayer.ComponentLocomotion.LastWalkOrder.Value.Length() : 0f;
 			float lastJumpOrder = m_componentPlayer.ComponentLocomotion.LastJumpOrder;
-			float num2 = m_componentPlayer.ComponentCreatureModel.EyePosition.Y - m_componentPlayer.ComponentBody.Position.Y;
-			bool flag = m_componentPlayer.ComponentBody.ImmersionDepth > num2;
-			bool flag2 = m_componentPlayer.ComponentBody.ImmersionFactor > 0.33f && !m_componentPlayer.ComponentBody.StandingOnValue.HasValue;
-			_ = m_componentPlayer.ComponentSickness.IsPuking;
+			float playerHeight = m_componentPlayer.ComponentCreatureModel.EyePosition.Y - m_componentPlayer.ComponentBody.Position.Y;
+			bool IsImmersedCompletely = m_componentPlayer.ComponentBody.ImmersionDepth > playerHeight;
+			bool IsImmersed = m_componentPlayer.ComponentBody.ImmersionFactor > 0.33f && !m_componentPlayer.ComponentBody.StandingOnValue.HasValue;
 			if (m_subsystemGameInfo.WorldSettings.GameMode >= GameMode.Survival && m_subsystemGameInfo.WorldSettings.AreAdventureSurvivalMechanicsEnabled)
 			{
 				float num3 = 1f / MathF.Max(m_componentPlayer.ComponentLevel.SpeedFactor, 0.75f);
@@ -361,25 +360,25 @@ namespace Game
 				}
 				Stamina += gameTimeDelta * 0.07f;
 				Stamina -= 0.025f * lastJumpOrder * num3;
-				if (flag2 | flag)
+				if (IsImmersed | IsImmersedCompletely)
 				{
-					Stamina -= gameTimeDelta * (0.07f + (0.006f * num3) + (0.008f * num));
+					Stamina -= gameTimeDelta * (0.07f + (0.006f * num3) + (0.008f * lastWalkOrder));
 				}
 				else
 				{
-					Stamina -= gameTimeDelta * (0.07f + (0.006f * num3)) * num;
+					Stamina -= gameTimeDelta * (0.07f + (0.006f * num3)) * lastWalkOrder;
 				}
-				if (!flag2 && !flag && Stamina < 0.33f && m_lastStamina >= 0.33f)
+				if (!IsImmersed && !IsImmersedCompletely && Stamina < 0.33f && m_lastStamina >= 0.33f)
 				{
 					m_componentPlayer.ComponentGui.DisplaySmallMessage(LanguageControl.Get(fName, 14), Color.White, blinking: true, playNotificationSound: false);
 				}
-				if ((flag2 | flag) && Stamina < 0.4f && m_lastStamina >= 0.4f)
+				if ((IsImmersed | IsImmersedCompletely) && Stamina < 0.4f && m_lastStamina >= 0.4f)
 				{
 					m_componentPlayer.ComponentGui.DisplaySmallMessage(LanguageControl.Get(fName, 15), Color.White, blinking: true, playNotificationSound: true);
 				}
 				if (Stamina < 0.1f)
 				{
-					if (flag2 | flag)
+					if (IsImmersed | IsImmersedCompletely)
 					{
 						if (m_subsystemTime.PeriodicGameTimeEvent(5.0, 0.0))
 						{
@@ -398,7 +397,7 @@ namespace Game
 				}
 				m_lastStamina = Stamina;
 				float num4 = MathUtils.Saturate(2f * (0.5f - Stamina));
-				if (!flag && num4 > 0f)
+				if (!IsImmersedCompletely && num4 > 0f)
 				{
 					float num5 = (m_componentPlayer.PlayerData.PlayerClass == PlayerClass.Female) ? 0.2f : 0f;
 					m_pantingSound.Volume = 1f * SettingsManager.SoundsVolume * MathUtils.Saturate(1f * num4) * MathUtils.Lerp(0.8f, 1f, SimplexNoise.Noise((float)MathUtils.Remainder((3.0 * Time.RealTime) + 100.0, 1000.0)));
@@ -409,6 +408,7 @@ namespace Game
 				{
 					m_pantingSound.Stop();
 				}
+				//玩家耐力低时，会沉入水中
 				float num6 = MathUtils.Saturate(3f * (0.33f - Stamina));
 				if (num6 > 0f && SimplexNoise.Noise((float)MathUtils.Remainder(Time.RealTime, 1000.0)) < num6)
 				{
@@ -611,33 +611,7 @@ namespace Game
 		public virtual void UpdateWetness()
 		{
 			float gameTimeDelta = m_subsystemTime.GameTimeDelta;
-			if (m_componentPlayer.ComponentBody.ImmersionFactor > 0.2f && m_componentPlayer.ComponentBody.ImmersionFluidBlock is WaterBlock)
-			{
-				float num = 2f * m_componentPlayer.ComponentBody.ImmersionFactor;
-				Wetness += MathUtils.Saturate(3f * gameTimeDelta) * (num - Wetness);
-			}
-			int x = Terrain.ToCell(m_componentPlayer.ComponentBody.Position.X);
-			int num2 = Terrain.ToCell(m_componentPlayer.ComponentBody.Position.Y + 0.1f);
-			int z = Terrain.ToCell(m_componentPlayer.ComponentBody.Position.Z);
-			PrecipitationShaftInfo precipitationShaftInfo = m_subsystemWeather.GetPrecipitationShaftInfo(x, z);
-			if (num2 >= precipitationShaftInfo.YLimit && precipitationShaftInfo.Type == PrecipitationType.Rain)
-			{
-				Wetness += 0.05f * precipitationShaftInfo.Intensity * gameTimeDelta;
-			}
-			float num3 = 180f;
-			if (m_targetTemperature > 8f)
-			{
-				num3 = 120f;
-			}
-			if (m_targetTemperature > 16f)
-			{
-				num3 = 60f;
-			}
-			if (m_targetTemperature > 24f)
-			{
-				num3 = 30f;
-			}
-			Wetness -= gameTimeDelta / num3;
+			Wetness += gameTimeDelta * m_componentPlayer.ComponentLevel.OtherFactorsResults["Wetness"];
 			if (m_subsystemGameInfo.WorldSettings.GameMode != 0 && m_subsystemGameInfo.WorldSettings.AreAdventureSurvivalMechanicsEnabled)
 			{
 				if (Wetness > 0.8f && m_lastWetness <= 0.8f)

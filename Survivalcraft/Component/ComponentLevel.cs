@@ -40,6 +40,8 @@ namespace Game
 
 		public ComponentPlayer m_componentPlayer;
 
+		public ComponentVitalStats m_componentVitalStats;
+
 		public const float FemaleStrengthFactor = 0.8f;
 
 		public const float FemaleResilienceFactor = 0.8f;
@@ -308,7 +310,63 @@ namespace Game
 				Description = string.Format(LanguageControl.Get(fName,12),LanguageControl.Get("GameMode", m_subsystemGameInfo.WorldSettings.GameMode.ToString()))
 			});
 		}
-
+		/// <summary>
+		/// 生成玩家所有关于潮湿度的因素
+		/// </summary>
+		public void GenerateWetnessFactors()
+		{
+			//潮湿度初始值为0
+			OtherFactors["Wetness"].Add(new Factor
+			{
+				Name = "Initialize",
+				FactorAdditionType = FactorAdditionType.Add,
+				Value = -1f
+			});
+			//在水中会提高潮湿度
+			if(m_componentPlayer.ComponentBody.ImmersionFactor > 0.2f && m_componentPlayer.ComponentBody.ImmersionFluidBlock is WaterBlock)
+			{
+				OtherFactors["Wetness"].Add(new Factor
+				{
+					Name = "InWater",
+					FactorAdditionType = FactorAdditionType.Add,
+					Value = 3f * (2f * m_componentPlayer.ComponentBody.ImmersionFactor - m_componentVitalStats.Wetness)
+				});
+			}
+			//在雨中会提高潮湿度
+			int x = Terrain.ToCell(m_componentPlayer.ComponentBody.Position.X);
+			int num2 = Terrain.ToCell(m_componentPlayer.ComponentBody.Position.Y + 0.1f);
+			int z = Terrain.ToCell(m_componentPlayer.ComponentBody.Position.Z);
+			PrecipitationShaftInfo precipitationShaftInfo = m_componentVitalStats.m_subsystemWeather.GetPrecipitationShaftInfo(x,z);
+			if(num2 >= precipitationShaftInfo.YLimit && precipitationShaftInfo.Type == PrecipitationType.Rain)
+			{
+				OtherFactors["Wetness"].Add(new Factor
+				{
+					Name = "Precipitation",
+					FactorAdditionType = FactorAdditionType.Add,
+					Value = 0.05f * precipitationShaftInfo.Intensity
+				});
+			}
+			//自动降低潮湿度，气温越高降低越快
+			float num3 = 180f;
+			if(m_componentVitalStats.m_targetTemperature > 8f)
+			{
+				num3 = 120f;
+			}
+			if(m_componentVitalStats.m_targetTemperature > 16f)
+			{
+				num3 = 60f;
+			}
+			if(m_componentVitalStats.m_targetTemperature > 24f)
+			{
+				num3 = 30f;
+			}
+			OtherFactors["Wetness"].Add(new Factor
+			{
+				Name = "Temperature",
+				FactorAdditionType = FactorAdditionType.Add,
+				Value = -1f / num3
+			});
+		}
 		public override void Update(float dt)
 		{
 			if (m_subsystemTime.PeriodicGameTimeEvent(180.0, 179.0))
@@ -322,6 +380,7 @@ namespace Game
 			}
 			m_componentPlayer.PlayerStats.HighestLevel = MathUtils.Max(m_componentPlayer.PlayerStats.HighestLevel, m_componentPlayer.PlayerData.Level);
 			base.Update(dt);
+			GenerateWetnessFactors();
 			ModsManager.HookAction("OnLevelUpdate", modLoader =>
 			{
 				modLoader.OnLevelUpdate(this);
@@ -333,6 +392,8 @@ namespace Game
 		{
 			base.Load(valuesDictionary, idToEntityMap);
 			m_componentPlayer = Entity.FindComponent<ComponentPlayer>(throwOnError: true);
+			m_componentVitalStats = Entity.FindComponent<ComponentVitalStats>(throwOnError: true);
+			OtherFactors["Wetness"] = new List<Factor>();
 		}
 
 		public void GenerateClothingSpeedFactors(int clothingValue)

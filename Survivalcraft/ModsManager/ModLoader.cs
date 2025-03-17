@@ -281,7 +281,7 @@ namespace Game
         }
 
 		/// <summary>
-		/// 等级组件更新时执行
+		/// 等级组件更新时执行，仅限玩家。参考OnFactorsUpdate接口使用说明。
 		/// </summary>
 		/// <param name="level"></param>
 		[Obsolete("You can update your factors in your mod components")]
@@ -1683,7 +1683,7 @@ namespace Game
 
 		}
 		/// <summary>
-		/// 在计算一个生物的Factors执行。
+		/// 在计算一个生物的Factors执行。仅限非玩家生物，玩家需要使用OnLevelUpdate。
 		/// ComponentFactors里面有四个List，这四个List储存了所有对该属性有影响的因子。模组可以修改其中的因子来实现自定义的操作。
 		/// public List<Factor> m_strengthFactors = [];
 		/// public List<Factor> m_speedFactors = [];
