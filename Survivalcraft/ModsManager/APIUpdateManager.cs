@@ -29,12 +29,13 @@ namespace Game
 
 		public static void Initialize()
 		{
+#if RELEASE
 			Task.Run(
 				async () => {
-					LatestVersion = await GetLatestVersion(true);
 					IsNeedUpdate = await GetIsNeedUpdate();
 				}
 			);
+#endif
 		}
 
 		/// <summary>
@@ -43,9 +44,9 @@ namespace Game
 		/// <returns>API统一链接发布的最新版本</returns>
 		public static async Task<bool> GetIsNeedUpdate()
 		{
-			string latestVersion = await GetLatestVersion(true);
+			LatestVersion = await GetLatestVersion(true);
 			string currentVersion = ModsManager.APIVersionString;
-			return ParseVersionFromString(latestVersion) > ParseVersionFromString(currentVersion);
+			return ParseVersionFromString(LatestVersion) > ParseVersionFromString(currentVersion);
 		}
 
 		/// <summary>
