@@ -34,11 +34,9 @@
 
 		<StackPanelWidget Direction="Vertical" HorizontalAlignment="Center" Margin="0, 4">
 			<StackPanelWidget HorizontalAlignment="Center">
-				<StackPanelWidget Name="BulletinStackPanel" Direction="Horizontal" VerticalAlignment="Center">
-					<BevelledButtonWidget Name="BulletinButton" CenterColor="0, 0, 0, 0" BevelColor="0, 0, 0, 0" Size="100, 30" VerticalAlignment="Center" HorizontalAlignment="Center">
-						<LabelWidget Text="点此查看公告" Font="{Fonts/Pericles}" FontScale="0.7" HorizontalAlignment="Near" VerticalAlignment="Center" Color="64, 192, 64" DropShadow="true" IsVisible="true"/>
-					</BevelledButtonWidget>
-				</StackPanelWidget>
+				<BevelledButtonWidget Name="BulletinButton" CenterColor="0, 0, 0, 0" BevelSize="0" Size="100, 30" VerticalAlignment="Center" HorizontalAlignment="Center">
+					<LabelWidget Text="[MainMenuScreen:11]" Font="{Fonts/Pericles}" FontScale="0.7" HorizontalAlignment="Near" VerticalAlignment="Center" Color="64, 192, 64" DropShadow="true"/>
+				</BevelledButtonWidget>
 				<LabelWidget Name="CopyrightLabel" Text="[MainMenuScreen:7]" Color="255, 255, 255, 255"  VerticalAlignment="Center" FontScale="0.7" DropShadow="true"/>
 				<LabelWidget Text="[MainMenuScreen:8]" Color="255, 255, 255, 255"  VerticalAlignment="Center" FontScale="0.7" DropShadow="true" _ExcludePlatforms="Ios" />
 				<LinkWidget Name="Link" Text="[MainMenuScreen:9]" Color="64, 192, 64" FontScale="0.7" VerticalAlignment="Center" Url="http://kaalus.wordpress.com" DropShadow="true" _ExcludePlatforms="Ios" />

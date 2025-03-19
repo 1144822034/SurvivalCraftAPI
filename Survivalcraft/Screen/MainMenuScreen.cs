@@ -15,8 +15,6 @@ namespace Game
 
 		public ButtonWidget m_showBulletinButton;
 
-		public StackPanelWidget m_bulletinStackPanel;
-
 		public LabelWidget m_copyrightLabel;
 
 		public ButtonWidget m_languageSwitchButton;
@@ -40,7 +38,6 @@ namespace Game
 			XElement node = ContentManager.Get<XElement>("Screens/MainMenuScreen");
 			LoadContents(this, node);
 			m_showBulletinButton = Children.Find<ButtonWidget>("BulletinButton");
-			m_bulletinStackPanel = Children.Find<StackPanelWidget>("BulletinStackPanel");
 			m_copyrightLabel = Children.Find<LabelWidget>("CopyrightLabel");
 			m_languageSwitchButton = Children.Find<ButtonWidget>("LanguageSwitchButton");
 			m_leftBottomBar = Children.Find<StackPanelWidget>("LeftBottomBar");
@@ -50,8 +47,10 @@ namespace Game
 			m_needToUpdateIcon = ContentManager.Get<Subtexture>("Textures/Gui/NeedToUpdate");
 			m_dontNeedUpdateIcon = ContentManager.Get<Subtexture>("Textures/Gui/UpdateChecking");
 			string languageType = ModsManager.Configs.GetValueOrDefault("Language", "zh-CN");
-			m_bulletinStackPanel.IsVisible = languageType == "zh-CN";
-			m_copyrightLabel.IsVisible = languageType != "zh-CN";
+			bool isZhCn = languageType == "zh-CN";
+			m_showBulletinButton.IsVisible = isZhCn;
+			m_showBulletinButton.IsEnabled = isZhCn;
+			m_copyrightLabel.IsVisible = !isZhCn;
 			ModsManager.HookAction("OnMainMenuScreenCreated",loader => { loader.OnMainMenuScreenCreated(this,m_leftBottomBar,m_rightBottomBar); return false; });
 		}
 
