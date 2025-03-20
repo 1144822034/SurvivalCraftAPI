@@ -790,7 +790,7 @@ namespace Game
 		/// </summary>
 		/// <param name="componentRider"></param>
 		/// <param name="score"></param>
-		public virtual void ScoreMount(ComponentRider componentRider,out float? score)
+		public virtual void ScoreMount(ComponentRider componentRider,ComponentMount componentMount,out float? score)
 		{
 			score = null;
 		}

@@ -169,7 +169,7 @@ namespace Game
 		{
 			float? score = null;
 			ModsManager.HookAction("ScoreMount",(modLoader) => {
-				modLoader.ScoreMount(this,out float? score);
+				modLoader.ScoreMount(this,componentMount,out float? score);
 				return false;
 			});
 			if(score.HasValue) return score.Value;
