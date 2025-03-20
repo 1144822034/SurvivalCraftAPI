@@ -167,6 +167,12 @@ namespace Game
 
 		public virtual float ScoreMount(ComponentMount componentMount, float maxDistance)
 		{
+			float? score = null;
+			ModsManager.HookAction("ScoreMount",(modLoader) => {
+				modLoader.ScoreMount(this,out float? score);
+				return false;
+			});
+			if(score.HasValue) return score.Value;
 			if (componentMount.ComponentBody.Velocity.LengthSquared() < 1f)
 			{
 				Vector3 v = componentMount.ComponentBody.Position + Vector3.Transform(componentMount.MountOffset, componentMount.ComponentBody.Rotation) - ComponentCreature.ComponentCreatureModel.EyePosition;

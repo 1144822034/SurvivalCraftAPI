@@ -783,14 +783,24 @@ namespace Game
 			herdCenter = null;
 			skipVanilla = false;
 		}
-
-        /// <summary>
-        /// 挖掘触发宝物生成时，注意这里能获取到上个Mod生成宝物的情况
-        /// </summary>
-        /// <param name="BlockValue">宝物的方块值</param>
-        /// <param name="Count">宝物数量</param>
-        /// <param name="IsGenerate">是否继续让其它Mod处理</param>
-        public virtual void OnTreasureGenerate(SubsystemTerrain subsystemTerrain, int x, int y, int z, int neighborX, int neighborY, int neighborZ, ref int BlockValue, ref int Count, out bool IsGenerate)
+		/// <summary>
+		/// ComponentRider组件接口
+		/// 用于获取可符合骑行条件生物
+		/// 通过此接口，模组可以实现自定义骑行，也可以用于生物骑行生物相关逻辑
+		/// </summary>
+		/// <param name="componentRider"></param>
+		/// <param name="score"></param>
+		public virtual void ScoreMount(ComponentRider componentRider,out float? score)
+		{
+			score = null;
+		}
+		/// <summary>
+		/// 挖掘触发宝物生成时，注意这里能获取到上个Mod生成宝物的情况
+		/// </summary>
+		/// <param name="BlockValue">宝物的方块值</param>
+		/// <param name="Count">宝物数量</param>
+		/// <param name="IsGenerate">是否继续让其它Mod处理</param>
+		public virtual void OnTreasureGenerate(SubsystemTerrain subsystemTerrain, int x, int y, int z, int neighborX, int neighborY, int neighborZ, ref int BlockValue, ref int Count, out bool IsGenerate)
         {
             IsGenerate = false;
         }
