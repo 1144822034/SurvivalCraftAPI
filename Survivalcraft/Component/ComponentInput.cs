@@ -59,6 +59,12 @@ namespace Game
 			set;
 		}
 
+		public Vector2? SetMousePositionInNextFrame
+		{
+			get;
+			set;
+		}
+
 		public UpdateOrder UpdateOrder => UpdateOrder.Input;
 		public bool IsKeyDown(string keyName)
 		{
@@ -180,7 +186,12 @@ namespace Game
 					ViewWidget viewWidget = m_componentPlayer.ViewWidget;
 					Vector2 value = viewWidget.WidgetToScreen(viewWidget.ActualSize / 2f);
 					input.IsMouseCursorVisible = true;
-					input.MousePosition = value;
+					SetMousePositionInNextFrame = value;
+				}
+				else if(SetMousePositionInNextFrame.HasValue && input.MousePosition.HasValue)
+				{
+					input.MousePosition = SetMousePositionInNextFrame.Value;
+					SetMousePositionInNextFrame = null;
 				}
 			}
 			else
