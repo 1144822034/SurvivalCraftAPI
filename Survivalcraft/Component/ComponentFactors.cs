@@ -31,7 +31,22 @@ namespace Game
 		public UpdateOrder UpdateOrder => UpdateOrder.Default;
 
 		public static string fName = "ComponentFactors";
-
+		public virtual float GetOtherFactorResult(string factorName, bool recalculate = false, bool throwIfNotFound = false)
+		{
+			if(!recalculate && OtherFactorsResults.TryGetValue(factorName, out float result))
+			{
+				return result;
+			}
+			if(!recalculate && throwIfNotFound)
+				throw new KeyNotFoundException(string.Format("Required factor result with name {0} is not found.", factorName));
+			bool factorsGotten = OtherFactors.TryGetValue(factorName,out var factors);
+			if(!factorsGotten)
+			{
+				if(throwIfNotFound) throw new KeyNotFoundException(string.Format("Required factor key with name {0} is not found.",factorName));
+				else return 1f;
+			}
+			return CalculateFactorsResult(factors);
+		}
 		public float StrengthFactor
 		{
 			get;

@@ -280,7 +280,7 @@ namespace Game
 					if(!Suppressed && m_autoChaseSuppressionTime <= 0f && (m_target == null || ScoreTarget(m_target) <= 0f) && m_componentCreature.ComponentHealth.Health > MinHealthToAttackActively)
 					{
 						m_range = (m_subsystemSky.SkyLightIntensity < 0.2f) ? m_nightChaseRange : m_dayChaseRange;
-						m_range *= m_componentFactors.OtherFactorsResults["ChaseRange"];
+						m_range *= m_componentFactors.GetOtherFactorResult("ChaseRange");
 						ComponentCreature componentCreature = FindTarget();
 						if(componentCreature != null)
 						{

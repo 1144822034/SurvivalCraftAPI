@@ -49,7 +49,7 @@ namespace Game
 		{
 			get
 			{
-				return m_basicHitInterval / ComponentFactors.OtherFactorsResults["AttackSpeed"];
+				return m_basicHitInterval / ComponentFactors.GetOtherFactorResult("AttackSpeed");
 			}
 			[Obsolete("Do not set the added hit interval, set m_basicHitInterval instead.")]
 			set

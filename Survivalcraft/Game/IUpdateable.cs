@@ -2,11 +2,20 @@ namespace Game
 {
 	public interface IUpdateable
 	{
-		UpdateOrder UpdateOrder
+		public UpdateOrder UpdateOrder
 		{
-			get;
+			get
+			{
+				return UpdateOrder.Default;
+			}
 		}
-
-		void Update(float dt);
+		public float FloatUpdateOrder
+		{
+			get
+			{
+				return (float)UpdateOrder;
+			}
+		}
+		public void Update(float dt);
 	}
 }

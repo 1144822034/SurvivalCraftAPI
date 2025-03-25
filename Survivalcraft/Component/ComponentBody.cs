@@ -253,15 +253,15 @@ namespace Game
 
 		public virtual Quaternion ParentBodyRotationOffset { get; set; }
 
-		public virtual UpdateOrder UpdateOrder
+		public virtual float FloatUpdateOrder
 		{
 			get
 			{
 				if (m_parentBody == null)
 				{
-					return UpdateOrder.Body;
+					return (float)UpdateOrder.Body;
 				}
-				return m_parentBody.UpdateOrder + 1;
+				return m_parentBody.FloatUpdateOrder + 0.01f;
 			}
 		}
 

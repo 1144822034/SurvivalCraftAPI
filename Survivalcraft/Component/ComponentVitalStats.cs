@@ -611,7 +611,7 @@ namespace Game
 		public virtual void UpdateWetness()
 		{
 			float gameTimeDelta = m_subsystemTime.GameTimeDelta;
-			Wetness += gameTimeDelta * m_componentPlayer.ComponentLevel.OtherFactorsResults["Wetness"];
+			Wetness += gameTimeDelta * m_componentPlayer.ComponentLevel.GetOtherFactorResult("Wetness");
 			if (m_subsystemGameInfo.WorldSettings.GameMode != 0 && m_subsystemGameInfo.WorldSettings.AreAdventureSurvivalMechanicsEnabled)
 			{
 				if (Wetness > 0.8f && m_lastWetness <= 0.8f)

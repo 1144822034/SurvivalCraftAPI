@@ -10,7 +10,7 @@ namespace Game
 	{
 		public class UpdateableInfo
 		{
-			public UpdateOrder UpdateOrder;
+			public float FloatUpdateOrder;
 		}
 
 		public class Comparer : IComparer<IUpdateable>
@@ -19,10 +19,10 @@ namespace Game
 
 			public int Compare(IUpdateable u1, IUpdateable u2)
 			{
-				int num = u1.UpdateOrder - u2.UpdateOrder;
+				float num = u1.FloatUpdateOrder - u2.FloatUpdateOrder;
 				if (num != 0)
 				{
-					return num;
+					return Math.Sign(num);
 				}
 				return u1.GetHashCode() - u2.GetHashCode();
 			}
@@ -77,7 +77,7 @@ namespace Game
                             {
                                 m_updateables.Add(item.Key, new UpdateableInfo
                                 {
-                                    UpdateOrder = item.Key.UpdateOrder
+                                    FloatUpdateOrder = item.Key.FloatUpdateOrder
                                 });
                                 flag = true;
                             }
@@ -93,11 +93,11 @@ namespace Game
 				
 				foreach (KeyValuePair<IUpdateable, UpdateableInfo> updateable in m_updateables)
 				{
-					UpdateOrder updateOrder = updateable.Key.UpdateOrder;
-					if (updateOrder != updateable.Value.UpdateOrder)
+					float updateOrder = updateable.Key.FloatUpdateOrder;
+					if (updateOrder != updateable.Value.FloatUpdateOrder)
 					{
 						flag = true;
-						updateable.Value.UpdateOrder = updateOrder;
+						updateable.Value.FloatUpdateOrder = updateOrder;
 					}
 				}
 				if (flag)
