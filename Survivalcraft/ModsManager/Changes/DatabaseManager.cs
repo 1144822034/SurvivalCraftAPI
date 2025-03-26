@@ -73,6 +73,7 @@ namespace Game
 			return null;
 		}
 
+		[Obsolete]
 		public static Entity CreateEntity(Project project, SpawnEntityData spawnEntityData, bool throwIfNotFound)
 		{
 			Entity entity = CreateEntity(project, spawnEntityData.TemplateName, throwIfNotFound);
@@ -83,7 +84,6 @@ namespace Game
 			}
 			return entity;
 		}
-
 
         public static Entity CreateEntity(Project project, string entityTemplateName, bool throwIfNotFound)
 		{

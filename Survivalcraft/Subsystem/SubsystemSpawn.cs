@@ -295,7 +295,8 @@ namespace Game
 		{
 			try
 			{
-				Entity entity = DatabaseManager.CreateEntity(Project, data, throwIfNotFound: true);
+				ValuesDictionary valuesDictionary = DatabaseManager.FindEntityValuesDictionary(data.TemplateName, true);
+				Entity entity = Project.CreateEntity(valuesDictionary, data.EntityId);
 				ModsManager.HookAction("OnReadSpawnData", (ModLoader loader) => { loader.OnReadSpawnData(entity, data); return true; });
 				entity.FindComponent<ComponentBody>(throwOnError: true).Position = data.Position;
 				entity.FindComponent<ComponentBody>(throwOnError: true).Rotation = Quaternion.CreateFromAxisAngle(Vector3.UnitY, m_random.Float(0f, (float)Math.PI * 2f));

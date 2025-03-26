@@ -174,11 +174,11 @@ namespace GameEntitySystem
 		{
 			return Entities.FirstOrDefault(entity => entity.Id == EntityID, null);
 		}
-		public Entity CreateEntity(ValuesDictionary valuesDictionary)
+		public Entity CreateEntity(ValuesDictionary valuesDictionary, int entityId = 0)
 		{
 			try
 			{
-				Entity entity = new(this, valuesDictionary);
+				Entity entity = new(this, valuesDictionary, entityId);
 				IdToEntityMap idToEntityMap = new([]);
 				entity.InternalLoadEntity(valuesDictionary, idToEntityMap);
 				return entity;
