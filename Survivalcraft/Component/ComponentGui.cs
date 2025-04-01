@@ -191,7 +191,7 @@ namespace Game
 		{
 			get
 			{
-				if (m_modalPanelContainerWidget.Children.Count <= 0)
+				if (m_modalPanelContainerWidget == null || m_modalPanelContainerWidget.Children.Count <= 0)
 				{
 					return null;
 				}
