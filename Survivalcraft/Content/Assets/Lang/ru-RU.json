@@ -25,6 +25,14 @@
         "4": "Loading Community Content cache failed.",
         "5": "Saving Community Content cache failed."
     },
+    "ModsManager":{
+        "1": "Database value \"{0}\" will be modified from \"{1}\" to \"{2}\".",
+        "2": "\nOther Mods May Not Run Correctly.",
+        "3": "Change Enabled",
+        "4": "Change Disabled",
+        "5": "Mod Downloaded Successfully",
+        "6": "Do you want to switch to Mod Manage Screen to install manually?"
+    },
     "AndroidSdCardExternalContentProvider": {
         "1": "Карта памяти"
     },
@@ -933,6 +941,10 @@
         "3": "Подтвердить?",
         "4": "Отмену",
         "5": "Enter \"yes\" to continue"
+    },
+    "PlayScreen": {
+        "1": "Mod Not Compatible",
+        "2": "Continue"
     },
     "JsInterface": {
         "1": "There is already a script running.",

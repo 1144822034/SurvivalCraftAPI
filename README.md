@@ -14,7 +14,7 @@ SCAPI1.8已跟进2.4原版，建议换到1.8x
 
 ## 用户下载
 
-[点击此处](https://gitee.com/THPRC/survivalcraft-api/releases/latest) 进入下载页面
+[点击此处](https://gitee.com/SC-SPM/SurvivalcraftApi/releases/latest) 进入下载页面
 
 * Android系统下载后缀为`.apk`的安装包，安装后即可运行，如果弹出标题为`所有文件访问`的授权窗口，请授权此APP
 * Windows系统下载后缀为`.7z`的压缩包，推荐使用 [7-Zip](https://www.7-zip.org/download.html) 进行解压，运行<font color="red">解压后</font>的`.exe`文件

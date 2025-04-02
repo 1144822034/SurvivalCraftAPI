@@ -257,7 +257,7 @@ namespace Game
 			}
 			if (!string.IsNullOrEmpty(tips))
 			{
-				DialogsManager.ShowDialog(null, new MessageDialog("Mod不兼容警告！", tips, "继续", "返回", delegate (MessageDialogButton button)
+				DialogsManager.ShowDialog(null, new MessageDialog(LanguageControl.Get(fName, "1"), tips, LanguageControl.Get(fName, "2"), LanguageControl.Back, delegate (MessageDialogButton button)
 				{
 					if (button == MessageDialogButton.Button1)
 					{

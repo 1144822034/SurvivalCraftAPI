@@ -58,13 +58,11 @@ namespace Game
 			
 			
 			// Process.Start("C:\\Windows\\System32\\msg.exe",  "/server:127.0.0.1 * \"此版本为预览版 不建议长期使用");
-#if WINDOWS
 			Window.Created += () =>
 			{
 				InputMethod.Initialize(Process.GetCurrentProcess().MainWindowHandle, true);
 				InputMethod.Enabled = false;
 			};
-#endif
 			EntryPoint();
 			AppDomain.CurrentDomain.AssemblyResolve += (sender, e) => {
 				//在程序目录下面寻找dll,解决部分设备找不到目录下程序集的问题

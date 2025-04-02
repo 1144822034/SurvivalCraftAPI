@@ -364,7 +364,6 @@ namespace Game
 				CharacterSkinsManager.Initialize();
 				CommunityContentManager.Initialize();
 				OriginalCommunityContentManager.Initialize();
-				ExternalContentManager.Initialize();
 				FurniturePacksManager.Initialize();
 				LightingManager.Initialize();
 				MotdManager.Initialize();

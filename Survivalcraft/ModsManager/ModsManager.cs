@@ -346,14 +346,14 @@ public static class ModsManager
 		}
 		var importModList = ScreensManager.FindScreen<ModsManageContentScreen>("ModsManageContent").m_latestScanModList;
 		if (!importModList.Contains(realName)) importModList.Add(realName);
-		DialogsManager.ShowDialog(null, new MessageDialog("Mod下载成功", "请到Mod管理器中进行手动安装，是否跳转", "前往", "返回", delegate (MessageDialogButton result)
+		DialogsManager.ShowDialog(null, new MessageDialog(LanguageControl.Get(fName, "5"), LanguageControl.Get(fName, "6"), LanguageControl.Yes, LanguageControl.Back, delegate (MessageDialogButton result)
 		{
 			if (result == MessageDialogButton.Button1)
 			{
 				ScreensManager.SwitchScreen("ModsManageContent");
 			}
 		}));
-		return "Mod下载成功";
+		return LanguageControl.Get(fName, "5");
 	}
 
 	public static void ModListAllDo(Action<ModEntity> entity)
@@ -703,9 +703,8 @@ public static class ModsManager
 							{
 								collisionsToHandle++;
 								AllowContinue = false;
-								string warningString = "Database value \"" + attribute1.Value + "\" will be modified from \"" + ModifiedElement[attribute1.Value] + "\" to \"" + attribute.Value + "\".";
-								string warningString2 = "\n" + "Other Mods May Not Run Correctly.";
-                                DialogsManager.ShowDialog(null, new MessageDialog(LanguageControl.Warning, warningString + warningString2, LanguageControl.Ok, LanguageControl.Disable, (vt) =>
+								string warningString = string.Format(LanguageControl.Get(fName,"1"),attribute1.Value,ModifiedElement[attribute1.Value],attribute.Value);
+                                DialogsManager.ShowDialog(null, new MessageDialog(LanguageControl.Warning, warningString + LanguageControl.Get(fName, "2"), LanguageControl.Ok, LanguageControl.Disable, (vt) =>
 								{
                                     if (vt == MessageDialogButton.Button1 || vt == MessageDialogButton.Button2)
 									{
@@ -717,11 +716,11 @@ public static class ModsManager
 									{
 										xElement.SetAttributeValue(px[0], attribute.Value);
                                         ModifiedElement[attribute1.Value] = attribute.Value;
-										Log.Warning("Change enabled");
+										Log.Warning(LanguageControl.Get(fName, "3"));
                                     }
 									else
 									{
-										Log.Warning("change Disabled");
+										Log.Warning(LanguageControl.Get(fName, "4"));
 									}
 								}));
                             }
