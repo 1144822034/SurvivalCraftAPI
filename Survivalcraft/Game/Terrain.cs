@@ -216,6 +216,7 @@ namespace Game
 			}
 			m_allChunks.Remove(chunk.Coords.X, chunk.Coords.Y);
 			m_allocatedChunksArray = null;
+			chunk.Dispose();
 		}
 
 		public static int ComparePoints(Point2 c1, Point2 c2)

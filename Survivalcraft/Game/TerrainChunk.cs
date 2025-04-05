@@ -96,9 +96,9 @@ namespace Game
 		{
 			foreach (var b in Buffers)
 			{
-				b.IndexBuffer.Dispose();
-				b.VertexBuffer.Dispose();
+				b.Dispose();
 			}
+			Buffers.Clear();
 		}
 
 		public virtual void InvalidateSliceContentsHashes()
@@ -116,6 +116,7 @@ namespace Game
 		}
 		public virtual void Dispose()
 		{
+			DisposeVertexIndexBuffers();
             if (this.Geometry == null)
                 throw new InvalidOperationException();
             this.Geometry = null;

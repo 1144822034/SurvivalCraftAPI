@@ -31,6 +31,10 @@ namespace Game
 			m_subsystemExplosions = Project.FindSubsystem<SubsystemExplosions>(throwOnError: true);
 			m_subsystemProjectiles = Project.FindSubsystem<SubsystemProjectiles>(throwOnError: true);
 			m_subsystemBlockBehaviors = Project.FindSubsystem<SubsystemBlockBehaviors>(throwOnError: true);
+			foreach (Projectile projectile in m_subsystemProjectiles.Projectiles)
+			{
+				ScanProjectile(projectile);
+			}
 			m_subsystemProjectiles.ProjectileAdded += (projectile) =>
 			{
 				ScanProjectile(projectile);
