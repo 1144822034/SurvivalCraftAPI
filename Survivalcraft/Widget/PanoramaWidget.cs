@@ -30,7 +30,7 @@ namespace Game
 			m_position.X = MathUtils.Remainder(m_position.X, 1f);
 			m_position.Y = MathUtils.Remainder(m_position.Y, 1f);
 			float f = (0.5f * MathUtils.PowSign(MathF.Sin((0.21f * num) + 2f), 2f)) + 0.5f;
-			float num2 = MathUtils.Lerp(0.13f, 0.3f, f);
+			float num2 = MathUtils.Lerp(0.3f, 0.5f, f);
 			float num3 = num2 / Texture.Height * Texture.Width / ActualSize.X * ActualSize.Y;
 			float x2 = m_position.X;
 			float y2 = m_position.Y;

@@ -28,7 +28,7 @@ namespace GameEntitySystem
 				{
 					if (!ignoreInvalidEntities)
 					{
-						throw ex;
+						throw;
 					}
 					Log.Warning("Ignoring invalid entity. Reason: {0}", ex);
 				}

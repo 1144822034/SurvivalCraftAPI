@@ -149,7 +149,7 @@ namespace Engine.Graphics
             int width = MathUtils.Max(Width >> mipLevel, 1);
             int height = MathUtils.Max(Height >> mipLevel, 1);
             GLWrapper.BindTexture(TextureTarget.Texture2D, m_texture, forceBind: false);
-            GLWrapper.GL.TexImage2D(TextureTarget.Texture2D, mipLevel, (InternalFormat)m_pixelFormat, (uint)width, (uint)height, 0, m_pixelFormat, m_pixelType, source);
+            GLWrapper.GL.TexImage2D(TextureTarget.Texture2D, mipLevel, (InternalFormat)m_pixelFormat, (uint)width, (uint)height, 0, m_pixelFormat, m_pixelType, in source);
         }
 
 		public unsafe void SetData(SixLabors.ImageSharp.Image<Rgba32> source)
@@ -343,11 +343,11 @@ namespace Engine.Graphics
 			}
 			if (num > size)
 			{
-				throw new ArgumentNullException("Source array element size is larger than pixel size.");
+				throw new ArgumentException("Source array element size is larger than pixel size.");
 			}
 			if (size % num != 0)
 			{
-				throw new ArgumentNullException("Pixel size is not an integer multiple of source array element size.");
+				throw new ArgumentException("Pixel size is not an integer multiple of source array element size.");
 			}
 			if (sourceStartIndex < 0 || (source.Length - sourceStartIndex) * num < num4)
 			{

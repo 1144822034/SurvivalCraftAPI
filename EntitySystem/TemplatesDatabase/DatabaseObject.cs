@@ -49,7 +49,9 @@ namespace TemplatesDatabase
 
 		private string m_description = string.Empty;
 
+#pragma warning disable CS0649
 		private bool m_readOnly;
+#pragma warning restore CS0649
 
 		private DatabaseObject m_explicitInheritanceParent;
 

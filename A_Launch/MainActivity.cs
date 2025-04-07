@@ -15,7 +15,7 @@ using Permission = Android.Content.PM.Permission;
 #pragma warning disable CA1416
 namespace SC4Android
 {
-	[Activity(Label = "@string/ShortTitle",LaunchMode = LaunchMode.SingleTask,Icon = "@mipmap/icon",Theme = "@style/MainTheme",MainLauncher = true,ConfigurationChanges = ConfigChanges.ScreenSize | ConfigChanges.Orientation | ConfigChanges.UiMode | ConfigChanges.ScreenLayout | ConfigChanges.SmallestScreenSize)]
+	[Activity(Label = "@string/ShortTitle",LaunchMode = LaunchMode.SingleTask,Icon = "@mipmap/icon",Theme = "@style/MainTheme",MainLauncher = true,ConfigurationChanges = ConfigChanges.ScreenSize | ConfigChanges.Orientation | ConfigChanges.UiMode | ConfigChanges.ScreenLayout | ConfigChanges.SmallestScreenSize, ScreenOrientation = ScreenOrientation.Landscape)]
 	[IntentFilter(["android.intent.action.VIEW"],DataScheme = "com.candy.survivalcraft",Categories = ["android.intent.category.DEFAULT","android.intent.category.BROWSABLE"])]
 
 	public class MainActivity : EngineActivity

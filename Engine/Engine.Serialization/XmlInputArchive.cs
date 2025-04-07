@@ -268,7 +268,7 @@ namespace Engine.Serialization
             isReference = false;
 		}
 
-		private void ReadObject(string name, SerializeData staticSerializeData, ref object value, bool allowOverwriteOfExistingObject)
+		protected override void ReadObject(string name, SerializeData staticSerializeData, ref object value, bool allowOverwriteOfExistingObject)
 		{
 			if (staticSerializeData.IsHumanReadableSupported)
 			{

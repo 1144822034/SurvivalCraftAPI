@@ -27,7 +27,7 @@ namespace Engine.Serialization
             Reset(version, context);
         }
 
-		public void Dispose()
+		public override void Dispose()
 		{
 			Utilities.Dispose(ref m_reader);
 		}

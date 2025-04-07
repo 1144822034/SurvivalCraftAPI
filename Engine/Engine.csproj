@@ -51,6 +51,7 @@
 		<PackageReference Include="Silk.NET.OpenGLES" Version="2.22.0" />
 		<PackageReference Include="Silk.NET.OpenAL" Version="2.22.0" />
 		<PackageReference Include="Silk.NET.Input" Version="2.22.0" Condition="'$(TargetFramework)' != 'net9.0-android'" />
+		<PackageReference Include="Microsoft.Extensions.DependencyModel" Version="9.0.3" /><!--To solve the warning of Silk.NET useing an old version of this-->
 	</ItemGroup>
 	<ItemGroup>
 		<PackageReference Include="System.Net.Http" Version="4.3.4" />

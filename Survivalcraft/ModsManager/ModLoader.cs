@@ -1695,10 +1695,12 @@ namespace Game
 		/// <summary>
 		/// 在计算一个生物的Factors执行。仅限非玩家生物，玩家需要使用OnLevelUpdate。
 		/// ComponentFactors里面有四个List，这四个List储存了所有对该属性有影响的因子。模组可以修改其中的因子来实现自定义的操作。
-		/// public List<Factor> m_strengthFactors = [];
-		/// public List<Factor> m_speedFactors = [];
-		/// public List<Factor> m_hungerFactors = [];
-		/// public List<Factor> m_resilienceFactors = [];
+		/// <code>
+		/// public List&lt;Factor&gt; m_strengthFactors = [];
+		/// public List&lt;Factor&gt; m_speedFactors = [];
+		/// public List&lt;Factor&gt; m_hungerFactors = [];
+		/// public List&lt;Factor&gt; m_resilienceFactors = [];
+		/// </code>
 		/// 在执行这个接口后，游戏会根据这四个List计算出StrengthFactor、SpeedFactor、HungerFactor、ResilienceFactor的最终值
 		/// </summary>
 		/// <param name="componentFactors"></param>

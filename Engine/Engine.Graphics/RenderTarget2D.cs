@@ -137,7 +137,8 @@ namespace Engine.Graphics
         {
             if (m_depthBuffer != 0)
             {
-                GLWrapper.GL.DeleteRenderbuffers(1, (uint)m_depthBuffer);
+                uint depthBuffer = (uint)m_depthBuffer;
+                GLWrapper.GL.DeleteRenderbuffers(1, in depthBuffer);
                 m_depthBuffer = 0;
             }
             if (m_frameBuffer != 0)
@@ -231,11 +232,11 @@ namespace Engine.Graphics
 			ArgumentNullException.ThrowIfNull(target);
 			if (num > size)
 			{
-				throw new ArgumentNullException("Target array element size is larger than pixel size.");
+				throw new ArgumentException("Target array element size is larger than pixel size.");
 			}
 			if (size % num != 0)
 			{
-				throw new ArgumentNullException("Pixel size is not an integer multiple of target array element size.");
+				throw new ArgumentException("Pixel size is not an integer multiple of target array element size.");
 			}
 			if (sourceRectangle.Left < 0 || sourceRectangle.Width <= 0 || sourceRectangle.Top < 0 || sourceRectangle.Height <= 0 || sourceRectangle.Left + sourceRectangle.Width > base.Width || sourceRectangle.Top + sourceRectangle.Height > base.Height)
 			{
@@ -270,7 +271,7 @@ namespace Engine.Graphics
             {
                 throw new ArgumentNullException("renderTarget1");
             }
-            if (renderTarget1 == null)
+            if (renderTarget2 == null)
             {
                 throw new ArgumentNullException("renderTarget2");
             }

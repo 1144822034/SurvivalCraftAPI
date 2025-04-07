@@ -189,7 +189,7 @@ namespace Engine.Serialization
 			}
 		}
 
-		private void WriteObject(string name, SerializeData staticSerializeData, object value)
+		protected override void WriteObject(string name, SerializeData staticSerializeData, object value)
 		{
 			if (staticSerializeData.IsHumanReadableSupported)
 			{

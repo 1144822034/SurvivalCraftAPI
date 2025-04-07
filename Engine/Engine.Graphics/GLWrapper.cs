@@ -474,7 +474,8 @@ namespace Engine.Graphics
 			{
 				m_framebuffer = -1;
 			}
-			GL.DeleteFramebuffers(1, (uint)framebuffer);
+            uint uFramebuffer = (uint)framebuffer;
+			GL.DeleteFramebuffers(1, in uFramebuffer);
 		}
 
 		public static void DeleteBuffer(BufferTargetARB target, int buffer)
@@ -494,7 +495,8 @@ namespace Engine.Graphics
 			{
 				m_elementArrayBuffer = -1;
 			}
-			GL.DeleteBuffers(1u, (uint)buffer);
+            uint uBuffer = (uint)buffer;
+			GL.DeleteBuffers(1u, in uBuffer);
 		}
 
 		public static void ApplyViewportScissor(Viewport viewport, Rectangle scissorRectangle, bool isScissorEnabled)
