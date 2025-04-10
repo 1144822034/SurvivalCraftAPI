@@ -24,7 +24,7 @@ namespace Game
 
 		public Random m_random = new();
 
-		public static TreasureData[] m_treasureData;
+		public static List<TreasureData> m_treasureData;
 
 		public override int[] HandledBlocks => new int[1]
 		{
@@ -46,10 +46,9 @@ namespace Game
 			int num2 = 0;
 			float max = m_treasureData.Sum((TreasureData t) => t.Probability);
 			float num3 = m_random.Float(0f, max);
-			TreasureData[] treasureData = m_treasureData;
-			for (int i = 0; i < treasureData.Length; i++)
+			for (int i = 0; i < m_treasureData.Count; i++)
 			{
-				TreasureData treasureData2 = treasureData[i];
+				TreasureData treasureData2 = m_treasureData[i];
 				num3 -= treasureData2.Probability;
 				if (num3 <= 0f)
 				{
@@ -513,7 +512,7 @@ namespace Game
 				MaxCount = 2
 			};
 			array[60] = treasureData;
-			m_treasureData = array;
+			m_treasureData = new List<TreasureData>(array);
 		}
 	}
 }

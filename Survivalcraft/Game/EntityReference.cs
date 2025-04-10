@@ -129,6 +129,15 @@ namespace Game
 			result.m_componentReference = string.Empty;
 			return result;
 		}
+		public static EntityReference FromId(Entity entity, EntityToIdMap entityToIdMap)
+		{
+			return FromId(entity);
+		}
+
+		public static EntityReference FromId(Component component, EntityToIdMap entityToIdMap)
+		{
+			return FromId(component);
+		}
 
 		public static EntityReference FromName(Component component)
 		{

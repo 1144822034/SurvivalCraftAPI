@@ -37,7 +37,6 @@
 		<Compile Include="..\Survivalcraft\ContentProvider\IExternalContentProvider.cs"/>
 		<Compile Include="..\Survivalcraft\ContentProvider\SchubExternalContentProvider.cs"/>
 		<Compile Include="..\Survivalcraft\Game\BlockAllocateData.cs"/>
-		<Compile Include="..\Survivalcraft\IPostprocessExplosions.cs"/>
 		<Compile Include="..\Survivalcraft\Managers\ClipboardManager.cs"/>
 		<Compile Include="..\Survivalcraft\Managers\ScreenCaptureManager.cs"/>
 		<Compile Include="..\Survivalcraft\Managers\WebManager.cs"/>
