@@ -1761,5 +1761,15 @@ namespace Game
 		{
 
 		}
+
+		/// <summary>
+		/// 设定是否显示默认的十字准星。可用于关闭PC端十字准星的强制显示
+		/// </summary>
+		/// <param name="componentAimingSights"></param>
+		/// <param name="isVisible"></param>
+		public virtual void IsCrosshairVisible(ComponentAimingSights componentAimingSights,ref bool isVisible)
+		{
+		}
+
 	}
 }
