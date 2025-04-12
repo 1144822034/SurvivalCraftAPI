@@ -132,7 +132,8 @@
     "4": "New version found: {0}\nCurrent version: {1}\nWould you like to go to the API download page?",
     "5": "Go",
     "6": "Fetching update...",
-    "7": "update notification"
+    "7": "update notification",
+    "8": "Release"
   },
   "SubsystemFurnitureBlockBehavior": {
     "0": "Unsuitable block found",

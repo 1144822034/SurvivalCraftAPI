@@ -108,7 +108,12 @@ namespace Game
 			}
 			if (m_updateCheckButton.IsClicked)
 			{
-				if (!APIUpdateManager.IsNeedUpdate.HasValue) DialogsManager.ShowDialog(this, new MessageDialog(LanguageControl.Get(fName,7), LanguageControl.Get(fName, 6), LanguageControl.Ok, null, null));
+				if (!APIUpdateManager.IsNeedUpdate.HasValue) DialogsManager.ShowDialog(this, new MessageDialog(LanguageControl.Get(fName,7), LanguageControl.Get(fName, 6), LanguageControl.Ok, LanguageControl.Get(fName, 8), (button) => {
+					if(button == MessageDialogButton.Button2)
+					{
+						WebBrowserManager.LaunchBrowser(ModsManager.APIReleaseLink_Client);
+					}
+				}));
 				else
 				{
 					if(APIUpdateManager.IsNeedUpdate.Value)
