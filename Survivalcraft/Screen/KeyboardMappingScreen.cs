@@ -83,6 +83,11 @@ namespace Game
 			if(IsWaitingForKeyInput)
 			{
 				m_setKeyButton.IsChecked = true;
+				if(Input.Back || Input.Cancel)
+				{
+					IsWaitingForKeyInput = false;
+					return;
+				}
 				foreach(Key key in EnumUtils.GetEnumValues(typeof(Key)))
 				{
 					if(key != Key.Null && Input.IsKeyDown(key))
@@ -110,7 +115,7 @@ namespace Game
 			{
 				IsWaitingForKeyInput = true;
 			}
-			if (!IsWaitingForKeyInput && Input.Back || Input.Cancel)
+			if (!IsWaitingForKeyInput && (Input.Back || Input.Cancel))
 			{
 				ScreensManager.SwitchScreen(ScreensManager.PreviousScreen);
 			}

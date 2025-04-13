@@ -799,7 +799,7 @@ namespace Game
 					ModalPanelWidget = null;
 				}
 			}
-			else if ((m_componentInput?.IsKeyDownOnce("GameMenu") ?? false) || m_backButtonWidget.IsClicked)
+			else if (input.Back || m_backButtonWidget.IsClicked)
 			{
 				DialogsManager.ShowDialog(m_componentPlayer.GuiWidget, new GameMenuDialog(m_componentPlayer));
 			}

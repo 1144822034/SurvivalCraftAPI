@@ -518,7 +518,6 @@ namespace Game
 			KeyboardMappingSettings.SetValue("Drop", Key.Q);
 			KeyboardMappingSettings.SetValue("EditItem", Key.G);
 			KeyboardMappingSettings.SetValue("KeyboardHelp", Key.H);
-			KeyboardMappingSettings.SetValue("GameMenu",Key.Escape);
 		}
 		public static void Initialize()
 		{
