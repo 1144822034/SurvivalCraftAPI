@@ -2,7 +2,11 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Runtime.InteropServices;
+#if NOTOPENGLES
+using Silk.NET.OpenGL;
+#else
 using Silk.NET.OpenGLES;
+#endif
 
 namespace Engine.Graphics
 {
@@ -96,13 +100,11 @@ namespace Engine.Graphics
 
 		public static bool GL_OES_packed_depth_stencil;
 
+        public static int GL_MAX_COMBINED_TEXTURE_IMAGE_UNITS;
+
 		public static void Initialize()
         {
-#if ANDROID
             GL = GL.GetApi(Window.m_view);
-#else
-            GL = Window.m_gameWindow.CreateOpenGLES();
-#endif
 #if DEBUG
             unsafe
             {
@@ -116,11 +118,17 @@ namespace Engine.Graphics
                 bits[i] = GL.GetInteger((GetPName)(i+3410));
             }
             GL.GetInteger(GetPName.MaxTextureSize, out int maxTextureSize);
-            Display.DeviceDescription = $"OpenGL ES, Vendor={GL.GetStringS(StringName.Vendor) ?? string.Empty}, Renderer={GL.GetStringS(StringName.Renderer) ?? string.Empty}, Version={GL.GetStringS(StringName.Version) ?? string.Empty}, R={bits[0]} G={bits[1]} B={bits[2]} A={bits[3]}, D={bits[4]} S={bits[5]}, MaxTextureSize={maxTextureSize}";
+#if NOTOPENGLES
+            string OpenGLVendor = $"OpenGL, Vendor={GL.GetStringS(StringName.Vendor) ?? string.Empty}";
+#else
+            string OpenGLVendor = $"OpenGL ES, Vendor={GL.GetStringS(StringName.Vendor) ?? string.Empty}";
+#endif
+            Display.DeviceDescription = $"{OpenGLVendor}, Renderer={GL.GetStringS(StringName.Renderer) ?? string.Empty}, Version={GL.GetStringS(StringName.Version) ?? string.Empty}, R={bits[0]} G={bits[1]} B={bits[2]} A={bits[3]}, D={bits[4]} S={bits[5]}, MaxTextureSize={maxTextureSize}";
             Log.Information("Initialized display device: " + Display.DeviceDescription);
 			string @string = GL.GetStringS(StringName.Extensions);
-			GL_EXT_texture_filter_anisotropic = @string.Contains("GL_EXT_texture_filter_anisotropic");
-			GL_OES_packed_depth_stencil = @string.Contains("GL_OES_packed_depth_stencil");
+			GL_EXT_texture_filter_anisotropic = @string?.Contains("GL_EXT_texture_filter_anisotropic") ?? false;
+			GL_OES_packed_depth_stencil = @string?.Contains("GL_OES_packed_depth_stencil") ?? false;
+            GL_MAX_COMBINED_TEXTURE_IMAGE_UNITS = GL.GetInteger(GetPName.MaxCombinedTextureImageUnits);
 		}
 
 		public static void InitializeCache()
@@ -715,11 +723,11 @@ namespace Engine.Graphics
 				}
 				if (shaderParameter.Type == ShaderParameterType.Texture2D)
 				{
-					if (num >= 8)
+					if (num >= GL_MAX_COMBINED_TEXTURE_IMAGE_UNITS)
 					{
 						throw new InvalidOperationException("Too many simultaneous textures.");
 					}
-					ActiveTexture((TextureUnit)(33984 + num));
+					ActiveTexture(TextureUnit.Texture0 + num);
 					if (shaderParameter.IsChanged)
 					{
 						GL.Uniform1(shaderParameter.Location, num);
@@ -892,6 +900,22 @@ namespace Engine.Graphics
 			};
 		}
 
+#if NOTOPENGLES
+        public static Silk.NET.OpenGL.PrimitiveType TranslatePrimitiveType(PrimitiveType primitiveType)
+        {
+            return primitiveType switch
+            {
+                PrimitiveType.LineList => Silk.NET.OpenGL.PrimitiveType.Lines,
+                PrimitiveType.LineStrip => Silk.NET.OpenGL.PrimitiveType.LineStrip,
+                PrimitiveType.TriangleList => Silk.NET.OpenGL.PrimitiveType.Triangles,
+                PrimitiveType.TriangleStrip => Silk.NET.OpenGL.PrimitiveType.TriangleStrip,
+                PrimitiveType.Points => Silk.NET.OpenGL.PrimitiveType.Points,
+                PrimitiveType.LineLoop => Silk.NET.OpenGL.PrimitiveType.LineLoop,
+                PrimitiveType.TriangleFan => Silk.NET.OpenGL.PrimitiveType.TriangleFan,
+                _ => throw new InvalidOperationException("Unsupported primitive type."),
+            };
+        }
+#else
 		public static Silk.NET.OpenGLES.PrimitiveType TranslatePrimitiveType(PrimitiveType primitiveType)
 		{
 			return primitiveType switch
@@ -906,6 +930,7 @@ namespace Engine.Graphics
 				_ => throw new InvalidOperationException("Unsupported primitive type."),
 			};
 		}
+#endif
 
 		public static TextureMinFilter TranslateTextureFilterModeMin(TextureFilterMode filterMode, bool isMipmapped)
 		{

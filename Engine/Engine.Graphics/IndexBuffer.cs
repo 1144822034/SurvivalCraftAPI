@@ -1,6 +1,10 @@
 using System;
 using System.Runtime.InteropServices;
+#if NOTOPENGLES
+using Silk.NET.OpenGL;
+#else
 using Silk.NET.OpenGLES;
+#endif
 using Buffer = System.Buffer;
 
 namespace Engine.Graphics

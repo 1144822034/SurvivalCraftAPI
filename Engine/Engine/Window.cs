@@ -289,7 +289,9 @@ namespace Engine
             };
             Silk.NET.Windowing.Window.ShouldLoadFirstPartyPlatforms(false);
             Silk.NET.Windowing.Window.TryAdd(WindowingLibrary);
-#if DEBUG
+#if NOTOPENGLES
+            GraphicsAPI api = new GraphicsAPI(ContextAPI.OpenGL, ContextProfile.Compatability, ContextFlags.ForwardCompatible, new APIVersion(4, 0));
+#elif DEBUG
             GraphicsAPI api = new GraphicsAPI(ContextAPI.OpenGLES, ContextProfile.Compatability, ContextFlags.Debug, new APIVersion(3, 2));
 #else
             GraphicsAPI api = new GraphicsAPI(ContextAPI.OpenGLES, new APIVersion(3, 2));

@@ -1,6 +1,10 @@
 using System.Runtime.InteropServices;
 using Engine.Media;
+#if NOTOPENGLES
+using Silk.NET.OpenGL;
+#else
 using Silk.NET.OpenGLES;
+#endif
 using SixLabors.ImageSharp.PixelFormats;
 
 namespace Engine.Graphics

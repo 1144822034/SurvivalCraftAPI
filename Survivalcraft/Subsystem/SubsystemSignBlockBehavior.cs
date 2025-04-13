@@ -2,7 +2,11 @@ using Engine;
 using Engine.Graphics;
 using Engine.Media;
 using Jint.Native;
+#if NOTOPENGLES
+using Silk.NET.OpenGL;
+#else
 using Silk.NET.OpenGLES;
+#endif
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;

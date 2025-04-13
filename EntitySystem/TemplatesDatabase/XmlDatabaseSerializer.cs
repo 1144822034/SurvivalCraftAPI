@@ -74,6 +74,20 @@ namespace TemplatesDatabase
 				string attributeValue13 = XmlUtils.GetAttributeValue<string>(item3, "Name");
 				try
 				{
+#if NOTOPENGLES
+					switch(attributeValue13)
+					{
+						case "Survivalcraft":
+							attributeValue13 = "SurvivalcraftNotOpenGLES";
+							break;
+						case "Engine":
+							attributeValue13 = "EngineNotOpenGLES";
+							break;
+						case "EntitySystem":
+							attributeValue13 = "EntitySystemNotOpenGLES";
+							break;
+					}
+#endif
 					Assembly.Load(new AssemblyName(attributeValue13));
 				}
 				catch (Exception ex)

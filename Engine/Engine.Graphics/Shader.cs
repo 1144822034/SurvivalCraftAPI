@@ -2,7 +2,11 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Xml.Linq;
+#if NOTOPENGLES
+using Silk.NET.OpenGL;
+#else
 using Silk.NET.OpenGLES;
+#endif
 
 namespace Engine.Graphics
 {
@@ -214,6 +218,15 @@ namespace Engine.Graphics
 				str += $"#version {versionnum}" + Environment.NewLine;
 				shaderCode = "//" + shaderCode;
 			}
+            else
+            {
+                //[WARN] 未指定版本时，会主动加上最低的版本号
+#if NOTOPENGLES
+                str += "#version 100" + Environment.NewLine;
+#else
+                str += "#version 100 es" + Environment.NewLine;
+#endif
+            }
 
 			str = str + "#define GLSL" + Environment.NewLine;
 			if (isVertexShader)

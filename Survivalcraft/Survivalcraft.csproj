@@ -1,9 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
     <PropertyGroup>
-		<TargetFrameworks Condition=" '$(Configuration)' == 'Release' ">net9.0;net9.0-windows</TargetFrameworks>
-		<TargetFramework Condition=" '$(Configuration)' == 'Debug' ">net9.0-windows</TargetFramework>
 		<OutputType Condition="'$(TargetFramework)' == 'net9.0'">library</OutputType>
-		<NoWarn>1701;1702;CA1416;1591;1572;1573;1587</NoWarn>
+		<NoWarn>1701;1702;CA1416;1591;1572;1573;1587;NETSDK1106</NoWarn>
 		<RootNamespace>Game</RootNamespace>
         <IsWebBootstrapper>false</IsWebBootstrapper>
         <PublishUrl>publish\</PublishUrl>
@@ -21,7 +19,7 @@
         <PublishWizardCompleted>true</PublishWizardCompleted>
         <BootstrapperEnabled>False</BootstrapperEnabled>
         <GenerateAssemblyInfo>False</GenerateAssemblyInfo>
-        <Configurations>Debug;Release</Configurations>
+        <Configurations>Debug;Release;NotOpenGLES</Configurations>
         <RuntimeIdentifier>win-x64</RuntimeIdentifier>
         <PackageId>SurvivalcraftAPI.Survivalcraft</PackageId>
         <Title>SurvivalcraftAPI.Survivalcraft</Title><!--For NuGet Package-->
@@ -31,16 +29,27 @@
         <RepositoryType>Git</RepositoryType>
 		<AllowUnsafeBlocks>true</AllowUnsafeBlocks>
 		<GenerateSerializationAssemblies>Off</GenerateSerializationAssemblies>
+		<Platforms>AnyCPU</Platforms>
+		<AssemblyName Condition="'$(Configuration)' != 'NotOpenGLES'">Survivalcraft</AssemblyName>
+		<AssemblyName Condition="'$(Configuration)' == 'NotOpenGLES'">SurvivalcraftNotOpenGLES</AssemblyName>
     </PropertyGroup>
     <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
+		<TargetFramework>net9.0-windows</TargetFramework>
         <DefineConstants>DEBUG</DefineConstants>
         <Optimize>True</Optimize>
     </PropertyGroup>
     <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
+		<TargetFrameworks>net9.0;net9.0-windows</TargetFrameworks>
         <DebugType>none</DebugType>
         <DefineConstants>TRACE</DefineConstants>
 		<DebugType>embedded</DebugType>
     </PropertyGroup>
+	<PropertyGroup Condition=" '$(Configuration)' == 'NotOpenGLES' ">
+		<TargetFramework>net9.0-windows</TargetFramework>
+		<DebugType>none</DebugType>
+		<DefineConstants>TRACE;NOTOPENGLES</DefineConstants>
+		<DebugType>embedded</DebugType>
+	</PropertyGroup>
 	<PropertyGroup Condition="'$(TargetFramework)' == 'net9.0-windows'">
 		<OutputType>WinExe</OutputType>
 		<IncludeNativeLibrariesForSelfExtract>true</IncludeNativeLibrariesForSelfExtract>
@@ -72,7 +81,7 @@
         <Using Include="System.IO" />
         <ProjectReference Include="..\Engine\Engine.csproj" />
         <ProjectReference Include="..\EntitySystem\EntitySystem.csproj" />
-        <PackageReference Include="Jint" Version="4.2.1" />
+        <PackageReference Include="Jint" Version="4.2.2" />
         <PackageReference Include="System.Net.Http" Version="4.3.4" />
         <PackageReference Include="System.Private.Uri" Version="4.3.2" />
         <PackageReference Include="System.Text.RegularExpressions" Version="4.3.1" />
@@ -90,7 +99,7 @@
 			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 		</EmbeddedResource>
     </ItemGroup>
-    <ItemGroup Condition="'$(Configuration)' == 'Release' And '$(TargetFramework)' == 'net9.0-windows'">
+    <ItemGroup Condition="('$(Configuration)' == 'Release' Or '$(Configuration)' == 'NotOpenGLES') And '$(TargetFramework)' == 'net9.0-windows'">
 		<EmbeddedResource Include="init.js">
 			<CopyToOutputDirectory>Never</CopyToOutputDirectory>
 		</EmbeddedResource>

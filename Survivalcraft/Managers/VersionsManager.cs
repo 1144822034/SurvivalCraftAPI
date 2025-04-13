@@ -40,6 +40,12 @@ public static class VersionsManager
 	public static string PlatformTag = System.Runtime.InteropServices.RuntimeInformation.OSDescription;
 	public static BuildConfiguration BuildConfiguration => BuildConfiguration.Release;
 
+#if NOTOPENGLES
+	public static bool IsNotOpenGLES = true;
+#else
+	public static bool IsNotOpenGLES = false;
+#endif
+
 	public static string Version
 	{
 		get;
