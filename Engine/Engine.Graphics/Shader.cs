@@ -221,11 +221,7 @@ namespace Engine.Graphics
             else
             {
                 //[WARN] 未指定版本时，会主动加上最低的版本号
-#if NOTOPENGLES
                 str += "#version 100" + Environment.NewLine;
-#else
-                str += "#version 100 es" + Environment.NewLine;
-#endif
             }
 
 			str = str + "#define GLSL" + Environment.NewLine;
