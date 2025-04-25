@@ -40,9 +40,9 @@ SCAPI1.8已跟进2.4原版，建议换到1.8x
      
      ```xml
      <ItemGroup>
-       <PackageReference Include="SurvivalcraftAPI.Engine" Version="1.7.2.2"/>
-       <PackageReference Include="SurvivalcraftAPI.EntitySystem" Version="1.7.2.2"/>
-       <PackageReference Include="SurvivalcraftAPI.Survivalcraft" Version="1.7.2.2"/>
+       <PackageReference Include="SurvivalcraftAPI.Engine" Version="1.8.0.0"/>
+       <PackageReference Include="SurvivalcraftAPI.EntitySystem" Version="1.8.0.0"/>
+       <PackageReference Include="SurvivalcraftAPI.Survivalcraft" Version="1.8.0.0"/>
      </ItemGroup>
      ```
 
@@ -62,9 +62,12 @@ SCAPI1.8已跟进2.4原版，建议换到1.8x
 
 3. 如果只是在Windows系统上进行调试，请右键卸载`安卓端`文件夹中的所有项目，在`电脑端`文件夹的`Survivalcraft`项目上右键，点击`构建所选项目`即可
 
-4. 如果需要生成Android系统上的`APK`安装文件，需要切换配置为`Release`模式，在`安卓端`文件夹的`A_Launch2`和`A_Survivalcraft`两个项目上分别右键，点击`加载项目`，最后在`A_Launch2`上右键，点击`归档以用于发布`即可
+4. 如果需要生成Android系统上的`APK`安装文件，在`安卓端`文件夹的`A_Launch2`和`A_Survivalcraft`两个项目上分别右键，点击`加载项目`，最后在`A_Launch2`上右键，点击`归档以用于发布`即可
 
 5. 以上过程中，如果报错未安装相应功能，请按提示完成安装
 
-> 关于项目还原  
-> 请运行`dotnet restore /p:Configuration="Release"`
+## 感谢
+
+* 西班牙语翻译
+  * Fire Dragon (Discord: firedragon4095)
+  * Kike13 (Discord: .kike.04)
