@@ -658,6 +658,13 @@
     "Pad": "Pad",
     "Buttons": "Buttons"
   },
+  "CameraManage": {
+    "Game.FppCamera": "First person camera",
+    "Game.TppCamera": "Third person camera",
+    "Game.OrbitCamera": "Orbit camera",
+    "Game.FixedCamera": "Fixed camera",
+    "Game.DebugCamera": "Debug camera"
+  },
   "DigMethod": {
     "Shovel": "Shovel",
     "Quarry": "Quarry",
@@ -2948,8 +2955,17 @@
       "Touch Screen Joystick Offset",
       "Touch Screen Joystick Offset X",
       "Touch Screen Joystick Offset Y",
-      "Keyboard Settings"
+      "Keyboard Settings",
+      "Camera List",
+      "Manage"
     ],
+    "CameraManageScreen": {
+      "Enable": "Enable",
+      "Disable": "Disable",
+      "Enabled": "Enabled",
+      "Disabled": "Disabled",
+      "Tip": "Manage the order in which you switch perspectives. Disabled camera perspectives are skipped. Enable at least two cameras"
+    },
     "SettingsGraphicsScreen": {
       "1": "Adjust Graphics Settings",
       "2": "Virtual Reality:",

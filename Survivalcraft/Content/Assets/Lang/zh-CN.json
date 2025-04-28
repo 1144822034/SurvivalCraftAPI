@@ -662,6 +662,13 @@
 		"Pad": "触摸板",
 		"Buttons": "按钮"
 	},
+	"CameraManage": {
+		"Game.FppCamera": "第一人称视角",
+		"Game.TppCamera": "第三人称视角",
+		"Game.OrbitCamera": "滑轨视角",
+		"Game.FixedCamera": "固定视角",
+		"Game.DebugCamera": "调试视角"
+	},
 	"DigMethod": {
 		"Shovel": "用铲挖",
 		"Quarry": "用镐挖",
@@ -3504,8 +3511,17 @@
 			"触屏摇杆偏移",
 			"触屏摇杆横向偏移",
 			"触屏摇杆纵向偏移",
-			"键位设置"
+			"键位设置",
+			"摄像机列表",
+			"管理"
 		],
+		"CameraManageScreen": {
+			"Enable": "启用",
+			"Disable": "禁用",
+			"Enabled": "已启用",
+			"Disabled": "已禁用",
+			"Tip": "管理使用按键切换视角时的顺序。已禁用的摄像机视角会被跳过。至少启用两个摄像机"
+		},
 		"KeyboardMappingScreen": {
 			"SetKey": "设置按键",
 			"DisableKey": "禁用按键"

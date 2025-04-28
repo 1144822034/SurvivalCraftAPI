@@ -614,6 +614,13 @@
         "Pad": "Deslizante",
         "Buttons": "Botones"
     },
+	"CameraManage": {
+		"Game.FppCamera": "Cámara en primera persona",
+		"Game.TppCamera": "Cámara en tercera persona",
+		"Game.OrbitCamera": "Cámara orbital",
+		"Game.FixedCamera": "Cámara fija",
+		"Game.DebugCamera": "Cámara fantasma"
+	},
     "DigMethod": {
         "Shovel": "Cavar",
         "Quarry": "Picar",
@@ -2917,8 +2924,20 @@
                 "Estilo MemoryBank:",
                 "Arrastrar pila máxima de bloques (creativo):",
                 "Arrastrar media pila al dividir:",
-                "Posición del joystick táctil"
+                "Touch Screen Joystick Offset",
+                "Touch Screen Joystick Offset X",
+                "Touch Screen Joystick Offset Y",
+                "Posición del joystick táctil",
+                "Lista de cámaras",
+                "Gestión"
             ],
+            "CameraManageScreen": {
+                "Enable": "Activar",
+                "Disable": "Desactivar",
+                "Enabled": "Habilitado",
+                "Disabled": "Desactivado",
+                "Tip": "Gestiona el orden al usar teclas para cambiar la perspectiva. Las perspectivas de la cámara desactivadas se saltarán. Al menos habilita dos cámaras."
+            },
             "SettingsGraphicsScreen": {
                 "1": "Ajustes de graficos",
                 "2": "Virtual Reality:",
