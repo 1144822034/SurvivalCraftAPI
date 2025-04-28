@@ -518,6 +518,10 @@ namespace Game
 			{
 				AddScreen("KeyboardMapping", new KeyboardMappingScreen());
 			});
+			AddLoadAction(delegate
+			{
+				AddScreen("CameraManage", new CameraManageScreen());
+			});
 		}
 		public void AddScreen(string name, Screen screen)
 		{

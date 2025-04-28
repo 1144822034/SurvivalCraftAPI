@@ -747,6 +747,13 @@ namespace Game
         {
         }
 
+		/// <summary>
+		/// 当GameWidget被创建时执行，适合添加新的摄像机类型。具体方法可参考SurvivalCraftModLoader.ManageCameras
+		/// </summary>
+		/// <param name="gameWidget"></param>
+		public virtual void ManageCameras(GameWidget gameWidget)
+		{
+		}
         /// <summary>
         /// 屏幕截图时执行
         /// </summary>

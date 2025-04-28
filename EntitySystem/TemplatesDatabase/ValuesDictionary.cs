@@ -80,7 +80,10 @@ namespace TemplatesDatabase
 		{
 			m_dictionary.Clear();
 		}
-
+		public void Remove(string key)
+		{
+			m_dictionary.Remove(key);
+		}
 		public void Save(XElement node)
 		{
 			foreach (KeyValuePair<string, object> item in m_dictionary)

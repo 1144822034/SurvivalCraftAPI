@@ -519,6 +519,16 @@ namespace Game
 			KeyboardMappingSettings.SetValue("EditItem", Key.G);
 			KeyboardMappingSettings.SetValue("KeyboardHelp", Key.H);
 		}
+		public static ValuesDictionary CameraManageSettings { get; set; }
+		public static void InitializeCameraManageSettings()
+		{//键表示摄像机的类名，值表示摄像机的排序（小于0则禁用）
+			CameraManageSettings = new ValuesDictionary();
+			CameraManageSettings.SetValue("Game.FppCamera", 0);
+			CameraManageSettings.SetValue("Game.TppCamera", 1);
+			CameraManageSettings.SetValue("Game.OrbitCamera", 2);
+			CameraManageSettings.SetValue("Game.FixedCamera", 3);
+			CameraManageSettings.SetValue("Game.DebugCamera", 4);
+		}
 		public static void Initialize()
 		{
 			{
@@ -587,6 +597,7 @@ namespace Game
 				MoveWidgetMarginX = 0f;
 				MoveWidgetMarginY = 0f;
 				InitializeKeyboardMappingSettings();
+				InitializeCameraManageSettings();
 			}
 			LoadSettings();
 			Window.Deactivated += delegate

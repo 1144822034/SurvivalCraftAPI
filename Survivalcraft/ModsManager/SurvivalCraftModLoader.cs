@@ -3,6 +3,7 @@ using Engine.Graphics;
 using Engine.Media;
 using GameEntitySystem;
 using Jint;
+using System.Reflection;
 
 namespace Game
 {
@@ -11,6 +12,7 @@ namespace Game
         public override void __ModInitialize()
         {
             ModsManager.RegisterHook("OnCameraChange", this);
+            ModsManager.RegisterHook("ManageCameras", this);
             ModsManager.RegisterHook("OnPlayerDead", this);
             ModsManager.RegisterHook("OnModelRendererDrawExtra", this);
             ModsManager.RegisterHook("GetMaxInstancesCount", this);
@@ -24,43 +26,35 @@ namespace Game
         public override void OnCameraChange(ComponentPlayer m_componentPlayer, ComponentGui componentGui)
         {
             GameWidget gameWidget = m_componentPlayer.GameWidget;
-            if (gameWidget.ActiveCamera is FppCamera)
-            {
-                gameWidget.ActiveCamera = gameWidget.FindCamera<TppCamera>();
-                componentGui.DisplaySmallMessage(LanguageControl.Get(ComponentGui.fName, 9), Color.White,
-                    blinking: false, playNotificationSound: false);
-            }
-            else if (gameWidget.ActiveCamera is TppCamera)
-            {
-                gameWidget.ActiveCamera = gameWidget.FindCamera<OrbitCamera>();
-                componentGui.DisplaySmallMessage(LanguageControl.Get(ComponentGui.fName, 10), Color.White,
-                    blinking: false, playNotificationSound: false);
-            }
-            else if (gameWidget.ActiveCamera is OrbitCamera)
-            {
-                gameWidget.ActiveCamera = gameWidget.FindCamera<FixedCamera>();
-                componentGui.DisplaySmallMessage(LanguageControl.Get(ComponentGui.fName, 11), Color.White,
-                    blinking: false, playNotificationSound: false);
-            }
-            else
-            {
-                if (componentGui.m_subsystemGameInfo.WorldSettings.GameMode == GameMode.Creative &&
-                    gameWidget.ActiveCamera is FixedCamera)
-                {
-                    gameWidget.ActiveCamera = gameWidget.FindCamera<DebugCamera>();
-                    componentGui.DisplaySmallMessage(LanguageControl.Get(ComponentGui.fName, 19), Color.White,
-                        blinking: false, playNotificationSound: false);
-                }
-                else
-                {
-                    gameWidget.ActiveCamera = gameWidget.FindCamera<FppCamera>();
-                    componentGui.DisplaySmallMessage(LanguageControl.Get(ComponentGui.fName, 12), Color.White,
-                        blinking: false, playNotificationSound: false);
-                }
-            }
+			int currentIndex = Convert.ToInt32(SettingsManager.CameraManageSettings.First(item => Type.GetType(item.Key) == gameWidget.ActiveCamera.GetType()).Value);
+			int enableCount = CameraManageScreen.EnabledCamerasCount;
+			int nextCameraIndex = (currentIndex + 1) % enableCount;
+			Camera camera;
+			bool isEnable;
+			string key;
+			do
+			{
+				key = SettingsManager.CameraManageSettings.First(item2 => Convert.ToInt32(item2.Value) == nextCameraIndex).Key;
+				camera = gameWidget.FindCamera(Type.GetType(key),out isEnable);
+				nextCameraIndex = (nextCameraIndex + 1) % enableCount;
+			}
+			while(!isEnable);
+			gameWidget.ActiveCamera = camera;
+			componentGui.DisplaySmallMessage(LanguageControl.Get("CameraManage",key),Color.White,
+				blinking: false,playNotificationSound: false);
         }
-
-        public override void OnPlayerDead(PlayerData playerData)
+		public override void ManageCameras(GameWidget gameWidget)
+		{//示例：添加调试视角
+			DebugCamera debugCamera = new DebugCamera(gameWidget);
+			//第一个参数声明一个新的摄像机
+			//第二个参数为一个Func委托，输入gameWidget可对当前条件进行判断(例如判断是否为创造模式、是否乘坐载具等)，若不符合条件则在玩家切换视角时会跳过当前摄像机
+			//如果不用判断条件(任何条件都不跳过该摄像机)，第二个参数可传入null或不填
+			gameWidget.AddCamera(debugCamera,gameWidget => {
+				SubsystemGameInfo subsystemGameInfo = gameWidget.Target.Project.FindSubsystem<SubsystemGameInfo>();
+				return subsystemGameInfo.WorldSettings.GameMode == GameMode.Creative;
+			});
+		}
+		public override void OnPlayerDead(PlayerData playerData)
         {
             playerData.GameWidget.ActiveCamera = playerData.GameWidget.FindCamera<DeathCamera>();
             if (playerData.ComponentPlayer != null)

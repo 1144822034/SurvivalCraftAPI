@@ -117,6 +117,11 @@
 				<BevelledButtonWidget Name="KeyboardMappingEntry" Text ="[SettingsControlsScreen:22]" Style="{Styles/ButtonStyle_310x60}" VerticalAlignment="Center" Margin="20, 0" />
 			</UniformSpacingPanelWidget>
 			
+			<UniformSpacingPanelWidget Direction="Horizontal" Margin="0, 3">
+				<LabelWidget Text="[SettingsControlsScreen:23]"  HorizontalAlignment="Far" VerticalAlignment="Center" Margin="20, 0" />
+				<BevelledButtonWidget Name="CameraManageEntry" Text ="[SettingsControlsScreen:24]" Style="{Styles/ButtonStyle_310x60}" VerticalAlignment="Center" Margin="20, 0" />
+			</UniformSpacingPanelWidget>
+			
         </StackPanelWidget>
       </ScrollPanelWidget>
     </CanvasWidget>
