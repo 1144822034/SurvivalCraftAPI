@@ -1,5 +1,3 @@
-using System;
-using GameEntitySystem;
 using Engine;
 
 namespace Game
@@ -8,10 +6,10 @@ namespace Game
     {
         public override void OnPickableGathered(Pickable pickable, ComponentPickableGatherer target, Vector3 distanceToTarget)
         {
-            float distance = distanceToTarget.Length();
-            if (!pickable.ToRemove && distance < pickable.DistanceToPick)
+            var distanceSquared = distanceToTarget.LengthSquared();
+            if (!pickable.ToRemove && distanceSquared < pickable.DistanceToPick * pickable.DistanceToPick)
             {
-                ComponentLevel targetComponentLevel = target.Entity.FindComponent<ComponentLevel>();
+                var targetComponentLevel = target.Entity.FindComponent<ComponentLevel>();
                 if (targetComponentLevel != null)
                 {
                     targetComponentLevel.AddExperience(pickable.Count, playSound: true);
