@@ -1778,5 +1778,20 @@ namespace Game
 		{
 		}
 
+		/// <summary>
+		/// 当按键设置初始化时执行。可用于模组添加新的按键设置。在重置按键设置时也会使用这里的设置作为默认值
+		/// </summary>
+		/// <param name="keyboardMappingSettings"></param>
+		public virtual void OnKeyboardMappingInit(ValuesDictionary keyboardMappingSettings)
+        {
+        }
+
+		/// <summary>
+		/// 在相机列表初始化时执行。可用于模组添加新的摄像机顺序。在重置摄像机列表时也会使用这里的设置作为默认值
+		/// </summary>
+		/// <param name="cameraList"></param>
+		public virtual void OnCameraListInit(ValuesDictionary cameraList)
+		{
+		}
 	}
 }

@@ -518,6 +518,10 @@ namespace Game
 			KeyboardMappingSettings.SetValue("Drop", Key.Q);
 			KeyboardMappingSettings.SetValue("EditItem", Key.G);
 			KeyboardMappingSettings.SetValue("KeyboardHelp", Key.H);
+			ModsManager.HookAction("OnKeyboardMappingInit", loader => {
+				loader.OnKeyboardMappingInit(KeyboardMappingSettings);
+				return false;
+			});
 		}
 		public static ValuesDictionary CameraManageSettings { get; set; }
 		public static void InitializeCameraManageSettings()
@@ -527,7 +531,10 @@ namespace Game
 			CameraManageSettings.SetValue("Game.TppCamera", 1);
 			CameraManageSettings.SetValue("Game.OrbitCamera", 2);
 			CameraManageSettings.SetValue("Game.FixedCamera", 3);
-			CameraManageSettings.SetValue("Game.DebugCamera", 4);
+			ModsManager.HookAction("OnCameraListInit", loader => {
+				loader.OnCameraListInit(CameraManageSettings);
+				return false;
+			});
 		}
 		public static void Initialize()
 		{

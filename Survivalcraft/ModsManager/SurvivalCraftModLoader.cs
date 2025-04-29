@@ -4,6 +4,7 @@ using Engine.Media;
 using GameEntitySystem;
 using Jint;
 using System.Reflection;
+using TemplatesDatabase;
 
 namespace Game
 {
@@ -11,9 +12,10 @@ namespace Game
     {
         public override void __ModInitialize()
         {
-            ModsManager.RegisterHook("OnCameraChange", this);
-            ModsManager.RegisterHook("ManageCameras", this);
-            ModsManager.RegisterHook("OnPlayerDead", this);
+			ModsManager.RegisterHook("OnCameraListInit", this);
+			ModsManager.RegisterHook("ManageCameras", this);
+			ModsManager.RegisterHook("OnCameraChange", this);
+			ModsManager.RegisterHook("OnPlayerDead", this);
             ModsManager.RegisterHook("OnModelRendererDrawExtra", this);
             ModsManager.RegisterHook("GetMaxInstancesCount", this);
             ModsManager.RegisterHook("BeforeWidgetDrawItemRender", this);
@@ -22,8 +24,22 @@ namespace Game
             
             TextBoxWidget.ShowCandidatesWindow = SettingsManager.FullScreenMode;
         }
-
-        public override void OnCameraChange(ComponentPlayer m_componentPlayer, ComponentGui componentGui)
+		public override void OnCameraListInit(ValuesDictionary cameraList)
+		{//示例：向摄像机列表设置中添加调试视角。若此处不添加，则设置里不会显示该视角的选项，并且在游戏中也无法切换到该视角
+			cameraList.SetValue("Game.DebugCamera", 4);//4为调试视角的默认序号。其它摄像机的序号详见SettingsManager.InitializeCameraManageSettings。这些序号只作为默认设置
+		}
+		public override void ManageCameras(GameWidget gameWidget)
+		{//示例：向GameWidget中添加调试视角
+			DebugCamera debugCamera = new DebugCamera(gameWidget);
+			//第一个参数声明一个新的摄像机
+			//第二个参数为一个Func委托，输入gameWidget可对当前条件进行判断(例如判断是否为创造模式、是否乘坐载具等)，若不符合条件则在玩家切换视角时会跳过当前摄像机
+			//如果不用判断条件(任何条件都不跳过该摄像机)，第二个参数可传入null或不填
+			gameWidget.AddCamera(debugCamera, gameWidget => {
+				SubsystemGameInfo subsystemGameInfo = gameWidget.Target.Project.FindSubsystem<SubsystemGameInfo>();
+				return subsystemGameInfo.WorldSettings.GameMode == GameMode.Creative;
+			});
+		}
+		public override void OnCameraChange(ComponentPlayer m_componentPlayer, ComponentGui componentGui)
         {
             GameWidget gameWidget = m_componentPlayer.GameWidget;
 			int currentIndex = Convert.ToInt32(SettingsManager.CameraManageSettings.First(item => Type.GetType(item.Key) == gameWidget.ActiveCamera.GetType()).Value);
@@ -43,17 +59,6 @@ namespace Game
 			componentGui.DisplaySmallMessage(LanguageControl.Get("CameraManage",key),Color.White,
 				blinking: false,playNotificationSound: false);
         }
-		public override void ManageCameras(GameWidget gameWidget)
-		{//示例：添加调试视角
-			DebugCamera debugCamera = new DebugCamera(gameWidget);
-			//第一个参数声明一个新的摄像机
-			//第二个参数为一个Func委托，输入gameWidget可对当前条件进行判断(例如判断是否为创造模式、是否乘坐载具等)，若不符合条件则在玩家切换视角时会跳过当前摄像机
-			//如果不用判断条件(任何条件都不跳过该摄像机)，第二个参数可传入null或不填
-			gameWidget.AddCamera(debugCamera,gameWidget => {
-				SubsystemGameInfo subsystemGameInfo = gameWidget.Target.Project.FindSubsystem<SubsystemGameInfo>();
-				return subsystemGameInfo.WorldSettings.GameMode == GameMode.Creative;
-			});
-		}
 		public override void OnPlayerDead(PlayerData playerData)
         {
             playerData.GameWidget.ActiveCamera = playerData.GameWidget.FindCamera<DeathCamera>();
