@@ -25,7 +25,7 @@
         "4": "Loading Community Content cache failed.",
         "5": "Saving Community Content cache failed."
     },
-    "ModsManager":{
+    "ModsManager": {
         "1": "Database value \"{0}\" will be modified from \"{1}\" to \"{2}\".",
         "2": "\nOther Mods May Not Run Correctly.",
         "3": "Change Enabled",
@@ -309,22 +309,22 @@
         "1": "Таблицей",
         "2": "Построчно"
     },
-  "ViewGameLogDialog": {
-    "1": "очист",
-    "2": "ошибк",
-    "3": "Заходите.",
-    "4": "увер",
-    "5": "отмен",
-    "6": "Загрузка в журнал...",
-    "7": "Загрузка завершена.",
-    "8": "Загрузка завершена.",
-    "9": "Ошибки в работе мира",
-    "10": "Пожалуйста, свяжитесь с разработчиком модуля и предоставьте журнал регистрации игр",
-    "11": "Мир загружен неправильно",
-    "12": "Ошибка генератора игрока",
-    "13": "Скопируй этот журнал",
-    "14": "The world files may be occupied by another program."
-  },
+    "ViewGameLogDialog": {
+        "1": "очист",
+        "2": "ошибк",
+        "3": "Заходите.",
+        "4": "увер",
+        "5": "отмен",
+        "6": "Загрузка в журнал...",
+        "7": "Загрузка завершена.",
+        "8": "Загрузка завершена.",
+        "9": "Ошибки в работе мира",
+        "10": "Пожалуйста, свяжитесь с разработчиком модуля и предоставьте журнал регистрации игр",
+        "11": "Мир загружен неправильно",
+        "12": "Ошибка генератора игрока",
+        "13": "Скопируй этот журнал",
+        "14": "The world files may be occupied by another program."
+    },
     "MoreCommunityLinkDialog": {
         "1": "No User",
         "2": "Select Active User"
@@ -650,13 +650,13 @@
         "Pad": "Панель",
         "Buttons": "Кнопки"
     },
-	"CameraManage": {
-		"Game.FppCamera": "От первого лица",
-		"Game.TppCamera": "От третьего лица",
-		"Game.OrbitCamera": "Орбитально",
-		"Game.FixedCamera": "Неподвижно",
-		"Game.DebugCamera": "Отладка"
-	},
+    "CameraManage": {
+        "Game.FppCamera": "От первого лица",
+        "Game.TppCamera": "От третьего лица",
+        "Game.OrbitCamera": "Орбитально",
+        "Game.FixedCamera": "Неподвижно",
+        "Game.DebugCamera": "Отладка"
+    },
     "DigMethod": {
         "Shovel": "Копание",
         "Quarry": "Добыча",
@@ -989,7 +989,7 @@
         "0": "Вместо этого делается каменный топор",
         "1": "Вместо этого делаются деревянные грабли"
     },
-    "GameLogSink":{
+    "GameLogSink": {
         "1": "The log file may be occupied by another program, resulting in a failed load."
     },
     "BasePumpkinBlock": {
@@ -1004,8 +1004,8 @@
     "BulletBlock": [ "Musket Ball", "Buckshot", "Buckshot Ball" ],
     "PressurePlateBlock": [ "Wooden Pressure Plate", "Stone Pressure Plate" ],
     "PistonBlock": [ "Piston", "Pulling Piston", "Strict Pulling Piston" ],
-    "DeciduousLeavesBlock": [ "Summer ", "Autumn ", "Winter ", "Spring "],
-    "SubsystemSeasons": [ "Early Summer", "Summer", "Late Summer", "Early Autumn", "Autumn", "Late Autumn", "Early Winter", "Winter", "Late Winter", "Early Spring", "Spring", "Late Spring"],
+    "DeciduousLeavesBlock": [ "Summer ", "Autumn ", "Winter ", "Spring " ],
+    "SubsystemSeasons": [ "Early Summer", "Summer", "Late Summer", "Early Autumn", "Autumn", "Late Autumn", "Early Winter", "Winter", "Late Winter", "Early Spring", "Spring", "Late Spring" ],
     "Blocks": {
         "AirBlock:0": {
             "DisplayName": "Воздух",
@@ -2798,19 +2798,19 @@
         "HelpTopicScreen": {
             "1": "Помощь"
         },
-      "MainMenuScreen": {
-        "1": "",
-        "2": "Игра",
-        "3": "Содержимое",
-        "4": "Настройки",
-        "5": "Помощь",
-        "6": "Полная версия",
-        "7": "(C) 2011-2025 Candy Rufus Games. ",
-        "8": "Дополнительная информация на ",
-        "9": "kaalus.wordpress.com",
-        "10": "",
-        "11": "View Announcement"
-      },
+        "MainMenuScreen": {
+            "1": "",
+            "2": "Игра",
+            "3": "Содержимое",
+            "4": "Настройки",
+            "5": "Помощь",
+            "6": "Полная версия",
+            "7": "(C) 2011-2025 Candy Rufus Games. ",
+            "8": "Дополнительная информация на ",
+            "9": "kaalus.wordpress.com",
+            "10": "",
+            "11": "View Announcement"
+        },
         "ManageContentScreen": {
             "1": "Содержимое",
             "2": "(можно загрузить из содержимого сообщества)",
@@ -2951,7 +2951,17 @@
             "Disable": "Отключить",
             "Enabled": "Включено",
             "Disabled": "Отключено",
-            "Tip": "Управляйте порядком использования клавиш для переключения перспектив. Отключенные перспективы камеры пропускаются. Включите как минимум две камеры"
+            "Tip": "Управляйте порядком использования клавиш для переключения перспектив. Отключенные перспективы камеры пропускаются. Включите как минимум две камеры",
+            "Reset": "Сбросить все",
+            "ResetTitle": "Сброс настроек всех камер",
+            "ResetText": "Вы уверены?\nЭто восстановит настройки списка камер по умолчанию"
+        },
+        "KeyboardMappingScreen": {
+            "SetKey": "Установка кнопок",
+            "DisableKey": "Кнопка отключения",
+            "Reset": "Сбросить все",
+            "ResetTitle": "Сбросить все кнопки",
+            "ResetText": "Вы уверены?\nЭто восстановит все ключи к настройкам по умолчанию"
         },
         "SettingsGraphicsScreen": {
             "1": "Настройка графики",

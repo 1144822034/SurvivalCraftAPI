@@ -27,6 +27,7 @@ namespace Game
 		public BevelledButtonWidget m_disableButton;
 		public BevelledButtonWidget m_upButton;
 		public BevelledButtonWidget m_downButton;
+		public BevelledButtonWidget m_resetButton;
 		public Dictionary<string, ContainerWidget> m_widgetsByString = new Dictionary<string, ContainerWidget>();
 
 		public static int EnabledCamerasCount => SettingsManager.CameraManageSettings.Count(item => Convert.ToInt32(item.Value) >= 0);
@@ -53,6 +54,7 @@ namespace Game
 			m_disableButton = Children.Find<BevelledButtonWidget>("DisableCamera");
 			m_upButton = Children.Find<BevelledButtonWidget>("Up");
 			m_downButton = Children.Find<BevelledButtonWidget>("Down");
+			m_resetButton = Children.Find<BevelledButtonWidget>("Reset");
 		}
 
 		public override void Update()
@@ -114,6 +116,20 @@ namespace Game
 				int i = m_camerasList.SelectedIndex ?? -1;
 				RefreshList();
 				m_camerasList.SelectedIndex = i + 1;//刷新列表后重新选中
+			}
+			if(m_resetButton.IsClicked)
+			{
+				MessageDialog dialog = new MessageDialog(LanguageControl.Get("ContentWidgets","CameraManageScreen","ResetTitle"),
+					LanguageControl.Get("ContentWidgets","CameraManageScreen","ResetText"),LanguageControl.Yes,LanguageControl.No,
+					delegate (MessageDialogButton button)
+					{
+						if(button == MessageDialogButton.Button1)
+						{
+							SettingsManager.InitializeCameraManageSettings();
+							RefreshList();
+						}
+					});
+				DialogsManager.ShowDialog(null,dialog);
 			}
 			if (Children.Find<ButtonWidget>("TopBar.Back").IsClicked || Input.Back || Input.Cancel)
 			{

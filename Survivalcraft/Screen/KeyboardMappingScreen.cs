@@ -23,6 +23,7 @@ namespace Game
 		}
 
 		public ListPanelWidget m_keysList;
+		public BevelledButtonWidget m_resetButton;
 		public BevelledButtonWidget m_setKeyButton;
 		public BevelledButtonWidget m_disableKeyButton;
 		public bool IsWaitingForKeyInput = false;
@@ -46,6 +47,7 @@ namespace Game
 					m_keysList.SelectedItem = item;
 				}
 			};
+			m_resetButton = Children.Find<BevelledButtonWidget>("Reset");
 			m_setKeyButton = Children.Find<BevelledButtonWidget>("SetKey");
 			m_disableKeyButton = Children.Find<BevelledButtonWidget>("DisableKey");
 		}
@@ -78,6 +80,20 @@ namespace Game
 			if(m_disableKeyButton.IsClicked)
 			{
 				SettingsManager.KeyboardMappingSettings[selectedKeyName] = Key.Null;
+				IsWaitingForKeyInput = false;
+			}
+			if(m_resetButton.IsClicked)
+			{
+				MessageDialog dialog = new MessageDialog(LanguageControl.Get("ContentWidgets",fName,"ResetTitle"),
+					LanguageControl.Get("ContentWidgets",fName,"ResetText"),LanguageControl.Yes,LanguageControl.No,
+					delegate (MessageDialogButton button)
+					{
+						if(button == MessageDialogButton.Button1)
+						{
+							SettingsManager.InitializeKeyboardMappingSettings();
+						}
+					});
+				DialogsManager.ShowDialog(null,dialog);
 				IsWaitingForKeyInput = false;
 			}
 			if(IsWaitingForKeyInput)
