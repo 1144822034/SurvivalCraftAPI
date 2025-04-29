@@ -1,4 +1,5 @@
 using System.Xml.Linq;
+using Engine;
 
 namespace Game
 {
@@ -18,6 +19,8 @@ namespace Game
 
 		public ButtonWidget m_controlsButton;
 
+		public StackPanelWidget m_leftStack, m_rightPanel;
+		readonly Dictionary<ButtonWidget, Action> m_buttonActions = new Dictionary<ButtonWidget,Action>();
 		public SettingsScreen()
 		{
 			XElement node = ContentManager.Get<XElement>("Screens/SettingsScreen");
@@ -28,7 +31,8 @@ namespace Game
 			m_compatibilityButton = Children.Find<ButtonWidget>("Compatibility");
 			m_audioButton = Children.Find<ButtonWidget>("Audio");
 			m_controlsButton = Children.Find<ButtonWidget>("Controls");
-
+			m_leftStack = Children.Find<StackPanelWidget>("LeftStack");
+			m_rightPanel = Children.Find<StackPanelWidget>("RightStack");
 		}
 
 		public override void Enter(object[] parameters)
@@ -65,11 +69,53 @@ namespace Game
 			{
 				ScreensManager.SwitchScreen("SettingsControls");
 			}
+			foreach(var buttonAction in m_buttonActions)
+			{
+				if(buttonAction.Key.IsClicked)
+					buttonAction.Value?.Invoke();
+			}
 			if (Input.Back || Input.Cancel || Children.Find<ButtonWidget>("TopBar.Back").IsClicked)
 			{
 				ScreensManager.SwitchScreen(m_previousScreen);
 				m_previousScreen = null;
 			}
+		}
+		/// <summary>
+		/// 添加新的设置按钮。建议在ModLoader.OnLoadingFinished中使用
+		/// </summary>
+		/// <param name="button"></param>
+		/// <param name="onClicked"></param>
+		/// <exception cref="InvalidOperationException"></exception>
+		public void AddSettingButton(ButtonWidget button,Action onClicked)
+		{
+			ArgumentNullException.ThrowIfNull(button);
+			if(m_buttonActions.ContainsKey(button))
+			{
+				throw new InvalidOperationException("Button already has an action assigned");
+			}
+			m_buttonActions.Add(button,onClicked);
+			int index = m_buttonActions.Count - 1;
+			if(index % 2 == 0)
+				m_leftStack.Children.Add(button);
+			else
+				m_rightPanel.Children.Add(button);
+		}
+
+		/// <summary>
+		/// 添加新的设置按钮。建议在ModLoader.OnLoadingFinished中使用。使用标准的设置按钮样式，若需要自定义样式请使用另一个重载
+		/// </summary>
+		/// <param name="text"></param>
+		/// <param name="onClicked"></param>
+		public void AddSettingButton(string text,Action onClicked)
+		{
+			ButtonWidget button = new BevelledButtonWidget()
+			{
+				Name = text, Text = text,
+				Style = ContentManager.Get<XElement>("Styles/ButtonStyle_310x60"),
+				HorizontalAlignment = WidgetAlignment.Center, VerticalAlignment = WidgetAlignment.Center,
+				Margin = new Vector2(0f,5f),
+			};
+			AddSettingButton(button,onClicked);
 		}
 	}
 }
