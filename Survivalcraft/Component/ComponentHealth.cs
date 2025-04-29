@@ -121,32 +121,36 @@ namespace Game
             get;
             set;
         }
-        public float m_attackResilience;
-        public float m_fallResilience;
-        public float m_fireResilience;
+		public float m_attackResilience;
+		public float m_fallResilience;
+		public float m_fireResilience;
 
         /// <summary>
         /// 攻击抗性
         /// </summary>
         public virtual float AttackResilience
         {
-            get;
-            set;
-        }
-        /// <summary>
-        /// 掉落抗性
-        /// </summary>
-        public virtual float FallResilience
-        {
-            get;
-            set;
-        }
+			get => m_attackResilience * AttackResilienceFactor;
+			set => m_attackResilience = value;
+		}
 
-        public virtual float FireResilience
+		/// <summary>
+		/// 掉落抗性
+		/// </summary>
+		public virtual float FallResilience
         {
-            get;
-            set;
-        }
+			get => m_fallResilience * FallResilienceFactor;
+			set => m_fallResilience = value;
+		}
+
+		/// <summary>
+		/// 火焰抗性
+		/// </summary>
+		public virtual float FireResilience
+        {
+			get => m_fireResilience * FireResilienceFactor;
+			set => m_fireResilience = value;
+		}
 
         public virtual double? DeathTime
         {
@@ -293,10 +297,7 @@ namespace Game
         {
             lock (this)
             {
-                //更新属性加成
-                AttackResilience = m_attackResilience * AttackResilienceFactor;
-                FallResilience = m_fallResilience * FallResilienceFactor;
-                FireResilienceFactor = m_fireResilience * FireResilienceFactor;
+              
                 Vector3 position = m_componentCreature.ComponentBody.Position;
                 if (m_regenerateLifeEnabled && Health > 0f && Health < 1f)
                 {
@@ -468,9 +469,6 @@ namespace Game
             AttackResilience = valuesDictionary.GetValue<float>("AttackResilience");
             FallResilience = valuesDictionary.GetValue<float>("FallResilience");
             FireResilience = valuesDictionary.GetValue<float>("FireResilience");
-            m_attackResilience = AttackResilience;
-            m_fallResilience = FallResilience;
-            m_fireResilience = FireResilience;
             CorpseDuration = valuesDictionary.GetValue<float>("CorpseDuration");
             BreathingMode = valuesDictionary.GetValue<BreathingMode>("BreathingMode");
             CanStrand = valuesDictionary.GetValue<bool>("CanStrand");
