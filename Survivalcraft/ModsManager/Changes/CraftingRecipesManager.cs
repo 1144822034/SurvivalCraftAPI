@@ -35,9 +35,13 @@ namespace Game
 			});
 			if(sort) m_recipes.Sort(delegate (CraftingRecipe r1, CraftingRecipe r2)
 			{
-				int y = r1.Ingredients.Count((string s) => !string.IsNullOrEmpty(s));
-				int x = r2.Ingredients.Count((string s) => !string.IsNullOrEmpty(s));
-				return Comparer<int>.Default.Compare(x, y);
+				if(r1.DisplayOrder == r2.DisplayOrder)
+				{
+					int y = r1.Ingredients.Count((string s) => !string.IsNullOrEmpty(s));
+					int x = r2.Ingredients.Count((string s) => !string.IsNullOrEmpty(s));
+					return Comparer<int>.Default.Compare(x,y);
+				}
+				return Comparer<int>.Default.Compare(r1.DisplayOrder, r2.DisplayOrder);
 			});
 			ModsManager.HookAction("CraftingRecipesManagerInitialized", loader =>
 			{
@@ -94,6 +98,7 @@ namespace Game
 			craftingRecipe.RequiredPlayerLevel = XmlUtils.GetAttributeValue(item, "RequiredPlayerLevel", 1f);
 			craftingRecipe.Description = desc;
 			craftingRecipe.Message = XmlUtils.GetAttributeValue<string>(item, "Message", null);
+			craftingRecipe.DisplayOrder = XmlUtils.GetAttributeValue<int>(item,"DisplayOrder", 0);
 			var dictionary = new Dictionary<char, string>();
 			foreach (XAttribute item2 in from a in item.Attributes()
 										 where a.Name.LocalName.Length == 1 && char.IsLower(a.Name.LocalName[0])

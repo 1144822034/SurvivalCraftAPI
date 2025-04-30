@@ -21,5 +21,10 @@ namespace Game
 		public string Description;
 
 		public string Message;
+
+		/// <summary>
+		/// 在配方表中的显示顺序，DisplayOrder越小，配方越靠前
+		/// </summary>
+		public int DisplayOrder = 0;
 	}
 }

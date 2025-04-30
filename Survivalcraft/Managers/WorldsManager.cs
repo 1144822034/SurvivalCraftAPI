@@ -114,8 +114,9 @@ namespace Game
 					}
 				}
 			}
-			catch (Exception)
+			catch (Exception ex)
 			{
+				Log.Error(ex);
 				throw new InvalidOperationException("The world files are corrupt and could not be repaired.");
 			}
 		}
