@@ -5,8 +5,8 @@ using GameEntitySystem;
 
 public class GameWidget : CanvasWidget
 {
-    readonly List<Camera> m_cameras = new List<Camera>();
-	readonly Dictionary<Camera,Func<GameWidget,bool>> m_isCameraEnable = new Dictionary<Camera, Func<GameWidget, bool>>();
+    public List<Camera> m_cameras = new List<Camera>();
+	public Dictionary<Camera,Func<GameWidget,bool>> m_isCameraEnable = new Dictionary<Camera, Func<GameWidget, bool>>();
 
     public Camera m_activeCamera;
 
