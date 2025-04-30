@@ -18,7 +18,7 @@ namespace Game
         public Action<TerrainChunk> GenerateAction;
         public ChunkGenerationStep(int generateOrder, Action<TerrainChunk> action) : this(generateOrder, action, action.Method?.Name ?? string.Empty)
 		{
-			//为了保证1.80的模组能够用带有2个参数的方法，这玩意别删
+			//为了保证1.8的模组能够用带有2个参数的方法，这玩意别删
         }
 
 		public ChunkGenerationStep(int generateOrder,Action<TerrainChunk> action,string name)

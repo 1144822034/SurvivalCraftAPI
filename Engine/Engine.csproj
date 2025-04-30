@@ -14,7 +14,7 @@
 		<AllowUnsafeBlocks>true</AllowUnsafeBlocks>
 		<PackageId>SurvivalcraftAPI.Engine</PackageId>
 		<Title>SurvivalcraftAPI.Engine</Title><!--For NuGet Package-->
-		<Version>1.8.0.0</Version><!--For NuGet Package-->
+		<Version>1.8.1.0</Version><!--For NuGet Package-->
 		<PackageProjectUrl>https://gitee.com/SC-SPM/SurvivalcraftApi</PackageProjectUrl>
 		<RepositoryUrl>https://gitee.com/SC-SPM/SurvivalcraftApi</RepositoryUrl>
 		<RepositoryType>Git</RepositoryType>

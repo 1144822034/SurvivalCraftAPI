@@ -79,7 +79,7 @@ namespace Game
 					return versionFloat;
 				}
 			}
-			throw new FormatException($"The API version string format is incorrect: {version}. The correct format should look like this: API1.80 or 1.80.");
+			throw new FormatException($"The API version string format is incorrect: {version}. The correct format should look like this: \"API1.8.1\" or \"1.8.1\"(older version likes \"API1.53\" or \"1.53\" instead).");
 		}
 
 		/// <summary>
