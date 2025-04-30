@@ -48,7 +48,6 @@ namespace Game
 			base.AddSlotItems(slotIndex, value, count);
 			if (oldCount == 0) m_recipeRefindNeeded = true;
 			m_recipeUpdateNeeded = true;
-			m_slots[RemainsSlotIndex].Count = 0;
 			m_slots[ResultSlotIndex].Count = 0;
 		}
 
