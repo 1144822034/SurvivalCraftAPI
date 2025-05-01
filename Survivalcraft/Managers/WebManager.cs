@@ -86,6 +86,7 @@ namespace Game
 			Exception e = default;
 			Task.Run(async delegate
 			{
+				Uri requestUri = (parameters != null && parameters.Count > 0) ? new Uri($"{address}?{UrlParametersToString(parameters)}") : new Uri(address);
 				try
 				{
 					progress = progress ?? new CancellableProgress();
@@ -95,7 +96,6 @@ namespace Game
 					}
 					using (HttpClient client = new())
 					{
-						Uri requestUri = (parameters != null && parameters.Count > 0) ? new System.Uri($"{address}?{UrlParametersToString(parameters)}") : new Uri(address);
 						client.DefaultRequestHeaders.Referrer = new Uri(address);
 						if (headers != null)
 						{
@@ -149,8 +149,8 @@ namespace Game
 				}
 				catch (Exception ex)
 				{
-					Log.Error(ExceptionManager.MakeFullErrorMessage(e));
-					if (failure != null)
+					Log.Warning(e.Message + ":\nThe connection is unavailable. Url: " + requestUri.ToString());
+					if(failure != null)
 					{
 						Dispatcher.Dispatch(delegate
 						{
@@ -224,6 +224,7 @@ namespace Game
 			byte[] responseData = default;
 			Task.Run(async delegate
 			{
+				Uri requestUri = (parameters != null && parameters.Count > 0) ? new Uri($"{address}?{UrlParametersToString(parameters)}") : new Uri(address);
 				try
 				{
 					if (!IsInternetConnectionAvailable())
@@ -242,9 +243,8 @@ namespace Game
 							}
 						}
 					}
-					Uri requestUri = (parameters != null && parameters.Count > 0) ? new Uri($"{address}?{UrlParametersToString(parameters)}") : new Uri(address);
 #if !ANDROID
-						var httpContent = new ProgressHttpContent(data, progress);
+					var httpContent = new ProgressHttpContent(data, progress);
 #else
 					HttpContent httpContent = (progress != null) ? ((HttpContent)new ProgressHttpContent(data,progress)) : ((HttpContent)new StreamContent(data));
 #endif
@@ -269,7 +269,7 @@ namespace Game
 				}
 				catch (Exception e)
 				{
-					Log.Error(ExceptionManager.MakeFullErrorMessage(e));
+					Log.Warning(e.Message + ":\nThe connection is unavailable. Url: " + requestUri.ToString());
 					if (failure != null)
 					{
 						Dispatcher.Dispatch(delegate

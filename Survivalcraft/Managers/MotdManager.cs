@@ -98,7 +98,7 @@ namespace Game
 				UpdateResult = JsonDocument.Parse(data);
 			}, ex =>
 			{
-				Log.Error("Failed processing Update check. Reason: " + ex.Message);
+				Log.Warning("Failed processing Update check. Reason: " + ex.Message);
 			});
 		}
 
@@ -116,11 +116,11 @@ namespace Game
 				}
 				catch (Exception ex)
 				{
-					Log.Error("Failed processing MOTD string. Reason: " + ex.Message);
+					Log.Warning("Failed processing MOTD string. Reason: " + ex.Message);
 				}
 			}, delegate (Exception error)
 			{
-				Log.Error("Failed downloading MOTD. Reason: {0}", error.Message);
+				Log.Warning("Failed downloading MOTD. Reason: " + error.Message);
 			});
 
 		}
@@ -268,7 +268,7 @@ namespace Game
 				{ "Operater", SettingsManager.ScpboxAccessToken },
 				{ "Content", dataString }
 			};
-			WebManager.Post("https://m.schub.top/com/api/zh/setnotice", null, header, WebManager.UrlParametersToStream(dictionary), progress, delegate (byte[] data)
+			WebManager.Post("https://m.sc1hub.top/com/api/zh/setnotice", null, header, WebManager.UrlParametersToStream(dictionary), progress, delegate (byte[] data)
 			{
 				success(data);
 			}, delegate (Exception error)
@@ -388,7 +388,7 @@ namespace Game
 					}, delegate (Exception e)
 					{
 						DialogsManager.HideDialog(busyDialog);
-						Log.Error("SaveBulletin:" + e.Message);
+						Log.Warning("SaveBulletin:" + e.Message);
 					});
 				});
 				CommunityContentManager.IsAdmin(new CancellableProgress(), delegate (bool isAdmin)
