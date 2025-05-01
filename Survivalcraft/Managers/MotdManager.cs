@@ -268,7 +268,7 @@ namespace Game
 				{ "Operater", SettingsManager.ScpboxAccessToken },
 				{ "Content", dataString }
 			};
-			WebManager.Post("https://m.sc1hub.top/com/api/zh/setnotice", null, header, WebManager.UrlParametersToStream(dictionary), progress, delegate (byte[] data)
+			WebManager.Post("https://m.schub.top/com/api/zh/setnotice", null, header, WebManager.UrlParametersToStream(dictionary), progress, delegate (byte[] data)
 			{
 				success(data);
 			}, delegate (Exception error)
