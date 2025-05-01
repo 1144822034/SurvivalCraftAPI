@@ -95,7 +95,7 @@ namespace Game
 					{
 						if(button == MessageDialogButton.Button1)
 						{//重设所有按键
-							SettingsManager.InitializeKeyboardMappingSettings();
+							SettingsManager.InitializeKeyboardMappingSettings(resetSettingsFromMods: true);
 							RefreshConflicts();
 						}
 					});

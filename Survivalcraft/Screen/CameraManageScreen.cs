@@ -125,7 +125,7 @@ namespace Game
 					{
 						if(button == MessageDialogButton.Button1)
 						{
-							SettingsManager.InitializeCameraManageSettings();
+							SettingsManager.InitializeCameraManageSettings(resetSettingsFromMods: true);
 							RefreshList();
 						}
 					});

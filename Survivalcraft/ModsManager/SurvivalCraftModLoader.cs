@@ -24,9 +24,24 @@ namespace Game
             
             TextBoxWidget.ShowCandidatesWindow = SettingsManager.FullScreenMode;
         }
+		public override void OnLoadingFinished(List<Action> actions)
+		{
+			actions.Add(() => {
+				ModsManager.HookAction("OnKeyboardMappingInit",loader => {
+					loader.OnKeyboardMappingInit(SettingsManager.KeyboardMappingSettings);
+					return false;
+				});
+				ModsManager.HookAction("OnCameraListInit",loader => {
+					loader.OnCameraListInit(SettingsManager.CameraManageSettings);
+					return false;
+				});
+			});
+		}
 		public override void OnCameraListInit(ValuesDictionary cameraList)
 		{//示例：向摄像机列表设置中添加调试视角。若此处不添加，则设置里不会显示该视角的选项，并且在游戏中通过切换视角按键也无法切换到该视角
-			cameraList.SetValue("Game.DebugCamera", 4);//4为调试视角的默认序号。其它摄像机的序号详见SettingsManager.InitializeCameraManageSettings。这些序号只作为默认设置
+			string key = "Game.DebugCamera";
+			if(!cameraList.ContainsKey(key))//避免重复添加，同时保证重置时能补上
+				cameraList.SetValue(key, 4);//4为调试视角的默认序号。其它摄像机的序号详见SettingsManager.InitializeCameraManageSettings。这些序号只作为默认设置
 		}
 		public override void ManageCameras(GameWidget gameWidget)
 		{//示例：向GameWidget中添加调试视角
@@ -42,7 +57,16 @@ namespace Game
 		public override void OnCameraChange(ComponentPlayer m_componentPlayer, ComponentGui componentGui)
         {
             GameWidget gameWidget = m_componentPlayer.GameWidget;
-			int currentIndex = Convert.ToInt32(SettingsManager.CameraManageSettings.First(item => Type.GetType(item.Key) == gameWidget.ActiveCamera.GetType()).Value);
+			int currentIndex = -1;
+			foreach(var item in SettingsManager.CameraManageSettings)
+			{
+				Type type = Type.GetType(item.Key);
+				if(type == gameWidget.ActiveCamera.GetType())
+				{
+					currentIndex = Convert.ToInt32(item.Value);
+					break;
+				}
+			}
 			int enableCount = CameraManageScreen.EnabledCamerasCount;
 			int nextCameraIndex = (currentIndex + 1) % enableCount;
 			Camera camera;

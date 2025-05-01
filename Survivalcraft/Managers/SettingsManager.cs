@@ -489,7 +489,7 @@ namespace Game
 
         public static event Action<string> SettingChanged;
 		public static ValuesDictionary KeyboardMappingSettings { get; set; }
-		public static void InitializeKeyboardMappingSettings()
+		public static void InitializeKeyboardMappingSettings(bool resetSettingsFromMods = false)
 		{
 			KeyboardMappingSettings = new ValuesDictionary();
 			KeyboardMappingSettings.SetValue("MoveLeft", Key.A);
@@ -518,23 +518,29 @@ namespace Game
 			KeyboardMappingSettings.SetValue("Drop", Key.Q);
 			KeyboardMappingSettings.SetValue("EditItem", Key.G);
 			KeyboardMappingSettings.SetValue("KeyboardHelp", Key.H);
-			ModsManager.HookAction("OnKeyboardMappingInit", loader => {
-				loader.OnKeyboardMappingInit(KeyboardMappingSettings);
-				return false;
-			});
+			if(resetSettingsFromMods)
+			{//调用一遍接口使模组也恢复到其默认设置
+				ModsManager.HookAction("OnKeyboardMappingInit",loader => {
+					loader.OnKeyboardMappingInit(KeyboardMappingSettings);
+					return false;
+				});
+			}
 		}
 		public static ValuesDictionary CameraManageSettings { get; set; }
-		public static void InitializeCameraManageSettings()
+		public static void InitializeCameraManageSettings(bool resetSettingsFromMods = false)
 		{//键表示摄像机的类名，值表示摄像机的排序（小于0则禁用）
 			CameraManageSettings = new ValuesDictionary();
 			CameraManageSettings.SetValue("Game.FppCamera", 0);
 			CameraManageSettings.SetValue("Game.TppCamera", 1);
 			CameraManageSettings.SetValue("Game.OrbitCamera", 2);
 			CameraManageSettings.SetValue("Game.FixedCamera", 3);
-			ModsManager.HookAction("OnCameraListInit", loader => {
-				loader.OnCameraListInit(CameraManageSettings);
-				return false;
-			});
+			if(resetSettingsFromMods)
+			{//调用一遍接口使模组也恢复到其默认设置
+				ModsManager.HookAction("OnCameraListInit",loader => {
+					loader.OnCameraListInit(CameraManageSettings);
+					return false;
+				});
+			}
 		}
 		public static void Initialize()
 		{
