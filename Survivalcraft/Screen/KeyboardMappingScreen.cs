@@ -28,6 +28,7 @@ namespace Game
 		public BevelledButtonWidget m_disableKeyButton;
 		public bool IsWaitingForKeyInput = false;
 		public Dictionary<string, ContainerWidget> m_widgetsByString = new Dictionary<string, ContainerWidget>();
+		public Dictionary<object, List<string>> m_conflicts = new Dictionary<object,List<string>>();
 		public KeyboardMappingScreen()
 		{
 			XElement node = ContentManager.Get<XElement>("Screens/KeyboardMappingScreen");
@@ -75,11 +76,15 @@ namespace Game
 						text =  text.Substring((keyName + ":").Length);
 					}
 					labelWidget.Text = text;
+					bool hasConflict = false;
+					if(m_conflicts.TryGetValue(value,out List<string> valueList))
+						hasConflict = HasConflict(valueList);
+					labelWidget.Color = hasConflict ? Color.Red : Color.White;
 				}
 			}
 			if(m_disableKeyButton.IsClicked)
 			{
-				SettingsManager.KeyboardMappingSettings[selectedKeyName] = Key.Null;
+				SetKeyboardMapping(selectedKeyName,Key.Null);
 				IsWaitingForKeyInput = false;
 			}
 			if(m_resetButton.IsClicked)
@@ -89,8 +94,9 @@ namespace Game
 					delegate (MessageDialogButton button)
 					{
 						if(button == MessageDialogButton.Button1)
-						{
+						{//重设所有按键
 							SettingsManager.InitializeKeyboardMappingSettings();
+							RefreshConflicts();
 						}
 					});
 				DialogsManager.ShowDialog(null,dialog);
@@ -108,7 +114,7 @@ namespace Game
 				{
 					if(key != Key.Null && Input.IsKeyDown(key))
 					{
-						SettingsManager.KeyboardMappingSettings[selectedKeyName] = key;
+						SetKeyboardMapping(selectedKeyName,key);
 						IsWaitingForKeyInput = false;
 						return;
 					}
@@ -117,7 +123,7 @@ namespace Game
 				{
 					if(Input.IsMouseButtonDown(mouseButton))
 					{
-						SettingsManager.KeyboardMappingSettings[selectedKeyName] = mouseButton;
+						SetKeyboardMapping(selectedKeyName,mouseButton);
 						IsWaitingForKeyInput = false;
 						return;
 					}
@@ -143,6 +149,47 @@ namespace Game
 			{
 				m_keysList.AddItem(keyName);
 			}
+			RefreshConflicts();
+		}
+
+		public void SetKeyboardMapping(string keyName,object value)
+		{
+			SettingsManager.KeyboardMappingSettings[keyName] = SettingsManager.KeyboardMappingSettings.ContainsKey(keyName)
+				? value
+				: throw new ArgumentException($"There's no keyboard mapping setting named \"{keyName}\"!");
+			RefreshConflicts();
+		}
+		public void RefreshConflicts()
+		{
+			m_conflicts.Clear();
+			foreach(string keyName in SettingsManager.KeyboardMappingSettings.Keys)
+			{
+				object obj = SettingsManager.KeyboardMappingSettings.GetValue(keyName,default(object));
+				if(!m_conflicts.TryGetValue(obj,out List<string> value))
+				{
+					value = new List<string>();
+					m_conflicts[obj] = value;
+				}
+				if(!value.Contains(keyName))
+					value.Add(keyName);
+			}
+		}
+		public static bool HasConflict(List<string> list)
+		{
+			int count = list.Count;
+			if(count == 2)
+			{//有且仅有原版的这些重复按键实际上是不冲突的，针对性地处理一下
+				string key1 = list[0], key2 = list[1];
+				if((key1 == "Jump" && key2 == "MoveUp") || (key2 == "Jump" && key1 == "MoveUp"))
+					return false;
+				if((key1 == "ToggleCrouch" && key2 == "MoveDown") || (key2 == "ToggleCrouch" && key1 == "MoveDown"))
+					return false;
+				if((key1 == "Dig" && key2 == "Hit") || (key2 == "Dig" && key1 == "Hit"))
+					return false;
+				if((key1 == "Interact" && key2 == "Aim") || (key2 == "Interact" && key1 == "Aim"))
+					return false;
+			}
+			return count > 1;
 		}
 	}
 }
