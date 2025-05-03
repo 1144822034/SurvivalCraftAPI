@@ -108,6 +108,8 @@ namespace Game
 			}
 			if (m_updateCheckButton.IsClicked)
 			{
+				uint versionInt = APIUpdateManager.ParseVersionFromString(ModsManager.APIVersionString);
+				Engine.Log.Information($"The current version is: {ModsManager.APIVersionString}, with uint 0x{versionInt:X8}");
 				if (!APIUpdateManager.IsNeedUpdate.HasValue) DialogsManager.ShowDialog(this, new MessageDialog(LanguageControl.Get(fName,7), LanguageControl.Get(fName, 6), LanguageControl.Ok, LanguageControl.Get(fName, 8), (button) => {
 					if(button == MessageDialogButton.Button2)
 					{

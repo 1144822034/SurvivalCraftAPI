@@ -1,3 +1,4 @@
+using System.IO;
 using System.Text.Json;
 
 namespace Game
@@ -56,30 +57,38 @@ namespace Game
 		public static async Task<JsonDocument> GetLatestAPIJsonDocument() => await OnlineJsonReader.GetJsonFromUrlAsync(ModsManager.APIReleaseLink_API);
 
 		/// <summary>
-		/// 将API版本字符串转为浮点数
+		/// 将API版本字符串以点分十进制数转为uint
 		/// </summary>
 		/// <param name="version"></param>
 		/// <returns>浮点数的版本</returns>
 		/// <exception cref="FormatException">字符串格式不正确</exception>
-		public static float ParseVersionFromString(string version)
+		public static uint ParseVersionFromString(string version)
 		{
+			string versionPart;
 			if(version.StartsWith("API",StringComparison.OrdinalIgnoreCase))
 			{
-				string versionPart = version.Substring(3);
-				// 4. 尝试转换为浮点数
-				if(float.TryParse(versionPart,out float versionFloat))
-				{
-					return versionFloat;
-				}
+				versionPart = version.Substring(3);
 			}
 			else
 			{
-				if(float.TryParse(version,out float versionFloat))
-				{
-					return versionFloat;
-				}
+				versionPart = version;
 			}
-			throw new FormatException($"The API version string format is incorrect: {version}. The correct format should look like this: \"API1.8.1\" or \"1.8.1\"(older version likes \"API1.53\" or \"1.53\" instead).");
+
+			string[] parts = versionPart.Split('.');
+
+			if(parts.Length != 3)
+				throw new ArgumentException("IThe API version string format is incorrect: {version}. The correct format should look like this: \"API1.8.1\" or \"1.8.1\"");
+
+			uint result = 0;
+			for(int i = 0; i < 3; i++)
+			{
+				if(!byte.TryParse(parts[i],out byte value))
+					throw new ArgumentException($"Version part {i + 1} is invalid: {parts[i]}");
+
+				result = (result << 8) | value;
+			}
+			result <<= 8;
+			return result;
 		}
 
 		/// <summary>
