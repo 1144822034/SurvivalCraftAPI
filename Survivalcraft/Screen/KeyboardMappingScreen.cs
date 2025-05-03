@@ -3,6 +3,7 @@ using Engine.Serialization;
 using NAudio.Flac;
 using System.Xml.Linq;
 using Engine.Input;
+using TemplatesDatabase;
 
 namespace Game
 {
@@ -17,7 +18,7 @@ namespace Game
 			LabelWidget labelWidget = containerWidget.Children.Find<LabelWidget>("Name");
 			LabelWidget labelWidget2 = containerWidget.Children.Find<LabelWidget>("BoundKey");
 			labelWidget.Text = LanguageControl.Get(fName, item.ToString());
-			labelWidget2.Text = HumanReadableConverter.ConvertToString(SettingsManager.KeyboardMappingSettings.GetValue(item.ToString(), default(object)));
+			labelWidget2.Text = HumanReadableConverter.ConvertToString(SettingsManager.GetKeyboardMapping(item.ToString()));
 			m_widgetsByString[item.ToString()] = containerWidget;
 			return containerWidget;
 		}
@@ -66,7 +67,7 @@ namespace Game
 			foreach(var key in m_widgetsByString.Keys)
 			{
 				LabelWidget labelWidget = m_widgetsByString[key].Children.Find<LabelWidget>("BoundKey");
-				object value = SettingsManager.KeyboardMappingSettings.GetValue(key,default(object));
+				object value = SettingsManager.GetKeyboardMapping(key);
 				if(value is Key valueKey && valueKey == Key.Null) labelWidget.Text = string.Empty;
 				else
 				{
@@ -95,8 +96,7 @@ namespace Game
 					{
 						if(button == MessageDialogButton.Button1)
 						{//重设所有按键
-							SettingsManager.InitializeKeyboardMappingSettings(resetSettingsFromMods: true);
-							RefreshConflicts();
+							ResetAll();
 						}
 					});
 				DialogsManager.ShowDialog(null,dialog);
@@ -145,7 +145,7 @@ namespace Game
 		public override void Enter(object[] parameters)
 		{
 			m_keysList.ClearItems();
-			foreach(string keyName in SettingsManager.KeyboardMappingSettings.Keys)
+			foreach(string keyName in ModSettingsManager.CombinedKeyboardMappingSettings.Keys)
 			{
 				m_keysList.AddItem(keyName);
 			}
@@ -154,24 +154,29 @@ namespace Game
 
 		public void SetKeyboardMapping(string keyName,object value)
 		{
-			SettingsManager.KeyboardMappingSettings[keyName] = SettingsManager.KeyboardMappingSettings.ContainsKey(keyName)
-				? value
-				: throw new ArgumentException($"There's no keyboard mapping setting named \"{keyName}\"!");
+			SettingsManager.SetKeyboardMapping(keyName, value);
+			RefreshConflicts();
+		}
+		public void ResetAll()
+		{
+			SettingsManager.InitializeKeyboardMappingSettings();
+			ModSettingsManager.ResetModsKeyboardMappingSettings();
 			RefreshConflicts();
 		}
 		public void RefreshConflicts()
 		{
 			m_conflicts.Clear();
-			foreach(string keyName in SettingsManager.KeyboardMappingSettings.Keys)
+			foreach(var item in ModSettingsManager.CombinedKeyboardMappingSettings)
 			{
-				object obj = SettingsManager.KeyboardMappingSettings.GetValue(keyName,default(object));
+				string name = item.Key;
+				object obj = item.Value;
 				if(!m_conflicts.TryGetValue(obj,out List<string> value))
 				{
 					value = new List<string>();
 					m_conflicts[obj] = value;
 				}
-				if(!value.Contains(keyName))
-					value.Add(keyName);
+				if(!value.Contains(name))
+					value.Add(name);
 			}
 		}
 		public static bool HasConflict(List<string> list)

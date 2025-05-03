@@ -489,59 +489,8 @@ namespace Game
 
         public static event Action<string> SettingChanged;
 		public static ValuesDictionary KeyboardMappingSettings { get; set; }
-		public static void InitializeKeyboardMappingSettings(bool resetSettingsFromMods = false)
-		{
-			KeyboardMappingSettings = new ValuesDictionary();
-			KeyboardMappingSettings.SetValue("MoveLeft", Key.A);
-			KeyboardMappingSettings.SetValue("MoveRight", Key.D);
-			KeyboardMappingSettings.SetValue("MoveFront", Key.W);
-			KeyboardMappingSettings.SetValue("MoveBack", Key.S);
-			KeyboardMappingSettings.SetValue("MoveUp", Key.Space);
-			KeyboardMappingSettings.SetValue("MoveDown", Key.Shift);
-			KeyboardMappingSettings.SetValue("Jump", Key.Space);
-			KeyboardMappingSettings.SetValue("Dig", MouseButton.Left);
-			KeyboardMappingSettings.SetValue("Hit", MouseButton.Left);
-			KeyboardMappingSettings.SetValue("Interact", MouseButton.Right);
-			KeyboardMappingSettings.SetValue("Aim", MouseButton.Right);
-			KeyboardMappingSettings.SetValue("ToggleCrouch", Key.Shift);
-			KeyboardMappingSettings.SetValue("ToggleMount", Key.R);
-			KeyboardMappingSettings.SetValue("ToggleFly", Key.F);
-			KeyboardMappingSettings.SetValue("PickBlockType", MouseButton.Middle);
-			KeyboardMappingSettings.SetValue("ToggleInventory", Key.E);
-			KeyboardMappingSettings.SetValue("ToggleClothing", Key.C);
-			KeyboardMappingSettings.SetValue("TakeScreenshot", Key.P);
-			KeyboardMappingSettings.SetValue("SwitchCameraMode", Key.V);
-			KeyboardMappingSettings.SetValue("TimeOfDay", Key.T);
-			KeyboardMappingSettings.SetValue("Lightning", Key.L);
-			KeyboardMappingSettings.SetValue("Precipitation", Key.K);
-			KeyboardMappingSettings.SetValue("Fog", Key.J);
-			KeyboardMappingSettings.SetValue("Drop", Key.Q);
-			KeyboardMappingSettings.SetValue("EditItem", Key.G);
-			KeyboardMappingSettings.SetValue("KeyboardHelp", Key.H);
-			if(resetSettingsFromMods)
-			{//调用一遍接口使模组也恢复到其默认设置
-				ModsManager.HookAction("OnKeyboardMappingInit",loader => {
-					loader.OnKeyboardMappingInit(KeyboardMappingSettings);
-					return false;
-				});
-			}
-		}
 		public static ValuesDictionary CameraManageSettings { get; set; }
-		public static void InitializeCameraManageSettings(bool resetSettingsFromMods = false)
-		{//键表示摄像机的类名，值表示摄像机的排序（小于0则禁用）
-			CameraManageSettings = new ValuesDictionary();
-			CameraManageSettings.SetValue("Game.FppCamera", 0);
-			CameraManageSettings.SetValue("Game.TppCamera", 1);
-			CameraManageSettings.SetValue("Game.OrbitCamera", 2);
-			CameraManageSettings.SetValue("Game.FixedCamera", 3);
-			if(resetSettingsFromMods)
-			{//调用一遍接口使模组也恢复到其默认设置
-				ModsManager.HookAction("OnCameraListInit",loader => {
-					loader.OnCameraListInit(CameraManageSettings);
-					return false;
-				});
-			}
-		}
+
 		public static void Initialize()
 		{
 			{
@@ -606,7 +555,7 @@ namespace Game
 				CreativeDragMaxStacking = true;
 				LowFPSToTimeDeceleration = 10;
 				UseAPISleepTimeAcceleration = false;
-				MoveWidgetSize = 1f;
+				//MoveWidgetSize = 1f;
 				MoveWidgetMarginX = 0f;
 				MoveWidgetMarginY = 0f;
 				InitializeKeyboardMappingSettings();
@@ -618,6 +567,118 @@ namespace Game
 				SaveSettings();
 			};
 		}
+
+		public static void InitializeKeyboardMappingSettings()
+		{
+			KeyboardMappingSettings = new ValuesDictionary();
+			KeyboardMappingSettings.SetValue("MoveLeft",Key.A);
+			KeyboardMappingSettings.SetValue("MoveRight",Key.D);
+			KeyboardMappingSettings.SetValue("MoveFront",Key.W);
+			KeyboardMappingSettings.SetValue("MoveBack",Key.S);
+			KeyboardMappingSettings.SetValue("MoveUp",Key.Space);
+			KeyboardMappingSettings.SetValue("MoveDown",Key.Shift);
+			KeyboardMappingSettings.SetValue("Jump",Key.Space);
+			KeyboardMappingSettings.SetValue("Dig",MouseButton.Left);
+			KeyboardMappingSettings.SetValue("Hit",MouseButton.Left);
+			KeyboardMappingSettings.SetValue("Interact",MouseButton.Right);
+			KeyboardMappingSettings.SetValue("Aim",MouseButton.Right);
+			KeyboardMappingSettings.SetValue("ToggleCrouch",Key.Shift);
+			KeyboardMappingSettings.SetValue("ToggleMount",Key.R);
+			KeyboardMappingSettings.SetValue("ToggleFly",Key.F);
+			KeyboardMappingSettings.SetValue("PickBlockType",MouseButton.Middle);
+			KeyboardMappingSettings.SetValue("ToggleInventory",Key.E);
+			KeyboardMappingSettings.SetValue("ToggleClothing",Key.C);
+			KeyboardMappingSettings.SetValue("TakeScreenshot",Key.P);
+			KeyboardMappingSettings.SetValue("SwitchCameraMode",Key.V);
+			KeyboardMappingSettings.SetValue("TimeOfDay",Key.T);
+			KeyboardMappingSettings.SetValue("Lightning",Key.L);
+			KeyboardMappingSettings.SetValue("Precipitation",Key.K);
+			KeyboardMappingSettings.SetValue("Fog",Key.J);
+			KeyboardMappingSettings.SetValue("Drop",Key.Q);
+			KeyboardMappingSettings.SetValue("EditItem",Key.G);
+			KeyboardMappingSettings.SetValue("KeyboardHelp",Key.H);
+		}
+		public static void InitializeCameraManageSettings()
+		{//键表示摄像机的类名，值表示摄像机的排序（小于0则禁用）
+			CameraManageSettings = new ValuesDictionary();
+			CameraManageSettings.SetValue("Game.FppCamera",0);
+			CameraManageSettings.SetValue("Game.TppCamera",1);
+			CameraManageSettings.SetValue("Game.OrbitCamera",2);
+			CameraManageSettings.SetValue("Game.FixedCamera",3);
+		}
+		public static object GetKeyboardMapping(string keyName,bool throwIfNotFound = true)
+		{
+			if(KeyboardMappingSettings.ContainsKey(keyName))
+			{//原版设置
+				return KeyboardMappingSettings[keyName];
+			}
+			else
+			{
+				foreach(var item in ModSettingsManager.ModKeyboardMapSettings.Values)
+				{//模组设置
+					if(item.ContainsKey(keyName))
+					{
+						return item[keyName];
+					}
+				}
+			}
+			return throwIfNotFound ? throw new ArgumentException($"There's no keyboard mapping setting named \"{keyName}\"!") : null;
+		}
+		public static void SetKeyboardMapping(string keyName,object value)
+		{
+			if(KeyboardMappingSettings.ContainsKey(keyName))
+			{//原版设置
+				KeyboardMappingSettings[keyName] = value;
+			}
+			else
+			{
+				foreach(var item in ModSettingsManager.ModKeyboardMapSettings.Values)
+				{//模组设置
+					if(item.ContainsKey(keyName))
+					{
+						item[keyName] = value;
+						break;
+					}
+				}
+			}
+		}
+		public static int GetCameraManageSetting(string keyName,bool throwIfNotFound = true)
+		{
+			if(CameraManageSettings.ContainsKey(keyName))
+			{//原版设置
+				return Convert.ToInt32(CameraManageSettings[keyName]);
+			}
+			else
+			{
+				foreach(var item in ModSettingsManager.ModCameraManageSettings.Values)
+				{//模组设置
+					if(item.ContainsKey(keyName))
+					{
+						return Convert.ToInt32(item[keyName]);
+					}
+				}
+			}
+			return throwIfNotFound ? throw new ArgumentException($"There's no camera manage setting named \"{keyName}\"!") : -1;
+		}
+		public static void SetCameraManageSetting(string keyName,int value)
+		{
+			if(CameraManageSettings.ContainsKey(keyName))
+			{//原版设置
+				CameraManageSettings[keyName] = value;
+			}
+			else
+			{
+				foreach(var item in ModSettingsManager.ModCameraManageSettings.Values)
+				{//模组设置
+					if(item.ContainsKey(keyName))
+					{
+						item[keyName] = value;
+						break;
+					}
+				}
+			}
+		}
+
 		/// <summary>
 		/// 文件存在则读取并返回真否则返回假
 		/// </summary>

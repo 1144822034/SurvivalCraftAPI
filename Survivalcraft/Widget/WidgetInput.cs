@@ -492,6 +492,42 @@ public class WidgetInput
 		}
 		return false;
 	}
+	/// <summary>
+	/// 根据按键映射名称判断按键是否按下
+	/// </summary>
+	/// <param name="keyName"></param>
+	/// <returns></returns>
+	public bool IsKeyDown(string keyName)
+	{
+		object key = SettingsManager.GetKeyboardMapping(keyName);
+		if(key is MouseButton mouseButton)
+		{
+			return IsMouseButtonDown(mouseButton);
+		}
+		if(key is Key key1 && key1 != Key.Null)
+		{
+			return IsKeyDown(key1);
+		}
+		return false;
+	}
+	/// <summary>
+	/// 根据按键映射名称判断按键是否按下
+	/// </summary>
+	/// <param name="keyName"></param>
+	/// <returns></returns>
+	public bool IsKeyDownOnce(string keyName)
+	{
+		object key = SettingsManager.GetKeyboardMapping(keyName);
+		if(key is MouseButton mouseButton)
+		{
+			return IsMouseButtonDownOnce(mouseButton);
+		}
+		if(key is Key key1 && key1 != Key.Null)
+		{
+			return IsKeyDownOnce(key1);
+		}
+		return false;
+	}
 
 	public void EnterText(ContainerWidget parentWidget, string title, string text, int maxLength, Action<string> handler)
 	{

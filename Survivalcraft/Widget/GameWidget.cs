@@ -66,27 +66,19 @@ public class GameWidget : CanvasWidget
 			modLoader.ManageCameras(this);
 			return false;
 		});
-		for(int i = SettingsManager.CameraManageSettings.Count - 1; i >= 0; i--)
-		{//若保存的设置中存在无法读取的类(可能是卸载模组导致)，将其移除
-			string key = SettingsManager.CameraManageSettings.Keys.ToList()[i];
-			if(Type.GetType(key,throwOnError: false) == null)
-				SettingsManager.CameraManageSettings.Remove(key);
-		}
-		foreach(var item in SettingsManager.CameraManageSettings)
-		{//若保存的设置中存在某个摄像机而GameWidget中没有，创建一个新的并添加到GameWidget
-			Type type = Type.GetType(item.Key);
-			if(FindCamera(type,throwOnError: false) == null)
-			{
-				try
-				{
-					AddCamera((Camera)Activator.CreateInstance(type, this));
-				}
-				catch(Exception e)
-				{
-					Log.Warning($"Cannot create camera in GameWidget from saved settings. Reason:{e}");
-				}
+		var list = ModSettingsManager.CombinedCameraManageSettings.OrderBy(x => x.Value).ToList();
+		int num = 0;
+		foreach(var item in list)
+		{
+			string name = item.Key;
+			int value = item.Value;
+			if(value >= 0)
+			{//刷新列表时重新按顺序分配值，避免出现空缺
+				SettingsManager.SetCameraManageSetting(name,num);
+				num++;
 			}
 		}
+
 		m_activeCamera = FindCamera<LoadingCamera>();
 	}
 

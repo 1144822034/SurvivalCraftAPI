@@ -1,6 +1,7 @@
 using Engine;
 using Engine.Graphics;
 using Engine.Media;
+using Engine.Serialization;
 using GameEntitySystem;
 using Jint;
 using System.Reflection;
@@ -24,24 +25,9 @@ namespace Game
             
             TextBoxWidget.ShowCandidatesWindow = SettingsManager.FullScreenMode;
         }
-		public override void OnLoadingFinished(List<Action> actions)
-		{
-			actions.Add(() => {
-				ModsManager.HookAction("OnKeyboardMappingInit",loader => {
-					loader.OnKeyboardMappingInit(SettingsManager.KeyboardMappingSettings);
-					return false;
-				});
-				ModsManager.HookAction("OnCameraListInit",loader => {
-					loader.OnCameraListInit(SettingsManager.CameraManageSettings);
-					return false;
-				});
-			});
-		}
 		public override void OnCameraListInit(ValuesDictionary cameraList)
 		{//示例：向摄像机列表设置中添加调试视角。若此处不添加，则设置里不会显示该视角的选项，并且在游戏中通过切换视角按键也无法切换到该视角
-			string key = "Game.DebugCamera";
-			if(!cameraList.ContainsKey(key))//避免重复添加，同时保证重置时能补上
-				cameraList.SetValue(key, 4);//4为调试视角的默认序号。其它摄像机的序号详见SettingsManager.InitializeCameraManageSettings。这些序号只作为默认设置
+			cameraList.SetValue("Game.DebugCamera", 4);//4为调试视角的默认序号。其它摄像机的序号详见SettingsManager.InitializeCameraManageSettings。这些序号只作为默认设置
 		}
 		public override void ManageCameras(GameWidget gameWidget)
 		{//示例：向GameWidget中添加调试视角
@@ -58,12 +44,13 @@ namespace Game
         {
             GameWidget gameWidget = m_componentPlayer.GameWidget;
 			int currentIndex = -1;
-			foreach(var item in SettingsManager.CameraManageSettings)
+			Dictionary<string,int> dictionary = ModSettingsManager.CombinedCameraManageSettings;
+			foreach(var item in dictionary)
 			{
-				Type type = Type.GetType(item.Key);
+				Type type = TypeCache.FindType(item.Key,skipSystemAssemblies: true,throwIfNotFound: true);
 				if(type == gameWidget.ActiveCamera.GetType())
 				{
-					currentIndex = Convert.ToInt32(item.Value);
+					currentIndex = item.Value;
 					break;
 				}
 			}
@@ -74,8 +61,11 @@ namespace Game
 			string key;
 			do
 			{
-				key = SettingsManager.CameraManageSettings.First(item2 => Convert.ToInt32(item2.Value) == nextCameraIndex).Key;
-				camera = gameWidget.FindCamera(Type.GetType(key),out isEnable);
+				key = dictionary.First(item2 => item2.Value == nextCameraIndex).Key;
+				Type type = TypeCache.FindType(key,skipSystemAssemblies: true,throwIfNotFound: true);
+					//.SelectMany(a => a.GetTypes())
+					//.FirstOrDefault(t => t.FullName == key);
+				camera = gameWidget.FindCamera(type,out isEnable);
 				nextCameraIndex = (nextCameraIndex + 1) % enableCount;
 			}
 			while(!isEnable);
