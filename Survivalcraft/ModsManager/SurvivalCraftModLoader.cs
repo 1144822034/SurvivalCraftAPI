@@ -63,8 +63,6 @@ namespace Game
 			{
 				key = dictionary.First(item2 => item2.Value == nextCameraIndex).Key;
 				Type type = TypeCache.FindType(key,skipSystemAssemblies: true,throwIfNotFound: true);
-					//.SelectMany(a => a.GetTypes())
-					//.FirstOrDefault(t => t.FullName == key);
 				camera = gameWidget.FindCamera(type,out isEnable);
 				nextCameraIndex = (nextCameraIndex + 1) % enableCount;
 			}
@@ -152,7 +150,7 @@ namespace Game
         }
 
         public override void BeforeWidgetDrawItemRender(Widget.DrawItem drawItem, out bool skipVanillaDraw,
-                                              out Action? afterWidgetDraw, ref Rectangle scissorRectangle,
+                                              out Action afterWidgetDraw, ref Rectangle scissorRectangle,
                                               Widget.DrawContext drawContext)
         {
             if (drawItem.Widget is TextBoxWidget apiTextBoxWidget && drawItem.IsOverdraw)

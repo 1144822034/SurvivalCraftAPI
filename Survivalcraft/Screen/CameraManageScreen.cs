@@ -70,8 +70,8 @@ namespace Game
 			 {
 				LabelWidget labelWidget = m_widgetsByString[key].Children.Find<LabelWidget>("BoundKey");
 				bool enable = SettingsManager.GetCameraManageSetting(key) >= 0;
-				labelWidget.Text = SettingsManager.GetCameraManageSetting(key).ToString();
-				//labelWidget.Text = LanguageControl.Get("ContentWidgets","CameraManageScreen",enable ? "Enabled" : "Disabled");
+				//labelWidget.Text = SettingsManager.GetCameraManageSetting(key).ToString();
+				labelWidget.Text = LanguageControl.Get("ContentWidgets","CameraManageScreen",enable ? "Enabled" : "Disabled");
 				labelWidget.Color = enable ? Color.White : Color.Gray;
 			}
 			if(m_disableButton.IsClicked)
