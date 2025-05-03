@@ -60,7 +60,7 @@ namespace Game
 		/// 将API版本字符串以点分十进制数转为uint
 		/// </summary>
 		/// <param name="version"></param>
-		/// <returns>浮点数的版本</returns>
+		/// <returns>无符号整数的版本</returns>
 		/// <exception cref="FormatException">字符串格式不正确</exception>
 		public static uint ParseVersionFromString(string version)
 		{

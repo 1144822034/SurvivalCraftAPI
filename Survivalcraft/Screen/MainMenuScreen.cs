@@ -121,7 +121,7 @@ namespace Game
 					if(APIUpdateManager.IsNeedUpdate.Value)
 						DialogsManager.ShowDialog(this,new MessageDialog(LanguageControl.Get(fName,7),string.Format(LanguageControl.Get(fName,4),APIUpdateManager.LatestVersion,APIUpdateManager.CurrentVersion),LanguageControl.Get(fName,5),LanguageControl.Cancel,
 								(button) => {
-									if(button == MessageDialogButton.Button2)
+									if(button == MessageDialogButton.Button1)
 									{
 										WebBrowserManager.LaunchBrowser(ModsManager.APIReleaseLink_Client);
 									}
