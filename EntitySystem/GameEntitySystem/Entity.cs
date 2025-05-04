@@ -123,11 +123,12 @@ namespace GameEntitySystem
 											  where x != null && x.DatabaseObject != null && x.DatabaseObject.Type == project.GameDatabase.MemberComponentTemplateType
 											  select x)
 			{
-				bool value = item.GetValue<bool>("IsOptional");
-				string value2 = item.GetValue<string>("Class");
-				int value3 = item.GetValue<int>("LoadOrder");
-				Type type = TypeCache.FindType(value2, skipSystemAssemblies: false, !value);
-				if (type != null)
+				var isOptional = item.GetValue<bool>("IsOptional");
+				var className = item.GetValue<string>("Class");
+				var loadOrder = item.GetValue<int>("LoadOrder");
+
+				var type = TypeCache.FindType(className, skipSystemAssemblies: false,!isOptional);
+				if(type != null)
 				{
 					object obj;
 					try
@@ -139,17 +140,21 @@ namespace GameEntitySystem
 						throw ex.InnerException;
 					}
 					Component component = obj as Component;
-					if (component == null)
+					if(component == null)
 					{
-						throw new InvalidOperationException($"Type \"{value2}\" cannot be used as a component because it does not inherit from Component class.");
+						throw new InvalidOperationException($"Type \"{className}\" cannot be used as a component because it does not inherit from Component class.");
 					}
 					component.Initialize(this, item);
-					list.Add(new KeyValuePair<int, Component>(value3, component));
+					var isModComponent = type.Namespace != "Game";
+					//如果是原版的组件，则按原来顺序，否则往后
+					int adjustedLoadOrder = isModComponent ? loadOrder + 10000 : loadOrder;
+					list.Add(new KeyValuePair<int,Component>(adjustedLoadOrder,component));
 				}
 			}
 			EntityComponentsInitialized.Invoke(this, list);
-			list.Sort((KeyValuePair<int, Component> x, KeyValuePair<int, Component> y) => x.Key - y.Key);
-			m_components = new List<Component>(list.Select((KeyValuePair<int, Component> x) => x.Value));
+			// 按调整后的 LoadOrder 排序
+			list.Sort((KeyValuePair<int,Component> x,KeyValuePair<int,Component> y) => x.Key - y.Key);
+			m_components = new List<Component>(list.Select(x => x.Value));
 		}
 
 		public Component FindComponent(Type type, string name, bool throwOnError)
