@@ -24,7 +24,7 @@ namespace Game;
 public class TextBoxWidget : Widget
 {
     // 已过时成员
-
+    
     #region Obsolete Members
 
     /// <summary>
@@ -391,6 +391,11 @@ public class TextBoxWidget : Widget
     /// </param>
     public void EnterCharacter(char value, int position = -1, bool moveCaret = true)
     {
+	    if(value is '\r')
+	    {
+		    return;
+	    }
+	    
         if (SelectionLength != 0)
         {
             DeleteSelection(false);
@@ -531,7 +536,7 @@ public class TextBoxWidget : Widget
     /// </summary>
     public void EnterText(string value, int index)
     {
-        foreach (var character in value)
+        foreach (var character in value.ReplaceLineEndings("\n"))
         {
             EnterCharacter(character, index++);
         }
@@ -1157,7 +1162,7 @@ public class TextBoxWidget : Widget
     /// they cannot be set to true at the same time, otherwise only one will take effect.
     /// </para>
     /// </summary>
-    public bool IndentAsSpace { get; set; } = true;
+    public bool IndentAsSpace { get; set; } = false;
 
     /// <summary>
     /// <para>
@@ -1426,8 +1431,14 @@ public class TextBoxWidget : Widget
     private static void SetCursorPosition(TextBoxWidget widget)
     {
 #if WINDOWS
-        var windowPosition = widget.WidgetToScreen(new Vector2(widget.FullTextCaretPosition, 0));
-        windowPosition.X -= widget.Scroll * widget.GlobalTransform.M11;
+	    var caretPosition = widget.Font.MeasureText(
+			    widget.FullText,
+			    0,
+			    widget.Caret + widget.CompositionTextCaret,
+			    new Vector2(widget.FontScale),
+			    widget.FontSpacing);
+        var windowPosition = Vector2.Transform(new Vector2(caretPosition.X, 0), widget.GlobalTransform * Matrix.CreateTranslation(-widget.Scroll, 0, 0));
+        
         InputMethod.SetTextInputRect((int)windowPosition.X, (int)(windowPosition.Y + widget.Font.LineHeight * widget.GlobalTransform.M11), 0, 0);
 #endif
     }
@@ -1573,8 +1584,12 @@ public class TextBoxWidget : Widget
 
         var fontBatch = dc.PrimitivesRenderer2D.FontBatch(Font, layer: 3,
             samplerState: TextureLinearFilter ? SamplerState.LinearClamp : SamplerState.PointClamp);
-
-        var candidateWindowCorner1 = new Vector2(FullTextCaretPosition, ActualSize.Y);
+        
+        var caretPosition =
+	        Font.MeasureText(FullText, 0, Caret + CompositionTextCaret, new Vector2(FontScale),
+		        FontSpacing) *
+	        Vector2.UnitX;
+        var candidateWindowCorner1 = new Vector2(caretPosition.X, ActualSize.Y);
         candidateWindowCorner1 += CandidateListOffset;
 
         // 绘制背景。
@@ -1660,113 +1675,151 @@ public class TextBoxWidget : Widget
         get
         {
             var caretPosition =
-                Font.MeasureText(Text, 0, Caret, new Vector2(FontScale),
+                Font.MeasureText(Text,
+	                0,
+	                Caret,
+	                new Vector2(FontScale),
                     FontSpacing) *
                 Vector2.UnitX;
             return caretPosition.X;
         }
     }
 
-    /// <summary>
-    /// <para>
-    /// 文本光标（包括 <see cref="CompositionText"/>）相对于 Widget 的显示位置。
-    /// </para>
-    /// <para>
-    /// Position of text caret (including <see cref="CompositionText"/>) relative to widget.
-    /// </para>
-    /// </summary>
-    public float FullTextCaretPosition
-    {
-        get
-        {
-            var caretPosition =
-                Font.MeasureText(FullText, 0, Caret + CompositionTextCaret, new Vector2(FontScale),
-                    FontSpacing) *
-                Vector2.UnitX;
-            return caretPosition.X;
-        }
-    }
 
     public override void Draw(DrawContext dc)
     {
-        try
-        {
-            var textToDraw = Text.Replace("\t", new string(' ', IndentWidth));
+	    var textToDraw = Text.Replace("\t", new string(' ',IndentWidth));
+			var caretIndex = Text[..Caret].Sum(c => c == '\t' ? IndentWidth : 1);
+	    var caretDrawPosition = Font.MeasureText(
+		    textToDraw,
+		    0,
+		    caretIndex + CompositionTextCaret,
+		    new Vector2(FontScale),
+		    FontSpacing);
+	    if(PasswordMode)
+	    {
+		    textToDraw = new string('*',textToDraw.Length);
+	    }
 
-            if (PasswordMode)
-            {
-                textToDraw = new string('*', textToDraw.Length);
-            }
+	    var flatBatch = dc.PrimitivesRenderer2D.FlatBatch(blendState: BlendState.NonPremultiplied);
+	    var outlineFlatBatch = dc.PrimitivesRenderer2D.FlatBatch(layer: 1);
+	    
+	    if(SelectionLength != 0 && CompositionText == null)
+	    {
+		    var selectionEndPosition = Font.MeasureText(
+			    textToDraw,
+			    0,
+			    caretIndex + SelectionLength,
+			    new Vector2(FontScale),
+			    FontSpacing);
+		    var topOfCaret = (ActualSize.Y - Font.GlyphHeight * FontScale * Font.Scale) / 2;
+		    flatBatch.QueueQuad((TextCaretPosition,topOfCaret),
+			    (0,topOfCaret) + selectionEndPosition,0,(64,64,255,128));
+	    }
 
-            var flatBatch = dc.PrimitivesRenderer2D.FlatBatch(blendState: BlendState.NonPremultiplied);
-            var outlineFlatBatch = dc.PrimitivesRenderer2D.FlatBatch(layer: 1);
+	    Vector2 currentDrawPosition = (0,ActualSize.Y / 2);
 
-            var fontBatch = dc.PrimitivesRenderer2D.FontBatch(Font);
-            var underlineFlatBatch = dc.PrimitivesRenderer2D.FlatBatch(layer: 1);
-            if (SelectionLength == 0 && FocusedTextBox == this &&
-                ((Time.RealTime - FocusStartTime - 0.4) % 1.0 <= 0.3f ||
-                 (Time.RealTime - FocusStartTime - 0.4) % 1.0 >= 0.8f))
-            {
-                DrawCaret(flatBatch, 1, Font.GlyphHeight * FontScale * Font.Scale, (FullTextCaretPosition, ActualSize.Y / 2),
-                    Scroll);
-            }
+	    List<TextDrawItem> drawItems = new(capacity: 3);
 
-            if (SelectionLength != 0 && CompositionText == null)
-            {
-                var selectionEndPosition = Font.MeasureText(FullText, 0, Caret + SelectionLength,
-                    new Vector2(FontScale),
-                    FontSpacing);
-                var topOfCaret = (ActualSize.Y - Font.GlyphHeight * FontScale * Font.Scale) / 2;
-                flatBatch.QueueQuad((0 - Scroll + TextCaretPosition, topOfCaret),
-                    (0 - Scroll, topOfCaret) + selectionEndPosition, 0, (64, 64, 255, 128));
-            }
+	    var fontBatch = dc.PrimitivesRenderer2D.FontBatch(Font);
+	    var underlineFlatBatch = dc.PrimitivesRenderer2D.FlatBatch(layer: 1);
 
-            Vector2 currentDrawPosition = new Vector2(0, ActualSize.Y / 2);
+	    var lines = textToDraw.Split('\n');
+	    int charIndex = 0;
+	    foreach(var line in lines)
+	    {
+		    if(charIndex <= caretIndex && charIndex + line.Length >= caretIndex)
+		    {
+			    var split = SplitStringAt(line, caretIndex - charIndex);
+			    drawItems.Add(new NormalDrawItem(
+				    line,
+				    0,
+				    split[0].Length,
+				    fontBatch,
+				    FontScale,
+				    FontSpacing,
+				    Color));
+			    
+			    if(SelectionLength == 0 && FocusedTextBox == this &&
+			       ((Time.RealTime - FocusStartTime - 0.4) % 1.0 <= 0.3f ||
+			        (Time.RealTime - FocusStartTime - 0.4) % 1.0 >= 0.8f))
+			    {
+				    drawItems.Add(new CaretDrawItem(flatBatch, 1, Font.GlyphHeight * FontScale * Font.Scale));
+			    }
+			    
+			    drawItems.Add(new CompositionTextDrawItem(
+				    CompositionText ?? "",
+				    fontBatch,
+				    underlineFlatBatch,
+				    FontScale,
+				    FontSpacing,
+				    Color));
 
-            List<TextDrawItem> drawItems = new(capacity: 3);
+			    if(split.Length > 1)
+			    {
+				    drawItems.Add(new NormalDrawItem(
+					    line,
+					    split[0].Length,
+					    split[1].Length,
+					    fontBatch,
+					    FontScale,
+					    FontSpacing,
+					    Color));
+			    }
+		    }
+		    else
+		    {
+			    drawItems.Add(new NormalDrawItem(
+				    textToDraw,
+				    charIndex,
+				    line.Length,
+				    fontBatch,
+				    FontScale,
+				    FontSpacing,
+				    Color));
+		    }
 
-            var split = SplitStringAt(textToDraw, Caret);
-            drawItems.Add(new NormalDrawItem(textToDraw, 0, split[0].Length, fontBatch, FontScale, FontSpacing, Color));
-            drawItems.Add(
-                new CompositionTextDrawItem(CompositionText ?? "", fontBatch, underlineFlatBatch, FontScale,
-                    FontSpacing, Color));
-            if (split.Length > 1)
-            {
-                drawItems.Add(new NormalDrawItem(textToDraw, split[0].Length, split[1].Length, fontBatch, FontScale, FontSpacing, Color));
-            }
+		    drawItems.Add(new EndOfLineDrawItem(Font,FontSpacing,FontScale));
+		    charIndex += line.Length + 1; // + 1 是因为换行符
+	    }
 
-            foreach (var drawItem in drawItems)
-            {
-                drawItem.Draw(ref currentDrawPosition, Scroll);
-            }
+	    /*var split = SplitStringAt(textToDraw, Caret);
+	    drawItems.Add(new NormalDrawItem(textToDraw, 0, split[0].Length, fontBatch, FontScale, FontSpacing, Color));
+	    drawItems.Add(new CompositionTextDrawItem(
+		    CompositionText ?? "",
+		    fontBatch,
+		    underlineFlatBatch,
+		    FontScale,
+		    FontSpacing,
+		    Color));
 
-            fontBatch.TransformTriangles(GlobalTransform);
-            flatBatch.TransformTriangles(GlobalTransform);
-            flatBatch.TransformLines(GlobalTransform);
-            outlineFlatBatch.TransformLines(GlobalTransform);
-        }
-        catch (Exception e)
-        {
-            Log.Error(e);
-            return;
-        }
+	    if (split.Length > 1)
+	    {
+	        drawItems.Add(new NormalDrawItem(
+		        textToDraw,
+		        split[0].Length,
+		        split[1].Length,
+		        fontBatch,
+		        FontScale,
+		        FontSpacing,
+		        Color));
+	    }*/
 
-        return;
+	    foreach(var drawItem in drawItems)
+	    {
+		    drawItem.Draw(ref currentDrawPosition);
+	    }
 
-        //static void DrawBackground(FlatBatch2D flatBatch, FlatBatch2D outlineFlatBatch, Vector2 size,
-        //                           Color outlineColor, Color color)
-        //{
-        //    outlineFlatBatch.QueueRectangle(Vector2.Zero, size, 0, outlineColor);
-        //    flatBatch.QueueQuad(Vector2.Zero, size, 0, color);
-        //}
 
-        static void DrawCaret(FlatBatch2D flatBatch, float width,
-                              float height, Vector2 position, float scroll)
-        {
-            flatBatch.QueueQuad(
-                position + (-scroll, -height / 2),
-                position + (-scroll + width, height / 2), 0, Color.White);
-        }
+	    fontBatch.TransformTriangles(GlobalTransform);
+	    flatBatch.TransformTriangles(GlobalTransform);
+	    flatBatch.TransformLines(GlobalTransform);
+	    outlineFlatBatch.TransformLines(GlobalTransform);
+
+	    var scrollTransform = Matrix.CreateTranslation(new Vector3(-Scroll,0,0));
+	    flatBatch.TransformTriangles(scrollTransform);
+	    fontBatch.TransformTriangles(scrollTransform);
+	    underlineFlatBatch.TransformTriangles(scrollTransform);
     }
 
     /// <inheritdoc/>
@@ -1796,7 +1849,7 @@ public class TextBoxWidget : Widget
 
     public abstract class TextDrawItem
     {
-        public abstract void Draw(ref Vector2 position, float scroll);
+        public abstract void Draw(ref Vector2 position);
     }
 
     public class NormalDrawItem(
@@ -1809,7 +1862,7 @@ public class TextBoxWidget : Widget
 	    Color color)
         : TextDrawItem
     {
-        public override void Draw(ref Vector2 position, float scroll)
+        public override void Draw(ref Vector2 position)
         {
 	        if(length == 0)
 	        {
@@ -1818,9 +1871,8 @@ public class TextBoxWidget : Widget
 	        
             var font = fontBatch.Font;
 
-            var size = font.MeasureText(fullText, start, length, new Vector2(fontScale),
-                Vector2.Zero);
-            fontBatch.QueueText(fullText.Substring(start, length), (position.X - scroll, position.Y), 0, color, TextAnchor.VerticalCenter,
+            var size = font.MeasureText(fullText, start, length, new Vector2(fontScale), fontSpacing);
+            fontBatch.QueueText(fullText.Substring(start, length), position, 0, color, TextAnchor.VerticalCenter,
                 new Vector2(fontScale),
                 fontSpacing);
             position.X += size.X;
@@ -1836,21 +1888,50 @@ public class TextBoxWidget : Widget
         Color color)
         : TextDrawItem
     {
-        public override void Draw(ref Vector2 position, float scroll)
+        public override void Draw(ref Vector2 position)
         {
             var font = fontBatch.Font;
             var size = font.MeasureText(compositionText, 0, compositionText.Length,
                 new Vector2(fontScale),
                 Vector2.Zero);
             
-            fontBatch.QueueText(compositionText, (position.X- scroll, position.Y), 0, color, TextAnchor.VerticalCenter,
+            fontBatch.QueueText(compositionText, position, 0, color, TextAnchor.VerticalCenter,
                 new Vector2(fontScale), fontSpacing);
-            underlineFlatBatch.QueueLine((position.X - scroll, position.Y) + size / 2 * Vector2.UnitY,
-                (position.X - scroll, position.Y) + size / 2 * Vector2.UnitY + new Vector2(size.X, 0), 0, Color.White);
+            underlineFlatBatch.QueueLine(position + size / 2 * Vector2.UnitY,
+                position + size / 2 * Vector2.UnitY + new Vector2(size.X, 0), 0, Color.White);
 
             position.X += size.X;
         }
     }
 
+    public class CaretDrawItem(
+	    FlatBatch2D flatBatch,
+	    float width,
+	    float height) : TextDrawItem
+    {
+
+	    public override void Draw(ref Vector2 position)
+	    {
+		    Console.WriteLine(position);
+		    flatBatch.QueueQuad(
+			    position + (0,-height / 2),
+			    position + (width,height / 2),
+			    0,
+			    Color.White);
+	    }
+    }
+
+    public class EndOfLineDrawItem(
+	    BitmapFont font,
+	    Vector2 fontSpacing,
+	    float fontScale)
+	    : TextDrawItem
+    {
+	    public override void Draw(ref Vector2 position)
+	    {
+		    position.X = 0;
+		    position.Y += font.GlyphHeight * font.Scale * fontScale + fontSpacing.Y;
+	    }
+    }
     #endregion
 }
