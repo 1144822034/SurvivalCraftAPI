@@ -34,4 +34,14 @@ namespace Game.IContentReader
 			return element.ValueKind == JsonValueKind.Object ? element : throw new InvalidDataException(contents[0].Filename + "is not Json object");
 		}
 	}
+	public class JsonDocumentReader : IContentReader
+	{
+		public override string Type => "System.Text.Json.JsonDocument";
+		public override string[] DefaultSuffix => ["json"];
+		public override object Get(ContentInfo[] contents)
+		{
+			return JsonDocument.Parse(new StreamReader(contents[0].Duplicate()).ReadToEnd());
+		}
+	}
+
 }

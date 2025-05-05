@@ -25,6 +25,7 @@ namespace Game
 				new ImageReader(),
 				new JsonArrayReader(),
 				new JsonObjectReader(),
+				new JsonDocumentReader(),
 				new IContentReader.JsonModelReader(),
 				new MtllibStructReader(),
 				new IContentReader.ObjModelReader(),
