@@ -1690,12 +1690,7 @@ public class TextBoxWidget : Widget
     {
 	    var textToDraw = Text.Replace("\t", new string(' ',IndentWidth));
 			var caretIndex = Text[..Caret].Sum(c => c == '\t' ? IndentWidth : 1);
-	    var caretDrawPosition = Font.MeasureText(
-		    textToDraw,
-		    0,
-		    caretIndex + CompositionTextCaret,
-		    new Vector2(FontScale),
-		    FontSpacing);
+	    
 	    if(PasswordMode)
 	    {
 		    textToDraw = new string('*',textToDraw.Length);
@@ -1912,7 +1907,6 @@ public class TextBoxWidget : Widget
 
 	    public override void Draw(ref Vector2 position)
 	    {
-		    Console.WriteLine(position);
 		    flatBatch.QueueQuad(
 			    position + (0,-height / 2),
 			    position + (width,height / 2),
