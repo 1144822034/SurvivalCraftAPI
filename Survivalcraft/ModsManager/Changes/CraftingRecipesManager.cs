@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
+using System.Reflection.Emit;
 using System.Xml.Linq;
 using XmlUtilities;
 
@@ -13,6 +14,11 @@ namespace Game
 		public static List<CraftingRecipe> m_recipes = [];
 		public static List<CraftingRecipe> Recipes => m_recipes;
 		public static string fName = "CraftingRecipesManager";
+		/// <summary>
+		/// 启用等级限制
+		/// Mod在初始化时，设置为false可以让物品合成不受玩家等级限制
+		/// </summary>
+		public static bool EnableLevelRestrictions = true;
 		public static void Initialize()
 		{
 			m_recipes.Clear();
@@ -179,7 +185,7 @@ namespace Game
 						Message = LanguageControl.Get(fName, 1)
 					};
 				}
-				else if (playerLevel < craftingRecipe.RequiredPlayerLevel)
+				else if (playerLevel < craftingRecipe.RequiredPlayerLevel && EnableLevelRestrictions)
 				{
 					craftingRecipe = (!(craftingRecipe.RequiredHeatLevel > 0f)) ? new CraftingRecipe
 					{
