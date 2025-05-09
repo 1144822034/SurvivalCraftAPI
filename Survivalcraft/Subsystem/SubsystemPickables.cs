@@ -91,6 +91,7 @@ namespace Game
 			try
 			{
 				var pickable = new T();
+				pickable.InitializeData(m_subsystemTerrain.Terrain,m_drawBlockEnvironmentData,m_subsystemSky.VisibilityRange,m_subsystemSky.CalculateFog,m_primitivesRenderer);
 				pickable.Initialize(value,count,position,velocity,stuckMatrix,owner);
 				return pickable;
 			}
@@ -125,8 +126,7 @@ namespace Game
 			{
 				try
 				{
-					pickable.SubsystemTerrain = m_subsystemTerrain;
-					pickable.SubsystemPickables = this;
+					pickable.Project = Project;
 					pickable.Draw(camera,drawOrder,totalElapsedGameTime,matrix);
 				}
 				catch(Exception e)
@@ -156,8 +156,7 @@ namespace Game
                     {
 						try
 						{
-							pickable.SubsystemTerrain = m_subsystemTerrain;
-							pickable.SubsystemPickables = this;
+							pickable.Project = Project;
 							pickable.Update(dt);
 						}
 						catch (Exception e)
@@ -199,8 +198,8 @@ namespace Game
 					string className = item.GetValue("Class",typeof(Pickable).FullName);
 					Type type = TypeCache.FindType(className,false,true);
 					var pickable = (Pickable)Activator.CreateInstance(type);
-					pickable.SubsystemTerrain = m_subsystemTerrain;
-					pickable.SubsystemPickables = this;
+					pickable.Project = Project;
+					pickable.InitializeData(m_subsystemTerrain.Terrain,m_drawBlockEnvironmentData,m_subsystemSky.VisibilityRange,m_subsystemSky.CalculateFog,m_primitivesRenderer);
 					pickable.Load(item);
 					ModsManager.HookAction("OnPickableAdded",loader => {
 						loader.OnPickableAdded(this,ref pickable,item);

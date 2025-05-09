@@ -580,7 +580,7 @@ namespace Game
 			{
 				Block block2 = BlocksManager.Blocks[Terrain.ExtractContents(pickable.Value)];
 				CalculateImpulseAndDamage(pickable.Position + new Vector3(0f, 0.5f, 0f), pickable.ExplosionMass, null, out Vector3 impulse2, out float damage2);
-				pickable.SubsystemExplosions = this;
+				pickable.Project = Project;
 				pickable.UnderExplosion(impulse2, damage2);
                 
 			}

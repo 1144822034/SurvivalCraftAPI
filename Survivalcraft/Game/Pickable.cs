@@ -1,4 +1,5 @@
 using Engine;
+using Engine.Graphics;
 using GameEntitySystem;
 using System;
 using TemplatesDatabase;
@@ -28,23 +29,54 @@ namespace Game
 
         public bool IsExplosionProof = false;
 
-		public ComponentPickableGatherer FlyToGatherer;
+        #region 必选参数
+        public Terrain Terrain;
 
-        public SubsystemPickables SubsystemPickables;
+        public float VisibilityRange;
 
-        public SubsystemTerrain SubsystemTerrain;
+        public DrawBlockEnvironmentData DrawBlockEnvironmentData;
 
-        public SubsystemExplosions SubsystemExplosions;
+        public SubsystemSky.CalculateFogDelegate CalculateFog;
 
-        public Entity OwnerEntity;
+        public PrimitivesRenderer3D m_primitivesRenderer;
+        #endregion
 
-		protected SubsystemMovingBlocks m_subsystemMovingBlocks;
+        #region 可选
+        public Project? Project;
 
-		public SubsystemMovingBlocks SubsystemMovingBlocks
-		{
-			get { if(m_subsystemMovingBlocks == null) m_subsystemMovingBlocks = SubsystemTerrain.Project.FindSubsystem<SubsystemMovingBlocks>();
-						return m_subsystemMovingBlocks; }
-		}
+        public Entity? OwnerEntity;
+
+        public ComponentPickableGatherer? FlyToGatherer;
+
+        protected SubsystemPickables? m_subsystemPickables;
+        public SubsystemPickables? SubsystemPickables
+        {
+	        get { if(m_subsystemPickables == null && Project != null) m_subsystemPickables = Project.FindSubsystem<SubsystemPickables>();
+		        return m_subsystemPickables; }
+        }
+
+        protected SubsystemTerrain? m_subsystemTerrain;
+        public SubsystemTerrain? SubsystemTerrain
+        {
+	        get { if(m_subsystemTerrain == null && Project != null) m_subsystemTerrain = Project.FindSubsystem<SubsystemTerrain>();
+		        return m_subsystemTerrain; }
+        }
+
+        protected SubsystemExplosions? m_subsystemExplosions;
+        public SubsystemExplosions? SubsystemExplosions
+        {
+	        get { if(m_subsystemExplosions == null && Project != null) m_subsystemExplosions = Project.FindSubsystem<SubsystemExplosions>();
+		        return m_subsystemExplosions; }
+        }
+
+        protected SubsystemMovingBlocks? m_subsystemMovingBlocks;
+        public SubsystemMovingBlocks? SubsystemMovingBlocks
+        {
+	        get { if(m_subsystemMovingBlocks == null && Project != null) m_subsystemMovingBlocks = Project.FindSubsystem<SubsystemMovingBlocks>();
+		        return m_subsystemMovingBlocks; }
+        }
+        #endregion
+
 
 		public override void Load(ValuesDictionary valuesDictionary)
 		{
@@ -58,10 +90,19 @@ namespace Game
 				StuckMatrix = valuesDictionary.GetValue<Matrix>("StuckMatrix");
 			}
 			int ownerEntityID = valuesDictionary.GetValue("OwnerID",0);
-			if(ownerEntityID != 0)
+			if(ownerEntityID != 0 && Project != null)
 			{
-				OwnerEntity = SubsystemPickables.Project.FindEntity(ownerEntityID);
+				OwnerEntity = Project.FindEntity(ownerEntityID);
 			}
+		}
+
+		public virtual void InitializeData(Terrain terrain,DrawBlockEnvironmentData drawBlockEnvironmentData,float visibilityRange,SubsystemSky.CalculateFogDelegate calculateFog,PrimitivesRenderer3D primitivesRenderer)
+		{
+			Terrain = terrain;
+			DrawBlockEnvironmentData = drawBlockEnvironmentData;
+			CalculateFog = calculateFog;
+			VisibilityRange = visibilityRange;
+			m_primitivesRenderer = primitivesRenderer;
 		}
 		public virtual void Initialize(int value, int count, Vector3 position, Vector3? velocity, Matrix? stuckMatrix, Entity owner)
         {
@@ -70,6 +111,7 @@ namespace Game
             Position = position;
             StuckMatrix = stuckMatrix;
             OwnerEntity = owner;
+
             if (velocity.HasValue)
             {
                 Velocity = velocity.Value;
@@ -84,28 +126,17 @@ namespace Game
                 Velocity = new Vector3(m_random.Float(-0.5f, 0.5f), m_random.Float(1f, 1.2f), m_random.Float(-0.5f, 0.5f));
             }
         }
+		protected TerrainRaycastResult? WrappedRaycast(Vector3 start, Vector3 end, bool useInteractionBoxes, bool skipAirBlocks, Func<int, float, bool> action) => m_subsystemTerrain == null ? SubsystemTerrain.Raycast(Terrain, start,end,useInteractionBoxes,skipAirBlocks,action) : m_subsystemTerrain.Raycast(start,end,useInteractionBoxes,skipAirBlocks,action);
         public virtual void Update(float dt)
         {
-            float maxTimeExist;
-            if(MaxTimeExist.HasValue)
-            {
-	            maxTimeExist = MaxTimeExist.Value;
-            }
+	        bool toRemove = UpdateTimeToRemove();
+	        if(toRemove)
+	        {
+		        ToRemove = true;
+	        }
             else
             {
-				Block block = BlocksManager.Blocks[Terrain.ExtractContents(Value)];
-	            string category = block.GetCategory(Value);
-	            int remainPickables = SubsystemPickables.m_pickables.Count - SubsystemPickables.m_pickablesToRemove.Count;
-	            maxTimeExist = ((category == "Terrain") ? ((float)((remainPickables > 80) ? 60 : 120)) : ((category == "Plants" && block.GetNutritionalValue(Value) == 0f) ? ((float)((remainPickables > 80) ? 60 : 120)) : ((!(block is EggBlock)) ? ((float)((remainPickables > 80) ? 120 : 480)) : 240f)));
-            }
-            double timeExisted = SubsystemPickables.m_subsystemGameInfo.TotalElapsedGameTime - CreationTime;
-            if (timeExisted > maxTimeExist)
-            {
-                ToRemove = true;
-            }
-            else
-            {
-                TerrainChunk chunkAtCell = SubsystemTerrain.Terrain.GetChunkAtCell(Terrain.ToCell(Position.X), Terrain.ToCell(Position.Z));
+                TerrainChunk chunkAtCell = Terrain.GetChunkAtCell(Terrain.ToCell(Position.X), Terrain.ToCell(Position.Z));
                 if (chunkAtCell != null && chunkAtCell.State > TerrainChunkState.InvalidContents4)
                 {
                     Vector3 positionAtdt = Position + Velocity * dt;
@@ -121,14 +152,39 @@ namespace Game
                 }
             }
         }
-		public virtual void UpdateMovement(float dt, ref Vector3 positionAtdt)
+
+        public virtual bool UpdateTimeToRemove()//更新移除逻辑
         {
+	        if(SubsystemPickables == null) return false;
+	        float maxTimeExist;
+	        if(MaxTimeExist.HasValue)
+	        {
+		        maxTimeExist = MaxTimeExist.Value;
+	        }
+	        else
+	        {
+		        Block block = BlocksManager.Blocks[Terrain.ExtractContents(Value)];
+		        string category = block.GetCategory(Value);
+		        int remainPickables = SubsystemPickables.m_pickables.Count - SubsystemPickables.m_pickablesToRemove.Count;
+		        maxTimeExist = ((category == "Terrain") ? ((float)((remainPickables > 80) ? 60 : 120)) : ((category == "Plants" && block.GetNutritionalValue(Value) == 0f) ? ((float)((remainPickables > 80) ? 60 : 120)) : ((!(block is EggBlock)) ? ((float)((remainPickables > 80) ? 120 : 480)) : 240f)));
+	        }
+	        double timeExisted = SubsystemPickables.m_subsystemGameInfo.TotalElapsedGameTime - CreationTime;
+	        if(timeExisted > maxTimeExist)
+	        {
+		        return true;
+	        }
+	        return false;
+        }
+		public virtual void UpdateMovement(float dt, ref Vector3 positionAtdt)
+		{
+			FluidBlock surfaceBlock = null;
+			float? surfaceHeight = null;
             Block block = BlocksManager.Blocks[Terrain.ExtractContents(Value)];
-            Vector2? vector2 = SubsystemPickables.m_subsystemFluidBlockBehavior.CalculateFlowSpeed(Terrain.ToCell(Position.X), Terrain.ToCell(Position.Y + 0.1f), Terrain.ToCell(Position.Z), out FluidBlock surfaceBlock, out float? surfaceHeight);
+            Vector2? vector2 = SubsystemPickables?.m_subsystemFluidBlockBehavior.CalculateFlowSpeed(Terrain.ToCell(Position.X), Terrain.ToCell(Position.Y + 0.1f), Terrain.ToCell(Position.Z), out surfaceBlock, out surfaceHeight);
             if (!StuckMatrix.HasValue)
             {
-                TerrainRaycastResult? terrainRaycastResult = SubsystemTerrain.Raycast(Position, positionAtdt, useInteractionBoxes: false, skipAirBlocks: true, (int value, float distance) => BlocksManager.Blocks[Terrain.ExtractContents(value)].IsCollidable_(value));
-				MovingBlocksRaycastResult? movingBlocksRaycastResult = SubsystemMovingBlocks.Raycast(Position + new Vector3(0f, 0.25f, 0f), positionAtdt + new Vector3(0f, 0.25f, 0f), true,(int value,float distance) => BlocksManager.Blocks[Terrain.ExtractContents(value)].IsCollidable_(value));
+                TerrainRaycastResult? terrainRaycastResult = WrappedRaycast(Position, positionAtdt, useInteractionBoxes: false, skipAirBlocks: true, (int value, float distance) => BlocksManager.Blocks[Terrain.ExtractContents(value)].IsCollidable_(value));
+				MovingBlocksRaycastResult? movingBlocksRaycastResult = SubsystemMovingBlocks?.Raycast(Position + new Vector3(0f, 0.25f, 0f), positionAtdt + new Vector3(0f, 0.25f, 0f), true,(int value,float distance) => BlocksManager.Blocks[Terrain.ExtractContents(value)].IsCollidable_(value));
 
 				bool isMovingRaycastDominant = false;
 
@@ -141,19 +197,22 @@ namespace Game
 				else if(terrainRaycastResult.HasValue && (!movingBlocksRaycastResult.HasValue || terrainRaycastResult.Value.Distance < movingBlocksRaycastResult.Value.Distance))
 				{
 					isMovingRaycastDominant = false;
-					cellValue = SubsystemTerrain.Terrain.GetCellValue(terrainRaycastResult.Value.CellFace.X,terrainRaycastResult.Value.CellFace.Y,terrainRaycastResult.Value.CellFace.Z);
+					cellValue = Terrain.GetCellValue(terrainRaycastResult.Value.CellFace.X,terrainRaycastResult.Value.CellFace.Y,terrainRaycastResult.Value.CellFace.Z);
 				}
-				
-				SubsystemBlockBehavior[] blockBehaviors = SubsystemPickables.m_subsystemBlockBehaviors.GetBlockBehaviors(Terrain.ExtractContents(cellValue));
-				for(int i = 0; i < blockBehaviors.Length; i++)
+
+				if(SubsystemPickables != null)
 				{
-					if(isMovingRaycastDominant) blockBehaviors[i].OnHitByProjectile(movingBlocksRaycastResult.Value.MovingBlock,this); 
-					else if(terrainRaycastResult.HasValue) blockBehaviors[i].OnHitByProjectile(terrainRaycastResult.Value.CellFace,this);
+					SubsystemBlockBehavior[] blockBehaviors = SubsystemPickables.m_subsystemBlockBehaviors.GetBlockBehaviors(Terrain.ExtractContents(cellValue));
+					for(int i = 0; i < blockBehaviors.Length; i++)
+					{
+						if(isMovingRaycastDominant) blockBehaviors[i].OnHitByProjectile(movingBlocksRaycastResult.Value.MovingBlock,this);
+						else if(terrainRaycastResult.HasValue) blockBehaviors[i].OnHitByProjectile(terrainRaycastResult.Value.CellFace,this);
+					}
 				}
 
 				if (terrainRaycastResult.HasValue)
                 {
-                    if (SubsystemTerrain.Raycast(Position, Position, useInteractionBoxes: false, skipAirBlocks: true, (int value2, float distance) => BlocksManager.Blocks[Terrain.ExtractContents(value2)].IsCollidable_(value2)).HasValue)
+                    if (WrappedRaycast(Position, Position, useInteractionBoxes: false, skipAirBlocks: true, (int value2, float distance) => BlocksManager.Blocks[Terrain.ExtractContents(value2)].IsCollidable_(value2)).HasValue)
                     {
                         int num8 = Terrain.ToCell(Position.X);
                         int num9 = Terrain.ToCell(Position.Y);
@@ -168,7 +227,7 @@ namespace Game
                             {
                                 for (int l = -3; l <= 3; l++)
                                 {
-                                    int value = SubsystemTerrain.Terrain.GetCellContents(j + num8, k + num9, l + num10);
+                                    int value = Terrain.GetCellContents(j + num8, k + num9, l + num10);
                                     if (!BlocksManager.Blocks[Terrain.ExtractContents(value)].IsCollidable_(value))
                                     {
                                         int num15 = (j * j) + (k * k) + (l * l);
@@ -222,7 +281,7 @@ namespace Game
             else
             {
                 Vector3 vector3 = StuckMatrix.Value.Translation + (StuckMatrix.Value.Up * block.ProjectileTipOffset);
-                if (!SubsystemTerrain.Raycast(vector3, vector3, useInteractionBoxes: false, skipAirBlocks: true, (int value, float distance) => BlocksManager.Blocks[Terrain.ExtractContents(value)].IsCollidable_(value)).HasValue)
+                if (!WrappedRaycast(vector3, vector3, useInteractionBoxes: false, skipAirBlocks: true, (int value, float distance) => BlocksManager.Blocks[Terrain.ExtractContents(value)].IsCollidable_(value)).HasValue)
                 {
                     Position = StuckMatrix.Value.Translation;
                     Velocity = Vector3.Zero;
@@ -280,7 +339,7 @@ namespace Game
                 }
             }
         }
-        public virtual void UpdateMovementWithTarget(ComponentPickableGatherer targetGatherer, float dt)
+        public virtual void UpdateMovementWithTarget(ComponentPickableGatherer? targetGatherer, float dt)
 		{
 			if (!FlyToPosition.HasValue) return;
             Vector3 v2 = FlyToPosition.Value - Position;
@@ -297,6 +356,7 @@ namespace Game
         }
         public override void UnderExplosion(Vector3 impulse, float damage)
         {
+	        if (SubsystemExplosions == null) return;
             if (IsExplosionProof) return;
             Block block = BlocksManager.Blocks[Terrain.ExtractContents(Value)];
             if (damage / block.GetExplosionResilience(Value) > 0.1f)
@@ -325,7 +385,7 @@ namespace Game
 
 		public virtual void Draw(Camera camera,int drawOrder, double totalElapsedGameTime, Matrix rotationMatrix)
 		{
-			float num = MathUtils.Min(SubsystemPickables.m_subsystemSky.VisibilityRange,30f);
+			float num = MathUtils.Min(VisibilityRange,30f);
 			Vector3 position = Position;
 			Vector3 v = position - camera.ViewPosition;
 			float num2 = Vector3.Dot(camera.ViewDirection,v);
@@ -346,18 +406,18 @@ namespace Game
 				int x = Terrain.ToCell(position.X);
 				int num6 = Terrain.ToCell(position.Y);
 				int z = Terrain.ToCell(position.Z);
-				TerrainChunk chunkAtCell = SubsystemPickables.m_subsystemTerrain.Terrain.GetChunkAtCell(x,z);
+				TerrainChunk chunkAtCell = Terrain.GetChunkAtCell(x,z);
 				if(chunkAtCell != null && chunkAtCell.State >= TerrainChunkState.InvalidVertices1 && num6 >= 0 && num6 < 255)
 				{
-					SubsystemPickables.m_drawBlockEnvironmentData.Humidity = SubsystemPickables.m_subsystemTerrain.Terrain.GetSeasonalHumidity(x,z);
-					SubsystemPickables.m_drawBlockEnvironmentData.Temperature = SubsystemPickables.m_subsystemTerrain.Terrain.GetSeasonalTemperature(x,z) + SubsystemWeather.GetTemperatureAdjustmentAtHeight(num6);
+					DrawBlockEnvironmentData.Humidity = Terrain.GetSeasonalHumidity(x,z);
+					DrawBlockEnvironmentData.Temperature = Terrain.GetSeasonalTemperature(x,z) + SubsystemWeather.GetTemperatureAdjustmentAtHeight(num6);
 					float f = MathUtils.Max(position.Y - num6 - 0.75f,0f) / 0.25f;
-					Light = (int)MathUtils.Lerp(SubsystemPickables.m_subsystemTerrain.Terrain.GetCellLightFast(x,num6,z),SubsystemPickables.m_subsystemTerrain.Terrain.GetCellLightFast(x,num6 + 1,z),f);
+					Light = (int)MathUtils.Lerp(Terrain.GetCellLightFast(x,num6,z),Terrain.GetCellLightFast(x,num6 + 1,z),f);
 				}
-				SubsystemPickables.m_drawBlockEnvironmentData.Light = Light;
-				SubsystemPickables.m_drawBlockEnvironmentData.BillboardDirection = Position - camera.ViewPosition;
-				SubsystemPickables.m_drawBlockEnvironmentData.InWorldMatrix.Translation = position;
-				float num7 = 1f - SubsystemPickables.m_subsystemSky.CalculateFog(camera.ViewPosition,Position);
+				DrawBlockEnvironmentData.Light = Light;
+				DrawBlockEnvironmentData.BillboardDirection = Position - camera.ViewPosition;
+				DrawBlockEnvironmentData.InWorldMatrix.Translation = position;
+				float num7 = 1f - CalculateFog(camera.ViewPosition,Position);
 				num7 *= MathUtils.Saturate(0.25f * (num - num3));
 				Matrix drawMatrix;
 				if(StuckMatrix.HasValue)
@@ -377,7 +437,7 @@ namespace Game
 				});
 				if(shouldDrawBlock)
 				{
-					block.DrawBlock(SubsystemPickables.m_primitivesRenderer,Value,drawBlockColor,drawBlockSize,ref drawMatrix,SubsystemPickables.m_drawBlockEnvironmentData);
+					block.DrawBlock(m_primitivesRenderer,Value,drawBlockColor,drawBlockSize,ref drawMatrix,DrawBlockEnvironmentData);
 				}
 			}
 		}
