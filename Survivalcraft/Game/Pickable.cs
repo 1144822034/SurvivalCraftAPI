@@ -288,7 +288,7 @@ namespace Game
                     StuckMatrix = null;
                 }
             }
-            if (surfaceBlock is FluidBlock && !SplashGenerated)
+            if (surfaceBlock is FluidBlock && !SplashGenerated && SubsystemPickables != null)
             {
                 if(surfaceBlock is MagmaBlock)
                 {
@@ -312,11 +312,14 @@ namespace Game
                 SplashGenerated = false;
             }
             //对于火焰的处理
-            if (!IsFireProof && SubsystemPickables.m_subsystemTime.PeriodicGameTimeEvent(1.0, GetHashCode() % 100 / 100.0) && (SubsystemTerrain.Terrain.GetCellContents(Terrain.ToCell(Position.X), Terrain.ToCell(Position.Y + 0.1f), Terrain.ToCell(Position.Z)) == 104 || SubsystemPickables.m_subsystemFireBlockBehavior.IsCellOnFire(Terrain.ToCell(Position.X), Terrain.ToCell(Position.Y + 0.1f), Terrain.ToCell(Position.Z))))
+            if(SubsystemPickables != null)
             {
-                SubsystemPickables.m_subsystemAudio.PlayRandomSound("Audio/Sizzles", 1f, SubsystemPickables.m_random.Float(-0.2f, 0.2f), Position, 3f, autoDelay: true);
-                ToRemove = true;
-                SubsystemPickables.m_subsystemExplosions.TryExplodeBlock(Terrain.ToCell(Position.X), Terrain.ToCell(Position.Y), Terrain.ToCell(Position.Z), Value);
+	            if (!IsFireProof && SubsystemPickables.m_subsystemTime.PeriodicGameTimeEvent(1.0, GetHashCode() % 100 / 100.0) && (SubsystemTerrain.Terrain.GetCellContents(Terrain.ToCell(Position.X), Terrain.ToCell(Position.Y + 0.1f), Terrain.ToCell(Position.Z)) == 104 || SubsystemPickables.m_subsystemFireBlockBehavior.IsCellOnFire(Terrain.ToCell(Position.X), Terrain.ToCell(Position.Y + 0.1f), Terrain.ToCell(Position.Z))))
+	            {
+		            SubsystemPickables.m_subsystemAudio.PlayRandomSound("Audio/Sizzles", 1f, SubsystemPickables.m_random.Float(-0.2f, 0.2f), Position, 3f, autoDelay: true);
+		            ToRemove = true;
+		            SubsystemPickables.m_subsystemExplosions.TryExplodeBlock(Terrain.ToCell(Position.X), Terrain.ToCell(Position.Y), Terrain.ToCell(Position.Z), Value);
+	            }
             }
             //掉落物在卡住的时候的更新
             if (!StuckMatrix.HasValue)
