@@ -33,11 +33,11 @@ namespace Game
 		/// <summary>
 		///  ‹‘Î…˘”∞œÏ
 		/// </summary>
-		public bool AffectedByNoise = true;
+		public bool AffectedByNoise;
 		/// <summary>
 		/// ≥·∞Ú…»∂Ø…˘“Ù
 		/// </summary>
-		public bool FanSound = true;
+		public bool FanSound;
 
 		public UpdateOrder UpdateOrder => UpdateOrder.Default;
 
@@ -86,6 +86,8 @@ namespace Game
 			m_componentCreature = Entity.FindComponent<ComponentCreature>(throwOnError: true);
 			m_componentPathfinding = Entity.FindComponent<ComponentPathfinding>(throwOnError: true);
 			LowHealthToEscape = valuesDictionary.GetValue<float>("LowHealthToEscape",0.33f);
+			AffectedByNoise = valuesDictionary.GetValue<bool>("AffectedByNoise",true);
+			FanSound = valuesDictionary.GetValue<bool>("FanSound",true);
 			m_componentCreature.ComponentBody.CollidedWithBody += delegate
 			{
 				if (m_stateMachine.CurrentState != "RunningAway")
@@ -213,18 +215,17 @@ namespace Game
 		{
 			if (entity != Entity)
 			{
+				var isPredator = false;
 				var skipVanilla = false;
 				ModsManager.HookAction("IsPredator",(modLoader) => {
-					modLoader.IsPredator(this,entity,out skipVanilla);
+					modLoader.IsPredator(this,entity,out isPredator,out skipVanilla);
 					return false;
 				});
-				if(!skipVanilla)
+				if(skipVanilla) return isPredator;
+				ComponentCreature componentCreature = entity.FindComponent<ComponentCreature>();
+				if(componentCreature != null && (componentCreature.Category == CreatureCategory.LandPredator || componentCreature.Category == CreatureCategory.WaterPredator || componentCreature.Category == CreatureCategory.LandOther))
 				{
-					ComponentCreature componentCreature = entity.FindComponent<ComponentCreature>();
-					if(componentCreature != null && (componentCreature.Category == CreatureCategory.LandPredator || componentCreature.Category == CreatureCategory.WaterPredator || componentCreature.Category == CreatureCategory.LandOther))
-					{
-						return true;
-					}
+					return true;
 				}
 			}
 			return false;
