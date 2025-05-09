@@ -770,6 +770,15 @@ namespace Game
         }
 
 		/// <summary>
+		/// ComponentFlyAwayBehavior组件接口
+		/// 用于判断是否将目标规划为捕食者，从而飞走
+		/// </summary>
+		/// <param name="skipVanilla">是否跳过原版逻辑</param>
+		public virtual void IsPredator(ComponentFlyAwayBehavior FlyAwayBehavior, Entity target, out bool skipVanilla)
+        {
+			skipVanilla = false;
+		}
+		/// <summary>
 		/// 摇人行为。
 		/// 仅建议对自己模组的生物使用，不要干涉其他模组生物的行为。
 		/// </summary>

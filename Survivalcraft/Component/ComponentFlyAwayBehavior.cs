@@ -29,6 +29,15 @@ namespace Game
 		public float m_importanceLevel;
 
 		public double m_nextUpdateTime;
+		public float LowHealthToEscape { get; set; }
+		/// <summary>
+		///  ‹‘Î…˘”∞œÏ
+		/// </summary>
+		public bool AffectedByNoise = true;
+		/// <summary>
+		/// ≥·∞Ú…»∂Ø…˘“Ù
+		/// </summary>
+		public bool FanSound = true;
 
 		public UpdateOrder UpdateOrder => UpdateOrder.Default;
 
@@ -61,7 +70,7 @@ namespace Game
 
 		public virtual void HearNoise(ComponentBody sourceBody, Vector3 sourcePosition, float loudness)
 		{
-			if (loudness >= 0.25f && m_stateMachine.CurrentState != "RunningAway")
+			if (loudness >= 0.25f && m_stateMachine.CurrentState != "RunningAway" && AffectedByNoise)
 			{
 				m_stateMachine.TransitionTo("DangerDetected");
 			}
@@ -76,6 +85,7 @@ namespace Game
 			m_subsystemNoise = Project.FindSubsystem<SubsystemNoise>(throwOnError: true);
 			m_componentCreature = Entity.FindComponent<ComponentCreature>(throwOnError: true);
 			m_componentPathfinding = Entity.FindComponent<ComponentPathfinding>(throwOnError: true);
+			LowHealthToEscape = valuesDictionary.GetValue<float>("LowHealthToEscape",0.33f);
 			m_componentCreature.ComponentBody.CollidedWithBody += delegate
 			{
 				if (m_stateMachine.CurrentState != "RunningAway")
@@ -92,7 +102,7 @@ namespace Game
 			}, null);
 			m_stateMachine.AddState("DangerDetected", delegate
 			{
-				m_importanceLevel = (m_componentCreature.ComponentHealth.Health < 0.33f) ? 300 : 100;
+				m_importanceLevel = (m_componentCreature.ComponentHealth.Health < LowHealthToEscape) ? 300 : 100;
 				m_nextUpdateTime = 0.0;
 			}, delegate
 			{
@@ -105,7 +115,8 @@ namespace Game
 			m_stateMachine.AddState("RunningAway", delegate
 			{
 				m_componentPathfinding.SetDestination(FindSafePlace(), 1f, 1f, 0, useRandomMovements: false, ignoreHeightDifference: true, raycastDestination: false, null);
-				m_subsystemAudio.PlayRandomSound("Audio/Creatures/Wings", 0.8f, m_random.Float(-0.1f, 0.2f), m_componentCreature.ComponentBody.Position, 3f, autoDelay: true);
+				if(FanSound)
+					m_subsystemAudio.PlayRandomSound("Audio/Creatures/Wings", 0.8f, m_random.Float(-0.1f, 0.2f), m_componentCreature.ComponentBody.Position, 3f, autoDelay: true);
 				m_componentCreature.ComponentCreatureSounds.PlayPainSound();
 				m_subsystemNoise.MakeNoise(m_componentCreature.ComponentBody, 0.25f, 6f);
 			}, delegate
@@ -202,10 +213,18 @@ namespace Game
 		{
 			if (entity != Entity)
 			{
-				ComponentCreature componentCreature = entity.FindComponent<ComponentCreature>();
-				if (componentCreature != null && (componentCreature.Category == CreatureCategory.LandPredator || componentCreature.Category == CreatureCategory.WaterPredator || componentCreature.Category == CreatureCategory.LandOther))
+				var skipVanilla = false;
+				ModsManager.HookAction("IsPredator",(modLoader) => {
+					modLoader.IsPredator(this,entity,out skipVanilla);
+					return false;
+				});
+				if(!skipVanilla)
 				{
-					return true;
+					ComponentCreature componentCreature = entity.FindComponent<ComponentCreature>();
+					if(componentCreature != null && (componentCreature.Category == CreatureCategory.LandPredator || componentCreature.Category == CreatureCategory.WaterPredator || componentCreature.Category == CreatureCategory.LandOther))
+					{
+						return true;
+					}
 				}
 			}
 			return false;
