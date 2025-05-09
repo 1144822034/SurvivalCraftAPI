@@ -8,6 +8,8 @@ namespace Game
 {
 	public class Pickable : WorldItem
 	{
+		public const int MaxVisibilityRange = int.MaxValue;//掉落物最大的可视距离
+
 		public int Count;
 
 		public Vector3? FlyToPosition;
@@ -388,7 +390,7 @@ namespace Game
 
 		public virtual void Draw(Camera camera,int drawOrder, double totalElapsedGameTime, Matrix rotationMatrix)
 		{
-			float num = MathUtils.Min(VisibilityRange,30f);
+			float num = MathUtils.Min(VisibilityRange,MaxVisibilityRange);
 			Vector3 position = Position;
 			Vector3 v = position - camera.ViewPosition;
 			float num2 = Vector3.Dot(camera.ViewDirection,v);
