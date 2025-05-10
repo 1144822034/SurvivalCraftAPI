@@ -61,7 +61,9 @@ namespace Game
 		public virtual Pickable AddPickable(Pickable pickable)
         {
 			if(pickable == null) return null;
-            pickable.CreationTime = m_subsystemGameInfo.TotalElapsedGameTime;
+			//如果掉落物创建时间没有初始化，就初始化一下
+			if(pickable.CreationTime == 0)
+				pickable.CreationTime = m_subsystemGameInfo.TotalElapsedGameTime;
             ModsManager.HookAction("OnPickableAdded", loader =>
             {
                 loader.OnPickableAdded(this, ref pickable, null);
@@ -93,6 +95,7 @@ namespace Game
 				var pickable = new T();
 				pickable.InitializeData(m_subsystemTerrain.Terrain,m_drawBlockEnvironmentData,Math.Min(m_subsystemSky.VisibilityRange, 30),m_subsystemSky.CalculateFog,m_primitivesRenderer);
 				pickable.Initialize(value,count,position,velocity,stuckMatrix,owner);
+				pickable.CreationTime = m_subsystemGameInfo.TotalElapsedGameTime;
 				return pickable;
 			}
 			catch(Exception e)
