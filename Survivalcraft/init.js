@@ -10,12 +10,11 @@ function getProject() {
     return Game.GameManager.Project;
 }
 function findSubsystem(name) {//根据名字寻找特定Subsystem，名字不带Subsystem
-    let type = Game["Subsystem" + name];
     let project = getProject();
-    if (!type || !project) {
+    if (!project) {
         return null;
     }
-    return System.Convert.ChangeType(project.FindSubsystem(type, null, false), type);
+    return project.FindSubsystem(name, false);
 }
 
 //键盘事件

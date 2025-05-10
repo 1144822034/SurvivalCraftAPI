@@ -177,6 +177,29 @@ namespace GameEntitySystem
 			return null;
 		}
 
+		public Component FindComponent(string name,bool throwOnError)
+		{
+			if (throwOnError)
+			{
+				if(string.IsNullOrEmpty(name))
+				{
+					throw new ArgumentNullException(nameof(name));
+				}
+			}
+			foreach (Component component in m_components)
+			{
+				if (component.ValuesDictionary.DatabaseObject.Name == name)
+				{
+					return component;
+				}
+			}
+			if(throwOnError)
+			{
+				throw new Exception($"Required component {name} does not exist in entity.");
+			}
+			return null;
+		}
+
 		public T FindComponent<T>() where T : class
 		{
 			return FindComponent(typeof(T), null, throwOnError: false) as T;

@@ -132,6 +132,29 @@ namespace GameEntitySystem
 			return null;
 		}
 
+		public Subsystem FindSubsystem(string name, bool throwOnError)
+		{
+			if (throwOnError)
+			{
+				if(string.IsNullOrEmpty(name))
+				{
+					throw new ArgumentNullException(nameof(name));
+				}
+			}
+			foreach (Subsystem subsystem in m_subsystems)
+			{
+				if (subsystem.ValuesDictionary.DatabaseObject.Name == name)
+				{
+					return subsystem;
+				}
+			}
+			if(throwOnError)
+			{
+				throw new Exception($"Required subsystem with name \"{name}\" does not exist in project.");
+			}
+			return null;
+		}
+
 		public T FindSubsystem<T>() where T : class
 		{
 			return FindSubsystem(typeof(T), null, throwOnError: false) as T;

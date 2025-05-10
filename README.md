@@ -68,8 +68,8 @@ SCAPI1.8已跟进2.4原版，建议换到1.8x
 
 ## 感谢
 
-* 西班牙语翻译
+* 西班牙语(Español)翻译
   * Fire Dragon (Discord: firedragon4095)
   * Kike13 (Discord: .kike.04)
-* 泰语翻译
+* 越南语(Tiếng Việt)翻译
   * Long (Discord: daylong89)
