@@ -265,12 +265,21 @@ namespace Game
 		{
 			return block.ShouldAvoid(cellValue, this);
 		}
-
+		/// <summary>
+		/// 地形是否安全可通行
+		/// </summary>
 		public virtual bool IsTerrainSafeToGo(Vector3 position, Vector3 direction)
 		{
+			var isTerrainSafeToGo = false;
+			var skipVanilla = false;
+			ModsManager.HookAction("IsTerrainSafeToGo",(modLoader) => {
+				modLoader.IsTerrainSafeToGo(this,position,direction,out isTerrainSafeToGo,out skipVanilla);
+				return false;
+			});
+			if(skipVanilla) return isTerrainSafeToGo;
 			//vector是自己判断移动后的位置
-			Vector3 vector = position + new Vector3(0f, 0.1f, 0f) + ((direction.LengthSquared() < 1.2f) ? new Vector3(direction.X, 0f, direction.Z) : (1.2f * Vector3.Normalize(new Vector3(direction.X, 0f, direction.Z))));
-            Vector3 vector2 = position + new Vector3(0f, 0.1f, 0f) + ((direction.LengthSquared() < 1f) ? new Vector3(direction.X, 0f, direction.Z) : (1f * Vector3.Normalize(new Vector3(direction.X, 0f, direction.Z))));
+			var vector = position + new Vector3(0f, 0.1f, 0f) + ((direction.LengthSquared() < 1.2f) ? new Vector3(direction.X, 0f, direction.Z) : (1.2f * Vector3.Normalize(new Vector3(direction.X, 0f, direction.Z))));
+			var vector2 = position + new Vector3(0f, 0.1f, 0f) + ((direction.LengthSquared() < 1f) ? new Vector3(direction.X, 0f, direction.Z) : (1f * Vector3.Normalize(new Vector3(direction.X, 0f, direction.Z))));
             for (int i = -1; i <= 1; i++)
 			{
 				for (int j = -1; j <= 1; j++)

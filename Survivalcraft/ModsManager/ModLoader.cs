@@ -770,6 +770,17 @@ namespace Game
         }
 
 		/// <summary>
+		/// ComponentPilot组件接口
+		/// 用于判断是否地形是否安全
+		/// </summary>
+		/// <param name="isTerrainSafeToGo">前往地形是安全的</param>
+		/// <param name="skipVanilla">是否跳过原版逻辑</param>
+		public virtual void IsTerrainSafeToGo(ComponentPilot componentPilot,Vector3 position,Vector3 direction,out bool isTerrainSafeToGo, out bool skipVanilla)
+        {
+			isTerrainSafeToGo = false;
+			skipVanilla = false;
+		}
+		/// <summary>
 		/// ComponentFlyAwayBehavior组件接口
 		/// 用于判断是否将目标规划为捕食者，从而飞走
 		/// </summary>
