@@ -53,29 +53,45 @@ namespace Game
         protected SubsystemPickables? m_subsystemPickables;
         public SubsystemPickables? SubsystemPickables
         {
-	        get { if(m_subsystemPickables == null && Project != null) m_subsystemPickables = Project.FindSubsystem<SubsystemPickables>();
-		        return m_subsystemPickables; }
+	        get
+	        {
+		        if(m_subsystemPickables == null && Project != null)
+			        m_subsystemPickables = Project.FindSubsystem<SubsystemPickables>();
+		        return m_subsystemPickables;
+	        }
         }
 
         protected SubsystemTerrain? m_subsystemTerrain;
         public SubsystemTerrain? SubsystemTerrain
         {
-	        get { if(m_subsystemTerrain == null && Project != null) m_subsystemTerrain = Project.FindSubsystem<SubsystemTerrain>();
-		        return m_subsystemTerrain; }
+	        get
+	        {
+		        if(m_subsystemTerrain == null && Project != null)
+			        m_subsystemTerrain = Project.FindSubsystem<SubsystemTerrain>();
+		        return m_subsystemTerrain;
+	        }
         }
 
         protected SubsystemExplosions? m_subsystemExplosions;
         public SubsystemExplosions? SubsystemExplosions
         {
-	        get { if(m_subsystemExplosions == null && Project != null) m_subsystemExplosions = Project.FindSubsystem<SubsystemExplosions>();
-		        return m_subsystemExplosions; }
+	        get
+	        {
+		        if(m_subsystemExplosions == null && Project != null)
+			        m_subsystemExplosions = Project.FindSubsystem<SubsystemExplosions>();
+		        return m_subsystemExplosions;
+	        }
         }
 
         protected SubsystemMovingBlocks? m_subsystemMovingBlocks;
         public SubsystemMovingBlocks? SubsystemMovingBlocks
         {
-	        get { if(m_subsystemMovingBlocks == null && Project != null) m_subsystemMovingBlocks = Project.FindSubsystem<SubsystemMovingBlocks>();
-		        return m_subsystemMovingBlocks; }
+	        get
+	        {
+		        if(m_subsystemMovingBlocks == null && Project != null)
+			        m_subsystemMovingBlocks = Project.FindSubsystem<SubsystemMovingBlocks>();
+		        return m_subsystemMovingBlocks;
+	        }
         }
         #endregion
 
@@ -435,11 +451,14 @@ namespace Game
 				bool shouldDrawBlock = true;
 				float drawBlockSize = 0.3f;
 				Color drawBlockColor = Color.MultiplyNotSaturated(Color.White,num7);
-				ModsManager.HookAction("OnPickableDraw",loader =>
+				if(SubsystemPickables != null)
 				{
-					loader.OnPickableDraw(this,SubsystemPickables,camera,drawOrder,ref shouldDrawBlock,ref drawBlockSize,ref drawBlockColor);
-					return false;
-				});
+					ModsManager.HookAction("OnPickableDraw",loader =>
+					{
+						loader.OnPickableDraw(this,SubsystemPickables,camera,drawOrder,ref shouldDrawBlock,ref drawBlockSize,ref drawBlockColor);
+						return false;
+					});
+				}
 				if(shouldDrawBlock)
 				{
 					block.DrawBlock(m_primitivesRenderer,Value,drawBlockColor,drawBlockSize,ref drawMatrix,DrawBlockEnvironmentData);

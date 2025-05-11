@@ -4,6 +4,7 @@ using GameEntitySystem;
 using TemplatesDatabase;
 using System.Globalization;
 using Acornima;
+using Engine.Graphics;
 using Jint.Native;
 
 namespace Game
@@ -31,20 +32,6 @@ namespace Game
 
 		public double LastNoiseTime;
 
-		public ComponentCreature Owner
-        {
-            get
-            {
-                return OwnerEntity?.FindComponent<ComponentCreature>();
-            }
-            set
-            {
-                OwnerEntity = value?.Entity;
-            }
-        }
-
-		public Entity OwnerEntity;
-
 		public ProjectileStoppedAction ProjectileStoppedAction;
 
 		public ITrailParticleSystem TrailParticleSystem;
@@ -56,10 +43,6 @@ namespace Game
 		public bool IsIncendiary;
 
 		public Action OnRemove;
-
-		public SubsystemProjectiles SubsystemProjectiles;
-
-		public SubsystemTerrain SubsystemTerrain;
 
         public float Damping = -1f;
 
@@ -83,6 +66,66 @@ namespace Game
         public bool BodyCollidable = true;
 
         public float? m_attackPower = null;
+
+        private Random m_random = new();
+
+        #region 必选参数
+
+		public Terrain Terrain;
+
+		public float VisibilityRange;
+
+		public DrawBlockEnvironmentData DrawBlockEnvironmentData;
+
+		public SubsystemSky.CalculateFogDelegate CalculateFog;
+
+		public PrimitivesRenderer3D m_primitivesRenderer;
+
+        #endregion
+
+        #region 可选参数
+
+        public Project? Project;
+
+        public Entity? OwnerEntity;
+
+        public ComponentCreature Owner
+        {
+	        get => OwnerEntity?.FindComponent<ComponentCreature>();
+	        set => OwnerEntity = value?.Entity;
+        }
+
+        /// <summary>
+        /// 弹射物飞行的时候会忽略List中的ComponentBody
+        /// </summary>
+        public List<ComponentBody> BodiesToIgnore = new List<ComponentBody>();
+
+        protected SubsystemProjectiles? m_subsystemProjectiles;
+        public SubsystemProjectiles? SubsystemProjectiles
+        {
+	        get
+	        {
+		        if(m_subsystemProjectiles == null && Project != null)
+			        m_subsystemProjectiles = Project.FindSubsystem<SubsystemProjectiles>();
+		        return m_subsystemProjectiles;
+	        }
+        }
+
+        protected SubsystemTerrain? m_subsystemTerrain;
+        public SubsystemTerrain? SubsystemTerrain
+        {
+	        get
+	        {
+		        if(m_subsystemTerrain == null && Project != null)
+			        m_subsystemTerrain = Project.FindSubsystem<SubsystemTerrain>();
+		        return m_subsystemTerrain;
+	        }
+        }
+
+        protected SubsystemPickables? SubsystemPickables => SubsystemProjectiles?.m_subsystemPickables;
+        protected SubsystemParticles? SubsystemParticles => SubsystemProjectiles?.m_subsystemParticles;
+        protected SubsystemAudio? SubsystemAudio => SubsystemProjectiles?.m_subsystemAudio;
+        #endregion
         
 		/// <summary>
 		/// 在进入加载存档时执行
@@ -95,9 +138,9 @@ namespace Game
 			CreationTime = valuesDictionary.GetValue<double>("CreationTime");
 			ProjectileStoppedAction = valuesDictionary.GetValue("ProjectileStoppedAction", ProjectileStoppedAction);
 			int ownerEntityID = valuesDictionary.GetValue("OwnerID",0);
-			if(ownerEntityID != 0)
+			if(ownerEntityID != 0 && Project != null)
 			{
-				OwnerEntity = SubsystemProjectiles.Project.FindEntity(ownerEntityID);
+				OwnerEntity = Project.FindEntity(ownerEntityID);
 			}
 		}
         public virtual void Save(SubsystemProjectiles subsystemProjectiles, ValuesDictionary valuesDictionary)
@@ -120,25 +163,18 @@ namespace Game
         }
         public float AttackPower
         {
-            get
-            {
-                return m_attackPower ?? BlocksManager.Blocks[Terrain.ExtractContents(Value)].GetProjectilePower(Value);
-            }
-            set
-            {
-                m_attackPower = value;
-            }
+            get => m_attackPower ?? BlocksManager.Blocks[Terrain.ExtractContents(Value)].GetProjectilePower(Value);
+            set => m_attackPower = value;
         }
 
-		/// <summary>
-		/// 弹射物飞行的时候会忽略List中的ComponentBody
-		/// </summary>
-		public List<ComponentBody> BodiesToIgnore = new List<ComponentBody>();
-        protected SubsystemPickables m_subsystemPickables => SubsystemProjectiles?.m_subsystemPickables;
-        protected SubsystemParticles m_subsystemParticles => SubsystemProjectiles?.m_subsystemParticles;
-        protected SubsystemAudio m_subsystemAudio => SubsystemProjectiles?.m_subsystemAudio;
-        protected Random m_random => SubsystemProjectiles?.m_random;
-
+        public virtual void InitializeData(Terrain terrain,DrawBlockEnvironmentData drawBlockEnvironmentData,float visibilityRange,SubsystemSky.CalculateFogDelegate calculateFog,PrimitivesRenderer3D primitivesRenderer)
+        {
+	        Terrain = terrain;
+	        DrawBlockEnvironmentData = drawBlockEnvironmentData;
+	        CalculateFog = calculateFog;
+	        VisibilityRange = visibilityRange;
+	        m_primitivesRenderer = primitivesRenderer;
+        }
         public virtual void Initialize(int value, Vector3 position, Vector3 velocity, Vector3 angularVelocity, Entity owner)
         {
             Block block = BlocksManager.Blocks[Terrain.ExtractContents(value)];
@@ -162,26 +198,24 @@ namespace Game
             Vector3 positionAtdt = position + (Velocity * dt);
             Vector3 v = block.ProjectileTipOffset * Vector3.Normalize(Velocity);
             if (TerrainCollidable)
-                terrainRaycastResult = SubsystemTerrain.Raycast(position + v, positionAtdt + v, useInteractionBoxes: false, skipAirBlocks: true, (int value, float distance) => BlocksManager.Blocks[Terrain.ExtractContents(value)].IsCollidable_(value));
+                terrainRaycastResult = SubsystemTerrain == null ? SubsystemTerrain.Raycast(Terrain, position + v, positionAtdt + v, useInteractionBoxes: false, skipAirBlocks: true, (int value, float distance) => BlocksManager.Blocks[Terrain.ExtractContents(value)].IsCollidable_(value)) : SubsystemTerrain.Raycast(position + v, positionAtdt + v, useInteractionBoxes: false, skipAirBlocks: true, (int value, float distance) => BlocksManager.Blocks[Terrain.ExtractContents(value)].IsCollidable_(value));
             else
                 terrainRaycastResult = null;
-            if(BodyCollidable)
-                bodyRaycastResult = SubsystemProjectiles.m_subsystemBodies.Raycast(position + v, positionAtdt + v, 0.2f, (ComponentBody body, float distance) =>
-                {
-                    if (BodiesToIgnore.Contains(body)) return false;
-                    return true;
-                });
+            if(BodyCollidable && Project != null)
+            {
+	            bodyRaycastResult = SubsystemProjectiles?.m_subsystemBodies.Raycast(position + v, positionAtdt + v, 0.2f, (ComponentBody body, float distance) =>
+	            {
+		            if (BodiesToIgnore.Contains(body)) return false;
+		            return true;
+	            });
+            }
             else
                 bodyRaycastResult = null;
         }
         public virtual void Update(float dt)
         {
-            double totalElapsedGameTime = SubsystemProjectiles.m_subsystemGameInfo.TotalElapsedGameTime;
-            if (totalElapsedGameTime - CreationTime > (MaxTimeExist ?? 40f))
-            {
-                ToRemove = true;
-            }
-            TerrainChunk chunkAtCell = SubsystemTerrain.Terrain.GetChunkAtCell(Terrain.ToCell(Position.X), Terrain.ToCell(Position.Z));
+			if (Project != null) UpdateTimeToRemove();
+            TerrainChunk chunkAtCell = Terrain.GetChunkAtCell(Terrain.ToCell(Position.X), Terrain.ToCell(Position.Z));
             if (chunkAtCell == null || chunkAtCell.State <= TerrainChunkState.InvalidContents4)
             {
                 NoChunk = true;
@@ -189,7 +223,7 @@ namespace Game
                 {
                     TrailParticleSystem.IsStopped = true;
                 }
-                OnProjectileFlyOutOfLoadedChunks();
+                if (Project != null) OnProjectileFlyOutOfLoadedChunks();
             }
             else
             {
@@ -197,8 +231,19 @@ namespace Game
                 UpdateInChunk(dt);
             }
         }
+
+        public virtual void UpdateTimeToRemove()
+        {
+	        if (SubsystemProjectiles == null) return;
+	        double totalElapsedGameTime = SubsystemProjectiles.m_subsystemGameInfo.TotalElapsedGameTime;
+	        if (totalElapsedGameTime - CreationTime > (MaxTimeExist ?? 40f))
+	        {
+		        ToRemove = true;
+	        }
+        }
         public virtual void OnProjectileFlyOutOfLoadedChunks()
         {
+	        if (Project == null) return;
             ModsManager.HookAction("OnProjectileFlyOutOfLoadedChunks", loader =>
             {
                 loader.OnProjectileFlyOutOfLoadedChunks(this);
@@ -207,6 +252,7 @@ namespace Game
         }
         public virtual bool ProcessOnHitAsProjectileBlockBehavior(CellFace? cellFace, ComponentBody componentBody, float dt)
         {
+	        if (SubsystemProjectiles == null) return false;
             bool flag = false;
             SubsystemBlockBehavior[] blockBehaviors = SubsystemProjectiles.m_subsystemBlockBehaviors.GetBlockBehaviors(Terrain.ExtractContents(Value));
             for (int i = 0; i < blockBehaviors.Length; i++)
@@ -235,7 +281,7 @@ namespace Game
             if (attackPower > 0f)
             {
                 ComponentMiner.AttackBody(attackment);
-                if (Owner != null && Owner.PlayerStats != null)
+                if (Owner is { PlayerStats: not null })
                 {
                     Owner.PlayerStats.RangedHits++;
                 }
@@ -251,7 +297,7 @@ namespace Game
         public virtual void HitTerrain(TerrainRaycastResult terrainRaycastResult, CellFace cellFace, ref Vector3 positionAtdt, ref Vector3? pickableStuckMatrix)
         {
             Block block = BlocksManager.Blocks[Terrain.ExtractContents(Value)];
-            int cellValue = SubsystemTerrain.Terrain.GetCellValue(cellFace.X, cellFace.Y, cellFace.Z);
+            int cellValue = Terrain.GetCellValue(cellFace.X, cellFace.Y, cellFace.Z);
             Block blockHitted = BlocksManager.Blocks[Terrain.ExtractContents(cellValue)];
             float velocityLength = Velocity.Length();
             Vector3 velocityAfterHit = Velocity;
@@ -281,7 +327,7 @@ namespace Game
                 return false;
             });
             //以上为ModLoader接口和ref变量
-            if (triggerBlocksBehavior)
+            if (triggerBlocksBehavior && SubsystemProjectiles != null)
             {
                 SubsystemBlockBehavior[] blockBehaviors2 = SubsystemProjectiles.m_subsystemBlockBehaviors.GetBlockBehaviors(Terrain.ExtractContents(cellValue));
                 for (int j = 0; j < blockBehaviors2.Length; j++)
@@ -289,12 +335,12 @@ namespace Game
                     blockBehaviors2[j].OnHitByProjectile(cellFace, this);
                 }
             }
-            if (destroyCell)
+            if (destroyCell && SubsystemTerrain != null && SubsystemProjectiles != null)
             {
                 SubsystemTerrain.DestroyCell(0, cellFace.X, cellFace.Y, cellFace.Z, 0, noDrop: true, noParticleSystem: false);
                 SubsystemProjectiles.m_subsystemSoundMaterials.PlayImpactSound(cellValue, Position, 1f);
             }
-            if (IsIncendiary)
+            if (IsIncendiary && SubsystemTerrain != null && SubsystemProjectiles != null)
             {
                 SubsystemProjectiles.m_subsystemFireBlockBehavior.SetCellOnFire(cellFace.X, cellFace.Y, cellFace.Z, 1f);
                 Vector3 vector3 = Position - (0.75f * Vector3.Normalize(Velocity));
@@ -308,7 +354,7 @@ namespace Game
                     }
                 }
             }
-            if (impactSoundLoudness > 0)
+            if (impactSoundLoudness > 0 && SubsystemProjectiles != null)
             {
                 SubsystemProjectiles.m_subsystemSoundMaterials.PlayImpactSound(cellValue, Position, impactSoundLoudness);
             }
@@ -332,27 +378,27 @@ namespace Game
 			Block block = BlocksManager.Blocks[Terrain.ExtractContents(Value)];
 			int damagedBlockValue = BlocksManager.DamageItem(Value,DamageToPickable,OwnerEntity);
 			if(TurnIntoPickableBlockValue.HasValue) damagedBlockValue = TurnIntoPickableBlockValue.Value;
-			if(damagedBlockValue != 0)
+			if(damagedBlockValue != 0 && SubsystemPickables != null)
 			{
 				Pickable pickable = null;
 				if(pickableStuckMatrix.HasValue)
 				{
 					SubsystemProjectiles.CalculateVelocityAlignMatrix(block,pickableStuckMatrix.Value,Velocity,out Matrix matrix);
-					pickable = m_subsystemPickables.CreatePickable(damagedBlockValue,1,Position,Vector3.Zero,matrix,OwnerEntity);
+					pickable = SubsystemPickables.CreatePickable(damagedBlockValue,1,Position,Vector3.Zero,matrix,OwnerEntity);
 				}
 				else
 				{
-					pickable = m_subsystemPickables.CreatePickable(damagedBlockValue,1,Position,Vector3.Zero,null,OwnerEntity);
+					pickable = SubsystemPickables.CreatePickable(damagedBlockValue,1,Position,Vector3.Zero,null,OwnerEntity);
 				}
 				ModsManager.HookAction("OnProjectileTurnIntoPickable",loader => {
 					loader.OnProjectileTurnIntoPickable(this,ref pickable);
 					return false;
 				});
-				if(pickable != null) m_subsystemPickables.AddPickable(pickable);
+				if(pickable != null) SubsystemPickables.AddPickable(pickable);
 			}
-			else
+			else if (SubsystemParticles != null)
 			{
-				m_subsystemParticles.AddParticleSystem(block.CreateDebrisParticleSystem(SubsystemTerrain,Position,Value,1f));
+				SubsystemParticles.AddParticleSystem(block.CreateDebrisParticleSystem(SubsystemTerrain,Position,Value,1f));
 			}
 			ToRemove = true;
 		}
@@ -387,9 +433,9 @@ namespace Game
             //弹射物转化为掉落物
             if (terrainRaycastResult.HasValue || bodyRaycastResult.HasValue)
             {
-                if (disintegrate)
+                if (disintegrate && SubsystemParticles != null)
                 {
-                    m_subsystemParticles.AddParticleSystem(block.CreateDebrisParticleSystem(SubsystemTerrain, Position, Value, 1f));
+	                SubsystemParticles.AddParticleSystem(block.CreateDebrisParticleSystem(SubsystemTerrain, Position, Value, 1f));
                 }
                 else if (!ToRemove && (pickableStuckMatrix.HasValue || Velocity.Length() < 1f))
                 {
@@ -413,7 +459,7 @@ namespace Game
                 Damping = block.GetProjectileDamping(Value);
             }
             float friction = IsInFluid ? MathF.Pow(DampingInFluid, dt) : MathF.Pow(Damping, dt);
-            int cellContents = SubsystemTerrain.Terrain.GetCellContents(Terrain.ToCell(Position.X), Terrain.ToCell(Position.Y), Terrain.ToCell(Position.Z));
+            int cellContents = Terrain.GetCellContents(Terrain.ToCell(Position.X), Terrain.ToCell(Position.Y), Terrain.ToCell(Position.Z));
             Block blockTheProjectileIn = BlocksManager.Blocks[cellContents];
             bool isProjectileInFluid = (blockTheProjectileIn is FluidBlock);
             Velocity.Y += -Gravity * dt;
@@ -441,14 +487,14 @@ namespace Game
                         Velocity *= 0.2f;
                     }
                 }
-                    
-                float? surfaceHeight = SubsystemProjectiles.m_subsystemFluidBlockBehavior.GetSurfaceHeight(Terrain.ToCell(Position.X), Terrain.ToCell(Position.Y), Terrain.ToCell(Position.Z));
-                if (surfaceHeight.HasValue)
+
+                float? surfaceHeight = SubsystemProjectiles?.m_subsystemFluidBlockBehavior.GetSurfaceHeight(Terrain.ToCell(Position.X), Terrain.ToCell(Position.Y), Terrain.ToCell(Position.Z));
+                if (surfaceHeight.HasValue && SubsystemParticles != null && SubsystemAudio != null)
                 {
                     if(blockTheProjectileIn is MagmaBlock)
                     {
-                        m_subsystemParticles.AddParticleSystem(new MagmaSplashParticleSystem(SubsystemTerrain, Position, large: false));
-                        m_subsystemAudio.PlayRandomSound("Audio/Sizzles", 1f, m_random.Float(-0.2f, 0.2f), Position, 3f, autoDelay: true);
+                        SubsystemParticles.AddParticleSystem(new MagmaSplashParticleSystem(SubsystemTerrain, Position, large: false));
+                        SubsystemAudio.PlayRandomSound("Audio/Sizzles", 1f, m_random.Float(-0.2f, 0.2f), Position, 3f, autoDelay: true);
                         if(!IsFireProof)
                         {
                             ToRemove = true;
@@ -457,25 +503,29 @@ namespace Game
                     }
                     else
                     {
-                        m_subsystemParticles.AddParticleSystem(new WaterSplashParticleSystem(SubsystemTerrain, new Vector3(Position.X, surfaceHeight.Value, Position.Z), large: false));
-                        m_subsystemAudio.PlayRandomSound("Audio/Splashes", 1f, m_random.Float(-0.2f, 0.2f), Position, 6f, autoDelay: true);
+	                    SubsystemParticles.AddParticleSystem(new WaterSplashParticleSystem(SubsystemTerrain, new Vector3(Position.X, surfaceHeight.Value, Position.Z), large: false));
+	                    SubsystemAudio.PlayRandomSound("Audio/Splashes", 1f, m_random.Float(-0.2f, 0.2f), Position, 6f, autoDelay: true);
                     }
                     MakeNoise();
                 }
             }
             IsInFluid = isProjectileInFluid;
-            if (!IsFireProof && SubsystemProjectiles.m_subsystemTime.PeriodicGameTimeEvent(1.0, GetHashCode() % 100 / 100.0) && (SubsystemProjectiles.m_subsystemFireBlockBehavior.IsCellOnFire(Terrain.ToCell(Position.X), Terrain.ToCell(Position.Y + 0.1f), Terrain.ToCell(Position.Z)) || SubsystemProjectiles.m_subsystemFireBlockBehavior.IsCellOnFire(Terrain.ToCell(Position.X), Terrain.ToCell(Position.Y + 0.1f) - 1, Terrain.ToCell(Position.Z))))
+            if (SubsystemProjectiles != null && SubsystemAudio != null)
             {
-                m_subsystemAudio.PlayRandomSound("Audio/Sizzles", 1f, m_random.Float(-0.2f, 0.2f), Position, 3f, autoDelay: true);
-                ToRemove = true;
-                SubsystemProjectiles.m_subsystemExplosions.TryExplodeBlock(Terrain.ToCell(Position.X), Terrain.ToCell(Position.Y), Terrain.ToCell(Position.Z), Value);
+	            if (!IsFireProof && SubsystemProjectiles.m_subsystemTime.PeriodicGameTimeEvent(1.0, GetHashCode() % 100 / 100.0) && (SubsystemProjectiles.m_subsystemFireBlockBehavior.IsCellOnFire(Terrain.ToCell(Position.X), Terrain.ToCell(Position.Y + 0.1f), Terrain.ToCell(Position.Z)) || SubsystemProjectiles.m_subsystemFireBlockBehavior.IsCellOnFire(Terrain.ToCell(Position.X), Terrain.ToCell(Position.Y + 0.1f) - 1, Terrain.ToCell(Position.Z))))
+	            {
+		            SubsystemAudio.PlayRandomSound("Audio/Sizzles", 1f, m_random.Float(-0.2f, 0.2f), Position, 3f, autoDelay: true);
+		            ToRemove = true;
+		            SubsystemProjectiles.m_subsystemExplosions.TryExplodeBlock(Terrain.ToCell(Position.X), Terrain.ToCell(Position.Y), Terrain.ToCell(Position.Z), Value);
+	            }
             }
         }
         public virtual void UpdateTrailParticleSystem(float dt)
         {
-            if (!m_subsystemParticles.ContainsParticleSystem((ParticleSystemBase)TrailParticleSystem))
+	        if (SubsystemParticles == null) return;
+            if (!SubsystemParticles.ContainsParticleSystem((ParticleSystemBase)TrailParticleSystem))
             {
-                m_subsystemParticles.AddParticleSystem((ParticleSystemBase)TrailParticleSystem);
+	            SubsystemParticles.AddParticleSystem((ParticleSystemBase)TrailParticleSystem);
             }
             Vector3 v4 = (TrailOffset != Vector3.Zero) ? Vector3.TransformNormal(TrailOffset, Matrix.CreateFromAxisAngle(Vector3.Normalize(Rotation), Rotation.Length())) : Vector3.Zero;
             TrailParticleSystem.Position = Position + v4;
@@ -486,6 +536,7 @@ namespace Game
         }
         public virtual void MakeNoise()
         {
+	        if (SubsystemProjectiles == null) return;
             if (SubsystemProjectiles.m_subsystemTime.GameTime - LastNoiseTime > 0.5)
             {
                 SubsystemProjectiles.m_subsystemNoise.MakeNoise(Position, 0.25f, 6f);
@@ -499,7 +550,7 @@ namespace Game
 
 		public virtual void Draw(Camera camera,int drawOrder)
 		{
-			float num = MathUtils.Sqr(SubsystemProjectiles.m_subsystemSky.VisibilityRange);
+			float num = MathUtils.Sqr(VisibilityRange);
 			Vector3 position = Position;
 			if(!NoChunk && Vector3.DistanceSquared(camera.ViewPosition,position) < num && camera.ViewFrustum.Intersection(position))
 			{
@@ -508,16 +559,16 @@ namespace Game
 				int z = Terrain.ToCell(position.Z);
 				int num3 = Terrain.ExtractContents(Value);
 				Block block = BlocksManager.Blocks[num3];
-				TerrainChunk chunkAtCell = SubsystemProjectiles.m_subsystemTerrain.Terrain.GetChunkAtCell(x,z);
+				TerrainChunk chunkAtCell = Terrain.GetChunkAtCell(x,z);
 				if(chunkAtCell != null && chunkAtCell.State >= TerrainChunkState.InvalidVertices1 && num2 >= 0 && num2 < 255)
 				{
-					SubsystemProjectiles.m_drawBlockEnvironmentData.Humidity = SubsystemProjectiles.m_subsystemTerrain.Terrain.GetSeasonalHumidity(x,z);
-					SubsystemProjectiles.m_drawBlockEnvironmentData.Temperature = SubsystemProjectiles.m_subsystemTerrain.Terrain.GetSeasonalTemperature(x,z) + SubsystemWeather.GetTemperatureAdjustmentAtHeight(num2);
-					Light = SubsystemProjectiles.m_subsystemTerrain.Terrain.GetCellLightFast(x,num2,z);
+					DrawBlockEnvironmentData.Humidity = Terrain.GetSeasonalHumidity(x,z);
+					DrawBlockEnvironmentData.Temperature = Terrain.GetSeasonalTemperature(x,z) + SubsystemWeather.GetTemperatureAdjustmentAtHeight(num2);
+					Light = Terrain.GetCellLightFast(x,num2,z);
 				}
-				SubsystemProjectiles.m_drawBlockEnvironmentData.Light = Light;
-				SubsystemProjectiles.m_drawBlockEnvironmentData.BillboardDirection = block.GetAlignToVelocity(Value) ? null : new Vector3?(camera.ViewDirection);
-				SubsystemProjectiles.m_drawBlockEnvironmentData.InWorldMatrix.Translation = position;
+				DrawBlockEnvironmentData.Light = Light;
+				DrawBlockEnvironmentData.BillboardDirection = block.GetAlignToVelocity(Value) ? null : new Vector3?(camera.ViewDirection);
+				DrawBlockEnvironmentData.InWorldMatrix.Translation = position;
 				Matrix matrix;
 				if(block.GetAlignToVelocity(Value))
 				{
@@ -534,14 +585,18 @@ namespace Game
 				}
 				bool shouldDrawBlock = true;
 				float drawBlockSize = 0.3f;
-				Color drawBlockColor = Color.MultiplyNotSaturated(Color.White,1f - SubsystemProjectiles.m_subsystemSky.CalculateFog(camera.ViewPosition,Position));
-				ModsManager.HookAction("OnProjectileDraw",loader =>
+				Color drawBlockColor = Color.MultiplyNotSaturated(Color.White,1f - CalculateFog(camera.ViewPosition,Position));
+				if(SubsystemProjectiles != null)
 				{
-					loader.OnProjectileDraw(this, SubsystemProjectiles, camera, drawOrder, ref shouldDrawBlock, ref drawBlockSize, ref drawBlockColor);
-					return false;
-				});
+					ModsManager.HookAction("OnProjectileDraw",loader =>
+					{
+						loader.OnProjectileDraw(this, SubsystemProjectiles, camera, drawOrder, ref shouldDrawBlock, ref drawBlockSize, ref drawBlockColor);
+						return false;
+					});
+				}
+
 				if(shouldDrawBlock)
-					block.DrawBlock(SubsystemProjectiles.m_primitivesRenderer,Value,drawBlockColor,drawBlockSize,ref matrix,SubsystemProjectiles.m_drawBlockEnvironmentData);
+					block.DrawBlock(m_primitivesRenderer,Value,drawBlockColor,drawBlockSize,ref matrix,DrawBlockEnvironmentData);
 			}
 		}
     }

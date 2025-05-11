@@ -103,6 +103,7 @@ namespace Game
 			try
 			{
 				var projectile = new T();
+				projectile.InitializeData(m_subsystemTerrain.Terrain, m_drawBlockEnvironmentData, m_subsystemSky.VisibilityRange, m_subsystemSky.CalculateFog, m_primitivesRenderer);
 				projectile.Initialize(value,position,velocity,angularVelocity,owner);
 				return projectile;
 			}
@@ -212,8 +213,7 @@ namespace Game
 				Projectile projectile = m_projectiles[i];
 				try
 				{
-					projectile.SubsystemProjectiles = this;
-					projectile.SubsystemTerrain = m_subsystemTerrain;
+					projectile.Project = Project;
 					projectile.Draw(camera,drawOrder);
 				}
 				catch(Exception e)
@@ -246,8 +246,7 @@ namespace Game
 							try
 							{
 
-								projectile.SubsystemProjectiles = this;
-								projectile.SubsystemTerrain = m_subsystemTerrain;
+								projectile.Project = Project;
 								projectile.Update(dt);
 							}
 							catch (Exception ex)
@@ -260,20 +259,23 @@ namespace Game
                     }
                 }
 			}
-			foreach (Projectile item in m_projectilesToRemove)
+			lock (m_projectilesToRemove)
 			{
-				if (item.TrailParticleSystem != null)
+				foreach (Projectile item in m_projectilesToRemove)
 				{
-					item.TrailParticleSystem.IsStopped = true;
+					if (item.TrailParticleSystem != null)
+					{
+						item.TrailParticleSystem.IsStopped = true;
+					}
+					item.OnRemove?.Invoke();
+					lock (m_projectiles)
+					{
+						m_projectiles.Remove(item);
+					}
+					ProjectileRemoved?.Invoke(item);
 				}
-				item.OnRemove?.Invoke();
-				lock (m_projectiles)
-				{
-                    m_projectiles.Remove(item);
-                }
-				ProjectileRemoved?.Invoke(item);
+				m_projectilesToRemove.Clear();
 			}
-			m_projectilesToRemove.Clear();
 		}
 
 		public override void Load(ValuesDictionary valuesDictionary)
@@ -299,8 +301,8 @@ namespace Game
 					string className = item.GetValue("Class",typeof(Projectile).FullName);
 					Type type = TypeCache.FindType(className,false,true);
 					var projectile = (Projectile)Activator.CreateInstance(type);
-					projectile.SubsystemProjectiles = this;
-					projectile.SubsystemTerrain = m_subsystemTerrain;
+					projectile.Project = Project;
+					projectile.InitializeData(m_subsystemTerrain.Terrain, m_drawBlockEnvironmentData, m_subsystemSky.VisibilityRange, m_subsystemSky.CalculateFog, m_primitivesRenderer);
 					projectile.Load(item);
 					ModsManager.HookAction("OnProjectileAdded",loader => {
 						loader.OnProjectileAdded(this,ref projectile,item);
