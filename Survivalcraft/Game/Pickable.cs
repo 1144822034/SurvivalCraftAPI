@@ -31,10 +31,12 @@ namespace Game
 
         public bool IsExplosionProof = false;
 
+        public delegate float CalcVisibilityRangeDelegate();
+
         #region 必选参数
         public Terrain Terrain;
 
-        public float VisibilityRange;
+        public CalcVisibilityRangeDelegate CalcVisibilityRange;
 
         public DrawBlockEnvironmentData DrawBlockEnvironmentData;
 
@@ -114,12 +116,12 @@ namespace Game
 			}
 		}
 
-		public virtual void InitializeData(Terrain terrain,DrawBlockEnvironmentData drawBlockEnvironmentData,float visibilityRange,SubsystemSky.CalculateFogDelegate calculateFog,PrimitivesRenderer3D primitivesRenderer)
+		public virtual void InitializeData(Terrain terrain,DrawBlockEnvironmentData drawBlockEnvironmentData,CalcVisibilityRangeDelegate calcVisibilityRangeDelegate,SubsystemSky.CalculateFogDelegate calculateFog,PrimitivesRenderer3D primitivesRenderer)
 		{
 			Terrain = terrain;
 			DrawBlockEnvironmentData = drawBlockEnvironmentData;
 			CalculateFog = calculateFog;
-			VisibilityRange = visibilityRange;
+			CalcVisibilityRange = calcVisibilityRangeDelegate;
 			m_primitivesRenderer = primitivesRenderer;
 		}
 		public virtual void Initialize(int value, int count, Vector3 position, Vector3? velocity, Matrix? stuckMatrix, Entity owner)
@@ -406,7 +408,7 @@ namespace Game
 
 		public virtual void Draw(Camera camera,int drawOrder, double totalElapsedGameTime, Matrix rotationMatrix)
 		{
-			float num = MathUtils.Min(VisibilityRange,MaxVisibilityRange);
+			float num = MathUtils.Min(CalcVisibilityRange(),MaxVisibilityRange);
 			Vector3 position = Position;
 			Vector3 v = position - camera.ViewPosition;
 			float num2 = Vector3.Dot(camera.ViewDirection,v);

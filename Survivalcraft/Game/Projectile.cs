@@ -68,12 +68,13 @@ namespace Game
         public float? m_attackPower = null;
 
         private Random m_random = new();
+        public delegate float CalcVisibilityRangeDelegate();
 
         #region 必选参数
 
 		public Terrain Terrain;
 
-		public float VisibilityRange;
+		public CalcVisibilityRangeDelegate CalcVisibilityRange;
 
 		public DrawBlockEnvironmentData DrawBlockEnvironmentData;
 
@@ -167,12 +168,12 @@ namespace Game
             set => m_attackPower = value;
         }
 
-        public virtual void InitializeData(Terrain terrain,DrawBlockEnvironmentData drawBlockEnvironmentData,float visibilityRange,SubsystemSky.CalculateFogDelegate calculateFog,PrimitivesRenderer3D primitivesRenderer)
+        public virtual void InitializeData(Terrain terrain,DrawBlockEnvironmentData drawBlockEnvironmentData,CalcVisibilityRangeDelegate calcVisibilityRangeDelegate,SubsystemSky.CalculateFogDelegate calculateFog,PrimitivesRenderer3D primitivesRenderer)
         {
 	        Terrain = terrain;
 	        DrawBlockEnvironmentData = drawBlockEnvironmentData;
 	        CalculateFog = calculateFog;
-	        VisibilityRange = visibilityRange;
+	        CalcVisibilityRange = calcVisibilityRangeDelegate;
 	        m_primitivesRenderer = primitivesRenderer;
         }
         public virtual void Initialize(int value, Vector3 position, Vector3 velocity, Vector3 angularVelocity, Entity owner)
@@ -550,7 +551,7 @@ namespace Game
 
 		public virtual void Draw(Camera camera,int drawOrder)
 		{
-			float num = MathUtils.Sqr(VisibilityRange);
+			float num = MathUtils.Sqr(CalcVisibilityRange());
 			Vector3 position = Position;
 			if(!NoChunk && Vector3.DistanceSquared(camera.ViewPosition,position) < num && camera.ViewFrustum.Intersection(position))
 			{
