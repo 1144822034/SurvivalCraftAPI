@@ -103,7 +103,7 @@ namespace Game
 			try
 			{
 				var projectile = new T();
-				projectile.InitializeData(m_subsystemTerrain.Terrain, m_drawBlockEnvironmentData, () => m_subsystemSky.VisibilityRange, m_subsystemSky.CalculateFog, m_primitivesRenderer);
+				projectile.InitializeData(() => m_subsystemTerrain.Terrain, () => m_drawBlockEnvironmentData, () => m_subsystemSky.VisibilityRange, () => m_subsystemSky.CalculateFog, () => m_primitivesRenderer);
 				projectile.Initialize(value,position,velocity,angularVelocity,owner);
 				return projectile;
 			}
@@ -214,7 +214,6 @@ namespace Game
 				try
 				{
 					projectile.Project = Project;
-					projectile.CalculateFog = m_subsystemSky.CalculateFog;
 					projectile.Draw(camera,drawOrder);
 				}
 				catch(Exception e)
@@ -248,7 +247,6 @@ namespace Game
 							{
 
 								projectile.Project = Project;
-								projectile.CalculateFog = m_subsystemSky.CalculateFog;
 								projectile.Update(dt);
 							}
 							catch (Exception ex)
@@ -304,7 +302,7 @@ namespace Game
 					Type type = TypeCache.FindType(className,false,true);
 					var projectile = (Projectile)Activator.CreateInstance(type);
 					projectile.Project = Project;
-					projectile.InitializeData(m_subsystemTerrain.Terrain, m_drawBlockEnvironmentData, () => m_subsystemSky.VisibilityRange, m_subsystemSky.CalculateFog, m_primitivesRenderer);
+					projectile.InitializeData(() => m_subsystemTerrain.Terrain, () => m_drawBlockEnvironmentData, () => m_subsystemSky.VisibilityRange, () => m_subsystemSky.CalculateFog, () => m_primitivesRenderer);
 					projectile.Load(item);
 					ModsManager.HookAction("OnProjectileAdded",loader => {
 						loader.OnProjectileAdded(this,ref projectile,item);

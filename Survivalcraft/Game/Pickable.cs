@@ -31,18 +31,16 @@ namespace Game
 
         public bool IsExplosionProof = false;
 
-        public delegate float CalcVisibilityRangeDelegate();
-
         #region 必选参数
-        public Terrain Terrain;
+        public Func<Terrain> CurrnetTerrain;
 
-        public CalcVisibilityRangeDelegate CalcVisibilityRange;
+        public Func<float> CalcVisibilityRange;
 
-        public DrawBlockEnvironmentData DrawBlockEnvironmentData;
+        public Func<DrawBlockEnvironmentData> DrawBlockEnvironmentData;
 
-        public SubsystemSky.CalculateFogDelegate CalculateFog;
+        public Func<SubsystemSky.CalculateFogDelegate> CalculateFog;
 
-        public PrimitivesRenderer3D m_primitivesRenderer;
+        public Func<PrimitivesRenderer3D> PrimitivesRenderer;
         #endregion
 
         #region 可选
@@ -116,13 +114,13 @@ namespace Game
 			}
 		}
 
-		public virtual void InitializeData(Terrain terrain,DrawBlockEnvironmentData drawBlockEnvironmentData,CalcVisibilityRangeDelegate calcVisibilityRangeDelegate,SubsystemSky.CalculateFogDelegate calculateFog,PrimitivesRenderer3D primitivesRenderer)
+		public virtual void InitializeData(Func<Terrain> terrain, Func<DrawBlockEnvironmentData> drawBlockEnvironmentData, Func<float> calcVisibilityRange, Func<SubsystemSky.CalculateFogDelegate> calculateFog, Func<PrimitivesRenderer3D> primitivesRenderer)
 		{
-			Terrain = terrain;
+			CurrnetTerrain = terrain;
 			DrawBlockEnvironmentData = drawBlockEnvironmentData;
 			CalculateFog = calculateFog;
-			CalcVisibilityRange = calcVisibilityRangeDelegate;
-			m_primitivesRenderer = primitivesRenderer;
+			CalcVisibilityRange = calcVisibilityRange;
+			PrimitivesRenderer = primitivesRenderer;
 		}
 		public virtual void Initialize(int value, int count, Vector3 position, Vector3? velocity, Matrix? stuckMatrix, Entity owner)
         {
@@ -146,7 +144,7 @@ namespace Game
                 Velocity = new Vector3(m_random.Float(-0.5f, 0.5f), m_random.Float(1f, 1.2f), m_random.Float(-0.5f, 0.5f));
             }
         }
-		protected TerrainRaycastResult? WrappedRaycast(Vector3 start, Vector3 end, bool useInteractionBoxes, bool skipAirBlocks, Func<int, float, bool> action) => m_subsystemTerrain == null ? SubsystemTerrain.Raycast(Terrain, start,end,useInteractionBoxes,skipAirBlocks,action) : m_subsystemTerrain.Raycast(start,end,useInteractionBoxes,skipAirBlocks,action);
+		protected TerrainRaycastResult? WrappedRaycast(Vector3 start, Vector3 end, bool useInteractionBoxes, bool skipAirBlocks, Func<int, float, bool> action) => m_subsystemTerrain == null ? SubsystemTerrain.Raycast(CurrnetTerrain(), start,end,useInteractionBoxes,skipAirBlocks,action) : m_subsystemTerrain.Raycast(start,end,useInteractionBoxes,skipAirBlocks,action);
         public virtual void Update(float dt)
         {
 	        bool toRemove = UpdateTimeToRemove();
@@ -156,7 +154,7 @@ namespace Game
 	        }
             else
             {
-                TerrainChunk chunkAtCell = Terrain.GetChunkAtCell(Terrain.ToCell(Position.X), Terrain.ToCell(Position.Z));
+                TerrainChunk chunkAtCell = CurrnetTerrain().GetChunkAtCell(Terrain.ToCell(Position.X), Terrain.ToCell(Position.Z));
                 if (chunkAtCell != null && chunkAtCell.State > TerrainChunkState.InvalidContents4)
                 {
                     Vector3 positionAtdt = Position + Velocity * dt;
@@ -217,7 +215,7 @@ namespace Game
 				else if(terrainRaycastResult.HasValue && (!movingBlocksRaycastResult.HasValue || terrainRaycastResult.Value.Distance < movingBlocksRaycastResult.Value.Distance))
 				{
 					isMovingRaycastDominant = false;
-					cellValue = Terrain.GetCellValue(terrainRaycastResult.Value.CellFace.X,terrainRaycastResult.Value.CellFace.Y,terrainRaycastResult.Value.CellFace.Z);
+					cellValue = CurrnetTerrain().GetCellValue(terrainRaycastResult.Value.CellFace.X,terrainRaycastResult.Value.CellFace.Y,terrainRaycastResult.Value.CellFace.Z);
 				}
 
 				if(SubsystemPickables != null)
@@ -247,7 +245,7 @@ namespace Game
                             {
                                 for (int l = -3; l <= 3; l++)
                                 {
-                                    int value = Terrain.GetCellContents(j + num8, k + num9, l + num10);
+                                    int value = CurrnetTerrain().GetCellContents(j + num8, k + num9, l + num10);
                                     if (!BlocksManager.Blocks[Terrain.ExtractContents(value)].IsCollidable_(value))
                                     {
                                         int num15 = (j * j) + (k * k) + (l * l);
@@ -429,18 +427,18 @@ namespace Game
 				int x = Terrain.ToCell(position.X);
 				int num6 = Terrain.ToCell(position.Y);
 				int z = Terrain.ToCell(position.Z);
-				TerrainChunk chunkAtCell = Terrain.GetChunkAtCell(x,z);
+				TerrainChunk chunkAtCell = CurrnetTerrain().GetChunkAtCell(x,z);
 				if(chunkAtCell != null && chunkAtCell.State >= TerrainChunkState.InvalidVertices1 && num6 >= 0 && num6 < 255)
 				{
-					DrawBlockEnvironmentData.Humidity = Terrain.GetSeasonalHumidity(x,z);
-					DrawBlockEnvironmentData.Temperature = Terrain.GetSeasonalTemperature(x,z) + SubsystemWeather.GetTemperatureAdjustmentAtHeight(num6);
+					DrawBlockEnvironmentData().Humidity = CurrnetTerrain().GetSeasonalHumidity(x,z);
+					DrawBlockEnvironmentData().Temperature = CurrnetTerrain().GetSeasonalTemperature(x,z) + SubsystemWeather.GetTemperatureAdjustmentAtHeight(num6);
 					float f = MathUtils.Max(position.Y - num6 - 0.75f,0f) / 0.25f;
-					Light = (int)MathUtils.Lerp(Terrain.GetCellLightFast(x,num6,z),Terrain.GetCellLightFast(x,num6 + 1,z),f);
+					Light = (int)MathUtils.Lerp(CurrnetTerrain().GetCellLightFast(x,num6,z),CurrnetTerrain().GetCellLightFast(x,num6 + 1,z),f);
 				}
-				DrawBlockEnvironmentData.Light = Light;
-				DrawBlockEnvironmentData.BillboardDirection = Position - camera.ViewPosition;
-				DrawBlockEnvironmentData.InWorldMatrix.Translation = position;
-				float num7 = 1f - CalculateFog(camera.ViewPosition,Position);
+				DrawBlockEnvironmentData().Light = Light;
+				DrawBlockEnvironmentData().BillboardDirection = Position - camera.ViewPosition;
+				DrawBlockEnvironmentData().InWorldMatrix.Translation = position;
+				float num7 = 1f - CalculateFog()(camera.ViewPosition,Position);
 				num7 *= MathUtils.Saturate(0.25f * (num - num3));
 				Matrix drawMatrix;
 				if(StuckMatrix.HasValue)
@@ -463,7 +461,7 @@ namespace Game
 				}
 				if(shouldDrawBlock)
 				{
-					block.DrawBlock(m_primitivesRenderer,Value,drawBlockColor,drawBlockSize,ref drawMatrix,DrawBlockEnvironmentData);
+					block.DrawBlock(PrimitivesRenderer(),Value,drawBlockColor,drawBlockSize,ref drawMatrix,DrawBlockEnvironmentData());
 				}
 			}
 		}

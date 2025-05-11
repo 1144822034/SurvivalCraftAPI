@@ -72,15 +72,15 @@ namespace Game
 
         #region 必选参数
 
-		public Terrain Terrain;
+        public Func<Terrain> CurrnetTerrain;
 
-		public CalcVisibilityRangeDelegate CalcVisibilityRange;
+        public Func<float> CalcVisibilityRange;
 
-		public DrawBlockEnvironmentData DrawBlockEnvironmentData;
+        public Func<DrawBlockEnvironmentData> DrawBlockEnvironmentData;
 
-		public SubsystemSky.CalculateFogDelegate CalculateFog;
+        public Func<SubsystemSky.CalculateFogDelegate> CalculateFog;
 
-		public PrimitivesRenderer3D m_primitivesRenderer;
+        public Func<PrimitivesRenderer3D> PrimitivesRenderer;
 
         #endregion
 
@@ -168,13 +168,13 @@ namespace Game
             set => m_attackPower = value;
         }
 
-        public virtual void InitializeData(Terrain terrain,DrawBlockEnvironmentData drawBlockEnvironmentData,CalcVisibilityRangeDelegate calcVisibilityRangeDelegate,SubsystemSky.CalculateFogDelegate calculateFog,PrimitivesRenderer3D primitivesRenderer)
+        public virtual void InitializeData(Func<Terrain> terrain, Func<DrawBlockEnvironmentData> drawBlockEnvironmentData, Func<float> calcVisibilityRange, Func<SubsystemSky.CalculateFogDelegate> calculateFog, Func<PrimitivesRenderer3D> primitivesRenderer)
         {
-	        Terrain = terrain;
+	        CurrnetTerrain = terrain;
 	        DrawBlockEnvironmentData = drawBlockEnvironmentData;
 	        CalculateFog = calculateFog;
-	        CalcVisibilityRange = calcVisibilityRangeDelegate;
-	        m_primitivesRenderer = primitivesRenderer;
+	        CalcVisibilityRange = calcVisibilityRange;
+	        PrimitivesRenderer = primitivesRenderer;
         }
         public virtual void Initialize(int value, Vector3 position, Vector3 velocity, Vector3 angularVelocity, Entity owner)
         {
@@ -199,7 +199,7 @@ namespace Game
             Vector3 positionAtdt = position + (Velocity * dt);
             Vector3 v = block.ProjectileTipOffset * Vector3.Normalize(Velocity);
             if (TerrainCollidable)
-                terrainRaycastResult = SubsystemTerrain == null ? SubsystemTerrain.Raycast(Terrain, position + v, positionAtdt + v, useInteractionBoxes: false, skipAirBlocks: true, (int value, float distance) => BlocksManager.Blocks[Terrain.ExtractContents(value)].IsCollidable_(value)) : SubsystemTerrain.Raycast(position + v, positionAtdt + v, useInteractionBoxes: false, skipAirBlocks: true, (int value, float distance) => BlocksManager.Blocks[Terrain.ExtractContents(value)].IsCollidable_(value));
+                terrainRaycastResult = SubsystemTerrain == null ? SubsystemTerrain.Raycast(CurrnetTerrain(), position + v, positionAtdt + v, useInteractionBoxes: false, skipAirBlocks: true, (int value, float distance) => BlocksManager.Blocks[Terrain.ExtractContents(value)].IsCollidable_(value)) : SubsystemTerrain.Raycast(position + v, positionAtdt + v, useInteractionBoxes: false, skipAirBlocks: true, (int value, float distance) => BlocksManager.Blocks[Terrain.ExtractContents(value)].IsCollidable_(value));
             else
                 terrainRaycastResult = null;
             if(BodyCollidable && Project != null)
@@ -216,7 +216,7 @@ namespace Game
         public virtual void Update(float dt)
         {
 			if (Project != null) UpdateTimeToRemove();
-            TerrainChunk chunkAtCell = Terrain.GetChunkAtCell(Terrain.ToCell(Position.X), Terrain.ToCell(Position.Z));
+            TerrainChunk chunkAtCell = CurrnetTerrain().GetChunkAtCell(Terrain.ToCell(Position.X), Terrain.ToCell(Position.Z));
             if (chunkAtCell == null || chunkAtCell.State <= TerrainChunkState.InvalidContents4)
             {
                 NoChunk = true;
@@ -298,7 +298,7 @@ namespace Game
         public virtual void HitTerrain(TerrainRaycastResult terrainRaycastResult, CellFace cellFace, ref Vector3 positionAtdt, ref Vector3? pickableStuckMatrix)
         {
             Block block = BlocksManager.Blocks[Terrain.ExtractContents(Value)];
-            int cellValue = Terrain.GetCellValue(cellFace.X, cellFace.Y, cellFace.Z);
+            int cellValue = CurrnetTerrain().GetCellValue(cellFace.X, cellFace.Y, cellFace.Z);
             Block blockHitted = BlocksManager.Blocks[Terrain.ExtractContents(cellValue)];
             float velocityLength = Velocity.Length();
             Vector3 velocityAfterHit = Velocity;
@@ -460,7 +460,7 @@ namespace Game
                 Damping = block.GetProjectileDamping(Value);
             }
             float friction = IsInFluid ? MathF.Pow(DampingInFluid, dt) : MathF.Pow(Damping, dt);
-            int cellContents = Terrain.GetCellContents(Terrain.ToCell(Position.X), Terrain.ToCell(Position.Y), Terrain.ToCell(Position.Z));
+            int cellContents = CurrnetTerrain().GetCellContents(Terrain.ToCell(Position.X), Terrain.ToCell(Position.Y), Terrain.ToCell(Position.Z));
             Block blockTheProjectileIn = BlocksManager.Blocks[cellContents];
             bool isProjectileInFluid = (blockTheProjectileIn is FluidBlock);
             Velocity.Y += -Gravity * dt;
@@ -560,16 +560,16 @@ namespace Game
 				int z = Terrain.ToCell(position.Z);
 				int num3 = Terrain.ExtractContents(Value);
 				Block block = BlocksManager.Blocks[num3];
-				TerrainChunk chunkAtCell = Terrain.GetChunkAtCell(x,z);
+				TerrainChunk chunkAtCell = CurrnetTerrain().GetChunkAtCell(x,z);
 				if(chunkAtCell != null && chunkAtCell.State >= TerrainChunkState.InvalidVertices1 && num2 >= 0 && num2 < 255)
 				{
-					DrawBlockEnvironmentData.Humidity = Terrain.GetSeasonalHumidity(x,z);
-					DrawBlockEnvironmentData.Temperature = Terrain.GetSeasonalTemperature(x,z) + SubsystemWeather.GetTemperatureAdjustmentAtHeight(num2);
-					Light = Terrain.GetCellLightFast(x,num2,z);
+					DrawBlockEnvironmentData().Humidity = CurrnetTerrain().GetSeasonalHumidity(x,z);
+					DrawBlockEnvironmentData().Temperature = CurrnetTerrain().GetSeasonalTemperature(x,z) + SubsystemWeather.GetTemperatureAdjustmentAtHeight(num2);
+					Light = CurrnetTerrain().GetCellLightFast(x,num2,z);
 				}
-				DrawBlockEnvironmentData.Light = Light;
-				DrawBlockEnvironmentData.BillboardDirection = block.GetAlignToVelocity(Value) ? null : new Vector3?(camera.ViewDirection);
-				DrawBlockEnvironmentData.InWorldMatrix.Translation = position;
+				DrawBlockEnvironmentData().Light = Light;
+				DrawBlockEnvironmentData().BillboardDirection = block.GetAlignToVelocity(Value) ? null : new Vector3?(camera.ViewDirection);
+				DrawBlockEnvironmentData().InWorldMatrix.Translation = position;
 				Matrix matrix;
 				if(block.GetAlignToVelocity(Value))
 				{
@@ -586,7 +586,7 @@ namespace Game
 				}
 				bool shouldDrawBlock = true;
 				float drawBlockSize = 0.3f;
-				Color drawBlockColor = Color.MultiplyNotSaturated(Color.White,1f - CalculateFog(camera.ViewPosition,Position));
+				Color drawBlockColor = Color.MultiplyNotSaturated(Color.White,1f - CalculateFog()(camera.ViewPosition,Position));
 				if(SubsystemProjectiles != null)
 				{
 					ModsManager.HookAction("OnProjectileDraw",loader =>
@@ -597,7 +597,7 @@ namespace Game
 				}
 
 				if(shouldDrawBlock)
-					block.DrawBlock(m_primitivesRenderer,Value,drawBlockColor,drawBlockSize,ref matrix,DrawBlockEnvironmentData);
+					block.DrawBlock(PrimitivesRenderer(),Value,drawBlockColor,drawBlockSize,ref matrix,DrawBlockEnvironmentData());
 			}
 		}
     }

@@ -93,7 +93,7 @@ namespace Game
 			try
 			{
 				var pickable = new T();
-				pickable.InitializeData(m_subsystemTerrain.Terrain,m_drawBlockEnvironmentData,DefaultCalcVisibilityRange,m_subsystemSky.CalculateFog,m_primitivesRenderer);
+				pickable.InitializeData(() => m_subsystemTerrain.Terrain, () => m_drawBlockEnvironmentData,DefaultCalcVisibilityRange, () => m_subsystemSky.CalculateFog, () => m_primitivesRenderer);
 				pickable.Initialize(value,count,position,velocity,stuckMatrix,owner);
 				pickable.CreationTime = m_subsystemGameInfo.TotalElapsedGameTime;
 				return pickable;
@@ -130,7 +130,6 @@ namespace Game
 				try
 				{
 					pickable.Project = Project;
-					pickable.CalculateFog = m_subsystemSky.CalculateFog;
 					pickable.Draw(camera,drawOrder,totalElapsedGameTime,matrix);
 				}
 				catch(Exception e)
@@ -161,7 +160,6 @@ namespace Game
 						try
 						{
 							pickable.Project = Project;
-							pickable.CalculateFog = m_subsystemSky.CalculateFog;
 							pickable.Update(dt);
 						}
 						catch (Exception e)
@@ -204,7 +202,7 @@ namespace Game
 					Type type = TypeCache.FindType(className,false,true);
 					var pickable = (Pickable)Activator.CreateInstance(type);
 					pickable.Project = Project;
-					pickable.InitializeData(m_subsystemTerrain.Terrain,m_drawBlockEnvironmentData,DefaultCalcVisibilityRange,m_subsystemSky.CalculateFog,m_primitivesRenderer);
+					pickable.InitializeData(() => m_subsystemTerrain.Terrain, () => m_drawBlockEnvironmentData,DefaultCalcVisibilityRange, () => m_subsystemSky.CalculateFog, () => m_primitivesRenderer);
 					pickable.Load(item);
 					ModsManager.HookAction("OnPickableAdded",loader => {
 						loader.OnPickableAdded(this,ref pickable,item);
