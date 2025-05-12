@@ -248,12 +248,22 @@ namespace Game
 		public virtual Vector3 CalculateEyePosition()
 		{
 			Matrix matrix = m_componentCreature.ComponentBody.Matrix;
-			return m_componentCreature.ComponentBody.Position + (matrix.Up * 0.95f * m_componentCreature.ComponentBody.BoxSize.Y) + (matrix.Forward * 0.45f * m_componentCreature.ComponentBody.BoxSize.Z);
+			Vector3 result = m_componentCreature.ComponentBody.Position + (matrix.Up * 0.95f * m_componentCreature.ComponentBody.BoxSize.Y) + (matrix.Forward * 0.45f * m_componentCreature.ComponentBody.BoxSize.Z);
+			ModsManager.HookAction("RecalculateModelEyePosition",loader => {
+				loader.RecalculateModelEyePosition(this,ref result);
+				return false;
+			});
+			return result;
 		}
 
 		public virtual Quaternion CalculateEyeRotation()
 		{
-			return m_componentCreature.ComponentBody.Rotation * Quaternion.CreateFromYawPitchRoll(0f - m_componentCreature.ComponentLocomotion.LookAngles.X, m_componentCreature.ComponentLocomotion.LookAngles.Y, 0f);
+			Quaternion result = m_componentCreature.ComponentBody.Rotation * Quaternion.CreateFromYawPitchRoll(0f - m_componentCreature.ComponentLocomotion.LookAngles.X,m_componentCreature.ComponentLocomotion.LookAngles.Y,0f);
+			ModsManager.HookAction("RecalculateModelEyeRotation",loader => {
+				loader.RecalculateModelEyeRotation(this,ref result);
+				return false;
+			});
+			return result;
 		}
 	}
 }

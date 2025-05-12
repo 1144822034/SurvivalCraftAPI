@@ -268,6 +268,58 @@ namespace Game
         }
 
 		/// <summary>
+		/// 当模型对象绘制额外时执行，Skip为是否跳过原本的绘制。
+		/// 与OnModelRendererDrawExtra不同，本方法主要是人物第三人称模型手上物品的绘制
+		/// </summary>
+		/// <param name="componentModel"></param>
+		/// <param name="camera"></param>
+		/// <param name="skip"></param>
+		public virtual void OnModelDrawExtra(ComponentModel componentModel,Camera camera,out bool skip)
+		{
+			skip = false;
+		}
+
+		/// <summary>
+		/// 当模型计算骨骼绝对变换时执行，Skip为是否跳过原本的计算
+		/// </summary>
+		/// <param name="componentModel"></param>
+		/// <param name="camera"></param>
+		/// <param name="skip"></param>
+		public virtual void OnModelCalculateBones(ComponentModel componentModel, Camera camera, out bool skip)
+		{
+			skip = false;
+		}
+
+		/// <summary>
+		/// 当模型计算是否可见时执行，Skip为是否跳过原本的计算
+		/// </summary>
+		/// <param name="componentModel"></param>
+		/// <param name="camera"></param>
+		/// <param name="skip"></param>
+		public virtual void OnModelCalculateIsVisible(ComponentModel componentModel,Camera camera,out bool skip)
+		{
+			skip = false;
+		}
+
+		/// <summary>
+		/// 重新计算模型眼睛位置
+		/// </summary>
+		/// <param name="componentModel"></param>
+		/// <param name="eyePosition"></param>
+		public virtual void RecalculateModelEyePosition(ComponentModel componentModel,ref Vector3 eyePosition)
+		{
+		}
+
+		/// <summary>
+		/// 重新计算模型眼睛旋转
+		/// </summary>
+		/// <param name="componentModel"></param>
+		/// <param name="eyeRotation"></param>
+		public virtual void RecalculateModelEyeRotation(ComponentModel componentModel,ref Quaternion eyeRotation)
+		{
+		}
+
+		/// <summary>
 		/// 计算护甲免伤时执行
 		/// </summary>
 		/// <param name="componentClothing"></param>

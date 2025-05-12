@@ -368,7 +368,17 @@ namespace Game
 
 		public override void DrawExtras(Camera camera)
 		{
-			if (m_componentCreature.ComponentHealth.Health > 0f && m_componentMiner != null && m_componentMiner.ActiveBlockValue != 0)
+			bool flag = false;
+			ModsManager.HookAction("OnModelDrawExtra",loader => {
+				loader.OnModelDrawExtra(this,camera,out bool skip);
+				flag |= skip;
+				return false;
+			});
+			if(flag)
+			{
+				return;
+			}
+			if(m_componentCreature.ComponentHealth.Health > 0f && m_componentMiner != null && m_componentMiner.ActiveBlockValue != 0)
 			{
 				int num = Terrain.ExtractContents(m_componentMiner.ActiveBlockValue);
 				Block block = BlocksManager.Blocks[num];
@@ -444,7 +454,12 @@ namespace Game
 			float num2 = 0.875f * m_componentCreature.ComponentBody.BoxSize.Y;
 			float num3 = MathUtils.Lerp(MathUtils.Lerp(num2, 0.45f * num2, num), 0.2f * num2, f);
 			Matrix matrix = m_componentCreature.ComponentBody.Matrix;
-			return m_componentCreature.ComponentBody.Position + (matrix.Up * (num3 + (2f * Bob))) + (matrix.Forward * -0.2f * num);
+			Vector3 result = m_componentCreature.ComponentBody.Position + (matrix.Up * (num3 + (2f * Bob))) + (matrix.Forward * -0.2f * num);
+			ModsManager.HookAction("RecalculateModelEyePosition",loader => {
+				loader.RecalculateModelEyePosition(this,ref result);
+				return false;
+			});
+			return result;
 		}
 
 		public override Quaternion CalculateEyeRotation()
@@ -454,7 +469,12 @@ namespace Game
 			{
 				num += MathUtils.DegToRad(80f) * MathUtils.Sigmoid(MathUtils.Max(m_lieDownFactorEye - 0.2f, 0f) / 0.8f, 4f);
 			}
-			return m_componentCreature.ComponentBody.Rotation * Quaternion.CreateFromYawPitchRoll(0f - m_componentCreature.ComponentLocomotion.LookAngles.X, m_componentCreature.ComponentLocomotion.LookAngles.Y, num);
+			Quaternion result = m_componentCreature.ComponentBody.Rotation * Quaternion.CreateFromYawPitchRoll(0f - m_componentCreature.ComponentLocomotion.LookAngles.X, m_componentCreature.ComponentLocomotion.LookAngles.Y, num);
+			ModsManager.HookAction("RecalculateModelEyeRotation",loader => {
+				loader.RecalculateModelEyeRotation(this,ref result);
+				return false;
+			});
+			return result;
 		}
 	}
 }

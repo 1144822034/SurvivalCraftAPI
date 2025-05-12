@@ -149,12 +149,32 @@ namespace Game
 
 		public virtual void CalculateAbsoluteBonesTransforms(Camera camera)
 		{
+			bool flag = false;
+			ModsManager.HookAction("OnModelCalculateBones",loader => {
+				loader.OnModelCalculateBones(this,camera,out bool skip);
+				flag |= skip;
+				return false;
+			});
+			if(flag)
+			{
+				return;
+			}
 			ProcessBoneHierarchy(Model.RootBone,camera.ViewMatrix, AbsoluteBoneTransformsForCamera);
 		}
 
 		public virtual void CalculateIsVisible(Camera camera)
 		{
-			if (camera.GameWidget.IsEntityFirstPersonTarget(Entity))
+			bool flag = false;
+			ModsManager.HookAction("OnModelCalculateIsVisible",loader => {
+				loader.OnModelCalculateIsVisible(this,camera,out bool skip);
+				flag |= skip;
+				return false;
+			});
+			if(flag)
+			{
+				return;
+			}
+			if(camera.GameWidget.IsEntityFirstPersonTarget(Entity))
 			{
 				IsVisibleForCamera = false;
 				return;

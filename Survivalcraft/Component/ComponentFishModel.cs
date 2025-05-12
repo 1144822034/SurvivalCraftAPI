@@ -229,7 +229,12 @@ namespace Game
 		public override Vector3 CalculateEyePosition()
 		{
 			Matrix matrix = m_componentCreature.ComponentBody.Matrix;
-			return m_componentCreature.ComponentBody.Position + (matrix.Up * 1f * m_componentCreature.ComponentBody.BoxSize.Y) + (matrix.Forward * 0.45f * m_componentCreature.ComponentBody.BoxSize.Z);
+			Vector3 result = m_componentCreature.ComponentBody.Position + (matrix.Up * 1f * m_componentCreature.ComponentBody.BoxSize.Y) + (matrix.Forward * 0.45f * m_componentCreature.ComponentBody.BoxSize.Z);
+			ModsManager.HookAction("RecalculateModelEyePosition",loader => {
+				loader.RecalculateModelEyePosition(this,ref result);
+				return false;
+			});
+			return result;
 		}
 	}
 }
