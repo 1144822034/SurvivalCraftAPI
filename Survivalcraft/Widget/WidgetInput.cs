@@ -495,11 +495,11 @@ public class WidgetInput
 	/// <summary>
 	/// 根据按键映射名称判断按键是否按下
 	/// </summary>
-	/// <param name="keyName"></param>
+	/// <param name="mappingName"></param>
 	/// <returns></returns>
-	public bool IsKeyDown(string keyName)
+	public bool IsKeyOrMouseDown(string mappingName)
 	{
-		object key = SettingsManager.GetKeyboardMapping(keyName);
+		object key = SettingsManager.GetKeyboardMapping(mappingName);
 		if(key is MouseButton mouseButton)
 		{
 			return IsMouseButtonDown(mouseButton);
@@ -513,11 +513,11 @@ public class WidgetInput
 	/// <summary>
 	/// 根据按键映射名称判断按键是否按下
 	/// </summary>
-	/// <param name="keyName"></param>
+	/// <param name="mappingName"></param>
 	/// <returns></returns>
-	public bool IsKeyDownOnce(string keyName)
+	public bool IsKeyOrMouseDownOnce(string mappingName)
 	{
-		object key = SettingsManager.GetKeyboardMapping(keyName);
+		object key = SettingsManager.GetKeyboardMapping(mappingName);
 		if(key is MouseButton mouseButton)
 		{
 			return IsMouseButtonDownOnce(mouseButton);

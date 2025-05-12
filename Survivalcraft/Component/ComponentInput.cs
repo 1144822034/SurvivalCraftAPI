@@ -185,39 +185,39 @@ namespace Game
 					}
 				}
 				Vector3 vector = default(Vector3);
-				vector += -Vector3.UnitX * (input.IsKeyDown("MoveLeft") ? 1 : 0);
-				vector += (Vector3.UnitX * (input.IsKeyDown( "MoveRight") ? 1 : 0));
-				vector += Vector3.UnitY * (input.IsKeyDown("MoveUp") ? 1 : 0);
-				vector += -Vector3.UnitY * (input.IsKeyDown("MoveDown") ? 1 : 0);
-				vector += -Vector3.UnitZ * (input.IsKeyDown( "MoveBack") ? 1 : 0);
-				vector += Vector3.UnitZ * (input.IsKeyDown("MoveFront") ? 1 : 0);
+				vector += -Vector3.UnitX * (input.IsKeyOrMouseDown("MoveLeft") ? 1 : 0);
+				vector += (Vector3.UnitX * (input.IsKeyOrMouseDown( "MoveRight") ? 1 : 0));
+				vector += Vector3.UnitY * (input.IsKeyOrMouseDown("MoveUp") ? 1 : 0);
+				vector += -Vector3.UnitY * (input.IsKeyOrMouseDown("MoveDown") ? 1 : 0);
+				vector += -Vector3.UnitZ * (input.IsKeyOrMouseDown( "MoveBack") ? 1 : 0);
+				vector += Vector3.UnitZ * (input.IsKeyOrMouseDown("MoveFront") ? 1 : 0);
 				m_playerInput.Look += new Vector2(Math.Clamp(zero.X, -15f, 15f), Math.Clamp(zero.Y, -15f, 15f));
 				m_playerInput.Move += vector;
 				m_playerInput.CrouchMove += vector;
-				m_playerInput.Jump |= input.IsKeyDownOnce( "Jump");
+				m_playerInput.Jump |= input.IsKeyOrMouseDownOnce( "Jump");
 				m_playerInput.ScrollInventory -= num;
-				m_playerInput.Dig = input.IsKeyDown( "Dig") ? new Ray3?(new Ray3(viewPosition, viewDirection)) : m_playerInput.Dig;
-				m_playerInput.Hit = input.IsKeyDownOnce( "Hit") ? new Ray3?(new Ray3(viewPosition, viewDirection)) : m_playerInput.Hit;
-				m_playerInput.Aim = input.IsKeyDown("Aim") ? new Ray3?(new Ray3(viewPosition, viewDirection)) : m_playerInput.Aim;
-				m_playerInput.Interact = input.IsKeyDownOnce( "Interact") ? new Ray3?(new Ray3(viewPosition, viewDirection)) : m_playerInput.Interact;
-				m_playerInput.ToggleCrouch |= input.IsKeyDownOnce("ToggleCrouch");
-				m_playerInput.ToggleMount |= input.IsKeyDownOnce("ToggleMount");
-				m_playerInput.ToggleCreativeFly |= input.IsKeyDownOnce("ToggleFly");
-				m_playerInput.PickBlockType = input.IsKeyDownOnce("PickBlockType") ? new Ray3?(new Ray3(viewPosition, viewDirection)) : m_playerInput.PickBlockType;
+				m_playerInput.Dig = input.IsKeyOrMouseDown( "Dig") ? new Ray3?(new Ray3(viewPosition, viewDirection)) : m_playerInput.Dig;
+				m_playerInput.Hit = input.IsKeyOrMouseDownOnce( "Hit") ? new Ray3?(new Ray3(viewPosition, viewDirection)) : m_playerInput.Hit;
+				m_playerInput.Aim = input.IsKeyOrMouseDown("Aim") ? new Ray3?(new Ray3(viewPosition, viewDirection)) : m_playerInput.Aim;
+				m_playerInput.Interact = input.IsKeyOrMouseDownOnce( "Interact") ? new Ray3?(new Ray3(viewPosition, viewDirection)) : m_playerInput.Interact;
+				m_playerInput.ToggleCrouch |= input.IsKeyOrMouseDownOnce("ToggleCrouch");
+				m_playerInput.ToggleMount |= input.IsKeyOrMouseDownOnce("ToggleMount");
+				m_playerInput.ToggleCreativeFly |= input.IsKeyOrMouseDownOnce("ToggleFly");
+				m_playerInput.PickBlockType = input.IsKeyOrMouseDownOnce("PickBlockType") ? new Ray3?(new Ray3(viewPosition, viewDirection)) : m_playerInput.PickBlockType;
 			}
 			if (!DialogsManager.HasDialogs(m_componentPlayer.GuiWidget) && AllowHandleInput)
 			{
-				m_playerInput.ToggleInventory |= input.IsKeyDownOnce("ToggleInventory");
-				m_playerInput.ToggleClothing |= input.IsKeyDownOnce("ToggleClothing");
-				m_playerInput.TakeScreenshot |= input.IsKeyDownOnce("TakeScreenshot");
-				m_playerInput.SwitchCameraMode |= input.IsKeyDownOnce("SwitchCameraMode");
-				m_playerInput.TimeOfDay |= input.IsKeyDownOnce( "TimeOfDay");
-				m_playerInput.Lighting |= input.IsKeyDownOnce("Lightning");
-				m_playerInput.Precipitation |= input.IsKeyDownOnce("Precipitation");
-				m_playerInput.Fog |= input.IsKeyDownOnce("Fog");
-				m_playerInput.Drop |= input.IsKeyDownOnce("Drop");
-				m_playerInput.EditItem |= input.IsKeyDownOnce("EditItem");
-				m_playerInput.KeyboardHelp |= input.IsKeyDownOnce("KeyboardHelp");
+				m_playerInput.ToggleInventory |= input.IsKeyOrMouseDownOnce("ToggleInventory");
+				m_playerInput.ToggleClothing |= input.IsKeyOrMouseDownOnce("ToggleClothing");
+				m_playerInput.TakeScreenshot |= input.IsKeyOrMouseDownOnce("TakeScreenshot");
+				m_playerInput.SwitchCameraMode |= input.IsKeyOrMouseDownOnce("SwitchCameraMode");
+				m_playerInput.TimeOfDay |= input.IsKeyOrMouseDownOnce( "TimeOfDay");
+				m_playerInput.Lighting |= input.IsKeyOrMouseDownOnce("Lightning");
+				m_playerInput.Precipitation |= input.IsKeyOrMouseDownOnce("Precipitation");
+				m_playerInput.Fog |= input.IsKeyOrMouseDownOnce("Fog");
+				m_playerInput.Drop |= input.IsKeyOrMouseDownOnce("Drop");
+				m_playerInput.EditItem |= input.IsKeyOrMouseDownOnce("EditItem");
+				m_playerInput.KeyboardHelp |= input.IsKeyOrMouseDownOnce("KeyboardHelp");
 				if (input.IsKeyDownOnce(Key.Number1))
 				{
 					m_playerInput.SelectInventorySlot = 0;
