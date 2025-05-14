@@ -86,7 +86,14 @@ namespace Game
 			rectangleWidget.RenderTransform = Matrix.CreateTranslation((0f - rectangleWidget.ActualSize.X) / 2f, (0f - rectangleWidget.ActualSize.Y) / 2f, 0f) * Matrix.CreateScale(num, num, 1f) * Matrix.CreateTranslation(rectangleWidget.ActualSize.X / 2f, rectangleWidget.ActualSize.Y / 2f, 0f);
 			if (m_languageSwitchButton.IsClicked)
 			{
-				DialogsManager.ShowDialog(null,new ListSelectionDialog(null,LanguageControl.LanguageTypes,70f,(object item) => ((KeyValuePair<string, CultureInfo>)item).Value.NativeName,delegate (object item)
+				var sorted = LanguageControl.LanguageTypes.OrderBy(item => {
+					if(item.Key == "en-US")
+						return 0;
+					if(item.Key == "zh-CN")
+						return 1;
+					return 2;
+				});
+				DialogsManager.ShowDialog(null,new ListSelectionDialog(null,sorted,70f,(object item) => ((KeyValuePair<string, CultureInfo>)item).Value.NativeName,delegate (object item)
 				{
 					LanguageControl.ChangeLanguage(((KeyValuePair<string, CultureInfo>)item).Key);
 				}));
