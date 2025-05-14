@@ -1867,5 +1867,16 @@ namespace Game
 		public virtual void OnCameraListInit(ValuesDictionary cameraList)
 		{
 		}
+
+		/// <summary>
+		/// 在设置界面创建时执行。可用于模组添加新的设置按钮。
+		/// 此接口可避免切换语言重新创建Screen导致按钮丢失的情况
+		/// </summary>
+		/// <param name="settingsScreen"></param>
+		/// <param name="buttonsToAdd">键为按钮，值为按下后进行的操作</param>
+		public virtual void OnSettingsScreenCreated(SettingsScreen settingsScreen,out Dictionary<ButtonWidget,Action> buttonsToAdd)
+		{
+			buttonsToAdd = new Dictionary<ButtonWidget,Action>();
+		}
 	}
 }

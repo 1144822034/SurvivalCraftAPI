@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Xml.Linq;
 using Engine;
 
@@ -20,11 +21,11 @@ namespace Game
 		public ButtonWidget m_controlsButton;
 
 		public StackPanelWidget m_leftStack, m_rightPanel;
-		readonly Dictionary<ButtonWidget, Action> m_buttonActions = new Dictionary<ButtonWidget,Action>();
+		readonly Dictionary<ButtonWidget,Action> m_buttonActions = new Dictionary<ButtonWidget,Action>();
 		public SettingsScreen()
 		{
 			XElement node = ContentManager.Get<XElement>("Screens/SettingsScreen");
-			LoadContents(this, node);
+			LoadContents(this,node);
 			m_performanceButton = Children.Find<ButtonWidget>("Performance");
 			m_graphicsButton = Children.Find<ButtonWidget>("Graphics");
 			m_uiButton = Children.Find<ButtonWidget>("Ui");
@@ -33,11 +34,24 @@ namespace Game
 			m_controlsButton = Children.Find<ButtonWidget>("Controls");
 			m_leftStack = Children.Find<StackPanelWidget>("LeftStack");
 			m_rightPanel = Children.Find<StackPanelWidget>("RightStack");
+
+			ModsManager.HookAction("OnSettingsScreenCreated",loader => {
+				loader.OnSettingsScreenCreated(this,out Dictionary<ButtonWidget,Action> buttonsToAdd);
+				if(buttonsToAdd != null)
+				{
+					foreach(var child in buttonsToAdd)
+					{
+						AddSettingButton(child.Key,child.Value);
+					}
+				}
+				return false;
+			});
+
 		}
 
 		public override void Enter(object[] parameters)
 		{
-			if (m_previousScreen == null)
+			if(m_previousScreen == null)
 			{
 				m_previousScreen = ScreensManager.PreviousScreen;
 			}
@@ -45,27 +59,27 @@ namespace Game
 
 		public override void Update()
 		{
-			if (m_performanceButton.IsClicked)
+			if(m_performanceButton.IsClicked)
 			{
 				ScreensManager.SwitchScreen("SettingsPerformance");
 			}
-			if (m_graphicsButton.IsClicked)
+			if(m_graphicsButton.IsClicked)
 			{
 				ScreensManager.SwitchScreen("SettingsGraphics");
 			}
-			if (m_uiButton.IsClicked)
+			if(m_uiButton.IsClicked)
 			{
 				ScreensManager.SwitchScreen("SettingsUi");
 			}
-			if (m_compatibilityButton.IsClicked)
+			if(m_compatibilityButton.IsClicked)
 			{
 				ScreensManager.SwitchScreen("SettingsCompatibility");
 			}
-			if (m_audioButton.IsClicked)
+			if(m_audioButton.IsClicked)
 			{
 				ScreensManager.SwitchScreen("SettingsAudio");
 			}
-			if (m_controlsButton.IsClicked)
+			if(m_controlsButton.IsClicked)
 			{
 				ScreensManager.SwitchScreen("SettingsControls");
 			}
@@ -74,14 +88,14 @@ namespace Game
 				if(buttonAction.Key.IsClicked)
 					buttonAction.Value?.Invoke();
 			}
-			if (Input.Back || Input.Cancel || Children.Find<ButtonWidget>("TopBar.Back").IsClicked)
+			if(Input.Back || Input.Cancel || Children.Find<ButtonWidget>("TopBar.Back").IsClicked)
 			{
 				ScreensManager.SwitchScreen(m_previousScreen);
 				m_previousScreen = null;
 			}
 		}
 		/// <summary>
-		/// 添加新的设置按钮。建议在ModLoader.OnLoadingFinished中使用
+		/// 添加新的设置按钮
 		/// </summary>
 		/// <param name="button"></param>
 		/// <param name="onClicked"></param>
@@ -102,7 +116,7 @@ namespace Game
 		}
 
 		/// <summary>
-		/// 添加新的设置按钮。建议在ModLoader.OnLoadingFinished中使用。使用标准的设置按钮样式，若需要自定义样式请使用另一个重载
+		/// 添加新的设置按钮。使用标准的设置按钮样式，若需要自定义样式请使用另一个重载
 		/// </summary>
 		/// <param name="text"></param>
 		/// <param name="onClicked"></param>
@@ -110,9 +124,11 @@ namespace Game
 		{
 			ButtonWidget button = new BevelledButtonWidget()
 			{
-				Name = text, Text = text,
+				Name = text,
+				Text = text,
 				Style = ContentManager.Get<XElement>("Styles/ButtonStyle_310x60"),
-				HorizontalAlignment = WidgetAlignment.Center, VerticalAlignment = WidgetAlignment.Center,
+				HorizontalAlignment = WidgetAlignment.Center,
+				VerticalAlignment = WidgetAlignment.Center,
 				Margin = new Vector2(0f,5f),
 			};
 			AddSettingButton(button,onClicked);
