@@ -118,7 +118,11 @@ namespace Game {
                 else if (text.Contains("INFO:")) {
                     color = Color.LightGray;
                 }
-                return new LabelWidget {
+				ModsManager.HookAction("ModifyLogColor",loader => {
+					loader.ModifyLogColor(text,ref color);
+					return false;
+				});
+				return new LabelWidget {
                     Text = text,
                     Font = LabelWidget.BitmapFont,
                     HorizontalAlignment = WidgetAlignment.Near,

@@ -1878,5 +1878,14 @@ namespace Game
 		{
 			buttonsToAdd = new Dictionary<ButtonWidget,Action>();
 		}
+
+		/// <summary>
+		/// 对单条日志消息进行判定以修改其显示颜色
+		/// </summary>
+		/// <param name="text"></param>
+		/// <param name="color"></param>
+		public virtual void ModifyLogColor(string text, ref Color color)
+		{
+		}
 	}
 }
