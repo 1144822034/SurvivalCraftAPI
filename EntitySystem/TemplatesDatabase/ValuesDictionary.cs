@@ -48,6 +48,16 @@ namespace TemplatesDatabase
 			return m_dictionary.ContainsKey(key);
 		}
 
+		public bool ContainsValue(object value)
+		{
+			return m_dictionary.ContainsValue(value);
+		}
+
+		public void EnsureCapacity(int capacity)
+		{
+			m_dictionary.EnsureCapacity(capacity);
+		}
+
 		public T GetValue<T>(string key)
 		{
 			if (m_dictionary.TryGetValue(key, out object value))
@@ -84,6 +94,38 @@ namespace TemplatesDatabase
 		{
 			m_dictionary.Remove(key);
 		}
+
+		public void Remove(string key, out object value)
+		{
+			m_dictionary.Remove(key, out value);
+		}
+
+		public void TrimExcess()
+		{
+			m_dictionary.TrimExcess();
+		}
+
+		public void TrimExcess(int capacity)
+		{
+			m_dictionary.TrimExcess(capacity);
+		}
+
+		public bool TryAdd<T>(string key, T value)
+		{
+			return m_dictionary.TryAdd(key, value);
+		}
+
+		public bool TryGetValue<T>(string key, out T value)
+		{
+			if (m_dictionary.TryGetValue(key, out object value2))
+			{
+				value = (T)value2;
+				return true;
+			}
+			value = default;
+			return false;
+		}
+
 		public void Save(XElement node)
 		{
 			foreach (KeyValuePair<string, object> item in m_dictionary)
