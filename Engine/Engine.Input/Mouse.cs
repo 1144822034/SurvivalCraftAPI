@@ -115,14 +115,22 @@ namespace Engine.Input
 #else
 			if (Window.IsActive)
 			{
-                m_mouse.Cursor.CursorMode = IsMouseVisible ? CursorMode.Normal : CursorMode.Disabled;
-                Point2 position = new Point2((int)m_mouse.Position.X, (int)m_mouse.Position.Y);
-                int wheel = (int)m_mouse.ScrollWheels[0].Y;
-				if (m_lastMousePosition.HasValue)
-				{
-					MouseMovement = new Point2(position.X - m_lastMousePosition.Value.X, position.Y - m_lastMousePosition.Value.Y);
-				}
-				m_lastMousePosition = position;
+                if (IsMouseVisible)
+                {
+                    m_mouse.Cursor.CursorMode = CursorMode.Normal;
+                    MouseMovement = Point2.Zero;
+                    m_lastMousePosition = null;
+                }
+                else
+                {
+                    m_mouse.Cursor.CursorMode = CursorMode.Disabled;
+                    Point2 position = new ((int)m_mouse.Position.X, (int)m_mouse.Position.Y);
+                    if (m_lastMousePosition.HasValue)
+                    {
+                        MouseMovement = new Point2(position.X - m_lastMousePosition.Value.X, position.Y - m_lastMousePosition.Value.Y);
+                    }
+                    m_lastMousePosition = position;
+                }
 			}
 			else
 			{
