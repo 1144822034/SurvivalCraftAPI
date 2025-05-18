@@ -41,9 +41,6 @@ public class TextBoxWidget : Widget
     [Obsolete("TextBoxWidget.MoveNextFlag is deprecated.", error: true)]
     public bool MoveNextFlag;
 
-    [Obsolete($"TextBoxWidget.m_scroll is deprecated, use {nameof(TextBoxWidget)}.{nameof(Scroll)} instead.")]
-    public float m_scroll;
-
     /// <summary>
     /// <para>
     /// Android 文本框的 Description。
@@ -204,7 +201,7 @@ public class TextBoxWidget : Widget
 		        m_text = text;
 		        Caret = Math.Clamp(Caret,0,m_text.Length);
 		        TextChanged?.Invoke(this);
-		        Scroll = Math.Clamp(Scroll,-Font.MeasureText(FullText,new Vector2(FontScale),FontSpacing).X,Font.MeasureText(FullText,new Vector2(FontScale),FontSpacing).X);
+		        Scroll = Scroll;
 	        }
         }
     }
@@ -328,14 +325,26 @@ public class TextBoxWidget : Widget
         get => FocusedTextBox == this;
         set
         {
+	        bool originValue = HasFocus;
             if (value)
             {
                 FocusedTextBox = this;
                 SetCursorPosition(this);
-                return;
             }
-
-            FocusedTextBox = null;
+            else
+            {
+	            FocusedTextBox = null;
+            }
+            
+            if (originValue && !value)
+            {
+                FocusLost?.Invoke(this);
+            }
+            
+            if (!originValue && value)
+            {
+                OnFocus?.Invoke(this);
+            }
         }
     }
 
@@ -437,7 +446,6 @@ public class TextBoxWidget : Widget
             Text = Text.Remove(position, str.Length);
             Text = Text.Insert(position, str);
 
-            SetCursorPosition(this);
             TextChanged?.Invoke(this);
         }
 
@@ -475,7 +483,6 @@ public class TextBoxWidget : Widget
                 Caret += str.Length;
             }
 
-            SetCursorPosition(this);
             TextChanged?.Invoke(this);
         }
     }
@@ -620,7 +627,6 @@ public class TextBoxWidget : Widget
         }
 
         FocusStartTime = Time.RealTime;
-        SetCursorPosition(this);
         TextChanged?.Invoke(this);
     }
 
@@ -671,7 +677,6 @@ public class TextBoxWidget : Widget
         }
 
         FocusStartTime = Time.RealTime;
-        SetCursorPosition(this);
         TextChanged?.Invoke(this);
     }
 
@@ -866,17 +871,19 @@ public class TextBoxWidget : Widget
                     () => HasFocus = false);
 #endif
                 HasFocus = true;
-                Caret = CalculateClickedCharacterIndex(Font, PasswordMode ? new string('*', Text.Length) : Text,
-                    InteractionToWidget(Input.Click.Value.Start + new Vector2(Scroll * GlobalTransform.M11, 0)),
-                    FontScale, FontSpacing.X);
-                OnFocus?.Invoke(this);
+                Caret = CalculateClickedCharacterIndex(
+	                Font,
+	                PasswordMode ? new string('*', Text.Length) : Text,
+	                ScreenToWidgetWithoutScale(Input.Click.Value.Start + new Vector2(Scroll, 0)),
+                    FontScale, FontSpacing,
+	                ActualSize,
+	                GlobalTransform);
             }
             else if (FocusedTextBox == this)
             {
                 // 如果点击不在文本框内，则失去焦点。
                 CloseInputMethod();
                 HasFocus = false;
-                FocusLost?.Invoke(this);
             }
 
             SelectionLength = 0;
@@ -888,9 +895,7 @@ public class TextBoxWidget : Widget
 					HitTestGlobal(Input.MousePosition.Value) == this)
 		{
 			var scroll = Input.Scroll.Value.X * Input.Scroll.Value.Z / 92;
-			Scroll += scroll;
-			Scroll = Math.Clamp(Scroll,-Font.MeasureText(FullText,new Vector2(FontScale),FontSpacing).X,
-				Font.MeasureText(FullText,new Vector2(FontScale),FontSpacing).X);
+			Scroll -= scroll;
 		}
         if (Input.Drag.HasValue)
         {
@@ -904,9 +909,14 @@ public class TextBoxWidget : Widget
                     HasFocus = true;
                     SelectionStarted = true;
                     ShowInputMethod();
-                    Caret = CalculateClickedCharacterIndex(Font, PasswordMode ? new string('*', Text.Length) : Text,
-                        InteractionToWidget(Input.Drag.Value + new Vector2(Scroll * GlobalTransform.M11, 0)),
-                        FontScale, FontSpacing.X);
+                    Caret = CalculateClickedCharacterIndex(
+						Font,
+						PasswordMode ? new string('*', Text.Length) : Text,
+						ScreenToWidgetWithoutScale(Input.Drag.Value + new Vector2(Scroll, 0)),
+                        FontScale,
+						FontSpacing,
+						ActualSize,
+						GlobalTransform);
                     DragStartedInsideTextBox = true;
                 }
                 else
@@ -919,9 +929,14 @@ public class TextBoxWidget : Widget
             else if (Time.RealTime - DragStartTime > 0 && DragStartedInsideTextBox)
             {
                 // 拖拽正在进行时：
-                var caret2 = CalculateClickedCharacterIndex(Font, PasswordMode ? new string('*', Text.Length) : Text,
-                    InteractionToWidget(Input.Drag.Value + new Vector2(Scroll * GlobalTransform.M11, 0)),
-                    FontScale, FontSpacing.X);
+                var caret2 = CalculateClickedCharacterIndex(
+	                Font,
+	                PasswordMode ? new string('*', Text.Length) : Text,
+	                ScreenToWidgetWithoutScale(Input.Drag.Value + new Vector2(Scroll, 0)),
+                    FontScale,
+	                FontSpacing,
+	                ActualSize,
+	                GlobalTransform);
                 if (SelectionStarted)
                 {
                     SelectionLength = caret2 - Caret;
@@ -1099,14 +1114,60 @@ public class TextBoxWidget : Widget
             return textBoxes;
         }
 
-        static int CalculateClickedCharacterIndex(BitmapFont font, string text, Vector2 clickPosition, float fontScale, float fontSpacing)
+        static int CalculateClickedCharacterIndex(
+	        BitmapFont font,
+	        string text,
+	        Vector2 clickPosition,
+	        float fontScale,
+	        Vector2 fontSpacing,
+	        Vector2 widgetActualSize,
+	        Matrix widgetGlobalTransform)
         {
-	        return font.FitText(clickPosition.X, text, fontScale, fontSpacing);
-        }
+	        clickPosition.Y /= widgetGlobalTransform.Up.Y;
+	        clickPosition.X /= widgetGlobalTransform.Right.X;
+	        var scale = fontScale * font.Scale;
+	        var spacing = fontSpacing + font.Spacing;
+	        float currentPosition = 0f;
+	        float currentHeight = widgetActualSize.Y / 2f - font.LineHeight * scale / 2;
+	        int i = 0;
+	        while(currentHeight + font.LineHeight * scale + spacing.Y < clickPosition.Y)
+	        {
+		        i = text.IndexOf('\n',i) + 1;
+		        if(i == -1)
+		        {
+			        return text.Length;
+		        }
+		        
+		        currentHeight += font.LineHeight * scale + spacing.Y;
+	        }
+	        
+	        for (; i < text.Length; i++)
+	        {
+		        char letter = text[i];
+		        
+		        if (letter == '\n')
+		        {
+			        return i;
+		        }
 
-        Vector2 InteractionToWidget(Vector2 position)
+		        if(letter == '\u200b') continue;
+
+		        var glyph = font.GetGlyph(letter is '\u00a0' ? ' ' : letter);
+		        float kerning = i + 1 < text.Length ? font.GetKerning(letter, text[i + 1]) : 0f;
+		        
+		        if (currentPosition + (glyph.Width - kerning + spacing.X) / 2> clickPosition.X)
+		        {
+			        return i;
+		        }
+				
+		        currentPosition += (glyph.Width - kerning + spacing.X) * scale;
+	        }
+	        
+	        return text.Length;
+        }
+        Vector2 ScreenToWidgetWithoutScale(Vector2 p)
         {
-            return ScreenToWidget(position);
+	        return p - GlobalTransform.Translation.XY;
         }
     }
 
@@ -1270,7 +1331,17 @@ public class TextBoxWidget : Widget
 
     public Color Color { get; set; } = Color.White;
 
-    public float Scroll { get; set; }
+    public float m_scroll;
+    
+    public float Scroll
+    {
+	    get => m_scroll;
+	    set
+	    {
+		    m_scroll = Math.Clamp(value, 0, Font.MeasureText(FullText, new Vector2(FontScale), FontSpacing).X);
+		    SetCursorPosition(this);
+	    }
+    }
 
     /// <summary>
     /// <para>
@@ -1321,7 +1392,7 @@ public class TextBoxWidget : Widget
     /// </para>
     /// </summary>
     public Vector2 m_sizeValue;
-    
+
     /// <summary>
     /// <para>
     /// 输入框大小（不一定是输入框的真实大小，真实大小请见 <see cref="Widget.ActualSize"/>）。
@@ -1410,7 +1481,7 @@ public class TextBoxWidget : Widget
     /// The length of the candidates window.
     /// </para>
     /// </summary>
-    public float CandidateWindowLength { get; set; } = 80;
+    public float CandidateWindowLength { get; set; } = 128;
 
     /// <summary>
     /// <para>
@@ -1428,6 +1499,13 @@ public class TextBoxWidget : Widget
 
     #region Input Method Api
 
+    public TextBoxWidget()
+    {
+	    TextChanged += (sender) =>
+	    {
+		    SetCursorPosition(this);
+	    };
+    }
     private static void SetCursorPosition(TextBoxWidget widget)
     {
 #if WINDOWS
@@ -1476,7 +1554,7 @@ public class TextBoxWidget : Widget
 #if WINDOWS
         InputMethod.CandidateList.Select(x => x.ToString()).ToArray();
 #else
-        Array.Empty<string>();
+        [];
 #endif
 
     /// <summary>
@@ -1626,7 +1704,7 @@ public class TextBoxWidget : Widget
                     glyph = Font.FallbackGlyph;
                 }
 
-                width += glyph.Width;
+                width += glyph.Width * FontScale * Font.Scale;
                 if (width >= CandidateWindowLength - 8 - 2 * Font.GetGlyph('.').Width)
                 {
                     break;
@@ -1662,34 +1740,23 @@ public class TextBoxWidget : Widget
         ClampToBounds = true;
     }
 
-    /// <summary>
-    /// <para>
-    /// 光标相对于 Widget 的显示位置。
-    /// </para>
-    /// <para>
-    /// Position of text caret relative to widget.
-    /// </para>
-    /// </summary>
-    public float TextCaretPosition
-    {
-        get
-        {
-            var caretPosition =
-                Font.MeasureText(Text,
-	                0,
-	                Caret,
-	                new Vector2(FontScale),
-                    FontSpacing) *
-                Vector2.UnitX;
-            return caretPosition.X;
-        }
-    }
-
 
     public override void Draw(DrawContext dc)
     {
 	    var textToDraw = Text.Replace("\t", new string(' ',IndentWidth));
-			var caretIndex = Text[..Caret].Sum(c => c == '\t' ? IndentWidth : 1);
+	    var caretIndex = Text[..Caret].Sum(c => c == '\t' ? IndentWidth : 1);
+	    var selectionLength = SelectionLength == 0 
+		                          ? 0
+		                          : SelectionString.Sum(c => c == '\t' ? IndentWidth : 1) 
+		                            * (SelectionLength / Math.Abs(SelectionLength)); 
+									// 保持 selectionLength 正负与 SelectionLength 一致
+	    
+	    int selectionStart = caretIndex;
+	    if (SelectionLength < 0)
+	    {
+		    selectionStart += selectionLength;
+		    selectionLength = -selectionLength;
+	    }
 	    
 	    if(PasswordMode)
 	    {
@@ -1698,19 +1765,6 @@ public class TextBoxWidget : Widget
 
 	    var flatBatch = dc.PrimitivesRenderer2D.FlatBatch(blendState: BlendState.NonPremultiplied);
 	    var outlineFlatBatch = dc.PrimitivesRenderer2D.FlatBatch(layer: 1);
-	    
-	    if(SelectionLength != 0 && CompositionText == null)
-	    {
-		    var selectionEndPosition = Font.MeasureText(
-			    textToDraw,
-			    0,
-			    caretIndex + SelectionLength,
-			    new Vector2(FontScale),
-			    FontSpacing);
-		    var topOfCaret = (ActualSize.Y - Font.GlyphHeight * FontScale * Font.Scale) / 2;
-		    flatBatch.QueueQuad((TextCaretPosition,topOfCaret),
-			    (0,topOfCaret) + selectionEndPosition,0,(64,64,255,128));
-	    }
 
 	    Vector2 currentDrawPosition = (0,ActualSize.Y / 2);
 
@@ -1723,6 +1777,27 @@ public class TextBoxWidget : Widget
 	    int charIndex = 0;
 	    foreach(var line in lines)
 	    {
+		    if(selectionLength != 0 && 
+		       selectionStart < charIndex + line.Length && 
+		       selectionStart + selectionLength > charIndex)
+		    {//如果这一行有字符被选中
+			    int lineStart = charIndex;
+			    int lineEnd = charIndex + line.Length;
+        
+			    int selectionStartInLine = Math.Max(selectionStart - lineStart, 0);
+			    int selectionEndInLine = Math.Min(selectionStart + selectionLength - lineStart, line.Length);
+			    int actualSelectionLength = selectionEndInLine - selectionStartInLine;
+			    drawItems.Add(new SelectionDrawItem(
+				    flatBatch,
+				    line,
+				    selectionStartInLine,
+				    actualSelectionLength,
+				    Font,
+				    FontSpacing,
+				    (64,64,255,128),
+				    Font.GlyphHeight * FontScale * Font.Scale,
+				    new Vector2(FontScale)));
+		    }
 		    if(charIndex <= caretIndex && charIndex + line.Length >= caretIndex)
 		    {
 			    var split = SplitStringAt(line, caretIndex - charIndex);
@@ -1739,7 +1814,16 @@ public class TextBoxWidget : Widget
 			       ((Time.RealTime - FocusStartTime - 0.4) % 1.0 <= 0.3f ||
 			        (Time.RealTime - FocusStartTime - 0.4) % 1.0 >= 0.8f))
 			    {
-				    drawItems.Add(new CaretDrawItem(flatBatch, 1, Font.GlyphHeight * FontScale * Font.Scale));
+				    drawItems.Add(new CaretDrawItem(
+					    flatBatch,
+					    1,
+					    Font.GlyphHeight * FontScale * Font.Scale,
+					    CompositionText,
+					    CompositionTextCaret,
+					    Font,
+					    FontSpacing,
+					    Color.White,
+					    new Vector2(FontScale)));
 			    }
 			    
 			    drawItems.Add(new CompositionTextDrawItem(
@@ -1777,44 +1861,22 @@ public class TextBoxWidget : Widget
 		    drawItems.Add(new EndOfLineDrawItem(Font,FontSpacing,FontScale));
 		    charIndex += line.Length + 1; // + 1 是因为换行符
 	    }
-
-	    /*var split = SplitStringAt(textToDraw, Caret);
-	    drawItems.Add(new NormalDrawItem(textToDraw, 0, split[0].Length, fontBatch, FontScale, FontSpacing, Color));
-	    drawItems.Add(new CompositionTextDrawItem(
-		    CompositionText ?? "",
-		    fontBatch,
-		    underlineFlatBatch,
-		    FontScale,
-		    FontSpacing,
-		    Color));
-
-	    if (split.Length > 1)
-	    {
-	        drawItems.Add(new NormalDrawItem(
-		        textToDraw,
-		        split[0].Length,
-		        split[1].Length,
-		        fontBatch,
-		        FontScale,
-		        FontSpacing,
-		        Color));
-	    }*/
+	    
 
 	    foreach(var drawItem in drawItems)
 	    {
 		    drawItem.Draw(ref currentDrawPosition);
 	    }
 
-
 	    fontBatch.TransformTriangles(GlobalTransform);
 	    flatBatch.TransformTriangles(GlobalTransform);
 	    flatBatch.TransformLines(GlobalTransform);
 	    outlineFlatBatch.TransformLines(GlobalTransform);
 
-	    var scrollTransform = Matrix.CreateTranslation(new Vector3(-Scroll,0,0));
+	    var scrollTransform = Matrix.CreateTranslation(new Vector3(-Scroll, 0, 0));
 	    flatBatch.TransformTriangles(scrollTransform);
 	    fontBatch.TransformTriangles(scrollTransform);
-	    underlineFlatBatch.TransformTriangles(scrollTransform);
+	    underlineFlatBatch.TransformLines(scrollTransform);
     }
 
     /// <inheritdoc/>
@@ -1902,19 +1964,77 @@ public class TextBoxWidget : Widget
     public class CaretDrawItem(
 	    FlatBatch2D flatBatch,
 	    float width,
-	    float height) : TextDrawItem
+	    float height,
+	    string compositionText,
+	    int compositionTextCaret,
+	    BitmapFont font,
+	    Vector2 fontSpacing,
+	    Color color,
+	    Vector2 fontScale) : TextDrawItem
     {
-
 	    public override void Draw(ref Vector2 position)
 	    {
-		    flatBatch.QueueQuad(
-			    position + (0,-height / 2),
-			    position + (width,height / 2),
+		    var offset = font.MeasureText(
+			    compositionText,
 			    0,
-			    Color.White);
+			    compositionTextCaret,
+			    fontScale,
+			    fontSpacing) * Vector2.UnitX;
+		    flatBatch.QueueQuad(
+			    position + offset + (0, -height / 2),
+			    position + offset + (width, height / 2),
+			    0,
+			    color);
 	    }
     }
 
+    public class SelectionDrawItem(
+	    FlatBatch2D flatBatch,
+	    string text,
+	    int relativeCaretPosition,
+	    int selectionLength,
+	    BitmapFont font,
+	    Vector2 fontSpacing,
+	    Color color,
+	    float height,
+	    Vector2 fontScale) : TextDrawItem
+    {
+	    private int m_relativeCaretPosition = relativeCaretPosition;
+	    private int m_selectionLength = selectionLength;
+
+	    public override void Draw(ref Vector2 position)
+	    {
+		    if(m_relativeCaretPosition < 0)
+		    {
+			    m_relativeCaretPosition = 0;
+			    m_selectionLength += m_relativeCaretPosition;
+		    }
+
+		    if(m_relativeCaretPosition + m_selectionLength + 1 > text.Length)
+		    {
+			    m_selectionLength = text.Length - m_relativeCaretPosition;
+		    }
+		    
+		    var length = font.MeasureText(
+			                 text,
+			                 m_relativeCaretPosition,
+			                 m_selectionLength,
+			                 fontScale,
+			                 fontSpacing).X;
+		    var offset = font.MeasureText(
+			                 text,
+			                 0,
+			                 m_relativeCaretPosition,
+			                 fontScale,
+			                 fontSpacing).X;
+		    flatBatch.QueueQuad(
+			    position + (offset, -height / 2),
+			    position + (offset + length, height / 2),
+			    0,
+			    color);
+	    }
+    }
+    
     public class EndOfLineDrawItem(
 	    BitmapFont font,
 	    Vector2 fontSpacing,
