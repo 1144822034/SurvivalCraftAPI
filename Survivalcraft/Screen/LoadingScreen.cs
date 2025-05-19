@@ -74,7 +74,12 @@ namespace Game
 		}
 		public void ContentLoaded()
 		{
-			if (SettingsManager.DisplayLog) return;
+			if(SettingsManager.DisplayLog)
+			{
+				_ = ContentManager.Get<Image>("Fonts/Pericles", ".webp");
+				m_isContentLoaded = true;
+				return;
+			}
 			ClearChildren();
 			RectangleWidget rectangle1 = new() { FillColor = Color.White, OutlineColor = Color.Transparent, Size = new Vector2(256f), VerticalAlignment = WidgetAlignment.Center, HorizontalAlignment = WidgetAlignment.Center };
 			rectangle1.Subtexture = ContentManager.Get<Subtexture>("Textures/Gui/CandyRufusLogo");
