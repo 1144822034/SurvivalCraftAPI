@@ -551,6 +551,13 @@ namespace Game
 		public override void Leave()
 		{
 			LogList?.ClearItems();
+#if ANDROID
+			// 当前Android端SDL不支持半垂直同步
+			if (SettingsManager.PresentationInterval > 1)
+			{
+				SettingsManager.PresentationInterval = 1;
+			}
+#endif
 			Window.PresentationInterval = SettingsManager.PresentationInterval;
 			ContentManager.Dispose("Textures/Gui/CandyRufusLogo");
 			ContentManager.Dispose("Textures/Gui/EngineLogo");

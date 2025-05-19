@@ -84,6 +84,9 @@ namespace Game
 			m_lowFPSToTimeDecelerationSlider.MinValue = 0f;
 			m_lowFPSToTimeDecelerationSlider.MaxValue = 20f;
             m_lowFPSToTimeDecelerationSlider.Value = SettingsManager.LowFPSToTimeDeceleration;
+#if ANDROID
+            m_framerateLimitSlider.MinValue = 1;
+#endif
         }
 
 		public override void Enter(object[] parameters)
