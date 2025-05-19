@@ -267,8 +267,8 @@ namespace Engine.Input
                                     case ButtonName.LeftBumper: state.Buttons[8] = button.Pressed; break;
                                     case ButtonName.RightBumper: state.Buttons[9] = button.Pressed; break;
                                     case ButtonName.DPadLeft: state.Buttons[10] = button.Pressed; break;
-                                    case ButtonName.DPadRight: state.Buttons[11] = button.Pressed; break;
-                                    case ButtonName.DPadUp: state.Buttons[12] = button.Pressed; break;
+                                    case ButtonName.DPadRight: state.Buttons[12] = button.Pressed; break;
+                                    case ButtonName.DPadUp: state.Buttons[11] = button.Pressed; break;
                                     case ButtonName.DPadDown: state.Buttons[13] = button.Pressed; break;
                                 }
                             }
@@ -345,29 +345,29 @@ namespace Engine.Input
             return false;
         }
 
-        /// <summary>
-        /// 使指定的手柄的马达震动(未适配安卓)
-        /// </summary>
-        /// <param name="gamePadIndex"></param>
-        /// <param name="vibration">震动幅度(马达速度)，在0到1之间</param>
-        /// <param name="durationMs">震动持续时间(毫秒)</param>
-        public static void MakeVibration(int gamePadIndex, float vibration, float durationMs)
-        {
-#if !ANDROID
-            if (IsConnected(gamePadIndex))
-            {
-                var gamePad = m_gamepads[gamePadIndex];
-                foreach(var motor in gamePad.VibrationMotors)
-                {
-                    motor.Speed = vibration;
-                    Task.Delay((int)durationMs).ContinueWith(_ =>
-                    {
-                        motor.Speed = 0f;
-                    });
-                }
-            }
-#endif
-        }
+//        /// <summary>
+//        /// 使指定的手柄的马达震动
+//        /// </summary>
+//        /// <param name="gamePadIndex"></param>
+//        /// <param name="vibration">震动幅度(马达速度)，在0到1之间</param>
+//        /// <param name="durationMs">震动持续时间(毫秒)</param>
+//        public static void MakeVibration(int gamePadIndex, float vibration, float durationMs)
+//        {//由于GLFW不支持手柄震动，所以暂时注释掉这段代码
+//#if !ANDROID
+//            if (IsConnected(gamePadIndex))
+//            {
+//                var gamePad = m_gamepads[gamePadIndex];
+//                foreach(var motor in gamePad.VibrationMotors)
+//                {
+//                    motor.Speed = vibration;
+//                    Task.Delay((int)durationMs).ContinueWith(_ =>
+//                    {
+//                        motor.Speed = 0f;
+//                    });
+//                }
+//            }
+//#endif
+//        }
         public static void Clear()
         {
             for (int i = 0; i < m_states.Length; i++)

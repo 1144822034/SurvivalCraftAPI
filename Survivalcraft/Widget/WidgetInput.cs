@@ -662,22 +662,22 @@ public class WidgetInput
 		}
 		return false;
 	}
-	/// <summary>
-	/// 使手柄的马达震动
-	/// </summary>
-	/// <param name="vibration">震动幅度(马达速度)，在0到1之间</param>
-	/// <param name="durationMs">震动持续时间(毫秒)</param>
-	public void MakeGamePadVibration(float vibration,float durationMs)
-	{
-		for(int i = 0; i < 4; i++)
-		{
-			if(((uint)Devices & (uint)(2048 << i)) != 0)
-			{
-				GamePad.MakeVibration(i,vibration,durationMs);
-				break;
-			}
-		}
-	}
+	///// <summary>
+	///// 使手柄的马达震动
+	///// </summary>
+	///// <param name="vibration">震动幅度(马达速度)，在0到1之间</param>
+	///// <param name="durationMs">震动持续时间(毫秒)</param>
+	//public void MakeGamePadVibration(float vibration,float durationMs)
+	//{
+	//	for(int i = 0; i < 4; i++)
+	//	{
+	//		if(((uint)Devices & (uint)(2048 << i)) != 0)
+	//		{
+	//			GamePad.MakeVibration(i,vibration,durationMs);
+	//			break;
+	//		}
+	//	}
+	//}
 
 
 	public Vector2 GetVrStickPosition(VrController controller, float deadZone = 0f)

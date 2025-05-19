@@ -715,7 +715,7 @@ namespace Game
 					}
 				}
 			}
-			if (m_cameraButtonWidget.IsClicked || playerInput.SwitchCameraMode /*|| input.IsKeyDownOnce(Engine.Input.Key.V) 这段会导致打字时点v触发相机*/|| input.IsPadButtonDownOnce(Engine.Input.GamePadButton.RightThumb) || input.IsPadButtonDownOnce(Engine.Input.GamePadButton.DPadDown))
+			if (m_cameraButtonWidget.IsClicked || playerInput.SwitchCameraMode)
 			{
 				ModsManager.HookAction("OnCameraChange", modLoader =>
 				{
