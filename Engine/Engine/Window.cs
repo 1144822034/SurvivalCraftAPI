@@ -442,6 +442,14 @@ namespace Engine
             {
                 m_state = State.Active;
                 Activity.EnableImmersiveMode();
+                if ((m_swapInterval ?? 1) == 0)
+                {
+                    Time.QueueFrameIndexDelayedExecution(10,
+                        () =>
+                        {
+                            m_view.GLContext?.SwapInterval(0);
+                        });
+                }
                 Activated?.Invoke();
             }
         }
