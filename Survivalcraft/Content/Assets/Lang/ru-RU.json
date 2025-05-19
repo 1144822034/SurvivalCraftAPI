@@ -2774,9 +2774,11 @@
             "6": "Загрузка по ссылке",
             "7": "По ссылке",
             "8": "Управление загруженным содержимым",
-            "9": "Управление",
+            "9": "Управление Содержимое",
             "10": "Access content created by other Original community members and registered for public access",
-            "11": "Original Community"
+            "11": "Original Community",
+            "12": "Управление загруженным Моды",
+            "13": "Управление Моды"
         },
         "ExternalContentScreen": {
             "1": "",

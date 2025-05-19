@@ -279,11 +279,11 @@ public class ManageContentScreen : Screen
 					}
 					else
 					{
-						ScreensManager.SwitchScreen("MainMenu");
+						ScreensManager.SwitchScreen("Content");
 					}
 				}));
 			}
-			else ScreensManager.SwitchScreen("MainMenu");
+			else ScreensManager.SwitchScreen("Content");
 		}
 	}
 

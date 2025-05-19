@@ -168,16 +168,18 @@ namespace Game
 					if (value == WindowMode.Borderless)
 					{
 						m_resizableWindowSize = Window.Size;
+						m_resizableWindowPosition = Window.Position;
 						Window.Position = Point2.Zero;
 						Window.Size = Window.ScreenSize;
 					}
-					else if (value == WindowMode.Resizable)
+					Window.WindowMode = value;
+					m_windowMode = value;
+					if (value == WindowMode.Resizable)
 					{
 						Window.Position = m_resizableWindowPosition;
 						Window.Size = m_resizableWindowSize;
 					}
-					Window.WindowMode = value;
-					m_windowMode = value;
+
 				}
 				
 				ModsManager.HookAction("WindowModeChanged", loader =>

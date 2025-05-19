@@ -2773,9 +2773,11 @@
             "6": "Descarga un archivo a través de un enlace web (usa copiar/pegar).",
             "7": "Por Enlace",
             "8": "Gestionar contenido descargado",
-            "9": "Gestionar",
+            "9": "Gestionar Contenido",
             "10": "Accede al contenido público creado por la comunidad Original.",
-            "11": "Comunidad Original"
+            "11": "Comunidad Original",
+            "12": "Gestionar mod descargado",
+            "13": "Gestionar Mod"
         },
         "ExternalContentScreen": {
             "1": "",

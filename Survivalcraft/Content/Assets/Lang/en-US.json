@@ -2801,9 +2801,11 @@
             "6": "Download a file directly from a web link, if you know it (it's best to use copy\/paste to enter links)",
             "7": "From Link",
             "8": "Manage downloaded content",
-            "9": "Manage",
+            "9": "Manage Content",
             "10": "Access content created by other Original community members and registered for public access",
-            "11": "Original Community"
+            "11": "Original Community",
+            "12": "Manage downloaded mod",
+            "13": "Manage Mod"
         },
         "ExternalContentScreen": {
             "1": "",

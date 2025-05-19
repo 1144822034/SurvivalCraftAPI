@@ -51,15 +51,11 @@ namespace Game
 			m_communityContentModeButton = Children.Find<ButtonWidget>("CommunityContentModeButton");
 			m_originalCommunityContentModeButton = Children.Find<ButtonWidget>("OriginalCommunityContentModeButton");
             m_deleteWorldNeedToTextButton = Children.Find<ButtonWidget>("DeleteWorldNeedToTextButton");
-            if(VersionsManager.PlatformString == "Android")
-            {
-	            m_windowModeButton.IsEnabled = false;
-            }
         }
 
 		public override void Enter(object[] parameters)
 		{
-			m_windowModeContainer.IsVisible = true;
+			m_windowModeContainer.IsVisible = VersionsManager.PlatformString != "Android";
 		}
 
 		public override void Update()

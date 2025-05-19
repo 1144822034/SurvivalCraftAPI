@@ -244,6 +244,8 @@ public class ModsManageContentScreen : Screen
 				}
 			}
 		};
+		//避免不在主线程加载此图片
+		_ = ContentManager.Get<Subtexture>("Textures/Gui/DefaultModsIcon");
 	}
 
 	public override void Enter(object[] parameters)
@@ -665,13 +667,13 @@ public class ModsManageContentScreen : Screen
 					}
 					if (result == MessageDialogButton.Button2)
 					{
-						ScreensManager.SwitchScreen("MainMenu");
+						ScreensManager.SwitchScreen("Content");
 					}
 				}));
 			}
 			else
 			{
-				ScreensManager.SwitchScreen("MainMenu");
+				ScreensManager.SwitchScreen("Content");
 			}
 		}
 	}

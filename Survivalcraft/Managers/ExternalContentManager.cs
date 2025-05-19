@@ -78,6 +78,7 @@ namespace Game {
 				ExternalContentType.BlocksTexture => ContentManager.Get<Subtexture>("Textures/Atlas/TexturePackIcon"),
 				ExternalContentType.CharacterSkin => ContentManager.Get<Subtexture>("Textures/Atlas/CharacterSkinIcon"),
 				ExternalContentType.FurniturePack => ContentManager.Get<Subtexture>("Textures/Atlas/FurnitureIcon"),
+				ExternalContentType.Mod => ContentManager.Get<Subtexture>("Textures/Gui/DefaultModsIcon"),
 				_ => ContentManager.Get<Subtexture>("Textures/Atlas/QuestionMarkIcon"),
 			};
 		}

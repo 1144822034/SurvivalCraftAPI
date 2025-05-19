@@ -18,6 +18,8 @@ namespace Game
 
 		public ButtonWidget m_manageButton;
 
+		public ButtonWidget m_manageModButton;
+
 		public bool m_isAdmin;
 		public ContentScreen()
 		{
@@ -28,6 +30,7 @@ namespace Game
 			m_originalCommunityContentButton = Children.Find<ButtonWidget>("OriginalCommunity");
 			m_linkButton = Children.Find<ButtonWidget>("Link");
 			m_manageButton = Children.Find<BevelledButtonWidget>("Manage");
+			m_manageModButton = Children.Find<BevelledButtonWidget>("ManageMod");
 		}
 
 		public override void Enter(object[] parameters)
@@ -86,7 +89,11 @@ namespace Game
 			}
 			if (m_manageButton.IsClicked)
 			{
-				OpenManageSelectDialog();
+				ScreensManager.SwitchScreen("ManageContent");
+			}
+			if(m_manageModButton.IsClicked)
+			{
+				ScreensManager.SwitchScreen("ModsManageContent");
 			}
 			if (Input.Back || Input.Cancel || Children.Find<ButtonWidget>("TopBar.Back").IsClicked)
 			{

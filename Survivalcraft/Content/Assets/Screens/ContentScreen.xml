@@ -14,7 +14,7 @@
 
       <StackPanelWidget Direction="Horizontal">
         <CanvasWidget Size="350, 90">
-          <LabelWidget Text="[ContentScreen:2]"  Color="128, 128, 128" WordWrap="true" HorizontalAlignment="Far" VerticalAlignment="Center" TextAnchor="VerticalCenter,HorizontalCenter" />
+          <LabelWidget Text="[ContentScreen:2]" FontScale="0.7" Color="128, 128, 128" WordWrap="true" HorizontalAlignment="Far" VerticalAlignment="Center" TextAnchor="VerticalCenter,HorizontalCenter" />
         </CanvasWidget>
         <CanvasWidget Size="20, 0" />
         <BevelledButtonWidget Name="External" Text="[ContentScreen:3]" Style="{Styles/ButtonStyle_310x60}" VerticalAlignment="Center" />
@@ -22,7 +22,7 @@
 
       <StackPanelWidget Direction="Horizontal">
         <CanvasWidget Size="350, 90">
-          <LabelWidget Text="[ContentScreen:4]"  Color="128, 128, 128" WordWrap="true" HorizontalAlignment="Far" VerticalAlignment="Center" TextAnchor="VerticalCenter,HorizontalCenter" />
+          <LabelWidget Text="[ContentScreen:4]" FontScale="0.7" Color="128, 128, 128" WordWrap="true" HorizontalAlignment="Far" VerticalAlignment="Center" TextAnchor="VerticalCenter,HorizontalCenter" />
         </CanvasWidget>
         <CanvasWidget Size="20, 0" />
         <BevelledButtonWidget Name="Community" Text="[ContentScreen:5]" Style="{Styles/ButtonStyle_310x60}" VerticalAlignment="Center" />
@@ -30,7 +30,7 @@
 
       <StackPanelWidget Direction="Horizontal">
         <CanvasWidget Size="350, 90">
-          <LabelWidget Text="[ContentScreen:10]"  Color="128, 128, 128" WordWrap="true" HorizontalAlignment="Far" VerticalAlignment="Center" TextAnchor="VerticalCenter,HorizontalCenter" />
+          <LabelWidget Text="[ContentScreen:10]" FontScale="0.7" Color="128, 128, 128" WordWrap="true" HorizontalAlignment="Far" VerticalAlignment="Center" TextAnchor="VerticalCenter,HorizontalCenter" />
         </CanvasWidget>
         <CanvasWidget Size="20, 0" />
         <BevelledButtonWidget Name="OriginalCommunity" Text="[ContentScreen:11]" Style="{Styles/ButtonStyle_310x60}" VerticalAlignment="Center" />
@@ -38,7 +38,7 @@
 
       <StackPanelWidget Direction="Horizontal">
         <CanvasWidget Size="350, 90">
-          <LabelWidget Text="[ContentScreen:6]"  Color="128, 128, 128" WordWrap="true" HorizontalAlignment="Far" VerticalAlignment="Center" TextAnchor="VerticalCenter, HorizontalCenter" />
+          <LabelWidget Text="[ContentScreen:6]" FontScale="0.7" Color="128, 128, 128" WordWrap="true" HorizontalAlignment="Far" VerticalAlignment="Center" TextAnchor="VerticalCenter, HorizontalCenter" />
         </CanvasWidget>
         <CanvasWidget Size="20, 0" />
         <BevelledButtonWidget Name="Link" Text="[ContentScreen:7]" Style="{Styles/ButtonStyle_310x60}" VerticalAlignment="Center" />
@@ -46,10 +46,18 @@
 
       <StackPanelWidget Direction="Horizontal">
         <CanvasWidget Size="350, 90">
-          <LabelWidget Text="[ContentScreen:8]"  Color="128, 128, 128" WordWrap="true" HorizontalAlignment="Far" VerticalAlignment="Center" TextAnchor="VerticalCenter, HorizontalCenter" />
+          <LabelWidget Text="[ContentScreen:8]" FontScale="0.7" Color="128, 128, 128" WordWrap="true" HorizontalAlignment="Far" VerticalAlignment="Center" TextAnchor="VerticalCenter, HorizontalCenter" />
         </CanvasWidget>
         <CanvasWidget Size="20, 0" />
         <BevelledButtonWidget Name="Manage" Text="[ContentScreen:9]" Style="{Styles/ButtonStyle_310x60}" VerticalAlignment="Center" />
+      </StackPanelWidget>
+
+      <StackPanelWidget Direction="Horizontal">
+        <CanvasWidget Size="350, 90">
+          <LabelWidget Text="[ContentScreen:12]" FontScale="0.7" Color="128, 128, 128" WordWrap="true" HorizontalAlignment="Far" VerticalAlignment="Center" TextAnchor="VerticalCenter, HorizontalCenter" />
+        </CanvasWidget>
+        <CanvasWidget Size="20, 0" />
+        <BevelledButtonWidget Name="ManageMod" Text="[ContentScreen:13]" Style="{Styles/ButtonStyle_310x60}" VerticalAlignment="Center" />
       </StackPanelWidget>
 
     </StackPanelWidget>

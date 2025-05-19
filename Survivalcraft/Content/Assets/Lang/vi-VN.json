@@ -2718,9 +2718,11 @@
       "6": "Tải xuống tệp trực tiếp từ liên kết web, nếu bạn biết (tốt nhất nên sử dụng sao chép/dán để nhập liên kết)",
       "7": "Từ Liên kết",
       "8": "Quản lý nội dung đã tải xuống",
-      "9": "Quản lý",
+      "9": "Quản lý Nội dung",
       "10": "Truy cập nội dung do các thành viên cộng đồng Gốc khác tạo và đăng ký quyền truy cập công cộng",
-      "11": "Cộng đồng Gốc"
+      "11": "Cộng đồng Gốc",
+      "12": "Quản lý mod đã tải xuống",
+      "13": "Quản lý Mod"
     },
     "ExternalContentScreen": {
       "1": "",
