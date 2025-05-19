@@ -2832,11 +2832,12 @@
             "4": "Settings",
             "5": "Help",
             "6": "Full Version...",
-            "7": "Copyright 2011-2025 Candy Rufus Games.",
-            "8": " Check ",
+            "7": "Copyright 2011-2025 Candy Rufus Games",
+            "8": "Check ",
             "9": "kaalus.wordpress.com",
             "10": " for more information.",
-            "11": "View Announcement"
+            "11": "View Announcement",
+            "12": "API Home Page: "
         },
         "ManageContentScreen": {
             "1": "Manage Content",

@@ -11,6 +11,8 @@ namespace Game
 
 		public bool m_textureLinearFilter;
 
+		public bool m_textureAnisotropicFilter;
+
 		public bool m_depthWriteEnabled;
 
 		public Vector2 Size
@@ -81,6 +83,21 @@ namespace Game
 				if (value != m_textureLinearFilter)
 				{
 					m_textureLinearFilter = value;
+				}
+			}
+		}
+
+		public bool TextureAnisotropicFilter
+		{
+			get
+			{
+				return m_textureAnisotropicFilter;
+			}
+			set
+			{
+				if (value != m_textureAnisotropicFilter)
+				{
+					m_textureAnisotropicFilter = value;
 				}
 			}
 		}
@@ -160,7 +177,15 @@ namespace Game
 			{
 				if (Subtexture != null)
 				{
-					SamplerState samplerState = (!TextureWrap) ? (TextureLinearFilter ? SamplerState.LinearClamp : SamplerState.PointClamp) : (TextureLinearFilter ? SamplerState.LinearWrap : SamplerState.PointWrap);
+					SamplerState samplerState;
+					if (TextureAnisotropicFilter)
+					{
+						samplerState = TextureWrap ? SamplerState.AnisotropicWrap : SamplerState.AnisotropicClamp;
+					}
+					else
+					{
+						samplerState = (!TextureWrap) ? (TextureLinearFilter ? SamplerState.LinearClamp : SamplerState.PointClamp) : (TextureLinearFilter ? SamplerState.LinearWrap : SamplerState.PointWrap);
+					}
 					TexturedBatch2D texturedBatch2D = dc.PrimitivesRenderer2D.TexturedBatch(Subtexture.Texture, useAlphaTest: true, 0, depthStencilState, null, null, samplerState);
 					Vector2 zero = default;
 					Vector2 texCoord;

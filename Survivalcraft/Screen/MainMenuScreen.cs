@@ -46,11 +46,6 @@ namespace Game
 			m_updateButtonIcon = Children.Find<RectangleWidget>("UpdateIcon");
 			m_needToUpdateIcon = ContentManager.Get<Subtexture>("Textures/Gui/NeedToUpdate");
 			m_dontNeedUpdateIcon = ContentManager.Get<Subtexture>("Textures/Gui/UpdateChecking");
-			string languageType = ModsManager.Configs.GetValueOrDefault("Language", "zh-CN");
-			bool isZhCn = languageType == "zh-CN";
-			m_showBulletinButton.IsVisible = isZhCn;
-			m_showBulletinButton.IsEnabled = isZhCn;
-			m_copyrightLabel.IsVisible = !isZhCn;
 			ModsManager.HookAction("OnMainMenuScreenCreated",loader => { loader.OnMainMenuScreenCreated(this,m_leftBottomBar,m_rightBottomBar); return false; });
 		}
 
@@ -155,12 +150,6 @@ namespace Game
 			if (Children.Find<ButtonWidget>("Buy").IsClicked)
 			{
 				MarketplaceManager.ShowMarketplace();
-			}
-			if (Children.Find<ButtonWidget>("ResourcesManagement").IsClicked)
-			{
-				ScreensManager.m_screens.TryGetValue("Content",out Screen screen);
-				ContentScreen contentScreen = screen as ContentScreen;
-				contentScreen.OpenManageSelectDialog();
 			}
 			if (m_showBulletinButton.IsClicked)
 			{
