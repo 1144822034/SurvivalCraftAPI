@@ -5,6 +5,8 @@ namespace Game
 {
 	public class PanoramaWidget : Widget
 	{
+		public static string TexturePath = "Textures/Gui/Panorama";
+
 		public Vector2 m_position;
 
 		public float m_timeOffset;
@@ -17,7 +19,7 @@ namespace Game
 
 		public PanoramaWidget()
 		{
-			Texture = ContentManager.Get<Texture2D>("Textures/Gui/Panorama");
+			Texture = ContentManager.Get<Texture2D>(TexturePath);
 			m_timeOffset = new Random().Float(0f, 1000f);
 		}
 

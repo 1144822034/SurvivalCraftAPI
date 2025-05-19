@@ -12,27 +12,28 @@
 
       <CanvasWidget Size="0, 8" />
 
-      <UniformSpacingPanelWidget Direction="Horizontal" Margin="10, 0">
-        <StackPanelWidget HorizontalAlignment="Near">
+      <StackPanelWidget Direction="Horizontal">
+        <StackPanelWidget Margin="10, 0">
           <LabelWidget Name="Order" Text="[CommunityContentScreen:2]"  VerticalAlignment="Center" ClampToBounds="true"/>
           <CanvasWidget Size="10, 0"/>
           <BevelledButtonWidget Name="ChangeOrder" Text="[CommunityContentScreen:3]" Style="{Styles/ButtonStyle_70x60}" VerticalAlignment="Center"/>
         </StackPanelWidget>
-        <StackPanelWidget Direction="Horizontal" HorizontalAlignment="Center" Margin="-40,0">
-          <BevelledButtonWidget Name="SearchType" Text="[CommunityContentScreen:10]" Size="100,60" VerticalAlignment="Far"/>
-          <CanvasWidget Size="240, 60">
+          <StackPanelWidget Margin="10, 0">
+              <LabelWidget Name="Filter" Text="[CommunityContentScreen:4]"  VerticalAlignment="Center"/>
+              <CanvasWidget Size="10, 0"/>
+              <BevelledButtonWidget Name="ChangeFilter" Text="[CommunityContentScreen:5]" Style="{Styles/ButtonStyle_70x60}" VerticalAlignment="Center"/>
+          </StackPanelWidget>
+        <StackPanelWidget Direction="Horizontal" Margin="10, 0">
+          <CanvasWidget VerticalAlignment="Center" Size="Infinity, 50" Margin="0, 5" >
             <BevelledRectangleWidget Style="{Styles/TextBoxArea}" />
-            <LabelWidget VerticalAlignment="Center" Name="placeholder" Text="[CommunityContentScreen:9]"  Margin="10,0"/>
-            <TextBoxWidget Size="240, 60" Name="key" VerticalAlignment="Center" Margin="10,0"/>
+            <LabelWidget HorizontalAlignment="Center" VerticalAlignment="Center" Name="placeholder" Text="[CommunityContentScreen:9]" Color="96, 96, 96"/>
+            <TextBoxWidget Size="Infinity, 60" Name="key" VerticalAlignment="Center" Margin="10,0"/>
+            <LinkWidget Name="ClearSearchLink" Text="[OriginalCommunityContentScreen:7]" Color="64, 192, 64" HorizontalAlignment="Far" VerticalAlignment="Center" DropShadow="true" Margin="10, 0" />
           </CanvasWidget>
-          <BevelledButtonWidget Name="Search" Text="[CommunityContentScreen:10]" Style="{Styles/ButtonStyle_70x60}" VerticalAlignment="Far"/>
+          <BevelledButtonWidget Name="Search" Text="[CommunityContentScreen:10]" Style="{Styles/ButtonStyle_70x60}" VerticalAlignment="Center"/>
+          <BevelledButtonWidget Name="SearchType" Text="[CommunityContentScreen:10]" Size="100,60" VerticalAlignment="Center"/>
         </StackPanelWidget>
-        <StackPanelWidget HorizontalAlignment="Far">
-          <LabelWidget Name="Filter" Text="[CommunityContentScreen:4]"  VerticalAlignment="Center"/>
-          <CanvasWidget Size="10, 0"/>
-          <BevelledButtonWidget Name="ChangeFilter" Text="[CommunityContentScreen:5]" Style="{Styles/ButtonStyle_70x60}" VerticalAlignment="Center"/>
-        </StackPanelWidget>
-      </UniformSpacingPanelWidget>
+      </StackPanelWidget>
 
       <CanvasWidget Size="0, 8" />
 
@@ -55,7 +56,7 @@
         <BevelledButtonWidget Name="MoreOptions" Style="{Styles/ButtonStyle_70x60}" Text="[CommunityContentScreen:8]"/>
       </StackPanelWidget>
 
-      <CanvasWidget Size="0, 8" />
+      <CanvasWidget Size="0, 5" />
 
     </StackPanelWidget>
     

@@ -237,6 +237,11 @@ namespace Game
 				StartTime = Time.RealTime + delay
 			};
 		}
+		public virtual void DisplaySmallMessage(string text, Color color, bool blinking, bool playNotificationSound)
+		{
+			MessageWidget.Message message = new(text,color,blinking,1f);
+			DisplaySmallMessage(message, playNotificationSound);
+		}
 		public virtual void DisplaySmallMessage(string text, Color color, bool blinking, bool playNotificationSound, float fontScale=1f)
 		{
 			MessageWidget.Message message = new(text,color,blinking,fontScale); 

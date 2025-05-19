@@ -10,10 +10,10 @@
 
 		<StackPanelWidget Direction="Vertical" HorizontalAlignment="Center">
 
-			<LabelWidget Name="ModsContentLabel" Text=""  Color="128, 128, 128" HorizontalAlignment="Center" Margin="0, 10" />
+			<LabelWidget Name="ModsContentLabel" Text="" Color="128, 128, 128" HorizontalAlignment="Center" Margin="15, 10" />
 
 			<CanvasWidget Margin="15, 0">
-				<RectangleWidget FillColor="0, 0, 0, 192" OutlineColor="128, 128, 128, 128" />
+				<BevelledRectangleWidget Style="{Styles/Area}" />
 				<ListPanelWidget Name="ModsContentList" Direction="Vertical" Margin="3, 3" ItemSize="64" SelectionColor="10, 70, 0, 90"/>
 			</CanvasWidget>
 

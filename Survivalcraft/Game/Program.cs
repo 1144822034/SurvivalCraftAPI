@@ -123,10 +123,11 @@ namespace Game
 		{
 			if (Time.FrameIndex < 0)
 			{
-				Display.Clear(Vector4.Zero, 1f);
+				Display.Clear(Color.White, 1f);
 			}
 			else if (Time.FrameIndex == 0)
 			{
+				Display.Clear(Color.White, 1f);
 				Initialize();
 			}
 			else
@@ -238,6 +239,10 @@ namespace Game
 						ScreensManager.Draw();
 						PerformanceManager.Draw();
 						ScreenCaptureManager.Run();
+					}
+					else
+					{
+						Display.Clear(Color.White, 1f);
 					}
 				}
 				else

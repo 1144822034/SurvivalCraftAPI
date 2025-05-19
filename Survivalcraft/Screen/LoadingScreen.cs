@@ -86,7 +86,6 @@ namespace Game
 			RectangleWidget rectangle2 = new() { FillColor = Color.White, OutlineColor = Color.Transparent, Size = new Vector2(80f, 50f), VerticalAlignment = WidgetAlignment.Far, HorizontalAlignment = WidgetAlignment.Far, Margin = new Vector2(10f) };
 			rectangle2.Subtexture = ContentManager.Get<Subtexture>("Textures/Gui/EngineLogo");
 			BusyBarWidget busyBar = new() { VerticalAlignment = WidgetAlignment.Far, HorizontalAlignment = WidgetAlignment.Center, Margin = new Vector2(0, 40) };
-			Canvas.AddChildren(Background);
 			Canvas.AddChildren(rectangle1);
 			Canvas.AddChildren(rectangle2);
 			Canvas.AddChildren(busyBar);

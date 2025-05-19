@@ -45,9 +45,9 @@
 
       </StackPanelWidget>
     
-      <StackPanelWidget Direction="Vertical" VerticalAlignment="Far" HorizontalAlignment="Center" IsHitTestVisible="false">
+      <StackPanelWidget Name="BottomWidgetsContainer" Direction="Vertical" VerticalAlignment="Far" HorizontalAlignment="Center" IsHitTestVisible="false">
         <MessageWidget Name="Message" HorizontalAlignment="Center" Margin="140, 6" IsHitTestVisible="false"/>
-        <StackPanelWidget Direction="Horizontal" HorizontalAlignment="Center" Margin="0, 2">
+        <StackPanelWidget Name="BottomBarsContainer" Direction="Horizontal" HorizontalAlignment="Center" Margin="0, 2">
           <ValueBarWidget Name="HealthBar" LayoutDirection="Horizontal" Margin="8, 0" VerticalAlignment="Center" BarsCount="10" Spacing="-1" BarBlending="false" HalfBars="true" LitBarColor="0, 0, 0" UnlitBarColor="64, 64, 64, 255" BarSize="15, 16" BarSubtexture="{Textures/Atlas/HealthBar}" TextureLinearFilter="true"/>
           <ValueBarWidget Name="TemperatureBar" LayoutDirection="Horizontal" Margin="8, 0" VerticalAlignment="Far" BarsCount="1" LitBarColor="255, 255, 255" BarSize="50, 14" TextureLinearFilter="true" Value="1"/>
           <LabelWidget Name="LevelLabel" TextAnchor="HorizontalCenter" Margin="8, 0" FontScale="0.6" VerticalAlignment="Center"  DropShadow="true" Color="255, 255, 255"/>

@@ -38,6 +38,7 @@ namespace Game
 		public ButtonWidget m_searchTypeButton;
 		public TextBoxWidget m_inputKey;
 		public LabelWidget m_placeHolder;
+		public LinkWidget m_clearSearchLink;
 
 		public object m_filter;
 
@@ -73,6 +74,7 @@ namespace Game
 			m_moreOptionsButton = Children.Find<ButtonWidget>("MoreOptions");
 			m_inputKey = Children.Find<TextBoxWidget>("key");
 			m_placeHolder = Children.Find<LabelWidget>("placeholder");
+			m_clearSearchLink = Children.Find<LinkWidget>("ClearSearchLink");
 			m_searchKey = Children.Find<ButtonWidget>("Search");
 			m_searchTypeButton = Children.Find<ButtonWidget>("SearchType");
 			m_searchType = SearchType.ByName;
@@ -155,6 +157,7 @@ namespace Game
 		public override void Update()
 		{
 			m_placeHolder.IsVisible = string.IsNullOrEmpty(m_inputKey.Text);
+			m_clearSearchLink.IsVisible = !string.IsNullOrEmpty(m_inputKey.Text) || m_inputKey.HasFocus;
 			m_actionButton.IsVisible = m_isAdmin || m_isOwn;
 			m_action2Button.IsVisible = m_isAdmin || m_isOwn;
 			if (!m_isCNLanguageType)
@@ -231,6 +234,11 @@ namespace Game
 					m_isOwn = item is string str && !string.IsNullOrEmpty(str);
 					PopulateList(null, true);
 				}));
+			}
+			if (m_clearSearchLink.IsClicked)
+			{
+				m_inputKey.Text = string.Empty;
+				PopulateList(null);
 			}
 			if (m_downloadButton.IsClicked && communityContentEntry != null)
 			{
