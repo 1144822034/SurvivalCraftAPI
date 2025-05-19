@@ -31,27 +31,36 @@ namespace Game
 		}
 		private List<Action> LoadingActoins = [];
 		private List<Action> ModLoadingActoins = [];
-		private CanvasWidget Canvas = new();
+		private CanvasWidget Canvas = new(){ Size = new Vector2(float.PositiveInfinity) };
 		private RectangleWidget Background = new() { FillColor = SettingsManager.DisplayLog ? Color.Black : Color.White, OutlineThickness = 0f, DepthWriteEnabled = true };
-		private static ListPanelWidget LogList = new() { Direction = LayoutDirection.Vertical, PlayClickSound = false };
+		private static ListPanelWidget LogList;
 		public static bool m_isContentLoaded = false;
 		public const string fName = "LoadingScreen";
 		static LoadingScreen()
 		{
-			LogList.ItemWidgetFactory = (obj) =>
+			if (SettingsManager.DisplayLog)
 			{
-				if(obj is LogItem logItem)
-				{
-                    CanvasWidget canvasWidget = new() { Size = new Vector2(Display.Viewport.Width, 40), Margin = new Vector2(0, 2), HorizontalAlignment = WidgetAlignment.Near };
-                    FontTextWidget fontTextWidget = new() { FontScale = 0.6f, Text = logItem.Message, Color = GetColor(logItem.LogType), VerticalAlignment = WidgetAlignment.Center, HorizontalAlignment = WidgetAlignment.Near };
-                    canvasWidget.Children.Add(fontTextWidget);
-                    canvasWidget.IsVisible = SettingsManager.DisplayLog;
-                    LogList.IsEnabled = SettingsManager.DisplayLog;
-                    return canvasWidget;
-                }
-				return null;
-			};
-			LogList.ItemSize = 30;
+				LogList = new() { Direction = LayoutDirection.Vertical, PlayClickSound = false };
+				LogList.ItemWidgetFactory = (obj) => {
+					if(obj is LogItem logItem)
+					{
+						CanvasWidget canvasWidget = new() { Size = new Vector2(Display.Viewport.Width,40),Margin = new Vector2(0,2),HorizontalAlignment = WidgetAlignment.Near };
+						FontTextWidget fontTextWidget = new()
+						{
+							FontScale = 0.6f,
+							Text = logItem.Message,
+							Color = GetColor(logItem.LogType),
+							VerticalAlignment = WidgetAlignment.Center,
+							HorizontalAlignment = WidgetAlignment.Near
+						};
+						canvasWidget.Children.Add(fontTextWidget);
+						canvasWidget.IsVisible = true;
+						return canvasWidget;
+					}
+					return null;
+				};
+				LogList.ItemSize = 30;
+			}
 		}
 		public static Color GetColor(LogType type)
 		{
@@ -66,10 +75,12 @@ namespace Game
 		}
 		public LoadingScreen()
 		{
-			Canvas.Size = new Vector2(float.PositiveInfinity);
-			Canvas.AddChildren(Background);
-			Canvas.AddChildren(LogList);
-			AddChildren(Canvas);
+			if(SettingsManager.DisplayLog)
+			{
+				Canvas.AddChildren(Background);
+				Canvas.AddChildren(LogList);
+				AddChildren(Canvas);
+			}
 			Info("Initializing Mods Manager. Api Version: " + ModsManager.APIVersionString);
 		}
 		public void ContentLoaded()
@@ -86,10 +97,10 @@ namespace Game
 			RectangleWidget rectangle2 = new() { FillColor = Color.White, OutlineColor = Color.Transparent, Size = new Vector2(80f, 50f), VerticalAlignment = WidgetAlignment.Far, HorizontalAlignment = WidgetAlignment.Far, Margin = new Vector2(10f) };
 			rectangle2.Subtexture = ContentManager.Get<Subtexture>("Textures/Gui/EngineLogo");
 			BusyBarWidget busyBar = new() { VerticalAlignment = WidgetAlignment.Far, HorizontalAlignment = WidgetAlignment.Center, Margin = new Vector2(0, 40) };
+			Canvas.AddChildren(Background);
 			Canvas.AddChildren(rectangle1);
 			Canvas.AddChildren(rectangle2);
 			Canvas.AddChildren(busyBar);
-			Canvas.AddChildren(LogList);
 			AddChildren(Canvas);
 			m_isContentLoaded = true;
 			Task.Run(
@@ -119,17 +130,19 @@ namespace Game
 		{
 			Dispatcher.Dispatch(delegate
 			{
-				LogItem item = new(type, mesg);
-				LogList.AddItem(item);
-				switch (type)
+				switch(type)
 				{
 					case LogType.Info:
 					case LogType.Advice: Log.Information(mesg); break;
 					case LogType.Error: Log.Error(mesg); break;
 					case LogType.Warning: Log.Warning(mesg); break;
-					default: break;
 				}
-				LogList.ScrollToItem(item);
+				if (SettingsManager.DisplayLog)
+				{
+					LogItem item = new(type,mesg);
+					LogList.AddItem(item);
+					LogList.ScrollToItem(item);
+				}
 			});
 		}
 		private void InitActions()
@@ -537,7 +550,7 @@ namespace Game
 		}
 		public override void Leave()
 		{
-			LogList.ClearItems();
+			LogList?.ClearItems();
 			Window.PresentationInterval = SettingsManager.PresentationInterval;
 			ContentManager.Dispose("Textures/Gui/CandyRufusLogo");
 			ContentManager.Dispose("Textures/Gui/EngineLogo");
