@@ -40,8 +40,8 @@ public static class ModsManager
 	public static string WorldsDirectoryName = DocPath+"/Worlds";
 #endif
 #if ANDROID
-	public static string ExternalPath { get; } = EngineActivity.BasePath;
-	public static string DocPath => EngineActivity.BasePath;
+	public static string ExternalPath = EngineActivity.BasePath;
+	public static string DocPath = EngineActivity.BasePath;
 	public static string WorldsDirectoryName = ExternalPath + "/Worlds";
 #endif
 	public static string ProcessModListPath = ExternalPath + "/ProcessModLists";
