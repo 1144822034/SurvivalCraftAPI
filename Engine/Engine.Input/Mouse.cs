@@ -76,7 +76,7 @@ namespace Engine.Input
             m_mouse = Window.m_inputContext.Mice[0];
             m_mouse.MouseDown += MouseDownHandler;
             m_mouse.MouseUp += MouseUpHandler;
-            m_mouse.MouseMove += MouseMoveHandler;
+            //m_mouse.MouseMove += MouseMoveHandler;
             m_mouse.Scroll += MouseWheelHandler;
 #endif
 		}
@@ -115,6 +115,8 @@ namespace Engine.Input
 #else
 			if (Window.IsActive)
 			{
+                Point2 position = new ((int)m_mouse.Position.X, (int)m_mouse.Position.Y);
+                ProcessMouseMove(position);
                 if (IsMouseVisible)
                 {
                     m_mouse.Cursor.CursorMode = CursorMode.Normal;
@@ -124,7 +126,6 @@ namespace Engine.Input
                 else
                 {
                     m_mouse.Cursor.CursorMode = CursorMode.Disabled;
-                    Point2 position = new ((int)m_mouse.Position.X, (int)m_mouse.Position.Y);
                     if (m_lastMousePosition.HasValue)
                     {
                         MouseMovement = new Point2(position.X - m_lastMousePosition.Value.X, position.Y - m_lastMousePosition.Value.Y);

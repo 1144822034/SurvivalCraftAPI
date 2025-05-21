@@ -165,12 +165,18 @@ namespace Game
 			{
 				if (value != m_windowMode)
 				{
-					if (value == WindowMode.Borderless)
+					if(value == WindowMode.Borderless)
 					{
 						m_resizableWindowSize = Window.Size;
 						m_resizableWindowPosition = Window.Position;
 						Window.Position = Point2.Zero;
 						Window.Size = Window.ScreenSize;
+					}
+					else if(value == WindowMode.Fullscreen
+						&& m_windowMode != WindowMode.Borderless)
+					{
+						m_resizableWindowSize = Window.Size;
+						m_resizableWindowPosition = Window.Position;
 					}
 					Window.WindowMode = value;
 					m_windowMode = value;
@@ -777,6 +783,10 @@ namespace Game
 					}
 				}
 				settingsValuesDictionary.Save(xElement);
+				if(!Storage.DirectoryExists(ModsManager.DocPath))
+				{
+					Storage.CreateDirectory(ModsManager.DocPath);
+				}
 				//保存
 				using (Stream stream = Storage.OpenFile(ModsManager.SettingPath, OpenFileMode.Create))
 				{
