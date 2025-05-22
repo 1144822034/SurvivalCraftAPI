@@ -38,6 +38,7 @@ namespace Game
 		public double? m_playerDeathTime;
 
 		public double m_terrainWaitStartTime;
+		public double TerrainMaxWaitTime { get; set; } = 15;
 
 		public SpawnDialog m_spawnDialog;
 
@@ -223,6 +224,10 @@ namespace Game
 				{
 					m_stateMachine.TransitionTo("PrepareSpawn");
 				}
+				ModsManager.HookAction("PlayerDataFirstUpdate",loader => {
+					loader.PlayerDataFirstUpdate(this);
+					return false;
+				});
 			}, null);
 			m_stateMachine.AddState("PrepareSpawn", delegate
 			{
@@ -277,7 +282,7 @@ namespace Game
 				{
 					float updateProgress2 = m_subsystemTerrain.TerrainUpdater.GetUpdateProgress(PlayerIndex, 0f, 64f);
 					UpdateSpawnDialog(null, null, 0.5f * updateProgress2, resetProgress: false);
-					if (!(updateProgress2 < 1f) || !(Time.FrameStartTime - m_terrainWaitStartTime < 15.0))
+					if (!(updateProgress2 < 1f) || !(Time.FrameStartTime - m_terrainWaitStartTime < TerrainMaxWaitTime))
 					{
 						switch (m_spawnMode)
 						{

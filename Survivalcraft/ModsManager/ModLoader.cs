@@ -1887,5 +1887,14 @@ namespace Game
 		public virtual void ModifyLogColor(string text, ref Color color)
 		{
 		}
+
+		/// <summary>
+		/// PlayerData首次更新时执行
+		/// </summary>
+		/// <param name="playerData"></param>
+		public virtual void PlayerDataFirstUpdate(PlayerData playerData)
+		{
+
+		}
 	}
 }
