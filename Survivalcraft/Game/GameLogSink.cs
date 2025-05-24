@@ -13,6 +13,8 @@ namespace Game
 
 		public static StreamWriter m_writer;
 
+		public static string errorOfInstantiation;
+
 		public const string fName = "GameLogSink";
 
 		public GameLogSink()
@@ -58,9 +60,11 @@ namespace Game
 				Console.Title = "Logs of Survivalcraft API";
 				Engine.Log.RemoveAllLogSinks();
 				Engine.Log.AddLogSink(new ConsoleLogSink());
-				Engine.Log.Information("Error creating GameLogSink, and a console window for viewing logs is created. Reason: {0}", ex.Message);
+				errorOfInstantiation = $"Error creating GameLogSink, and a console window for viewing logs is created. Reason: {ex.Message}";
+				Engine.Log.Information(errorOfInstantiation);
 #else
-				Engine.Log.Error("Error creating GameLogSink. Reason: {0}", ex.Message);
+				errorOfInstantiation = $"Error creating GameLogSink. Reason: {ex.Message}"
+				Engine.Log.Error(errorOfinstantiation);
 #endif
 			}
 		}
@@ -89,7 +93,7 @@ namespace Game
 		{
 			if (m_stream == null)
 			{
-				return [LanguageControl.Get(fName, "1")];
+				return [errorOfInstantiation, LanguageControl.Get(fName, "1")];
 			}
 			lock (m_stream)
 			{
