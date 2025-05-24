@@ -63,8 +63,8 @@ namespace Game
 				errorOfInstantiation = $"Error creating GameLogSink, and a console window for viewing logs is created. Reason: {ex.Message}";
 				Engine.Log.Information(errorOfInstantiation);
 #else
-				errorOfInstantiation = $"Error creating GameLogSink. Reason: {ex.Message}"
-				Engine.Log.Error(errorOfinstantiation);
+				errorOfInstantiation = $"Error creating GameLogSink. Reason: {ex.Message}";
+				Engine.Log.Error(errorOfInstantiation);
 #endif
 			}
 		}
