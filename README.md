@@ -40,9 +40,9 @@ SCAPI1.8已跟进2.4原版，建议换到1.8x
      
      ```xml
      <ItemGroup>
-       <PackageReference Include="SurvivalcraftAPI.Engine" Version="1.8.0.0"/>
-       <PackageReference Include="SurvivalcraftAPI.EntitySystem" Version="1.8.0.0"/>
-       <PackageReference Include="SurvivalcraftAPI.Survivalcraft" Version="1.8.0.0"/>
+       <PackageReference Include="SurvivalcraftAPI.Engine" Version="1.8.1.1"/>
+       <PackageReference Include="SurvivalcraftAPI.EntitySystem" Version="1.8.1.1"/>
+       <PackageReference Include="SurvivalcraftAPI.Survivalcraft" Version="1.8.1.1"/>
      </ItemGroup>
      ```
 
