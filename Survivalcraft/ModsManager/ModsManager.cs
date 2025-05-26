@@ -292,23 +292,39 @@ public static class ModsManager
 	public static void LoadConfigs()
 	{
 		//加载Config
-		if(Storage.FileExists(ConfigsPath))
+		try
 		{
-			using(Stream stream = Storage.OpenFile(ConfigsPath,OpenFileMode.Read))
+			if(Storage.FileExists(ConfigsPath))
 			{
-				XElement xElement = XmlUtils.LoadXmlFromStream(stream, null, throwOnError: true);
-				LoadConfigsFromXml(xElement);
+				using(Stream stream = Storage.OpenFile(ConfigsPath,OpenFileMode.Read))
+				{
+					XElement xElement = XmlUtils.LoadXmlFromStream(stream,null,throwOnError: true);
+					LoadConfigsFromXml(xElement);
+				}
 			}
+		}
+		catch(Exception e)
+		{
+			Log.Error($"Load configs failed. Reason: {e}");
+			ConfigLoaded = false;
 		}
 	}
 	public static void LoadConfigsFromXml(XElement xElement)
 	{
-		if (xElement.Name != "Configs") return;
-		foreach (var c in xElement.Attributes())
+		try
 		{
-			if (!Configs.ContainsKey(c.Name.LocalName)) SetConfig(c.Name.LocalName, c.Value);
+			if (xElement.Name != "Configs") return;
+			foreach (var c in xElement.Attributes())
+			{
+				if (!Configs.ContainsKey(c.Name.LocalName)) SetConfig(c.Name.LocalName, c.Value);
+			}
+			ConfigLoaded = true;
 		}
-		ConfigLoaded = true;
+		catch(Exception e)
+		{
+			Log.Error($"Load configs failed. Reason: {e}");
+			ConfigLoaded = false;
+		}
 	}
 
 	public static void LoadModSettings(XElement xElement)
