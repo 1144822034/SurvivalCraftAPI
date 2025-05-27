@@ -1,3 +1,4 @@
+using Engine;
 using System;
 using System.IO;
 using System.Threading;
@@ -93,20 +94,27 @@ namespace Game
 
 		public void Upload(string path, Stream stream, CancellableProgress progress, Action<string> success, Action<Exception> failure)
 		{
-			//var saveFileDialog1 = new SaveFileDialog();
-			try
+			ThreadPool.QueueUserWorkItem(delegate
 			{
-				FileStream fileStream = null;
-				string nPath = Path.Combine(LocalPath, path);
-				fileStream = !File.Exists(nPath) ? File.Create(nPath) : File.OpenWrite(nPath);
-				stream.CopyTo(fileStream);
-				fileStream.Close();
-				success(null);
-			}
-			catch (Exception e)
-			{
-				failure(e);
-			}
+				try
+				{
+					using (FileStream destination = new FileStream(Path.Combine(LocalPath, path), FileMode.Create, FileAccess.Write, FileShare.None))
+					{
+						stream.CopyTo(destination);
+					}
+					Dispatcher.Dispatch(delegate
+					{
+						success(null);
+					});
+				}
+				catch (Exception ex)
+				{
+					Dispatcher.Dispatch(delegate
+					{
+						failure(ex);
+					});
+				}
+			});
 		}
         public ExternalContentEntry GetDirectoryEntry(string internalPath, bool scanContents)
 		{
