@@ -1894,7 +1894,10 @@ namespace Game
 		/// <param name="playerData"></param>
 		public virtual void PlayerDataFirstUpdate(PlayerData playerData)
 		{
+		}
 
+		public virtual void RecalculateCameraProjection(Camera camera, ref Matrix projectionMatrix)
+		{
 		}
 	}
 }

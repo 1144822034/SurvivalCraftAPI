@@ -228,6 +228,7 @@ namespace Game
 		/// <returns></returns>
 		public virtual Matrix CalculateBaseProjectionMatrix()
 		{
+			Matrix result;
 			if(!Eye.HasValue)
 			{
 				float num = 80f * SettingsManager.ViewAngle;
@@ -244,9 +245,17 @@ namespace Game
 					num4 *= 175f / num5;
 				}
 				//猜测，将世界坐标转换为屏幕坐标的矩阵
-				return Matrix.CreatePerspectiveFieldOfView(MathUtils.DegToRad(num4),num3,0.1f,2048f); //参数1视野Y宽度，参数2纵横比，参数3近平面，参数4远平面
+				result = Matrix.CreatePerspectiveFieldOfView(MathUtils.DegToRad(num4),num3,0.1f,2048f); //参数1视野Y宽度，参数2纵横比，参数3近平面，参数4远平面
 			}
-			return VrManager.GetProjectionMatrix(base.Eye.Value, 0.1f, 2048f);
+			else
+			{
+				result = VrManager.GetProjectionMatrix(base.Eye.Value, 0.1f, 2048f);
+			}
+			ModsManager.HookAction("RecalculateCameraProjection",loader => {
+				loader.RecalculateCameraProjection(this, ref result);
+				return false;
+			});
+			return result;
 		}
 	}
 }
