@@ -348,18 +348,25 @@ namespace Game
 				HideSpawnDialog();
 			}, delegate
 			{
-				if (ComponentPlayer == null)
+				if(ComponentPlayer == null)
 				{
 					m_stateMachine.TransitionTo("PrepareSpawn");
 				}
-				else if (m_playerDeathTime.HasValue)
+				else if(m_playerDeathTime.HasValue)
 				{
 					m_stateMachine.TransitionTo("PlayerDead");
 				}
-				else if (ComponentPlayer.ComponentHealth.Health <= 0f)
+				else
 				{
-					m_playerDeathTime = Time.RealTime;
+					lock(ComponentPlayer.ComponentHealth)
+					{
+						if(ComponentPlayer.ComponentHealth.Health <= 0f)
+						{
+							m_playerDeathTime = Time.RealTime;
+						}
+					}
 				}
+				
 			}, null);
 			m_stateMachine.AddState("PlayerDead", delegate
 			{
