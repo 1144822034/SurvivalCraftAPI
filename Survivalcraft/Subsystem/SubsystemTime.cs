@@ -53,6 +53,8 @@ namespace Game
 
 		public float m_gameTimeFactor = 1f;
 
+		public float BasicGameTimeFactor { get; set; } = 1f;
+
 		public float? m_gameTimeFactorSleep = 60f;
 
 		public List<DelayedExecutionRequest> m_delayedExecutionsRequests = [];
@@ -151,7 +153,7 @@ namespace Game
 				FixedTimeStep = null;
 				m_subsystemUpdate.UpdatesPerFrame = 1;
 				if(m_gameTimeFactorSleep != null)
-					m_gameTimeFactor = 1f;
+					m_gameTimeFactor = BasicGameTimeFactor;
 			}
 			bool flag = true;
 			foreach (ComponentPlayer componentPlayer2 in m_subsystemPlayers.ComponentPlayers)
@@ -168,7 +170,7 @@ namespace Game
 			}
 			else if (GameTimeFactor == GameMenuDialogTimeFactor)
 			{
-				GameTimeFactor = 1f;
+				GameTimeFactor = BasicGameTimeFactor;
 			}
 		}
 
