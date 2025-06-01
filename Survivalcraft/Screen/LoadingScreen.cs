@@ -404,6 +404,10 @@ namespace Game
 					});
 			});
 			AddLoadAction(delegate
+			{//初始化按键兼容组
+				KeyCompatibleGroupsManager.Initialize();
+			});
+			AddLoadAction(delegate
 			{
 				ScreensManager.SwitchScreen("MainMenu");
 			});

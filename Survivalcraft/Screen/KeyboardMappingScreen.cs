@@ -9,19 +9,21 @@ namespace Game
 {
 	public class KeyboardMappingScreen : Screen
 	{
-		public const string fName = "KeyboardMappingScreen";
-		public const string keyName = "KeyboardMappingScreenKeys";
 		public Widget KeyInfoWidget(Object item)
 		{
 			XElement node = ContentManager.Get<XElement>("Widgets/KeyboardMappingItem");
+			node.SetAttributeValue("Name","KeyboardMappingItem_" + item.ToString());
 			var containerWidget = (ContainerWidget)LoadWidget(this,node,null);
 			LabelWidget labelWidget = containerWidget.Children.Find<LabelWidget>("Name");
 			LabelWidget labelWidget2 = containerWidget.Children.Find<LabelWidget>("BoundKey");
-			labelWidget.Text = LanguageControl.Get(fName, item.ToString());
+			labelWidget.Text = LanguageControl.Get(fName,item.ToString());
 			labelWidget2.Text = HumanReadableConverter.ConvertToString(SettingsManager.GetKeyboardMapping(item.ToString()));
 			m_widgetsByString[item.ToString()] = containerWidget;
 			return containerWidget;
 		}
+
+		public const string fName = "KeyboardMappingScreen";
+		public const string keyName = "KeyboardMappingScreenKeys";
 
 		public ListPanelWidget m_keysList;
 		public BevelledButtonWidget m_resetButton;
@@ -40,14 +42,7 @@ namespace Game
 			m_keysList.ScrollSpeed = 0f;
 			m_keysList.ItemClicked += (item) =>
 			{
-				if(m_keysList.SelectedItem == item)
-				{
-					m_keysList.SelectedItem = null;
-				}
-				else
-				{
-					m_keysList.SelectedItem = item;
-				}
+				m_keysList.SelectedItem = m_keysList.SelectedItem == item ? null : item;
 			};
 			m_resetButton = Children.Find<BevelledButtonWidget>("Reset");
 			m_setKeyButton = Children.Find<BevelledButtonWidget>("SetKey");
@@ -79,7 +74,7 @@ namespace Game
 					labelWidget.Text = text;
 					bool hasConflict = false;
 					if(m_conflicts.TryGetValue(value,out List<string> valueList))
-						hasConflict = HasConflict(valueList);
+						hasConflict = KeyCompatibleGroupsManager.HasConflict(valueList);
 					labelWidget.Color = hasConflict ? Color.Red : Color.White;
 				}
 			}
@@ -178,23 +173,6 @@ namespace Game
 				if(!value.Contains(name))
 					value.Add(name);
 			}
-		}
-		public static bool HasConflict(List<string> list)
-		{
-			int count = list.Count;
-			if(count == 2)
-			{//有且仅有原版的这些重复按键实际上是不冲突的，针对性地处理一下
-				string key1 = list[0], key2 = list[1];
-				if((key1 == "Jump" && key2 == "MoveUp") || (key2 == "Jump" && key1 == "MoveUp"))
-					return false;
-				if((key1 == "ToggleCrouch" && key2 == "MoveDown") || (key2 == "ToggleCrouch" && key1 == "MoveDown"))
-					return false;
-				if((key1 == "Dig" && key2 == "Hit") || (key2 == "Dig" && key1 == "Hit"))
-					return false;
-				if((key1 == "Interact" && key2 == "Aim") || (key2 == "Interact" && key1 == "Aim"))
-					return false;
-			}
-			return count > 1;
 		}
 	}
 }

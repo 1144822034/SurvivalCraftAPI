@@ -13,6 +13,7 @@ namespace Game
     {
         public override void __ModInitialize()
         {
+			ModsManager.RegisterHook("InitKeyCompatibleGroups", this);
 			ModsManager.RegisterHook("OnCameraListInit", this);
 			ModsManager.RegisterHook("ManageCameras", this);
 			ModsManager.RegisterHook("OnCameraChange", this);
@@ -25,6 +26,16 @@ namespace Game
             
             TextBoxWidget.ShowCandidatesWindow = SettingsManager.FullScreenMode;
         }
+		public override void InitKeyCompatibleGroups()
+		{//示例：添加按键兼容组，同组内的按键在按键绑定界面不会显示冲突(但功能上仍可能存在冲突，请自行安排)
+			//第一个参数为组名；后续参数为按键名
+			KeyCompatibleGroupsManager.AddKeyToCompatibleGroup("Group_Movement","Jump","MoveUp");
+			KeyCompatibleGroupsManager.AddKeyToCompatibleGroup("Group_Crouch","ToggleCrouch","MoveDown");
+			KeyCompatibleGroupsManager.AddKeyToCompatibleGroup("Group_Action","Dig","Hit");
+			KeyCompatibleGroupsManager.AddKeyToCompatibleGroup("Group_Interact","Interact","Aim");
+			//若需要添加一个使用鼠标左键但与挖掘、攻击兼容的按键Fire，将其添加至对应的组Group_Action即可。代码如下：
+			//KeyCompatibleGroupsManager.AddKeyToCompatibleGroup("Group_Action","Fire");
+		}
 		public override void OnCameraListInit(ValuesDictionary cameraList)
 		{//示例：向摄像机列表设置中添加调试视角。若此处不添加，则设置里不会显示该视角的选项，并且在游戏中通过切换视角按键也无法切换到该视角
 			cameraList.SetValue("Game.DebugCamera", 4);//4为调试视角的默认序号。其它摄像机的序号详见SettingsManager.InitializeCameraManageSettings。这些序号只作为默认设置

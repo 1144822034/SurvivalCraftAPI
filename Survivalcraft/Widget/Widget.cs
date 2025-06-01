@@ -432,6 +432,11 @@ namespace Game
 			get;
 			set;
 		}
+		public object ExtraData
+		{
+			get;
+			set;
+		}
 
 		public virtual bool IsVisible
 		{
@@ -630,6 +635,7 @@ namespace Game
 		{
 			LoadProperties(eventsTarget, node);
 			LoadChildren(eventsTarget, node);
+			ModsManager.HookAction("OnWidgetContentsLoaded",loader => { loader.OnWidgetContentsLoaded(this); return false; });
 		}
 
 		public void LoadProperties(object eventsTarget, XElement node)
