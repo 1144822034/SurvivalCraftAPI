@@ -197,11 +197,18 @@ namespace TemplatesDatabase
 
 		public void ApplyOverrides(XElement overridesNode)
 		{
+			ApplyOverrides(overridesNode, overrideExistOnly: false);
+		}
+		public void ApplyOverrides(XElement overridesNode, bool overrideExistOnly)
+		{
 			foreach (XElement item in overridesNode.Elements())
 			{
 				if (item.Name == "Value")
 				{
 					string attributeValue = XmlUtils.GetAttributeValue<string>(item, "Name");
+					if (overrideExistOnly && !m_dictionary.ContainsKey(attributeValue))
+						continue;
+
 					string attributeValue2 = XmlUtils.GetAttributeValue<string>(item, "Type", null);
 					Type type;
 					if (attributeValue2 == null)
@@ -227,13 +234,16 @@ namespace TemplatesDatabase
 						throw new InvalidOperationException($"Unrecognized element \"{item.Name}\" in values dictionary overrides XML.");
 					}
 					string attributeValue4 = XmlUtils.GetAttributeValue<string>(item, "Name");
+					if (overrideExistOnly && !m_dictionary.ContainsKey(attributeValue4))
+						continue;
+
 					ValuesDictionary valuesDictionary = GetValue<object>(attributeValue4, null) as ValuesDictionary;
 					if (valuesDictionary == null)
 					{
 						valuesDictionary = [];
 						SetValue(attributeValue4, valuesDictionary);
 					}
-					valuesDictionary.ApplyOverrides(item);
+					valuesDictionary.ApplyOverrides(item, overrideExistOnly);
 				}
 			}
 		}

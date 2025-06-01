@@ -92,10 +92,10 @@ namespace Game
 						{//加载模组保存的键位映射、相机设置
 							XElement keyboardMapping = setting.Element("KeyboardMapping");
 							if(keyboardMapping != null)
-								modKeyboardSettings.ApplyOverrides(keyboardMapping);
+								modKeyboardSettings.ApplyOverrides(keyboardMapping,overrideExistOnly: true);
 							XElement cameraList = setting.Element("CameraList");
 							if(cameraList != null)
-								modCameraSettings.ApplyOverrides(cameraList);
+								modCameraSettings.ApplyOverrides(cameraList,overrideExistOnly: true);
 						}
 					}
 					if(!ModKeyboardMapSettings.TryAdd(packageName,modKeyboardSettings))

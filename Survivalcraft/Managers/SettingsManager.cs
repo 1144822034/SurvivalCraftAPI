@@ -616,17 +616,17 @@ namespace Game
 		}
 		public static object GetKeyboardMapping(string keyName,bool throwIfNotFound = true)
 		{
-			if(KeyboardMappingSettings.ContainsKey(keyName))
+			if(KeyboardMappingSettings.TryGetValue(keyName,out object result))
 			{//原版设置
-				return KeyboardMappingSettings[keyName];
+				return result;
 			}
 			else
 			{
 				foreach(var item in ModSettingsManager.ModKeyboardMapSettings.Values)
 				{//模组设置
-					if(item.ContainsKey(keyName))
+					if(item.TryGetValue(keyName,out object result2))
 					{
-						return item[keyName];
+						return result2;
 					}
 				}
 			}
@@ -652,21 +652,21 @@ namespace Game
 		}
 		public static int GetCameraManageSetting(string keyName,bool throwIfNotFound = true)
 		{
-			if(CameraManageSettings.ContainsKey(keyName))
+			if(CameraManageSettings.TryGetValue(keyName,out object result))
 			{//原版设置
-				return Convert.ToInt32(CameraManageSettings[keyName]);
+				return Convert.ToInt32(result);
 			}
 			else
 			{
 				foreach(var item in ModSettingsManager.ModCameraManageSettings.Values)
 				{//模组设置
-					if(item.ContainsKey(keyName))
+					if(item.TryGetValue(keyName,out object result2))
 					{
-						return Convert.ToInt32(item[keyName]);
+						return Convert.ToInt32(result2);
 					}
 				}
 			}
-			return throwIfNotFound ? throw new ArgumentException($"There's no camera manage setting named \"{keyName}\"!") : -1;
+			return throwIfNotFound ? throw new ArgumentException($"There's no camera setting named \"{keyName}\"!") : -1;
 		}
 		public static void SetCameraManageSetting(string keyName,int value)
 		{
