@@ -90,7 +90,7 @@ namespace Game
 					delegate (MessageDialogButton button)
 					{
 						if(button == MessageDialogButton.Button1)
-						{//ÖØÉèËùÓĞ°´¼ü
+						{//é‡è®¾æ‰€æœ‰æŒ‰é”®
 							ResetAll();
 						}
 					});

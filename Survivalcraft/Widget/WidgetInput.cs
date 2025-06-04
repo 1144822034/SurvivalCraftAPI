@@ -493,7 +493,7 @@ public class WidgetInput
 		return false;
 	}
 	/// <summary>
-	/// ¸ù¾İ°´¼üÓ³ÉäÃû³ÆÅĞ¶Ï°´¼üÊÇ·ñ°´ÏÂ
+	/// æ ¹æ®æŒ‰é”®æ˜ å°„åç§°åˆ¤æ–­æŒ‰é”®æ˜¯å¦æŒ‰ä¸‹
 	/// </summary>
 	/// <param name="mappingName"></param>
 	/// <returns></returns>
@@ -511,7 +511,7 @@ public class WidgetInput
 		return false;
 	}
 	/// <summary>
-	/// ¸ù¾İ°´¼üÓ³ÉäÃû³ÆÅĞ¶Ï°´¼üÊÇ·ñ°´ÏÂ
+	/// æ ¹æ®æŒ‰é”®æ˜ å°„åç§°åˆ¤æ–­æŒ‰é”®æ˜¯å¦æŒ‰ä¸‹
 	/// </summary>
 	/// <param name="mappingName"></param>
 	/// <returns></returns>
@@ -663,10 +663,10 @@ public class WidgetInput
 		return false;
 	}
 	///// <summary>
-	///// Ê¹ÊÖ±úµÄÂí´ïÕğ¶¯
+	///// ä½¿æ‰‹æŸ„çš„é©¬è¾¾éœ‡åŠ¨
 	///// </summary>
-	///// <param name="vibration">Õğ¶¯·ù¶È(Âí´ïËÙ¶È)£¬ÔÚ0µ½1Ö®¼ä</param>
-	///// <param name="durationMs">Õğ¶¯³ÖĞøÊ±¼ä(ºÁÃë)</param>
+	///// <param name="vibration">éœ‡åŠ¨å¹…åº¦(é©¬è¾¾é€Ÿåº¦)ï¼Œåœ¨0åˆ°1ä¹‹é—´</param>
+	///// <param name="durationMs">éœ‡åŠ¨æŒç»­æ—¶é—´(æ¯«ç§’)</param>
 	//public void MakeGamePadVibration(float vibration,float durationMs)
 	//{
 	//	for(int i = 0; i < 4; i++)

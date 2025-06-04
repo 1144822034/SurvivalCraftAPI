@@ -31,11 +31,11 @@ namespace Game
 		public double m_nextUpdateTime;
 		public float LowHealthToEscape { get; set; }
 		/// <summary>
-		/// ÊÜÔëÉùÓ°Ïì
+		/// Â â€¹â€˜Ãâ€¦Ë˜â€âˆÅ“Ã
 		/// </summary>
 		public bool AffectedByNoise;
 		/// <summary>
-		/// ³á°òÉÈ¶¯ÉùÒô
+		/// â‰¥Â·âˆÃšâ€¦Â»âˆ‚Ã˜â€¦Ë˜â€œÃ™
 		/// </summary>
 		public bool FanSound;
 

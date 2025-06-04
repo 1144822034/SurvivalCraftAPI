@@ -408,7 +408,7 @@ namespace Game
 				{
 					m_pantingSound.Stop();
 				}
-				//玩家耐力低时，会沉入水中
+				//鐜╁鑰愬姏浣庢椂锛屼細娌夊叆姘翠腑
 				float num6 = MathUtils.Saturate(3f * (0.33f - Stamina));
 				if (num6 > 0f && SimplexNoise.Noise((float)MathUtils.Remainder(Time.RealTime, 1000.0)) < num6)
 				{

@@ -15,8 +15,8 @@ namespace Game
 		public static List<CraftingRecipe> Recipes => m_recipes;
 		public static string fName = "CraftingRecipesManager";
 		/// <summary>
-		/// ÆôÓÃµÈ¼¶ÏŞÖÆ
-		/// ModÔÚ³õÊ¼»¯Ê±£¬ÉèÖÃÎªfalse¿ÉÒÔÈÃÎïÆ·ºÏ³É²»ÊÜÍæ¼ÒµÈ¼¶ÏŞÖÆ
+		/// å¯ç”¨ç­‰çº§é™åˆ¶
+		/// Modåœ¨åˆå§‹åŒ–æ—¶ï¼Œè®¾ç½®ä¸ºfalseå¯ä»¥è®©ç‰©å“åˆæˆä¸å—ç©å®¶ç­‰çº§é™åˆ¶
 		/// </summary>
 		public static bool EnableLevelRestrictions = true;
 		public static void Initialize()

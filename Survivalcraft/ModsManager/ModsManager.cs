@@ -1,4 +1,4 @@
-﻿// Game.ModsManager
+// Game.ModsManager
 
 using Engine;
 using Game;

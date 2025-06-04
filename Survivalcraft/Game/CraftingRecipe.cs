@@ -23,7 +23,7 @@ namespace Game
 		public string Message;
 
 		/// <summary>
-		/// 在配方表中的显示顺序，DisplayOrder越小，配方越靠前
+		/// 鍦ㄩ厤鏂硅〃涓殑鏄剧ず椤哄簭锛孌isplayOrder瓒婂皬锛岄厤鏂硅秺闈犲墠
 		/// </summary>
 		public int DisplayOrder = 0;
 	}

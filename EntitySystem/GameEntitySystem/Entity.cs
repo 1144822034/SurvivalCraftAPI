@@ -146,13 +146,13 @@ namespace GameEntitySystem
 					}
 					component.Initialize(this, item);
 					var isModComponent = type.Namespace != "Game";
-					//Èç¹ûÊÇÔ­°æµÄ×é¼ş£¬Ôò°´Ô­À´Ë³Ğò£¬·ñÔòÍùºó
+					//å¦‚æœæ˜¯åŸç‰ˆçš„ç»„ä»¶ï¼Œåˆ™æŒ‰åŸæ¥é¡ºåºï¼Œå¦åˆ™å¾€å
 					int adjustedLoadOrder = isModComponent ? loadOrder + 10000 : loadOrder;
 					list.Add(new KeyValuePair<int,Component>(adjustedLoadOrder,component));
 				}
 			}
 			EntityComponentsInitialized.Invoke(this, list);
-			// °´µ÷ÕûºóµÄ LoadOrder ÅÅĞò
+			// æŒ‰è°ƒæ•´åçš„ LoadOrder æ’åº
 			list.Sort((KeyValuePair<int,Component> x,KeyValuePair<int,Component> y) => x.Key - y.Key);
 			m_components = new List<Component>(list.Select(x => x.Value));
 		}

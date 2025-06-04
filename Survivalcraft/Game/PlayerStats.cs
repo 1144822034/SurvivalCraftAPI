@@ -59,8 +59,8 @@ namespace Game
 			}
 
 			/// <summary>
-			/// ģ�������Ҫ���ӻ�ʹ�ö�����Ϣ�����������ValuesDictionary��дԪ��
-			/// ĿǰAPI�ݲ�֧��ֱ�ӱ��浽�浵������Ϣ�У�����ģ�����б������������Ϣ���Լ���Subsystem��
+			/// 模组如果需要添加或使用额外信息，可以在这个ValuesDictionary读写元素
+			/// 目前API暂不支持直接保存到存档死亡信息中，建议模组自行保存额外死亡信息到自己的Subsystem中
 			/// </summary>
 			public ValuesDictionary ValuesDictionaryForMods = new ValuesDictionary();
 		}
@@ -190,8 +190,8 @@ namespace Game
 
 		public ReadOnlyList<DeathRecord> DeathRecords => new(m_deathRecords);
 		/// <summary>
-		/// ģ�������Ҫ���ӻ�ʹ�ö�����Ϣ�����������ValuesDictionary��дԪ��
-		/// ĿǰAPI�ݲ�֧��ֱ�ӱ��浽�浵�У�����ģ�����б��������Ϣ���Լ���Subsystem��
+		/// 模组如果需要添加或使用额外信息，可以在这个ValuesDictionary读写元素
+		/// 目前API暂不支持直接保存到存档中，建议模组自行保存额外信息到自己的Subsystem中
 		/// </summary>
 		public ValuesDictionary ValuesDictionaryForMods = new ValuesDictionary();
 

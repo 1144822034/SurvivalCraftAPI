@@ -95,7 +95,7 @@ namespace Game
 			}
 		}
 		/// <summary>
-		/// �����µ����ð�ť
+		/// 添加新的设置按钮
 		/// </summary>
 		/// <param name="button"></param>
 		/// <param name="onClicked"></param>
@@ -116,7 +116,7 @@ namespace Game
 		}
 
 		/// <summary>
-		/// �����µ����ð�ť��ʹ�ñ�׼�����ð�ť��ʽ������Ҫ�Զ�����ʽ��ʹ����һ������
+		/// 添加新的设置按钮。使用标准的设置按钮样式，若需要自定义样式请使用另一个重载
 		/// </summary>
 		/// <param name="text"></param>
 		/// <param name="onClicked"></param>

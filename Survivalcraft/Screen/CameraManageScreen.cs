@@ -63,7 +63,7 @@ namespace Game
 			int enabledCount = EnabledCamerasCount;
 			int selectedItemValue = string.IsNullOrEmpty(selectedCameraName) ? -2 : SettingsManager.GetCameraManageSetting(selectedCameraName);
 			m_enableButton.IsEnabled = !string.IsNullOrEmpty(selectedCameraName) && selectedItemValue < 0;
-			m_disableButton.IsEnabled = !string.IsNullOrEmpty(selectedCameraName) && selectedItemValue >= 0 && selectedCameraName != "Game.FppCamera" && enabledCount > 2;//ÖÁÉÙ±£Áô2¸öÉãÏñ»ú£¬µ±ÏÖ´æĞ¡ÓÚµÈÓÚ2¸öÊ±ÎŞ·¨µã»÷½ûÓÃ°´Å¥
+			m_disableButton.IsEnabled = !string.IsNullOrEmpty(selectedCameraName) && selectedItemValue >= 0 && selectedCameraName != "Game.FppCamera" && enabledCount > 2;//è‡³å°‘ä¿ç•™2ä¸ªæ‘„åƒæœºï¼Œå½“ç°å­˜å°äºç­‰äº2ä¸ªæ—¶æ— æ³•ç‚¹å‡»ç¦ç”¨æŒ‰é’®
 			m_upButton.IsEnabled = !string.IsNullOrEmpty(selectedCameraName) && selectedItemValue > 0;
 			m_downButton.IsEnabled = !string.IsNullOrEmpty(selectedCameraName) && selectedItemValue >= 0 && selectedItemValue < enabledCount - 1;
 			foreach(var key in m_widgetsByString.Keys)
@@ -76,19 +76,19 @@ namespace Game
 			}
 			if(m_disableButton.IsClicked)
 			{
-				SettingsManager.SetCameraManageSetting(selectedCameraName, -1);//-1±íÊ¾½ûÓÃ
+				SettingsManager.SetCameraManageSetting(selectedCameraName, -1);//-1è¡¨ç¤ºç¦ç”¨
 				RefreshList();
 			}
 			if(m_enableButton.IsClicked)
 			{
-				SettingsManager.SetCameraManageSetting(selectedCameraName, enabledCount);//½«½ûÓÃµÄÆôÓÃºó×Ô¶¯·ÅÔÚ×îºóÃæ
+				SettingsManager.SetCameraManageSetting(selectedCameraName, enabledCount);//å°†ç¦ç”¨çš„å¯ç”¨åè‡ªåŠ¨æ”¾åœ¨æœ€åé¢
 				RefreshList();
-				m_camerasList.SelectedIndex = ModSettingsManager.CombinedCameraManageSettings.Count - 1;//ÁĞ±í×Ô¶¯Ñ¡ÖĞ×îºóÒ»¸ö
+				m_camerasList.SelectedIndex = ModSettingsManager.CombinedCameraManageSettings.Count - 1;//åˆ—è¡¨è‡ªåŠ¨é€‰ä¸­æœ€åä¸€ä¸ª
 			}
 			if(m_upButton.IsClicked)
 			{
 				foreach(var item in ModSettingsManager.CombinedCameraManageSettings)
-				{//ÕÒµ½Ñ¡ÖĞÉãÏñ»úµÄÉÏÒ»¸ö²¢½«ÆäĞòºÅ½øĞĞÌæ»»
+				{//æ‰¾åˆ°é€‰ä¸­æ‘„åƒæœºçš„ä¸Šä¸€ä¸ªå¹¶å°†å…¶åºå·è¿›è¡Œæ›¿æ¢
 					string key = item.Key;
 					if(SettingsManager.GetCameraManageSetting(key) == selectedItemValue - 1)
 					{
@@ -99,12 +99,12 @@ namespace Game
 				SettingsManager.SetCameraManageSetting(selectedCameraName, selectedItemValue - 1);
 				int i = m_camerasList.SelectedIndex ?? 1;
 				RefreshList();
-				m_camerasList.SelectedIndex = i - 1;//Ë¢ĞÂÁĞ±íºóÖØĞÂÑ¡ÖĞ
+				m_camerasList.SelectedIndex = i - 1;//åˆ·æ–°åˆ—è¡¨åé‡æ–°é€‰ä¸­
 			}
 			if(m_downButton.IsClicked)
 			{
 				foreach(var item in ModSettingsManager.CombinedCameraManageSettings)
-				{//ÕÒµ½Ñ¡ÖĞÉãÏñ»úµÄÏÂÒ»¸ö²¢½«ÆäĞòºÅ½øĞĞÌæ»»
+				{//æ‰¾åˆ°é€‰ä¸­æ‘„åƒæœºçš„ä¸‹ä¸€ä¸ªå¹¶å°†å…¶åºå·è¿›è¡Œæ›¿æ¢
 					string key = item.Key;
 					if(SettingsManager.GetCameraManageSetting(key) == selectedItemValue + 1)
 					{
@@ -115,7 +115,7 @@ namespace Game
 				SettingsManager.SetCameraManageSetting(selectedCameraName,selectedItemValue + 1);
 				int i = m_camerasList.SelectedIndex ?? -1;
 				RefreshList();
-				m_camerasList.SelectedIndex = i + 1;//Ë¢ĞÂÁĞ±íºóÖØĞÂÑ¡ÖĞ
+				m_camerasList.SelectedIndex = i + 1;//åˆ·æ–°åˆ—è¡¨åé‡æ–°é€‰ä¸­
 			}
 			if(m_resetButton.IsClicked)
 			{
@@ -152,7 +152,7 @@ namespace Game
 				m_camerasList.AddItem(name);
 				int value = item.Value;
 				if(value >= 0)
-				{//Ë¢ĞÂÁĞ±íÊ±ÖØĞÂ°´Ë³Ğò·ÖÅäÖµ£¬±ÜÃâ³öÏÖ¿ÕÈ±
+				{//åˆ·æ–°åˆ—è¡¨æ—¶é‡æ–°æŒ‰é¡ºåºåˆ†é…å€¼ï¼Œé¿å…å‡ºç°ç©ºç¼º
 					SettingsManager.SetCameraManageSetting(name, num);
 					num++;
 				}

@@ -346,13 +346,13 @@ namespace Engine.Input
         }
 
 //        /// <summary>
-//        /// ʹָ�����ֱ���������
+//        /// 使指定的手柄的马达震动
 //        /// </summary>
 //        /// <param name="gamePadIndex"></param>
-//        /// <param name="vibration">�𶯷���(�����ٶ�)����0��1֮��</param>
-//        /// <param name="durationMs">�𶯳���ʱ��(����)</param>
+//        /// <param name="vibration">震动幅度(马达速度)，在0到1之间</param>
+//        /// <param name="durationMs">震动持续时间(毫秒)</param>
 //        public static void MakeVibration(int gamePadIndex, float vibration, float durationMs)
-//        {//����GLFW��֧���ֱ��𶯣�������ʱע�͵���δ���
+//        {//由于GLFW不支持手柄震动，所以暂时注释掉这段代码
 //#if !ANDROID
 //            if (IsConnected(gamePadIndex))
 //            {

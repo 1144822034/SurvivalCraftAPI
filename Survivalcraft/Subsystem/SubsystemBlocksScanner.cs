@@ -28,7 +28,7 @@ namespace Game
 
 		public SubsystemBlockBehaviors m_subsystemBlockBehaviors;
 		/// <summary>
-		/// Ã¿Ö¡»á½øĞĞ¶àÉÙxz¸ñµÄ·½¿é¼ì²é
+		/// æ¯å¸§ä¼šè¿›è¡Œå¤šå°‘xzæ ¼çš„æ–¹å—æ£€æŸ¥
 		/// </summary>
 		public float MaxShaftsToPollPerFrame = 500f;
 		public UpdateOrder UpdateOrder => UpdateOrder.BlocksScanner;

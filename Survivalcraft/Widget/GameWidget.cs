@@ -73,7 +73,7 @@ public class GameWidget : CanvasWidget
 			string name = item.Key;
 			int value = item.Value;
 			if(value >= 0)
-			{//Ë¢ĞÂÁĞ±íÊ±ÖØĞÂ°´Ë³Ğò·ÖÅäÖµ£¬±ÜÃâ³öÏÖ¿ÕÈ±
+			{//åˆ·æ–°åˆ—è¡¨æ—¶é‡æ–°æŒ‰é¡ºåºåˆ†é…å€¼ï¼Œé¿å…å‡ºç°ç©ºç¼º
 				SettingsManager.SetCameraManageSetting(name,num);
 				num++;
 			}
@@ -105,7 +105,7 @@ public class GameWidget : CanvasWidget
 	/// 
 	/// </summary>
 	/// <param name="type"></param>
-	/// <param name="isEnable">ÓÃÓÚÅĞ¶¨µ±Ç°ÉãÏñ»úÊÇ·ñ¿ÉÓÃ£¬±ÈÈçÔÚ·Ç´´ÔìÄ£Ê½ÖĞµ÷ÊÔÊÓ½Ç²»¿ÉÓÃ</param>
+	/// <param name="isEnable">ç”¨äºåˆ¤å®šå½“å‰æ‘„åƒæœºæ˜¯å¦å¯ç”¨ï¼Œæ¯”å¦‚åœ¨éåˆ›é€ æ¨¡å¼ä¸­è°ƒè¯•è§†è§’ä¸å¯ç”¨</param>
 	/// <param name="throwOnError"></param>
 	/// <returns></returns>
 	public Camera FindCamera(Type type, out bool isEnable, bool throwOnError = true)
@@ -117,10 +117,10 @@ public class GameWidget : CanvasWidget
 		return result;
 	}
 	/// <summary>
-	/// ´Ë·½·¨½¨ÒéÔÚModLoader.ManageCameras½Ó¿ÚÖĞÊ¹ÓÃ£¬±ÜÃâÖØ¸´Ìí¼Ó¡£ÈôÎŞĞè½áºÏÌõ¼şÅĞ¶ÏÉãÏñ»úÊÇ·ñ¿ÉÓÃ(±ÈÈçµ÷ÊÔÊÓ½Ç½ö´´ÔìÄ£Ê½¿ÉÓÃ)£¬ÔòisEnable¿É´«null
+	/// æ­¤æ–¹æ³•å»ºè®®åœ¨ModLoader.ManageCamerasæ¥å£ä¸­ä½¿ç”¨ï¼Œé¿å…é‡å¤æ·»åŠ ã€‚è‹¥æ— éœ€ç»“åˆæ¡ä»¶åˆ¤æ–­æ‘„åƒæœºæ˜¯å¦å¯ç”¨(æ¯”å¦‚è°ƒè¯•è§†è§’ä»…åˆ›é€ æ¨¡å¼å¯ç”¨)ï¼Œåˆ™isEnableå¯ä¼ null
 	/// </summary>
 	/// <param name="camera"></param>
-	/// <param name="isEnable">ÔÚFuncÖĞ½øĞĞÅĞ¶Ï£¬ÈôÊä³öfalse£¬Ôò±íÊ¾¸ÃÉãÏñ»úÄ¿Ç°²»¿ÉÓÃ</param>
+	/// <param name="isEnable">åœ¨Funcä¸­è¿›è¡Œåˆ¤æ–­ï¼Œè‹¥è¾“å‡ºfalseï¼Œåˆ™è¡¨ç¤ºè¯¥æ‘„åƒæœºç›®å‰ä¸å¯ç”¨</param>
 	public void AddCamera(Camera camera, Func<GameWidget,bool> isEnable = null)
 	{
 		if(camera == null)

@@ -15,7 +15,7 @@ namespace Game
 
 			public int MaxCount;
 			/// <summary>
-			/// 模组如果需要添加或使用额外信息，可以在这个ValuesDictionary读写元素
+			/// 妯＄粍濡傛灉闇�瑕佹坊鍔犳垨浣跨敤棰濆淇℃伅锛屽彲浠ュ湪杩欎釜ValuesDictionary璇诲啓鍏冪礌
 			/// </summary>
 			public ValuesDictionary ValuesDictionaryForMods = new ValuesDictionary();
 		}
