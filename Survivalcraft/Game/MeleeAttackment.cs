@@ -9,7 +9,7 @@ namespace Game
             : base(target, attacker, hitPoint, hitDirection, attackPower)
         {
             ComponentBody attackerBody = Attacker.FindComponent<ComponentBody>();
-            ComponentBody targetBody = Attacker.FindComponent<ComponentBody>();
+            ComponentBody targetBody = target.FindComponent<ComponentBody>();
             float num5 = (attackPower >= 2f) ? 1.25f : 1f;
             float num6 = MathF.Pow(attackerBody.Mass / targetBody.Mass, 0.5f);
             float x2 = num5 * num6;
