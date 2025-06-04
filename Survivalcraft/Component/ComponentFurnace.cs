@@ -28,7 +28,7 @@ namespace Game
 
 		public float SmeltSpeed = 0.15f;
 		/// <summary>
-		/// 熔炉不在冶炼时，冶炼进度倒退速率
+		/// 没有燃料时，冶炼进度倒退速率
 		/// </summary>
 		public float SmeltProgressReductionSpeed = float.PositiveInfinity;
 
@@ -43,73 +43,6 @@ namespace Game
 		/// </summary>
 		public float m_fuelEndTime;
 		public virtual float FireTimeRemaining => m_fireTimeRemaining;
-
-		#endregion
-
-		#region 1.8.1.1方法
-
-		public virtual bool UseFuel()
-		{
-			Point3 coordinates = m_componentBlockEntity.Coordinates;
-			Slot slot2 = m_slots[FuelSlotIndex];
-			if(slot2.Count > 0)
-			{
-				int num2 = Terrain.ExtractContents(slot2.Value);
-				Block block = BlocksManager.Blocks[num2];
-				if(block.GetExplosionPressure(slot2.Value) > 0f)
-				{
-					slot2.Count = 0;
-					m_subsystemExplosions.TryExplodeBlock(coordinates.X,coordinates.Y,coordinates.Z,slot2.Value);
-				}
-				else if(block.GetFuelHeatLevel(slot2.Value) > 0f)
-				{
-					slot2.Count--;
-					if(m_heatLevel == 0f) m_fuelEndTime = (float)m_subsystemGameInfo.TotalElapsedGameTime;
-					m_fuelEndTime = m_fuelEndTime + block.GetFuelFireDuration(slot2.Value) * FuelTimeEfficiency;
-					m_heatLevel = block.GetFuelHeatLevel(slot2.Value);
-					return true;
-				}
-			}
-			return false;
-		}
-
-		public virtual void UpdateSmeltingRecipe()
-		{
-			m_updateSmeltingRecipe = false;
-			float heatLevel = 0f;
-			if(m_heatLevel > 0f)
-			{
-				heatLevel = m_heatLevel;
-			}
-			else
-			{
-				Slot slot = m_slots[FuelSlotIndex];
-				if(slot.Count > 0)
-				{
-					int num = Terrain.ExtractContents(slot.Value);
-					heatLevel = BlocksManager.Blocks[num].GetFuelHeatLevel(slot.Value);
-				}
-			}
-			CraftingRecipe craftingRecipe = FindSmeltingRecipe(heatLevel);
-			if(craftingRecipe != m_smeltingRecipe)
-			{
-				m_smeltingRecipe = (craftingRecipe != null && craftingRecipe.ResultValue != 0) ? craftingRecipe : null;
-				m_smeltingProgress = 0f;
-				if(FireTimeRemaining <= 0 && m_smeltingRecipe != null) UseFuel();
-			}
-		}
-
-		public virtual void StopSmelting(bool resetProgress)
-		{
-			m_heatLevel = 0f;
-			m_fuelEndTime = 0f;
-			m_smeltingRecipe = null;
-			if(resetProgress) m_smeltingProgress = 0f;
-		}
-		public override void OnEntityRemoved()
-		{
-			m_subsystemParticles.RemoveParticleSystem(m_fireParticleSystem);
-		}
 
 		#endregion
 
@@ -164,8 +97,14 @@ namespace Game
 			return base.RemoveSlotItems(slotIndex, count);
 		}
 
+		public override void OnEntityRemoved()
+		{
+			m_subsystemParticles.RemoveParticleSystem(m_fireParticleSystem);
+		}
+
 		public void Update(float dt)
 		{
+			m_fuelEndTime = (float)(m_subsystemGameInfo.TotalElapsedGameTime + m_fireTimeRemaining);
 			Point3 coordinates = m_componentBlockEntity.Coordinates;
 			if (m_heatLevel > 0f)
 			{
@@ -177,61 +116,27 @@ namespace Game
 			}
 			if (m_updateSmeltingRecipe)
 			{
-				m_updateSmeltingRecipe = false;
-				float heatLevel = 0f;
-				if (m_heatLevel > 0f)
-				{
-					heatLevel = m_heatLevel;
-				}
-				else
-				{
-					Slot slot = m_slots[FuelSlotIndex];
-					if (slot.Count > 0)
-					{
-						int num = Terrain.ExtractContents(slot.Value);
-						heatLevel = BlocksManager.Blocks[num].GetFuelHeatLevel(slot.Value);
-					}
-				}
-				CraftingRecipe craftingRecipe = FindSmeltingRecipe(heatLevel);
-				if (craftingRecipe != m_smeltingRecipe)
-				{
-					m_smeltingRecipe = (craftingRecipe != null && craftingRecipe.ResultValue != 0) ? craftingRecipe : null;
-					m_smeltingProgress = 0f;
-				}
+				UpdateSmeltingRecipe();
 			}
-			if (m_smeltingRecipe == null)
+			if (m_smeltingRecipe == null)//没有配方，处理空烧
 			{
-				m_heatLevel = 0f;
-				m_fireTimeRemaining = 0f;
+				if(StopFuelWhenNoRecipeIsActive)
+				{
+					StopSmelting(true);
+				}
 			}
 			if (m_smeltingRecipe != null && m_fireTimeRemaining <= 0f)
 			{
-				Slot slot2 = m_slots[FuelSlotIndex];
-				if (slot2.Count > 0)
-				{
-					int num2 = Terrain.ExtractContents(slot2.Value);
-					Block block = BlocksManager.Blocks[num2];
-					if (block.GetExplosionPressure(slot2.Value) > 0f)
-					{
-						slot2.Count = 0;
-						m_subsystemExplosions.TryExplodeBlock(coordinates.X, coordinates.Y, coordinates.Z, slot2.Value);
-					}
-					else if (block.GetFuelHeatLevel(slot2.Value) > 0f)
-					{
-						slot2.Count--;
-						m_fireTimeRemaining = block.GetFuelFireDuration(slot2.Value);
-						m_heatLevel = block.GetFuelHeatLevel(slot2.Value);
-					}
-				}
+				UseFuel();
 			}
 			if (m_fireTimeRemaining <= 0f)
 			{
 				m_smeltingRecipe = null;
-				m_smeltingProgress = 0f;
+				m_smeltingProgress = MathUtils.Max(0, m_smeltingProgress - dt * SmeltProgressReductionSpeed);
 			}
 			if (m_smeltingRecipe != null)
 			{
-				m_smeltingProgress = MathUtils.Min(m_smeltingProgress + (0.15f * dt), 1f);
+				m_smeltingProgress = MathUtils.Min(m_smeltingProgress + (SmeltSpeed * dt), 1f);
 				if (m_smeltingProgress >= 1f)
 				{
 					for (int i = 0; i < m_furnaceSize; i++)
@@ -268,6 +173,69 @@ namespace Game
 					m_subsystemParticles.RemoveParticleSystem(m_fireParticleSystem);
 				m_componentBlockEntity.BlockValue = Terrain.ReplaceContents(cellValue,64);
 			}
+		}
+
+		/// <summary>
+		/// 更新配方逻辑
+		/// </summary>
+		public virtual void UpdateSmeltingRecipe()
+		{
+			m_updateSmeltingRecipe = false;
+			float heatLevel = 0f;
+			if (m_heatLevel > 0f)
+			{
+				heatLevel = m_heatLevel;
+			}
+			else
+			{
+				Slot slot = m_slots[FuelSlotIndex];
+				if (slot.Count > 0)
+				{
+					int num = Terrain.ExtractContents(slot.Value);
+					heatLevel = BlocksManager.Blocks[num].GetFuelHeatLevel(slot.Value);
+				}
+			}
+			CraftingRecipe craftingRecipe = FindSmeltingRecipe(heatLevel);
+			if (craftingRecipe != m_smeltingRecipe)
+			{
+				m_smeltingRecipe = (craftingRecipe != null && craftingRecipe.ResultValue != 0) ? craftingRecipe : null;
+				m_smeltingProgress = 0f;
+			}
+		}
+
+		/// <summary>
+		/// 使用燃料逻辑，目前返回值在API熔炉中无作用
+		/// </summary>
+		/// <returns>是否成功消耗燃料</returns>
+		public virtual bool UseFuel()
+		{
+			Point3 coordinates = m_componentBlockEntity.Coordinates;
+			Slot slot2 = m_slots[FuelSlotIndex];
+			if (slot2.Count > 0)
+			{
+				int num2 = Terrain.ExtractContents(slot2.Value);
+				Block block = BlocksManager.Blocks[num2];
+				if (block.GetExplosionPressure(slot2.Value) > 0f)
+				{
+					slot2.Count = 0;
+					m_subsystemExplosions.TryExplodeBlock(coordinates.X, coordinates.Y, coordinates.Z, slot2.Value);
+				}
+				else if (block.GetFuelHeatLevel(slot2.Value) > 0f)
+				{
+					slot2.Count--;
+					m_fireTimeRemaining = block.GetFuelFireDuration(slot2.Value) * FuelTimeEfficiency;
+					m_heatLevel = block.GetFuelHeatLevel(slot2.Value);
+					return true;
+				}
+			}
+			return false;
+		}
+
+		public virtual void StopSmelting(bool resetProgress)
+		{
+			m_heatLevel = 0f;
+			m_fireTimeRemaining = 0f;
+			if(resetProgress) m_smeltingProgress = 0f;
 		}
 
 		public override void Load(ValuesDictionary valuesDictionary, IdToEntityMap idToEntityMap)
