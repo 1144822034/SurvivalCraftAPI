@@ -14,11 +14,110 @@ namespace Game
 
 		public ComponentBlockEntity m_componentBlockEntity;
 
+		#region 1.8.1.1变量
+
+		public SubsystemGameInfo m_subsystemGameInfo;
+
+		public SubsystemTime m_subsystemTime;
+
+		public FireParticleSystem m_fireParticleSystem;
+
+		public SubsystemParticles m_subsystemParticles;
+
+		public bool StopFuelWhenNoRecipeIsActive = true;
+
+		public float SmeltSpeed = 0.15f;
+		/// <summary>
+		/// 熔炉不在冶炼时，冶炼进度倒退速率
+		/// </summary>
+		public float SmeltProgressReductionSpeed = float.PositiveInfinity;
+
+		/// <summary>
+		/// 使用燃料时，燃料实际补充的时间倍数
+		/// </summary>
+		public float FuelTimeEfficiency = 1f;
+
+		/// <summary>
+		/// 燃料耗尽时间
+		/// 开发时，注意这个不能改成{get;set;}形式，否则会出现mod兼容问题
+		/// </summary>
+		public float m_fuelEndTime;
+		public virtual float FireTimeRemaining => m_fireTimeRemaining;
+
+		#endregion
+
+		#region 1.8.1.1方法
+
+		public virtual bool UseFuel()
+		{
+			Point3 coordinates = m_componentBlockEntity.Coordinates;
+			Slot slot2 = m_slots[FuelSlotIndex];
+			if(slot2.Count > 0)
+			{
+				int num2 = Terrain.ExtractContents(slot2.Value);
+				Block block = BlocksManager.Blocks[num2];
+				if(block.GetExplosionPressure(slot2.Value) > 0f)
+				{
+					slot2.Count = 0;
+					m_subsystemExplosions.TryExplodeBlock(coordinates.X,coordinates.Y,coordinates.Z,slot2.Value);
+				}
+				else if(block.GetFuelHeatLevel(slot2.Value) > 0f)
+				{
+					slot2.Count--;
+					if(m_heatLevel == 0f) m_fuelEndTime = (float)m_subsystemGameInfo.TotalElapsedGameTime;
+					m_fuelEndTime = m_fuelEndTime + block.GetFuelFireDuration(slot2.Value) * FuelTimeEfficiency;
+					m_heatLevel = block.GetFuelHeatLevel(slot2.Value);
+					return true;
+				}
+			}
+			return false;
+		}
+
+		public virtual void UpdateSmeltingRecipe()
+		{
+			m_updateSmeltingRecipe = false;
+			float heatLevel = 0f;
+			if(m_heatLevel > 0f)
+			{
+				heatLevel = m_heatLevel;
+			}
+			else
+			{
+				Slot slot = m_slots[FuelSlotIndex];
+				if(slot.Count > 0)
+				{
+					int num = Terrain.ExtractContents(slot.Value);
+					heatLevel = BlocksManager.Blocks[num].GetFuelHeatLevel(slot.Value);
+				}
+			}
+			CraftingRecipe craftingRecipe = FindSmeltingRecipe(heatLevel);
+			if(craftingRecipe != m_smeltingRecipe)
+			{
+				m_smeltingRecipe = (craftingRecipe != null && craftingRecipe.ResultValue != 0) ? craftingRecipe : null;
+				m_smeltingProgress = 0f;
+				if(FireTimeRemaining <= 0 && m_smeltingRecipe != null) UseFuel();
+			}
+		}
+
+		public virtual void StopSmelting(bool resetProgress)
+		{
+			m_heatLevel = 0f;
+			m_fuelEndTime = 0f;
+			m_smeltingRecipe = null;
+			if(resetProgress) m_smeltingProgress = 0f;
+		}
+		public override void OnEntityRemoved()
+		{
+			m_subsystemParticles.RemoveParticleSystem(m_fireParticleSystem);
+		}
+
+		#endregion
+
 		public int m_furnaceSize;
 
 		public string[] m_matchedIngredients = new string[9];
 
-		public float m_fireTimeRemaining;
+		public virtual float m_fireTimeRemaining { get; set; }
 
 		public float m_heatLevel;
 
@@ -28,15 +127,15 @@ namespace Game
 
 		public float m_smeltingProgress;
 
-		public int RemainsSlotIndex => SlotsCount - 1;
+		public virtual int RemainsSlotIndex => SlotsCount - 1;
 
-		public int ResultSlotIndex => SlotsCount - 2;
+		public virtual int ResultSlotIndex => SlotsCount - 2;
 
-		public int FuelSlotIndex => SlotsCount - 3;
+		public virtual int FuelSlotIndex => SlotsCount - 3;
 
-		public float HeatLevel => m_heatLevel;
+		public virtual float HeatLevel => m_heatLevel;
 
-		public float SmeltingProgress => m_smeltingProgress;
+		public virtual float SmeltingProgress => m_smeltingProgress;
 
 		public UpdateOrder UpdateOrder => UpdateOrder.Default;
 
