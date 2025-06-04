@@ -1,4 +1,4 @@
-using Engine;
+﻿using Engine;
 using GameEntitySystem;
 using System;
 using System.Globalization;
@@ -14,7 +14,7 @@ namespace Game
 
 		public ComponentBlockEntity m_componentBlockEntity;
 
-		#region 1.8.1.1����
+		#region 1.8.1.1变量
 
 		public SubsystemGameInfo m_subsystemGameInfo;
 
@@ -28,25 +28,25 @@ namespace Game
 
 		public float SmeltSpeed = 0.15f;
 		/// <summary>
-		/// ��¯����ұ��ʱ��ұ�����ȵ�������
+		/// 熔炉不在冶炼时，冶炼进度倒退速率
 		/// </summary>
 		public float SmeltProgressReductionSpeed = float.PositiveInfinity;
 
 		/// <summary>
-		/// ʹ��ȼ��ʱ��ȼ��ʵ�ʲ����ʱ�䱶��
+		/// 使用燃料时，燃料实际补充的时间倍数
 		/// </summary>
 		public float FuelTimeEfficiency = 1f;
 
 		/// <summary>
-		/// ȼ�Ϻľ�ʱ��
-		/// ����ʱ��ע��������ܸĳ�{get;set;}��ʽ����������mod��������
+		/// 燃料耗尽时间
+		/// 开发时，注意这个不能改成{get;set;}形式，否则会出现mod兼容问题
 		/// </summary>
 		public float m_fuelEndTime;
 		public virtual float FireTimeRemaining => m_fireTimeRemaining;
 
 		#endregion
 
-		#region 1.8.1.1����
+		#region 1.8.1.1方法
 
 		public virtual bool UseFuel()
 		{
