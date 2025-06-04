@@ -253,11 +253,20 @@ namespace Game
 					m_updateSmeltingRecipe = true;
 				}
 			}
-			TerrainChunk chunkAtCell = m_subsystemTerrain.Terrain.GetChunkAtCell(coordinates.X, coordinates.Z);
-			if (chunkAtCell != null && chunkAtCell.State == TerrainChunkState.Valid)
+			//根据熔炉燃烧状态调整方块值
+			int cellValue = m_componentBlockEntity.BlockValue;
+			if(m_heatLevel > 0f)
 			{
-				int cellValue = m_subsystemTerrain.Terrain.GetCellValue(coordinates.X, coordinates.Y, coordinates.Z);
-				m_subsystemTerrain.ChangeCell(coordinates.X, coordinates.Y, coordinates.Z, Terrain.ReplaceContents(cellValue, (m_heatLevel > 0f) ? 65 : 64));
+				m_fireParticleSystem.m_position = m_componentBlockEntity.Position + new Vector3(0.5f,0.2f,0.5f);
+				if(Terrain.ExtractContents(cellValue) == 64)
+					m_subsystemParticles.AddParticleSystem(m_fireParticleSystem);
+				m_componentBlockEntity.BlockValue = Terrain.ReplaceContents(cellValue,65);
+			}
+			else
+			{
+				if(Terrain.ExtractContents(cellValue) == 65)
+					m_subsystemParticles.RemoveParticleSystem(m_fireParticleSystem);
+				m_componentBlockEntity.BlockValue = Terrain.ReplaceContents(cellValue,64);
 			}
 		}
 
@@ -267,14 +276,14 @@ namespace Game
 			m_subsystemTerrain = Project.FindSubsystem<SubsystemTerrain>(throwOnError: true);
 			m_subsystemExplosions = Project.FindSubsystem<SubsystemExplosions>(throwOnError: true);
 			m_componentBlockEntity = Entity.FindComponent<ComponentBlockEntity>(throwOnError: true);
+			m_subsystemGameInfo = Project.FindSubsystem<SubsystemGameInfo>(throwOnError: true);
+			m_subsystemParticles = Project.FindSubsystem<SubsystemParticles>(throwOnError: true);
+			m_subsystemTime = Project.FindSubsystem<SubsystemTime>(throwOnError: true);
 			m_furnaceSize = SlotsCount - 3;
-			if (m_furnaceSize < 1 || m_furnaceSize > 3)
-			{
-				throw new InvalidOperationException("Invalid furnace size.");
-			}
 			m_fireTimeRemaining = valuesDictionary.GetValue<float>("FireTimeRemaining");
 			m_heatLevel = valuesDictionary.GetValue<float>("HeatLevel");
 			m_updateSmeltingRecipe = true;
+			m_fireParticleSystem = new FireParticleSystem(m_componentBlockEntity.Position + new Vector3(0.5f,0.2f,0.5f),0.15f,16f);
 		}
 
 		public override void Save(ValuesDictionary valuesDictionary, EntityToIdMap entityToIdMap)
