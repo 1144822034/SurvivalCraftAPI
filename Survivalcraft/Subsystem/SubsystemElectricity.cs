@@ -546,9 +546,10 @@ namespace Game
 					string updateName = String.Format("{0, -" + (maxLength + 5).ToString() + "}", item.FullName);
 					bool updateTimeExists = m_updateTimesCount.TryGetValue(item, out int updateTime);
 					bool updateTickExists = m_updateTicksCount.TryGetValue(item, out int updateTick);
-					string updateTimeInfo = "TimesOfUpdate: " + String.Format("{0, -8}", updateTimeExists ? updateTime : "Error");
-					string updateTimeInfo2 = "TimeOfUpdate: " + String.Format("{0, -10}", (updateTickExists ? updateTick : "Error") + "ms");
-					Engine.Log.Information(updateName + updateTimeInfo + updateTimeInfo2);
+					string updateTimeInfo = "TimesOfUpdate: " + $"{(updateTimeExists ? updateTime : "Error"),-8}";
+					string updateTimeInfo2 = "TimeOfUpdate: " + $"{(updateTickExists ? updateTick : "Error") + "ms",-10}";
+					string info3 = $"Average: {((float)updateTick / updateTime) + "ms",-10}";
+					Engine.Log.Information(updateName + updateTimeInfo + updateTimeInfo2 + info3);
 				}
 				Engine.Log.Information("======SubsystemElectricity性能分析======");
 				m_updateTicksCount.Clear();
