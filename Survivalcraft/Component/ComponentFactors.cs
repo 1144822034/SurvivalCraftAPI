@@ -116,9 +116,9 @@ namespace Game
 		}
 		public virtual void CalculateOtherFactorsResult()
 		{
-			foreach(var key in OtherFactors.Keys)
+			foreach((string key, List<Factor> factors) in OtherFactors)
 			{
-				OtherFactorsResults[key] = CalculateFactorsResult(OtherFactors[key]);
+				OtherFactorsResults[key] = CalculateFactorsResult(factors);
 			}
 		}
 

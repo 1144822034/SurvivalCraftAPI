@@ -495,6 +495,8 @@ namespace Game
 		[Obsolete("该变量目前尚未使用，有待后续API版本完善。后续完善后模组可能用到，为了向未来兼容别删")]
 		public static float MoveWidgetSize {  get; set; }
 
+		public static int AnimatedTextureRefreshLimit { get; set; }
+
         public static event Action<string> SettingChanged;
 		public static ValuesDictionary KeyboardMappingSettings { get; set; }
 		public static ValuesDictionary CameraManageSettings { get; set; }
@@ -566,6 +568,7 @@ namespace Game
 				//MoveWidgetSize = 1f;
 				MoveWidgetMarginX = 0f;
 				MoveWidgetMarginY = 0f;
+				AnimatedTextureRefreshLimit = 7;
 				InitializeKeyboardMappingSettings();
 				InitializeCameraManageSettings();
 			}

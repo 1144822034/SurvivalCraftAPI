@@ -54,10 +54,13 @@ namespace Game
 
 		public void Update(float dt)
 		{
-			if (!DisableTextureAnimation && !m_subsystemTime.FixedTimeStep.HasValue)
+			if (!DisableTextureAnimation
+				&& !m_subsystemTime.FixedTimeStep.HasValue
+				&& SettingsManager.AnimatedTextureRefreshLimit > 0
+				&& (SettingsManager.AnimatedTextureRefreshLimit >= 7
+					|| Time.PeriodicEvent(0.1 / SettingsManager.AnimatedTextureRefreshLimit, 0)))
 			{
 				float dt2 = (float)Math.Min(m_subsystemTime.GameTime - m_lastAnimateGameTime, 1.0);
-				m_lastAnimateGameTime = m_subsystemTime.GameTime;
 				Texture2D blocksTexture = m_subsystemBlocksTexture.BlocksTexture;
 				if (m_animatedBlocksTexture == null || m_animatedBlocksTexture.Width != blocksTexture.Width || m_animatedBlocksTexture.Height != blocksTexture.Height || (m_animatedBlocksTexture.MipLevelsCount > 1) != SettingsManager.TerrainMipmapsEnabled)
 				{
@@ -87,6 +90,7 @@ namespace Game
 				{
 					m_animatedBlocksTexture.GenerateMipMaps();
 				}
+				m_lastAnimateGameTime = m_subsystemTime.GameTime;
 			}
 		}
 
@@ -114,7 +118,7 @@ namespace Game
 			int num = BlocksManager.Blocks[18].DefaultTextureSlot % 16;
 			int num2 = BlocksManager.Blocks[18].DefaultTextureSlot / 16;
 			double num3 = 1.0 * m_subsystemTime.GameTime;
-			double num4 = 1.0 * (m_subsystemTime.GameTime - m_subsystemTime.GameTimeDelta);
+			double num4 = 1.0 * m_lastAnimateGameTime;
 			float num5 = MathUtils.Min((float)MathUtils.Remainder(num3, 2.0), 1f);
 			float num6 = MathUtils.Min((float)MathUtils.Remainder(num3 + 1.0, 2.0), 1f);
 			byte b = (byte)(255f * num5);
@@ -181,7 +185,7 @@ namespace Game
 			int num = BlocksManager.Blocks[92].DefaultTextureSlot % 16;
 			int num2 = BlocksManager.Blocks[92].DefaultTextureSlot / 16;
 			double num3 = 0.5 * m_subsystemTime.GameTime;
-			double num4 = 0.5 * (m_subsystemTime.GameTime - m_subsystemTime.GameTimeDelta);
+			double num4 = 0.5 * m_lastAnimateGameTime;
 			float num5 = MathUtils.Min((float)MathUtils.Remainder(num3, 2.0), 1f);
 			float num6 = MathUtils.Min((float)MathUtils.Remainder(num3 + 1.0, 2.0), 1f);
 			byte b = (byte)(255f * num5);

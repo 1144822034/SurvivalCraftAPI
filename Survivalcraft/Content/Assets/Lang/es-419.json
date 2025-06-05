@@ -689,7 +689,9 @@
         "12": "API",
         "13": "Principal",
         "14": "1 VSYNC",
-        "15": "2 VSYNC"
+        "15": "2 VSYNC",
+        "16": "Stop Refreshing",
+        "17": "Every Frame"
     },
     "RecipaediaDescriptionScreen": {
         "Luminosity": "Iluminacion",
@@ -2969,7 +2971,8 @@
             "9": "Mostrar contador de FPS:",
             "10": "Mostrar gráfico de FPS:",
             "11": "Limitar juego en FPS bajos:",
-            "12": "Método de aceleración temporal en espera:"
+            "12": "Método de aceleración temporal en espera:",
+            "13": "Animated Texture Refresh Limit:"
         },
         "SettingsScreen": {
             "1": "Configuracion",

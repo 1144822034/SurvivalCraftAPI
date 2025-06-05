@@ -62,6 +62,8 @@ namespace Game
 
 		public ButtonWidget m_useAPISleepTimeAccelerationButton;
 
+		public SliderWidget m_animatedTextureRefreshLimitSlider;
+
         public int m_enterVisibilityRange;
 		public static string fName = "SettingsPerformanceScreen";
 		public SettingsPerformanceScreen()
@@ -84,6 +86,7 @@ namespace Game
 			m_lowFPSToTimeDecelerationSlider.MinValue = 0f;
 			m_lowFPSToTimeDecelerationSlider.MaxValue = 20f;
             m_lowFPSToTimeDecelerationSlider.Value = SettingsManager.LowFPSToTimeDeceleration;
+            m_animatedTextureRefreshLimitSlider = Children.Find<SliderWidget>("AnimatedTextureRefreshLimitSlider");
 #if ANDROID
             m_framerateLimitSlider.MinValue = 1;
 #endif
@@ -139,6 +142,10 @@ namespace Game
 			{
 				SettingsManager.UseAPISleepTimeAcceleration = !SettingsManager.UseAPISleepTimeAcceleration;
 			}
+			if(m_animatedTextureRefreshLimitSlider.IsSliding)
+			{
+				SettingsManager.AnimatedTextureRefreshLimit = (int)m_animatedTextureRefreshLimitSlider.Value;
+			}
 			m_resolutionButton.Text = LanguageControl.Get("ResolutionMode", SettingsManager.ResolutionMode.ToString());
 			m_visibilityRangeSlider.Value = (m_visibilityRanges.IndexOf(SettingsManager.VisibilityRange) >= 0) ? m_visibilityRanges.IndexOf(SettingsManager.VisibilityRange) : 64;
 			m_visibilityRangeSlider.Text = string.Format(LanguageControl.Get(fName, 1), SettingsManager.VisibilityRange);
@@ -191,7 +198,18 @@ namespace Game
 			m_displayFpsRibbonButton.Text = SettingsManager.DisplayFpsRibbon ? LanguageControl.Yes : LanguageControl.No;
 			m_lowFPSToTimeDecelerationSlider.Text = SettingsManager.LowFPSToTimeDeceleration > 0 ? string.Format(LanguageControl.Get(fName, 8), SettingsManager.LowFPSToTimeDeceleration) : LanguageControl.Get(fName, 9);
 			m_useAPISleepTimeAccelerationButton.Text = SettingsManager.UseAPISleepTimeAcceleration ? LanguageControl.Get(fName, 12) : LanguageControl.Get(fName, 13);
-
+			switch(SettingsManager.AnimatedTextureRefreshLimit)
+			{
+				case 0:
+					m_animatedTextureRefreshLimitSlider.Text = LanguageControl.Get(fName, 16);
+					break;
+				case >= 7:
+					m_animatedTextureRefreshLimitSlider.Text = LanguageControl.Get(fName, 17);
+					break;
+				default: m_animatedTextureRefreshLimitSlider.Text = (SettingsManager.AnimatedTextureRefreshLimit * 10).ToString();
+					break;
+			}
+			m_animatedTextureRefreshLimitSlider.Value = SettingsManager.AnimatedTextureRefreshLimit;
             if (Input.Back || Input.Cancel || Children.Find<ButtonWidget>("TopBar.Back").IsClicked)
 			{
 				bool flag = SettingsManager.VisibilityRange > 128;

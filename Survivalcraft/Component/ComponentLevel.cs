@@ -315,8 +315,9 @@ namespace Game
 		/// </summary>
 		public void GenerateWetnessFactors()
 		{
+			List<Factor> wetness = OtherFactors["Wetness"];
 			//潮湿度初始值为0
-			OtherFactors["Wetness"].Add(new Factor
+			wetness.Add(new Factor
 			{
 				Name = "Initialize",
 				FactorAdditionType = FactorAdditionType.Add,
@@ -325,7 +326,7 @@ namespace Game
 			//在水中会提高潮湿度
 			if(m_componentPlayer.ComponentBody.ImmersionFactor > 0.2f && m_componentPlayer.ComponentBody.ImmersionFluidBlock is WaterBlock)
 			{
-				OtherFactors["Wetness"].Add(new Factor
+				wetness.Add(new Factor
 				{
 					Name = "InWater",
 					FactorAdditionType = FactorAdditionType.Add,
@@ -339,7 +340,7 @@ namespace Game
 			PrecipitationShaftInfo precipitationShaftInfo = m_componentVitalStats.m_subsystemWeather.GetPrecipitationShaftInfo(x,z);
 			if(num2 >= precipitationShaftInfo.YLimit && precipitationShaftInfo.Type == PrecipitationType.Rain)
 			{
-				OtherFactors["Wetness"].Add(new Factor
+				wetness.Add(new Factor
 				{
 					Name = "Precipitation",
 					FactorAdditionType = FactorAdditionType.Add,
@@ -360,7 +361,7 @@ namespace Game
 			{
 				num3 = 30f;
 			}
-			OtherFactors["Wetness"].Add(new Factor
+			wetness.Add(new Factor
 			{
 				Name = "Temperature",
 				FactorAdditionType = FactorAdditionType.Add,

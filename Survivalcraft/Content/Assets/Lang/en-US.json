@@ -733,7 +733,9 @@
         "12": "API",
         "13": "Primary",
         "14": "1 VSYNC",
-        "15": "2 VSYNC"
+        "15": "2 VSYNC",
+        "16": "Stop Refreshing",
+        "17": "Every Frame"
     },
     "RecipaediaDescriptionScreen": {
         "Luminosity": "Luminosity",
@@ -2997,7 +2999,8 @@
             "9": "Display FPS Counter:",
             "10": "Display FPS Ribbon:",
             "11": "Limit Game Run In Low FPS:",
-            "12": "Time Acceleration Method During Sleep:"
+            "12": "Time Acceleration Method During Sleep:",
+            "13": "Animated Texture Refresh Limit:"
         },
         "SettingsScreen": {
             "1": "Choose Settings Category",

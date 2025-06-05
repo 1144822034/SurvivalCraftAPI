@@ -714,7 +714,9 @@
     "12": "API",
     "13": "Chính",
     "14": "1 VSYNC",
-    "15": "2 VSYNC"
+    "15": "2 VSYNC",
+    "16": "Stop Refreshing",
+    "17": "Every Frame"
   },
   "RecipaediaDescriptionScreen": {
     "Luminosity": "Độ sáng",
@@ -2894,7 +2896,8 @@
       "9": "Hiển thị Bộ đếm FPS:",
       "10": "Hiển thị Dải băng FPS:",
       "11": "Hạn chế Game Chạy ở FPS Thấp:",
-      "12": "Phương pháp Tăng tốc Thời gian Khi ngủ:"
+      "12": "Phương pháp Tăng tốc Thời gian Khi ngủ:",
+      "13": "Animated Texture Refresh Limit:"
     },
     "SettingsScreen": {
       "1": "Chọn Danh mục Cài đặt",
