@@ -2,6 +2,7 @@ using Engine;
 using GameEntitySystem;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Globalization;
 using System.Text;
 using TemplatesDatabase;
@@ -10,6 +11,16 @@ namespace Game
 {
 	public class SubsystemElectricity : Subsystem, IUpdateable
 	{
+#if DEBUG
+		public class ElementDebugInfo
+		{
+			public int Counter;
+			public long TotalTicksCosted;
+			public long MaxTicksCosted1;
+			public long MaxTicksCosted2;
+		}
+#endif
+
 		public static ElectricConnectionPath[] m_connectionPathsTable = new ElectricConnectionPath[120]
 		{
 			new(0, 1, -1, 4, 4, 0),
@@ -242,11 +253,11 @@ namespace Game
 
 		public const float CircuitStepDuration = 0.01f;
 
-		public Dictionary<Type, int> m_updateTicksCount = new Dictionary<Type, int>();
-
-		public Dictionary<Type, int> m_updateTimesCount = new Dictionary<Type, int>();
-
-		public bool UpdateTimeDebug = false;
+#if DEBUG
+		public Dictionary<Type, ElementDebugInfo> m_elementDebugInfos = [];
+		public Stopwatch m_debugStopwatch = new ();
+		public bool UpdateTimeDebug = true;
+#endif
 
 		public SubsystemTime SubsystemTime
 		{
@@ -443,31 +454,55 @@ namespace Game
 				{
 					m_futureSimulateLists.Remove(CircuitStep);
 					SimulatedElectricElements += value.Count;
+#if DEBUG
+					m_debugStopwatch.Start();
+#endif
 					foreach (ElectricElement key in value.Keys)
 					{
+#if DEBUG
+						long ticks = m_debugStopwatch.ElapsedTicks;
+#endif
 						if (m_electricElements.ContainsKey(key))
 						{
 							Type type = key.GetType();
-							int tick1 = Environment.TickCount;
 							try
 							{
 								SimulateElectricElement(key);
 							}
 							catch(Exception e)
 							{
-								Console.WriteLine(e);
+								Console.WriteLine($"Error in simulating {type.Name}: {e}");
 								throw;
 							}
+#if DEBUG
 							finally
 							{
-								int tick2 = Environment.TickCount;
-								bool updateTicksHasValue = m_updateTicksCount.TryGetValue(type, out int updateTicksCount);
-								m_updateTicksCount[type] = (updateTicksHasValue ? updateTicksCount : 0) + (tick2 - tick1);
-								bool updateTimesHasValue = m_updateTimesCount.TryGetValue(type, out int updateTimesCount);
-								m_updateTimesCount[type] = (updateTimesHasValue ? updateTimesCount : 0) + 1;
+								if(UpdateTimeDebug)
+								{
+									long ticksCosted = m_debugStopwatch.ElapsedTicks - ticks;
+									if(!m_elementDebugInfos.TryGetValue(type,out ElementDebugInfo info))
+									{
+										info = new ElementDebugInfo();
+										m_elementDebugInfos.Add(type, info);
+									}
+									info.Counter++;
+									info.TotalTicksCosted += ticksCosted;
+									if(ticksCosted > info.MaxTicksCosted1)
+									{
+										info.MaxTicksCosted1 = ticksCosted;
+									}
+									else if(ticksCosted > info.MaxTicksCosted2)
+									{
+										info.MaxTicksCosted2 = ticksCosted;
+									}
+								}
 							}
+#endif
 						}
 					}
+#if DEBUG
+					m_debugStopwatch.Reset();
+#endif
 					ReturnListToCache(value);
 				}
 			}
@@ -530,31 +565,28 @@ namespace Game
 				num++;
 			}
 			valuesDictionary.SetValue("VoltagesByCell", stringBuilder.ToString());
+#if DEBUG
 			if(UpdateTimeDebug)
 			{
-				Engine.Log.Information("======SubsystemElectricity性能分析======");
-				var list = m_updateTicksCount.Keys.ToList();
-				int maxLength = 0;
-				for (int i = 0; i < list.Count; i++)
+				int maxTypeNameLength = m_elementDebugInfos.Keys.Max(type => type.FullName?.Length ?? 0) + 1;
+				StringBuilder stringBuilder2 = new StringBuilder();
+				stringBuilder2.AppendLine("====== SubsystemElectricity Performance Analyze ======");
+				stringBuilder2.Append("TypeName".PadRight(maxTypeNameLength));
+				stringBuilder2.Append("     Counter      TotalTime    AverageTime       MaxTime1       MaxTime2");
+				foreach((Type type, ElementDebugInfo info) in m_elementDebugInfos)
 				{
-					int lengthStr = list[i].FullName.Length;
-					if(maxLength < lengthStr) maxLength = lengthStr;
+					stringBuilder2.AppendLine();
+					stringBuilder2.Append(type.FullName?.PadRight(maxTypeNameLength));
+					stringBuilder2.Append(info.Counter.ToString().PadLeft(12));
+					stringBuilder2.Append($"{((float)info.TotalTicksCosted / Stopwatch.Frequency * 1000):F}ms".PadLeft(15));
+					stringBuilder2.Append($"{((float)info.TotalTicksCosted / info.Counter / Stopwatch.Frequency * 1000000f):F}μs".PadLeft(15));
+					stringBuilder2.Append($"{((float)info.MaxTicksCosted1 / Stopwatch.Frequency * 1000000f):F}μs".PadLeft(15));
+					stringBuilder2.Append($"{((float)info.MaxTicksCosted2 / Stopwatch.Frequency * 1000000f):F}μs".PadLeft(15));
 				}
-				for (int i = 0; i < list.Count; i++)
-				{
-					var item = list[i];
-					string updateName = String.Format("{0, -" + (maxLength + 5).ToString() + "}", item.FullName);
-					bool updateTimeExists = m_updateTimesCount.TryGetValue(item, out int updateTime);
-					bool updateTickExists = m_updateTicksCount.TryGetValue(item, out int updateTick);
-					string updateTimeInfo = "TimesOfUpdate: " + $"{(updateTimeExists ? updateTime : "Error"),-8}";
-					string updateTimeInfo2 = "TimeOfUpdate: " + $"{(updateTickExists ? updateTick : "Error") + "ms",-10}";
-					string info3 = $"Average: {((float)updateTick / updateTime) + "ms",-10}";
-					Engine.Log.Information(updateName + updateTimeInfo + updateTimeInfo2 + info3);
-				}
-				Engine.Log.Information("======SubsystemElectricity性能分析======");
-				m_updateTicksCount.Clear();
-				m_updateTimesCount.Clear();
+				Log.Information(stringBuilder2.ToString());
+				m_elementDebugInfos.Clear();
 			}
+#endif
 		}
 
 		public static ElectricConnectionPath GetConnectionPath(int mountingFace, ElectricConnectorDirection localConnector, int neighborIndex)
