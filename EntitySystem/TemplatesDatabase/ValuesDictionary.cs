@@ -137,7 +137,7 @@ namespace TemplatesDatabase
 					XmlUtils.SetAttributeValue(node2, "Name", item.Key);
 					valuesDictionary.Save(node2);
 				}
-				else
+				else if (item.Value != null)
 				{
 					XElement node3 = XmlUtils.AddElement(node, "Value");
 					XmlUtils.SetAttributeValue(node3, "Name", item.Key);
