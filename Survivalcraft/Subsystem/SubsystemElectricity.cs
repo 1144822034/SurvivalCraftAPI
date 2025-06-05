@@ -11,15 +11,6 @@ namespace Game
 {
 	public class SubsystemElectricity : Subsystem, IUpdateable
 	{
-#if DEBUG
-		public class ElementDebugInfo
-		{
-			public int Counter;
-			public long TotalTicksCosted;
-			public long MaxTicksCosted1;
-			public long MaxTicksCosted2;
-		}
-#endif
 
 		public static ElectricConnectionPath[] m_connectionPathsTable = new ElectricConnectionPath[120]
 		{
@@ -254,9 +245,9 @@ namespace Game
 		public const float CircuitStepDuration = 0.01f;
 
 #if DEBUG
-		public Dictionary<Type, ElementDebugInfo> m_elementDebugInfos = [];
+		public Dictionary<Type, DebugInfo> m_debugInfos = [];
 		public Stopwatch m_debugStopwatch = new ();
-		public bool UpdateTimeDebug = true;
+		public bool UpdateTimeDebug = false;
 #endif
 
 		public SubsystemTime SubsystemTime
@@ -459,11 +450,11 @@ namespace Game
 #endif
 					foreach (ElectricElement key in value.Keys)
 					{
-#if DEBUG
-						long ticks = m_debugStopwatch.ElapsedTicks;
-#endif
 						if (m_electricElements.ContainsKey(key))
 						{
+#if DEBUG
+							long startTick = m_debugStopwatch.ElapsedTicks;
+#endif
 							Type type = key.GetType();
 							try
 							{
@@ -479,11 +470,11 @@ namespace Game
 							{
 								if(UpdateTimeDebug)
 								{
-									long ticksCosted = m_debugStopwatch.ElapsedTicks - ticks;
-									if(!m_elementDebugInfos.TryGetValue(type,out ElementDebugInfo info))
+									long ticksCosted = m_debugStopwatch.ElapsedTicks - startTick;
+									if(!m_debugInfos.TryGetValue(type,out DebugInfo info))
 									{
-										info = new ElementDebugInfo();
-										m_elementDebugInfos.Add(type, info);
+										info = new DebugInfo();
+										m_debugInfos.Add(type, info);
 									}
 									info.Counter++;
 									info.TotalTicksCosted += ticksCosted;
@@ -568,23 +559,23 @@ namespace Game
 #if DEBUG
 			if(UpdateTimeDebug)
 			{
-				int maxTypeNameLength = m_elementDebugInfos.Keys.Max(type => type.FullName?.Length ?? 0) + 1;
+				int maxTypeNameLength = m_debugInfos.Keys.Max(type => type.FullName?.Length ?? 0) + 1;
 				StringBuilder stringBuilder2 = new StringBuilder();
 				stringBuilder2.AppendLine("====== SubsystemElectricity Performance Analyze ======");
 				stringBuilder2.Append("TypeName".PadRight(maxTypeNameLength));
-				stringBuilder2.Append("     Counter      TotalTime    AverageTime       MaxTime1       MaxTime2");
-				foreach((Type type, ElementDebugInfo info) in m_elementDebugInfos)
+				stringBuilder2.Append("    Counter   TotalTime AverageTime    MaxTime1    MaxTime2");
+				foreach((Type type, DebugInfo info) in m_debugInfos.OrderByDescending(pair => pair.Value.TotalTicksCosted))
 				{
 					stringBuilder2.AppendLine();
 					stringBuilder2.Append(type.FullName?.PadRight(maxTypeNameLength));
-					stringBuilder2.Append(info.Counter.ToString().PadLeft(12));
-					stringBuilder2.Append($"{((float)info.TotalTicksCosted / Stopwatch.Frequency * 1000):F}ms".PadLeft(15));
-					stringBuilder2.Append($"{((float)info.TotalTicksCosted / info.Counter / Stopwatch.Frequency * 1000000f):F}μs".PadLeft(15));
-					stringBuilder2.Append($"{((float)info.MaxTicksCosted1 / Stopwatch.Frequency * 1000000f):F}μs".PadLeft(15));
-					stringBuilder2.Append($"{((float)info.MaxTicksCosted2 / Stopwatch.Frequency * 1000000f):F}μs".PadLeft(15));
+					stringBuilder2.Append(info.Counter.ToString().PadLeft(11));
+					stringBuilder2.Append($"{((float)info.TotalTicksCosted / Stopwatch.Frequency * 1000):F}ms".PadLeft(12));
+					stringBuilder2.Append($"{((float)info.TotalTicksCosted / info.Counter / Stopwatch.Frequency * 1000000f):F}μs".PadLeft(12));
+					stringBuilder2.Append($"{((float)info.MaxTicksCosted1 / Stopwatch.Frequency * 1000000f):F}μs".PadLeft(12));
+					stringBuilder2.Append($"{((float)info.MaxTicksCosted2 / Stopwatch.Frequency * 1000000f):F}μs".PadLeft(12));
 				}
 				Log.Information(stringBuilder2.ToString());
-				m_elementDebugInfos.Clear();
+				m_debugInfos.Clear();
 			}
 #endif
 		}
