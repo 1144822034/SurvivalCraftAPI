@@ -698,15 +698,36 @@ public static class ModsManager
 		ModifiedElement["1df4e627-c959-4e6a-bfa2-b7ee3ef08c99"] = "Game.ComponentClothing";
 
 	}
-
-	public static void CombineDataBase(XElement DataBaseXml, Stream Xdb)
+	public static void CombineDataBase(XElement DataBaseXml,Stream Xdb)
+	{
+		CombineDataBase(DataBaseXml, Xdb, string.Empty);
+	}
+	public static void CombineDataBase(XElement DataBaseXml, Stream Xdb, string modPackageName)
 	{
 		XElement MergeXml = XmlUtils.LoadXmlFromStream(Xdb, Encoding.UTF8, true);
 		XElement DataObjects = DataBaseXml.Element("DatabaseObjects");
 		foreach (XElement element in MergeXml.Elements())
 		{
+			// 为实体添加模组来源信息
+			if(!string.IsNullOrEmpty(modPackageName) && element.Name.LocalName == "EntityTemplate")
+			{
+				string guid = element.Attribute("Guid")?.Value;
+				bool isNewEntity = true;
+				if(!string.IsNullOrEmpty(guid))
+				{// 检查是否为新增实体(在原数据库中不存在)
+					isNewEntity = !FindElementByGuid(DataObjects,guid,out _);
+				}
+				if(isNewEntity)
+				{// 只为新增的实体添加ModSource
+					XElement parameterElement = new("Parameter");
+					parameterElement.SetAttributeValue("Name","ModSource");
+					parameterElement.SetAttributeValue("Value",modPackageName);
+					parameterElement.SetAttributeValue("Type","string");
+					element.Add(parameterElement);
+				}
+			}
 			//处理修改
-			if (HasAttribute(element, (str) => { return str.Contains("new-"); }, out XAttribute attribute))
+			if(HasAttribute(element, (str) => { return str.Contains("new-"); }, out XAttribute attribute))
 			{
 				if (HasAttribute(element, (str) => { return str == "Guid"; }, out XAttribute attribute1))
 				{

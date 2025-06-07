@@ -210,7 +210,7 @@ namespace Game
 					LoadingScreen.Info($"[{modInfo.Name}] {LanguageControl.Get(fName, "2")}");
 					flag = false;
 				}
-				ModsManager.CombineDataBase(element, stream);
+				ModsManager.CombineDataBase(element, stream, modInfo.PackageName);
 			});
 			Loader?.OnXdbLoad(xElement);
 		}
