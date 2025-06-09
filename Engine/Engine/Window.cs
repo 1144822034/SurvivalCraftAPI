@@ -293,6 +293,9 @@ namespace Engine
             GraphicsAPI api = new GraphicsAPI(ContextAPI.OpenGL, ContextProfile.Compatability, ContextFlags.ForwardCompatible, new APIVersion(4, 0));
 #elif DEBUG
             GraphicsAPI api = new GraphicsAPI(ContextAPI.OpenGLES, ContextProfile.Compatability, ContextFlags.Debug, new APIVersion(3, 2));
+#elif ANDROID
+            Activity.GetGlEsVersion(out int major, out int minor);
+            GraphicsAPI api = new GraphicsAPI(ContextAPI.OpenGLES, new APIVersion(major, minor));
 #else
             GraphicsAPI api = new GraphicsAPI(ContextAPI.OpenGLES, new APIVersion(3, 2));
 #endif

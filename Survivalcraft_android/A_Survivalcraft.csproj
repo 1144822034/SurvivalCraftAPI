@@ -1022,6 +1022,8 @@
 		<Compile Include="..\Survivalcraft\Game\VrControllerButton.cs"/>
 		<Compile Include="..\Survivalcraft\Game\VrEye.cs"/>
 		<Compile Include="..\Survivalcraft\Managers\VrManager.cs"/>
+		<Compile Include="..\Survivalcraft\Managers\KeyCompatibleGroupsManager.cs"/>
+        <Compile Include="..\Survivalcraft\Game\DebugInfo.cs"/>
 	</ItemGroup>
 	<PropertyGroup>
 <RootNamespace>Game</RootNamespace>

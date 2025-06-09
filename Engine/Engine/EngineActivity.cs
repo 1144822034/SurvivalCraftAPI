@@ -183,6 +183,21 @@ namespace Engine
                 Window.DecorView.SystemUiFlags = SystemUiFlags.Fullscreen | SystemUiFlags.HideNavigation | SystemUiFlags.Immersive | SystemUiFlags.ImmersiveSticky;
             }
         }
+
+        public void GetGlEsVersion(out int major, out int minor)
+        {
+            try
+            {
+                int reqGlEsVersion = ((ActivityManager)GetSystemService(Context.ActivityService))?.DeviceConfigurationInfo?.ReqGlEsVersion ?? 0x20000;
+                major = reqGlEsVersion >> 16;
+                minor = reqGlEsVersion & 0xFFFF;
+            }
+            catch
+            {
+                major = 2;
+                minor = 0;
+            }
+        }
     }
 }
 #endif
