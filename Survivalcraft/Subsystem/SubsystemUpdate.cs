@@ -41,11 +41,9 @@ namespace Game
 		public Dictionary<IUpdateable, bool> m_toAddOrRemove = [];
 
 		public List<IUpdateable> m_sortedUpdateables = [];
-#if DEBUG
 		public Dictionary<Type, DebugInfo> m_debugInfos = [];
 		public Stopwatch m_debugStopwatch = new ();
 		public bool UpdateTimeDebug = false;
-#endif
 
 		public int UpdateablesCount => m_updateables.Count;
 
@@ -111,13 +109,12 @@ namespace Game
 					m_sortedUpdateables.Sort(Comparer.Instance);
 				}
 				float dt = m_subsystemTime.GameTimeDelta;
-#if DEBUG
-				m_debugStopwatch.Start();
-#endif
+				if(UpdateTimeDebug)
+				{
+					m_debugStopwatch.Start();
+				}
 				foreach (IUpdateable sortedUpdateable in m_sortedUpdateables) {
-#if DEBUG
-					long ticks = m_debugStopwatch.ElapsedTicks;
-#endif
+					long ticks = UpdateTimeDebug ? m_debugStopwatch.ElapsedTicks : 0;
 					try
 					{
 						lock (sortedUpdateable)
@@ -129,7 +126,6 @@ namespace Game
 					{
 						// ignored
 					}
-#if DEBUG
 					finally
 					{
 						if(UpdateTimeDebug)
@@ -153,11 +149,11 @@ namespace Game
 							}
 						}
 					}
-#endif
 				}
-#if DEBUG
-				m_debugStopwatch.Reset();
-#endif
+				if(UpdateTimeDebug)
+				{
+					m_debugStopwatch.Reset();
+				}
 				ModsManager.HookAction("SubsystemUpdate", loader => { loader.SubsystemUpdate(dt); return false; });
 			}
 		}
@@ -188,7 +184,6 @@ namespace Game
 			UpdatesPerFrame = 1;
 		}
 
-#if DEBUG
         public override void Save(ValuesDictionary valuesDictionary)
         {
             if(UpdateTimeDebug)
@@ -212,7 +207,6 @@ namespace Game
 				m_debugInfos.Clear();
             }
         }
-#endif
 
         public override void OnEntityAdded(Entity entity)
 		{

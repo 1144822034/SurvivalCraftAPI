@@ -1,5 +1,4 @@
-﻿#if DEBUG
-namespace Game
+﻿namespace Game
 {
 	public class DebugInfo
 	{
@@ -9,4 +8,3 @@ namespace Game
 		public long MaxTicksCosted2;
 	}
 }
-#endif

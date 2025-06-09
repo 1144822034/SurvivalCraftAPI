@@ -13,11 +13,11 @@ namespace Game
 		public Dictionary<IDrawable, bool> m_drawables = [];
 
 		public SortedMultiCollection<int, IDrawable> m_sortedDrawables = [];
-#if DEBUG
+
 		public Dictionary<Type, DebugInfo> m_debugInfos = [];
 		public Stopwatch m_debugStopwatch = new ();
 		public bool UpdateTimeDebug = false;
-#endif
+
 
 		public int DrawablesCount => m_drawables.Count;
 
@@ -51,13 +51,12 @@ namespace Game
                     }
                 }
             }
-#if DEBUG
-			m_debugStopwatch.Start();
-#endif
+			if(UpdateTimeDebug)
+			{
+				m_debugStopwatch.Start();
+			}
 			foreach ((int drawOrder, IDrawable sortedDrawable) in m_sortedDrawables) {
-#if DEBUG
-				long ticks = m_debugStopwatch.ElapsedTicks;
-#endif
+				long ticks = UpdateTimeDebug ? m_debugStopwatch.ElapsedTicks : 0;
 				try
 				{
 					sortedDrawable.Draw(camera, drawOrder);
@@ -66,7 +65,6 @@ namespace Game
 				{
 					// ignored
 				}
-#if DEBUG
 				finally
 				{
 					if(UpdateTimeDebug)
@@ -90,11 +88,8 @@ namespace Game
 						}
 					}
 				}
-#endif
 			}
-#if DEBUG
 			m_debugStopwatch.Reset();
-#endif
 		}
 
 		public override void Load(ValuesDictionary valuesDictionary)
@@ -105,7 +100,6 @@ namespace Game
 			}
 		}
 
-#if DEBUG
 		public override void Save(ValuesDictionary valuesDictionary)
 		{
 			if(UpdateTimeDebug)
@@ -129,7 +123,6 @@ namespace Game
 				m_debugInfos.Clear();
 			}
 		}
-#endif
 
         public override void OnEntityAdded(Entity entity)
         {

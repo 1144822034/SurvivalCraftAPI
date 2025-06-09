@@ -244,11 +244,9 @@ namespace Game
 
 		public const float CircuitStepDuration = 0.01f;
 
-#if DEBUG
 		public Dictionary<Type, DebugInfo> m_debugInfos = [];
 		public Stopwatch m_debugStopwatch = new ();
 		public bool UpdateTimeDebug = false;
-#endif
 
 		public SubsystemTime SubsystemTime
 		{
@@ -445,16 +443,15 @@ namespace Game
 				{
 					m_futureSimulateLists.Remove(CircuitStep);
 					SimulatedElectricElements += value.Count;
-#if DEBUG
-					m_debugStopwatch.Start();
-#endif
+					if(UpdateTimeDebug)
+					{
+						m_debugStopwatch.Start();
+					}
 					foreach (ElectricElement key in value.Keys)
 					{
 						if (m_electricElements.ContainsKey(key))
 						{
-#if DEBUG
-							long startTick = m_debugStopwatch.ElapsedTicks;
-#endif
+							long startTick = UpdateTimeDebug ? m_debugStopwatch.ElapsedTicks : 0;
 							Type type = key.GetType();
 							try
 							{
@@ -465,7 +462,6 @@ namespace Game
 								Console.WriteLine($"Error in simulating {type.Name}: {e}");
 								throw;
 							}
-#if DEBUG
 							finally
 							{
 								if(UpdateTimeDebug)
@@ -488,12 +484,13 @@ namespace Game
 									}
 								}
 							}
-#endif
 						}
 					}
-#if DEBUG
-					m_debugStopwatch.Reset();
-#endif
+					if(UpdateTimeDebug)
+					{
+
+						m_debugStopwatch.Reset();
+					}
 					ReturnListToCache(value);
 				}
 			}
@@ -556,10 +553,13 @@ namespace Game
 				num++;
 			}
 			valuesDictionary.SetValue("VoltagesByCell", stringBuilder.ToString());
-#if DEBUG
 			if(UpdateTimeDebug)
 			{
-				int maxTypeNameLength = m_debugInfos.Keys.Max(type => type.FullName?.Length ?? 0) + 1;
+				int maxTypeNameLength = 1;
+				if(m_debugInfos.Keys.Count > 0)
+				{
+					maxTypeNameLength = m_debugInfos.Keys.Max(type => type.FullName?.Length ?? 0) + 1;
+				}
 				StringBuilder stringBuilder2 = new StringBuilder();
 				stringBuilder2.AppendLine("====== SubsystemElectricity Performance Analyze ======");
 				stringBuilder2.Append("TypeName".PadRight(maxTypeNameLength));
@@ -577,7 +577,6 @@ namespace Game
 				Log.Information(stringBuilder2.ToString());
 				m_debugInfos.Clear();
 			}
-#endif
 		}
 
 		public static ElectricConnectionPath GetConnectionPath(int mountingFace, ElectricConnectorDirection localConnector, int neighborIndex)

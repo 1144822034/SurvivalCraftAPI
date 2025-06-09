@@ -47,19 +47,16 @@ namespace Engine
 #endif
 		}
 
-		[Conditional("DEBUG")]
 		public static void Debug(object message)
 		{
 			Write(LogType.Debug, (message != null) ? message.ToString() : "null");
 		}
 
-		[Conditional("DEBUG")]
 		public static void Debug(string message)
 		{
 			Write(LogType.Debug, message);
 		}
 
-		[Conditional("DEBUG")]
 		public static void Debug(string format, params object[] parameters)
 		{
 			Write(LogType.Debug, string.Format(format, parameters));
