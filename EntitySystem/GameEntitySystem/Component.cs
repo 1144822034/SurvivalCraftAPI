@@ -46,7 +46,6 @@ namespace GameEntitySystem
 
 		public virtual void InheritFromComponent(Component baseComponent)
 		{
-			throw new NotImplementedException();
 		}
 		
 		internal void DisposeInternal()

@@ -1138,7 +1138,6 @@ namespace Game
         /// <param name="subsystemProjectiles"></param>
         /// <param name="projectile"></param>
         /// <param name="valuesDictionary">存储射弹信息的ValuesDictionaey</param>
-        /// <exception cref="NotImplementedException"></exception>
         public virtual void SaveProjectile(SubsystemProjectiles subsystemProjectiles, Projectile projectile, ref ValuesDictionary valuesDictionary)
         {
         }
@@ -1149,7 +1148,6 @@ namespace Game
         /// <param name="subsystemPickables"></param>
         /// <param name="pickable"></param>
         /// <param name="valuesDictionary">存储掉落物信息的ValuesDictionary</param>
-        /// <exception cref="NotImplementedException"></exception>
         public virtual void SavePickable(SubsystemPickables subsystemPickables, Pickable pickable, ref ValuesDictionary valuesDictionary)
         {
         }
