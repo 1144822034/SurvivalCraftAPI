@@ -1141,7 +1141,6 @@ namespace Game
         /// <exception cref="NotImplementedException"></exception>
         public virtual void SaveProjectile(SubsystemProjectiles subsystemProjectiles, Projectile projectile, ref ValuesDictionary valuesDictionary)
         {
-            throw new NotImplementedException();
         }
 
         /// <summary>
@@ -1153,7 +1152,6 @@ namespace Game
         /// <exception cref="NotImplementedException"></exception>
         public virtual void SavePickable(SubsystemPickables subsystemPickables, Pickable pickable, ref ValuesDictionary valuesDictionary)
         {
-            throw new NotImplementedException();
         }
 
         /// <summary>
