@@ -167,6 +167,7 @@ namespace Game
 			ModsManager.HookAction("EditBlockDescriptionScreen", loader =>
 			{
 				loader.EditBlockDescriptionScreen(dictionary);
+				loader.EditBlockDescriptionScreen(dictionary,value);
 				return false;
 			});
 			return dictionary;

@@ -1513,20 +1513,31 @@ namespace Game
 
         }
 
-        /// <summary>
-        /// 在方块介绍页面中，增加或减少方块的属性字段
-        /// </summary>
-        /// <param name="blockProperties"></param>
+		/// <summary>
+		/// 在方块介绍页面中，增加或减少方块的属性字段
+		/// </summary>
+		/// <param name="blockProperties"></param>
+		[Obsolete("Override EditBlockDescriptionScreen(Dictionary<string,string> blockProperties, int blockValue) instead.")]
         public virtual void EditBlockDescriptionScreen(Dictionary<string, string> blockProperties)
         {
 
         }
 
-        /// <summary>
-        /// 在合成表页面时每帧更新时，编辑该页面
-        /// </summary>
-        /// <param name="screen"></param>
-        public virtual void EditRecipeScreenWidget(RecipaediaRecipesScreen screen)
+		/// <summary>
+		/// 在方块介绍页面中，增加或减少方块的属性字段
+		/// </summary>
+		/// <param name="blockProperties">已有的方块属性表</param>
+		/// <param name="blockValue">被介绍的方块完整值</param>
+		public virtual void EditBlockDescriptionScreen(Dictionary<string,string> blockProperties, int blockValue)
+		{
+
+		}
+
+		/// <summary>
+		/// 在合成表页面时每帧更新时，编辑该页面
+		/// </summary>
+		/// <param name="screen"></param>
+		public virtual void EditRecipeScreenWidget(RecipaediaRecipesScreen screen)
         {
 
         }
