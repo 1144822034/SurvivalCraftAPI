@@ -288,7 +288,7 @@ namespace Engine.Graphics
             TriangleIndices.Add(count + 2);
 
             TriangleIndices.Add(count + 2);
-            TriangleIndices.Add(count + 1);
+            TriangleIndices.Add(count + 0);
             TriangleIndices.Add(count + 3);
         }
         public void QueueQuad(Vector3 p1, Vector3 p2, Vector3 p3, Vector3 p4, Color color)
