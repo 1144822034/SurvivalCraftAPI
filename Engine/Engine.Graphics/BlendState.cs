@@ -138,5 +138,15 @@ namespace Engine.Graphics
 				m_blendFactor = value;
 			}
 		}
-	}
+
+        public bool BaseEquals(object obj)
+        {
+            BlendState blendState = obj as BlendState;
+            if (blendState == null)
+            {
+                return false;
+            }
+            return m_colorSourceBlend == blendState.m_colorSourceBlend && m_colorDestinationBlend == blendState.m_colorDestinationBlend && m_alphaSourceBlend == blendState.m_alphaSourceBlend && m_alphaDestinationBlend == blendState.m_alphaDestinationBlend;
+        }
+    }
 }

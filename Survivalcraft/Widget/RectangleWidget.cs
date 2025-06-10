@@ -144,6 +144,12 @@ namespace Game
 			set;
 		}
 
+		public BlendState BlendState
+		{
+			get;
+			set;
+		} =  BlendState.AlphaBlend;
+
 		public RectangleWidget()
 		{
 			Size = new Vector2(float.PositiveInfinity);
@@ -186,7 +192,7 @@ namespace Game
 					{
 						samplerState = (!TextureWrap) ? (TextureLinearFilter ? SamplerState.LinearClamp : SamplerState.PointClamp) : (TextureLinearFilter ? SamplerState.LinearWrap : SamplerState.PointWrap);
 					}
-					TexturedBatch2D texturedBatch2D = dc.PrimitivesRenderer2D.TexturedBatch(Subtexture.Texture, useAlphaTest: true, 0, depthStencilState, null, null, samplerState);
+					TexturedBatch2D texturedBatch2D = dc.PrimitivesRenderer2D.TexturedBatch(Subtexture.Texture, useAlphaTest: true, 0, depthStencilState, null, BlendState, samplerState);
 					Vector2 zero = default;
 					Vector2 texCoord;
 					Vector2 texCoord2 = default;

@@ -50,13 +50,13 @@
 
 	<StackPanelWidget Name="LeftBottomBar" HorizontalAlignment="Near" VerticalAlignment="Far" Direction="Vertical" Margin="8, 8">
 		<BevelledButtonWidget Size="60, 60" Text="" Name="UpdateCheckButton">
-			<RectangleWidget Size="28, 28" Name="UpdateIcon" TextureLinearFilter="true" HorizontalAlignment="Center" VerticalAlignment="Center" Subtexture="{Textures/Gui/UpdateChecking}" OutlineColor="0, 0, 0, 0" FillColor="255, 255, 255" IsVisible="true" TextureAnisotropicFilter="true"/>
+			<RectangleWidget Size="28, 28" Name="UpdateIcon" TextureLinearFilter="true" HorizontalAlignment="Center" VerticalAlignment="Center" Subtexture="{Textures/Gui/UpdateChecking}" OutlineColor="0, 0, 0, 0" FillColor="255, 255, 255" IsVisible="true" TextureAnisotropicFilter="true" BlendState="NonPremultiplied"/>
 		</BevelledButtonWidget>
 		<BevelledButtonWidget Size="60, 60" Text="" Name="LanguageSwitchButton">
-			<RectangleWidget Size="28, 28" TextureLinearFilter="true" HorizontalAlignment="Center" VerticalAlignment="Center" Subtexture="{Textures/Gui/Language}" OutlineColor="0, 0, 0, 0" FillColor="255, 255, 255" IsVisible="true" TextureAnisotropicFilter="true"/>
+			<RectangleWidget Size="28, 28" TextureLinearFilter="true" HorizontalAlignment="Center" VerticalAlignment="Center" Subtexture="{Textures/Gui/Language}" OutlineColor="0, 0, 0, 0" FillColor="255, 255, 255" IsVisible="true" TextureAnisotropicFilter="true" BlendState="NonPremultiplied"/>
 		</BevelledButtonWidget>
 		<BevelledButtonWidget Size="60, 60" Text="" Name="BulletinButton">
-			<RectangleWidget Size="28, 28" TextureLinearFilter="true" HorizontalAlignment="Center" VerticalAlignment="Center" Subtexture="{Textures/Gui/Bulletin}" OutlineColor="0, 0, 0, 0" FillColor="255, 255, 255" IsVisible="true" TextureAnisotropicFilter="true"/>
+			<RectangleWidget Size="28, 28" TextureLinearFilter="true" HorizontalAlignment="Center" VerticalAlignment="Center" Subtexture="{Textures/Gui/Bulletin}" OutlineColor="0, 0, 0, 0" FillColor="255, 255, 255" IsVisible="true" TextureAnisotropicFilter="true" BlendState="NonPremultiplied"/>
 		</BevelledButtonWidget>
 	</StackPanelWidget>
 
