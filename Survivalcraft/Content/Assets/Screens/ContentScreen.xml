@@ -8,9 +8,11 @@
       <LabelWidget Name="TopBar.Label" Text="[ContentScreen:1]" />
     </CanvasWidget>
 
-    <CanvasWidget Size="Infinity, 0" />
+    <ScrollPanelWidget Direction="Vertical">
     
     <StackPanelWidget Direction="Vertical" HorizontalAlignment="Center" VerticalAlignment="Center">
+
+      <CanvasWidget Size="0, 25"/>
 
       <StackPanelWidget Direction="Horizontal">
         <CanvasWidget Size="350, 90">
@@ -60,9 +62,11 @@
         <BevelledButtonWidget Name="ManageMod" Text="[ContentScreen:13]" Style="{Styles/ButtonStyle_310x60}" VerticalAlignment="Center" />
       </StackPanelWidget>
 
+      <CanvasWidget Size="0, 25"/>
+
     </StackPanelWidget>
 
-    <CanvasWidget Size="Infinity, 0" />
+    </ScrollPanelWidget>
   
   </StackPanelWidget>
 
