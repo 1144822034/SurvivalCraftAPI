@@ -53,7 +53,7 @@ namespace Game
 
 		public override void Enter(object[] parameters)
 		{
-			if (ScreensManager.PreviousScreen.GetType() != typeof(WorldOptionsScreen))
+			if (!(ScreensManager.PreviousScreen is IWorldOptionsScreen))
 			{
 				m_worldSettings = new WorldSettings
 				{

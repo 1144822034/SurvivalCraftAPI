@@ -5,7 +5,7 @@ using System.Xml.Linq;
 
 namespace Game
 {
-	public class WorldOptionsScreen : Screen
+	public class WorldOptionsScreen : Screen, IWorldOptionsScreen
 	{
 		public static string fName = "WorldOptionsScreen";
 		public Widget m_newWorldOnlyPanel;

@@ -59,7 +59,7 @@ namespace Game
 
 		public override void Enter(object[] parameters)
 		{
-			if (ScreensManager.PreviousScreen.GetType() != typeof(WorldOptionsScreen))
+			if (!(ScreensManager.PreviousScreen is IWorldOptionsScreen))
 			{
 				m_directoryName = (string)parameters[0];
 				m_worldSettings = (WorldSettings)parameters[1];
