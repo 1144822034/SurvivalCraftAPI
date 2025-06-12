@@ -110,8 +110,9 @@ namespace Game
 			}
 			if (m_updateCheckButton.IsClicked)
 			{
-				ScreensManager.SwitchScreen("APIReleases", ModsManager.APIReleasesLink_API, "API");
-				//ScreensManager.SwitchScreen("APIReleases", "https://gitee.com/api/v5/repos/yhuse/SunnyUI/releases", "SunnyUI", new Test());
+				ScreensManager.SwitchScreen("Releases", ModsManager.APIReleasesLink_API, "API");
+				//TODO 原版的获取更新逻辑我不知道要咋处理
+				//ScreensManager.SwitchScreen("Releases", "https://gitee.com/api/v5/repos/yhuse/SunnyUI/releases", "SunnyUI", new Test());
 				//uint versionInt = APIUpdateManager.ParseVersionFromString(ModsManager.APIVersionString);
 				//Engine.Log.Information($"The current version is: {ModsManager.APIVersionString}, with uint 0x{versionInt:X8}");
 				//if (!APIUpdateManager.IsNeedUpdate.HasValue) DialogsManager.ShowDialog(this, new MessageDialog(LanguageControl.Get(fName,7), LanguageControl.Get(fName, 6), LanguageControl.Ok, LanguageControl.Get(fName, 8), (button) => {

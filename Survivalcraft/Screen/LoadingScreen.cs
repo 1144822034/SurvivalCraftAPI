@@ -525,7 +525,7 @@ namespace Game
 			});
 			AddLoadAction(delegate
 			{
-				AddScreen("APIReleases", new ReleasesScreen());
+				AddScreen("Releases", new ReleasesScreen());
 			});
 			AddLoadAction(delegate
 			{

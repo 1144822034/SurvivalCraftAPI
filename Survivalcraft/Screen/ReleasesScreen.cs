@@ -1,4 +1,5 @@
 using Engine;
+using System.Diagnostics;
 using System.Text.Json;
 using System.Xml.Linq;
 
@@ -135,6 +136,21 @@ namespace Game
 
 		public override void Update()
 		{
+			foreach(var assetButton in m_assetButtons)
+			{
+				if(assetButton.Key.IsClicked)
+				{
+					if(VersionsManager.CurrentPlatform == VersionsManager.Platform.Windows)
+					{
+						Process.Start(new ProcessStartInfo
+						{
+							FileName = assetButton.Value.browser_download_url,
+							UseShellExecute = true  // 关键参数，使用系统默认程序打开
+						});
+					}
+					//TODO 还差个安卓端
+				}
+			}
 			if (Input.Back || Input.Cancel || Children.Find<ButtonWidget>("TopBar.Back").IsClicked)
 			{
 				ScreensManager.SwitchScreen(ScreensManager.PreviousScreen);
