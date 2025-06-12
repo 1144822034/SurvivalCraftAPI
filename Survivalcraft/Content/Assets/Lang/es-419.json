@@ -3039,6 +3039,13 @@
             "27": "Duración del año:",
             "28": "Estación:"
         },
+        "ReleasesScreen": {
+            "1": "Lista de versiones de {0}",
+            "2": "Obteniendo la versión {0}...",
+            "3": "Aviso",
+            "4": "Publicado por {0} el {1}",
+            "20": "Error al obtener la lista de versiones de {0}. Razón:\n{1}"
+        },
         "BestiaryItem": {
             "1": "",
             "2": ""

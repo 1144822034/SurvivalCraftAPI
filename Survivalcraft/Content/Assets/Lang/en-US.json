@@ -3067,6 +3067,13 @@
             "27": "Length Of Year:",
             "28": "Season:"
         },
+        "ReleasesScreen": {
+            "1": "{0} Version List",
+            "2": "Fetching {0} version...",
+            "3": "Notice",
+            "4": "Published by {0} on {1}",
+            "20": "Failed to fetch {0} version list. Reason:\n{1}"
+        },
         "BestiaryItem": {
             "1": "",
             "2": ""

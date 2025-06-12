@@ -2964,6 +2964,13 @@
       "27": "Độ dài Năm:",
       "28": "Mùa:"
     },
+    "ReleasesScreen": {
+      "1": "Danh sách phiên bản {0}",
+      "2": "Đang lấy phiên bản {0}...",
+      "3": "Thông báo",
+      "4": "Được phát hành bởi {0} vào {1}",
+      "20": "Lỗi khi lấy danh sách phiên bản {0}. Lý do:\n{1}"
+    },
     "BestiaryItem": {
       "1": "",
       "2": ""
