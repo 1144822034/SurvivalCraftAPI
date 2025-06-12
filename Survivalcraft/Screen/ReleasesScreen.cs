@@ -22,6 +22,8 @@ namespace Game
 
 		public LabelWidget m_textLabel;
 
+		public LabelWidget m_infoLabel;
+
 		public ListPanelWidget m_releasesListPanel;
 
 		public StackPanelWidget m_releaseInfoPanel;
@@ -40,6 +42,7 @@ namespace Game
 			m_textLabel = Children.Find<LabelWidget>("ReleaseText");
 			m_scrollPanel = Children.Find<ScrollPanelWidget>("ScrollPanel");
 			m_releasesListPanel = Children.Find<ListPanelWidget>("ReleasesList");
+			m_infoLabel = Children.Find<LabelWidget>("ReleaseInfo");
 			m_releaseInfoPanel = Children.Find<StackPanelWidget>("ReleaseInfoPanel");
 			m_releasesListPanel.ItemWidgetFactory = (object item) => new LabelWidget
 			{
@@ -47,7 +50,7 @@ namespace Game
 				HorizontalAlignment = WidgetAlignment.Center,
 				VerticalAlignment = WidgetAlignment.Center
 			};
-			m_releasesListPanel.ItemClicked += OnReleasesListItemClicked;
+			m_releasesListPanel.ItemClicked += DisplayReleaseInfo;
 		}
 
 		public override void Enter(object[] parameters)
@@ -109,6 +112,7 @@ namespace Game
 			{
 				m_releasesListPanel.AddItem(releaseInfo);
 			}
+			if(Releases.Count > 0) DisplayReleaseInfo(Releases[0]);
 		}
 
 		public void PopulateAssetsList(ReleaseInfo releaseInfo)
@@ -126,10 +130,11 @@ namespace Game
 			}
 		}
 
-		public void OnReleasesListItemClicked(object item)//档左侧版本列表中某条目点击时
+		public void DisplayReleaseInfo(object item)//档左侧版本列表中某条目点击时
 		{
 			ReleaseInfo releaseInfo = (ReleaseInfo)item;
 			m_titleLabel.Text = releaseInfo.name;
+			m_infoLabel.Text = string.Format(LanguageControl.GetContentWidgets(nameof(ReleasesScreen), 4), releaseInfo.author.name, releaseInfo.created_at);
 			m_textLabel.Text = releaseInfo.body;
 			PopulateAssetsList(releaseInfo);
 		}

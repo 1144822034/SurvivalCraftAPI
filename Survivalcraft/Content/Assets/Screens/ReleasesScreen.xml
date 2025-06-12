@@ -24,9 +24,11 @@
 
           <StackPanelWidget Name="ReleaseInfoPanel" Direction="Vertical" HorizontalAlignment="Center" Margin="10, 10" >
             <LabelWidget Name="ReleaseTitle" HorizontalAlignment="Center" TextAnchor="HorizontalCenter" WordWrap="true" />
-            <CanvasWidget Size="0, 20" />
-            <LabelWidget Name="ReleaseText"  Color="128, 128, 128" HorizontalAlignment="Center" TextAnchor="Left" WordWrap="true" />
-            <CanvasWidget Size="0, 20" />
+            <CanvasWidget Size="0, 10" />
+            <LabelWidget Name="ReleaseInfo" Color="128, 128, 128" HorizontalAlignment="Center" TextAnchor="Left" WordWrap="true" />
+            <CanvasWidget Size="0, 24" />
+            <LabelWidget Name="ReleaseText" Color="128, 128, 128" HorizontalAlignment="Center" TextAnchor="Left" WordWrap="true" />
+            <CanvasWidget Size="0, 24" />
           </StackPanelWidget>
 
         </CanvasWidget>
