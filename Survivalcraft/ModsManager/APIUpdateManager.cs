@@ -135,10 +135,66 @@ namespace Game
 		public static int CompareVersion(string current, string target)
 		{
 			if (target == "API_OLD") return current == "API_OLD" ? 0 : 1;
+			if (current == "API_OLD") return -1;
 
 			uint currentVersion = ParseVersionFromString(current);
 			uint targetVersion = ParseVersionFromString(target);
 			return currentVersion.CompareTo(targetVersion);
 		}
+	}
+
+	/*
+	 这里面的字段名称由于涉及到反序列化解析千万不能改！！
+	 这里面的字段名称由于涉及到反序列化解析千万不能改！！
+	 这里面的字段名称由于涉及到反序列化解析千万不能改！！
+	*/
+	public class ReleaseInfo
+	{
+		public long id { get; set; }
+		public string tag_name { get; set; }
+		public string target_commitish { get; set; }
+		public bool prerelease { get; set; }
+		public string name { get; set; }
+		public string body { get; set; }
+		public Author author { get; set; }
+		public string created_at { get; set; }
+		public List<Asset> assets { get; set; }
+	}
+
+	/*
+	 这里面的字段名称由于涉及到反序列化解析千万不能改！！
+	 这里面的字段名称由于涉及到反序列化解析千万不能改！！
+	 这里面的字段名称由于涉及到反序列化解析千万不能改！！
+	*/
+	public class Author
+	{
+		public long id { get; set; }
+		public string login { get; set; }
+		public string name { get; set; }
+		public string avatar_url { get; set; }
+		public string url { get; set; }
+		public string html_url { get; set; }
+		public string remark { get; set; }
+		public string followers_url { get; set; }
+		public string following_url { get; set; }
+		public string gists_url { get; set; }
+		public string starred_url { get; set; }
+		public string subscriptions_url { get; set; }
+		public string organizations_url { get; set; }
+		public string repos_url { get; set; }
+		public string events_url { get; set; }
+		public string received_events_url { get; set; }
+		public string type { get; set; }
+	}
+
+	/*
+	 这里面的字段名称由于涉及到反序列化解析千万不能改！！
+	 这里面的字段名称由于涉及到反序列化解析千万不能改！！
+	 这里面的字段名称由于涉及到反序列化解析千万不能改！！
+	*/
+	public class Asset
+	{
+		public string browser_download_url { get; set; }
+		public string name { get; set; }
 	}
 }

@@ -525,6 +525,10 @@ namespace Game
 			});
 			AddLoadAction(delegate
 			{
+				AddScreen("APIReleases", new ReleasesScreen());
+			});
+			AddLoadAction(delegate
+			{
 				AddScreen("ManageUser", new ManageUserScreen());
 			});
 			AddLoadAction(delegate
