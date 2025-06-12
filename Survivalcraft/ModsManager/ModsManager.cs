@@ -21,8 +21,10 @@ public static class ModsManager
 	public static string GameVersion = "2.4.0.0";
 	public static string ShortGameVersion = "2.4";
 	public static string ReportLink = "https://gitee.com/SC-SPM/SurvivalcraftApi/issues";
-	public static string APIReleaseLink_API = "https://gitee.com/api/v5/repos/SC-SPM/SurvivalcraftApi/releases/latest";
-	public static string APIReleaseLink_Client = "https://gitee.com/SC-SPM/SurvivalcraftApi/releases/";
+	public static string APILatestReleaseLink_API = "https://gitee.com/api/v5/repos/SC-SPM/SurvivalcraftApi/releases/latest";
+	public static string APILatestReleaseLink_Client = "https://gitee.com/SC-SPM/SurvivalcraftApi/releases/latest";
+	public static string APIReleasesLink_API = "https://gitee.com/api/v5/repos/SC-SPM/SurvivalcraftApi/releases";
+	public static string APIReleasesLink_Client = "https://gitee.com/SC-SPM/SurvivalcraftApi/releases/";
 	public static string fName = "ModsManager";
 	[Obsolete("使用ApiVersionString")]
 	public enum ApiVersionEnum//不准确，弃用

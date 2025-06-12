@@ -115,7 +115,7 @@ namespace Game
 				if (!APIUpdateManager.IsNeedUpdate.HasValue) DialogsManager.ShowDialog(this, new MessageDialog(LanguageControl.Get(fName,7), LanguageControl.Get(fName, 6), LanguageControl.Ok, LanguageControl.Get(fName, 8), (button) => {
 					if(button == MessageDialogButton.Button2)
 					{
-						WebBrowserManager.LaunchBrowser(ModsManager.APIReleaseLink_Client);
+						WebBrowserManager.LaunchBrowser(ModsManager.APIReleasesLink_Client);
 					}
 				}));
 				else
@@ -125,7 +125,7 @@ namespace Game
 								(button) => {
 									if(button == MessageDialogButton.Button1)
 									{
-										WebBrowserManager.LaunchBrowser(ModsManager.APIReleaseLink_Client);
+										WebBrowserManager.LaunchBrowser(ModsManager.APIReleasesLink_Client);
 									}
 								}));
 					else DialogsManager.ShowDialog(this,new MessageDialog(LanguageControl.Get(fName,7),LanguageControl.Get(fName,3),LanguageControl.Ok,null,null));

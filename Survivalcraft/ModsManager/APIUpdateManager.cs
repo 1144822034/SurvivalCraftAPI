@@ -48,15 +48,24 @@ namespace Game
 		{
 			LatestVersion = await GetLatestVersion(true);
 			string currentVersion = ModsManager.APIVersionString;
-			return ParseVersionFromString(LatestVersion) > ParseVersionFromString(currentVersion);
+			return CompareVersion(currentVersion, LatestVersion) == -1;
 		}
 
 		/// <summary>
 		/// 获取 Gitee release最后一个版本的Json文件数据
 		/// </summary>
 		/// <returns></returns>
-		public static async Task<JsonDocument> GetLatestAPIJsonDocument() => await OnlineJsonReader.GetJsonFromUrlAsync(ModsManager.APIReleaseLink_API);
+		public static async Task<JsonDocument> GetLatestAPIJsonDocument() => await OnlineJsonReader.GetJsonFromUrlAsync(ModsManager.APILatestReleaseLink_API);
 
+		/// <summary>
+		/// 获取 Gitee 所有release版本的Json文件数据
+		/// </summary>
+		/// <returns></returns>
+		public static async Task<JsonDocument> GetAPIReleasesJsonDocument() => await OnlineJsonReader.GetJsonFromUrlAsync(ModsManager.APIReleasesLink_API);
+
+		/// <summary>
+		/// 版本号X.X.X.X的正则表达式s
+		/// </summary>
 		public static Regex VersionRegex = new Regex(@"(\d+)\.?(\d+)?\.?(\d+)?\.?(\d+)?");
 
 		/// <summary>
@@ -112,6 +121,24 @@ namespace Game
 					: root[root.GetArrayLength() - 1].GetProperty("tag_name").GetString();
 				return input;
 			}
+		}
+
+		/// <summary>
+		/// 比较两个版本的新旧关系。
+		/// current大于target，返回1
+		/// current小于target，返回-1
+		/// 版本相等，返回0
+		/// </summary>
+		/// <param name="current"></param>
+		/// <param name="target"></param>
+		/// <returns></returns>
+		public static int CompareVersion(string current, string target)
+		{
+			if (target == "API_OLD") return current == "API_OLD" ? 0 : 1;
+
+			uint currentVersion = ParseVersionFromString(current);
+			uint targetVersion = ParseVersionFromString(target);
+			return currentVersion.CompareTo(targetVersion);
 		}
 	}
 }
