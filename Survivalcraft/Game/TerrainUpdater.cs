@@ -212,7 +212,7 @@ namespace Game
 
 		public static int SlowTerrainUpdate;
 
-		public static bool LogTerrainUpdateStats = true;
+		public static bool LogTerrainUpdateStats = false;
 
 		public AutoResetEvent UpdateEvent => m_updateEvent;
 
