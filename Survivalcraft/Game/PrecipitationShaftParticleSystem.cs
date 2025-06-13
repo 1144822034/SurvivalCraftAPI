@@ -41,7 +41,7 @@ namespace Game
 
 		public TexturedBatch3D m_batch;
 
-		public Particle[] m_particles = new Particle[4];
+		public Particle[] m_particles = new Particle[m_particlesCount];
 
 		public PrecipitationType m_precipitationType;
 

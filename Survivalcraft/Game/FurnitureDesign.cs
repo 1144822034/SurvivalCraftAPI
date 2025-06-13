@@ -303,7 +303,7 @@ namespace Game
 
 		public void SetValues(int resolution, int[] values)
 		{
-			if (resolution < 2 || resolution > MaxResolution)
+			if (resolution < MinResolution || resolution > MaxResolution)
 			{
 				throw new ArgumentException(LanguageControl.Get(fName, 3));
 			}
@@ -402,7 +402,7 @@ namespace Game
 
 		public void Resize(int resolution)
 		{
-			if (resolution < 2 || resolution > MaxResolution)
+			if (resolution < MinResolution || resolution > MaxResolution)
 			{
 				throw new ArgumentException(LanguageControl.Get(fName, 3));
 			}

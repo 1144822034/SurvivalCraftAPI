@@ -8,7 +8,7 @@ namespace Game
 
 		public const int MaxNameLength = 16;
 
-		public static readonly Color[] DefaultColors = new Color[16]
+		public static readonly Color[] DefaultColors = new Color[MaxColors]
 		{
 			new(255, 255, 255),
 			new(181, 255, 255),
@@ -41,13 +41,13 @@ namespace Game
 		public WorldPalette(ValuesDictionary valuesDictionary)
 		{
 			string[] array = valuesDictionary.GetValue("Colors", new string(';', 15)).Split(';');
-			if (array.Length != 16)
+			if (array.Length != MaxColors)
 			{
 				throw new InvalidOperationException(LanguageControl.Get(GetType().Name, 0));
 			}
 			Colors = array.Select((string s, int i) => (!string.IsNullOrEmpty(s)) ? HumanReadableConverter.ConvertFromString<Color>(s) : DefaultColors[i]).ToArray();
 			string[] array2 = valuesDictionary.GetValue("Names", new string(';', 15)).Split(';');
-			if (array2.Length != 16)
+			if (array2.Length != MaxColors)
 			{
 				throw new InvalidOperationException(LanguageControl.Get(GetType().Name, 1));
 			}
@@ -88,7 +88,7 @@ namespace Game
 
 		public static bool VerifyColorName(string name)
 		{
-			if (name.Length < 1 || name.Length > 16)
+			if (name.Length < 1 || name.Length > MaxNameLength)
 			{
 				return false;
 			}

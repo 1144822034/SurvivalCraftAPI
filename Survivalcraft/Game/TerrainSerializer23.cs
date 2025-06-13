@@ -61,7 +61,7 @@ namespace Game
 
 			private int NodeSize;
 
-			private int NodeDataSize => NodeSize - 8;
+			private int NodeDataSize => NodeSize - NodeHeaderSize;
 
 			public virtual void Open(string directoryName, string suffix)
 			{
@@ -218,14 +218,14 @@ namespace Game
 
             public virtual void SetAndWriteFreeNode(int freeNode)
 			{
-				Stream.Position = 8L;
+				Stream.Position = NodeHeaderSize;
 				Writer.Write(freeNode);
 				FreeNode = freeNode;
 			}
 
             public virtual ChunkDescriptor ReadChunkDescriptor(int i)
 			{
-				Stream.Position = 12 + (i * 12);
+				Stream.Position = FileHeaderChunkDescriptorsOffset + (i * FileHeaderChunkDescriptorSize);
 				ChunkDescriptor result = default(ChunkDescriptor);
 				result.Index = i;
 				result.Coords.X = Reader.ReadInt32();
@@ -236,7 +236,7 @@ namespace Game
 
             public virtual void WriteChunkDescriptor(ChunkDescriptor desc)
 			{
-				Stream.Position = 12 + (desc.Index * 12);
+				Stream.Position = FileHeaderChunkDescriptorsOffset + (desc.Index * FileHeaderChunkDescriptorSize);
 				Writer.Write(desc.Coords.X);
 				Writer.Write(desc.Coords.Y);
 				Writer.Write(desc.StartNode);
@@ -303,7 +303,7 @@ namespace Game
 
             public static uint ReverseEndianness(uint n)
 			{
-				return ((n & 0xFF000000u) >> 24) | ((n & 0xFF0000) >> 8) | ((n & 0xFF00) << 8) | (n << 24);
+				return ((n & 0xFF000000u) >> 24) | ((n & 0xFF0000) >> FileHeaderFreeNodeOffset) | ((n & 0xFF00) << FileHeaderFreeNodeOffset) | (n << 24);
 			}
 
 			public virtual void LogDebugInfo()
@@ -425,7 +425,7 @@ namespace Game
 				{
 					using (BinaryWriter writer = new(regionStream, Encoding.UTF8, leaveOpen: true))
 					{
-						int num = point.X + (16 * point.Y);
+						int num = point.X + (ChunkSizeX * point.Y);
 						DirectoryEntry[] array = ReadDirectoryEntries(reader);
 						DirectoryEntry directoryEntry = array[num];
 						DirectoryEntry entry;
@@ -605,8 +605,8 @@ namespace Game
 
             public static DirectoryEntry ReadDirectoryEntry(BinaryReader reader, Point2 chunk)
 			{
-				int num = chunk.X + (16 * chunk.Y);
-				reader.BaseStream.Position = 4 + (num * 8);
+				int num = chunk.X + (ChunkSizeX * chunk.Y);
+				reader.BaseStream.Position = 4 + (num * RegionDirectoryEntrySize);
 				return ReadDirectoryEntry(reader);
 			}
 
@@ -637,7 +637,7 @@ namespace Game
             public static void WriteDirectoryEntry(BinaryWriter writer, Point2 chunk, DirectoryEntry entry)
 			{
 				int num = chunk.X + (16 * chunk.Y);
-				writer.BaseStream.Position = 4 + (num * 8);
+				writer.BaseStream.Position = 4 + (num * RegionDirectoryEntrySize);
 				WriteDirectoryEntry(writer, entry);
 			}
 
@@ -798,9 +798,9 @@ namespace Game
         public virtual int CompressChunkData(TerrainChunk chunk, byte[] buffer)
 		{
 			int num = 0;
-			for (int i = 0; i < 16; i++)
+			for (int i = 0; i < ChunkSizeX; i++)
 			{
-				for (int j = 0; j < 16; j++)
+				for (int j = 0; j < ChunkSizeZ; j++)
 				{
 					int shaftValueFast = chunk.GetShaftValueFast(i, j);
 					m_compressBuffer[num++] = (byte)((Terrain.ExtractTemperature(shaftValueFast) << 4) | Terrain.ExtractHumidity(shaftValueFast));
@@ -810,9 +810,9 @@ namespace Game
 			int num3 = -1;
 			for (int k = 0; k < ChunkSizeY; k++)
 			{
-				for (int l = 0; l < 16; l++)
+				for (int l = 0; l < ChunkSizeX; l++)
 				{
-					for (int m = 0; m < 16; m++)
+					for (int m = 0; m < ChunkSizeZ; m++)
 					{
 						int num4 = Terrain.ReplaceLight(chunk.GetCellValueFast(m, k, l), 0);
 						if (num2 == 0)
@@ -848,9 +848,9 @@ namespace Game
 		{
 			size = UnDeflate(buffer, 0, size, m_compressBuffer);
 			int num = 0;
-			for (int i = 0; i < 16; i++)
+			for (int i = 0; i < ChunkSizeX; i++)
 			{
-				for (int j = 0; j < 16; j++)
+				for (int j = 0; j < ChunkSizeZ; j++)
 				{
 					byte b = m_compressBuffer[num++];
 					int value = Terrain.ReplaceTemperature(Terrain.ReplaceHumidity(0, b & 0xF), b >> 4);
@@ -867,11 +867,11 @@ namespace Game
 				{
 					chunk.SetCellValueFast(num2, num3, num4, value2);
 					num2++;
-					if (num2 >= 16)
+					if (num2 >= ChunkSizeX)
 					{
 						num2 = 0;
 						num4++;
-						if (num4 >= 16)
+						if (num4 >= ChunkSizeZ)
 						{
 							num4 = 0;
 							num3++;

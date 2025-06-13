@@ -16,12 +16,12 @@ namespace Game
 
 			public const int CapacityMinusOne = 65535;
 
-			public TerrainChunk[] m_array = new TerrainChunk[65536];
+			public TerrainChunk[] m_array = new TerrainChunk[Capacity];
 
 			[MethodImpl(MethodImplOptions.AggressiveInlining)]
 			public virtual TerrainChunk Get(int x, int y)
 			{
-				int num = (x + (y << 8)) & 0xFFFF;
+				int num = (x + (y << Shift)) & CapacityMinusOne;
 				TerrainChunk terrainChunk;
 				while (true)
 				{
@@ -34,24 +34,24 @@ namespace Game
 					{
 						break;
 					}
-					num = (num + 1) & 0xFFFF;
+					num = (num + 1) & CapacityMinusOne;
 				}
 				return terrainChunk;
 			}
 
 			public virtual void Add(int x, int y, TerrainChunk chunk)
 			{
-				int num = (x + (y << 8)) & 0xFFFF;
+				int num = (x + (y << Shift)) & CapacityMinusOne;
 				while (m_array[num] != null)
 				{
-					num = (num + 1) & 0xFFFF;
+					num = (num + 1) & CapacityMinusOne;
 				}
 				m_array[num] = chunk;
 			}
 
 			public virtual void Remove(int x, int y)
 			{
-				int num = (x + (y << 8)) & 0xFFFF;
+				int num = (x + (y << Shift)) & CapacityMinusOne;
 				while (true)
 				{
 					TerrainChunk terrainChunk = m_array[num];
@@ -63,7 +63,7 @@ namespace Game
 					{
 						break;
 					}
-					num = (num + 1) & 0xFFFF;
+					num = (num + 1) & CapacityMinusOne;
 				}
 				m_array[num] = null;
 			}
@@ -379,101 +379,101 @@ namespace Game
 
 		public static int MakeBlockValue(int contents)
 		{
-			return contents & 0x3FF;
+			return contents & ContentsMask;
 		}
 
 		public static int MakeBlockValue(int contents, int light, int data)
 		{
-			return (contents & 0x3FF) | ((light << 10) & 0x3C00) | ((data << 14) & -16384);
+			return (contents & ContentsMask) | ((light << LightShift) & LightMask) | ((data << DataShift) & DataMask);
 		}
 
 		public static int ExtractContents(int value)
 		{
-			return value & 0x3FF;
+			return value & ContentsMask;
 		}
 
 		public static int ExtractLight(int value)
 		{
-			return (value & 0x3C00) >> 10;
+			return (value & LightMask) >> LightShift;
 		}
 
 		public static int ExtractData(int value)
 		{
-			return (value & -16384) >> 14;
+			return (value & DataMask) >> DataShift;
 		}
 
 		public static int ExtractTopHeight(int value)
 		{
-			return value & 0xFF;
+			return value & TopHeightMask;
 		}
 
 		public static int ExtractBottomHeight(int value)
 		{
-			return (value & 0xFF0000) >> 16;
+			return (value & BottomHeightMask) >> BottomHeightShift;
 		}
 
 		public static int ExtractSunlightHeight(int value)
 		{
-			return value >>> 24;
+			return value >>> SunlightHeightShift;
         }
 
 		public static int ExtractHumidity(int value)
 		{
-			return (value & 0xF000) >> 12;
+			return (value & HumidityMask) >> HumidityShift;
 		}
 
 		public static int ExtractTemperature(int value)
 		{
-			return (value & 0xF00) >> 8;
+			return (value & TemperatureMask) >> TemperatureShift;
 		}
 		/// <summary>
 		/// 方块值的最低10位，替换为目标Content
 		/// </summary>
 		public static int ReplaceContents(int value, int contents)
 		{
-			return value ^ ((value ^ contents) & 0x3FF);
+			return value ^ ((value ^ contents) & ContentsMask);
 		}
 		/// <summary>
 		/// 方块值的最低10位，替换为目标Content(value始终为0时)
 		/// </summary>
 		public static int ReplaceContents(int contents)
 		{
-			return contents & 0x3FF;
+			return contents & ContentsMask;
 		}
 
 		public static int ReplaceLight(int value, int light)
 		{
-			return value ^ ((value ^ (light << 10)) & 0x3C00);
+			return value ^ ((value ^ (light << LightShift)) & LightMask);
 		}
 
 		public static int ReplaceData(int value, int data)
 		{
-			return value ^ ((value ^ (data << 14)) & -16384);
+			return value ^ ((value ^ (data << DataShift)) & DataMask);
 		}
 
 		public static int ReplaceTopHeight(int value, int topHeight)
 		{
-			return value ^ ((value ^ topHeight) & 0xFF);
+			return value ^ ((value ^ topHeight) & TopHeightMask);
 		}
 
 		public static int ReplaceBottomHeight(int value, int bottomHeight)
 		{
-			return value ^ ((value ^ (bottomHeight << 16)) & 0xFF0000);
+			return value ^ ((value ^ (bottomHeight << BottomHeightShift)) & BottomHeightMask);
 		}
 
 		public static int ReplaceSunlightHeight(int value, int sunlightHeight)
 		{
-			return (value & 16777215) | (sunlightHeight << 24);
+			return (value & 16777215) | (sunlightHeight << SunlightHeightShift);
 		}
 
 		public static int ReplaceHumidity(int value, int humidity)
 		{
-			return value ^ ((value ^ (humidity << 12)) & 0xF000);
+			return value ^ ((value ^ (humidity << HumidityShift)) & HumidityMask);
 		}
 
 		public static int ReplaceTemperature(int value, int temperature)
 		{
-			return value ^ ((value ^ (temperature << 8)) & 0xF00);
+			return value ^ ((value ^ (temperature << TemperatureShift)) & TemperatureMask);
 		}
 
 		public virtual int GetSeasonalTemperature(int x, int z)

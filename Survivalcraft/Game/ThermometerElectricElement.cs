@@ -26,7 +26,7 @@ namespace Game
 			float voltage = m_voltage;
 			CellFace cellFace = CellFaces[0];
 			m_voltage = MathUtils.Saturate(m_subsystemMetersBlockBehavior.GetThermometerReading(cellFace.X, cellFace.Y, cellFace.Z) / 15f);
-			float num = 0.5f * (0.9f + (0.000200000009f * (GetHashCode() % 1000)));
+			float num = m_pollingPeriod * (0.9f + (0.0002f * (GetHashCode() % 1000)));
 			SubsystemElectricity.QueueElectricElementForSimulation(this, SubsystemElectricity.CircuitStep + MathUtils.Max((int)(num / 0.01f), 1));
 			return m_voltage != voltage;
 		}

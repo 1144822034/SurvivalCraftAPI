@@ -486,7 +486,7 @@ namespace Engine
         {
             if (Capacity <= m_count)
             {
-                ReallocateNonZero(MathUtils.Max(Capacity * 2, 4));
+                ReallocateNonZero(MathUtils.Max(Capacity * 2, MinCapacity));
             }
         }
 

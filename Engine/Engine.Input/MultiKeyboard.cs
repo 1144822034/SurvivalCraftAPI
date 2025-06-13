@@ -18,9 +18,9 @@ public static class MultiKeyboard
 		public char? LastChar;
 	}
 
-	private const double KeyFirstRepeatTime = 0.3;
+	private static double KeyFirstRepeatTime = 0.3;
 
-	private const double KeyNextRepeatTime = 0.04;
+	private static double KeyNextRepeatTime = 0.04;
 
 	private static KeyboardData[] _KeyboardData =
     [
@@ -108,11 +108,11 @@ public static class MultiKeyboard
 				{
 					if (_KeyboardData[i].KeysDownRepeatArray[k] < 0.0)
 					{
-						_KeyboardData[i].KeysDownRepeatArray[k] = Time.FrameStartTime + 0.2;
+						_KeyboardData[i].KeysDownRepeatArray[k] = Time.FrameStartTime + KeyFirstRepeatTime;
 					}
 					else if (Time.FrameStartTime >= _KeyboardData[i].KeysDownRepeatArray[k])
 					{
-						_KeyboardData[i].KeysDownRepeatArray[k] = Math.Max(Time.FrameStartTime, _KeyboardData[i].KeysDownRepeatArray[k] + 0.033);
+						_KeyboardData[i].KeysDownRepeatArray[k] = Math.Max(Time.FrameStartTime, _KeyboardData[i].KeysDownRepeatArray[k] + KeyNextRepeatTime);
 					}
 				}
 				else

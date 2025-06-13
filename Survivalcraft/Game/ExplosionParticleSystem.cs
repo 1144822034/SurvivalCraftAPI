@@ -76,7 +76,7 @@ namespace Game
 					if (particle.IsActive)
 					{
 						m_isEmpty = false;
-						particle.Strength -= dt / 2.5f;
+						particle.Strength -= dt / m_duration;
 						if (particle.Strength > 0f)
 						{
 							particle.TextureSlot = (int)MathUtils.Min(9f * (1f - particle.Strength) * 0.6f, 8f);

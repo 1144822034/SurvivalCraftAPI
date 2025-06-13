@@ -212,7 +212,7 @@ namespace Game
 
 		public static int SlowTerrainUpdate;
 
-		public static bool LogTerrainUpdateStats;
+		public static bool LogTerrainUpdateStats = true;
 
 		public AutoResetEvent UpdateEvent => m_updateEvent;
 
@@ -280,8 +280,8 @@ namespace Game
 			int num2 = 0;
 			if (m_updateParameters.Locations.TryGetValue(locationIndex, out UpdateLocation value))
 			{
-				visibilityDistance = MathUtils.Max(MathUtils.Min(visibilityDistance, value.VisibilityDistance) - 8f - 0.1f, 0f);
-				contentDistance = MathUtils.Max(MathUtils.Min(contentDistance, value.ContentDistance) - 8f - 0.1f, 0f);
+				visibilityDistance = MathUtils.Max(MathUtils.Min(visibilityDistance, value.VisibilityDistance) - m_updateHysteresis - 0.1f, 0f);
+				contentDistance = MathUtils.Max(MathUtils.Min(contentDistance, value.ContentDistance) - m_updateHysteresis - 0.1f, 0f);
 				float num3 = MathUtils.Sqr(visibilityDistance);
 				float num4 = MathUtils.Sqr(contentDistance);
 				float v = MathUtils.Max(visibilityDistance, contentDistance);
@@ -648,7 +648,7 @@ namespace Game
 				{
 					UpdateChunkSingleStep(terrainChunk, m_subsystemSky.SkyLightValue);
 				}
-				while (terrainChunk.ThreadState < desiredState && Time.RealTime - realTime < 0.0099999997764825821);
+				while (terrainChunk.ThreadState < desiredState && Time.RealTime - realTime < 0.01);
 				return false;
 			}
 			if (LogTerrainUpdateStats)
@@ -664,7 +664,7 @@ namespace Game
 			double realTime = Time.RealTime;
 			TerrainChunk[] chunks = m_threadUpdateParameters.Chunks;
 			UpdateLocation[] array = m_threadUpdateParameters.Locations.Values.ToArray();
-			float num = 3.40282347E+38f;
+			float num = float.MaxValue;
 			TerrainChunk result = null;
 			desiredState = TerrainChunkState.NotLoaded;
 			foreach (TerrainChunk terrainChunk in chunks)
@@ -1041,7 +1041,7 @@ namespace Game
                                 int cellLightFast2 = chunkAtCell2.GetCellLightFast(num6, l, num7);
                                 int cellLightFast3 = chunkAtCell3.GetCellLightFast(num8, l, num9);
                                 int cellLightFast4 = chunkAtCell4.GetCellLightFast(num10, l, num11);
-                                int num18 = MathUtils.Max(cellLightFast, cellLightFast2, cellLightFast3, cellLightFast4) - 1 - block2.LightAttenuation;
+                                int num18 = MathUtils.Max(cellLightFast, cellLightFast2, cellLightFast3, cellLightFast4) - m_lightAttenuationWithDistance - block2.LightAttenuation;
                                 if (num18 > Terrain.ExtractLight(cellValueFast2))
                                 {
                                     chunk.SetCellValueFast(num17, Terrain.ReplaceLight(cellValueFast2, num18));
@@ -1164,7 +1164,7 @@ namespace Game
 			Block block = BlocksManager.Blocks[num];
 			if (block.IsTransparent_(cellValueFast))
 			{
-				int num2 = light - block.LightAttenuation - 1;
+				int num2 = light - block.LightAttenuation - m_lightAttenuationWithDistance;
 				if (num2 > Terrain.ExtractLight(cellValueFast))
 				{
 					m_lightSources.Add(new LightSource
@@ -1264,7 +1264,7 @@ namespace Game
                 Block block = BlocksManager.Blocks[num2];
                 if (block.IsTransparent)
                 {
-                    int num3 = light - block.LightAttenuation - 1;
+                    int num3 = light - block.LightAttenuation - m_lightAttenuationWithDistance;
                     if (num3 > Terrain.ExtractLight(cellValueFast))
                     {
                         if (num3 > 1)

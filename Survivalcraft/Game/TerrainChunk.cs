@@ -67,29 +67,29 @@ namespace Game
 
 		public int[] Shafts;
 
-        public static ArrayCache<int> m_cellsCache = new ArrayCache<int>((IEnumerable<int>)new int[1] { 65536 }, 0.66f, 60f, 0.33f, 5f);
+        public static ArrayCache<int> m_cellsCache = new ArrayCache<int>((IEnumerable<int>)new int[1] { Size * Size * Height }, 0.66f, 60f, 0.33f, 5f);
 
-        public static ArrayCache<int> m_shaftsCache = new ArrayCache<int>((IEnumerable<int>)new int[1] { 256 }, 0.66f, 60f, 0.33f, 5f);
+        public static ArrayCache<int> m_shaftsCache = new ArrayCache<int>((IEnumerable<int>)new int[1] { Size * Size }, 0.66f, 60f, 0.33f, 5f);
 
 		public DynamicArray<BrushPaint> m_brushPaints = [];
 		
-		public TerrainGeometry[] ChunkSliceGeometries = new TerrainGeometry[16];
+		public TerrainGeometry[] ChunkSliceGeometries = new TerrainGeometry[SlicesCount];
 
 		public DynamicArray<TerrainChunkGeometry.Buffer> Buffers = new DynamicArray<TerrainChunkGeometry.Buffer>();
 
-		public int[] SliceContentsHashes = new int[16];
+		public int[] SliceContentsHashes = new int[SlicesCount];
 
-		public int[] GeneratedSliceContentsHashes = new int[16];
+		public int[] GeneratedSliceContentsHashes = new int[SlicesCount];
 
 		public TerrainChunk(Terrain terrain, int x, int z)
 		{
 			Terrain = terrain;
 			Coords = new Point2(x, z);
-			Origin = new Point2(x * 16, z * 16);
-			BoundingBox = new BoundingBox(new Vector3(Origin.X, 0f, Origin.Y), new Vector3(Origin.X + 16, 256f, Origin.Y + 16));
-			Center = new Vector2((float)Origin.X + 8f, (float)Origin.Y + 8f);
-            Cells = TerrainChunk.m_cellsCache.Rent(65536, true);
-            Shafts = TerrainChunk.m_shaftsCache.Rent(256, true);
+			Origin = new Point2(x * Size, z * Size);
+			BoundingBox = new BoundingBox(new Vector3(Origin.X, 0f, Origin.Y), new Vector3(Origin.X + Size, Height, Origin.Y + Size));
+			Center = new Vector2((float)Origin.X + Size / 2, (float)Origin.Y + Size / 2);
+            Cells = TerrainChunk.m_cellsCache.Rent(Size * Size * Height, true);
+            Shafts = TerrainChunk.m_shaftsCache.Rent(Size * Size, true);
         }
 
 		public virtual void DisposeVertexIndexBuffers()
@@ -126,46 +126,46 @@ namespace Game
 
 		public static bool IsCellValid(int x, int y, int z)
 		{
-			if (x >= 0 && x < 16 && y >= 0 && y < 256 && z >= 0)
+			if (x >= 0 && x < Size && y >= 0 && y < Height && z >= 0)
 			{
-				return z < 16;
+				return z < Size;
 			}
 			return false;
 		}
 
 		public static bool IsShaftValid(int x, int z)
 		{
-			if (x >= 0 && x < 16 && z >= 0)
+			if (x >= 0 && x < Size && z >= 0)
 			{
-				return z < 16;
+				return z < Size;
 			}
 			return false;
 		}
 
 		public static int CalculateCellIndex(int x, int y, int z)
 		{
-			if(y is >= 0 and < 256)
+			if(y is >= 0 and < Height)
 			{
-				return y | (x << 8) | (z << 12);
+				return y | (x << HeightBits) | (z << 12);
 			}
 			else
 			{
 				int absY = Math.Abs(y);
-				int yUpperBits = absY >> 8;
+				int yUpperBits = absY >> HeightBits;
 				if (yUpperBits > 0x7FFF)
 				{
 					throw new ArgumentOutOfRangeException(nameof(y), "Height is too large.");
 				}
 				int yLower8Bits = absY & 0xFF;
 				yUpperBits = yUpperBits & 0x7FFF;
-				return (((y < 0) ? 1 : 0) << 31) | (yUpperBits << 16) | (z << 12) | (x << 8) | yLower8Bits;
+				return (((y < 0) ? 1 : 0) << 31) | (yUpperBits << 16) | (z << 12) | (x << HeightBits) | yLower8Bits;
 			}
 		}
 
 		public virtual int CalculateTopmostCellHeight(int x, int z)
 		{
-			int num = CalculateCellIndex(x, 255, z);
-			int num2 = 255;
+			int num = CalculateCellIndex(x, HeightMinusOne, z);
+			int num2 = HeightMinusOne;
 			while (num2 >= 0)
 			{
 				if (Terrain.ExtractContents(GetCellValueFast(num)) != 0)
@@ -185,12 +185,12 @@ namespace Game
 
 		public virtual int GetCellValueFast(int x, int y, int z)
 		{
-			return Cells[y + (x * 256) + (z * 256 * 16)];
+			return Cells[y + (x * Height) + (z * Height * Size)];
 		}
 
 		public virtual void SetCellValueFast(int x, int y, int z, int value)
 		{
-			Cells[y + (x * 256) + (z * 256 * 16)] = value;
+			Cells[y + (x * Height) + (z * Height * Size)] = value;
 		}
 
 		public virtual void SetCellValueFast(int index, int value)
@@ -210,12 +210,12 @@ namespace Game
 
 		public virtual int GetShaftValueFast(int x, int z)
 		{
-			return Shafts[x + (z * 16)];
+			return Shafts[x + (z * Size)];
 		}
 
 		public virtual void SetShaftValueFast(int x, int z, int value)
 		{
-			Shafts[x + (z * 16)] = value;
+			Shafts[x + (z * Size)] = value;
 		}
 
 		public virtual int GetTemperatureFast(int x, int z)
