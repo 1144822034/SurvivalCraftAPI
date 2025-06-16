@@ -180,7 +180,19 @@ namespace Game
 						    Log.Information($"[{modEntity.modInfo.Name}] Getting assemblies.");
 						    flag = false;
 					    }
-					    ModsManager.Dlls.Add(assembly.GetName().FullName, assembly);
+					    AssemblyName assemblyName = assembly.GetName();
+					    string fullName = assemblyName.FullName;
+					    if(ModsManager.Dlls.TryGetValue(fullName,out Assembly existingAssembly))
+					    {
+						    if(existingAssembly.GetName().Version < assemblyName.Version)
+						    {
+							    ModsManager.Dlls[fullName] = assembly;
+						    }
+					    }
+					    else
+					    {
+						    ModsManager.Dlls.Add(fullName, assembly);
+					    }
 				    }
 				});
 				//加载 mod 程序集(.dll)文件
