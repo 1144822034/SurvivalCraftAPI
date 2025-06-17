@@ -61,7 +61,10 @@ namespace Game
 
         public static ReadOnlyList<string> Categories => new(m_categories);
 
+		[Obsolete("Use BlockTypeToOriginalIndex.")]
         public static int[] m_originalBlockIndex = new int[1024];
+
+		public static Dictionary<Type, int> BlockTypeToOriginalIndex = new Dictionary<Type, int>();
 
         public const int SurvivalCraftBlockCount = 299;
 
@@ -94,12 +97,12 @@ namespace Game
             m_blocks[Index] = block;
             BlockNameToIndex[block.GetType().Name] = Index;
             BlockTypeToIndex[block.GetType()] = Index;
-            
-            //Engine.Log.Information("分配方块信息：Name = " + allocateData.Block.GetType().Name + ", Index = " + Index + ", 原始Index = " + allocateData.Block.BlockIndex);
-            if (m_originalBlockIndex[Index] == 0)
-                m_originalBlockIndex[Index] = allocateData.Block.BlockIndex;
-            //修复了加载旧API存档时，会导致方块索引错乱的问题
-            allocateData.Block.BlockIndex = Index;
+
+			if(!BlockTypeToOriginalIndex.ContainsKey(block.GetType()))
+				BlockTypeToOriginalIndex.Add(block.GetType(),allocateData.Block.BlockIndex);
+
+			//修复了加载旧API存档时，会导致方块索引错乱的问题
+			allocateData.Block.BlockIndex = Index;
             allocateData.Allocated = true;
             allocateData.Index = Index;
             //修改方块的Index静态字段值
@@ -109,8 +112,7 @@ namespace Game
                 try
                 {
                     fieldInfo.SetValue(null, block.BlockIndex); // 对于静态字段，第一个参数为null
-                    //Log.Information("设置方块" + block.GetType().Name + ".Index为" + block.BlockIndex);
-                }
+				}
                 catch (Exception ex)
                 {
                     Log.Error("Failed to edit Index of <" + block.GetType().AssemblyQualifiedName + ">! " + ex);
@@ -324,8 +326,8 @@ namespace Game
                     BlockAllocateData allocateData = BlocksAllocateData[i];
                     if(allocateData.Block.BlockIndex >= 0)
                     {
-                        int originalIndex;
-                        originalIndex = m_originalBlockIndex[allocateData.Block.BlockIndex];
+                        int originalIndex = 0;
+						BlockTypeToOriginalIndex.TryGetValue(allocateData.Block.GetType(),out originalIndex);
                         if (originalIndex == 0) originalIndex = allocateData.Block.BlockIndex;
                         if (allocateData.StaticBlockIndex)
                         {
