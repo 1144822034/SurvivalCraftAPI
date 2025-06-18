@@ -195,7 +195,22 @@ namespace Game
         {
             return false;
         }
-        public virtual void SetClothes(ComponentClothing componentClothing, ClothingSlot slot, IEnumerable<int> clothes)
+
+		/// <summary>
+		/// 控制物品拖动到人物上方时，是否能执行操作。
+		/// 返回1表示可以处理物品。
+		/// 多个模组执行时，取最大值
+		/// </summary>
+		/// <param name="componentClothing"></param>
+		/// <param name="slotIndex"></param>
+		/// <param name="blockValue"></param>
+		/// <returns></returns>
+		public virtual void ClothingSlotProcessCapacity(ComponentClothing componentClothing, int slotIndex, int blockValue, ref bool notToProcessVanilla, out int capacity)
+		{
+			capacity = 0;
+		}
+
+		public virtual void SetClothes(ComponentClothing componentClothing, ClothingSlot slot, IEnumerable<int> clothes)
         {
 
         }

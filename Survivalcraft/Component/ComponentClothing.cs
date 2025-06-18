@@ -460,15 +460,25 @@ namespace Game
 		public virtual int GetSlotProcessCapacity(int slotIndex, int value)
 		{
 			Block block = BlocksManager.Blocks[Terrain.ExtractContents(value)];
-			if (block.GetNutritionalValue(value) > 0f)
+			bool notToProcessVanilla = false;
+			int maxCapacity = 0;
+			ModsManager.HookAction("ClothingSlotProcessCapacity",loader => {
+				loader.ClothingSlotProcessCapacity(this, slotIndex, value, ref notToProcessVanilla, out int capacity);
+				maxCapacity = Math.Max(capacity,maxCapacity);
+				return false;
+			});
+			if(!notToProcessVanilla && maxCapacity < 1)
 			{
-				return 1;
+				if(block.GetNutritionalValue(value) > 0f)
+				{
+					return 1;
+				}
+				if(block.CanWear(value) && CanWearClothing(value))
+				{
+					return 1;
+				}
 			}
-			if (block.CanWear(value) && CanWearClothing(value))
-			{
-				return 1;
-			}
-			return 0;
+			return maxCapacity;
 		}
 
 		public virtual void AddSlotItems(int slotIndex, int value, int count)
@@ -484,7 +494,9 @@ namespace Game
 				return;
 			}
 			Block block = BlocksManager.Blocks[Terrain.ExtractContents(value)];
-			ModsManager.HookAction("ClothingProcessSlotItems", modLoader => { return modLoader.ClothingProcessSlotItems(m_componentPlayer, block, slotIndex, value, count); });
+			ModsManager.HookAction("ClothingProcessSlotItems", modLoader => {
+				return modLoader.ClothingProcessSlotItems(m_componentPlayer, block, slotIndex, value, count); 
+			});
 			if (block.GetNutritionalValue(value) > 0f)
 			{
 				if (block is BucketBlock)
