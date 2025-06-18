@@ -66,11 +66,18 @@ namespace Game
 		public float m_temperatureBlackoutFactor;
 
 		public float m_temperatureBlackoutDuration;
-
 		public float EnvironmentTemperature => m_environmentTemperature;
 
 		public static string fName = "ComponentVitalStats";
 
+		public Action<int> FoodEaten { get; set; }
+
+		/// <summary>
+		/// 1.8.1.2添加：
+		/// 用于多模组控制同一项参数
+		/// 例如：VitalStatsForMods["Water"]表示水份值
+		/// </summary>
+		public ValuesDictionary VitalStatsForMods = new ValuesDictionary();
 		public float Food
 		{
 			get
@@ -156,6 +163,7 @@ namespace Game
 					num2 *= 0.75f;
 				}
 				Food += num2;
+				FoodEaten?.Invoke(value);
 				m_satiation.TryGetValue(num, out float value2);
 				value2 += MathF.Max(num2, 0.5f);
 				m_satiation[num] = value2;
