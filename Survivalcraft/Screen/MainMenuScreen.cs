@@ -37,13 +37,13 @@ namespace Game
 		{
 			XElement node = ContentManager.Get<XElement>("Screens/MainMenuScreen");
 			LoadContents(this, node);
-			m_showBulletinButton = Children.Find<ButtonWidget>("BulletinButton");
-			m_copyrightLabel = Children.Find<LabelWidget>("CopyrightLabel");
-			m_languageSwitchButton = Children.Find<ButtonWidget>("LanguageSwitchButton");
-			m_leftBottomBar = Children.Find<StackPanelWidget>("LeftBottomBar");
-			m_rightBottomBar = Children.Find<StackPanelWidget>("RightBottomBar");
-			m_updateCheckButton = Children.Find<ButtonWidget>("UpdateCheckButton");
-			m_updateButtonIcon = Children.Find<RectangleWidget>("UpdateIcon");
+			m_showBulletinButton = Children.Find<ButtonWidget>("BulletinButton",false);
+			m_copyrightLabel = Children.Find<LabelWidget>("CopyrightLabel",false);
+			m_languageSwitchButton = Children.Find<ButtonWidget>("LanguageSwitchButton",false);
+			m_leftBottomBar = Children.Find<StackPanelWidget>("LeftBottomBar",false);
+			m_rightBottomBar = Children.Find<StackPanelWidget>("RightBottomBar",false);
+			m_updateCheckButton = Children.Find<ButtonWidget>("UpdateCheckButton",false);
+			m_updateButtonIcon = Children.Find<RectangleWidget>("UpdateIcon",false);
 			m_needToUpdateIcon = ContentManager.Get<Subtexture>("Textures/Gui/NeedToUpdate");
 			m_dontNeedUpdateIcon = ContentManager.Get<Subtexture>("Textures/Gui/UpdateChecking");
 			ModsManager.HookAction("OnMainMenuScreenCreated",loader => { loader.OnMainMenuScreenCreated(this,m_leftBottomBar,m_rightBottomBar); return false; });
@@ -79,7 +79,7 @@ namespace Game
 			RectangleWidget rectangleWidget = Children.Find<RectangleWidget>("Logo");
 			float num = 1f + (0.02f * MathF.Sin(1.5f * (float)MathUtils.Remainder(Time.FrameStartTime, 10000.0)));
 			rectangleWidget.RenderTransform = Matrix.CreateTranslation((0f - rectangleWidget.ActualSize.X) / 2f, (0f - rectangleWidget.ActualSize.Y) / 2f, 0f) * Matrix.CreateScale(num, num, 1f) * Matrix.CreateTranslation(rectangleWidget.ActualSize.X / 2f, rectangleWidget.ActualSize.Y / 2f, 0f);
-			if (m_languageSwitchButton.IsClicked)
+			if (m_languageSwitchButton?.IsClicked ?? false)
 			{
 				var sorted = LanguageControl.LanguageTypes.OrderBy(item => {
 					if(item.Key == "en-US")
@@ -101,14 +101,20 @@ namespace Game
 				scale -= MathF.Round(scale);
 				scale *= (MathF.PI / 2);
 				scale = new Vector2(1,MathF.Tan(scale)).Length() / MathF.Sqrt(2);
-				m_updateButtonIcon.LayoutTransform = Matrix.CreateRotationZ(angle) * Matrix.CreateScale(scale);
+				if(m_updateButtonIcon != null)
+				{
+					m_updateButtonIcon.LayoutTransform = Matrix.CreateRotationZ(angle) * Matrix.CreateScale(scale);
+				}
 			}
 			else
 			{
-				m_updateButtonIcon.LayoutTransform = Matrix.CreateRotationZ(0) * Matrix.CreateScale(1);
-				m_updateButtonIcon.Subtexture = APIUpdateManager.IsNeedUpdate.Value ? m_needToUpdateIcon : m_dontNeedUpdateIcon;
+				if(m_updateButtonIcon != null)
+				{
+					m_updateButtonIcon.LayoutTransform = Matrix.CreateRotationZ(0) * Matrix.CreateScale(1);
+					m_updateButtonIcon.Subtexture = APIUpdateManager.IsNeedUpdate.Value ? m_needToUpdateIcon : m_dontNeedUpdateIcon;
+				}
 			}
-			if (m_updateCheckButton.IsClicked)
+			if (m_updateCheckButton?.IsClicked ?? false)
 			{
 				ScreensManager.SwitchScreen("Releases", ModsManager.APIReleasesLink_API, "API");
 				//TODO 原版的获取更新逻辑我不知道要咋处理
@@ -154,7 +160,7 @@ namespace Game
 			{
 				MarketplaceManager.ShowMarketplace();
 			}
-			if (m_showBulletinButton.IsClicked)
+			if (m_showBulletinButton?.IsClicked ?? false)
 			{
 				if (MotdManager.m_bulletin != null && !MotdManager.m_bulletin.Title.Equals("null",StringComparison.CurrentCultureIgnoreCase))
 				{

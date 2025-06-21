@@ -89,7 +89,7 @@ namespace Game
 			string key = suffix == null ? name : name + (suffix.StartsWith('.') ? suffix : ('.' + suffix));
 			if(type == typeof(Subtexture))
 			{
-				return TextureAtlasManager.GetSubtexture(name);
+				return TextureAtlasManager.GetSubtexture(name,throwOnNotFound);
 			}
 			if(Caches.TryGetValue(key,out var cacheList)) obj = cacheList.Find(f => f.GetType() == type);
 			if(obj != null) return obj;

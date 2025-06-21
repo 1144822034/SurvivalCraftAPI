@@ -681,8 +681,15 @@ namespace Game
 						if (attribute.Value.StartsWith("{") && attribute.Value.EndsWith("}"))
 						{
 							string name = attribute.Value.Substring(1, attribute.Value.Length - 2);
-							object value = ContentManager.Get(propertyInfo.PropertyType, name);
-							propertyInfo.SetValue(this, value, null);
+							object value = ContentManager.Get(propertyInfo.PropertyType, name, null, false);
+							if(value == null)
+							{
+								Log.Error($"Not Found Res [{name}][{propertyInfo.PropertyType.FullName}] when loading {GetType().FullName}");
+							}
+							else
+							{
+								propertyInfo.SetValue(this, value, null);
+							}
 						}
 						else
 						{

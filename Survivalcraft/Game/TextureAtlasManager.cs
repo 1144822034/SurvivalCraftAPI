@@ -28,22 +28,28 @@ namespace Game
 			LoadTextureAtlas(AtlasTexture, Atlas, "Textures/Atlas/");
 		}
 
-		public static Subtexture GetSubtexture(string name)
+		public static Subtexture GetSubtexture(string name,bool throwOnNotFound)
 		{
-			if (!m_subtextures.TryGetValue(name, out Subtexture value))
+			if(!m_subtextures.TryGetValue(name,out Subtexture value))
 			{
-				try
+				object value1 = ContentManager.Get(typeof(Texture2D),name,null,throwOnNotFound);
+				if(value1 == null)
 				{
-					value = new Subtexture(ContentManager.Get(typeof(Texture2D), name) as Texture2D, Vector2.Zero, Vector2.One);
-					m_subtextures.Add(name, value);
-					return value;
+					if(throwOnNotFound)
+					{
+						throw new FileNotFoundException($"Required subtexture {name} not found in TextureAtlasManager.");
+					}
+					return null;
 				}
-				catch (Exception innerException)
-				{
-					throw new InvalidOperationException($"Required subtexture {name} not found in TextureAtlasManager.", innerException);
-				}
+				value = new Subtexture(value1 as Texture2D,Vector2.Zero,Vector2.One);
+				m_subtextures.Add(name,value);
 			}
 			return value;
+		}
+
+		public static Subtexture GetSubtexture(string name)
+		{
+			return GetSubtexture(name,true);
 		}
 
 		public static void LoadTextureAtlas(Texture2D texture, string atlasDefinition, string prefix)
