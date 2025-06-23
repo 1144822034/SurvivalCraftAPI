@@ -4276,6 +4276,8 @@
 				<ComponentTemplate Name="Model" Description="Manages a 3D model and allows to animate it by changing bone matrices (models are drawn by SubsystemModelsRenderer)" Guid="79f776b5-94f4-4bce-b119-971a9cf6255c" InheritanceParent="b05700ed-7e4e-4679-98f5-b597f421496b">
 					<Parameter Name="PrepareOrder" Description="Order in which models will be prepared for drawing" Guid="0d918779-99d1-45de-aaf5-d1b706213853" Value="0" Type="int" />
 					<Parameter Name="BoundingSphereRadius" Description="Radius of bounding sphere used for visibility culling" Guid="63d3e786-7ee2-4bdd-afa6-e2c64bcbb9d7" Value="2" Type="float" />
+					<Parameter Name="ModelScale"  Guid="63d3e786-8ee2-4bdd-afa6-e2c64bcbb9d7" Value="1" Type="float" />
+					<Parameter Name="Transparent"  Guid="63d3e786-9ee2-4bdd-afa6-e2c64bcbb9d7" Value="1" Type="float" />
 					<Parameter Name="Class" Guid="6c11bcce-b6f8-47d8-bf70-8b05d44208a2" Value="Game.ComponentModel" Type="string" />
 					<Parameter Name="ModelName" Description="Name of model" Guid="b218aefe-9a39-4dda-b3a7-20fd2488b70f" Value="" Type="string" />
 					<Parameter Name="CastsShadow" Description="Whether model casts shadow on the terrain (ComponentBody must also be present in entity)" Guid="db4beb73-f071-49e3-9a46-8feb09c8f13d" Value="False" Type="bool" />
