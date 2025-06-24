@@ -1934,5 +1934,18 @@ namespace Game
 		public virtual void RecalculateCameraProjection(Camera camera, ref Matrix projectionMatrix)
 		{
 		}
+
+
+		/// <summary>
+		/// 射弹更新寻找下一个可以命中的Body时执行
+		/// </summary>
+		/// <param name="componentBody">射弹可能命中的Body</param>
+		/// <param name="projectile">触发判定的射弹</param>
+		/// <param name="ignore">设置为true会让射弹无视此Body</param>
+		/// 也可以通过将componentBody列入projectile.BodiesToIgnore中，以忽略目标
+		public virtual void OnProjectileRaycastBody(ComponentBody componentBody, Projectile projectile, out bool ignore)
+		{
+			ignore = false;
+		}
 	}
 }

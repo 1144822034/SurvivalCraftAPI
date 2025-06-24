@@ -206,7 +206,13 @@ namespace Game
             {
 	            bodyRaycastResult = SubsystemProjectiles?.m_subsystemBodies.Raycast(position + v, positionAtdt + v, 0.2f, (ComponentBody body, float distance) =>
 	            {
-		            if (BodiesToIgnore.Contains(body)) return false;
+					bool ignore = false;
+					ModsManager.HookAction("OnProjectileRaycastBody",loader => {
+						loader.OnProjectileRaycastBody(body,this,out bool ignoreByThisMod);
+						ignore |= ignoreByThisMod;
+						return false;
+					});
+		            if (BodiesToIgnore.Contains(body) || ignore) return false;
 		            return true;
 	            });
             }
