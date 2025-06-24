@@ -539,10 +539,10 @@ namespace Game
 			{
 				AddScreen("Releases", new ReleasesScreen());
 			});
-			AddLoadAction(delegate
+			/*AddLoadAction(delegate
 			{
 				AddScreen("ManageUser", new ManageUserScreen());
-			});
+			});*/
 			AddLoadAction(delegate
 			{
 				AddScreen("Players", new PlayersScreen());

@@ -6,7 +6,6 @@ using System.Text;
 using System.Text.Json;
 using System.Xml.Linq;
 using XmlUtilities;
-using static ManageUserScreen;
 
 namespace Game
 {
@@ -343,7 +342,7 @@ namespace Game
 			});
 		}
 
-
+/*
 		public static void UserList(string cursor, string searchKey, string searchType, string filter, int order, CancellableProgress progress, Action<List<ComUserInfo>, string> success, Action<Exception> failure)
 		{
 			progress ??= new CancellableProgress();
@@ -431,7 +430,7 @@ namespace Game
 				failure(error);
 			});
 		}
-
+*/
 		public static void UpdateLockState(int id, int lockState, string reason, int duration, CancellableProgress progress, Action<byte[]> success, Action<Exception> failure)
 		{
 			progress ??= new CancellableProgress();

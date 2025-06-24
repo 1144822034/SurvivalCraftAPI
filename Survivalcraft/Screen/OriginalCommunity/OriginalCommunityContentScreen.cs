@@ -46,7 +46,7 @@ public class OriginalCommunityContentScreen : Screen
 	public const string fName = "OriginalCommunityContentScreen";
 	public const string fName1 = "CommunityContentScreen";
 
-	public CancellableBusyDialog m_busyDialog = new CancellableBusyDialog(LanguageControl.Get(fName1, "2"), autoHideOnCancel: false);
+	public CancellableBusyDialog m_busyDialog = new CancellableBusyDialog($"[{fName}:2]", autoHideOnCancel: false);
 
 	public object m_filter;
 

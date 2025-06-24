@@ -336,6 +336,7 @@ public class ManageUserScreen : Screen
 		var busyDialog = new CancellableBusyDialog(LanguageControl.Get("CommunityContentScreen", 2), autoHideOnCancel: false);
 		DialogsManager.ShowDialog(null, busyDialog);
 		int order = m_order ? 1 : 0;
+		/*
 		CommunityContentManager.UserList(cursor, m_searchKeyTextBox.Text, m_searchType.ToString(), m_filter.ToString(), order, busyDialog.Progress, delegate (List<ComUserInfo> list, string nextCursor)
 		{
 			DialogsManager.HideDialog(busyDialog);
@@ -356,6 +357,7 @@ public class ManageUserScreen : Screen
 			DialogsManager.HideDialog(busyDialog);
 			DialogsManager.ShowDialog(null, new MessageDialog(LanguageControl.Error, error.Message, LanguageControl.Ok, null, null));
 		});
+		*/
 	}
 
 	public string GetFilterDisplayName(Filter filter)

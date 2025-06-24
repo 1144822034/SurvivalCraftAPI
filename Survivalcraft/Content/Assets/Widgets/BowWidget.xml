@@ -8,7 +8,7 @@
 
   <CanvasWidget Size="230, 288" CanvasWidget.Position="36, 52">
     <InventorySlotWidget Name="InventorySlot" Size="230, 288" VerticalAlignment="Center" HideHighlightRectangle="true" ProcessingOnly="true" HideEditOverlay="true">
-      <LabelWidget Name="InstructionsLabel" Text="[BowWidget:3]"  HorizontalAlignment="Center" VerticalAlignment="Far" Margin="0, 2"/>
+      <LabelWidget Name="InstructionsLabel" HorizontalAlignment="Center" VerticalAlignment="Far" Margin="0, 2"/>
     </InventorySlotWidget>
   </CanvasWidget>
   

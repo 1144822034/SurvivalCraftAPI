@@ -5,7 +5,7 @@
 
     <CanvasWidget Size="0, 12"/>
 
-    <LabelWidget Name="TitleLabel" Text="[VitalStatsWidget:1]"  Color="255, 255, 255" HorizontalAlignment="Center"/>
+    <LabelWidget Name="TitleLabel" Color="255, 255, 255" HorizontalAlignment="Center"/>
     <CanvasWidget Size="0, 4" />
     <LabelWidget Text="[VitalStatsWidget:2]"  Color="160, 160, 160, 255" HorizontalAlignment="Center" />
 
@@ -157,7 +157,7 @@
 
   </StackPanelWidget>
 
-  <BevelledButtonWidget Name="ChokeButton" CanvasWidget.Position="535, 12" Text="[VitalStatsWidget:15]" Style="{Styles/ButtonStyle_70x60}">
+  <BevelledButtonWidget Name="ChokeButton" CanvasWidget.Position="535, 12" Style="{Styles/ButtonStyle_70x60}">
     <RectangleWidget Size="40, 40" OutlineColor="0, 0, 0, 0" FillColor="255, 255, 255" Subtexture="{Textures/Atlas/SkullAndBones}" HorizontalAlignment="Center" VerticalAlignment="Center" />
   </BevelledButtonWidget>
   

@@ -8,7 +8,7 @@ namespace Game
 {
 	public class FontTextWidget : Widget
 	{
-		public string m_text;
+		public string m_text = String.Empty;
 
 		public TextOrientation m_textOrientation;
 
@@ -195,7 +195,6 @@ namespace Game
 		public FontTextWidget()
 		{
 			IsHitTestVisible = false;
-			Text = string.Empty;
 			FontScale = 1f;
 			Color = Color.White;
 			TextureLinearFilter = true;

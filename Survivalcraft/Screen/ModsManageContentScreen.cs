@@ -147,11 +147,11 @@ public class ModsManageContentScreen : Screen
 		m_uninstallFilterButton = Children.Find<BevelledButtonWidget>("UninstallFilter");
 		m_installFilterButton = Children.Find<BevelledButtonWidget>("InstallFilter");
 		m_upDirectoryButton = Children.Find<BevelledButtonWidget>("UpDirectory");
-		m_topBarLabel.Text = LanguageControl.Get(fName, 1);
-		m_uninstallFilterButton.Text = LanguageControl.Get(fName, 44);
-		m_installFilterButton.Text = LanguageControl.Get(fName, 45);
+		m_topBarLabel.Text = $"[{fName}:1]";
+		m_uninstallFilterButton.Text = $"[{fName}:44]";
+		m_installFilterButton.Text = $"[{fName}:45]";
 		m_firstEnterScreen = false;
-		m_actionButton3.Text = LanguageControl.Get(fName, 73);
+		m_actionButton3.Text = $"[{fName}:73]";
 		m_modsContentList.ItemWidgetFactory = delegate (object item)
 		{
 			ModItem modItem = (ModItem)item;

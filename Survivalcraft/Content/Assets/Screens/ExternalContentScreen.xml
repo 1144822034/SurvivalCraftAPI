@@ -5,7 +5,7 @@
   <StackPanelWidget Direction="Horizontal">
 
     <CanvasWidget Style="{Widgets/TopBarContents}" >
-      <LabelWidget Name="TopBar.Label" Text="[ExternalContentScreen:1]" />
+      <LabelWidget Name="TopBar.Label" />
     </CanvasWidget>
 
     <StackPanelWidget Direction="Vertical" VerticalAlignment="Center">

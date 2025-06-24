@@ -5,6 +5,6 @@
       <RectangleWidget Name="Checkbox.Tick" IsVisible="false" Margin="1, 1" />
       <ClickableWidget Name="Checkbox.Clickable" />
     </CanvasWidget>
-    <LabelWidget Name="Checkbox.Label" Text="[CheckboxContents:1]" VerticalAlignment="Center" Margin="10, 0" />
+    <LabelWidget Name="Checkbox.Label" VerticalAlignment="Center" Margin="10, 0" />
   </StackPanelWidget>
 </CheckboxWidget>

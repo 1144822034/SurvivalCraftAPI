@@ -29,7 +29,7 @@ namespace Game
 					}
 					else
 					{
-						m_text = LanguageControl.Get("Usual", value);
+						m_text = value;
 					}
 					m_linesSize = null;
 				}

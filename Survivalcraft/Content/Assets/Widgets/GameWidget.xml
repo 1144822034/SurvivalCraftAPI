@@ -57,28 +57,28 @@
       </StackPanelWidget>
 
       <StackPanelWidget Name="LeftControlsContainer" Direction="Vertical" HorizontalAlignment="Near" VerticalAlignment="Near" IsHitTestVisible="false">
-        <BitmapButtonWidget Name="BackButton" Text="[GameWidget:3]" Size="64, 64" NormalSubtexture="{Textures/Atlas/BackButton}" ClickedSubtexture="{Textures/Atlas/BackButton_Pressed}" Margin="0, 3" />
-        <BitmapButtonWidget Name="ClothingButton" Text="[GameWidget:4]" Size="64, 64" NormalSubtexture="{Textures/Atlas/ClothingButton}" ClickedSubtexture="{Textures/Atlas/ClothingButton_Pressed}" Margin="0, 3" IsAutoCheckingEnabled="true"/>
-        <BitmapButtonWidget Name="InventoryButton" Text="[GameWidget:5]" Size="64, 64" NormalSubtexture="{Textures/Atlas/InventoryButton}" ClickedSubtexture="{Textures/Atlas/InventoryButton_Pressed}" Margin="0, 3" IsAutoCheckingEnabled="true"/>
+        <BitmapButtonWidget Name="BackButton" Size="64, 64" NormalSubtexture="{Textures/Atlas/BackButton}" ClickedSubtexture="{Textures/Atlas/BackButton_Pressed}" Margin="0, 3" />
+        <BitmapButtonWidget Name="ClothingButton" Size="64, 64" NormalSubtexture="{Textures/Atlas/ClothingButton}" ClickedSubtexture="{Textures/Atlas/ClothingButton_Pressed}" Margin="0, 3" IsAutoCheckingEnabled="true"/>
+        <BitmapButtonWidget Name="InventoryButton" Size="64, 64" NormalSubtexture="{Textures/Atlas/InventoryButton}" ClickedSubtexture="{Textures/Atlas/InventoryButton_Pressed}" Margin="0, 3" IsAutoCheckingEnabled="true"/>
       </StackPanelWidget>
 
       <StackPanelWidget Name="RightControlsContainer" Direction="Vertical" HorizontalAlignment="Far" VerticalAlignment="Near" IsHitTestVisible="false">
         <StackPanelWidget Direction="Horizontal" HorizontalAlignment="Far">
           <StackPanelWidget Name="MoreContents" Direction="Horizontal" HorizontalAlignment="Far" IsVisible="false" Margin="4, 3">
-            <BitmapButtonWidget Name="HelpButton" Text="[GameWidget:6]" Size="68, 64" NormalSubtexture="{Textures/Atlas/HelpButton}" ClickedSubtexture="{Textures/Atlas/HelpButton_Pressed}" Margin="4, 0" />
-            <BitmapButtonWidget Name="PhotoButton" Text="[GameWidget:7]" Size="68, 64" NormalSubtexture="{Textures/Atlas/PhotoButton}" ClickedSubtexture="{Textures/Atlas/PhotoButton_Pressed}" Margin="4, 0" />
-            <BitmapButtonWidget Name="CameraButton" Text="[GameWidget:8]" Size="68, 64" NormalSubtexture="{Textures/Atlas/CameraButton}" ClickedSubtexture="{Textures/Atlas/CameraButton_Pressed}" Margin="4, 0" />
-            <BitmapButtonWidget Name="PrecipitationButton" Text="" Size="68, 64" NormalSubtexture="{Textures/Atlas/PrecipitationButton}" ClickedSubtexture="{Textures/Atlas/PrecipitationButton_Pressed}" Margin="4, 0" />
-            <BitmapButtonWidget Name="FogButton" Text="" Size="68, 64" NormalSubtexture="{Textures/Atlas/FogButton}" ClickedSubtexture="{Textures/Atlas/FogButton_Pressed}" Margin="4, 0" />
-            <BitmapButtonWidget Name="LightningButton" Text="[GameWidget:9]" Size="68, 64" NormalSubtexture="{Textures/Atlas/LightningButton}" ClickedSubtexture="{Textures/Atlas/LightningButton_Pressed}" Margin="4, 0" />
-            <BitmapButtonWidget Name="TimeOfDayButton" Text="[GameWidget:10]" Size="68, 64" NormalSubtexture="{Textures/Atlas/TimeOfDayButton}" ClickedSubtexture="{Textures/Atlas/TimeOfDayButton_Pressed}" Margin="4, 0" />
+            <BitmapButtonWidget Name="HelpButton" Size="68, 64" NormalSubtexture="{Textures/Atlas/HelpButton}" ClickedSubtexture="{Textures/Atlas/HelpButton_Pressed}" Margin="4, 0" />
+            <BitmapButtonWidget Name="PhotoButton" Size="68, 64" NormalSubtexture="{Textures/Atlas/PhotoButton}" ClickedSubtexture="{Textures/Atlas/PhotoButton_Pressed}" Margin="4, 0" />
+            <BitmapButtonWidget Name="CameraButton" Size="68, 64" NormalSubtexture="{Textures/Atlas/CameraButton}" ClickedSubtexture="{Textures/Atlas/CameraButton_Pressed}" Margin="4, 0" />
+            <BitmapButtonWidget Name="PrecipitationButton" Size="68, 64" NormalSubtexture="{Textures/Atlas/PrecipitationButton}" ClickedSubtexture="{Textures/Atlas/PrecipitationButton_Pressed}" Margin="4, 0" />
+            <BitmapButtonWidget Name="FogButton" Size="68, 64" NormalSubtexture="{Textures/Atlas/FogButton}" ClickedSubtexture="{Textures/Atlas/FogButton_Pressed}" Margin="4, 0" />
+            <BitmapButtonWidget Name="LightningButton" Size="68, 64" NormalSubtexture="{Textures/Atlas/LightningButton}" ClickedSubtexture="{Textures/Atlas/LightningButton_Pressed}" Margin="4, 0" />
+            <BitmapButtonWidget Name="TimeOfDayButton" Size="68, 64" NormalSubtexture="{Textures/Atlas/TimeOfDayButton}" ClickedSubtexture="{Textures/Atlas/TimeOfDayButton_Pressed}" Margin="4, 0" />
           </StackPanelWidget>
-          <BitmapButtonWidget Name="MoreButton" HorizontalAlignment="Far" Text="[GameWidget:11]" Size="64, 64" NormalSubtexture="{Textures/Atlas/MoreButton}" ClickedSubtexture="{Textures/Atlas/MoreButton_Pressed}" Margin="0, 3" IsAutoCheckingEnabled="true" />
+          <BitmapButtonWidget Name="MoreButton" HorizontalAlignment="Far" Size="64, 64" NormalSubtexture="{Textures/Atlas/MoreButton}" ClickedSubtexture="{Textures/Atlas/MoreButton_Pressed}" Margin="0, 3" IsAutoCheckingEnabled="true" />
         </StackPanelWidget>
-        <BitmapButtonWidget Name="CreativeFlyButton" HorizontalAlignment="Far" Text="[GameWidget:12]" Size="64, 64" NormalSubtexture="{Textures/Atlas/CreativeFlyButton}" ClickedSubtexture="{Textures/Atlas/CreativeFlyButton_Pressed}" Margin="0, 3" IsAutoCheckingEnabled="true"/>
-        <BitmapButtonWidget Name="CrouchButton" HorizontalAlignment="Far" Text="" Size="64, 64" NormalSubtexture="{Textures/Atlas/SneakButton}" ClickedSubtexture="{Textures/Atlas/SneakButton_Pressed}" Margin="0, 3" IsAutoCheckingEnabled="true"/>
-        <BitmapButtonWidget Name="MountButton" HorizontalAlignment="Far" Text="[GameWidget:14]" Size="64, 64" NormalSubtexture="{Textures/Atlas/MountButton}" ClickedSubtexture="{Textures/Atlas/MountButton_Pressed}" Margin="0, 3" IsAutoCheckingEnabled="true"/>
-        <BitmapButtonWidget Name="EditItemButton" HorizontalAlignment="Far" Text="[GameWidget:15]" Size="64, 64" NormalSubtexture="{Textures/Atlas/EditItemButton}" ClickedSubtexture="{Textures/Atlas/EditItemButton_Pressed}" Margin="0, 3" />
+        <BitmapButtonWidget Name="CreativeFlyButton" HorizontalAlignment="Far" Size="64, 64" NormalSubtexture="{Textures/Atlas/CreativeFlyButton}" ClickedSubtexture="{Textures/Atlas/CreativeFlyButton_Pressed}" Margin="0, 3" IsAutoCheckingEnabled="true"/>
+        <BitmapButtonWidget Name="CrouchButton" HorizontalAlignment="Far" Size="64, 64" NormalSubtexture="{Textures/Atlas/SneakButton}" ClickedSubtexture="{Textures/Atlas/SneakButton_Pressed}" Margin="0, 3" IsAutoCheckingEnabled="true"/>
+        <BitmapButtonWidget Name="MountButton" HorizontalAlignment="Far" Size="64, 64" NormalSubtexture="{Textures/Atlas/MountButton}" ClickedSubtexture="{Textures/Atlas/MountButton_Pressed}" Margin="0, 3" IsAutoCheckingEnabled="true"/>
+        <BitmapButtonWidget Name="EditItemButton" HorizontalAlignment="Far" Size="64, 64" NormalSubtexture="{Textures/Atlas/EditItemButton}" ClickedSubtexture="{Textures/Atlas/EditItemButton_Pressed}" Margin="0, 3" />
       </StackPanelWidget>
 
       <DragHostWidget Name="DragHost" />

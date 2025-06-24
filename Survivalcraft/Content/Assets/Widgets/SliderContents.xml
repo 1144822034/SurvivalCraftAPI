@@ -5,7 +5,7 @@
       <BevelledRectangleWidget Name="Slider.Tab" Size="30, 45" IsHitTestVisible="true" BevelSize="2" />
     </CanvasWidget>
     <CanvasWidget Name="Slider.LabelCanvas" Size="100, Infinity">
-      <LabelWidget Name="Slider.Label" Text="[SliderContents:1]"  VerticalAlignment="Center" HorizontalAlignment="Center" />
+      <LabelWidget Name="Slider.Label" VerticalAlignment="Center" HorizontalAlignment="Center" />
     </CanvasWidget>
   </StackPanelWidget>
 </SliderWidget>

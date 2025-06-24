@@ -1,8 +1,8 @@
 ﻿<CanvasWidget xmlns="runtime-namespace:Game">
 
 	<CanvasWidget Size="780, 120" ClampToBounds="true" HorizontalAlignment="Center" VerticalAlignment="Near">
-		<LabelWidget Name="HeadText" Text="" HorizontalAlignment="Center" VerticalAlignment="Near" Margin="0,10"/>
-		<LabelWidget Name="AdviceText" Color="128,128,128,255" Text="" HorizontalAlignment="Center" VerticalAlignment="Near" Margin="0,40"/>
+		<LabelWidget Name="HeadText" HorizontalAlignment="Center" VerticalAlignment="Near" Margin="0,10"/>
+		<LabelWidget Name="AdviceText" Color="128,128,128,255" HorizontalAlignment="Center" VerticalAlignment="Near" Margin="0,40"/>
 	</CanvasWidget>
 
 	<CanvasWidget Size="780, 440" ClampToBounds="true" HorizontalAlignment="Center" VerticalAlignment="Center">

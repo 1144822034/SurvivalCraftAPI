@@ -28,7 +28,7 @@
             <CanvasWidget Size="0, 10" />
             <StackPanelWidget Direction="Horizontal" HorizontalAlignment="Near">
                 <LabelWidget Text="[RunJsDialog:6]" Color="255, 255, 255" HorizontalAlignment="Near" Margin="4, 0" />
-                <LabelWidget Name="RunJsDialog.TimeCosted" Text="" Color="255, 255, 255" HorizontalAlignment="Center" Margin="4, 0" />
+                <LabelWidget Name="RunJsDialog.TimeCosted" Color="255, 255, 255" HorizontalAlignment="Center" Margin="4, 0" />
             </StackPanelWidget>
             <CanvasWidget Size="0, Infinity" />
             <StackPanelWidget Direction="Horizontal" HorizontalAlignment="Center">

@@ -6,10 +6,10 @@
 
   <CanvasWidget CanvasWidget.Position="24, 52" Size="80, 288" >
     <StackPanelWidget Direction="Vertical" VerticalAlignment="Center">
-      <BevelledButtonWidget Name="VitalStatsButton" Text="[ClothingWidget:3]" Style="{Styles/ButtonStyle_70x60}">
+      <BevelledButtonWidget Name="VitalStatsButton" Style="{Styles/ButtonStyle_70x60}">
         <RectangleWidget Size="40, 40" OutlineColor="0, 0, 0, 0" FillColor="255, 255, 255" Subtexture="{Textures/Atlas/VitalStats}" HorizontalAlignment="Center" VerticalAlignment="Center" />
       </BevelledButtonWidget>
-      <BevelledButtonWidget Name="SleepButton" Text="[ClothingWidget:4]" Style="{Styles/ButtonStyle_70x60}">
+      <BevelledButtonWidget Name="SleepButton" Style="{Styles/ButtonStyle_70x60}">
         <RectangleWidget Size="40, 40" OutlineColor="0, 0, 0, 0" FillColor="255, 255, 255" Subtexture="{Textures/Atlas/Sleep}" HorizontalAlignment="Center" VerticalAlignment="Center" />
       </BevelledButtonWidget>
     </StackPanelWidget>

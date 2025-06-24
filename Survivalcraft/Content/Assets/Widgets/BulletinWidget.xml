@@ -9,7 +9,7 @@
 			<StackPanelWidget Direction="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center">
 
 				<CanvasWidget Size="515, 40">
-					<LabelWidget Name="Title" Text="" VerticalAlignment="Center" Margin="20, 0"/>
+					<LabelWidget Name="Title" VerticalAlignment="Center" Margin="20, 0"/>
 				</CanvasWidget>
 
 				<CanvasWidget Size="17, 0"/>
@@ -28,7 +28,7 @@
 				<ScrollPanelWidget Name="ScrollPanel" Direction="Vertical" Margin="3, 3" ClampToBounds="true">
 					<CanvasWidget HorizontalAlignment="Center" VerticalAlignment="Center">
 						<StackPanelWidget Direction="Vertical" HorizontalAlignment="Center" Margin="10, 10" >
-							<LabelWidget Name="Content" Text=""  Color="255,255,255" HorizontalAlignment="Center" TextAnchor="HorizontalCenter" WordWrap="true" />
+							<LabelWidget Name="Content" Color="255,255,255" HorizontalAlignment="Center" TextAnchor="HorizontalCenter" WordWrap="true" />
 						</StackPanelWidget>
 					</CanvasWidget>
 				</ScrollPanelWidget>

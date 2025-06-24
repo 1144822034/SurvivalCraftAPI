@@ -12,8 +12,8 @@
       <BevelledButtonWidget Name="CategoryButton" Text="[CreativeInventoryWidget:1]" Size="240, 60" HorizontalAlignment="Center" VerticalAlignment="Center"  />
       <CanvasWidget Size="Infinity, 0" />
       <LabelWidget Name="PageLabel" HorizontalAlignment="Center" VerticalAlignment="Center"  Margin="6, 0"/>
-      <BevelledButtonWidget Name="PageUpButton" Text="[CreativeInventoryWidget:2]" Style="{Styles/ButtonStyle_ArrowUp}" />
-      <BevelledButtonWidget Name="PageDownButton" Text="[CreativeInventoryWidget:3]" Style="{Styles/ButtonStyle_ArrowDown}" />
+      <BevelledButtonWidget Name="PageUpButton" Style="{Styles/ButtonStyle_ArrowUp}" />
+      <BevelledButtonWidget Name="PageDownButton" Style="{Styles/ButtonStyle_ArrowDown}" />
     </StackPanelWidget>
 
     <CanvasWidget Size="0, 4"/>

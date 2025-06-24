@@ -4,7 +4,7 @@
     <PlayerModelWidget Name="CharacterSkinItem.Model" AnimateHandsSeed="-1" AnimateHeadSeed="-1" Size="28, 56" HorizontalAlignment="Center" />
   </CanvasWidget>
   <StackPanelWidget Direction="Vertical" VerticalAlignment="Center">
-    <LabelWidget Name="CharacterSkinItem.Text" Text="[CharacterSkinItem:1]"  Color="255, 255, 255" />
+    <LabelWidget Name="CharacterSkinItem.Text" Color="255, 255, 255" />
     <LabelWidget Name="CharacterSkinItem.Details"  Color="128, 128, 128" VerticalAlignment="Center" />
   </StackPanelWidget>
 </StackPanelWidget>
