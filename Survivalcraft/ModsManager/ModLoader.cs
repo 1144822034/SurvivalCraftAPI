@@ -1942,8 +1942,9 @@ namespace Game
 		/// <param name="componentBody">射弹可能命中的Body</param>
 		/// <param name="projectile">触发判定的射弹</param>
 		/// <param name="ignore">设置为true会让射弹无视此Body</param>
+		/// <param name="distance">射弹和目标的在本帧更新中的距离</param>
 		/// 也可以通过将componentBody列入projectile.BodiesToIgnore中，以忽略目标
-		public virtual void OnProjectileRaycastBody(ComponentBody componentBody, Projectile projectile, out bool ignore)
+		public virtual void OnProjectileRaycastBody(ComponentBody componentBody, Projectile projectile, float distance, out bool ignore)
 		{
 			ignore = false;
 		}

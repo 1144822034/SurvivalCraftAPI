@@ -208,7 +208,7 @@ namespace Game
 	            {
 					bool ignore = false;
 					ModsManager.HookAction("OnProjectileRaycastBody",loader => {
-						loader.OnProjectileRaycastBody(body,this,out bool ignoreByThisMod);
+						loader.OnProjectileRaycastBody(body,this,distance,out bool ignoreByThisMod);
 						ignore |= ignoreByThisMod;
 						return false;
 					});
