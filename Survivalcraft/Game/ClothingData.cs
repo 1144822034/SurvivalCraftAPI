@@ -180,5 +180,15 @@ namespace Game
 			componentClothing.SteedMovementSpeedFactor *= SteedMovementSpeedFactor;
 			componentClothing.m_densityModifierApplied += DensityModifier;
 		}
+		/// <summary>
+		/// 获取衣物穿着在身上时的颜色附加
+		/// </summary>
+		/// <param name="data"></param>
+		/// <returns></returns>
+		public virtual Color GetColor(ComponentClothing componentClothing, int value)
+		{
+			int data = Terrain.ExtractData(value);
+			return SubsystemPalette.GetFabricColor(componentClothing.m_subsystemTerrain, ClothingBlock.GetClothingColor(data));
+		}
 	}
 }

@@ -649,7 +649,7 @@ namespace Game
 							{
 								continue;
 							}
-							Color fabricColor = SubsystemPalette.GetFabricColor(m_subsystemTerrain, ClothingBlock.GetClothingColor(data));
+							Color fabricColor = clothingData.GetColor(this, clothe);
 							texturedBatch2D = m_primitivesRenderer.TexturedBatch(clothingData.Texture, useAlphaTest: false, num++, DepthStencilState.None, null, BlendState.NonPremultiplied, SamplerState.PointClamp);
 							if (!clothingData.IsOuter)
 							{
@@ -673,7 +673,7 @@ namespace Game
 							{
 								continue;
 							}
-							Color fabricColor2 = SubsystemPalette.GetFabricColor(m_subsystemTerrain, ClothingBlock.GetClothingColor(data2));
+							Color fabricColor2 = clothingData2.GetColor(this, clothe2);
 							texturedBatch2D = m_primitivesRenderer.TexturedBatch(clothingData2.Texture, useAlphaTest: false, num++, DepthStencilState.None, null, BlendState.NonPremultiplied, SamplerState.PointClamp);
 							if (clothingData2.IsOuter)
 							{
