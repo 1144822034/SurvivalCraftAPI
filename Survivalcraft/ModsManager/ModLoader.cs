@@ -1,6 +1,7 @@
 using Engine;
 using Engine.Graphics;
 using GameEntitySystem;
+using Jint.Native;
 using System.Collections.Generic;
 using System.Xml.Linq;
 using TemplatesDatabase;
@@ -180,17 +181,18 @@ namespace Game
         public virtual void AttackPowerParameter(ComponentBody target, ComponentCreature attacker, Vector3 hitPoint, Vector3 hitDirection, ref float impulseFactor, ref float stunTimeFactor, ref bool recalculate)
         {
         }
-        /// <summary>
-        /// 当人物吃东西时执行
-        /// </summary>
-        /// <param name="componentPlayer"></param>
-        /// <param name="block"></param>
-        /// <param name="value"></param>
-        /// <param name="count"></param>
-        // <param name="processCount"></param>
-        // <param name="processedValue"></param>
-        // <param name="processedCount"></param>
-        /// <returns>如果为 true：不移交到下一个 mod 处理</returns>
+		/// <summary>
+		/// 当人物吃东西时执行
+		/// </summary>
+		/// <param name="componentPlayer"></param>
+		/// <param name="block"></param>
+		/// <param name="value"></param>
+		/// <param name="count"></param>
+		// <param name="processCount"></param>
+		// <param name="processedValue"></param>
+		// <param name="processedCount"></param>
+		/// <returns>如果为 true：不移交到下一个 mod 处理</returns>
+		[Obsolete("使用另一个ClothingProcessSlotItems接口")]
         public virtual bool ClothingProcessSlotItems(ComponentPlayer componentPlayer, Block block, int slotIndex, int value, int count)
         {
             return false;
@@ -1947,6 +1949,22 @@ namespace Game
 		public virtual void OnProjectileRaycastBody(ComponentBody componentBody, Projectile projectile, float distance, out bool ignore)
 		{
 			ignore = false;
+		}
+
+		/// <summary>
+		/// 将物品拖动到衣物界面玩家身上时执行
+		/// </summary>
+		/// <param name="componentPlayer"></param>
+		/// <param name="slotIndex">拖动到的栏位（头部、躯干、护腿、脚）</param>
+		/// <param name="inputValue">拖动过来的方块的方块完整值。修改会改动移交给下一个模组的完整值</param>
+		/// <param name="inputCount">拖动过来的方块的数量。修改会改动移交给下一个模组的数量</param>
+		/// <param name="processedValue">执行完毕后，留下的物品的Value。例如奶桶在食用完毕后会留下空桶。</param>
+		/// <param name="processedCount">执行完毕后，留下的物品的数量。</param>
+		/// <param name="skippedByOtherMods">是否已经被其他模组接管执行</param>
+		/// <param name="skipVanilla">是否由本模组接管执行。为保证模组间兼容性，建议只在处理本模组物品时，才将skipVanilla设置为true，或者改动inputValue和inputCount。</param>
+		public virtual void ClothingProcessSlotItems(ComponentPlayer componentPlayer, int slotIndex, ref int inputValue, ref int inputCount, ref int processedValue, ref int processedCount, bool skippedByOtherMods,out bool skipVanilla)
+		{
+			skipVanilla = false;
 		}
 	}
 }

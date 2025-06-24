@@ -487,16 +487,20 @@ namespace Game
 
 		public virtual void ProcessSlotItems(int slotIndex, int value, int count, int processCount, out int processedValue, out int processedCount)
 		{
-			processedCount = 0;
-			processedValue = 0;
-			if (processCount != 1)
-			{
-				return;
-			}
-			Block block = BlocksManager.Blocks[Terrain.ExtractContents(value)];
+			int pValue = 0;
+			int pCount = 0;
+			bool skippedByMods = false;
 			ModsManager.HookAction("ClothingProcessSlotItems", modLoader => {
-				return modLoader.ClothingProcessSlotItems(m_componentPlayer, block, slotIndex, value, count); 
+				modLoader.ClothingProcessSlotItems(m_componentPlayer,slotIndex,ref value,ref count,ref pValue,ref pCount,skippedByMods,out bool skipVanilla);
+				bool oldLoaderResult = modLoader.ClothingProcessSlotItems(m_componentPlayer,BlocksManager.Blocks[Terrain.ExtractContents(value)],slotIndex,value,count);
+				skippedByMods |= oldLoaderResult;
+				skippedByMods |= skipVanilla;
+				return false;
 			});
+			processedCount = pValue;
+			processedValue = pCount;
+			if(skippedByMods) return;
+			Block block = BlocksManager.Blocks[Terrain.ExtractContents(value)];
 			if (block.GetNutritionalValue(value) > 0f)
 			{
 				if (block is BucketBlock)
