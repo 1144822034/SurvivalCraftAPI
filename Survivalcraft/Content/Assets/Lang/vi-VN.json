@@ -401,6 +401,9 @@
   "PaintBucketBlock": {
     "1": "Make {0} Paint"
   },
+  "PumpkinSoupBucketBlock": {
+    "1": "Cook pumpkin soup"
+  },
   "GameMenuDialog": {
     "1": "Thiết bị của bạn nhanh",
     "2": "Hãy cân nhắc tăng tầm nhìn hoặc độ phân giải để có đồ họa tốt hơn. Để làm vậy, vào cài đặt hiệu năng.",
@@ -3451,7 +3454,8 @@
       "2": " Nhấp nháy",
       "3": " (Thấp)",
       "4": " (Cao)"
-    }
+    },
+    "CRDescription":"Make fireworks"
   },
   "WorldPalette": {
     "Colors": [

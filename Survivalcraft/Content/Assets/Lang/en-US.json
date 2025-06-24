@@ -413,6 +413,9 @@
     "PaintBucketBlock": {
         "1": "Make {0} Paint"
     },
+    "PumpkinSoupBucketBlock": {
+      "1": "Cook pumpkin soup"
+    },
     "GameMenuDialog": {
         "1": "Your device is fast",
         "2": "Consider increasing visibility range or resolution for better graphics. To do so, go to performance settings.",
@@ -3554,7 +3557,8 @@
             "2": " Flickering",
             "3": "(Low)",
             "4": "(High)"
-        }
+        },
+        "CRDescription":"Make fireworks"
     },
     "WorldPalette": {
         "Colors": [

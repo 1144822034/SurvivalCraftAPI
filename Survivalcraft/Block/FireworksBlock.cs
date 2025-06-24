@@ -151,7 +151,7 @@ namespace Game
 								RemainsCount = 1,
 								RemainsValue = Terrain.MakeBlockValue(90),
 								RequiredHeatLevel = 0f,
-								Description = "ÖÆ×÷ÑÌ»¨"
+								Description = LanguageControl.GetFireworks("CRDescription", null)
 							};
 							if (shape == 0)
 							{

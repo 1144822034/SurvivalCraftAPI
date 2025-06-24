@@ -119,6 +119,10 @@
     "SubsystemEggBlockBehavior": {
         "1": "Error al generar la criatura, revise el registro del juego."
     },
+    "SubsystemFireworksBlockBehavior": {
+      "1": "Happy New Year!",
+      "2": "--- Enjoy the fireworks ---"
+    },
     "ExternalContentManager": {
         "1": "Sin nombre.",
         "2": "Nombre demasiado largo. Máximo 50 caracteres permitido.",
@@ -369,6 +373,9 @@
     },
     "PaintBucketBlock": {
       "1": "Make {0} Paint"
+    },
+    "PumpkinSoupBucketBlock": {
+      "1": "Cook pumpkin soup"
     },
     "GameMenuDialog": {
         "1": "Tu dispositivo es rápido",
@@ -3523,7 +3530,8 @@
             "2": "Parpadeando",
             "3": "(Bajo)",
             "4": "(Alto)"
-        }
+        },
+        "CRDescription":"Make fireworks"
     },
     "WorldPalette": {
         "Colors": [

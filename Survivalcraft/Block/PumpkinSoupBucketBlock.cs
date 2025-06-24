@@ -11,6 +11,8 @@ namespace Game
 
 		public BlockMesh m_standaloneBlockMesh = new();
 
+		public const string fName = "PumpkinSoupBucketBlock";
+
 		public override void Initialize()
 		{
 			Model model = ContentManager.Get<Model>("Models/FullBucket");
@@ -45,7 +47,7 @@ namespace Game
 						ResultCount = 1,
 						ResultValue = 251,
 						RequiredHeatLevel = 1f,
-						Description = "Åëâ¿ÄÏ¹ÏÖà"
+						Description = LanguageControl.Get(fName, "1")
 					};
 					int data = BasePumpkinBlock.SetIsDead(BasePumpkinBlock.SetSize(0, 7), isDead != 0);
 					int value = SetDamage(Terrain.MakeBlockValue(131, 0, data), rot);

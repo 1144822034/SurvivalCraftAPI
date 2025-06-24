@@ -5,7 +5,7 @@
   <StackPanelWidget Direction="Horizontal">
 
     <CanvasWidget Style="{Widgets/TopBarContents}" >
-      <LabelWidget Name="TopBar.Label" Text="[APIReleasesScreen:1]" />
+      <LabelWidget Name="TopBar.Label" Text="[ReleasesScreen:1]" />
     </CanvasWidget>
 
     <CanvasWidget Size="300, Infinity" Margin="10, 10">

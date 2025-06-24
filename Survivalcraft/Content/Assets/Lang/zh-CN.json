@@ -415,6 +415,9 @@
     "PaintBucketBlock": {
       "1": "制作{0}颜料"
     },
+    "PumpkinSoupBucketBlock": {
+      "1": "煮南瓜汤"
+    },
     "GameMenuDialog": {
         "1": "你的设备性能充足",
         "2": "你可以考虑增加可视范围或提高分辨率以获得更好的图形效果",
@@ -3660,7 +3663,8 @@
             "2": "闪烁",
             "3": "低",
             "4": "高"
-        }
+        },
+        "CRDescription":"制造烟花"
     },
     "WorldPalette": {
         "Colors": [

@@ -174,7 +174,7 @@ namespace Game
 		}
 		public static string Get(params string[] key)
 		{
-			return Get(out bool r, key);
+			return Get(out bool _, key);
 		}
 		public static string Get(out bool r, params string[] keys)
 		{//获得键值
@@ -183,7 +183,7 @@ namespace Game
 			bool flag = false;
             foreach (string key in keys)
 			{
-				if(key.Length == 0 || nowNode == null)
+				if(string.IsNullOrEmpty(key) || nowNode == null)
 				{
 					break;
 				}
