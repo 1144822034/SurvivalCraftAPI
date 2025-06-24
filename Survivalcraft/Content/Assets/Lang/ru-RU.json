@@ -403,6 +403,12 @@
     "AirBlock": {
         "1": "Unknown Block"
     },
+    "SevenSegmentDisplayBlock": {
+      "1": "Make 7-segment displays from copper, glass and paint"
+    },
+    "PaintBucketBlock": {
+      "1": "Make {0} Paint"
+    },
     "GameMenuDialog": {
         "1": "Устройство сочтено быстрым",
         "2": "рекомендуется увеличение дальности видимости или разрешения в настройках производительности для лучшей графики",

@@ -13,6 +13,8 @@ namespace Game
 
 		public BlockMesh m_standalonePaintBlockMesh = new();
 
+		public const string fName = "PaintBucketBlock";
+
 		public override void Initialize()
 		{
 			Model model = ContentManager.Get<Model>("Models/FullBucket");
@@ -62,7 +64,7 @@ namespace Game
 					{
 						var craftingRecipe = new CraftingRecipe
 						{
-							Description = $"ÖÆ×÷ {SubsystemPalette.GetName(null, num, null)} ÑÕÁÏ",
+							Description = string.Format(LanguageControl.Get(fName, "1"),SubsystemPalette.GetName(null, num, null)),
 							ResultValue = Terrain.MakeBlockValue(129, 0, num),
 							ResultCount = 1,
 							RequiredHeatLevel = 1f

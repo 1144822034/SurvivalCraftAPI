@@ -367,6 +367,9 @@
     "SevenSegmentDisplayBlock": {
         "1": "Haga una Pantalla de 7 segmentos con cobre, vidrio y pintura"
     },
+    "PaintBucketBlock": {
+      "1": "Make {0} Paint"
+    },
     "GameMenuDialog": {
         "1": "Tu dispositivo es rápido",
         "2": "se considera un aumento de resolución y visibilidad, para ello ve a: Configuración/Ajustes de rendimiento.",

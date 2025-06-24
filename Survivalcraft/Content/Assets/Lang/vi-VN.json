@@ -398,6 +398,9 @@
   "SevenSegmentDisplayBlock": {
     "1": "Làm màn hình 7 đoạn từ đồng, kính và sơn"
   },
+  "PaintBucketBlock": {
+    "1": "Make {0} Paint"
+  },
   "GameMenuDialog": {
     "1": "Thiết bị của bạn nhanh",
     "2": "Hãy cân nhắc tăng tầm nhìn hoặc độ phân giải để có đồ họa tốt hơn. Để làm vậy, vào cài đặt hiệu năng.",
