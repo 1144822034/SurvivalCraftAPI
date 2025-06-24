@@ -500,6 +500,10 @@ namespace Game
 			processedCount = pValue;
 			processedValue = pCount;
 			if(skippedByMods) return;
+			if(processCount != 1)
+			{
+				return;
+			}
 			Block block = BlocksManager.Blocks[Terrain.ExtractContents(value)];
 			if (block.GetNutritionalValue(value) > 0f)
 			{
