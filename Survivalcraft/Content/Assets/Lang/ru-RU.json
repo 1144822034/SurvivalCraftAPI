@@ -208,6 +208,13 @@
         "2": "Требуется уровень {0}",
         "3": "Требуется уровень {0}"
     },
+    "BlocksTexturesManager":{
+        "1": "Could not find blocks texture \"{0}\".",
+        "2": "Could not load blocks texture \"{0}\". Reason: {1}.",
+        "3": "Unable to delete blocks texture \"{0}\"",
+        "4": "Blocks texture is larger than 65536x65536 pixels (size={0}x{1})",
+        "5": "Blocks texture does not have power-of-two size (size={0}x{1})"
+    },
     "SubsystemCrossbowBlockBehavior": {
         "0": "Арбалет не натянут",
         "1": "Болт не загружен"

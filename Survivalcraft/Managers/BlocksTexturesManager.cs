@@ -9,6 +9,7 @@ namespace Game
 {
 	public static class BlocksTexturesManager
 	{
+		public const string fName = "BlocksTexturesManager";
 		public static List<string> m_blockTextureNames = [];
 
 		public static Texture2D DefaultBlocksTexture
@@ -74,14 +75,22 @@ namespace Game
 			{
 				try
 				{
-					Image image = Image.Load(GetFileName(name));
-					ValidateBlocksTexture(image);
-					texture2D = Texture2D.Load(image);
-					texture2D.Tag = image;
+					string fileName = GetFileName(name);
+					if(Storage.FileExists(fileName))
+					{
+						Image image = Image.Load(fileName);
+						ValidateBlocksTexture(image);
+						texture2D = Texture2D.Load(image);
+						texture2D.Tag = image;
+					}
+					else
+					{
+						Log.Warning(string.Format(LanguageControl.Get(fName,"1"),name));
+					}
 				}
 				catch (Exception ex)
 				{
-					Log.Warning(string.Format("Could not load blocks texture \"{0}\". Reason: {1}.", new object[2] { name, ex.Message }));
+					Log.Warning(string.Format(LanguageControl.Get(fName,"2"), new object[2] { name, ex.Message }));
 				}
 			}
 			if (texture2D == null)
@@ -124,7 +133,7 @@ namespace Game
 			}
 			catch (Exception e)
 			{
-				ExceptionManager.ReportExceptionToUser($"Unable to delete blocks texture \"{name}\"", e);
+				ExceptionManager.ReportExceptionToUser(string.Format(LanguageControl.Get(fName,"3"),name), e);
 			}
 		}
 
@@ -143,23 +152,24 @@ namespace Game
 			var image = Image.Load(stream);
 			if (image.Width > 65536 || image.Height > 65536)
 			{
-				throw new InvalidOperationException($"Blocks texture is larger than 65536x65536 pixels (size={image.Width}x{image.Height})");
+				throw new InvalidOperationException(string.Format(LanguageControl.Get(fName,"4"),image.Width,image.Height));
 			}
 			if (!MathUtils.IsPowerOf2(image.Width) || !MathUtils.IsPowerOf2(image.Height))
 			{
-				throw new InvalidOperationException($"Blocks texture does not have power-of-two size (size={image.Width}x{image.Height})");
+				throw new InvalidOperationException(string.Format(LanguageControl.Get(fName,"5"),image.Width,image.Height));
 			}
+			image.Dispose();
 		}
 
 		public static void ValidateBlocksTexture(Image image)
 		{
 			if (image.Width > 65536 || image.Height > 65536)
 			{
-				throw new InvalidOperationException(string.Format("Blocks texture is larger than 65536x65536 pixels (size={0}x{1})", new object[2] { image.Width, image.Height }));
+				throw new InvalidOperationException(string.Format(LanguageControl.Get(fName,"4"),image.Width,image.Height));
 			}
 			if (!MathUtils.IsPowerOf2(image.Width) || !MathUtils.IsPowerOf2(image.Height))
 			{
-				throw new InvalidOperationException(string.Format("Blocks texture does not have power-of-two size (size={0}x{1})", new object[2] { image.Width, image.Height }));
+				throw new InvalidOperationException(string.Format(LanguageControl.Get(fName,"5"),image.Width,image.Height));
 			}
 		}
 	}

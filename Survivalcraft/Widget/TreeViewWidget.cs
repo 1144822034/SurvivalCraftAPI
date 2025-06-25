@@ -393,8 +393,7 @@ namespace Game
 			{
 				if(Icon.Tag is Image image)
 				{
-					image.m_pixels = null;
-					image.m_trueImage.Dispose();
+					image.Dispose();
 				}
 				Icon.Dispose();
 			}

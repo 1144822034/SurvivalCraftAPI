@@ -62,6 +62,7 @@ namespace Engine.Media
         }
 
         public readonly Image<Rgba32> m_trueImage;
+        public bool m_isDisposed = false;
 
         public Image(Image image)
         {
@@ -325,5 +326,15 @@ namespace Engine.Media
             {"tga", ImageFileFormat.Tga },
             {"webp", ImageFileFormat.WebP }
         };
+
+        public void Dispose()
+        {
+            if (!m_isDisposed)
+            {
+                m_isDisposed = true;
+                m_pixels = null;
+                m_trueImage.Dispose();
+            }
+        }
     }
 }

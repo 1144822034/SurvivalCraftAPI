@@ -167,13 +167,11 @@ namespace Engine.Graphics
         public new static RenderTarget2D Load(Image image, int mipLevelsCount = 1)
         {
             RenderTarget2D renderTarget2D = new RenderTarget2D(image.Width, image.Height, mipLevelsCount, ColorFormat.Rgba8888, DepthFormat.None);
+            renderTarget2D.SetData(image.m_trueImage);
             if (mipLevelsCount > 1)
             {
-                throw new InvalidOperationException("In this version, mipLevelsCount is not supported to be greater than 1");
-            }
-            else
-            {
-                renderTarget2D.SetData(0, image.Pixels);
+                GLWrapper.BindTexture(TextureTarget.Texture2D, renderTarget2D.m_texture, forceBind: false);
+                GLWrapper.GL.GenerateMipmap(TextureTarget.Texture2D);
             }
             return renderTarget2D;
         }

@@ -5,7 +5,6 @@
     "DiskExternalContentProvider": {
         "DisplayName": "Disco local",
         "Description": "Guardar en el disco local"
-
     },
     "FurnitureBlock": [ "Combine furniture en un diseño interactivo", "Demasiados furnitures diferentes, no es posible agregar más." ],
     "MemoryBankBlockBehavior": {
@@ -169,8 +168,6 @@
         "0": "Prepara una flecha",
         "1": "Listo para disparar"
     },
-
-
     "SubsystemBowBlockBehavior": {
         "0": "Prepara una flecha primero"
     },
@@ -179,8 +176,13 @@
         "1": "Necesitas mas temperatura para fundir este objeto,\nusa un mejor combustible.",
         "2": "Necesitas ser nivel {0} para crear este objeto.",
         "3": "Necesitas ser nivel {0} para cocinar o fundir este objeto."
-
-
+    },
+    "BlocksTexturesManager":{
+        "1": "Could not find blocks texture \"{0}\".",
+        "2": "Could not load blocks texture \"{0}\". Reason: {1}.",
+        "3": "Unable to delete blocks texture \"{0}\"",
+        "4": "Blocks texture is larger than 65536x65536 pixels (size={0}x{1})",
+        "5": "Blocks texture does not have power-of-two size (size={0}x{1})"
     },
     "SubsystemCrossbowBlockBehavior": {
         "0": "Prepara la ballesta primero.",
@@ -298,9 +300,6 @@
         "12": "Error al generar jugador",
         "13": "Copiar registro"
     },
-
-
-
     "FurnitureDesignWidget": [ "Frontal", "Lateral" ],
     "FurnitureSetItemWidget": [ "Sin categorizar", "{0} diseño(s)" ],
     "FurnitureInventoryPanel": {
@@ -962,7 +961,6 @@
     "DeciduousLeavesBlock": [ "Verano. ", "Otoño. ", "Invierno. ", "Primavera. " ],
     "SubsystemSeasons": [ "Principios de Verano", "Verano", "Finales de Verano", "Principios de Otoño", "Otoño", "Finales de otoño", "Principios de Invierno", "Invierno", "Finales de Invierno", "Principios de Primavera", "Primavera", "Finales de Primavera" ],
     "Blocks": {
-
         "CommandBlock:0": {
             "DisplayName": "Bloque de comandos",
             "Description": "El bloque de comando le permite usar el control de circuitos, puede almacenar instrucciones y tiene varias funciones.",
@@ -973,8 +971,6 @@
             "Description": "La varilla de comandos puede ayudarlo a ver rápidamente los comandos y obtener información del bloque o entidad. Ejemplo de uso: Primero lleva en la mano la varilla de comandos luego le das click a cualquier bloque o entidad, despues de hacer eso, se copiaran valores a un portapapeles interno del mod, estos valores los puedes pegar presionando la ''[T]'' que esta en la interfaz de comandos. Tambien puedes hacer click en el aire mientras vuelas para copiar el valor de tu ubicacion en el mundo que esta representada en cordenadas X,Y,Z. Un objeto extremadamente util.",
             "CRDescription:0": "[COMENTARIO]Del mod ''Command block Mod''"
         },
-
-
         "AirBlock:0": {
             "DisplayName": "Aire",
             "Description": ""
@@ -1257,114 +1253,95 @@
             "Description": "Una hermosa piedra decorativa que se puede obtener al derretir arena y piedra caliza en un horno. Es un material frágil que se rompe fácilmente.",
             "CRDescription:0": "Funde arena con piedra caliza para obtener mármol"
         },
-
         "MalachiteBlock:0": {
             "DisplayName": "Bloque de Malaquita",
             "Description": "Un bloque de malaquita se puede hacer combinando muchos trozos pequeños de malaquita. Este material es muy decorativo pero también frágil.",
             "CRDescription:0": "Combina varios trozos de malaquita en un gran bloque"
         },
-
         "DiamondBlock:0": {
             "DisplayName": "Bloque Sólido de Diamante",
             "Description": "Un bloque de diamante. Extremadamente valioso, contiene múltiples cristales de diamante combinados en un solo bloque grande. Es bueno para fines decorativos. Ten cuidado, porque el diamante es inflamable y se quema cuando entra en contacto con magma o es incendiado por un rayo.",
             "CRDescription:0": "Combina muchos diamantes en un gran bloque"
         },
-
         "IronBlock:0": {
             "DisplayName": "Bloque Sólido de Hierro",
             "Description": "Un bloque de hierro puro. Muy pesado y duradero. Extremadamente resistente a excavar y explosiones. Se puede fabricar a partir de varios lingotes de hierro. Se puede pintar.",
             "CRDescription:0": "Combina varios lingotes de hierro en un gran bloque"
         },
-
         "CopperBlock:0": {
             "DisplayName": "Bloque Sólido de Cobre",
             "Description": "Un bloque de cobre puro. Muy pesado y duradero. Extremadamente resistente a excavar y explosiones. Se puede fabricar a partir de varios lingotes de cobre. Se puede pintar.",
             "CRDescription:0": "Combina varios lingotes de cobre en un gran bloque"
         },
-
         "SemiconductorBlock:0": {
             "DisplayName": "Bloque de Germanio",
             "Description": "Un bloque de semiconductor.",
             "CRDescription:0": "Combina varios cristales de germanio en un bloque semiconductor"
         },
-
         "GlassBlock:0": {
             "DisplayName": "Vidrio",
             "Description": "Bloque transparente hecho al fundir arena en el horno. Muy útil para hacer ventanas y iluminar habitaciones oscuras. Es un material muy frágil que se romperá irremediablemente cuando sea golpeado por algo duro.",
             "CRDescription:0": "Funde arena para obtener vidrio"
         },
-
         "FramedGlassBlock:0": {
             "DisplayName": "Vidrio Enmarcado",
             "Description": "Un bloque de vidrio se puede hacer más fuerte y decorativo enmarcándolo con palos de madera. Perfecto para hacer ventanas.",
             "CRDescription:0": "Enmarca el vidrio con madera"
         },
-
         "WindowBlock:0": {
             "DisplayName": "Ventana",
             "Description": "Un bloque de vidrio se puede hacer más fuerte y decorativo enmarcándolo con palos de madera. Perfecto para hacer ventanas.",
             "CRDescription:0": "Enmarca el vidrio con madera"
         },
-
         "WoodenStairsBlock:0": {
             "DisplayName": "Escalera de Madera",
             "Description": "Las escaleras facilitan subir pendientes. Ya no necesitas saltar constantemente y escalar superficies verticales, en su lugar te mueves más rápido, ahorrando tiempo y energía. Las escaleras se pueden fabricar con varios materiales. También se pueden colocar al revés en los techos. Se puede pintar.",
             "CRDescription:0": "Haz escaleras para subir alturas más rápido"
         },
-
         "StoneStairsBlock:0": {
             "DisplayName": "Escalera de Piedra",
             "Description": "Las escaleras facilitan subir pendientes. Ya no necesitas saltar constantemente y escalar superficies verticales, en su lugar te mueves más rápido, ahorrando tiempo y energía. Las escaleras se pueden fabricar con varios materiales. También se pueden colocar al revés en los techos. Se puede pintar.",
             "CRDescription:0": "Haz escaleras para subir alturas más rápido"
         },
-
         "CobblestoneStairsBlock:0": {
             "DisplayName": "Escalera de Piedra",
             "Description": "Las escaleras facilitan subir pendientes. Ya no necesitas saltar constantemente y escalar superficies verticales, en su lugar te mueves más rápido, ahorrando tiempo y energía. Las escaleras se pueden fabricar con varios materiales. También se pueden colocar al revés en los techos. Se puede pintar.",
             "CRDescription:0": "Haz escaleras para subir alturas más rápido"
         },
-
         "StoneBrickStairsBlock:0": {
             "DisplayName": "Escalera de Ladrillo de Piedra",
             "Description": "Las escaleras facilitan subir pendientes. Ya no necesitas saltar constantemente y escalar superficies verticales, en su lugar te mueves más rápido, ahorrando tiempo y energía. Las escaleras se pueden fabricar con varios materiales. También se pueden colocar al revés en los techos. Se puede pintar.",
             "CRDescription:0": "Haz escaleras para subir alturas más rápido"
         },
-
         "BrickStairsBlock:0": {
             "DisplayName": "Escalera de Ladrillo",
             "Description": "Las escaleras facilitan subir pendientes. Ya no necesitas saltar constantemente y escalar superficies verticales, en su lugar te mueves más rápido, ahorrando tiempo y energía. Las escaleras se pueden fabricar con varios materiales. También se pueden colocar al revés en los techos. Se puede pintar.",
             "CRDescription:0": "Haz escaleras para subir alturas más rápido"
         },
-
         "SandstoneStairsBlock:0": {
             "DisplayName": "Escalera de Arenisca",
             "Description": "Las escaleras facilitan subir pendientes. Ya no necesitas saltar constantemente y escalar superficies verticales, en su lugar te mueves más rápido, ahorrando tiempo y energía. Las escaleras se pueden fabricar con varios materiales. También se pueden colocar al revés en los techos. Se puede pintar.",
             "CRDescription:0": "Haz escaleras para subir alturas más rápido"
         },
-
         "MarbleStairsBlock:0": {
             "DisplayName": "Escalera de Mármol",
             "Description": "Las escaleras facilitan subir pendientes. Ya no necesitas saltar constantemente y escalar superficies verticales, en su lugar te mueves más rápido, ahorrando tiempo y energía. Las escaleras se pueden fabricar con varios materiales. También se pueden colocar al revés en los techos. Se puede pintar.",
             "CRDescription:0": "Haz escaleras para subir alturas más rápido"
         },
-
         "BasaltStairsBlock:0": {
             "DisplayName": "Escalera de Basalto",
             "Description": "Las escaleras facilitan subir pendientes. Ya no necesitas saltar constantemente y escalar superficies verticales, en su lugar te mueves más rápido, ahorrando tiempo y energía. Las escaleras se pueden fabricar con varios materiales. También se pueden colocar al revés en los techos. Se puede pintar.",
             "CRDescription:0": "Haz escaleras para subir alturas más rápido"
         },
-
         "EspadaBlock:0": {
             "DisplayName": "Espada",
             "Description": "Hecha con acero de calidad."
         },
-
         "WoodenSlabBlock:0": {
             "DisplayName": "Losa de Madera",
             "Description": "Las losas son bloques de medio altura, que se pueden fabricar con una variedad de materiales diferentes. Pueden usarse para cubrir pisos a un costo más barato que los bloques de tamaño completo. También se pueden usar para hacer escaleras largas, donde cada unidad de longitud sube una media unidad de altura. Las losas también se pueden fijar a los techos. Se puede pintar.",
             "CRDescription:0": "Haz losas para fines decorativos"
         },
-
         "StoneSlabBlock:0": {
             "DisplayName": "Losa de Piedra",
             "Description": "Las losas son bloques de medio altura, que se pueden fabricar con una variedad de materiales diferentes. Pueden usarse para cubrir pisos a un costo más barato que los bloques de tamaño completo. También se pueden usar para hacer escaleras largas, donde cada unidad de longitud sube una media unidad de altura. Las losas también se pueden fijar a los techos. Se puede pintar.",
@@ -2876,8 +2853,6 @@
             "8": "Lo sentimos, no es posible crear mas de {0} mundos. Exporta los mundos al contenido y borralos de aqui o borra los que ya no te intereza.",
             "9": "{0} Jugadores",
             "10": "{0} Jugador"
-
-
         },
         "PlayerScreen": {
             "1": "Preparar jugador",
