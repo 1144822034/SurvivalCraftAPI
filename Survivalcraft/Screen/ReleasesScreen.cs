@@ -46,7 +46,7 @@ namespace Game
 			m_releaseInfoPanel = Children.Find<StackPanelWidget>("ReleaseInfoPanel");
 			m_releasesListPanel.ItemWidgetFactory = (object item) => new LabelWidget
 			{
-				Text = (item is ReleaseInfo releaseInfo) ? releaseInfo.name : string.Empty,
+				Text = (item is ReleaseInfo releaseInfo) ? releaseInfo.name + GetVersionSuffix(releaseInfo.tag_name, APIUpdateManager.CurrentVersion) : string.Empty,
 				HorizontalAlignment = WidgetAlignment.Center,
 				VerticalAlignment = WidgetAlignment.Center
 			};
@@ -115,6 +115,17 @@ namespace Game
 			if(Releases.Count > 0) DisplayReleaseInfo(Releases[0]);
 		}
 
+		public string GetVersionSuffix(string currentVersion,string targetVersion)
+		{
+			return APIUpdateManager.CompareVersion(currentVersion,targetVersion) switch
+			{
+				-1 => string.Empty,
+				0 => LanguageControl.GetContentWidgets(nameof(ReleasesScreen),5),
+				1 => LanguageControl.GetContentWidgets(nameof(ReleasesScreen),6),
+				_ => throw new ArgumentOutOfRangeException()
+			};
+		}
+
 		public void PopulateAssetsList(ReleaseInfo releaseInfo)
 		{
 			foreach(var assetButton in m_assetButtons.Keys)
@@ -145,15 +156,7 @@ namespace Game
 			{
 				if(assetButton.Key.IsClicked)
 				{
-					if(VersionsManager.CurrentPlatform == VersionsManager.Platform.Windows)
-					{
-						Process.Start(new ProcessStartInfo
-						{
-							FileName = assetButton.Value.browser_download_url,
-							UseShellExecute = true  // 关键参数，使用系统默认程序打开
-						});
-					}
-					//TODO 还差个安卓端
+					WebBrowserManager.LaunchBrowser(assetButton.Value.browser_download_url);
 				}
 			}
 			if (Input.Back || Input.Cancel || Children.Find<ButtonWidget>("TopBar.Back").IsClicked)
