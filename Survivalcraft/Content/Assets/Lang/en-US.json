@@ -109,7 +109,8 @@
         "69": "This mod is an API 1.3 mod that cannot be used in this API version(API 1.8)",
         "70": "This mod is an old API version mod, which does not take effect here and is recommended to be removed",
         "71": "Directory into the failure",
-        "72": "Your device can't access "
+        "72": "Your device can't access ",
+        "73": "Dereinforcing"
     },
     "ManageContentScreen": {
         "1": "Blocks Texture | {0}x{1}",
@@ -571,7 +572,7 @@
         "11": "Top Ranked",
         "12": "Recently Added",
         "13": "Invalid order.",
-        "14": "Star",
+        "14": "Boutique",
         "15": "Add to Boutique",
         "16": "Remove from Boutique",
         "17": "Operation",
@@ -2792,7 +2793,8 @@
             "7": "Delete",
             "8": "...",
             "9": "Input Keywords",
-            "10": "Search"
+            "10": "Search",
+            "11": "Boutique"
         },
         "OriginalCommunityContentScreen": {
             "1": "Original Community Content",

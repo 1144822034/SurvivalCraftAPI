@@ -8,6 +8,7 @@ namespace Game
 	public static class LanguageControl
 	{
 		public static JsonNode jsonNode = null;
+		public static JsonNode englishJsonNode = null;
 		public static string Ok = default;
 		public static string Cancel = default;
 		public static string None = default;
@@ -63,7 +64,16 @@ namespace Game
 			string txt = new StreamReader(stream).ReadToEnd();
 			if (txt.Length > 0)
 			{//加载原版语言包
-				JsonNode newJsonNode = JsonNode.Parse(txt);
+				JsonNode newJsonNode = null;
+				try
+				{
+					newJsonNode = JsonNode.Parse(txt);
+				}
+				catch(Exception e)
+				{
+					Log.Error($"Invalid json file, reason: {e}");
+					return;
+				}
                 if (jsonNode == null)
 				{
 					jsonNode = newJsonNode;
@@ -93,6 +103,32 @@ namespace Game
 			if (Exists == default) Exists = Get("Usual", "exist");
 			if (Success == default) Success = Get("Usual", "success");
 			if (Delete == default) Success = Get("Usual", "delete");
+		}
+
+		public static void LoadEnglishJson(Stream stream)
+		{
+			string txt = new StreamReader(stream).ReadToEnd();
+			if (txt.Length > 0)
+			{
+				JsonNode newJsonNode = null;
+				try
+				{
+					newJsonNode = JsonNode.Parse(txt);
+				}
+				catch(Exception e)
+				{
+					Log.Error($"Invalid json file, reason: {e}");
+					return;
+				}
+				if (englishJsonNode == null)
+				{
+					englishJsonNode = newJsonNode;
+				}
+				else
+				{
+					MergeJsonNode(englishJsonNode, newJsonNode);
+				}
+			}
 		}
 		public static void MergeJsonNode(JsonNode oldNode, JsonNode newNode)
 		{
@@ -178,10 +214,33 @@ namespace Game
 		}
 		public static string Get(out bool r, params string[] keys)
 		{//获得键值
+			if(jsonNode == null)
+			{
+				if(englishJsonNode == null)
+				{
+					r = false;
+					return String.Join(':', keys);
+				}
+				jsonNode = englishJsonNode;
+			}
+			string result = Get(out r,jsonNode,keys);
+			if(r)
+			{
+				return result;
+			}
+			if(ModsManager.Configs["Language"] != "en-US")
+			{
+				result = Get(out r,englishJsonNode,keys);
+			}
+			return result;
+		}
+
+		public static string Get(out bool r,JsonNode node,params string[] keys)
+		{
 			r = false;
-			JsonNode nowNode = jsonNode;
+			JsonNode nowNode = node;
 			bool flag = false;
-            foreach (string key in keys)
+			foreach (string key in keys)
 			{
 				if(string.IsNullOrEmpty(key) || nowNode == null)
 				{
@@ -189,29 +248,29 @@ namespace Game
 				}
 				if(nowNode.GetValueKind() == JsonValueKind.Object)
 				{
-                    nowNode = nowNode[key];
-                    if (nowNode == null)
+					nowNode = nowNode[key];
+					if (nowNode == null)
 					{
-                        break;
-                    }
+						break;
+					}
 					else
-                    {
+					{
 						flag = true;
-                    }
-                }
+					}
+				}
 				else if(nowNode.GetValueKind() == JsonValueKind.Array && int.TryParse(key, out int num) && num >= 0)
 				{
 					JsonArray array = nowNode.AsArray();
 					if(num < array.Count)
 					{
-                        nowNode = array[num];
-                        flag = true;
-                    }
+						nowNode = array[num];
+						flag = true;
+					}
 					else
 					{
 						break;
 					}
-                }
+				}
 				else
 				{
 					break;
@@ -230,6 +289,11 @@ namespace Game
 				}
 			}
 			return flag? keys.Last() : String.Join(':', keys);
+		}
+
+		public static string GetWithoutFallback(out bool r,params string[] keys)
+		{
+			return Get(out r,jsonNode,keys);
 		}
 		public static string GetBlock(string blockName, string prop)
 		{
@@ -267,9 +331,16 @@ namespace Game
 		public static void ChangeLanguage(string languageType)
 		{
 			Initialize(languageType);
-			foreach (var c in ModsManager.ModList)
+			if(languageType == "en-US" && englishJsonNode != null)
 			{
-				c.LoadLauguage();
+				jsonNode = englishJsonNode;
+			}
+			else
+			{
+				foreach(var c in ModsManager.ModList)
+				{
+					c.LoadLauguage();
+				}
 			}
 #if WINDOWS
 			string title = $"{Get("Usual", "gameName")} {ModsManager.ShortGameVersion} - API {ModsManager.APIVersionString}";

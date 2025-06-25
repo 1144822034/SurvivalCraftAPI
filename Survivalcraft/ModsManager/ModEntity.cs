@@ -122,7 +122,17 @@ namespace Game
 		/// </summary>
 		public virtual void LoadLauguage()
 		{
-			GetAssetsFile($"Lang/{ModsManager.Configs["Language"]}.json",
+			GetAssetsFile("Lang/en-US.json",
+				(stream) => {
+					LoadingScreen.Info($"[{modInfo.Name}] Loading English Language file");
+					LanguageControl.LoadEnglishJson(stream);
+				});
+			string language = ModsManager.Configs["Language"];
+			if(language == "en-US")
+			{
+				return;
+			}
+			GetAssetsFile($"Lang/{language}.json",
 				(stream) => {
 					LoadingScreen.Info($"[{modInfo.Name}] Loading Language file");
 					LanguageControl.loadJson(stream);
