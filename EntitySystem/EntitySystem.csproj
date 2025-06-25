@@ -1,4 +1,4 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 	<PropertyGroup>
 		<NoWarn>$(NoWarn);1591;1573</NoWarn>
 		<ImplicitUsings>enable</ImplicitUsings>
@@ -19,12 +19,12 @@
 		<AssemblyName Condition="'$(Configuration)' == 'NotOpenGLES'">EntitySystemNotOpenGLES</AssemblyName>
 	</PropertyGroup>
 	<PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
-		<TargetFrameworks>net9.0-windows;net9.0</TargetFrameworks>
+		<TargetFrameworks>net9.0-windows;net9.0-android</TargetFrameworks>
 		<DefineConstants>DEBUG</DefineConstants>
 		<WarningLevel>2</WarningLevel>
 	</PropertyGroup>
 	<PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
-		<TargetFrameworks>net9.0;net9.0-windows</TargetFrameworks>
+		<TargetFrameworks>net9.0;net9.0-windows;net9.0-android</TargetFrameworks>
 		<DebugType>none</DebugType>
 		<DefineConstants>TRACE</DefineConstants>
 	</PropertyGroup>
