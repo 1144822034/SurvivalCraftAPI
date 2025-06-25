@@ -50,7 +50,7 @@ namespace Game
 					Block block = array[(int)(1.0 * Time.RealTime) % array.Length];
 					if (block != null)
 					{
-						m_blockIconWidget.Value = Terrain.MakeBlockValue(block.BlockIndex, 0, data ?? 4);
+						m_blockIconWidget.Value = Terrain.MakeBlockValue(block.BlockIndex, 0, data ?? 0);
 						m_blockIconWidget.Light = 15;
 						m_blockIconWidget.IsVisible = true;
 					}
