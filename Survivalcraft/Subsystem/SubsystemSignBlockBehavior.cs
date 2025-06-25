@@ -61,7 +61,7 @@ namespace Game
 
 		public const int m_textHeight = 32;
 
-		public const int m_maxTexts = 32;
+		public static int m_maxTexts = 32;
 
 		public float m_fontScale = 1f;
 
@@ -114,6 +114,7 @@ namespace Game
 		public UpdateOrder UpdateOrder => UpdateOrder.Default;
 
 		public int[] DrawOrders => m_drawOrders;
+
 		public SignData GetSignData(Point3 point)
 		{
 			if (m_textsByPoint.TryGetValue(point, out TextData value))
@@ -353,15 +354,14 @@ namespace Game
 		public void CreateRenderTarget()
 		{
 			GLWrapper.GL.GetInteger(GetPName.MaxTextureSize, out int maxTextureSize);
-			int height = (int)m_font.GlyphHeight * 4 * 32;
-			if(height > maxTextureSize)
+			int eachSignHeight = (int)m_font.GlyphHeight * 4;
+			if(maxTextureSize < eachSignHeight * 32)
 			{
-				m_fontScale = maxTextureSize / (float)height;
-				height = maxTextureSize;
+				m_maxTexts = maxTextureSize / eachSignHeight;
 			}
 			m_renderTarget = new RenderTarget2D(
 				(int)(m_font.GlyphHeight * 16 * m_fontScale),
-				height,
+				eachSignHeight * m_maxTexts,
 				1,
 				ColorFormat.Rgba8888,
 				DepthFormat.None
@@ -454,7 +454,7 @@ namespace Game
 			{
 				Point3 point = value.Point;
 				float num = m_subsystemViews.CalculateSquaredDistanceFromNearestView(new Vector3(point));
-				if (num <= 400f)
+				if (num <= m_maxVisibilityDistanceSqr)
 				{
 					value.Distance = num;
 					m_nearTexts.Add(value);
@@ -465,23 +465,23 @@ namespace Game
 				Vector3 position = movingBlock.Position;
 				TextData value = m_textsByMovingBlock[movingBlock];
 				float num = m_subsystemViews.CalculateSquaredDistanceFromNearestView(position);
-				if(num <= 400f)
+				if(num <= m_maxVisibilityDistanceSqr)
 				{
 					value.Distance = num;
 					m_nearTexts.Add(value);
 				}
 			}
 			m_nearTexts.Sort((TextData d1, TextData d2) => Comparer<float>.Default.Compare(d1.Distance, d2.Distance));
-			if (m_nearTexts.Count > 32)
+			if (m_nearTexts.Count > m_maxTexts)
 			{
-				m_nearTexts.RemoveRange(32, m_nearTexts.Count - 32);
+				m_nearTexts.RemoveRange(m_maxTexts, m_nearTexts.Count - m_maxTexts);
 			}
 			foreach (TextData nearText in m_nearTexts)
 			{
 				nearText.ToBeRenderedFrame = Time.FrameIndex;
 			}
 			bool flag3 = false;
-			for (int i = 0; i < MathUtils.Min(m_nearTexts.Count, 32); i++)
+			for (int i = 0; i < MathUtils.Min(m_nearTexts.Count, m_maxTexts); i++)
 			{
 				TextData textData = m_nearTexts[i];
 				if (textData.TextureLocation.HasValue)
@@ -489,7 +489,7 @@ namespace Game
 					continue;
 				}
 				int num2 = m_textureLocations.FirstIndex((TextData d) => d == null);
-				if (num2 < 0)
+				if (num2 < 0 || num2 >= m_maxTexts)
 				{
 					num2 = m_textureLocations.FirstIndex((TextData d) => d.ToBeRenderedFrame != Time.FrameIndex);
 				}
@@ -517,7 +517,7 @@ namespace Game
 				Display.Clear(new Vector4(Color.Transparent));
 				FlatBatch2D flatBatch = m_primitivesRenderer2D.FlatBatch(0, DepthStencilState.None, null, BlendState.Opaque);
 				FontBatch2D fontBatch = m_primitivesRenderer2D.FontBatch(m_font, 1, DepthStencilState.None, null, BlendState.Opaque, SamplerState.PointClamp);
-				for (int j = 0; j < m_textureLocations.Length; j++)
+				for (int j = 0; j < m_maxTexts; j++)
 				{
 					TextData textData3 = m_textureLocations[j];
 					if (textData3 != null)
@@ -566,8 +566,8 @@ namespace Game
 					Color color = new(num2, num2, num2);
 					float x = 0f;
 					float x2 = nearText.UsedTextureWidth / (m_font.GlyphHeight * 16f * m_fontScale);
-					float x3 = (float)nearText.TextureLocation.Value / 32f;
-					float x4 = ((float)nearText.TextureLocation.Value + (nearText.UsedTextureHeight / (m_font.GlyphHeight * 4f * m_fontScale))) / 32f;
+					float x3 = (float)nearText.TextureLocation.Value / m_maxTexts;
+					float x4 = ((float)nearText.TextureLocation.Value + (nearText.UsedTextureHeight / (m_font.GlyphHeight * 4f * m_fontScale))) / m_maxTexts;
 					Vector3 signSurfaceNormal = signBlock.GetSignSurfaceNormal(data);
 					Vector3 vector = new(nearText.Point.X, nearText.Point.Y, nearText.Point.Z);
 					if(!MovingBlock.IsNullOrStopped(nearText.MovingBlock))

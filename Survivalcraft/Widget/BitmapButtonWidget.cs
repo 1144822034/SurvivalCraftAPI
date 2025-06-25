@@ -82,6 +82,12 @@ namespace Game
 			set;
 		}
 
+		public float FontScale
+		{
+			get => m_labelWidget.FontScale;
+			set => m_labelWidget.FontScale = value;
+		}
+
 		public BitmapButtonWidget()
 		{
 			Color = Color.White;

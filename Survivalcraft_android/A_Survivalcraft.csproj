@@ -797,6 +797,7 @@
 		<Compile Include="..\Survivalcraft\Screen\GameScreen.cs"/>
 		<Compile Include="..\Survivalcraft\Screen\HelpScreen.cs"/>
 		<Compile Include="..\Survivalcraft\Screen\HelpTopicScreen.cs"/>
+        <Compile Include="..\Survivalcraft\Screen\IWorldOptionsScreen.cs"/>
 		<Compile Include="..\Survivalcraft\Screen\LoadingScreen.cs"/>
 		<Compile Include="..\Survivalcraft\Screen\MainMenuScreen.cs"/>
 		<Compile Include="..\Survivalcraft\Screen\ManageContentScreen.cs"/>
@@ -811,6 +812,7 @@
 		<Compile Include="..\Survivalcraft\Screen\RecipaediaDescriptionScreen.cs"/>
 		<Compile Include="..\Survivalcraft\Screen\RecipaediaRecipesScreen.cs"/>
 		<Compile Include="..\Survivalcraft\Screen\RecipaediaScreen.cs"/>
+        <Compile Include="..\Survivalcraft\Screen\ReleasesScreen.cs"/>
 		<Compile Include="..\Survivalcraft\Screen\Screen.cs"/>
 		<Compile Include="..\Survivalcraft\Screen\ScreenLayout.cs"/>
 		<Compile Include="..\Survivalcraft\Screen\ScreenshotSize.cs"/>
