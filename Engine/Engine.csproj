@@ -1,4 +1,4 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 	<PropertyGroup>
 		<NoWarn>$(NoWarn);CA1416;1591;1573</NoWarn>
 		<ImplicitUsings>enable</ImplicitUsings>
@@ -22,12 +22,12 @@
 		<Platforms>AnyCPU</Platforms>
 	</PropertyGroup>
 	<PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
-		<TargetFrameworks>net9.0-windows;net9.0</TargetFrameworks>
+		<TargetFrameworks>net9.0-windows;net9.0-android</TargetFrameworks>
 		<DefineConstants>DEBUG</DefineConstants>
 		<WarningLevel>2</WarningLevel>
 	</PropertyGroup>
 	<PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
-		<TargetFrameworks>net9.0;net9.0-windows;net9.0</TargetFrameworks>
+		<TargetFrameworks>net9.0;net9.0-windows;net9.0-android</TargetFrameworks>
 		<DebugType>none</DebugType>
 		<DefineConstants>TRACE</DefineConstants>
 	</PropertyGroup>
@@ -35,6 +35,9 @@
 		<TargetFramework>net9.0-windows</TargetFramework>
 		<DebugType>none</DebugType>
 		<DefineConstants>TRACE;NOTOPENGLES</DefineConstants>
+	</PropertyGroup>
+	<PropertyGroup Condition="'$(TargetFramework)' == 'net9.0-android'">
+		<SupportedOSPlatformVersion>23.0</SupportedOSPlatformVersion>
 	</PropertyGroup>
 	<ItemGroup>
 		<EmbeddedResource Include="Resources\Lit.psh" Condition="'$(TargetFramework)' == 'net9.0-windows'" />
