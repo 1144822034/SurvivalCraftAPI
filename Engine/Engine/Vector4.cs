@@ -247,5 +247,47 @@ namespace Engine
 			float num = 1f / d;
 			return new Vector4(v.X * num, v.Y * num, v.Z * num, v.W * num);
 		}
+
+        public static Vector4 FixNaN(Vector4 v)
+        {
+            if (float.IsNaN(v.X))
+            {
+                v.X = 0;
+            }
+            if (float.IsNaN(v.Y))
+            {
+                v.Y = 0;
+            }
+            if (float.IsNaN(v.Z))
+            {
+                v.Z = 0;
+            }
+            if (float.IsNaN(v.W))
+            {
+                v.W = 0;
+            }
+            return v;
+        }
+
+        public Vector4 FixNaN()
+        {
+            if (float.IsNaN(X))
+            {
+                X = 0;
+            }
+            if (float.IsNaN(Y))
+            {
+                Y = 0;
+            }
+            if (float.IsNaN(Z))
+            {
+                Z = 0;
+            }
+            if (float.IsNaN(W))
+            {
+                W = 0;
+            }
+            return this;
+        }
 	}
 }

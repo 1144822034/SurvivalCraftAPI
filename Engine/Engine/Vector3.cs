@@ -382,5 +382,39 @@ namespace Engine
 			float num = 1f / d;
 			return new Vector3(v.X * num, v.Y * num, v.Z * num);
 		}
+
+        public static Vector3 FixNaN(Vector3 v)
+        {
+            if (float.IsNaN(v.X))
+            {
+                v.X = 0;
+            }
+            if (float.IsNaN(v.Y))
+            {
+                v.Y = 0;
+            }
+            if (float.IsNaN(v.Z))
+            {
+                v.Z = 0;
+            }
+            return v;
+        }
+
+        public Vector3 FixNaN()
+        {
+            if (float.IsNaN(X))
+            {
+                X = 0;
+            }
+            if (float.IsNaN(Y))
+            {
+                Y = 0;
+            }
+            if (float.IsNaN(Z))
+            {
+                Z = 0;
+            }
+            return this;
+        }
 	}
 }

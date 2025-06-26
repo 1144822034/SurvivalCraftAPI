@@ -365,5 +365,47 @@ namespace Engine
 			float num = 1f / d;
 			return new Quaternion(q.X * num, q.Y * num, q.Z * num, q.W * num);
 		}
+
+        public static Quaternion FixNaN(Quaternion v)
+        {
+            if (float.IsNaN(v.X))
+            {
+                v.X = 0;
+            }
+            if (float.IsNaN(v.Y))
+            {
+                v.Y = 0;
+            }
+            if (float.IsNaN(v.Z))
+            {
+                v.Z = 0;
+            }
+            if (float.IsNaN(v.W))
+            {
+                v.W = 0;
+            }
+            return v;
+        }
+
+        public Quaternion FixNaN()
+        {
+            if (float.IsNaN(X))
+            {
+                X = 0;
+            }
+            if (float.IsNaN(Y))
+            {
+                Y = 0;
+            }
+            if (float.IsNaN(Z))
+            {
+                Z = 0;
+            }
+            if (float.IsNaN(W))
+            {
+                W = 0;
+            }
+            return this;
+        }
 	}
 }

@@ -326,5 +326,31 @@ namespace Engine
         {
             return new Vector2(d / v.X, d / v.Y);
         }
+
+        public static Vector2 FixNaN(Vector2 v)
+        {
+            if (float.IsNaN(v.X))
+            {
+                v.X = 0;
+            }
+            if (float.IsNaN(v.Y))
+            {
+                v.Y = 0;
+            }
+            return v;
+        }
+
+        public Vector2 FixNaN()
+        {
+            if (float.IsNaN(X))
+            {
+                X = 0;
+            }
+            if (float.IsNaN(Y))
+            {
+                Y = 0;
+            }
+            return this;
+        }
 	}
 }

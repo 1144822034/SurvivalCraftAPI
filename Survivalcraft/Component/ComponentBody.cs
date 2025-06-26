@@ -383,7 +383,7 @@ namespace Game
 			WaterSwayAngle = valuesDictionary.GetValue<float>("WaterSwayAngle");
 			WaterTurnSpeed = valuesDictionary.GetValue<float>("WaterTurnSpeed");
 			CanEmbedInIce = valuesDictionary.GetValue<bool>("CanEmbedInIce");
-			Velocity = valuesDictionary.GetValue<Vector3>("Velocity");
+			Velocity = valuesDictionary.GetValue<Vector3>("Velocity").FixNaN();
 			m_embeddedInIceCounter = valuesDictionary.GetValue("EmbeddedInIceCounter", 0);
 			if(ResetVelocityOnProjectLoad) Velocity = Vector3.Zero;
 			MaxSmoothRiseHeight = valuesDictionary.GetValue<float>("MaxSmoothRiseHeight");
@@ -401,7 +401,7 @@ namespace Game
 			base.Save(valuesDictionary, entityToIdMap);
 			if (Velocity != Vector3.Zero)
 			{
-				valuesDictionary.SetValue("Velocity", Velocity);
+				valuesDictionary.SetValue("Velocity", Velocity.FixNaN());
 			}
 			valuesDictionary.SetValue("EmbeddedInIceCounter", m_embeddedInIceCounter);
 			EntityReference value = EntityReference.FromId(ParentBody);
