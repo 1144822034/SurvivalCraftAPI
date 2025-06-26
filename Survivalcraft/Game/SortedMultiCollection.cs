@@ -214,21 +214,24 @@ namespace Game
 			}
 		}
 
+		// Find the last one. Edited by Deepseek.
 		public int Find(TKey key)
 		{
 			if (m_count > 0)
 			{
 				int num = 0;
 				int num2 = m_count - 1;
+				int lastFound = -1;
 				while (num <= num2)
 				{
 					int num3 = (num + num2) >> 1;
 					int num4 = m_comparer.Compare(m_array[num3].Key, key);
 					if (num4 == 0)
 					{
-						return num3;
+						lastFound = num3;
+						num = num3 + 1;
 					}
-					if (num4 < 0)
+					else if (num4 < 0)
 					{
 						num = num3 + 1;
 					}
@@ -236,6 +239,10 @@ namespace Game
 					{
 						num2 = num3 - 1;
 					}
+				}
+				if (lastFound != -1)
+				{
+					return lastFound;
 				}
 				return ~num;
 			}
