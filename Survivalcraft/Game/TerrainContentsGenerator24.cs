@@ -723,8 +723,9 @@ public class TerrainContentsGenerator24 : ITerrainContentsGenerator
 				int num4 = 254;
 				while (num4 >= 0)
 				{
-					int num5 = Terrain.ExtractContents(chunk.GetCellValueFast(num3));
-					if (!BlocksManager.Blocks[num5].IsTransparent)
+					int cellValue = chunk.GetCellValueFast(num3);
+					int num5 = Terrain.ExtractContents(cellValue);
+					if (!BlocksManager.Blocks[num5].IsTransparent_(cellValue))
 					{
 						float num6 = CalculateMountainRangeFactor(num, num2);
 						int temperature = terrain.GetTemperature(num, num2);

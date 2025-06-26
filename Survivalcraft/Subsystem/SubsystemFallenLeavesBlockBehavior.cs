@@ -43,7 +43,7 @@ public class SubsystemFallenLeavesBlockBehavior : SubsystemPollableBlockBehavior
 	public static bool CanSupportFallenLeaves(int value)
 	{
 		int num = Terrain.ExtractContents(value);
-		return !BlocksManager.Blocks[num].IsTransparent;
+		return !BlocksManager.Blocks[num].IsTransparent_(value);
 	}
 
 	public static bool StopsFallenLeaves(int value)

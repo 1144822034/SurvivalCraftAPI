@@ -197,7 +197,7 @@ namespace Game
 				m_digProgress = 0f;
 				if (m_subsystemTime.PeriodicGameTimeEvent(5.0, m_digStartTime + 1.0))
 				{
-					ComponentPlayer?.ComponentGui.DisplaySmallMessage(string.Format(LanguageControl.Get(fName, 1), activeBlock.PlayerLevelRequired, activeBlock.GetDisplayName(m_subsystemTerrain, activeBlockValue)), Color.White, blinking: true, playNotificationSound: true);
+					ComponentPlayer?.ComponentGui.DisplaySmallMessage(string.Format(LanguageControl.Get(fName, 1), activeBlock.GetPlayerLevelRequired(activeBlockValue), activeBlock.GetDisplayName(m_subsystemTerrain, activeBlockValue)), Color.White, blinking: true, playNotificationSound: true);
 				}
 			}
 			bool flag2 = ComponentPlayer != null && !ComponentPlayer.ComponentInput.IsControlledByTouch && m_subsystemGameInfo.WorldSettings.GameMode == GameMode.Creative;
@@ -236,7 +236,7 @@ namespace Game
                         Poke(forceRestart: true);
                     }
                     BlockPlacementData digValue = cellBlock.GetDigValue(m_subsystemTerrain, this, cellValue, activeBlockValue, raycastResult);
-                    m_subsystemTerrain.DestroyCell(activeBlock.ToolLevel, digValue.CellFace.X, digValue.CellFace.Y, digValue.CellFace.Z, digValue.Value, noDrop: false, noParticleSystem: false);
+                    m_subsystemTerrain.DestroyCell(activeBlock.GetToolLevel(activeBlockValue), digValue.CellFace.X, digValue.CellFace.Y, digValue.CellFace.Z, digValue.Value, noDrop: false, noParticleSystem: false);
 					int durabilityReduction = 1;
 					int playerDataAdd = 1;
 					bool mute_ = false;
@@ -359,7 +359,7 @@ namespace Game
 			Block block = BlocksManager.Blocks[num];
 			if (!IsLevelSufficientForTool(ActiveBlockValue))
 			{
-				ComponentPlayer?.ComponentGui.DisplaySmallMessage(string.Format(LanguageControl.Get(fName, 1), block.PlayerLevelRequired, block.GetDisplayName(m_subsystemTerrain, ActiveBlockValue)), Color.White, blinking: true, playNotificationSound: true);
+				ComponentPlayer?.ComponentGui.DisplaySmallMessage(string.Format(LanguageControl.Get(fName, 1), block.GetPlayerLevelRequired(ActiveBlockValue), block.GetDisplayName(m_subsystemTerrain, ActiveBlockValue)), Color.White, blinking: true, playNotificationSound: true);
 				Poke(forceRestart: false);
 				return false;
 			}
@@ -426,7 +426,7 @@ namespace Game
 			Block block = BlocksManager.Blocks[Terrain.ExtractContents(ActiveBlockValue)];
 			if (!IsLevelSufficientForTool(ActiveBlockValue))
 			{
-				ComponentPlayer?.ComponentGui.DisplaySmallMessage(string.Format(LanguageControl.Get(fName, 1), block.PlayerLevelRequired, block.GetDisplayName(m_subsystemTerrain, ActiveBlockValue)), Color.White, blinking: true, playNotificationSound: true);
+				ComponentPlayer?.ComponentGui.DisplaySmallMessage(string.Format(LanguageControl.Get(fName, 1), block.GetPlayerLevelRequired(ActiveBlockValue), block.GetDisplayName(m_subsystemTerrain, ActiveBlockValue)), Color.White, blinking: true, playNotificationSound: true);
 				Poke(forceRestart: false);
 				return;
 			}
