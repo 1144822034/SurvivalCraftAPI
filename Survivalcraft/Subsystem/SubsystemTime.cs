@@ -95,20 +95,27 @@ namespace Game
 
 		public virtual bool IsAllPlayerLivingSleeping()
 		{
-            int numSleepingPlayers = 0;
-            int numDeadPlayers = 0;
-            foreach (ComponentPlayer componentPlayer in m_subsystemPlayers.ComponentPlayers)
-            {
-                if (componentPlayer.ComponentHealth.Health == 0f)
-                {
-                    numDeadPlayers++;
-                }
-                else if (componentPlayer.ComponentSleep.SleepFactor == 1f)
-                {
-                    numSleepingPlayers++;
-                }
-            }
-			return numSleepingPlayers + numDeadPlayers == m_subsystemPlayers.ComponentPlayers.Count && numSleepingPlayers >= 1;
+			try
+			{
+				int numSleepingPlayers = 0;
+				int numDeadPlayers = 0;
+				foreach(ComponentPlayer componentPlayer in m_subsystemPlayers.ComponentPlayers)
+				{
+					if(componentPlayer.ComponentHealth.Health == 0f)
+					{
+						numDeadPlayers++;
+					}
+					else if(componentPlayer.ComponentSleep.SleepFactor == 1f)
+					{
+						numSleepingPlayers++;
+					}
+				}
+				return numSleepingPlayers + numDeadPlayers == m_subsystemPlayers.ComponentPlayers.Count && numSleepingPlayers >= 1;
+			}
+			catch(Exception ex)
+			{
+				return false;
+			}
         }
 		public virtual void NextFrame()
 		{
