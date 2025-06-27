@@ -110,7 +110,16 @@ namespace Game
 			get;
 			set;
 		}
-
+		public virtual float AttackPhase
+		{
+			get;
+			set;
+		}
+		public virtual float AttackFactor
+		{
+			get;
+			set;
+		}
 		public Vector3 EyePosition
 		{
 			get

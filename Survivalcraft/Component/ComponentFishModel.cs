@@ -41,7 +41,7 @@ namespace Game
 			get;
 			set;
 		}
-
+		public override float AttackPhase { get => m_bitingPhase; set => m_bitingPhase = value; }
 		public override void Update(float dt)
 		{
 			if (m_componentCreature.ComponentLocomotion.LastSwimOrder.HasValue && m_componentCreature.ComponentLocomotion.LastSwimOrder.Value != Vector3.Zero)

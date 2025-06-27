@@ -37,7 +37,8 @@ namespace Game
 		public float m_legAngle2;
 
 		public float m_headAngleY;
-
+		public override float AttackPhase { get => m_kickPhase; set => m_kickPhase = value; }
+		public override float AttackFactor { get => m_kickFactor; set => m_kickFactor = value; }
 		public override void Update(float dt)
 		{
 			float footstepsPhase = m_footstepsPhase;

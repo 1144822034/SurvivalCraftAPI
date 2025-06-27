@@ -78,7 +78,8 @@ namespace Game
 		public Vector2 m_legAngles1;
 
 		public Vector2 m_legAngles2;
-
+		public override float AttackPhase { get => m_punchPhase; set => m_punchPhase = value; }
+		public override float AttackFactor { get => m_punchFactor; set => m_punchFactor = value; }
 		public override void Update(float dt)
 		{
 			m_sneakFactor = m_componentCreature.ComponentBody.IsCrouching

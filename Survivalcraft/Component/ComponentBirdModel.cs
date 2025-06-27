@@ -40,6 +40,8 @@ namespace Game
 			get;
 			set;
 		}
+		public override float AttackPhase { get => m_kickPhase; set => m_kickPhase = value; }
+		public override float AttackFactor { get => m_peckAnimationSpeed; set => m_peckAnimationSpeed = value; }
 
 		public override void Update(float dt)
 		{

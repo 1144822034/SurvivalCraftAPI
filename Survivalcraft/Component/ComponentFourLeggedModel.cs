@@ -70,7 +70,8 @@ namespace Game
 		public float m_legAngle4;
 
 		public float m_headAngleY;
-
+		public override float AttackPhase { get => m_buttPhase; set => m_buttPhase = value; }
+		public override float AttackFactor { get => m_buttFactor; set => m_buttFactor = value; }
 		public override void Update(float dt)
 		{
 			float footstepsPhase = m_footstepsPhase;
