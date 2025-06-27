@@ -80,10 +80,16 @@ namespace Game
 				{
 					string packageName = modEntity.modInfo.PackageName;
 
-					ValuesDictionary modKeyboardSettings = new ValuesDictionary();
-					modEntity.Loader?.OnKeyboardMappingInit(modKeyboardSettings);//初始化模组默认键位设置
-					ValuesDictionary modCameraSettings = new ValuesDictionary();
-					modEntity.Loader?.OnCameraListInit(modCameraSettings);//初始化模组默认相机设置
+					ValuesDictionary modKeyboardSettings = [];
+					ValuesDictionary modCameraSettings = [];
+					List<KeyValuePair<string,object>> keysToAdd = [];
+					List<KeyValuePair<string,object>> camerasToAdd = [];
+					modEntity.Loader?.OnKeyboardMappingInit(keysToAdd);//初始化模组默认键位设置
+					modEntity.Loader?.OnCameraListInit(camerasToAdd);//初始化模组默认相机设置
+					foreach(var item1 in keysToAdd)
+						modKeyboardSettings.Add(item1.Key, item1.Value);
+					foreach(var item2 in camerasToAdd)
+						modCameraSettings.Add(item2.Key, item2.Value);
 
 					if(ModSettingsCache.TryGetValue(packageName, out XElement setting))
 					{
@@ -160,7 +166,10 @@ namespace Game
 				if(ModKeyboardMapSettings.TryGetValue(packageName,out ValuesDictionary keyboardSettings))
 				{
 					keyboardSettings.Clear();
-					modEntity.Loader?.OnKeyboardMappingInit(keyboardSettings);
+					List<KeyValuePair<string,object>> keysToAdd = [];
+					modEntity.Loader?.OnKeyboardMappingInit(keysToAdd);
+					foreach(var item1 in keysToAdd)
+						keyboardSettings.Add(item1.Key,item1.Value);
 				}
 			}
 			Log.Information("Reset mod keyboard mapping settings");
@@ -174,7 +183,10 @@ namespace Game
 				if(ModCameraManageSettings.TryGetValue(packageName,out ValuesDictionary cameraSettings))
 				{
 					cameraSettings.Clear();
-					modEntity.Loader?.OnCameraListInit(cameraSettings);
+					List<KeyValuePair<string,object>> camerasToAdd = [];
+					modEntity.Loader?.OnCameraListInit(camerasToAdd);
+					foreach(var item1 in camerasToAdd)
+						cameraSettings.Add(item1.Key,item1.Value);
 				}
 			}
 			Log.Information("Reset mod camera manage settings");

@@ -125,8 +125,7 @@ namespace Game
 					{
 						if(button == MessageDialogButton.Button1)
 						{
-							SettingsManager.InitializeCameraManageSettings();
-							RefreshList();
+							ResetAll();
 						}
 					});
 				DialogsManager.ShowDialog(null,dialog);
@@ -138,6 +137,12 @@ namespace Game
 		}
 		public override void Enter(object[] parameters)
 		{
+			RefreshList();
+		}
+		public void ResetAll()
+		{
+			SettingsManager.InitializeCameraManageSettings();
+			ModSettingsManager.ResetModsCameraManageSettings();
 			RefreshList();
 		}
 

@@ -635,6 +635,11 @@ namespace Game
 			}
 			return throwIfNotFound ? throw new ArgumentException($"There's no keyboard mapping setting named \"{keyName}\"!") : null;
 		}
+		/// <summary>
+		/// 仅用于修改现有键位，添加键位请使用<see cref="ModLoader.OnKeyboardMappingInit"/>
+		/// </summary>
+		/// <param name="keyName"></param>
+		/// <param name="value"></param>
 		public static void SetKeyboardMapping(string keyName,object value)
 		{
 			if(KeyboardMappingSettings.ContainsKey(keyName))
@@ -671,6 +676,11 @@ namespace Game
 			}
 			return throwIfNotFound ? throw new ArgumentException($"There's no camera setting named \"{keyName}\"!") : -1;
 		}
+		/// <summary>
+		/// 仅用于修改现有相机配置，添加相机配置请使用<see cref="ModLoader.OnCameraListInit"/>
+		/// </summary>
+		/// <param name="keyName"></param>
+		/// <param name="value"></param>
 		public static void SetCameraManageSetting(string keyName,int value)
 		{
 			if(CameraManageSettings.ContainsKey(keyName))

@@ -1885,7 +1885,7 @@ namespace Game
 		/// 当按键设置初始化时执行。可用于模组添加新的按键设置。在重置按键设置时也会使用这里的设置作为默认值
 		/// </summary>
 		/// <param name="keyboardMappingSettings"></param>
-		public virtual void OnKeyboardMappingInit(ValuesDictionary keyboardMappingSettings)
+		public virtual void OnKeyboardMappingInit(List<KeyValuePair<string, object>> keysToAdd)
         {
         }
 
@@ -1893,7 +1893,7 @@ namespace Game
 		/// 在相机列表初始化时执行。可用于模组添加新的摄像机顺序。在重置摄像机列表时也会使用这里的设置作为默认值
 		/// </summary>
 		/// <param name="cameraList"></param>
-		public virtual void OnCameraListInit(ValuesDictionary cameraList)
+		public virtual void OnCameraListInit(List<KeyValuePair<string,object>> camerasToAdd)
 		{
 		}
 
@@ -1913,7 +1913,7 @@ namespace Game
 		/// <param name="buttonsToAdd">键为按钮，值为按下后进行的操作</param>
 		public virtual void OnSettingsScreenCreated(SettingsScreen settingsScreen,out Dictionary<ButtonWidget,Action> buttonsToAdd)
 		{
-			buttonsToAdd = new Dictionary<ButtonWidget,Action>();
+			buttonsToAdd = [];
 		}
 
 		/// <summary>
