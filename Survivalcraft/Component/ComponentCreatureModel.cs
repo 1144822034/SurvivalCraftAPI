@@ -166,7 +166,17 @@ namespace Game
 			base.Animate();
 			if(!Animated)
 			{
-				AnimateCreature();
+				bool flag = false;
+				bool skip = false;
+				ModsManager.HookAction("OnModelAnimate",loader => {
+					loader.OnModelAnimate(this,out skip);
+					flag = flag | skip;
+					return false;
+				});
+				if(!flag)
+				{
+					AnimateCreature();
+				}
 			}
 			var qpacity = (m_componentCreature.ComponentSpawn.SpawnDuration > 0f) ? ((float)MathUtils.Saturate((m_subsystemGameInfo.TotalElapsedGameTime - m_componentCreature.ComponentSpawn.SpawnTime) / m_componentCreature.ComponentSpawn.SpawnDuration)) : 1f;
 			Opacity = MathUtils.Min(qpacity, Transparent);
