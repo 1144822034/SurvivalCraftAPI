@@ -12,7 +12,10 @@ namespace Game
 
 		public override void Animate()
 		{
-			if (m_componentSpawn != null)
+			base.Animate();
+			if(Animated)
+				return;
+			if(m_componentSpawn != null)
 			{
 				Opacity = (m_componentSpawn.SpawnDuration > 0f) ? ((float)MathUtils.Saturate((m_subsystemGameInfo.TotalElapsedGameTime - m_componentSpawn.SpawnTime) / m_componentSpawn.SpawnDuration)) : 1f;
 				if (m_componentSpawn.DespawnTime.HasValue)
@@ -21,7 +24,6 @@ namespace Game
 				}
 			}
 			SetBoneTransform(Model.RootBone.Index, m_componentFrame.Matrix);
-			base.Animate();
 		}
 
 		public override void Load(ValuesDictionary valuesDictionary, IdToEntityMap idToEntityMap)

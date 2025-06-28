@@ -116,18 +116,6 @@ namespace Game
 
 		public override void AnimateCreature()
 		{
-			bool flag = false;
-			bool skip = false;
-			ModsManager.HookAction("OnModelAnimate", loader =>
-			{
-				loader.OnModelAnimate(this, out skip);
-				flag = flag | skip;
-				return false;
-			});
-			if (flag)
-			{
-				return;
-			}
 			Vector3 vector = m_componentCreature.ComponentBody.Rotation.ToYawPitchRoll();
 			if (m_componentCreature.ComponentHealth.Health == 0f)
 			{
@@ -210,7 +198,9 @@ namespace Game
 		public override void SetModel(Model model)
 		{
 			base.SetModel(model);
-			if (Model != null)
+			if(IsSet)
+				return;
+			if(Model != null)
 			{
 				m_bodyBone = Model.FindBone("Body");
 				m_tail1Bone = Model.FindBone("Tail1");

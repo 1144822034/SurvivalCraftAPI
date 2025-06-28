@@ -22,7 +22,8 @@ namespace Game
 		public override void Animate()
 		{
 			base.Animate();
-			if (Animated) return;
+			if (Animated)
+				return;
 			Opacity = m_componentHumanModel.Opacity;
 			foreach (ModelBone bone in Model.Bones)
 			{

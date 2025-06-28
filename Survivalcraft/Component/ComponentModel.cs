@@ -11,8 +11,8 @@ namespace Game
 		public SubsystemSky m_subsystemSky;
 
 		public bool IsSet;
-
-		public bool Animated = false;
+		public bool Animated;
+		public bool IsExtrasDrawn;
 
 		public ComponentFrame m_componentFrame;
 
@@ -195,11 +195,22 @@ namespace Game
 
 		public virtual void Animate()
 		{
-			
+			Animated = false;
+			ModsManager.HookAction("OnAnimateModel",loader => {
+				loader.OnAnimateModel(this,out bool skip);
+				Animated |= skip;
+				return false;
+			});
 		}
 
 		public virtual void DrawExtras(Camera camera)
 		{
+			IsExtrasDrawn = false;
+			ModsManager.HookAction("OnModelDrawExtra",loader => {
+				loader.OnModelDrawExtra(this,camera,out bool skip);
+				IsExtrasDrawn |= skip;
+				return false;
+			});
 		}
 
 		public override void Load(ValuesDictionary valuesDictionary, IdToEntityMap idToEntityMap)
@@ -225,7 +236,7 @@ namespace Game
 			ModsManager.HookAction("OnSetModel", (modLoader) =>
 			{
 				modLoader.OnSetModel(this, model, out IsSet);
-				return IsSet;
+				return false;
 			});
 			if (IsSet) return;
 			m_model = model;

@@ -163,7 +163,11 @@ namespace Game
 
 		public override void Animate()
 		{
-			AnimateCreature();
+			base.Animate();
+			if(!Animated)
+			{
+				AnimateCreature();
+			}
 			var qpacity = (m_componentCreature.ComponentSpawn.SpawnDuration > 0f) ? ((float)MathUtils.Saturate((m_subsystemGameInfo.TotalElapsedGameTime - m_componentCreature.ComponentSpawn.SpawnTime) / m_componentCreature.ComponentSpawn.SpawnDuration)) : 1f;
 			Opacity = MathUtils.Min(qpacity, Transparent);
 			if (m_componentCreature.ComponentSpawn.DespawnTime.HasValue)

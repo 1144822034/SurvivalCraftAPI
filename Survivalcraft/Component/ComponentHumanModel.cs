@@ -214,18 +214,6 @@ namespace Game
 
 		public override void AnimateCreature()
 		{
-			bool flag = false;
-			bool skip = false;
-			ModsManager.HookAction("OnModelAnimate", loader =>
-			{
-				loader.OnModelAnimate(this, out skip);
-				flag = flag | skip;
-				return false;
-			});
-			if (flag)
-			{
-				return;
-			}
 			Vector3 position = m_componentCreature.ComponentBody.Position;
 			Vector3 vector = m_componentCreature.ComponentBody.Rotation.ToYawPitchRoll();
 			if (OnAnimate != null && OnAnimate()) return;
@@ -369,13 +357,8 @@ namespace Game
 
 		public override void DrawExtras(Camera camera)
 		{
-			bool flag = false;
-			ModsManager.HookAction("OnModelDrawExtra",loader => {
-				loader.OnModelDrawExtra(this,camera,out bool skip);
-				flag |= skip;
-				return false;
-			});
-			if(flag)
+			base.DrawExtras(camera);
+			if(IsExtrasDrawn)
 			{
 				return;
 			}
@@ -404,8 +387,6 @@ namespace Game
 				Matrix matrix2 = matrix * camera.ViewMatrix;
 				block.DrawBlock(m_subsystemModelsRenderer.PrimitivesRenderer, m_componentMiner.ActiveBlockValue, Color.White, block.GetInHandScale(m_componentMiner.ActiveBlockValue), ref matrix2, m_drawBlockEnvironmentData);
 			}
-
-			base.DrawExtras(camera);
 		}
 
 		public override void Load(ValuesDictionary valuesDictionary, IdToEntityMap idToEntityMap)

@@ -275,17 +275,22 @@ namespace Game
             IsSet = false;
         }
 
-        /// <summary>
-        /// 当动物模型对象作出动画时执行
-        /// Skip为是否跳过原动画代码
-        /// </summary>
-        public virtual void OnModelAnimate(ComponentCreatureModel componentCreatureModel, out bool Skip)
+		[Obsolete("Use OnAnimateModel() instead")]
+		public virtual void OnModelAnimate(ComponentCreatureModel componentCreatureModel, out bool Skip)
         {
             Skip = false;
         }
+		/// <summary>
+		/// 当模型对象作出动画时执行
+		/// skip为是否跳过原动画代码
+		/// </summary>
+		public virtual void OnAnimateModel(ComponentModel componentModel, out bool skip)
+        {
+            skip = false;
+        }
 
 		/// <summary>
-		/// 当模型对象绘制额外时执行，Skip为是否跳过原本的绘制。
+		/// 当模型对象绘制额外时执行，skip为是否跳过原本的绘制。
 		/// 与OnModelRendererDrawExtra不同，本方法主要是人物第三人称模型手上物品的绘制
 		/// </summary>
 		/// <param name="componentModel"></param>
