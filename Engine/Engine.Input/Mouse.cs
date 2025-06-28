@@ -130,6 +130,15 @@ namespace Engine.Input
                     {
                         MouseMovement = new Point2(position.X - m_lastMousePosition.Value.X, position.Y - m_lastMousePosition.Value.Y);
                     }
+                    Point2 windowSize = Window.Size;
+                    if (position.X < 0
+                        || position.X >= windowSize.X
+                        || position.Y < 0
+                        || position.Y >= windowSize.Y)
+                    {
+                        position = new Point2(windowSize.X / 2, windowSize.Y / 2);
+                        SetMousePosition(position.X, position.Y);
+                    }
                     m_lastMousePosition = position;
                 }
 			}
