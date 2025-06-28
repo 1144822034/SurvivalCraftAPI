@@ -36,9 +36,9 @@ namespace Game
 			//若需要添加一个使用鼠标左键但与挖掘、攻击兼容的按键Fire，将其添加至对应的组Group_Action即可。代码如下：
 			//KeyCompatibleGroupsManager.AddKeyToCompatibleGroup("Group_Action","Fire");
 		}
-		public override void OnCameraListInit(List<KeyValuePair<string,object>> camerasToAdd)
+		public override IEnumerable<KeyValuePair<string,int>> GetCameraList()
 		{//示例：向摄像机列表设置中添加调试视角。若此处不添加，则设置里不会显示该视角的选项，并且在游戏中通过切换视角按键也无法切换到该视角
-			camerasToAdd.Add(new KeyValuePair<string, object>("Game.DebugCamera", 4));//4为调试视角的默认序号。其它摄像机的序号详见SettingsManager.InitializeCameraManageSettings。这些序号只作为默认设置
+			yield return new("Game.DebugCamera", 4);//4为调试视角的默认序号。其它摄像机的序号详见SettingsManager.InitializeCameraManageSettings。这些序号只作为默认设置
 		}
 		public override void ManageCameras(GameWidget gameWidget)
 		{//示例：向GameWidget中添加调试视角

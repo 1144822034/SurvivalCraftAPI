@@ -636,7 +636,7 @@ namespace Game
 			return throwIfNotFound ? throw new ArgumentException($"There's no keyboard mapping setting named \"{keyName}\"!") : null;
 		}
 		/// <summary>
-		/// 仅用于修改现有键位，添加键位请使用<see cref="ModLoader.OnKeyboardMappingInit"/>
+		/// 仅用于修改现有键位，添加键位请使用<see cref="ModLoader.GetKeyboardMappings"/>
 		/// </summary>
 		/// <param name="keyName"></param>
 		/// <param name="value"></param>
@@ -677,7 +677,7 @@ namespace Game
 			return throwIfNotFound ? throw new ArgumentException($"There's no camera setting named \"{keyName}\"!") : -1;
 		}
 		/// <summary>
-		/// 仅用于修改现有相机配置，添加相机配置请使用<see cref="ModLoader.OnCameraListInit"/>
+		/// 仅用于修改现有相机配置，添加相机配置请使用<see cref="ModLoader.GetCameraList"/>
 		/// </summary>
 		/// <param name="keyName"></param>
 		/// <param name="value"></param>

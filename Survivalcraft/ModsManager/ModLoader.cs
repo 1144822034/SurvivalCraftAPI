@@ -1882,19 +1882,21 @@ namespace Game
 		}
 
 		/// <summary>
-		/// 当按键设置初始化时执行。可用于模组添加新的按键设置。在重置按键设置时也会使用这里的设置作为默认值
+		/// 用于添加新的按键映射，在重置按键设置时也会使用这里的设置作为默认值。
+		/// 使用yield return可返回多个键值对。键：映射名；值：按键(Key)或鼠标按钮(MouseButton)
 		/// </summary>
-		/// <param name="keyboardMappingSettings"></param>
-		public virtual void OnKeyboardMappingInit(List<KeyValuePair<string, object>> keysToAdd)
+		public virtual IEnumerable<KeyValuePair<string,object>> GetKeyboardMappings()
         {
-        }
+			yield break;
+		}
 
 		/// <summary>
-		/// 在相机列表初始化时执行。可用于模组添加新的摄像机顺序。在重置摄像机列表时也会使用这里的设置作为默认值
+		/// 用于添加新的摄像机顺序，在重置摄像机列表时也会使用这里的设置作为默认值。
+		/// 使用yield return可返回多个键值对。键：摄像机类名；值：顺序
 		/// </summary>
-		/// <param name="cameraList"></param>
-		public virtual void OnCameraListInit(List<KeyValuePair<string,object>> camerasToAdd)
+		public virtual IEnumerable<KeyValuePair<string,int>> GetCameraList()
 		{
+			yield break;
 		}
 
 		/// <summary>
