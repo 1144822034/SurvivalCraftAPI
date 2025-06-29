@@ -429,6 +429,10 @@ namespace Game
 		{
 			return null;
 		}
+		public virtual CraftingRecipe GetAdHocCraftingRecipe(CraftingContext craftingContext)
+		{
+			return GetAdHocCraftingRecipe(craftingContext.SubsystemTerrain, craftingContext.Ingredients, craftingContext.HeatLevel, craftingContext.PlayerLevel);
+		}
 
 		public virtual bool IsFaceTransparent(SubsystemTerrain subsystemTerrain, int face, int value)
 		{

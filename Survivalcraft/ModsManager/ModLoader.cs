@@ -283,6 +283,7 @@ namespace Game
 		/// <summary>
 		/// 当模型对象作出动画时执行
 		/// skip为是否跳过原动画代码
+		/// 该接口可能涉及较多mod访问，建议只对属于自己mod的模型进行skip
 		/// </summary>
 		public virtual void OnAnimateModel(ComponentModel componentModel, out bool skip)
         {
