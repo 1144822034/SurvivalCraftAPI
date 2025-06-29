@@ -6,13 +6,6 @@ using System.Linq;
 using System.Reflection.Emit;
 using System.Xml.Linq;
 using XmlUtilities;
-using Engine;
-using Engine.Graphics;
-using Engine.Serialization;
-using System.Collections.Generic;
-using System.Linq;
-using System.Xml.Linq;
-using XmlUtilities;
 
 namespace Game
 {
@@ -25,7 +18,6 @@ namespace Game
 		/// 启用等级限制
 		/// Mod在初始化时，设置为false可以让物品合成不受玩家等级限制
 		/// </summary>
-		[Obsolete("建议在CraftingRecipesManagerInitialize时，对需要等级清空的配方，将其RequiredPlayerLevel设置为0")]
 		public static bool EnableLevelRestrictions = true;
 		public static void Initialize()
 		{
@@ -96,36 +88,117 @@ namespace Game
 
 		public static CraftingRecipe DecodeElementToCraftingRecipe(XElement item, int HorizontalLen = 3)
 		{
-			CraftingRecipe craftingRecipe = null;
-			string className = item.Attribute("Class")?.Value ?? typeof(CraftingRecipe).FullName;
-			if(!string.IsNullOrEmpty(className))
+			var craftingRecipe = new CraftingRecipe();
+			string attributeValue = XmlUtils.GetAttributeValue<string>(item, "Result");
+			string desc = XmlUtils.GetAttributeValue<string>(item, "Description");
+			if (desc.StartsWith("[") && desc.EndsWith("]") && LanguageControl.TryGetBlock(attributeValue, "CRDescription:" + desc.Substring(1, desc.Length - 2), out var r)) desc = r;
+			craftingRecipe.ResultValue = DecodeResult(attributeValue);
+			craftingRecipe.ResultCount = XmlUtils.GetAttributeValue<int>(item, "ResultCount");
+			string attributeValue2 = XmlUtils.GetAttributeValue(item, "Remains", string.Empty);
+			if (!string.IsNullOrEmpty(attributeValue2))
 			{
-				try
+				craftingRecipe.RemainsValue = DecodeResult(attributeValue2);
+				craftingRecipe.RemainsCount = XmlUtils.GetAttributeValue<int>(item, "RemainsCount");
+			}
+			craftingRecipe.RequiredHeatLevel = XmlUtils.GetAttributeValue<float>(item, "RequiredHeatLevel");
+			craftingRecipe.RequiredPlayerLevel = XmlUtils.GetAttributeValue(item, "RequiredPlayerLevel", 1f);
+			craftingRecipe.Description = desc;
+			craftingRecipe.Message = XmlUtils.GetAttributeValue<string>(item, "Message", null);
+			craftingRecipe.DisplayOrder = XmlUtils.GetAttributeValue<int>(item,"DisplayOrder", 0);
+			var dictionary = new Dictionary<char, string>();
+			foreach (XAttribute item2 in from a in item.Attributes()
+										 where a.Name.LocalName.Length == 1 && char.IsLower(a.Name.LocalName[0])
+										 select a)
+			{
+				DecodeIngredient(item2.Value, out string craftingId, out int? data);
+				if (BlocksManager.FindBlocksByCraftingId(craftingId).Length == 0)
 				{
-					Type type = TypeCache.FindType(className,false,true);
-					craftingRecipe = (CraftingRecipe)Activator.CreateInstance(type: type,args: new object[] { item });
-					if(craftingRecipe == null) throw new Exception("Recipe is not assignable to Game.CraftingRecipe.");
+					throw new InvalidOperationException($"Block with craftingId \"{item2.Value}\" not found.");
 				}
-				catch(Exception ex)
+				if (data.HasValue && (data.Value < 0 || data.Value > 262143))
 				{
-					Log.Error("CraftingRecipe from class " + className + " create failed! " + ex);
+					throw new InvalidOperationException($"Data in recipe ingredient \"{item2.Value}\" must be between 0 and 0x3FFFF.");
+				}
+				dictionary.Add(item2.Name.LocalName[0], item2.Value);
+			}
+			string[] array = item.Value.Trim().Split(new string[] { "\n" }, StringSplitOptions.None);
+			for (int i = 0; i < array.Length; i++)
+			{
+				int num = array[i].IndexOf('"');
+				int num2 = array[i].LastIndexOf('"');
+				if (num < 0 || num2 < 0 || num2 <= num)
+				{
+					throw new InvalidOperationException("Invalid recipe line.");
+				}
+				string text = array[i].Substring(num + 1, num2 - num - 1);
+				for (int j = 0; j < text.Length; j++)
+				{
+					char c = text[j];
+					if (char.IsLower(c))
+					{
+						string text2 = dictionary[c];
+						craftingRecipe.Ingredients[j + (i * HorizontalLen)] = text2;
+					}
+				}
+			}
+
+			return craftingRecipe;
+		}
+
+		public static CraftingRecipe FindMatchingRecipe(SubsystemTerrain terrain, string[] ingredients, float heatLevel, float playerLevel)
+		{
+			if (ingredients.All((string s) => string.IsNullOrEmpty(s)))
+			{
+				return null;
+			}
+			CraftingRecipe craftingRecipe = null;
+			Block[] blocks = BlocksManager.Blocks;
+			for (int i = 0; i < blocks.Length; i++)
+			{
+				CraftingRecipe adHocCraftingRecipe = blocks[i].GetAdHocCraftingRecipe(terrain, ingredients, heatLevel, playerLevel);
+				if (adHocCraftingRecipe != null && MatchRecipe(adHocCraftingRecipe.Ingredients, ingredients))
+				{
+					craftingRecipe = adHocCraftingRecipe;
+					break;
+				}
+			}
+			if (craftingRecipe == null)
+			{
+				foreach (CraftingRecipe recipe in Recipes)
+				{
+					if (MatchRecipe(recipe.Ingredients, ingredients))
+					{
+						craftingRecipe = recipe;
+						break;
+					}
+				}
+			}
+			if (craftingRecipe != null)
+			{
+				if (heatLevel < craftingRecipe.RequiredHeatLevel)
+				{
+					craftingRecipe = (!(heatLevel > 0f)) ? new CraftingRecipe
+					{
+						Message = LanguageControl.Get(fName, 0)
+					} : new CraftingRecipe
+					{
+						Message = LanguageControl.Get(fName, 1)
+					};
+				}
+				else if (playerLevel < craftingRecipe.RequiredPlayerLevel && EnableLevelRestrictions)
+				{
+					craftingRecipe = (!(craftingRecipe.RequiredHeatLevel > 0f)) ? new CraftingRecipe
+					{
+						Message = String.Format(LanguageControl.Get(fName, 2), craftingRecipe.RequiredPlayerLevel)
+					} : new CraftingRecipe
+					{
+						Message = String.Format(LanguageControl.Get(fName, 3), craftingRecipe.RequiredPlayerLevel)
+					};
 				}
 			}
 			return craftingRecipe;
 		}
-		public static CraftingRecipe FindMatchingRecipe(SubsystemTerrain terrain, string[] ingredients, float heatLevel, float playerLevel)
-		{
-			CraftingContext context = new CraftingContext()
-			{
-				RowsCount = 3,
-				ColumnsCount = 3,
-				SubsystemTerrain = terrain,
-				Ingredients = ingredients,
-				HeatLevel = heatLevel,
-				PlayerLevel = playerLevel
-			};
-			return context.FindMatchingRecipe(context.SearchPossibleRecipes());
-		}
+
 		public static int DecodeResult(string result)
 		{
 			bool flag2 = false;
@@ -144,6 +217,7 @@ namespace Game
 			}
 			return 0;
 		}
+
 		public static void DecodeIngredient(string ingredient, out string craftingId, out int? data)
 		{
 			bool flag2 = false;
@@ -159,7 +233,7 @@ namespace Game
 			craftingId = array[0];
 			data = (array.Length >= 2) ? new int?(int.Parse(array[1], CultureInfo.InvariantCulture)) : null;
 		}
-		[Obsolete]
+
 		public static bool MatchRecipe(string[] requiredIngredients, string[] actualIngredients)
 		{
 			bool flag2 = false;
@@ -201,7 +275,7 @@ namespace Game
 			}
 			return false;
 		}
-		[Obsolete]
+
 		public static bool TransformRecipe(string[] transformedIngredients, string[] ingredients, int shiftX, int shiftY, bool flip)
 		{
 			for (int i = 0; i < 9; i++)
@@ -227,7 +301,7 @@ namespace Game
 			}
 			return true;
 		}
-		[Obsolete]
+
 		public static bool CompareIngredients(string requiredIngredient, string actualIngredient)
 		{
 			if (requiredIngredient == null)
