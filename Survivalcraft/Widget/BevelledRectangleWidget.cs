@@ -142,6 +142,7 @@ namespace Game
 				if (value != m_texture)
 				{
 					m_texture = value;
+					m_cachedBatchesValid = false;
 				}
 			}
 		}
@@ -163,6 +164,7 @@ namespace Game
 				if (value != m_textureLinearFilter)
 				{
 					m_textureLinearFilter = value;
+					m_cachedBatchesValid = false;
 				}
 			}
 		}

@@ -23,7 +23,7 @@
         <RuntimeIdentifier>win-x64</RuntimeIdentifier>
         <PackageId>SurvivalcraftAPI.Survivalcraft</PackageId>
         <Title>SurvivalcraftAPI.Survivalcraft</Title><!--For NuGet Package-->
-        <Version>1.8.1.1</Version><!--For NuGet Package-->
+        <Version>1.8.1.2</Version><!--For NuGet Package-->
         <PackageProjectUrl>https://gitee.com/SC-SPM/SurvivalcraftApi</PackageProjectUrl>
         <RepositoryUrl>https://gitee.com/SC-SPM/SurvivalcraftApi</RepositoryUrl>
         <RepositoryType>Git</RepositoryType>
