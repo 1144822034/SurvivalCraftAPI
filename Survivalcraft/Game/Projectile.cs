@@ -466,15 +466,15 @@ namespace Game
                 Damping = block.GetProjectileDamping(Value);
             }
             float friction = IsInFluid ? MathF.Pow(DampingInFluid, dt) : MathF.Pow(Damping, dt);
-            int cellContents = CurrnetTerrain().GetCellContents(Terrain.ToCell(Position.X), Terrain.ToCell(Position.Y), Terrain.ToCell(Position.Z));
-            Block blockTheProjectileIn = BlocksManager.Blocks[cellContents];
-            bool isProjectileInFluid = (blockTheProjectileIn is FluidBlock);
             Velocity.Y += -Gravity * dt;
             Velocity *= friction;
             AngularVelocity *= friction;
             Position = positionAtdt;
             Rotation += AngularVelocity * dt;
-            if (TrailParticleSystem != null)
+			int cellContents = CurrnetTerrain().GetCellContents(Terrain.ToCell(Position.X),Terrain.ToCell(Position.Y),Terrain.ToCell(Position.Z));
+			Block blockTheProjectileIn = BlocksManager.Blocks[cellContents];
+			bool isProjectileInFluid = (blockTheProjectileIn is FluidBlock);
+			if (TrailParticleSystem != null)
             {
                 UpdateTrailParticleSystem(dt);
             }

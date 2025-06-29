@@ -108,10 +108,6 @@ namespace Game
 				UseAlphaThreshold = true,
 				IsPerspective = true
 			};
-			OuterClothingModel = CharacterSkinsManager.GetOuterClothingModel(PlayerClass);
-			PlayerModel = CharacterSkinsManager.GetPlayerModel(PlayerClass);
-			m_modelWidget.AddModel(PlayerModel);
-			m_modelWidget.AddModel(OuterClothingModel);
 			Children.Add(m_modelWidget);
 			IsHitTestVisible = false;
 			m_publicCharacterSkinsCache = new CharacterSkinsCache();
@@ -148,10 +144,22 @@ namespace Game
 			}
 			m_modelWidget.ModelMatrix = (m_rotation != 0f) ? Matrix.CreateRotationY(m_rotation) : Matrix.Identity;
 		}
-
+		public bool m_modelsInitialized;
+		public virtual void InitializeModels()
+		{
+			OuterClothingModel = CharacterSkinsManager.GetOuterClothingModel(PlayerClass);
+			PlayerModel = CharacterSkinsManager.GetPlayerModel(PlayerClass);
+			m_modelWidget.AddModel(PlayerModel);
+			m_modelWidget.AddModel(OuterClothingModel);
+		}
 		public override void MeasureOverride(Vector2 parentAvailableSize)
 		{
 			if(OuterClothing) return;
+			if(!m_modelsInitialized)
+			{
+				m_modelsInitialized = true;
+				InitializeModels();
+			}
 			if (CameraShot == Shot.Body)
 			{
 				m_modelWidget.ViewPosition = (PlayerClass == PlayerClass.Male) ? new Vector3(0f, 1.46f, -3.2f) : new Vector3(0f, 1.39f, -3.04f);
