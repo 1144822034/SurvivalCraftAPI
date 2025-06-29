@@ -4,7 +4,7 @@ using TemplatesDatabase;
 
 namespace Game
 {
-	public class ComponentSwimAwayBehavior : ComponentBehavior, IUpdateable
+	public class ComponentSwimAwayBehavior : ComponentBehavior, IUpdateable, IComponentEscapeBehavior
 	{
 		public SubsystemTerrain m_subsystemTerrain;
 

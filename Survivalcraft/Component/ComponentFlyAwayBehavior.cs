@@ -4,7 +4,7 @@ using TemplatesDatabase;
 
 namespace Game
 {
-	public class ComponentFlyAwayBehavior : ComponentBehavior, IUpdateable, INoiseListener
+	public class ComponentFlyAwayBehavior : ComponentBehavior, IUpdateable, INoiseListener, IComponentEscapeBehavior
 	{
 		public SubsystemTerrain m_subsystemTerrain;
 
