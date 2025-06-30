@@ -262,20 +262,29 @@ namespace Game
 			ModsManager.HookAction("SetShaderParameter", (modLoader) => { modLoader.SetShaderParameter(modelShader, camera); return true; });
 			foreach (ModelData modelsDatum in modelsData)
 			{
-				ComponentModel componentModel = modelsDatum.ComponentModel;
-				Vector3 v = componentModel.DiffuseColor ?? Vector3.One;
-				float num = componentModel.Opacity ?? 1f;
-				modelShader.InstancesCount = componentModel.AbsoluteBoneTransformsForCamera.Length;
-				modelShader.MaterialColor = new Vector4(v * num, num);
-				modelShader.EmissionColor = componentModel.EmissionColor ?? Vector4.Zero;
-				modelShader.AmbientLightColor = new Vector3(LightingManager.LightAmbient * modelsDatum.Light);
-				modelShader.DiffuseLightColor1 = new Vector3(modelsDatum.Light);
-				modelShader.DiffuseLightColor2 = new Vector3(modelsDatum.Light);
-				modelShader.Texture = componentModel.TextureOverride;
-				Array.Copy(componentModel.AbsoluteBoneTransformsForCamera, modelShader.Transforms.World, componentModel.AbsoluteBoneTransformsForCamera.Length);
-				InstancedModelData instancedModelData = InstancedModelsManager.GetInstancedModelData(componentModel.Model, componentModel.MeshDrawOrders);
-				Display.DrawIndexed(PrimitiveType.TriangleList, modelShader, instancedModelData.VertexBuffer, instancedModelData.IndexBuffer, 0, instancedModelData.IndexBuffer.IndicesCount);
-				ModelsDrawn++;
+				bool skipDrawing = false;
+				ModsManager.HookAction("OnModelDataDrawing",modLoader => {
+					modLoader.OnModelDataDrawing(modelsDatum, modelShader, camera, this, out bool skip);
+					skipDrawing |= skip;
+					return false;
+				});
+				if(!skipDrawing)
+				{
+					ComponentModel componentModel = modelsDatum.ComponentModel;
+					Vector3 v = componentModel.DiffuseColor ?? Vector3.One;
+					float num = componentModel.Opacity ?? 1f;
+					modelShader.InstancesCount = componentModel.AbsoluteBoneTransformsForCamera.Length;
+					modelShader.MaterialColor = new Vector4(v * num,num);
+					modelShader.EmissionColor = componentModel.EmissionColor ?? Vector4.Zero;
+					modelShader.AmbientLightColor = new Vector3(LightingManager.LightAmbient * modelsDatum.Light);
+					modelShader.DiffuseLightColor1 = new Vector3(modelsDatum.Light);
+					modelShader.DiffuseLightColor2 = new Vector3(modelsDatum.Light);
+					modelShader.Texture = componentModel.TextureOverride;
+					Array.Copy(componentModel.AbsoluteBoneTransformsForCamera,modelShader.Transforms.World,componentModel.AbsoluteBoneTransformsForCamera.Length);
+					InstancedModelData instancedModelData = InstancedModelsManager.GetInstancedModelData(componentModel.Model,componentModel.MeshDrawOrders);
+					Display.DrawIndexed(PrimitiveType.TriangleList,modelShader,instancedModelData.VertexBuffer,instancedModelData.IndexBuffer,0,instancedModelData.IndexBuffer.IndicesCount);
+					ModelsDrawn++;
+				}
 				//画名称
 				ModsManager.HookAction("OnModelRendererDrawExtra", modLoader =>
 				{

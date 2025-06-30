@@ -1940,6 +1940,11 @@ namespace Game
 		{
 		}
 
+		/// <summary>
+		/// 重新计算摄像机投影矩阵
+		/// </summary>
+		/// <param name="camera"></param>
+		/// <param name="projectionMatrix"></param>
 		public virtual void RecalculateCameraProjection(Camera camera, ref Matrix projectionMatrix)
 		{
 		}
@@ -1972,6 +1977,18 @@ namespace Game
 		public virtual void ClothingProcessSlotItems(ComponentPlayer componentPlayer, int slotIndex, ref int inputValue, ref int inputCount, ref int processedValue, ref int processedCount, bool skippedByOtherMods,out bool skipVanilla)
 		{
 			skipVanilla = false;
+		}
+
+		/// <summary>
+		/// 当单个模型数据被渲染时执行
+		/// </summary>
+		/// <param name="modelData"></param>
+		/// <param name="modelShader"></param>
+		/// <param name="subsystemModelsRenderer"></param>
+		/// <param name="skip"></param>
+		public virtual void OnModelDataDrawing(SubsystemModelsRenderer.ModelData modelData, ModelShader modelShader, Camera camera, SubsystemModelsRenderer subsystemModelsRenderer, out bool skip)
+		{
+			skip = false;
 		}
 	}
 }
