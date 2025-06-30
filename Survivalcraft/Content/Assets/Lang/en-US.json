@@ -722,6 +722,9 @@
         "1": "Furniture",
         "2": "User"
     },
+    "InventorySlotWidget": {
+        "1": "Split"
+    },
     "SettingsControlsScreen": [
         "{0}blocks",
         "Pix",

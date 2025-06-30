@@ -724,6 +724,9 @@
         "1": "家具",
         "2": "用户自定义"
     },
+    "InventorySlotWidget": {
+        "1": "拆分"
+    },
     "SettingsControlsScreen": [
         "{0}方块",
         "像素",

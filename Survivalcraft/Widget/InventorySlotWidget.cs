@@ -49,6 +49,8 @@ namespace Game
 
 		public Entity m_entity;
 
+		public const string fName = "InventorySlotWidget";
+
 		public virtual bool HideBlockIcon
 		{
 			get;
@@ -249,7 +251,7 @@ namespace Game
             //红框Split标记
             m_splitLabelWidget = new LabelWidget
 			{
-				Text = "Split",
+				Text = LanguageControl.Get(fName, "1"),
 				Color = new Color(255, 64, 0),
 				HorizontalAlignment = WidgetAlignment.Near,
 				VerticalAlignment = WidgetAlignment.Near,
