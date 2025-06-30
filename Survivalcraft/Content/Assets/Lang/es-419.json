@@ -119,8 +119,8 @@
         "1": "Error al generar la criatura, revise el registro del juego."
     },
     "SubsystemFireworksBlockBehavior": {
-      "1": "Happy New Year!",
-      "2": "--- Enjoy the fireworks ---"
+        "1": "Happy New Year!",
+        "2": "--- Enjoy the fireworks ---"
     },
     "ExternalContentManager": {
         "1": "Sin nombre.",
@@ -371,10 +371,10 @@
         "1": "Haga una Pantalla de 7 segmentos con cobre, vidrio y pintura"
     },
     "PaintBucketBlock": {
-      "1": "Make {0} Paint"
+        "1": "Make {0} Paint"
     },
     "PumpkinSoupBucketBlock": {
-      "1": "Cook pumpkin soup"
+        "1": "Cook pumpkin soup"
     },
     "GameMenuDialog": {
         "1": "Tu dispositivo es rápido",
@@ -919,6 +919,16 @@
         "2": "El archivo no se podra recuperar si lo eliminas sin su copia de seguridad.",
         "3": "¿Habandonar cambios?",
         "4": "Has cambiado algunos parametros de esete mundo, pero si sales de esta seccion directamente, los cambios no se aplicaran."
+    },
+    "PlayScreen": {
+        "1": "¡Advertencia de incompatibilidad de mod!",
+        "2": "Continuar",
+        "3": "Faltan los siguientes mods: ",
+        "4": "Nombre del mod: {0}, versión: {1}",
+        "5": "Los siguientes mods tienen versiones incompatibles:",
+        "6": "Nombre del mod: {0}, versión requerida: {1}, versión actual: {2}",
+        "7": "¿Estás seguro de que deseas continuar?",
+        "8": "Mod faltante"
     },
     "Usual": {
         "unknown": "Desconocido",
@@ -2843,14 +2853,16 @@
             "10": "Preparar jugadores"
         },
         "PlayScreen": {
-            "1": "¡Advertencia de incompatibilidad de mod!",
-            "2": "Continuar",
-            "3": "Faltan los siguientes mods: ",
-            "4": "Nombre del mod: {0}, versión: {1}",
-            "5": "Los siguientes mods tienen versiones incompatibles:",
-            "6": "Nombre del mod: {0}, versión requerida: {1}, versión actual: {2}",
-            "7": "¿Estás seguro de que deseas continuar?",
-            "8": "Mod faltante"
+            "1": "Mundos existentes",
+            "2": "Jugar mundo",
+            "3": "Nuevo mundo",
+            "4": "Opciones",
+            "5": "Escaneando mundos, espere...",
+            "6": "Mundos guardados ({0})",
+            "7": "/!/Limite alcanzado",
+            "8": "Lo sentimos, no es posible crear mas de {0} mundos. Exporta los mundos al contenido y borralos de aqui o borra los que ya no te intereza.",
+            "9": "{0} Jugadores",
+            "10": "{0} Jugador"
         },
         "PlayerScreen": {
             "1": "Preparar jugador",
