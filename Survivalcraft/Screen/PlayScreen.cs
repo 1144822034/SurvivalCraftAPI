@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection.Metadata.Ecma335;
+using System.Text;
 using System.Threading.Tasks;
 using System.Xml.Linq;
 using TemplatesDatabase;
@@ -197,19 +198,19 @@ namespace Game
 			{
 				if(modsNotLoaded.Count > 0 || modsVersionNotCapable.Count > 0)
 				{
-					string text = string.Empty;
-					if(modsNotLoaded.Count > 0) text += "缺少以下模组：\n";
+					StringBuilder text = new();
+					if(modsNotLoaded.Count > 0) text.AppendLine(LanguageControl.Get(nameof(PlayScreen),3));
 					foreach(ValuesDictionary modDictionary in modsNotLoaded)
 					{
-						text += string.Format("模组名：{0}, 版本号：{1}\n",modDictionary.GetValue("Name", "?"),modDictionary.GetValue("Version", "?"));
+						text.AppendLine(string.Format(LanguageControl.Get(nameof(PlayScreen),4),modDictionary.GetValue("Name", "?"),modDictionary.GetValue("Version", "?")));
 					}
-					if(modsVersionNotCapable.Count > 0) text += "以下模组版本不兼容：\n";
+					if(modsVersionNotCapable.Count > 0) text.AppendLine(LanguageControl.Get(nameof(PlayScreen),5));
 					foreach(ValuesDictionary modDictionary in modsVersionNotCapable)
 					{
-						text += string.Format("模组名：{0}，需求版本号：{1}，当前版本号：{2}\n",modDictionary.GetValue("Name","?"),modDictionary.GetValue("Version","?"),modDictionary.GetValue("CurrentVersion","?"));
+						text.AppendLine(string.Format(LanguageControl.Get(nameof(PlayScreen),6),modDictionary.GetValue("Name","?"),modDictionary.GetValue("Version","?"),modDictionary.GetValue("CurrentVersion","?")));
 					}
-					text += "你确定要继续吗？";
-					DialogsManager.ShowDialog(this,new MessageDialog("Mod缺失",text,LanguageControl.Yes,LanguageControl.No,delegate (MessageDialogButton button)
+					text.AppendLine(LanguageControl.Get(nameof(PlayScreen),7));
+					DialogsManager.ShowDialog(this,new MessageDialog(LanguageControl.Get(nameof(PlayScreen),8),text.ToString(),LanguageControl.Yes,LanguageControl.No,delegate (MessageDialogButton button)
 					{
 						if(button == MessageDialogButton.Button1)
 						{

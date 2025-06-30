@@ -975,8 +975,14 @@
         "5": "Enter \"yes\" to continue"
     },
     "PlayScreen": {
-        "1": "Mod Not Compatible",
-        "2": "Continue"
+        "1": "Mod Incompatibility Warning!",
+        "2": "Continue",
+        "3": "The following mods are missing: ",
+        "4": "Mod Name: {0}, Version: {1}",
+        "5": "The following mods have incompatible versions:",
+        "6": "Mod Name: {0}, Required Version: {1}, Current Version: {2}",
+        "7": "Are you sure you want to continue?",
+        "8": "Mod Missing"
     },
     "JsInterface": {
         "1": "There is already a script running.",

@@ -956,8 +956,14 @@
     "5": "Nhập \"yes\" để tiếp tục"
   },
   "PlayScreen": {
-    "1": "Mod Không Tương thích",
-    "2": "Tiếp tục"
+    "1": "Cảnh báo không tương thích mod!",
+    "2": "Tiếp tục",
+    "3": "Thiếu các mod sau: ",
+    "4": "Tên mod: {0}, phiên bản: {1}",
+    "5": "Các mod sau có phiên bản không tương thích:",
+    "6": "Tên mod: {0}, phiên bản yêu cầu: {1}, phiên bản hiện tại: {2}",
+    "7": "Bạn có chắc muốn tiếp tục không?",
+    "8": "Thiếu mod"
   },
   "JsInterface": {
     "1": "Đã có một script đang chạy.",
