@@ -66,12 +66,9 @@ namespace Game
 				if(value is Key valueKey && valueKey == Key.Null) labelWidget.Text = string.Empty;
 				else
 				{
-					string text = LanguageControl.Get(keyName,HumanReadableConverter.ConvertToString(value));
-					if(text.StartsWith(keyName + ":"))
-					{
-						text =  text.Substring((keyName + ":").Length);
-					}
-					labelWidget.Text = text;
+					string text = HumanReadableConverter.ConvertToString(value);
+					string translated = LanguageControl.Get(out bool r,keyName,text);
+					labelWidget.Text = r ? translated : text;
 					bool hasConflict = false;
 					if(m_conflicts.TryGetValue(value,out List<string> valueList))
 						hasConflict = KeyCompatibleGroupsManager.HasConflict(valueList);

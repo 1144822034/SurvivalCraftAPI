@@ -180,7 +180,7 @@ namespace Game
 
 		public static bool ValidateWorldName(string name)
 		{
-			if (name.Contains("\\") || name.Length > 128) return false;
+			if (string.IsNullOrEmpty(name) || name.Contains('\\') || name.Contains('\n') || name.Length > 128) return false;
 			return true;
 		}
 

@@ -42,12 +42,12 @@ namespace Game
 			m_playButton = Children.Find<ButtonWidget>("Play");
 			m_nameTextBox.TextChanged += delegate
 			{
-				m_worldSettings.Name = m_nameTextBox.Text;
+				m_worldSettings.Name = m_nameTextBox.Text.Trim();
 			};
 			m_nameTextBox.MaximumLength = 128;
 			m_seedTextBox.TextChanged += delegate
 			{
-				m_worldSettings.Seed = m_seedTextBox.Text;
+				m_worldSettings.Seed = m_seedTextBox.Text.Trim();
 			};
 		}
 

@@ -2896,7 +2896,9 @@
             "7": "Change World Options:",
             "8": "Options...",
             "9": "Error: invalid world name!",
-            "10": "Setup Players"
+            "10": "Setup Players",
+            "11": "Enter World Seed",
+            "12": "A different seed will cause a different world to be generated."
         },
         "PlayScreen": {
             "1": "Existing Worlds",
