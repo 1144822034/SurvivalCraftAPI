@@ -67,19 +67,19 @@ namespace Game
 
 		public static SpawnLocationType[] m_spawnLocations = EnumUtils.GetEnumValues(typeof(SpawnLocationType)).Cast<SpawnLocationType>().ToArray();
 
-		public const int m_totalLimit = 26;
+		public static int m_totalLimit = 26;
 
-		public const int m_areaLimit = 3;
+		public static int m_areaLimit = 3;
 
-		public const int m_areaRadius = 16;
+		public static int m_areaRadius = 16;
 
-		public const int m_totalLimitConstant = 6;
+		public static int m_totalLimitConstant = 6;
 
-		public const int m_totalLimitConstantChallenging = 12;
+		public static int m_totalLimitConstantChallenging = 12;
 
-		public const int m_areaLimitConstant = 4;
+		public static int m_areaLimitConstant = 4;
 
-		public const int m_areaRadiusConstant = 42;
+		public static int m_areaRadiusConstant = 42;
 
 		public const float m_populationReductionConstant = 0.25f;
 
@@ -980,7 +980,7 @@ namespace Game
 
 		public virtual void SpawnRandomCreature()
 		{
-			if (CountCreatures(constantSpawn: false) < 26)
+			if (CountCreatures(constantSpawn: false) < m_totalLimit)
 			{
 				foreach (GameWidget gameWidget in m_subsystemViews.GameWidgets)
 				{
@@ -1015,9 +1015,9 @@ namespace Game
 
 		public virtual void SpawnChunkCreatures(SpawnChunk chunk, int maxAttempts, bool constantSpawn)
 		{
-			int num = constantSpawn ? ((m_subsystemGameInfo.WorldSettings.GameMode >= GameMode.Challenging) ? 12 : 6) : 26;
-			int num2 = constantSpawn ? 4 : 3;
-			float v = constantSpawn ? 42 : 16;
+			int num = constantSpawn ? ((m_subsystemGameInfo.WorldSettings.GameMode >= GameMode.Challenging) ? m_totalLimitConstantChallenging : m_totalLimitConstant) : m_totalLimit;
+			int num2 = constantSpawn ? m_areaLimitConstant : m_areaLimit;
+			float v = constantSpawn ? m_areaRadiusConstant : m_areaRadius;
 			int num3 = CountCreatures(constantSpawn);
 			Vector2 c2 = new Vector2(chunk.Point.X * 16, chunk.Point.Y * 16) - new Vector2(v);
 			Vector2 c3 = new Vector2((chunk.Point.X + 1) * 16, (chunk.Point.Y + 1) * 16) + new Vector2(v);
