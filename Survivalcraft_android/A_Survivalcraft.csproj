@@ -429,6 +429,7 @@
 		<Compile Include="..\Survivalcraft\Component\ComponentWalkAroundBehavior.cs"/>
 		<Compile Include="..\Survivalcraft\Component\ComponentPickableGathererPlayer.cs"/>
 		<Compile Include="..\Survivalcraft\Component\ComponentPickableGatherer.cs"/>
+        <Compile Include="..\Survivalcraft\Component\IComponentEscapeBehavior.cs"/>
 		<Compile Include="..\Survivalcraft\Dialog\BuildFurnitureDialog.cs"/>
 		<Compile Include="..\Survivalcraft\Dialog\BulletinDialog.cs"/>
 		<Compile Include="..\Survivalcraft\Dialog\BusyDialog.cs"/>
