@@ -5,7 +5,7 @@ namespace Game.IContentReader
 {
 	public class JsonArrayReader : IContentReader
 	{
-		public override string Type => "JsonArray";
+		public override string Type => "System.Text.Json.Nodes.JsonArray";
 		public override string[] DefaultSuffix => ["json"];
 		public override object Get(ContentInfo[] contents)
 		{
@@ -26,7 +26,7 @@ namespace Game.IContentReader
 
 	public class JsonObjectReader : IContentReader
 	{
-		public override string Type => "JsonObject";
+		public override string Type => "System.Text.Json.Nodes.JsonObject";
 		public override string[] DefaultSuffix => ["json"];
 		public override object Get(ContentInfo[] contents)
 		{
