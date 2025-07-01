@@ -36,12 +36,14 @@ namespace Game
 		public override void Enter(object[] parameters)
 		{
 			base.Enter(parameters);
+#if RELEASE
 			CommunityContentManager.IsAdmin(new CancellableProgress(), delegate (bool isAdmin)
 			{
 				m_isAdmin = isAdmin;
 			}, delegate (Exception e)
 			{
 			});
+#endif
 		}
 		public void OpenManageSelectDialog()
 		{

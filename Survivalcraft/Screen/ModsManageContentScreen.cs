@@ -932,21 +932,43 @@ public class ModsManageContentScreen : Screen
 			ZipArchive zipArchive = ZipArchive.Open(stream, false);
 			foreach (ZipArchiveEntry zipArchiveEntry in zipArchive.ReadCentralDir())
 			{
-				if (Path.GetFileNameWithoutExtension(zipArchiveEntry.FilenameInZip) == "icon")//兼容多种格式
+				string[] array = zipArchiveEntry.FilenameInZip.Split('.');
+				if (array.Length == 2 && array[0] == "icon")//兼容多种格式
 				{
 					MemoryStream memoryStream = new();
 					zipArchive.ExtractFile(zipArchiveEntry, memoryStream);
 					memoryStream.Position = 0L;
-					modItem.Subtexture = new Subtexture(Texture2D.Load(memoryStream), Vector2.Zero, Vector2.One);
-					memoryStream.Dispose();
+					try
+					{
+						modItem.Subtexture = new Subtexture(Texture2D.Load(memoryStream), Vector2.Zero, Vector2.One);
+					}
+					catch (Exception e)
+					{
+						Log.Error(string.Format(LanguageControl.Get(fName,"74"),fileName,e));
+					}
+					finally
+					{
+						memoryStream.Dispose();
+					}
 				}
 				else if (zipArchiveEntry.FilenameInZip == "modinfo.json")
 				{
 					MemoryStream memoryStream = new();
 					zipArchive.ExtractFile(zipArchiveEntry, memoryStream);
 					memoryStream.Position = 0L;
-					modItem.ModInfo = ModsManager.DeserializeJson(ModsManager.StreamToString(memoryStream));
-					memoryStream.Dispose();
+					try
+					{
+						modItem.ModInfo = ModsManager.DeserializeJson(ModsManager.StreamToString(memoryStream));
+					}
+					catch(Exception e)
+					{
+						modItem = null;
+						Log.Error(string.Format(LanguageControl.Get(fName,"75"),fileName,e));
+					}
+					finally
+					{
+						memoryStream.Dispose();
+					}
 				}
 			}
 		}

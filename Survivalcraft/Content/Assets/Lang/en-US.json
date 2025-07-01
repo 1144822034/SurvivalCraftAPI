@@ -110,7 +110,9 @@
         "70": "This mod is an old API version mod, which does not take effect here and is recommended to be removed",
         "71": "Directory into the failure",
         "72": "Your device can't access ",
-        "73": "Dereinforcing"
+        "73": "Dereinforcing",
+        "74": "Load the icon of {0} failed, reason: {1}",
+        "75": "Load mod information from the modinfo.json of {0} failed, reason: {1}"
     },
     "ManageContentScreen": {
         "1": "Blocks Texture | {0}x{1}",
