@@ -113,7 +113,7 @@ namespace Game
 				{
 					m_updateButtonIcon.LayoutTransform = Matrix.CreateRotationZ(0) * Matrix.CreateScale(1);
 					m_updateButtonIcon.Subtexture = APIUpdateManager.IsNeedUpdate.Value ? m_needToUpdateIcon : m_dontNeedUpdateIcon;
-					m_updateButtonIcon.FillColor = APIUpdateManager.IsNeedUpdate.Value ? Color.White : Color.Yellow;
+					m_updateButtonIcon.FillColor = APIUpdateManager.IsNeedUpdate.Value ? Color.Yellow : Color.White;
 				}
 			}
 			if (m_updateCheckButton?.IsClicked ?? false)
