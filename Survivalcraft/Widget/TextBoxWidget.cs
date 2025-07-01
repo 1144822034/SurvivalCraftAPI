@@ -260,6 +260,24 @@ public class TextBoxWidget : Widget
 
     #region Interacting
 
+    public abstract class UpdateTask
+    {
+	    public abstract void Run(TextBoxWidget widget);
+    }
+
+    public class SetCursorPositionTask : UpdateTask
+    {
+	    public override void Run(TextBoxWidget widget)
+	    {
+		    SetCursorPosition(widget);
+	    }
+    }
+    
+    /// <summary>
+    /// 每帧执行一次的任务队列。
+    /// </summary>
+    public Queue<UpdateTask> TasksQueue { get; } = [];
+	
     /// <summary>
     /// <para>
     /// 当前选中的文本长度，为 0 则表示不选择任何文本，可以小于 0.
@@ -402,12 +420,18 @@ public class TextBoxWidget : Widget
     {
 	    if(value is '\r')
 	    {
-		    return;
+		    value = ' ';
+	    }
+
+	    // 换行符的数量 + 1 即为行数 所以在此处加上 1
+	    if(value is '\n' && Text.Sum(x => x == '\n' ? 1 : 0) + 1 >= MaximumLinesCount)
+	    {
+		    value = ' ';
 	    }
 	    
         if (SelectionLength != 0)
         {
-            DeleteSelection(false);
+            DeleteSelection();
         }
 
         FocusStartTime = Time.RealTime;
@@ -445,8 +469,6 @@ public class TextBoxWidget : Widget
 
             Text = Text.Remove(position, str.Length);
             Text = Text.Insert(position, str);
-
-            TextChanged?.Invoke(this);
         }
 
         void InsertCharacter()
@@ -482,8 +504,6 @@ public class TextBoxWidget : Widget
             {
                 Caret += str.Length;
             }
-
-            TextChanged?.Invoke(this);
         }
     }
 
@@ -495,16 +515,8 @@ public class TextBoxWidget : Widget
     /// <para>
     /// Delete selected text.
     /// </para>
-    /// <param name="invokeTextChanged">
-    ///     <para>
-    ///     如果为 true，调用 <see cref="TextChanged"/> 事件。
-    ///     </para>
-    ///     <para>
-    ///     If true, invoke <see cref="TextChanged"/> event.
-    ///     </para>
-    /// </param>
     /// </summary>
-    public void DeleteSelection(bool invokeTextChanged = true)
+    public void DeleteSelection()
     {
         int caret = Caret;
         int selectionLength = SelectionLength;
@@ -517,10 +529,6 @@ public class TextBoxWidget : Widget
         Text = Text.Remove(caret, selectionLength);
         SelectionLength = 0;
         Caret = Math.Clamp(caret, 0, Text.Length);
-        if (invokeTextChanged)
-        {
-            TextChanged?.Invoke(this);
-        }
     }
 
     /// <summary>
@@ -627,7 +635,6 @@ public class TextBoxWidget : Widget
         }
 
         FocusStartTime = Time.RealTime;
-        TextChanged?.Invoke(this);
     }
 
     /// <summary>
@@ -677,7 +684,6 @@ public class TextBoxWidget : Widget
         }
 
         FocusStartTime = Time.RealTime;
-        TextChanged?.Invoke(this);
     }
 
     static TextBoxWidget()
@@ -849,6 +855,12 @@ public class TextBoxWidget : Widget
         
     public override void Update()
     {
+	    foreach (var task in TasksQueue)
+	    {
+		    task.Run(this);
+	    }
+	    TasksQueue.Clear();
+	    
         if (Input.Click.HasValue)
         {
             // 处理点击，使文本框在被点击时获取焦点。
@@ -1014,9 +1026,16 @@ public class TextBoxWidget : Widget
 
         if (HasFocus && Keyboard.IsKeyDownOnce(Key.Enter))
         {
-            Enter?.Invoke(this);
-            HasFocus = false;
-            CloseInputMethod();
+	        if(EnterAsNewLine)
+	        {
+		        EnterCharacter('\n');
+	        }
+	        else
+	        {
+		        Enter?.Invoke(this);
+		        HasFocus = false;
+		        CloseInputMethod();
+	        }
         }
 //#endif
 
@@ -1227,6 +1246,16 @@ public class TextBoxWidget : Widget
 
     /// <summary>
     /// <para>
+    /// 是否把回车键视为换行符，而不是视为“输入完毕”的操作。
+    /// </para>
+    /// <para>
+    /// Considered as new line when typing enter when true, otherwise as “input completed”.
+    /// </para>
+    /// </summary>
+    public bool EnterAsNewLine { get; set; } = false;
+    
+    /// <summary>
+    /// <para>
     /// 当 <see cref="IndentAsSpace"/> 为 true 时，输入的制表符会被替换为空格，空格数量由 <see cref="IndentWidth"/> 决定。
     /// </para>
     /// <para>
@@ -1285,7 +1314,31 @@ public class TextBoxWidget : Widget
             m_maximumLength = value;
         }
     }
+    
+    public int m_maximumLinesCount = 1;
+    public int MaximumLinesCount
+    {
+	    get => m_maximumLinesCount;
+	    set
+	    {
+		    if (value < 0)
+		    {
+			    throw new InvalidOperationException($"{nameof(MaximumLength)} 必须大于或等于 0.");
+		    }
 
+		    if (m_maximumLinesCount > value)
+		    {
+			    if (Text.Sum(x => x == '\n' ? 1 : 0) > value)
+			    {
+				    Text = Text[..Text.IndexOf('\n', 0, value)];
+			    }
+
+			    Caret = Math.Clamp(Caret, 0, value);
+		    }
+
+		    m_maximumLinesCount = value;
+	    }
+    }
     /// <summary>
     /// <para>
     /// 密码模式，开启后所有文本都会被显示为 *（组合窗除外）。
@@ -1501,9 +1554,12 @@ public class TextBoxWidget : Widget
 
     public TextBoxWidget()
     {
-	    TextChanged += (sender) =>
+	    TextChanged += (_) =>
 	    {
-		    SetCursorPosition(this);
+		    if(!TasksQueue.OfType<SetCursorPositionTask>().Any())
+		    {
+			    TasksQueue.Enqueue(new SetCursorPositionTask());
+		    }
 	    };
     }
     private static void SetCursorPosition(TextBoxWidget widget)
@@ -1742,6 +1798,18 @@ public class TextBoxWidget : Widget
 
 
     public override void Draw(DrawContext dc)
+    {
+	    try
+	    {
+		    Draw_(dc);
+	    }
+	    catch(Exception e)
+	    {
+		    Log.Error(e);
+	    }
+
+    }
+    public void Draw_(DrawContext dc)
     {
 	    var textToDraw = Text.Replace("\t", new string(' ',IndentWidth));
 	    var caretIndex = Text[..Caret].Sum(c => c == '\t' ? IndentWidth : 1);

@@ -43,41 +43,44 @@ namespace SC4Android
 			if(GraterThanAndroid6)
 			{
 				//当版本大于安卓6
+				List<string> permissionList = [];
 				var readPermissionStatus = CheckSelfPermission(Manifest.Permission.ReadExternalStorage);
 				if(readPermissionStatus != Permission.Granted)
 				{
 					arePermissionsGranted = false;
-					RunOnUiThread(() => Toast.MakeText(this, "Need Permission 需要权限", ToastLength.Short)!.Show());
-					RequestPermissions([Manifest.Permission.ReadExternalStorage],0);
+					permissionList.Add(Manifest.Permission.ReadExternalStorage);
 				}
-
+				
 				var writePermissionStatus = CheckSelfPermission(Manifest.Permission.WriteExternalStorage);
 				if(writePermissionStatus != Permission.Granted)
 				{
-					if (arePermissionsGranted)
-					{
-						RunOnUiThread(() => Toast.MakeText(this, "Need Permission 需要权限", ToastLength.Short)!.Show());
-						arePermissionsGranted = false;
-					}
-					RequestPermissions([Manifest.Permission.WriteExternalStorage],1);
+					arePermissionsGranted = false;
+					permissionList.Add(Manifest.Permission.WriteExternalStorage);
+				}
+				
+				if(permissionList.Count > 0)
+				{
+					RunOnUiThread(() => Toast.MakeText(this, "Need Permission 需要权限", ToastLength.Short)!.Show());
+					RequestPermissions(permissionList.ToArray()	, 1);
 				}
 			}
 			return arePermissionsGranted;
 		}
 
-		private bool isPermissionGranted()
+		private bool IsPermissionGranted()
 		{
 			if(GraterThanAndroid11)
 			{
 				return Environment.IsExternalStorageManager;
 			}
-			else if(GraterThanAndroid6)
+
+			if(GraterThanAndroid6)
 			{
 				return CheckSelfPermission(Manifest.Permission.ReadExternalStorage) == Permission.Granted && CheckSelfPermission(Manifest.Permission.WriteExternalStorage) == Permission.Granted;
 			}
 			return true;
 		}
-
+		
 		protected override void OnRun()
 		{
 			base.OnRun();
@@ -95,36 +98,17 @@ namespace SC4Android
 					{
 						break;
 					}
-					else
+
+					RunRequired = IsPermissionGranted();
+					if(RunRequired)
 					{
-						RunRequired = isPermissionGranted();
-						if(RunRequired)
-						{
-							break;
-						}
+						break;
 					}
 				}
 			}
 			Program.EntryPoint();
 		}
 		private static bool RunRequired { get; set; }
-		public override void OnRequestPermissionsResult(int requestCode,string[] permissions,[GeneratedEnum] Permission[] grantResults)
-		{
-			if (GraterThanAndroid11)
-			{
-				RunRequired = Environment.IsExternalStorageManager;
-			}
-			else if (GraterThanAndroid6)
-			{
-				bool allGranted = 
-					grantResults.All(x => x == Permission.Granted);
-
-				if (allGranted)
-				{
-					RunRequired = true;
-				}
-			}
-		}
 
 		private bool isPaused = false;
 
