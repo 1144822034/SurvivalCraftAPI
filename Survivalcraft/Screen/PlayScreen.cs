@@ -24,6 +24,8 @@ namespace Game
 
 		public double m_modTipsTime;
 
+		public long m_totalWorldsSize;
+
 		public static string fName = "PlayScreen";
 
 		public virtual void OnWorldsListWidgetItemClicked(Object item)
@@ -92,6 +94,7 @@ namespace Game
 					{
 						m_worldsListWidget.AddItem(item);
 					}
+					m_totalWorldsSize = worldInfos.Sum(wi => wi.Size);
 					if (selectedItem != null)
 					{
 						m_worldsListWidget.SelectedItem = worldInfos.FirstOrDefault((WorldInfo wi) => wi.DirectoryName == selectedItem.DirectoryName);
@@ -111,7 +114,14 @@ namespace Game
 			{
 				m_worldsListWidget.SelectedItem = null;
 			}
-			Children.Find<LabelWidget>("TopBar.Label").Text = string.Format(LanguageControl.GetContentWidgets(fName, 6), m_worldsListWidget.Items.Count);
+			if(this.m_worldsListWidget.Items.Count > 0)
+			{
+				Children.Find<LabelWidget>("TopBar.Label",true).Text = string.Format(LanguageControl.Get(fName,m_worldsListWidget.Items.Count > 1 ? "10" : "9"),m_worldsListWidget.Items.Count,DataSizeFormatter.Format(this.m_totalWorldsSize,2));
+			}
+			else
+			{
+				Children.Find<LabelWidget>("TopBar.Label", true).Text = LanguageControl.Get(fName, "11");
+			}
 			m_playButton.IsEnabled = m_worldsListWidget.SelectedItem != null;
 			m_propertiesButton.IsEnabled = m_worldsListWidget.SelectedItem != null;
 			if (m_playButton.IsClicked && m_worldsListWidget.SelectedItem != null)

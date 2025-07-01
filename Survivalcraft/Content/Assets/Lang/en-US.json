@@ -982,7 +982,10 @@
         "5": "The following mods have incompatible versions:",
         "6": "Mod Name: {0}, Required Version: {1}, Current Version: {2}",
         "7": "Are you sure you want to continue?",
-        "8": "Mod Missing"
+        "8": "Mod Missing",
+        "9": "{0} world, {1}",
+        "10": "{0} worlds, {1}",
+        "11": "No worlds"
     },
     "JsInterface": {
         "1": "There is already a script running.",
