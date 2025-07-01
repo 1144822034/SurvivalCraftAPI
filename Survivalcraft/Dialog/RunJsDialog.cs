@@ -12,6 +12,7 @@ namespace Game
 		public readonly LabelWidget m_timeCostedLabel;
 
 		public readonly ButtonWidget m_runButton;
+		public readonly ButtonWidget m_copyOutputButton;
 		public readonly ButtonWidget m_closeButton;
 		public readonly ButtonWidget m_serverButton;
 
@@ -23,6 +24,7 @@ namespace Game
 			m_outputBox = Children.Find<LabelWidget>("RunJsDialog.Output");
 			m_timeCostedLabel = Children.Find<LabelWidget>("RunJsDialog.TimeCosted");
 			m_runButton = Children.Find<ButtonWidget>("RunJsDialog.RunButton");
+			m_copyOutputButton = Children.Find<ButtonWidget>("RunJsDialog.CopyOutputButton");
 			m_closeButton = Children.Find<ButtonWidget>("RunJsDialog.CloseButton");
 			m_serverButton = Children.Find<ButtonWidget>("RunJsDialog.ServerButton");
 			m_inputBox.HasFocus = true;
@@ -49,6 +51,10 @@ namespace Game
 			else if (m_runButton.IsClicked)
 			{
 				Dismiss(true);
+			}
+			else if (m_copyOutputButton.IsClicked)
+			{
+				ClipboardManager.ClipboardString = m_outputBox.Text;
 			}
 			else if (m_closeButton.IsClicked)
 			{

@@ -171,6 +171,7 @@ namespace Game
 			}
 		}
 
+		/// <param name="key">全路径，需要带后缀</param>
 		public static bool ContainsKey(string key)
 		{
 			return Resources.ContainsKey(key);
