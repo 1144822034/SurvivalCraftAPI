@@ -17,9 +17,9 @@
 		  </CanvasWidget>
 
 		  <StackPanelWidget Direction="Horizontal" HorizontalAlignment="Center" Margin="4, 10">
-        <BevelledButtonWidget Name="SetKey" Style="{Styles/ButtonStyle_310x60}" Text="[KeyboardMappingScreen:SetKey]" VerticalAlignment="Center" />
-			  <BevelledButtonWidget Name="DisableKey" Style="{Styles/ButtonStyle_310x60}" Text="[KeyboardMappingScreen:DisableKey]" VerticalAlignment="Center" />
-        <BevelledButtonWidget Name="Reset" Style="{Styles/ButtonStyle_310x60}" Text="[KeyboardMappingScreen:Reset]" VerticalAlignment="Center" />
+        <BevelledButtonWidget Name="SetKey" Style="{Styles/ButtonStyle_160x60}" Text="[KeyboardMappingScreen:SetKey]" VerticalAlignment="Center" />
+			  <BevelledButtonWidget Name="DisableKey" Style="{Styles/ButtonStyle_160x60}" Text="[KeyboardMappingScreen:DisableKey]" VerticalAlignment="Center" />
+        <BevelledButtonWidget Name="Reset" Style="{Styles/ButtonStyle_160x60}" Text="[KeyboardMappingScreen:Reset]" VerticalAlignment="Center" />
       </StackPanelWidget>
 	  </StackPanelWidget>
 	</StackPanelWidget>

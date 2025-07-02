@@ -19,8 +19,8 @@
       <LabelWidget Text="[CameraManageScreen:Tip]" Color="255, 255, 255, 255" HorizontalAlignment="Center" VerticalAlignment="Center" FontScale="0.8" DropShadow="true" WordWrap="true"/>
 
       <StackPanelWidget Direction="Horizontal" HorizontalAlignment="Center" Margin="4, 10">
-        <BevelledButtonWidget Name="EnableCamera" Style="{Styles/ButtonStyle_310x60}" Text="[CameraManageScreen:Enable]" VerticalAlignment="Center" />
-			  <BevelledButtonWidget Name="DisableCamera" Style="{Styles/ButtonStyle_310x60}" Text="[CameraManageScreen:Disable]" VerticalAlignment="Center" />
+        <BevelledButtonWidget Name="EnableCamera" Style="{Styles/ButtonStyle_160x60}" Text="[CameraManageScreen:Enable]" VerticalAlignment="Center" />
+			  <BevelledButtonWidget Name="DisableCamera" Style="{Styles/ButtonStyle_160x60}" Text="[CameraManageScreen:Disable]" VerticalAlignment="Center" />
         <BevelledButtonWidget Name="Up" Style="{Styles/ButtonStyle_ArrowUp}" VerticalAlignment="Center" />
         <BevelledButtonWidget Name="Down" Style="{Styles/ButtonStyle_ArrowDown}" VerticalAlignment="Center" />
         <BevelledButtonWidget Name="Reset" Style="{Styles/ButtonStyle_160x60}" Text="[CameraManageScreen:Reset]" VerticalAlignment="Center" />
