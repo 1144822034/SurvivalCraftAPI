@@ -231,21 +231,10 @@ namespace Game
 			Matrix result;
 			if(!Eye.HasValue)
 			{
-				float num = 80f * SettingsManager.ViewAngle;
+				float viewAngle = 80f * SettingsManager.ViewAngle;
 				ViewWidget viewWidget = base.GameWidget.ViewWidget;
-				float num3 = viewWidget.ActualSize.X / viewWidget.ActualSize.Y; //视野长宽比
-				float num4 = MathF.Min(num * num3,num); //根据长宽比获取值，最大90f
-				float num5 = num4 * num3;
-				if(num5 < 90f)
-				{
-					num4 *= 90f / num5;
-				}
-				else if(num5 > 175f)
-				{
-					num4 *= 175f / num5;
-				}
-				//猜测，将世界坐标转换为屏幕坐标的矩阵
-				result = Matrix.CreatePerspectiveFieldOfView(MathUtils.DegToRad(num4),num3,0.1f,2048f); //参数1视野Y宽度，参数2纵横比，参数3近平面，参数4远平面
+				float aspectRatio = viewWidget.ActualSize.X / viewWidget.ActualSize.Y; //视野长宽比
+				result = Matrix.CreatePerspectiveFieldOfView(MathUtils.DegToRad(viewAngle),aspectRatio,0.1f,2048f); //参数1视野Y宽度，参数2纵横比，参数3近平面，参数4远平面
 			}
 			else
 			{

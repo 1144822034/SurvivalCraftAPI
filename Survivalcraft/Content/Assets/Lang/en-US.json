@@ -3050,7 +3050,8 @@
             "Chinese Community Content:",
             "Show loading log:",
             "Input \"yes\" to delete world:",
-            "Original Community Content"
+            "Original Community Content",
+            "Hide Crosshair:"
         ],
         "TrialEndedScreen": {
             "1": "The day has ended",

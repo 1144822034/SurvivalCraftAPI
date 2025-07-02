@@ -20,6 +20,8 @@ namespace Game
 
 		public ButtonWidget m_hideMoveLookPadsButton;
 
+		public ButtonWidget m_hideCrosshairButton;
+
 		public ButtonWidget m_showGuiInScreenshotsButton;
 
 		public ButtonWidget m_showLogoInScreenshotsButton;
@@ -45,6 +47,7 @@ namespace Game
 			m_uiScaleSlider = Children.Find<SliderWidget>("UIScaleSlider");
 			m_upsideDownButton = Children.Find<ButtonWidget>("UpsideDownButton");
 			m_hideMoveLookPadsButton = Children.Find<ButtonWidget>("HideMoveLookPads");
+			m_hideCrosshairButton = Children.Find<ButtonWidget>("HideCrosshair");
 			m_showGuiInScreenshotsButton = Children.Find<ButtonWidget>("ShowGuiInScreenshotsButton");
 			m_showLogoInScreenshotsButton = Children.Find<ButtonWidget>("ShowLogoInScreenshotsButton");
 			m_screenshotSizeButton = Children.Find<ButtonWidget>("ScreenshotSizeButton");
@@ -108,6 +111,10 @@ namespace Game
 			{
 				SettingsManager.HideMoveLookPads = !SettingsManager.HideMoveLookPads;
 			}
+			if(m_hideCrosshairButton.IsClicked)
+			{
+				SettingsManager.HideCrosshair = !SettingsManager.HideCrosshair;
+			}
 			if (m_showGuiInScreenshotsButton.IsClicked)
 			{
 				SettingsManager.ShowGuiInScreenshots = !SettingsManager.ShowGuiInScreenshots;
@@ -137,6 +144,7 @@ namespace Game
 			m_displayLogButton.Text = SettingsManager.DisplayLog ? LanguageControl.Yes : LanguageControl.No;
 			m_upsideDownButton.Text = SettingsManager.UpsideDownLayout ? LanguageControl.Yes : LanguageControl.No;
 			m_hideMoveLookPadsButton.Text = SettingsManager.HideMoveLookPads ? LanguageControl.Yes : LanguageControl.No;
+			m_hideCrosshairButton.Text = SettingsManager.HideCrosshair ? LanguageControl.Yes : LanguageControl.No;
 			m_showGuiInScreenshotsButton.Text = SettingsManager.ShowGuiInScreenshots ? LanguageControl.Yes : LanguageControl.No;
 			m_showLogoInScreenshotsButton.Text = SettingsManager.ShowLogoInScreenshots ? LanguageControl.Yes : LanguageControl.No;
 			m_screenshotSizeButton.Text = LanguageControl.Get("ScreenshotSize", SettingsManager.ScreenshotSize.ToString());

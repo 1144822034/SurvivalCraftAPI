@@ -25,7 +25,7 @@
 
           <UniformSpacingPanelWidget Direction="Horizontal" Margin="0, 3">
             <LabelWidget Text="[SettingsGraphicsScreen:4]" HorizontalAlignment="Far" VerticalAlignment="Center" Margin="20, 0" />
-            <SliderWidget Name="ViewAngleSlider" Size="Infinity, 60" VerticalAlignment="Center" Margin="20, 0" Granularity="0.02" MinValue="0.8" MaxValue="1.2" />
+            <SliderWidget Name="ViewAngleSlider" Size="Infinity, 60" VerticalAlignment="Center" Margin="20, 0" Granularity="0.02" MinValue="0.02" MaxValue="2.0" />
           </UniformSpacingPanelWidget>
 
         </StackPanelWidget>

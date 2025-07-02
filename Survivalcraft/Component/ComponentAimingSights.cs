@@ -68,7 +68,7 @@ namespace Game
 					texturedBatch3D.QueueQuad(p,p2,p3,p4,new Vector2(0f,0f),new Vector2(1f,0f),new Vector2(1f,1f),new Vector2(0f,1f),Color.White);
 					texturedBatch3D.TransformTriangles(camera.ViewMatrix,count);
 				}
-				bool isCrosshairVisible = true;
+				bool isCrosshairVisible = !SettingsManager.HideCrosshair;
 				ModsManager.HookAction("IsCrosshairVisible",loader => {
 					loader.IsCrosshairVisible(this,ref isCrosshairVisible);
 					return false;

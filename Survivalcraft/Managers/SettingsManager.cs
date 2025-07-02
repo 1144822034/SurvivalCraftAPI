@@ -208,6 +208,12 @@ namespace Game
 			set;
 		}
 
+		public static bool HideCrosshair
+		{
+			get;
+			set;
+		}
+
 		public static string BlocksTextureFileName
 		{
 			get;
@@ -521,6 +527,7 @@ namespace Game
 				ScreenshotSize = ScreenshotSize.ScreenSize;
 				MoveControlMode = MoveControlMode.Buttons;
 				HideMoveLookPads = false;
+				HideCrosshair = false;
 				AllowInitialIntro = true;
 				DeleteWorldNeedToText = false;
 				BlocksTextureFileName = string.Empty;
