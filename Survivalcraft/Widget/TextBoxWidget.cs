@@ -420,7 +420,7 @@ public class TextBoxWidget : Widget
     {
 	    if(value is '\r')
 	    {
-		    value = ' ';
+		    return;
 	    }
 
 	    // 换行符的数量 + 1 即为行数 所以在此处加上 1
@@ -790,6 +790,10 @@ public class TextBoxWidget : Widget
                     // Escape
                     break;
                     // TextBoxWidget 的 Esc 处理不依赖此输入，所以直接跳过。
+                }
+                case (< (char)32 or > (char)126) and <= (char)128:
+                { // ASCII 码表内 0-128 的字符，如果不在 32-126 范围内，则跳过。
+	                break;
                 }
                 default:
                 {
