@@ -180,12 +180,15 @@ namespace Game
 			LastFrameTime = (float)(Time.RealTime - m_frameBeginTime);
 			LastCpuFrameTime = (float)(m_cpuEndTime - m_frameBeginTime);
 			m_frameBeginTime = Time.RealTime;
+#if WINDOWS
 			if (Keyboard.IsKeyDownOnce(Key.F11))
 			{
 				SettingsManager.WindowMode = SettingsManager.WindowMode == WindowMode.Fullscreen
 					? WindowMode.Resizable
 					: WindowMode.Fullscreen;
+				Mouse.m_lastMousePosition = null;
 			}
+#endif
 
 			try
 			{

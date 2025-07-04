@@ -375,13 +375,14 @@ namespace Engine
             return new FileInfo(ProcessPath(path, writeAccess: true, failIfApp: false));
         }
 
+        public static char[] InvalidFileNameChars = ['\\','/',':','*','?','"','<','>','|', '\0'];
+
         public static string SanitizeFileName(string filename, string replacement = "-")
         {
             StringBuilder sanitized = new StringBuilder();
-            char[] invalidChars = Path.GetInvalidFileNameChars();
             foreach (char c in filename)
             {
-                sanitized.Append(invalidChars.Contains(c) ? replacement : c);
+                sanitized.Append(InvalidFileNameChars.Contains(c) ? replacement : c);
             }
 
             return sanitized.ToString();
