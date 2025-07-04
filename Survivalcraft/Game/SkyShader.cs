@@ -2,7 +2,7 @@ using System.Collections.Generic;
 
 namespace Engine.Graphics
 {
-	public class SkyShader : Shader
+	public class SkyShader : TransformedShader
 	{
 		public ShaderParameter m_worldViewProjectionMatrixParameter;
 
@@ -13,8 +13,6 @@ namespace Engine.Graphics
 		public ShaderParameter m_colorParameter;
 
 		public ShaderParameter m_alphaThresholdParameter;
-
-		public readonly ShaderTransforms Transforms;
 
 		public Texture2D Texture
 		{
@@ -49,18 +47,16 @@ namespace Engine.Graphics
 		}
 
 		public SkyShader(string vsc, string psc, bool useVertexColor, bool useTexture, bool useAlphaThreshold)
-			: base(vsc, psc, PrepareShaderMacros(useVertexColor, useTexture, useAlphaThreshold))
+			: base(vsc, psc, maxInstancesCount: 1, PrepareShaderMacros(useVertexColor, useTexture, useAlphaThreshold))
 		{
 			SetParameter();
-			Transforms = new ShaderTransforms(1);
 			Color = Vector4.One;
 		}
 
 		public SkyShader(string vsc, string psc, bool useVertexColor, bool useTexture, bool useAlphaThreshold, ShaderMacro[] shaderMacros = null)
-			: base(vsc, psc, PrepareShaderMacros(useVertexColor, useTexture, useAlphaThreshold, shaderMacros))
+			: base(vsc, psc, maxInstancesCount: 1, PrepareShaderMacros(useVertexColor, useTexture, useAlphaThreshold, shaderMacros))
 		{
 			SetParameter();
-			Transforms = new ShaderTransforms(1);
 			Color = Vector4.One;
 		}
 

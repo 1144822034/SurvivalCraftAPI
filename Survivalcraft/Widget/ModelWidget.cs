@@ -102,6 +102,13 @@ namespace Game
 			}
 		}
 
+		public Action<ModelWidget,Shader,Model,ModelMesh> OnSetupShaderParameters;
+		/// <summary>
+		/// 自定义着色器，若留空则使用默认着色器进行渲染。
+		/// 若要使用，可能需通过 <see cref="OnSetupShaderParameters"/> 设置参数，否则可能无效
+		/// </summary>
+		public TransformedShader CustomShader { get; set; }
+
 		public void AddModel(Model value)
 		{
 			if(value != null)
@@ -153,22 +160,31 @@ namespace Game
 			{
 				return;
 			}
-			LitShader litShader = UseAlphaThreshold ? m_shaderAlpha : m_shader;
-			litShader.SamplerState = SamplerState.PointClamp;
-			litShader.MaterialColor = new Vector4(Color * GlobalColorTransform);
-			litShader.AmbientLightColor = new Vector3(0.66f, 0.66f, 0.66f);
-			litShader.DiffuseLightColor1 = new Vector3(1f, 1f, 1f);
-			litShader.LightDirection1 = Vector3.Normalize(new Vector3(1f, 1f, 1f));
-			if (UseAlphaThreshold)
+			TransformedShader shader;
+			if(CustomShader != null)
 			{
-				litShader.AlphaThreshold = 0f;
+				shader = CustomShader;
 			}
-			litShader.Transforms.View = Matrix.CreateLookAt(ViewPosition, ViewTarget, Vector3.UnitY);
+			else
+			{
+				shader = UseAlphaThreshold ? m_shaderAlpha : m_shader;
+				LitShader litShader = shader as LitShader;
+				litShader.SamplerState = SamplerState.PointClamp;
+				litShader.MaterialColor = new Vector4(Color * GlobalColorTransform);
+				litShader.AmbientLightColor = new Vector3(0.66f,0.66f,0.66f);
+				litShader.DiffuseLightColor1 = new Vector3(1f,1f,1f);
+				litShader.LightDirection1 = Vector3.Normalize(new Vector3(1f,1f,1f));
+				if(UseAlphaThreshold)
+				{
+					litShader.AlphaThreshold = 0f;
+				}
+			}
+			shader.Transforms.View = Matrix.CreateLookAt(ViewPosition, ViewTarget, Vector3.UnitY);
 			Viewport viewport = Display.Viewport;
 			float num = ActualSize.X / ActualSize.Y;
 			if (IsPerspective)
 			{
-				litShader.Transforms.Projection = Matrix.CreatePerspectiveFieldOfView(ViewFov, num, 0.1f, 100f) * MatrixUtils.CreateScaleTranslation(0.5f * ActualSize.X, -0.5f * ActualSize.Y, ActualSize.X / 2f, ActualSize.Y / 2f) * GlobalTransform * MatrixUtils.CreateScaleTranslation(2f / viewport.Width, -2f / viewport.Height, -1f, 1f);
+				shader.Transforms.Projection = Matrix.CreatePerspectiveFieldOfView(ViewFov, num, 0.1f, 100f) * MatrixUtils.CreateScaleTranslation(0.5f * ActualSize.X, -0.5f * ActualSize.Y, ActualSize.X / 2f, ActualSize.Y / 2f) * GlobalTransform * MatrixUtils.CreateScaleTranslation(2f / viewport.Width, -2f / viewport.Height, -1f, 1f);
 			}
 			else
 			{
@@ -181,7 +197,7 @@ namespace Game
 				{
 					orthographicFrustumSize.Y = orthographicFrustumSize.X * num;
 				}
-				litShader.Transforms.Projection = Matrix.CreateOrthographic(orthographicFrustumSize.X, orthographicFrustumSize.Y, 0f, OrthographicFrustumSize.Z) * MatrixUtils.CreateScaleTranslation(0.5f * ActualSize.X, -0.5f * ActualSize.Y, ActualSize.X / 2f, ActualSize.Y / 2f) * GlobalTransform * MatrixUtils.CreateScaleTranslation(2f / viewport.Width, -2f / viewport.Height, -1f, 1f);
+				shader.Transforms.Projection = Matrix.CreateOrthographic(orthographicFrustumSize.X, orthographicFrustumSize.Y, 0f, OrthographicFrustumSize.Z) * MatrixUtils.CreateScaleTranslation(0.5f * ActualSize.X, -0.5f * ActualSize.Y, ActualSize.X / 2f, ActualSize.Y / 2f) * GlobalTransform * MatrixUtils.CreateScaleTranslation(2f / viewport.Width, -2f / viewport.Height, -1f, 1f);
 			}
 			Display.DepthStencilState = DepthStencilState.Default;
 			Display.BlendState = BlendState.AlphaBlend;
@@ -194,15 +210,16 @@ namespace Game
 			Matrix m = (AutoRotationVector.LengthSquared() > 0f) ? Matrix.CreateFromAxisAngle(Vector3.Normalize(AutoRotationVector), AutoRotationVector.Length() * num2) : Matrix.Identity;
 			foreach(Model model in Models)
 			{
-				litShader.Texture = Textures[model];
+				shader.GetParameter("u_texture",allowNull: true)?.SetValue(Textures[model]);
 				foreach(ModelMesh mesh in model.Meshes)
 				{
-					litShader.Transforms.World[0] = m_absoluteBoneTransforms[mesh.ParentBone.Model][mesh.ParentBone.Index] * ModelMatrix * m;
+					shader.Transforms.World[0] = m_absoluteBoneTransforms[mesh.ParentBone.Model][mesh.ParentBone.Index] * ModelMatrix * m;
+					OnSetupShaderParameters?.Invoke(this,shader,model,mesh);
 					foreach(ModelMeshPart meshPart in mesh.MeshParts)
 					{
 						if(meshPart.IndicesCount > 0)
 						{
-							Display.DrawIndexed(PrimitiveType.TriangleList,litShader,meshPart.VertexBuffer,meshPart.IndexBuffer,meshPart.StartIndex,meshPart.IndicesCount);
+							Display.DrawIndexed(PrimitiveType.TriangleList,shader,meshPart.VertexBuffer,meshPart.IndexBuffer,meshPart.StartIndex,meshPart.IndicesCount);
 						}
 					}
 				}

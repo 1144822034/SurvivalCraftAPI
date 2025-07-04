@@ -6,7 +6,7 @@ using System.Globalization;
 
 namespace Game
 {
-	public class ModelShader : Shader
+	public class ModelShader : TransformedShader
 	{
 		public ShaderParameter m_worldMatrixParameter;
 
@@ -43,8 +43,6 @@ namespace Game
 		public ShaderParameter m_worldUpParameter;
 
 		public int m_instancesCount;
-
-		public readonly ShaderTransforms Transforms;
 
 		public Texture2D Texture
 		{
@@ -183,17 +181,15 @@ namespace Game
 		}
 
 		public ModelShader(string vsc, string psc, bool useAlphaThreshold, int maxInstancesCount = 1)
-		   : base(vsc, psc, PrepareShaderMacros(useAlphaThreshold, maxInstancesCount))
+		   : base(vsc, psc, maxInstancesCount, PrepareShaderMacros(useAlphaThreshold, maxInstancesCount))
 		{
 			SetParameter();
-			Transforms = new ShaderTransforms(maxInstancesCount);
 		}
 
 		public ModelShader(string vsc, string psc, bool useAlphaThreshold, int maxInstancesCount = 1, ShaderMacro[] shaderMacros = null)
-			: base(vsc, psc, PrepareShaderMacros(useAlphaThreshold, maxInstancesCount, shaderMacros))
+			: base(vsc, psc, maxInstancesCount, PrepareShaderMacros(useAlphaThreshold, maxInstancesCount, shaderMacros))
 		{
 			SetParameter();
-			Transforms = new ShaderTransforms(maxInstancesCount);
 		}
 
 		public void SetParameter()

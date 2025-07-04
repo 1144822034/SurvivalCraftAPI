@@ -6,7 +6,7 @@ using System.Reflection;
 
 namespace Engine.Graphics
 {
-	public class LitShader : Shader
+	public class LitShader : TransformedShader
 	{
 		public ShaderParameter m_worldMatrixParameter;
 
@@ -51,8 +51,6 @@ namespace Engine.Graphics
 		public int m_lightsCount;
 
 		public bool m_useFog;
-
-		public readonly ShaderTransforms Transforms;
 
 		public Texture2D Texture
 		{
@@ -199,7 +197,7 @@ namespace Engine.Graphics
 		}
 
 		public LitShader(string vsc, string psc, int lightsCount, bool useEmissionColor, bool useVertexColor, bool useTexture, bool useFog, bool useAlphaThreshold, int maxInstancesCount = 1)
-			: base(vsc, psc, PrepareShaderMacros(lightsCount, useEmissionColor, useVertexColor, useTexture, useFog, useAlphaThreshold, maxInstancesCount))
+			: base(vsc, psc, maxInstancesCount, PrepareShaderMacros(lightsCount, useEmissionColor, useVertexColor, useTexture, useFog, useAlphaThreshold, maxInstancesCount))
 		{
 			if (lightsCount < 0 || lightsCount > 3)
 			{
@@ -228,7 +226,6 @@ namespace Engine.Graphics
 			m_fogLengthParameter = GetParameter("u_fogLength", allowNull: true);
 			m_fogColorParameter = GetParameter("u_fogColor", allowNull: true);
 			m_time = GetParameter("u_time", allowNull: true);
-			Transforms = new ShaderTransforms(maxInstancesCount);
 			m_lightsCount = lightsCount;
 			m_instancesCount = 1;
 			m_useFog = useFog;
@@ -261,9 +258,9 @@ namespace Engine.Graphics
 
 		public LitShader(int lightsCount, bool useEmissionColor, bool useVertexColor, bool useTexture, bool useFog, bool useAlphaThreshold, int maxInstancesCount = 1)
 #if ANDROID
-			: base(new StreamReader(Storage.OpenFile("app:Lit.vsh", OpenFileMode.Read)).ReadToEnd(), new StreamReader(Storage.OpenFile("app:Lit.psh", OpenFileMode.Read)).ReadToEnd(), PrepareShaderMacros(lightsCount, useEmissionColor, useVertexColor, useTexture, useFog, useAlphaThreshold, maxInstancesCount))
+			: base(new StreamReader(Storage.OpenFile("app:Lit.vsh", OpenFileMode.Read)).ReadToEnd(), new StreamReader(Storage.OpenFile("app:Lit.psh", OpenFileMode.Read)).ReadToEnd(), maxInstancesCount, PrepareShaderMacros(lightsCount, useEmissionColor, useVertexColor, useTexture, useFog, useAlphaThreshold, maxInstancesCount))
 #else
-			: base(new StreamReader(typeof(Shader).GetTypeInfo().Assembly.GetManifestResourceStream("Engine.Resources.Lit.vsh")).ReadToEnd(), new StreamReader(typeof(Shader).GetTypeInfo().Assembly.GetManifestResourceStream("Engine.Resources.Lit.psh")).ReadToEnd(), PrepareShaderMacros(lightsCount, useEmissionColor, useVertexColor, useTexture, useFog, useAlphaThreshold, maxInstancesCount))
+            : base(new StreamReader(typeof(Shader).GetTypeInfo().Assembly.GetManifestResourceStream("Engine.Resources.Lit.vsh")).ReadToEnd(), new StreamReader(typeof(Shader).GetTypeInfo().Assembly.GetManifestResourceStream("Engine.Resources.Lit.psh")).ReadToEnd(), maxInstancesCount, PrepareShaderMacros(lightsCount, useEmissionColor, useVertexColor, useTexture, useFog, useAlphaThreshold, maxInstancesCount))
 #endif
 		{
 			if (lightsCount < 0 || lightsCount > 3)
@@ -292,7 +289,6 @@ namespace Engine.Graphics
 			m_fogStartParameter = GetParameter("u_fogStart", allowNull: true);
 			m_fogLengthParameter = GetParameter("u_fogLength", allowNull: true);
 			m_fogColorParameter = GetParameter("u_fogColor", allowNull: true);
-			Transforms = new ShaderTransforms(maxInstancesCount);
 			m_lightsCount = lightsCount;
 			m_instancesCount = 1;
 			m_useFog = useFog;
