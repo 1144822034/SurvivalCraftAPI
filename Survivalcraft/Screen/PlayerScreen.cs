@@ -155,6 +155,7 @@ public class PlayerScreen : Screen
         m_characterSkinsCache.GetTexture(m_playerData.CharacterSkinName);
         m_playerModel.PlayerClass = m_playerData.PlayerClass;
         m_playerModel.CharacterSkinName = m_playerData.CharacterSkinName;
+		m_playerModel.PlayerData = m_playerData;
         m_playerClassButton.Text = m_playerData.PlayerClass.ToString();
         if (!m_nameTextBox.HasFocus)
         {

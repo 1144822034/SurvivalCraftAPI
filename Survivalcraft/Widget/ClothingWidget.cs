@@ -69,6 +69,7 @@ namespace Game
 			m_innerClothingModelWidget.PlayerClass = componentPlayer.PlayerData.PlayerClass;
 			m_innerClothingModelWidget.CharacterSkinTexture = m_componentPlayer.ComponentClothing.InnerClothedTexture;
 			m_innerClothingModelWidget.OuterClothingTexture = m_componentPlayer.ComponentClothing.OuterClothedTexture;
+			m_innerClothingModelWidget.PlayerData = componentPlayer.PlayerData;
 		}
 
 		public override void Update()

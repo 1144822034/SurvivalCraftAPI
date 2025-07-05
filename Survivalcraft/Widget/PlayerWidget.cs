@@ -33,6 +33,7 @@ namespace Game
 			SubsystemGameInfo subsystemGameInfo = m_playerData.SubsystemPlayers.Project.FindSubsystem<SubsystemGameInfo>(throwOnError: true);
 			m_playerModel.PlayerClass = m_playerData.PlayerClass;
 			m_playerModel.CharacterSkinName = m_playerData.CharacterSkinName;
+			m_playerModel.PlayerData = m_playerData;
 			m_nameLabel.Text = m_playerData.Name;
 			m_detailsLabel.Text = m_playerData.PlayerClass.ToString();
 			m_detailsLabel.Text += "\n";

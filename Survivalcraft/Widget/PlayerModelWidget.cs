@@ -71,6 +71,11 @@ namespace Game
 			get;
 			set;
 		}
+		public PlayerData PlayerData
+		{//目前仅赋值，游戏里没有使用该属性，但勿删，模组可能会用到
+			get;
+			set;
+		}
 
 		public string CharacterSkinName
 		{
