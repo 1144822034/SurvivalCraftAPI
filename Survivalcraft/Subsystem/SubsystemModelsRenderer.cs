@@ -43,9 +43,9 @@ namespace Game
 
 		public static ModelShader ShaderAlphaTested;
 
-		private ModelShader m_shaderOpaque;
+		public ModelShader m_shaderOpaque;
 
-		private ModelShader m_shaderAlphaTested;
+		public ModelShader m_shaderAlphaTested;
 
 		private Vector3 m_sunLightDirection;
 
