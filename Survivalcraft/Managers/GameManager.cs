@@ -29,6 +29,8 @@ namespace Game
 
 		public static event Action<Project> ProjectDisposed;
 
+		public const string fName = "GameManager";
+
 		public static void RepairAndUpgradeWorld(WorldInfo worldInfo)
 		{
 			WorldsManager.RepairWorldIfNeeded(worldInfo.DirectoryName);
@@ -94,7 +96,7 @@ namespace Game
 				m_subsystemUpdate = m_project.FindSubsystem<SubsystemUpdate>(throwOnError: true);
 			}
 			m_worldInfo = worldInfo;
-			Log.Information("Loaded world, GameMode={0}, StartingPosition={1}, WorldName={2}, VisibilityRange={3}, Resolution={4}", worldInfo.WorldSettings.GameMode, worldInfo.WorldSettings.StartingPositionMode, worldInfo.WorldSettings.Name, SettingsManager.VisibilityRange.ToString(), SettingsManager.ResolutionMode.ToString());
+			Log.Information(LanguageControl.Get(fName,"1"), worldInfo.WorldSettings.GameMode, worldInfo.WorldSettings.StartingPositionMode, worldInfo.WorldSettings.Name, SettingsManager.VisibilityRange.ToString(), SettingsManager.ResolutionMode.ToString());
 			GC.Collect();
 		}
 
@@ -108,7 +110,6 @@ namespace Game
 				m_saveCompleted.Reset();
 				SubsystemGameInfo subsystemGameInfo = m_project.FindSubsystem<SubsystemGameInfo>(throwOnError: true);
 				string projectFileName = Storage.CombinePaths(subsystemGameInfo.DirectoryName, "Project.xml");
-				Exception e = default;
 				Task.Run(delegate
 				{
 					try
@@ -135,14 +136,14 @@ namespace Game
 					}
 					catch (Exception ex)
 					{
-						e = ex;
 						if (showErrorDialog)
 						{
 							Dispatcher.Dispatch(delegate
 							{
-								DialogsManager.ShowDialog(null, new MessageDialog("Error saving game", e.Message, "OK", null, null));
+								DialogsManager.ShowDialog(null, new MessageDialog(LanguageControl.Get(fName, "2"), $"{ex.Message}\n{LanguageControl.Get(fName, "3")}", LanguageControl.Ok, null, null));
 							});
 						}
+						Log.Error($"{LanguageControl.Get(fName, "2")}\n{ex}");
 					}
 					finally
 					{
@@ -153,8 +154,7 @@ namespace Game
 				{
 					m_saveCompleted.WaitOne();
 				}
-				double realTime2 = Time.RealTime;
-				Log.Verbose($"Saved project, {Math.Round((realTime2 - realTime) * 1000.0)}ms");
+				Log.Verbose(string.Format(LanguageControl.Get(fName, "4"), Math.Round((Time.RealTime - realTime) * 1000.0)));
 			}
 		}
 

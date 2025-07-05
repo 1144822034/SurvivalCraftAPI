@@ -219,6 +219,12 @@
         "4": "Blocks texture is larger than 65536x65536 pixels (size={0}x{1})",
         "5": "Blocks texture does not have power-of-two size (size={0}x{1})"
     },
+    "GameManager":{
+        "1": "Loaded world, GameMode={0}, StartingPosition={1}, WorldName={2}, VisibilityRange={3}, Resolution={4}",
+        "2": "Error saving game",
+        "3": "Details are in the game log",
+        "4": "Saved project, {0}ms"
+    },
     "SubsystemCrossbowBlockBehavior": {
         "0": "Draw the crossbow first",
         "1": "Load a bolt first"
