@@ -142,7 +142,7 @@ namespace Game
 
 		public virtual void SetBoneTransform(int boneIndex, Matrix? transformation)
 		{
-			var canScale = Model.m_bones[boneIndex].Name == "Body";
+			var canScale = boneIndex == Model.RootBone.Index;
 			var tf = canScale ? Matrix.CreateScale(ModelScale) * transformation : transformation;
 			m_boneTransforms[boneIndex] = tf * Matrix.CreateTranslation(ModelOffset);
 		}
