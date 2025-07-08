@@ -1990,5 +1990,18 @@ namespace Game
 		{
 			skip = false;
 		}
+
+		/// <summary>
+		/// 当第一人称手部模型或手持方块图标被渲染时执行
+		/// </summary>
+		/// <param name="componentFirstPersonModel"></param>
+		/// <param name="camera"></param>
+		/// <param name="itemValue">手持方块完整值，为0表示空手</param>
+		/// <param name="matrix"></param>
+		/// <param name="skip"></param>
+		public virtual void OnFirstPersonModelDrawing(ComponentFirstPersonModel componentFirstPersonModel, Camera camera, int itemValue, ref Matrix matrix, out bool skip)
+		{
+			skip = false;
+		}
 	}
 }

@@ -122,64 +122,82 @@ namespace Game
 					int z = Terrain.ToCell(eyePosition.Z);
 					var m = Matrix.CreateFromQuaternion(m_componentPlayer.ComponentCreatureModel.EyeRotation);
 					m.Translation = m_componentPlayer.ComponentCreatureModel.EyePosition;
-					if (m_value != 0)
+
+					//每隔一段时间重新计算光照。这两段原本分别在对应的绘制前面，为避免被接口跳过所以移到前面来
+					if(m_value != 0)
 					{
-						if (num5 >= 0 && num5 <= 255)
+						if(num5 >= 0 && num5 <= 255)
 						{
-							TerrainChunk chunkAtCell = m_subsystemTerrain.Terrain.GetChunkAtCell(x, z);
-							if (chunkAtCell != null && chunkAtCell.State >= TerrainChunkState.InvalidVertices1)
+							TerrainChunk chunkAtCell = m_subsystemTerrain.Terrain.GetChunkAtCell(x,z);
+							if(chunkAtCell != null && chunkAtCell.State >= TerrainChunkState.InvalidVertices1)
 							{
-								m_itemLight = m_subsystemTerrain.Terrain.GetCellLightFast(x, num5, z);
+								m_itemLight = m_subsystemTerrain.Terrain.GetCellLightFast(x,num5,z);
 							}
 						}
-						int num6 = Terrain.ExtractContents(m_value);
-						Block block = BlocksManager.Blocks[num6];
-						Vector3 vector = (block.GetFirstPersonRotation(m_value) * ((float)Math.PI / 180f)) + m_itemRotation;
-						Vector3 position3 = block.GetFirstPersonOffset(m_value) + m_itemOffset;
-						Matrix matrix = Matrix.CreateFromYawPitchRoll(vector.Y, vector.X, vector.Z) * identity * Matrix.CreateTranslation(position3) * Matrix.CreateFromYawPitchRoll(m_lagAngles.X, m_lagAngles.Y, 0f) * m;
-						Matrix matrix2 = matrix * camera.ViewMatrix;
-						m_drawBlockEnvironmentData.DrawBlockMode = DrawBlockMode.FirstPerson;
-						m_drawBlockEnvironmentData.SubsystemTerrain = m_subsystemTerrain;
-						m_drawBlockEnvironmentData.InWorldMatrix = matrix;
-						m_drawBlockEnvironmentData.Light = m_itemLight;
-						m_drawBlockEnvironmentData.Humidity = m_subsystemTerrain.Terrain.GetSeasonalHumidity(x, z);
-						m_drawBlockEnvironmentData.Temperature = m_subsystemTerrain.Terrain.GetSeasonalTemperature(x, z) + SubsystemWeather.GetTemperatureAdjustmentAtHeight(num5);
-						m_drawBlockEnvironmentData.EnvironmentTemperature = m_componentPlayer.ComponentVitalStats.EnvironmentTemperature;
-						m_drawBlockEnvironmentData.Owner = m_entity;
-						block.DrawBlock(m_primitivesRenderer, m_value, Color.White, block.GetFirstPersonScale(m_value), ref matrix2, m_drawBlockEnvironmentData);
-						m_primitivesRenderer.Flush(camera.ProjectionMatrix);
 					}
 					else
 					{
-						if (Time.FrameStartTime >= m_nextHandLightTime)
+						if(Time.FrameStartTime >= m_nextHandLightTime)
 						{
-							float? num7 = LightingManager.CalculateSmoothLight(m_subsystemTerrain, eyePosition);
-							if (num7.HasValue)
+							float? num7 = LightingManager.CalculateSmoothLight(m_subsystemTerrain,eyePosition);
+							if(num7.HasValue)
 							{
 								m_nextHandLightTime = Time.FrameStartTime + 0.1;
 								m_handLight = num7.Value;
 							}
 						}
-						var position4 = new Vector3(0.25f, -0.3f, -0.05f);
-						Matrix matrix2 = Matrix.CreateScale(0.01f) * Matrix.CreateRotationX(0.8f) * Matrix.CreateRotationY(0.4f) * identity * Matrix.CreateTranslation(position4) * Matrix.CreateFromYawPitchRoll(m_lagAngles.X, m_lagAngles.Y, 0f) * m * camera.ViewMatrix;
-						Display.DepthStencilState = DepthStencilState.Default;
-						Display.RasterizerState = RasterizerState.CullCounterClockwiseScissor;
-						LitShader.Texture = m_componentPlayer.ComponentCreatureModel.TextureOverride;
-						LitShader.SamplerState = SamplerState.PointClamp;
-						LitShader.MaterialColor = Vector4.One;
-						LitShader.AmbientLightColor = new Vector3(m_handLight * LightingManager.LightAmbient);
-						LitShader.DiffuseLightColor1 = new Vector3(m_handLight);
-						LitShader.DiffuseLightColor2 = new Vector3(m_handLight);
-						LitShader.LightDirection1 = Vector3.TransformNormal(LightingManager.DirectionToLight1, camera.ViewMatrix);
-						LitShader.LightDirection2 = Vector3.TransformNormal(LightingManager.DirectionToLight2, camera.ViewMatrix);
-						LitShader.Transforms.World[0] = matrix2;
-						LitShader.Transforms.View = Matrix.Identity;
-						LitShader.Transforms.Projection = camera.ProjectionMatrix;
-						foreach (ModelMesh mesh in m_handModel.Meshes)
-						{
-							foreach (ModelMeshPart meshPart in mesh.MeshParts)
+					}
+
+					bool skipVanilla = false;
+					ModsManager.HookAction("OnFirstPersonModelDrawing",loader => {
+						loader.OnFirstPersonModelDrawing(this, camera, m_value, ref identity, out bool skip);
+						skipVanilla |= skip;
+						return false;
+					});
+					if(!skipVanilla)
+					{
+						if(m_value != 0)
+						{//手持物品时绘制方块图标
+							int num6 = Terrain.ExtractContents(m_value);
+							Block block = BlocksManager.Blocks[num6];
+							Vector3 vector = (block.GetFirstPersonRotation(m_value) * ((float)Math.PI / 180f)) + m_itemRotation;
+							Vector3 position3 = block.GetFirstPersonOffset(m_value) + m_itemOffset;
+							Matrix matrix = Matrix.CreateFromYawPitchRoll(vector.Y,vector.X,vector.Z) * identity * Matrix.CreateTranslation(position3) * Matrix.CreateFromYawPitchRoll(m_lagAngles.X,m_lagAngles.Y,0f) * m;
+							Matrix matrix2 = matrix * camera.ViewMatrix;
+							m_drawBlockEnvironmentData.DrawBlockMode = DrawBlockMode.FirstPerson;
+							m_drawBlockEnvironmentData.SubsystemTerrain = m_subsystemTerrain;
+							m_drawBlockEnvironmentData.InWorldMatrix = matrix;
+							m_drawBlockEnvironmentData.Light = m_itemLight;
+							m_drawBlockEnvironmentData.Humidity = m_subsystemTerrain.Terrain.GetSeasonalHumidity(x,z);
+							m_drawBlockEnvironmentData.Temperature = m_subsystemTerrain.Terrain.GetSeasonalTemperature(x,z) + SubsystemWeather.GetTemperatureAdjustmentAtHeight(num5);
+							m_drawBlockEnvironmentData.EnvironmentTemperature = m_componentPlayer.ComponentVitalStats.EnvironmentTemperature;
+							m_drawBlockEnvironmentData.Owner = m_entity;
+							block.DrawBlock(m_primitivesRenderer,m_value,Color.White,block.GetFirstPersonScale(m_value),ref matrix2,m_drawBlockEnvironmentData);
+							m_primitivesRenderer.Flush(camera.ProjectionMatrix);
+						}
+						else
+						{//空手时绘制第一人称手臂模型
+							var position4 = new Vector3(0.25f,-0.3f,-0.05f);
+							Matrix matrix2 = Matrix.CreateScale(0.01f) * Matrix.CreateRotationX(0.8f) * Matrix.CreateRotationY(0.4f) * identity * Matrix.CreateTranslation(position4) * Matrix.CreateFromYawPitchRoll(m_lagAngles.X,m_lagAngles.Y,0f) * m * camera.ViewMatrix;
+							Display.DepthStencilState = DepthStencilState.Default;
+							Display.RasterizerState = RasterizerState.CullCounterClockwiseScissor;
+							LitShader.Texture = m_componentPlayer.ComponentCreatureModel.TextureOverride;
+							LitShader.SamplerState = SamplerState.PointClamp;
+							LitShader.MaterialColor = Vector4.One;
+							LitShader.AmbientLightColor = new Vector3(m_handLight * LightingManager.LightAmbient);
+							LitShader.DiffuseLightColor1 = new Vector3(m_handLight);
+							LitShader.DiffuseLightColor2 = new Vector3(m_handLight);
+							LitShader.LightDirection1 = Vector3.TransformNormal(LightingManager.DirectionToLight1,camera.ViewMatrix);
+							LitShader.LightDirection2 = Vector3.TransformNormal(LightingManager.DirectionToLight2,camera.ViewMatrix);
+							LitShader.Transforms.World[0] = matrix2;
+							LitShader.Transforms.View = Matrix.Identity;
+							LitShader.Transforms.Projection = camera.ProjectionMatrix;
+							foreach(ModelMesh mesh in m_handModel.Meshes)
 							{
-								Display.DrawIndexed(PrimitiveType.TriangleList, LitShader, meshPart.VertexBuffer, meshPart.IndexBuffer, meshPart.StartIndex, meshPart.IndicesCount);
+								foreach(ModelMeshPart meshPart in mesh.MeshParts)
+								{
+									Display.DrawIndexed(PrimitiveType.TriangleList,LitShader,meshPart.VertexBuffer,meshPart.IndexBuffer,meshPart.StartIndex,meshPart.IndicesCount);
+								}
 							}
 						}
 					}
