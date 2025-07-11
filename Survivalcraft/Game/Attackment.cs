@@ -67,6 +67,13 @@ namespace Game
         public float AttackSoundVolume = 1f;
         public float AttackSoundPitch = 0f;
 
+		/// <summary>
+		/// 该攻击被护甲结算时，护甲的防御值会除以ArmorProtectionDivision。
+		/// 例如当ArmorProtectionDivision = 2，模组护甲的ArmorProtection = 150%时，实际防御75%伤害。
+		/// 可以基于此设计模组生物的攻击力和护甲数值
+		/// </summary>
+		public virtual float ArmorProtectionDivision { get; set; } = 1f;
+
 		public bool AllowImpulseAndStunWhenDamageIsZero = true;
 
 		public float? m_injuryAmount = null;

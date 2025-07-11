@@ -112,7 +112,7 @@ namespace Game
 			Block block = BlocksManager.Blocks[Terrain.ExtractContents(value)];
 			float maxDurability = block.GetDurability(value) + 1;
 			float remainingSturdiness = (maxDurability - block.GetDamage(value)) / maxDurability * Sturdiness;
-			float damageToAbsorb = MathF.Min(attackPowerAfterProtection * MathUtils.Saturate(ArmorProtection), remainingSturdiness);
+			float damageToAbsorb = MathF.Min(attackPowerAfterProtection * MathUtils.Saturate(ArmorProtection / attackment.ArmorProtectionDivision), remainingSturdiness);
 			if(damageToAbsorb > 0f)
 			{
 				attackPowerAfterProtection -= damageToAbsorb;

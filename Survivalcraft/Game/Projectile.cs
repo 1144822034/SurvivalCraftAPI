@@ -66,7 +66,7 @@ namespace Game
         public bool BodyCollidable = true;
 
         public float? m_attackPower = null;
-
+		public virtual float MinVelocityToAttack { get; set; } = 10f;
         private Random m_random = new();
         public delegate float CalcVisibilityRangeDelegate();
 
@@ -162,7 +162,7 @@ namespace Game
                 return false;
             });
         }
-        public float AttackPower
+        public virtual float AttackPower
         {
             get => m_attackPower ?? BlocksManager.Blocks[Terrain.ExtractContents(Value)].GetProjectilePower(Value);
             set => m_attackPower = value;
@@ -271,8 +271,8 @@ namespace Game
         public virtual void HitBody(BodyRaycastResult bodyRaycastResult, ref Vector3 positionAtdt)
         {
             Block block = BlocksManager.Blocks[Terrain.ExtractContents(Value)];
-            float attackPower = (Velocity.Length() > 10f) ? AttackPower : 0;
-            Vector3 velocityAfterAttack = Velocity * 0.05f + m_random.Vector3(0.33f * Velocity.Length());
+            float attackPower = (Velocity.Length() > MinVelocityToAttack) ? AttackPower : 0;
+            Vector3 velocityAfterAttack = Velocity * -0.05f + m_random.Vector3(-0.0166f * Velocity.Length());
             Vector3 angularVelocityAfterAttack = AngularVelocity * 0.05f;
             bool ignoreBody = false;
             Attackment attackment = new ProjectileAttackment(bodyRaycastResult.ComponentBody.Entity, OwnerEntity, bodyRaycastResult.HitPoint(), Vector3.Normalize(Velocity), attackPower, this);
