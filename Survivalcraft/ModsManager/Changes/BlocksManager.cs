@@ -547,6 +547,28 @@ namespace Game
             texturedBatch3D.QueueQuad(color: Color.MultiplyColorOnly(color, LightingManager.CalculateLighting(matrix.Right)), p1: v4, p2: v6, p3: v10, p4: v8, texCoord1: new Vector2(vector2.X, vector2.W), texCoord2: new Vector2(vector2.X, vector2.Y), texCoord3: new Vector2(vector2.Z, vector2.Y), texCoord4: new Vector2(vector2.Z, vector2.W));
         }
 
+        public static void DrawCubeBlock(PrimitivesRenderer3D primitivesRenderer,
+	        int value,
+	        Vector3 size,
+	        ref Matrix matrix,
+	        Color color,
+	        Color topColor,
+	        DrawBlockEnvironmentData environmentData,
+	        Texture2D texture)
+        {
+	        DrawCubeBlock(
+		        primitivesRenderer,
+		        value,
+		        size,
+		        1f,
+		        ref matrix,
+		        color,
+		        topColor,
+		        environmentData,
+		        texture
+	        );
+        }
+
         public static void DrawFlatOrImageExtrusionBlock(PrimitivesRenderer3D primitivesRenderer, int value, float size, ref Matrix matrix, Texture2D texture, Color color, bool isEmissive, DrawBlockEnvironmentData environmentData)
         {
             environmentData = environmentData ?? m_defaultEnvironmentData;
