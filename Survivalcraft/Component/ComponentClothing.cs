@@ -490,11 +490,13 @@ namespace Game
 			int pValue = 0;
 			int pCount = 0;
 			bool skippedByMods = false;
-			ModsManager.HookAction("ClothingProcessSlotItems", modLoader => {
-				modLoader.ClothingProcessSlotItems(m_componentPlayer,slotIndex,ref value,ref count,ref pCount,ref pValue,skippedByMods,out bool skipVanilla);
+			ModsManager.HookAction("ClothingProcessSlotItems",modLoader => {
+				modLoader.ClothingProcessSlotItems(componentClothing: this,slotIndex,ref value,ref count,ref pValue,ref pCount,skippedByMods,out bool skipVanilla);
+				modLoader.ClothingProcessSlotItems(componentPlayer: m_componentPlayer,slotIndex,ref value,ref count,ref pCount,ref pValue,skippedByMods,out bool glitchedLoaderResult);
 				bool oldLoaderResult = modLoader.ClothingProcessSlotItems(m_componentPlayer,BlocksManager.Blocks[Terrain.ExtractContents(value)],slotIndex,value,count);
 				skippedByMods |= oldLoaderResult;
 				skippedByMods |= skipVanilla;
+				skippedByMods |= glitchedLoaderResult;
 				return false;
 			});
 			processedCount = pCount;

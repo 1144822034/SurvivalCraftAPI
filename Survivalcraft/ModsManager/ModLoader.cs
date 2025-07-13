@@ -1966,7 +1966,7 @@ namespace Game
 		/// <summary>
 		/// 将物品拖动到衣物界面玩家身上时执行
 		/// </summary>
-		/// <param name="componentPlayer"></param>
+		/// <param name="componentClothing"></param>
 		/// <param name="slotIndex">拖动到的栏位（头部、躯干、护腿、脚）</param>
 		/// <param name="inputValue">拖动过来的方块的方块完整值。修改会改动移交给下一个模组的完整值</param>
 		/// <param name="inputCount">拖动过来的方块的数量。修改会改动移交给下一个模组的数量</param>
@@ -1974,7 +1974,13 @@ namespace Game
 		/// <param name="processedCount">执行完毕后，留下的物品的数量。</param>
 		/// <param name="skippedByOtherMods">是否已经被其他模组接管执行</param>
 		/// <param name="skipVanilla">是否由本模组接管执行。为保证模组间兼容性，建议只在处理本模组物品时，才将skipVanilla设置为true或改动inputValue和inputCount。</param>
-		public virtual void ClothingProcessSlotItems(ComponentPlayer componentPlayer, int slotIndex, ref int inputCount, ref int inputValue, ref int processedValue, ref int processedCount, bool skippedByOtherMods,out bool skipVanilla)
+		public virtual void ClothingProcessSlotItems(ComponentClothing componentClothing,int slotIndex,ref int inputValue,ref int inputCount,ref int processedValue,ref int processedCount,bool skippedByOtherMods,out bool skipVanilla)
+		{
+			skipVanilla = false;
+		}
+
+		[Obsolete("该接口有误，建议使用另一个同名接口ClothingProcessSlotItems(ComponentClothing componentClothing,int slotIndex,ref int inputValue,ref int inputCount,ref int processedValue,ref int processedCount,bool skippedByOtherMods,out bool skipVanilla)")]
+		public virtual void ClothingProcessSlotItems(ComponentPlayer componentPlayer,int slotIndex,ref int inputValue,ref int inputCount,ref int processedValue,ref int processedCount,bool skippedByOtherMods,out bool skipVanilla)
 		{
 			skipVanilla = false;
 		}
