@@ -1974,7 +1974,7 @@ namespace Game
 		/// <param name="processedCount">执行完毕后，留下的物品的数量。</param>
 		/// <param name="skippedByOtherMods">是否已经被其他模组接管执行</param>
 		/// <param name="skipVanilla">是否由本模组接管执行。为保证模组间兼容性，建议只在处理本模组物品时，才将skipVanilla设置为true或改动inputValue和inputCount。</param>
-		public virtual void ClothingProcessSlotItems(ComponentPlayer componentPlayer, int slotIndex, ref int inputValue, ref int inputCount, ref int processedValue, ref int processedCount, bool skippedByOtherMods,out bool skipVanilla)
+		public virtual void ClothingProcessSlotItems(ComponentPlayer componentPlayer, int slotIndex, ref int inputCount, ref int inputValue, ref int processedValue, ref int processedCount, bool skippedByOtherMods,out bool skipVanilla)
 		{
 			skipVanilla = false;
 		}

@@ -491,14 +491,14 @@ namespace Game
 			int pCount = 0;
 			bool skippedByMods = false;
 			ModsManager.HookAction("ClothingProcessSlotItems", modLoader => {
-				modLoader.ClothingProcessSlotItems(m_componentPlayer,slotIndex,ref value,ref count,ref pValue,ref pCount,skippedByMods,out bool skipVanilla);
+				modLoader.ClothingProcessSlotItems(m_componentPlayer,slotIndex,ref value,ref count,ref pCount,ref pValue,skippedByMods,out bool skipVanilla);
 				bool oldLoaderResult = modLoader.ClothingProcessSlotItems(m_componentPlayer,BlocksManager.Blocks[Terrain.ExtractContents(value)],slotIndex,value,count);
 				skippedByMods |= oldLoaderResult;
 				skippedByMods |= skipVanilla;
 				return false;
 			});
-			processedCount = pValue;
-			processedValue = pCount;
+			processedCount = pCount;
+			processedValue = pValue;
 			if(skippedByMods) return;
 			if(processCount != 1)
 			{
