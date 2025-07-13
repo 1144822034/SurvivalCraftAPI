@@ -164,14 +164,18 @@ namespace Game
 			{
 				m_fireParticleSystem.m_position = m_componentBlockEntity.Position + new Vector3(0.5f,0.2f,0.5f);
 				if(Terrain.ExtractContents(cellValue) == FurnaceBlock.Index)
+				{
 					m_subsystemParticles.AddParticleSystem(m_fireParticleSystem);
-				m_componentBlockEntity.BlockValue = Terrain.ReplaceContents(cellValue,LitFurnaceBlock.Index);
+					m_componentBlockEntity.BlockValue = Terrain.ReplaceContents(cellValue,LitFurnaceBlock.Index);
+				}
 			}
 			else
 			{
 				if(Terrain.ExtractContents(cellValue) == LitFurnaceBlock.Index)
+				{
 					m_subsystemParticles.RemoveParticleSystem(m_fireParticleSystem);
-				m_componentBlockEntity.BlockValue = Terrain.ReplaceContents(cellValue,FurnaceBlock.Index);
+					m_componentBlockEntity.BlockValue = Terrain.ReplaceContents(cellValue,FurnaceBlock.Index);
+				}
 			}
 		}
 
