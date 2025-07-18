@@ -49,12 +49,22 @@ namespace Game
 		public override bool OnInteract(TerrainRaycastResult raycastResult,ComponentMiner componentMiner)
 		{
 			ComponentBlockEntity blockEntity = m_subsystemBlockEntities.GetBlockEntity(raycastResult.CellFace.X,raycastResult.CellFace.Y,raycastResult.CellFace.Z);
+			bool isInitialNull = (blockEntity == null);
+			ModsManager.HookAction("OnEntityBehaviorBlockInteracted",loader => {
+				loader.OnEntityBehaviorBlockInteracted(raycastResult,isInitialNull,ref blockEntity);
+				return false;
+			});
 			return InteractBlockEntity(blockEntity,componentMiner);
 		}
 
 		public override bool OnInteract(MovingBlocksRaycastResult movingBlocksRaycastResult,ComponentMiner componentMiner)
 		{
 			ComponentBlockEntity componentBlockEntity = m_subsystemBlockEntities.GetBlockEntity(movingBlocksRaycastResult.MovingBlock);
+			bool isInitialNull = (componentBlockEntity == null);
+			ModsManager.HookAction("OnEntityBehaviorBlockInteracted",loader => {
+				loader.OnEntityBehaviorBlockInteracted(movingBlocksRaycastResult,isInitialNull,ref componentBlockEntity);
+				return false;
+			});
 			return InteractBlockEntity(componentBlockEntity,componentMiner);
 		}
 

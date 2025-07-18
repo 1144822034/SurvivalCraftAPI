@@ -890,9 +890,10 @@ namespace Game
 		/// ComponentRider组件接口
 		/// 用于获取可符合骑行条件生物
 		/// 通过此接口，模组可以实现自定义骑行，也可以用于生物骑行生物相关逻辑
+		/// 为保证模组兼容性，建议预先判断是否是自己模组的载具，且仅处理自己模组的载具
 		/// </summary>
 		/// <param name="componentRider"></param>
-		/// <param name="score"></param>
+		/// <param name="score">返回的分数。返回null则表示不处理，移交给原版或下一个模组。返回正数表示允许骑乘，返回负数表示禁止骑乘（即使其他模组允许）。</param>
 		public virtual void ScoreMount(ComponentRider componentRider,ComponentMount componentMount,out float? score)
 		{
 			score = null;
@@ -2008,6 +2009,18 @@ namespace Game
 		public virtual void OnFirstPersonModelDrawing(ComponentFirstPersonModel componentFirstPersonModel, Camera camera, int itemValue, ref Matrix matrix, out bool skip)
 		{
 			skip = false;
+		}
+
+		/// <summary>
+		/// 当玩家开始交互一个带有SubsystemEntityBlockBehavior的方块时执行
+		/// 可以用于当玩家打开一个通过地形生成，导致没有ComponentBlockEntity的箱子时，添加宝箱实体并为箱子添加战利品
+		/// 该接口可能会引发模组冲突，谨慎使用
+		/// </summary>
+		/// <param name="raycastResult">可能的类型为TerrainRaycastResult或MovingBlockRaycastResult</param>
+		/// <param name="isInitialNull">表示在开始交互方块时，方块并没有对应的交互实体。通常在首次交互野生箱子时发生</param>
+		/// <param name="componentBlockEntity">在交互时指向的ComponentBlockEntity，可能为null</param>
+		public virtual void OnEntityBehaviorBlockInteracted(object raycastResult, bool isInitialNull, ref ComponentBlockEntity componentBlockEntity)
+		{
 		}
 	}
 }

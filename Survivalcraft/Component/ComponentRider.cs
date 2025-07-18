@@ -170,11 +170,14 @@ namespace Game
 		public virtual float ScoreMount(ComponentMount componentMount, float maxDistance)
 		{
 			float? score = null;
+			bool modDisallows = false;
 			ModsManager.HookAction("ScoreMount",(modLoader) => {
 				modLoader.ScoreMount(this,componentMount,out float? scoreByMod);
+				if(scoreByMod.HasValue && scoreByMod < 0) modDisallows = true;
 				if(scoreByMod.HasValue) score = MathUtils.Max(score ?? float.MinValue, scoreByMod.Value);
 				return false;
 			});
+			if(modDisallows) return -1;
 			if(score.HasValue) return score.Value;
 			if (componentMount.ComponentBody.Velocity.LengthSquared() < 1f)
 			{
