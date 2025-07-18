@@ -60,7 +60,8 @@ namespace Game
 											where m != null && m.Entity != Entity
 											select m)
 			{
-				float num2 = ScoreMount(item, DetectSurroundingMountRange);
+				float allowToStartRange = item.MountAllowToStartRange;
+				float num2 = ScoreMount(item, allowToStartRange);
 				if (num2 > num)
 				{
 					num = num2;
@@ -170,7 +171,8 @@ namespace Game
 		{
 			float? score = null;
 			ModsManager.HookAction("ScoreMount",(modLoader) => {
-				modLoader.ScoreMount(this,componentMount,out float? score);
+				modLoader.ScoreMount(this,componentMount,out float? scoreByMod);
+				if(scoreByMod.HasValue) score = MathUtils.Max(score ?? float.MinValue, scoreByMod.Value);
 				return false;
 			});
 			if(score.HasValue) return score.Value;

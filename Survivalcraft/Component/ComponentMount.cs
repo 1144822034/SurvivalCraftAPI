@@ -23,6 +23,11 @@ namespace Game
 			get;
 			set;
 		}
+		public float MountAllowToStartRange
+		{
+			get;
+			set;
+		}
 
 		public ComponentRider Rider
 		{
@@ -45,6 +50,7 @@ namespace Game
 			ComponentBody = Entity.FindComponent<ComponentBody>(throwOnError: true);
 			MountOffset = valuesDictionary.GetValue<Vector3>("MountOffset");
 			DismountOffset = valuesDictionary.GetValue<Vector3>("DismountOffset");
+			MountAllowToStartRange = valuesDictionary.GetValue<float>("MountAllowToStartRange",2.5f);
 		}
 	}
 }
