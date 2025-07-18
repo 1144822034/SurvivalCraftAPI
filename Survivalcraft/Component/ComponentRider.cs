@@ -27,6 +27,7 @@ namespace Game
 
 		public float m_outOfMountTime;
 
+		public float DetectSurroundingMountRange = 2.5f;
 		public ComponentCreature ComponentCreature
 		{
 			get;
@@ -51,7 +52,7 @@ namespace Game
 		{
 			var point = new Vector2(ComponentCreature.ComponentBody.Position.X, ComponentCreature.ComponentBody.Position.Z);
 			m_componentBodies.Clear();
-			m_subsystemBodies.FindBodiesAroundPoint(point, 2.5f, m_componentBodies);
+			m_subsystemBodies.FindBodiesAroundPoint(point, DetectSurroundingMountRange, m_componentBodies);
 			float num = 0f;
 			ComponentMount result = null;
 			foreach (ComponentMount item in from b in m_componentBodies
@@ -59,7 +60,7 @@ namespace Game
 											where m != null && m.Entity != Entity
 											select m)
 			{
-				float num2 = ScoreMount(item, 2.5f);
+				float num2 = ScoreMount(item, DetectSurroundingMountRange);
 				if (num2 > num)
 				{
 					num = num2;
