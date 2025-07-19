@@ -481,6 +481,8 @@ namespace Engine.Input
                     return Key.Period;
                 case Silk.NET.Input.Key.Slash:
                     return Key.Slash;
+                case Silk.NET.Input.Key.BackSlash:
+                    return Key.BackSlash;
                 case Silk.NET.Input.Key.AltLeft:
                 case Silk.NET.Input.Key.AltRight:
                     return Key.Alt;
@@ -595,6 +597,8 @@ namespace Engine.Input
                     return Key.Semicolon;
                 case Keycode.Slash:
                     return Key.Slash;
+                case Keycode.Backslash:
+                    return Key.BackSlash;
                 case Keycode.Plus:
                     return Key.Plus;
                 case Keycode.PageUp:

@@ -79,12 +79,12 @@ namespace Game
 			set;
 		}
 
-		[Obsolete("A ModelWidget may contains multiple models. Model only represents the first model and cannot be set.")]
+		[Obsolete("A ModelWidget may contains multiple models, please use Models field instead. This field only represents the first model of Models field.")]
 		public Model Model
 		{
 			get
 			{
-				return Models[0];
+				return Models[0] ?? null;
 			}
 			set
 			{

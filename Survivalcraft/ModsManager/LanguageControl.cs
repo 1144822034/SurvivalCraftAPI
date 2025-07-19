@@ -83,26 +83,7 @@ namespace Game
                     MergeJsonNode(jsonNode, newJsonNode);
                 }
             }
-			if (Ok == default) Ok = Get("Usual", "ok");
-			if (Cancel == default) Cancel = Get("Usual", "cancel");
-			if (None == default) None = Get("Usual", "none");
-			if (Nothing == default) Nothing = Get("Usual", "nothing");
-			if (Error == default) Error = Get("Usual", "error");
-			if (On == default) On = Get("Usual", "on");
-			if (Off == default) Off = Get("Usual", "off");
-			if (Disable == default) Disable = Get("Usual", "disable");
-			if (Enable == default) Enable = Get("Usual", "enable");
-			if (Warning == default) Warning = Get("Usual", "warning");
-			if (Back == default) Back = Get("Usual", "back");
-			if (Allowed == default) Allowed = Get("Usual", "allowed");
-			if (NAllowed == default) NAllowed = Get("Usual", "not allowed");
-			if (Unknown == default) Unknown = Get("Usual", "unknown");
-			if (Yes == default) Yes = Get("Usual", "yes");
-			if (No == default) No = Get("Usual", "no");
-			if (Unavailable == default) Unavailable = Get("Usual", "Unavailable");
-			if (Exists == default) Exists = Get("Usual", "exist");
-			if (Success == default) Success = Get("Usual", "success");
-			if (Delete == default) Success = Get("Usual", "delete");
+			SetUsual();
 		}
 
 		public static void LoadEnglishJson(Stream stream)
@@ -129,6 +110,31 @@ namespace Game
 					MergeJsonNode(englishJsonNode, newJsonNode);
 				}
 			}
+			SetUsual();
+		}
+
+		public static void SetUsual()
+		{
+			Ok ??= Get("Usual", "ok");
+			Cancel ??= Get("Usual", "cancel");
+			None ??= Get("Usual", "none");
+			Nothing ??= Get("Usual", "nothing");
+			Error ??= Get("Usual", "error");
+			On ??= Get("Usual", "on");
+			Off ??= Get("Usual", "off");
+			Disable ??= Get("Usual", "disable");
+			Enable ??= Get("Usual", "enable");
+			Warning ??= Get("Usual", "warning");
+			Back ??= Get("Usual", "back");
+			Allowed ??= Get("Usual", "allowed");
+			NAllowed ??= Get("Usual", "not allowed");
+			Unknown ??= Get("Usual", "unknown");
+			Yes ??= Get("Usual", "yes");
+			No ??= Get("Usual", "no");
+			Unavailable ??= Get("Usual", "Unavailable");
+			Exists ??= Get("Usual", "exist");
+			Success ??= Get("Usual", "success");
+			Delete ??= Get("Usual", "delete");
 		}
 		public static void MergeJsonNode(JsonNode oldNode, JsonNode newNode)
 		{
@@ -334,6 +340,7 @@ namespace Game
 			if(languageType == "en-US" && englishJsonNode != null)
 			{
 				jsonNode = englishJsonNode;
+				SetUsual();
 			}
 			else
 			{

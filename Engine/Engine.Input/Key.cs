@@ -80,6 +80,7 @@ namespace Engine.Input
 		Period,
 		Slash,
         Alt,
+        BackSlash,
         Null = -1
 	}
 }

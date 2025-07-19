@@ -37,6 +37,8 @@ namespace Game
 		public bool m_changingGameModeAllowed;
 
 		public bool m_cruelAllowed = true;
+		
+		public const string fName = "ModifyWorldScreen";
 		public ModifyWorldScreen()
 		{
 			XElement node = ContentManager.Get<XElement>("Screens/ModifyWorldScreen");
@@ -103,7 +105,7 @@ namespace Game
 				if(SettingsManager.DeleteWorldNeedToText)
 				{
 					TextBoxDialog textBoxDialog;
-					textBoxDialog = new TextBoxDialog(LanguageControl.Get(GetType().Name, 1) + LanguageControl.Get(GetType().Name, 5), string.Empty, 3, delegate (string content)
+					textBoxDialog = new TextBoxDialog(LanguageControl.Get(fName, 1) + LanguageControl.Get(fName, 5), string.Empty, 3, delegate (string content)
                     {
                         if (content?.ToLower() == "yes")
                         {
@@ -122,7 +124,7 @@ namespace Game
                 }
 				else
 				{
-                    dialog = new MessageDialog(LanguageControl.Get(GetType().Name, 1), LanguageControl.Get(GetType().Name, 2), LanguageControl.Yes, LanguageControl.No, delegate (MessageDialogButton button)
+                    dialog = new MessageDialog(LanguageControl.Get(fName, 1), LanguageControl.Get(fName, 2), LanguageControl.Yes, LanguageControl.No, delegate (MessageDialogButton button)
                     {
                         if (button == MessageDialogButton.Button1)
                         {
@@ -158,7 +160,7 @@ namespace Game
 			}
 			if (flag)
 			{
-				DialogsManager.ShowDialog(null, new MessageDialog(LanguageControl.Get(GetType().Name, 3), LanguageControl.Get(GetType().Name, 4), LanguageControl.Yes, LanguageControl.No, delegate (MessageDialogButton button)
+				DialogsManager.ShowDialog(null, new MessageDialog(LanguageControl.Get(fName, 3), LanguageControl.Get(fName, 4), LanguageControl.Yes, LanguageControl.No, delegate (MessageDialogButton button)
 				{
 					if (button == MessageDialogButton.Button1)
 					{
