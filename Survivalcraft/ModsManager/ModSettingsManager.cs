@@ -22,6 +22,8 @@ namespace Game
 		/// </summary>
 		public static Dictionary<string, ValuesDictionary> ModCameraManageSettings { get; private set; } = new();
 
+		public const string fName = "ModSettingsManager";
+
 		public static Dictionary<string,object> CombinedKeyboardMappingSettings
 		{
 			get
@@ -57,20 +59,27 @@ namespace Game
 		{
 			if (!Storage.FileExists(ModsManager.ModsSettingsPath)) return;
 
-			using Stream stream = Storage.OpenFile(ModsManager.ModsSettingsPath, OpenFileMode.Read);
 			//读取设置并且加入到ModSettings表内
 			try
 			{
-				XElement element = XElement.Load(stream);
-				foreach(var modXElement in element.Elements("Mod"))
+				using(Stream stream = Storage.OpenFile(ModsManager.ModsSettingsPath,OpenFileMode.Read))
 				{
-					string packageName = XmlUtils.GetAttributeValue<string>(modXElement, "PackageName");
-					ModSettingsCache[packageName] = modXElement;
+					XElement element = XElement.Load(stream);
+					foreach(var modXElement in element.Elements("Mod"))
+					{
+						string packageName = XmlUtils.GetAttributeValue<string>(modXElement, "PackageName");
+						ModSettingsCache[packageName] = modXElement;
+					}
 				}
 			}
 			catch (Exception e)
 			{
-				Log.Warning(e.ToString());
+				if(!LanguageControl.TryGet(out string str,fName,"1"))
+				{
+					str = "Error serializing mod settings file:";
+				}
+				Log.Warning($"{str} {e.Message}");
+				return;
 			}
 
 			//遍历每个模组，加载设置项，如果设置项已加载，就从ModSettingsCache中删除
@@ -107,13 +116,20 @@ namespace Game
 					if(!ModCameraManageSettings.TryAdd(packageName,modCameraSettings))
 						ModCameraManageSettings[packageName] = modCameraSettings;
 				}
+				if(!LanguageControl.TryGet(out string info,fName,"2"))
+				{
+					info = "Loaded mod settings";
+				}
+				Log.Information(info);
 			}
 			catch(Exception e)
 			{
-				Log.Warning(e.ToString());
+				if(!LanguageControl.TryGet(out string str,fName,"3"))
+				{
+					str = "Error loading mod settings:";
+				}
+				Log.Warning($"{str} {e}");
 			}
-
-			Log.Information("Loaded mod settings");
 		}
 
 		public static void SaveModSettings()
@@ -123,7 +139,18 @@ namespace Game
 				string packageName = modEntity.modInfo.PackageName;
 				XElement settingsElement = new XElement("Mod");
 				XmlUtils.SetAttributeValue(settingsElement, "PackageName", packageName);
-				modEntity.SaveSettings(settingsElement);
+				try
+				{
+					modEntity.SaveSettings(settingsElement);
+				}
+				catch(Exception e)
+				{
+					if(!LanguageControl.TryGet(out string str,fName,"4"))
+					{
+						str = "Error saving the mod settings of [{0}]:";
+					}
+					Log.Warning($"{string.Format(str,packageName)} {e}");
+				}
 				//保存模组的键位映射设置
 				XElement keyboardMapping = new XElement("KeyboardMapping");
 				if(ModKeyboardMapSettings.TryGetValue(packageName,out ValuesDictionary modKeyboardSettings) && modKeyboardSettings.Count > 0)
@@ -149,11 +176,27 @@ namespace Game
 				xElement.Add(settingElement.Value);
 			}
 
-			using (Stream stream = Storage.OpenFile(ModsManager.ModsSettingsPath, OpenFileMode.Create))
+			try
 			{
-				XmlUtils.SaveXmlToStream(xElement,stream,Encoding.UTF8,throwOnError: true);
+				using(Stream stream = Storage.OpenFile(ModsManager.ModsSettingsPath,OpenFileMode.Create))
+				{
+					XmlUtils.SaveXmlToStream(xElement,stream,Encoding.UTF8,throwOnError: true);
+				}
 			}
-			Log.Information("Saved mod settings");
+			catch(Exception e)
+			{
+				if(!LanguageControl.TryGet(out string str,fName,"5"))
+				{
+					str = "Error saving mod settings file:";
+				}
+				Log.Warning($"{str} {e.Message}");
+			}
+
+			if(!LanguageControl.TryGet(out string info,fName,"6"))
+			{
+				info = "Saved mod settings";
+			}
+			Log.Information(info);
 		}
 
 		public static void ResetModsKeyboardMappingSettings()
@@ -169,7 +212,7 @@ namespace Game
 						keyboardSettings.Add(item1.Key,item1.Value);
 				}
 			}
-			Log.Information("Reset mod keyboard mapping settings");
+			Log.Information(LanguageControl.Get(fName, "7"));
 		}
 
 		public static void ResetModsCameraManageSettings()
@@ -185,7 +228,7 @@ namespace Game
 						cameraSettings.Add(item1.Key,item1.Value);
 				}
 			}
-			Log.Information("Reset mod camera manage settings");
+			Log.Information(LanguageControl.Get(fName, "8"));
 		}
 	}
 }

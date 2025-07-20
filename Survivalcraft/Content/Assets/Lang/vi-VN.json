@@ -2535,94 +2535,102 @@
   "Help": {
     "1": {
       "value": "\\n Left Stick - Di chuyển\\n Right Stick - Nhìn xung quanh\\n Left Trigger - Đào/Tấn công/Nhắm\\n Right Trigger - Đặt khối/Sử dụng/Tương tác\\n D-Pad Lên/Xuống - Cuộn túi đồ, trang trước/sau\\n D-Pad Trái/Phải - Chuyển ô hoạt động\\n Nút A - Nhảy\\n Nhấn Left Thumb - Đặt khối hoặc gắn thú/phương tiện\\n Nhấn Right Thumb - Thay đổi chế độ camera\\n Nút B - Thả vật phẩm đang cầm\\n Nút X - Mở bảng túi đồ\\n Nút Y - Mở bảng cơ thể\\n Back/Select - Hiện menu trò chơi\\n Start/Pause - Hiện menu trò chơi\\n Nhấn Left Shoulder - Bật/tắt rón rén\\n Nhấn Right Shoulder - Nhảy (như A)\\n Left Trigger + A - Tự động di chuyển vật phẩm trong túi đồ\\n A hai lần nhanh - Bật/tắt chế độ bay (Sáng tạo)\\n \\n\\n\\n Bất kỳ tay cầm nào tương thích XInput đều hoạt động.\\n Một số tay cầm tương thích DirectInput cũng hoạt động, nhưng các nút có thể bị ánh xạ sai.\\n Sơ đồ điều khiển có thể không giống trên tất cả các thiết bị Android, nhưng những điều khiển cơ bản nên hoạt động.\\n ",
-      "Name": "Tay cầm",
+      "Name": "Gamepad",
       "Title": "Điều khiển Tay cầm"
     },
     "2": {
       "value": "\\n W/A/S/D - Di chuyển\\n Chuột - Nhìn xung quanh\\n Phím cách - Nhảy\\n Shift trái - Rón rén (giữ)\\n E - Mở bảng túi đồ\\n C - Mở bảng cơ thể\\n Q - Thả vật phẩm đang cầm\\n V - Thay đổi chế độ camera\\n R - Gắn thú/phương tiện\\n G - Chỉnh sửa khối hoặc vật phẩm\\n P - Chụp ảnh màn hình\\n L - Triệu hồi sét (Sáng tạo)\\n T - Thay đổi thời gian trong ngày (Sáng tạo)\\n 0-9 - Chọn ô hoạt động\\n F hoặc Phím cách hai lần - Bật/tắt chế độ bay (Sáng tạo)\\n Phím cách/Shift trái - Bay lên/xuống (Sáng tạo)\\n Chuột trái (nhấn) - Đào/Tấn công/Nhắm\\n Chuột phải (nhấn) - Đặt khối/Sử dụng/Tương tác\\n Chuột trái (kéo) - Di chuyển tất cả vật phẩm\\n Chuột phải (kéo) - Di chuyển một vật phẩm\\n Chuột trái (giữ) - Đánh dấu ngăn xếp để chia đôi\\n Shift trái + Chuột trái - Tự động di chuyển vật phẩm trong túi đồ\\n Bánh xe chuột - Cuộn túi đồ, thay đổi ô hoạt động\\n Escape - Hiện menu trò chơi\\n H - Hiện/Ẩn trợ giúp điều khiển này\\n J - Bật/tắt sương mù (Sáng tạo)\\n K - Bật/tắt mưa/tuyết (Sáng tạo)\\n ",
-      "Name": "Bàn phím",
+      "Name": "Keyboard",
       "Title": "Điều khiển Bàn phím"
     },
     "3": {
       "value": "\\n Sử dụng bàn di cảm ứng ở phía dưới bên trái màn hình để di chuyển.\\n Chạm một lần để nhảy.\\n Điều này cũng có thể được cấu hình để sử dụng các nút điều hướng thay vì bàn di.\\n \\n\\n\\n Sử dụng bàn di cảm ứng ở phía dưới bên phải màn hình để nhìn xung quanh.\\n Chạm một lần để nhảy.\\n Bạn cũng có thể kéo ngón tay qua bất kỳ vùng nào của màn hình để nhìn (có thể cấu hình trong cài đặt).\\n \\n\\n\\n Bạn có thể điều chỉnh sơ đồ điều khiển của trò chơi trong cài đặt Điều khiển và Độ nhạy.\\n Thử nghiệm với các tùy chọn khác nhau, ví dụ bạn có thể thích nút hơn bàn di, hoặc chia màn hình cảm ứng với tâm ngắm hơn điều khiển thông thường.\\n Điều khiển trò chơi góc nhìn thứ nhất trên màn hình cảm ứng nhỏ có thể trông khó khăn, nhưng một khi bạn quen với nó, nó không khác gì sử dụng tay cầm hoặc chuột.\\n Vì bạn có thể chạm vào bất kỳ phần nào của màn hình bất cứ lúc nào, một số hành động như đào khối hoặc đặt khối thậm chí có thể dễ dàng hơn.\\n \\n\\n\\n Một số thiết bị rẻ tiền hoặc cũ có màn hình cảm ứng chất lượng thấp hoặc trình điều khiển cảm ứng có lỗi.\\n Chúng có thể thỉnh thoảng bỏ qua các điểm chạm đang hoạt động, hoặc trộn lẫn chúng nếu chạm vào nhiều hơn một điểm cùng lúc.\\n Tốt nhất nên tránh những thiết bị này vì chơi trên chúng rất khó chịu.\\n ",
+      "Name": "TouchScreen",
       "Title": "Điều khiển Màn hình Cảm ứng"
     },
     "4": {
       "value": "\\n Rón rén hữu ích nếu bạn muốn di chuyển chậm và cẩn thận, ví dụ để tránh rơi gần mép của một vách đá cao.\\n \\n\\n\\n Để bật/tắt chế độ rón rén, nhấn nút rón rén ở phía bên phải màn hình.\\n Khi chế độ rón rén được bật, chuyển động của bạn sẽ bị hạn chế ở các mép để ngăn bạn rơi xuống.\\n \\n\\n\\n Rón rén cũng làm cho chuyển động của bạn yên tĩnh hơn nhiều, cho phép bạn đến gần hơn với một số động vật mà không làm chúng sợ hãi. \\n Ví dụ, bạn có thể sử dụng rón rén để đến gần một con chim mà không làm nó sợ bay đi. \\n Chỉ cần đảm bảo bạn không tiếp cận nó từ phía trước, vì nó sẽ nhìn thấy bạn và bay đi. \\n \\n\\n\\n Rón rén cũng giúp tăng độ chính xác khi bắn cung/nỏ.",
+      "Name": "Sneaking",
       "Title": "Rón rén (Sneaking)"
     },
     "5": {
       "value": "\\n Bay chỉ có sẵn trong Chế độ Sáng tạo.\\n Để bật/tắt chế độ bay, chạm vào nút bay ở phía bên phải màn hình. \\n Nhảy hai lần nhanh chóng cũng sẽ bật/tắt chế độ bay.\\n \\n\\n\\n Để bay lên hoặc xuống, sử dụng nút lên/xuống xuất hiện bên cạnh nút bay.\\n Bay nhanh hơn nhiều so với đi bộ và cho phép bạn nhanh chóng đến các khu vực mà nếu không sẽ không thể tiếp cận được.\\n ",
+      "Name": "Flying",
       "Title": "Bay"
     },
     "6": {
       "value": "\\n Thang có thể được chế tạo từ gậy gỗ hoặc thanh sắt.\\n Một khi được đặt trên tường thẳng đứng, chúng cho phép bạn dễ dàng leo lên tường.\\n \\n\\n\\n An toàn nhất là leo thang khi đối mặt với nó.\\n Điều này đúng cả khi leo lên và xuống.\\n \\n\\n\\n Do đó, cách tốt nhất để leo xuống thang là tiếp cận nó từ phía sau, như bạn sẽ làm trong thực tế.\\n \\n\\n\\n Bạn có thể nhảy khỏi thang bất cứ lúc nào\\n ",
+      "Name": "Ladder",
       "Title": "Leo Thang"
     },
     "7": {
       "value": "\\n Thanh máu được hiển thị trong màn hình trò chơi dưới dạng những trái tim nhỏ.\\n Đó là lượng sinh mệnh còn lại của người chơi.\\n Khi nó giảm xuống 0, người chơi sẽ chết.\\n \\n\\n\\n Nó từ từ hồi phục khi người chơi no đủ, nó hồi phục nhanh hơn khi ngủ.\\n Hãy cẩn thận khi máu của bạn thấp, ngay cả một vết thương nhẹ cũng có thể giết chết bạn.\\n \\n\\n\\n Khi người chơi bị bệnh, các trái tim trở thành màu xanh lá bẩn.\\n Đừng ăn thức ăn đáng ngờ để tránh bị bệnh.\\n Khi người chơi bị cúm, các trái tim trở thành màu xanh dương.\\n Đừng bị lạnh trong thời gian dài để tránh bị cúm.\\n ",
-      "Name": "Máu",
+      "Name": "Health",
       "Title": "Máu (Health)"
     },
     "8": {
       "value": "\\n Khi bạn ăn thịt sống, trứng chưa nấu hoặc bất kỳ thức ăn nào đã bị để thối rữa, người chơi có thể bị bệnh.\\n \\n\\n\\n Bệnh tật là một tình trạng không dễ chịu. \\n Máu của bạn sẽ từ từ giảm xuống còn một trái tim, khiến bạn rất dễ bị tổn thương.\\n Các hoạt động của bạn sẽ liên tục bị gián đoạn bởi các cơn nôn và buồn nôn.\\n Bạn sẽ di chuyển chậm, yếu và dễ mệt mỏi.\\n Bạn sẽ không thể ăn một số loại thức ăn nhất định.\\n \\n\\n\\n Tốt nhất là đi ngủ, có thể sáng mai dạ dày của bạn sẽ khá hơn.\\n ",
-      "Name": "Bệnh tật",
+      "Name": "Sickness",
       "Title": "Bệnh tật (Sickness)"
     },
     "9": {
       "value": "\\n Khi nhiệt độ cơ thể của bạn ở mức thấp trong thời gian dài, người chơi sẽ bắt đầu hắt hơi.\\n Đây là dấu hiệu cảnh báo rằng bạn có thể sẽ bị cúm sớm.\\n Hãy làm ấm người nhanh chóng.\\n \\n\\n\\n Cúm là một tình trạng nguy hiểm.\\n Máu của bạn sẽ từ từ giảm xuống còn hai trái tim, khiến bạn rất dễ bị tổn thương.\\n Các hoạt động của bạn sẽ thường xuyên bị gián đoạn bởi các cơn ho.\\n Bạn sẽ di chuyển chậm, yếu và dễ mệt mỏi.\\n Bạn cũng sẽ trở nên rất buồn ngủ.\\n \\n\\n\\n Tốt nhất là đến một nơi ấm áp và ngủ để khỏi cúm, có thể sáng mai bạn sẽ khá hơn.\\n Cúm rất khó chữa khi bạn đang lạnh.\\n ",
-      "Name": "Cúm",
+      "Name": "Flu",
       "Title": "Cúm (Flu)"
     },
     "10": {
       "value": "\\n Thanh đói được hiển thị trong màn hình trò chơi dưới dạng những miếng thịt nhỏ (thay vì cá).\\n Nếu bạn không ăn trong thời gian dài, nhân vật của bạn sẽ bắt đầu phàn nàn về điều đó và cuối cùng mất máu, cho đến khi bạn chết.\\n Ngoài ra, nếu bạn đói, bạn không hồi phục máu.\\n \\n\\n\\n Để ăn, kéo một vật phẩm có thể ăn được lên hình người chơi trong bảng Cơ thể/Thức ăn.\\n Nhân vật của bạn sẽ cho bạn biết liệu bạn có còn đói không.\\n \\n\\n\\n Thức ăn có thể được lấy từ nhiều nguồn trong trò chơi.\\n Nguồn rõ ràng nhất là săn bắt động vật ăn được, như bò, chim và lợn rừng.\\n Hãy nhớ rằng săn bắn có thể nguy hiểm, và nguồn cung cấp động vật sẽ nhanh chóng cạn kiệt ở các khu vực gần đó, buộc bạn phải tìm kiếm xa hơn.\\n \\n\\n\\n Một lựa chọn thay thế cho săn bắn là trồng trọt (ví dụ: lúa mạch đen) hoặc câu cá.\\n Trồng trọt cho phép bạn tạo ra một nguồn thức ăn bền vững, mặc dù có thể cần nhiều công việc chuẩn bị và bảo trì thêm.\\n ",
-      "Name": "Đói",
+      "Name": "Hunger",
       "Title": "Đói (Hunger)"
     },
     "11": {
       "value": "\\n Thể lực là thước đo mức độ mệt mỏi của nhân vật của bạn, hiển thị qua thanh màu xanh lam.\\n Khi bạn thực hiện một hành động mệt mỏi trong thời gian dài không nghỉ (chạy, nhảy, bơi, đào, chiến đấu), thanh thể lực sẽ giảm và bạn sẽ bắt đầu thở hổn hển.\\n \\n\\n\\n Khi bạn đang thở hổn hển (thanh thể lực thấp), hiệu suất của bạn thấp hơn khi bạn đã nghỉ ngơi.\\n Bạn sẽ di chuyển và đào chậm hơn, và bạn sẽ không thể thực hiện nhảy.\\n \\n\\n\\n Rất nguy hiểm khi bị mệt khi bạn đang ở trong nước, vì bạn không thể nghỉ ngơi trong khi bơi và sẽ bắt đầu mất máu (đuối nước).\\n Theo dõi thanh thể lực, và ra khỏi nước ngay lập tức khi nó xuống thấp.\\n Khi bạn kiệt sức trong khi ở trong nước, bạn sẽ chết đuối trừ khi bờ rất gần.\\n \\n\\n\\n Hãy cẩn thận, rất dễ bị mệt khi chạy trốn khỏi động vật nguy hiểm.\\n ",
-      "Name": "Thể lực",
+      "Name": "Stamina",
       "Title": "Thể lực (Stamina)"
     },
     "12": {
       "value": "\\n Ngủ sẽ giúp phục hồi máu của bạn và vượt qua những giờ đêm khi quá tối hoặc nguy hiểm để làm việc.\\n \\n\\n\\n Ngay cả khi bạn không bị thương, bạn vẫn cần ngủ thỉnh thoảng (thanh Ngủ sẽ giảm).\\n Nếu bạn bỏ qua nó, nhân vật của bạn sẽ bắt đầu có những cơn ngất ngắn khi thanh ngủ cạn kiệt.\\n Nếu bạn vẫn hoạt động bất chấp cảnh báo này, các cơn ngất sẽ kéo dài hơn và cuối cùng bạn sẽ bất tỉnh.\\n Bất tỉnh rất nguy hiểm, vì động vật săn mồi sẽ nhanh chóng ngửi thấy bạn và ăn thịt bạn khi không được bảo vệ.\\n \\n\\n\\n Mặc dù bạn không cần giường, bạn chỉ có thể ngủ ở một nơi ấm cúng, khô ráo và thoải mái.\\n Mặt đất không thể quá cứng và khu vực không thể quá lộ thiên hoặc quá nguy hiểm.\\n \\n\\n\\n Điểm hồi sinh của bạn được đặt tại nơi bạn ngủ lần cuối.\\n Để ngủ, mở màn hình Cơ thể/Thức ăn và nhấn nút ngủ (hình mặt trăng).\\n ",
-      "Name": "Ngủ",
+      "Name": "Sleep",
       "Title": "Ngủ (Sleep)"
     },
     "13": {
       "value": "\\n Khi bạn ở ngoài trời lạnh mà không có quần áo phù hợp, nhiệt độ cơ thể của bạn sẽ giảm (biểu tượng nhiệt kế chuyển sang màu xanh và giảm xuống).\\n Tầm nhìn của bạn sẽ bắt đầu đóng băng và bạn sẽ bắt đầu mất máu.\\n Tìm một nơi ấm hơn hoặc đến gần lửa để sưởi ấm và làm khô người.\\n Nếu bạn bị lạnh trong thời gian dài, bạn sẽ bắt đầu hắt hơi và có thể bị cúm.\\n \\n\\n\\n Quá nhiều nhiệt cũng không tốt cho bạn, đứng quá gần một đám lửa lớn hoặc ở sa mạc nóng bức sẽ khiến bạn bị quá nóng (biểu tượng nhiệt kế chuyển sang màu đỏ và tăng lên). Điều này cũng làm mất máu.\\n \\n\\n\\n Khu vực có mái che ấm hơn bên ngoài. Bịt kín tất cả các lỗ và khóa cửa sẽ làm cho nơi trú ẩn ấm hơn nữa.\\n Đốt lửa bên trong nơi trú ẩn của bạn để làm cho nó ấm áp.\\n \\n\\n\\n Bị ướt làm tăng đáng kể khả năng bị lạnh của bạn, tìm một nơi ấm áp để làm khô nhanh hơn.\\n \\n\\n\\n Cách tốt nhất để đối phó với lạnh là mặc nhiều lớp quần áo dày, khô có chỉ số cách nhiệt tốt.\\n Bạn cần che phủ toàn bộ cơ thể (đầu, ngực, chân, bàn chân).\\n Quần áo làm từ lông thú động vật cách nhiệt tốt nhất.\\n ",
-      "Name": "Nhiệt độ",
+      "Name": "Temperature",
       "Title": "Nhiệt độ Cơ thể (Body Heat)"
     },
     "14": {
       "value": "\\n Nhân vật của bạn có thể bị ướt khi ở ngoài trời mưa hoặc rơi xuống nước (thanh Độ ẩm tăng lên).\\n Độ ướt làm giảm mạnh khả năng cách nhiệt của quần áo, vì vậy rất dễ bị đóng băng ở vùng khí hậu lạnh hơn.\\n Nhân vật của bạn sẽ khô nhanh hơn ở nơi ấm áp.\\n ",
-      "Name": "Độ ướt",
+      "Name": "Wetness",
       "Title": "Độ ướt (Wetness)"
     },
     "15": {
       "value": "\\n Tất cả các vật phẩm thức ăn sẽ bị thối sau một thời gian.\\n Biểu tượng thức ăn (ví dụ: miếng thịt) bên cạnh vật phẩm sẽ chuyển sang màu nâu để chỉ ra rằng quá trình thối rữa đang bắt đầu. Thời gian bảo quản được ghi trong Recipaedia.\\n Một thời gian sau đó, vật phẩm thức ăn sẽ bị thối hoàn toàn và có tên 'Thối'.\\n \\n\\n\\n Thức ăn sống sẽ thối rất nhanh.\\n Nấu thức ăn sẽ kéo dài tuổi thọ của nó.\\n \\n\\n\\n Thức ăn thối vẫn hấp dẫn động vật và thậm chí có thể được ăn bởi người chơi, nhưng có khả năng cao gây bệnh (xem mục Bệnh tật).\\n \\n\\n\\n Khi người chơi bị bệnh, họ rất chậm, yếu và sẽ dừng lại để nôn định kỳ.\\n Tốt nhất là đi ngủ và đợi cho bệnh qua đi.\\n \\n\\n\\n Hầu hết thức ăn thối cuối cùng sẽ biến thành phân ủ (Compost), một nguồn tài nguyên trồng trọt có thể được sử dụng thay cho đất thường.\\n Phân ủ ẩm có thể thay thế đất canh tác ẩm.\\n ",
-      "Name": "ThốiThứcĂn",
+      "Name": "FoodRot",
       "Title": "Thức ăn Thối (Food Rot)"
     },
     "16": {
       "value": "\\n Nhân vật của bạn trở nên có kinh nghiệm hơn theo thời gian.\\n Kinh nghiệm được thể hiện bằng những quả cầu vàng nhỏ có thể nhặt được.\\n Chúng xuất hiện khi bạn khai thác khoáng sản, thu hoạch mùa màng, chế tạo vật phẩm hoặc săn động vật. Đài kỷ niệm trên núi chứa rất nhiều kinh nghiệm.\\n Thu thập chúng bằng cách đến gần.\\n \\n\\n\\n Thanh kinh nghiệm màu tím ở dưới cùng sẽ đầy lên.\\n Khi đầy, nhân vật của bạn sẽ tiến lên cấp độ tiếp theo.\\n Sức mạnh, Tốc độ và Sức bền của bạn sẽ tăng và nhu cầu thức ăn (Đói) của bạn sẽ giảm.\\n Bạn cũng sẽ có thể sử dụng các công cụ, vũ khí và áo giáp tiên tiến hơn (yêu cầu cấp độ được ghi trong Recipaedia).\\n \\n\\n\\n Khi bạn chết và hồi sinh (trong chế độ Sinh tồn hoặc Thử thách), cấp độ của bạn sẽ giảm xuống một giá trị thấp hơn nhiều.\\n Sẽ mất rất nhiều thời gian để lấy lại kinh nghiệm đã mất.\\n ",
-      "Name": "Cấp độ",
+      "Name": "Levels",
       "Title": "Cấp độ và Kinh nghiệm (Level and Experience)"
     },
     "17": {
       "value": "\\n Bạn có thể cưỡi một số động vật, như ngựa, lạc đà hoặc lừa.\\n Cưỡi động vật cho phép bạn di chuyển nhanh hơn và nhìn thế giới từ một điểm cao hơn.\\n \\n\\n\\n Để cưỡi một con vật, đến gần nó và đợi nó dừng lại.\\n Nút rón rén sẽ chuyển thành nút cưỡi (hình yên ngựa).\\n Nhấn nó để cưỡi/xuống.\\n Bạn cũng có thể cưỡi thuyền theo cách tương tự.\\n \\n\\n\\n Để cưỡi động vật thành công, bạn cần một yên ngựa, có thể được chế tạo từ da thuộc và gậy gỗ.\\n Trang bị yên ngựa cho con vật bằng cách dùng yên ngựa tương tác với nó.\\n Khi con vật được đặt yên, hành vi của nó thay đổi và nó trở nên thân thiện hơn với bạn.\\n Đừng cố cưỡi một con vật không có yên, nó sẽ không thích điều đó và có thể hất bạn ngã.\\n \\n\\n\\n Một cái còi sẽ triệu tập bất kỳ con vật nào đã đặt yên ở gần đó.\\n Tốt nhất là mang theo một cái còi khi bạn đang cưỡi.\\n \\n\\n\\n Một số loại ủng (Ủng Kỵ Binh) giúp thú cưỡi chạy nhanh hơn.",
+      "Name": "Riding",
       "Title": "Cưỡi Động vật (Riding Animals)"
     },
     "18": {
       "value": "\\n Trong Survivalcraft, gần như mọi khối đều có thể bị phá hủy (trừ Đá nền).\\n \\n\\n\\n Để đào một khối, nhấn và giữ vào khối đó.\\n Vết nứt sẽ xuất hiện và lan rộng khi khối đang được đào.\\n Khi vết nứt lan hết, khối sẽ vỡ ra và rơi vật phẩm (nếu có).\\n \\n\\n\\n Một số khối mất rất nhiều thời gian để đào mà không có công cụ thích hợp (ví dụ: đào đá bằng tay). Recipaedia cho biết phương pháp đào (Xẻng, Cuốc chim, Rìu/Khác) và độ bền khai thác.\\n Sử dụng công cụ phù hợp sẽ tăng tốc độ đào.\\n Công cụ làm từ vật liệu tốt hơn (Đồng < Sắt < Kim cương) sẽ đào nhanh hơn và bền hơn.\\n \\n\\n\\n Đào một số khối, như kính, sẽ phá hủy chúng hoàn toàn mà không rơi ra vật phẩm.\\n Khai thác quặng bằng công cụ không phù hợp hoặc cấp thấp cũng có thể làm mất khoáng sản.\\n ",
+      "Name": "Digging",
       "Title": "Đào Khối (Digging Blocks)"
     },
     "19": {
       "value": "\\n Để đặt một khối, chọn nó từ thanh túi đồ nhanh hoặc túi đồ chính để bạn đang cầm nó trong tay.\\n Sau đó chạm vào mặt của một khối hiện có, nơi bạn muốn khối mới được gắn vào.\\n Khối sẽ được đặt ở đó ngay lập tức, trừ khi không thể (ví dụ: đặt khối vào vị trí của người chơi).\\n \\n\\n\\n Một số vật phẩm có hành vi khác nhau nếu được gắn vào các phần khác nhau của một khối hiện có.\\n Ví dụ, cửa sập có thể được gắn vào phần trên hoặc dưới với kết quả khác nhau (mở lên trên hoặc xuống dưới).\\n Cầu thang có thể đặt xuôi hoặc ngược.\\n Đuốc có thể đặt trên sàn hoặc gắn vào tường.\\n ",
+      "Name": "Placing",
       "Title": "Đặt Khối (Placing Blocks)"
     },
     "20": {
       "value": "\\n Một số khối có thể tương tác khi chạm vào.\\n Ví dụ: cửa, cổng, cửa sập, rương, bàn chế tạo, lò nung, nút bấm, công tắc, thùng thuốc súng (dùng diêm), lửa trại (thêm nhiên liệu), khối nội thất tương tác.\\n \\n\\n\\n Để tương tác với một khối, chỉ cần chạm vào nó một lần.\\n Hành động tương ứng sẽ được kích hoạt.\\n \\n\\n\\n Ví dụ, chạm vào một cánh cửa đóng sẽ mở nó, chạm vào lò nung sẽ mở giao diện lò nung, chạm vào nút bấm sẽ kích hoạt tín hiệu điện tạm thời.\\n Tương tác với khối nội thất có thể bật/tắt đèn, mở/đóng cửa tủ, v.v., tùy thuộc vào thiết kế nội thất.\\n ",
+      "Name": "Interacting",
       "Title": "Tương tác Với Khối (Interacting With Blocks)"
     }
   },

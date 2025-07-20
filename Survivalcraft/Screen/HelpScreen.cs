@@ -81,9 +81,11 @@ namespace Game
 				};
 				if (!string.IsNullOrEmpty(helpTopic.Name))
 				{
-					m_topics.Add(helpTopic.Name, helpTopic);
+					if(m_topics.TryAdd(helpTopic.Name,helpTopic))
+					{
+						m_topicsList.m_items.Add(helpTopic);
+					}
 				}
-				m_topicsList.m_items.Add(helpTopic);
 			}
 			m_topicsList.m_items.Sort((x, y) => {
 				var x_topic = x as HelpTopic;

@@ -146,19 +146,31 @@ namespace Game
 			{
 				case JsonValueKind.Object:
 					{
-						foreach (var newChild in newNode.AsObject())
+						if(oldNode.GetValueKind() == JsonValueKind.Object)
 						{
-							JsonNode oldChild = oldNode[newChild.Key];
-							if (oldChild == null)
+							JsonObject oldObject = oldNode.AsObject();
+							JsonObject newObject = newNode.AsObject();
+							foreach(var newChild in newObject)
 							{
-								oldNode.AsObject().Add(newChild.Key, newChild.Value.DeepClone());
-							}
-							else
-							{
-								MergeJsonNode(oldChild, newChild.Value);
+								if(newChild.Value == null)
+								{
+									continue;
+								}
+								JsonNode oldChild = oldObject[newChild.Key];
+								if(oldChild == null)
+								{
+									oldObject.Add(newChild.Key,newChild.Value.DeepClone());
+								}
+								else
+								{
+									MergeJsonNode(oldChild,newChild.Value);
+								}
 							}
 						}
-
+						else
+						{
+							oldNode.ReplaceWith(newNode.DeepClone());
+						}
 						break;
 					}
 				case JsonValueKind.Array:
@@ -167,15 +179,22 @@ namespace Game
 						{
 							JsonArray oldArray = oldNode.AsArray();
 							JsonArray newArray = newNode.AsArray();
-							if (newArray.Count >= oldArray.Count)
+							if (newArray.Count > oldArray.Count)
 							{
-								oldNode.ReplaceWith(newNode.DeepClone());
+								for (int i = 0; i < oldArray.Count; i++)
+								{
+									MergeJsonNode(oldArray[i], newArray[i]);
+								}
+								for (int i = oldArray.Count; i < newArray.Count; i++)
+								{
+									oldArray.Add(newArray[i]?.DeepClone());
+								}
 							}
 							else
 							{
 								for (int i = 0; i < newArray.Count; i++)
 								{
-									oldNode[i] = newArray[i];
+									MergeJsonNode(oldArray[i], newArray[i]);
 								}
 							}
 						}
@@ -297,13 +316,26 @@ namespace Game
 			return flag? keys.Last() : String.Join(':', keys);
 		}
 
+		public static bool TryGet(out string result,params string[] keys)
+		{
+			result = Get(out bool r, keys);
+			return r;
+		}
+
+		public static bool TryGet(out string result,JsonNode node,params string[] keys)
+		{
+			result = Get(out bool r, node, keys);
+			return r;
+		}
+
 		public static string GetWithoutFallback(out bool r,params string[] keys)
 		{
 			return Get(out r,jsonNode,keys);
 		}
 		public static string GetBlock(string blockName, string prop)
 		{
-			return TryGetBlock(blockName, prop, out var result) ? result : result;
+			TryGetBlock(blockName,prop,out var result);
+			return result;
 		}
 		public static bool TryGetBlock(string blockName, string prop, out string result)
 		{

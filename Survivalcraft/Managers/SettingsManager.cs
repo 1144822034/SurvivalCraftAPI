@@ -36,6 +36,8 @@ namespace Game
 
 		public static float Touchoffset { get; set; }
 
+		public const string fName = "SettingsManager";
+
 		public static float SoundsVolume
 		{
 			get
@@ -507,6 +509,8 @@ namespace Game
 		public static ValuesDictionary KeyboardMappingSettings { get; set; }
 		public static ValuesDictionary CameraManageSettings { get; set; }
 
+		private static readonly Lock m_saveLock = new Lock();
+
 		public static void Initialize()
 		{
 			{
@@ -640,7 +644,7 @@ namespace Game
 					}
 				}
 			}
-			return throwIfNotFound ? throw new ArgumentException($"There's no keyboard mapping setting named \"{keyName}\"!") : null;
+			return throwIfNotFound ? throw new ArgumentException(string.Format(LanguageControl.Get(fName,"1"),keyName)) : null;
 		}
 		/// <summary>
 		/// 仅用于修改现有键位，添加键位请使用<see cref="ModLoader.GetKeyboardMappings"/>
@@ -681,7 +685,7 @@ namespace Game
 					}
 				}
 			}
-			return throwIfNotFound ? throw new ArgumentException($"There's no camera setting named \"{keyName}\"!") : -1;
+			return throwIfNotFound ? throw new ArgumentException(string.Format(LanguageControl.Get(fName,"2"),keyName)) : -1;
 		}
 		/// <summary>
 		/// 仅用于修改现有相机配置，添加相机配置请使用<see cref="ModLoader.GetCameraList"/>
@@ -749,18 +753,22 @@ namespace Game
 								}
 								catch(Exception ex)
 								{
-									Log.Warning(string.Format("Setting \"{0}\" could not be loaded. Reason: {1}",new object[2]
+									if(!LanguageControl.TryGet(out string str,fName,"3"))
 									{
-									name,
-									ex.ToString()
-									}));
+										str = "Setting \"{0}\" could not be loaded. Reason: {1}";
+									}
+									Log.Warning(string.Format(str,name,ex));
 								}
 							}
 						}
 						
 
 					}
-					Log.Information("Loaded settings.");
+					if(!LanguageControl.TryGet(out string info,fName,"4"))
+					{
+						info = "Loaded settings.";
+					}
+					Log.Information(info);
 					return true;
 				}
 				else
@@ -770,17 +778,32 @@ namespace Game
 			}
 			catch (Exception e)
 			{
-				ExceptionManager.ReportExceptionToUser("Loading settings failed.", e);
+				if(!LanguageControl.TryGet(out string str,fName,"5"))
+				{
+					str = "Loading settings failed.";
+				}
+				ExceptionManager.ReportExceptionToUser(str, e);
 				return false;
 			}
 		}
 
 		public static void SaveSettings()
 		{
-			ModsManager.SaveConfigs();
-			ModSettingsManager.SaveModSettings();
+			if(!m_saveLock.TryEnter(0))
+			{
+				return;
+			}
 			try
 			{
+				try
+				{
+					ModsManager.SaveConfigs();
+					ModSettingsManager.SaveModSettings();
+				}
+				catch(Exception _)
+				{
+					//ignore
+				}
 				ValuesDictionary settingsValuesDictionary = new ValuesDictionary();
 				//原生设置
 				var xElement = new XElement("Settings");
@@ -795,11 +818,11 @@ namespace Game
 					}
 					catch (Exception ex)
 					{
-						Log.Warning(string.Format("Setting \"{0}\" could not be saved. Reason: {1}",
-						[
-							item.Name,
-							ex
-						]));
+						if(!LanguageControl.TryGet(out string str,fName,"6"))
+						{
+							str = "Setting \"{0}\" could not be saved. Reason: {1}";
+						}
+						Log.Warning(string.Format(str,item.Name,ex));
 					}
 				}
 				settingsValuesDictionary.Save(xElement);
@@ -812,11 +835,22 @@ namespace Game
 				{
 					XmlUtils.SaveXmlToStream(xElement, stream,Encoding.UTF8, throwOnError: true);
 				}
-				Log.Information("Saved settings");
+				if(!LanguageControl.TryGet(out string info,fName,"7"))
+				{
+					info = "Saved settings.";
+				}
+				Log.Information(info);
 			}
 			catch (Exception e)
 			{
-				ExceptionManager.ReportExceptionToUser("Saving settings failed.", e);
+				if(!LanguageControl.TryGet(out string str,fName,"8"))
+				{
+					str = "Saving settings failed.";
+				}
+				ExceptionManager.ReportExceptionToUser(str, e);
+			}
+			finally{
+				m_saveLock.Exit();
 			}
 		}
 	}

@@ -354,7 +354,7 @@ namespace Game
 		public void CreateRenderTarget()
 		{
 			GLWrapper.GL.GetInteger(GetPName.MaxTextureSize, out int maxTextureSize);
-			int eachSignHeight = (int)m_font.GlyphHeight * 4;
+			int eachSignHeight = (int)(m_font.GlyphHeight * m_fontScale * 4);
 			if(maxTextureSize < eachSignHeight * 32)
 			{
 				m_maxTexts = maxTextureSize / eachSignHeight;
