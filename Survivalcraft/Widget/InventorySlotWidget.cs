@@ -636,6 +636,7 @@ namespace Game
 				{
 					//TODO:ProcessItem允许突破格子物品上限限制
 					int count = MathUtils.Min(sourceInventory.GetSlotCapacity(sourceSlotIndex, processedValue), processedCount);
+					sourceInventory.RemoveSlotItems(sourceSlotIndex, count);
 					sourceInventory.AddSlotItems(sourceSlotIndex, processedValue, count);
                 }
 				flag = true;
