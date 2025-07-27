@@ -84,7 +84,7 @@ namespace Game
 		{
 			get
 			{
-				return Models[0] ?? null;
+				return Models?[0] ?? null;
 			}
 			set
 			{

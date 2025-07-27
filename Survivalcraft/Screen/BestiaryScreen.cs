@@ -47,9 +47,9 @@ namespace Game
 				if (valuesDictionary != null)
 				{
 					string value = valuesDictionary.GetValue<string>("DisplayName");
-					if (value.StartsWith("[") && value.EndsWith("]"))
+					if(value.StartsWith('[') && value.EndsWith(']'))
 					{
-						string[] lp = value.Substring(1, value.Length - 2).Split(new string[] { ":" }, StringSplitOptions.RemoveEmptyEntries);
+						string[] lp = value.Substring(1, value.Length - 2).Split(":", StringSplitOptions.RemoveEmptyEntries);
 						value = LanguageControl.GetDatabase("DisplayName", lp[1]);
 					}
 					if (!string.IsNullOrEmpty(value))
@@ -77,9 +77,9 @@ namespace Game
 							ValuesDictionary valuesDictionary8 = DatabaseManager.FindValuesDictionaryForComponent(entitiesValuesDictionary, typeof(ComponentMount));
 							ValuesDictionary valuesDictionary9 = DatabaseManager.FindValuesDictionaryForComponent(entitiesValuesDictionary, typeof(ComponentLoot));
 							string dy = valuesDictionary.GetValue<string>("Description");
-							if (dy.StartsWith("[") && dy.EndsWith("]"))
+							if(dy.StartsWith('[') && dy.StartsWith(']'))
 							{
-								string[] lp = dy.Substring(1, dy.Length - 2).Split(new string[] { ":" }, StringSplitOptions.RemoveEmptyEntries);
+								string[] lp = dy.Substring(1,dy.Length - 2).Split(":",StringSplitOptions.RemoveEmptyEntries);
 								dy = LanguageControl.GetDatabase("Description", lp[1]);
 							}
 							var bestiaryCreatureInfo = new BestiaryCreatureInfo
@@ -135,22 +135,61 @@ namespace Game
 			}
 		}
 
-		public static void SetupBestiaryModelWidget(BestiaryCreatureInfo info, ModelWidget modelWidget, Vector3 offset, bool autoRotate, bool autoAspect)
+		public static void SetupBestiaryModelWidget(BestiaryCreatureInfo info,
+			ModelWidget modelWidget,
+			Vector3 offset,
+			bool autoRotate,
+			bool autoAspect)
 		{
-			modelWidget.Model = ContentManager.Get<Model>(info.ModelName);
-			modelWidget.TextureOverride = ContentManager.Get<Texture2D>(info.TextureOverride);
-			var absoluteTransforms = new Matrix[modelWidget.Model.Bones.Count];
-			modelWidget.Model.CopyAbsoluteBoneTransformsTo(absoluteTransforms);
-			BoundingBox boundingBox = modelWidget.Model.CalculateAbsoluteBoundingBox(absoluteTransforms);
-			float x = MathUtils.Max(boundingBox.Size().X, 1.4f * boundingBox.Size().Y, boundingBox.Size().Z);
-			modelWidget.ViewPosition = new Vector3(boundingBox.Center().X, 1.5f, boundingBox.Center().Z) + (2.6f * MathF.Pow(x, 0.75f) * offset);
+			SetupBestiaryModelWidget(
+				info.ModelName,
+				info.TextureOverride,
+				modelWidget,
+				offset,
+				autoRotate,
+				autoAspect
+			);
+		}
+
+		public static void SetupBestiaryModelWidget(string modelName,
+			string textureOverrideName,
+			ModelWidget modelWidget,
+			Vector3 offset,
+			bool autoRotate,
+			bool autoAspect)
+		{
+			Model model = ContentManager.Get<Model>(modelName);
+			SetModel(model,modelWidget);
+			modelWidget.Textures[model] = ContentManager.Get<Texture2D>(textureOverrideName);
+			Matrix[] absoluteTransforms = new Matrix[model.Bones.Count];
+			model.CopyAbsoluteBoneTransformsTo(absoluteTransforms);
+			BoundingBox boundingBox = model.CalculateAbsoluteBoundingBox(absoluteTransforms);
+			float x = MathUtils.Max(boundingBox.Size().X,1.4f * boundingBox.Size().Y,boundingBox.Size().Z);
+			modelWidget.ViewPosition = new Vector3(boundingBox.Center().X,1.5f,boundingBox.Center().Z) + (2.6f * MathF.Pow(x,0.75f) * offset);
 			modelWidget.ViewTarget = boundingBox.Center();
 			modelWidget.ViewFov = 0.3f;
-			modelWidget.AutoRotationVector = autoRotate ? new Vector3(0f, Math.Clamp(1.7f / boundingBox.Size().Length(), 0.25f, 1.4f), 0f) : Vector3.Zero;
-			if (autoAspect)
+			modelWidget.AutoRotationVector = autoRotate ? new Vector3(0f,Math.Clamp(1.7f / boundingBox.Size().Length(),0.25f,1.4f),0f) : Vector3.Zero;
+			if(autoAspect)
 			{
-				float num = Math.Clamp(boundingBox.Size().XZ.Length() / boundingBox.Size().Y, 1f, 1.5f);
-				modelWidget.Size = new Vector2(modelWidget.Size.Y * num, modelWidget.Size.Y);
+				float num = Math.Clamp(boundingBox.Size().XZ.Length() / boundingBox.Size().Y,1f,1.5f);
+				modelWidget.Size = new Vector2(modelWidget.Size.Y * num,modelWidget.Size.Y);
+			}
+		}
+
+		private static void SetModel(Model model,ModelWidget widget,int index = 0)
+		{
+			if(model != null)
+			{
+				if(widget.Models.Count == 0 || index >= widget.Models.Count)
+					widget.Models.Add(model);
+				else
+					widget.Models[index] = model;
+				widget.m_boneTransforms[model] = new Matrix?[model.Bones.Count];
+				widget.m_absoluteBoneTransforms[model] = new Matrix[model.Bones.Count];
+			}
+			else
+			{
+				widget.Models.RemoveAt(index);
 			}
 		}
 	}
