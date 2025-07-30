@@ -100,7 +100,7 @@ namespace Game
 				return;
 			}
 			ComponentBlockEntity blockEntity = m_subsystemBlockEntities.GetBlockEntity(cellFace.X,cellFace.Y,cellFace.Z);
-			blockEntity.GatherPickable(worldItem);
+			blockEntity?.GatherPickable(worldItem);
 		}
 		public override void OnHitByProjectile(MovingBlock movingBlock,WorldItem worldItem)
 		{
@@ -109,7 +109,7 @@ namespace Game
 				return;
 			}
 			ComponentBlockEntity blockEntity = m_subsystemBlockEntities.GetBlockEntity(movingBlock);
-			blockEntity.GatherPickable(worldItem);
+			blockEntity?.GatherPickable(worldItem);
 		}
 	}
 }
