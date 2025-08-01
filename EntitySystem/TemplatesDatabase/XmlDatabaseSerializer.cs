@@ -74,7 +74,7 @@ namespace TemplatesDatabase
 				string attributeValue13 = XmlUtils.GetAttributeValue<string>(item3, "Name");
 				try
 				{
-#if NOTOPENGLES
+#if Direct3D11
 					switch(attributeValue13)
 					{
 						case "Survivalcraft":

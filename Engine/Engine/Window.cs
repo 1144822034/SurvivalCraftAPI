@@ -260,7 +260,7 @@ namespace Engine
 
 #if ANDROID
         public const string WindowingLibrary = "Silk.NET.Windowing.Sdl";
-#else
+#elif !Direct3D11
         public const string WindowingLibrary = "Silk.NET.Windowing.Glfw";
         public const string InputLibrary = "Silk.NET.Input.Glfw";
 #endif
@@ -287,10 +287,12 @@ namespace Engine
                     Environment.Exit(1);
                 }
             };
+#if !Direct3D11
             Silk.NET.Windowing.Window.ShouldLoadFirstPartyPlatforms(false);
             Silk.NET.Windowing.Window.TryAdd(WindowingLibrary);
-#if NOTOPENGLES
-            GraphicsAPI api = new GraphicsAPI(ContextAPI.OpenGL, ContextProfile.Compatability, ContextFlags.ForwardCompatible, new APIVersion(4, 0));
+#endif
+#if Direct3D11
+            GraphicsAPI api = GraphicsAPI.None;
 #elif DEBUG
             GraphicsAPI api = new GraphicsAPI(ContextAPI.OpenGLES, ContextProfile.Compatability, ContextFlags.Debug, new APIVersion(3, 2));
 #elif ANDROID
@@ -334,7 +336,10 @@ namespace Engine
             m_view.ShouldSwapAutomatically = false;
             m_view.Load += LoadHandler;
             m_view.Run();//会阻塞，不要放置在前边
+#if Direct3D11
+#else
             GLWrapper.GL.Dispose();
+#endif
             m_view?.Dispose();
         }
 
@@ -529,8 +534,10 @@ namespace Engine
               Dispatcher.Initialize();
                Display.Initialize();
 #if !ANDROID
+#if !Direct3D11
                 InputWindowExtensions.ShouldLoadFirstPartyPlatforms(false);
                 InputWindowExtensions.TryAdd(InputLibrary);
+#endif
                 m_inputContext = m_view.CreateInput();
 #endif
               Keyboard.Initialize();

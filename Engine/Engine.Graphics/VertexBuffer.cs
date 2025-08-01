@@ -1,6 +1,6 @@
 using System;
 using System.Runtime.InteropServices;
-#if NOTOPENGLES
+#if Direct3D11
 using Silk.NET.OpenGL;
 #else
 using Silk.NET.OpenGLES;

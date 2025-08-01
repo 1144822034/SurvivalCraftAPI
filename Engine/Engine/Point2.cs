@@ -152,5 +152,21 @@ namespace Engine
 		{
 			return new Point2(p1.X / p2.X, p1.Y / p2.Y);
 		}
+
+        public unsafe Span<int> AsSpan()
+        {
+            fixed (int* ptr = &X)
+            {
+                return new Span<int>(ptr, 2);
+            }
+        }
+
+        public unsafe int* AsPointer()
+        {
+            fixed (int* ptr = &X)
+            {
+                return ptr;
+            }
+        }
 	}
 }

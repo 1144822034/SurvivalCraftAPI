@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Xml.Linq;
-#if NOTOPENGLES
+#if Direct3D11
 using Silk.NET.OpenGL;
 #else
 using Silk.NET.OpenGLES;

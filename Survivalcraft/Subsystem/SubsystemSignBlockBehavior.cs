@@ -2,7 +2,7 @@ using Engine;
 using Engine.Graphics;
 using Engine.Media;
 using Jint.Native;
-#if NOTOPENGLES
+#if Direct3D11
 using Silk.NET.OpenGL;
 #else
 using Silk.NET.OpenGLES;

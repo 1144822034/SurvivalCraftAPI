@@ -1,7 +1,7 @@
 using System;
 using System.Runtime.InteropServices;
-#if NOTOPENGLES
-using Silk.NET.OpenGL;
+#if Direct3D11
+using Silk.NET.Direct3D;
 #else
 using Silk.NET.OpenGLES;
 #endif
@@ -130,6 +130,18 @@ namespace Engine.Graphics
         public static void DrawUser<T>(PrimitiveType primitiveType, Shader shader, VertexDeclaration vertexDeclaration, T[] vertexData, int startVertex, int verticesCount) where T : struct
         {
             VerifyParametersDrawUser(primitiveType, shader, vertexDeclaration, vertexData, startVertex, verticesCount);
+#if Direct3D11
+            int num = DXWrapper.AppendUserVertices<T>(vertexData, vertexDeclaration.VertexStride, startVertex, verticesCount);
+            DXWrapper.ApplyViewportScissor(Display.Viewport, Display.ScissorRectangle);
+            DXWrapper.ApplyRasterizerState(Display.RasterizerState);
+            DXWrapper.ApplyDepthStencilState(Display.DepthStencilState);
+            DXWrapper.ApplyBlendState(Display.BlendState);
+            DXWrapper.ApplyShaderAndRenderTarget(Display.RenderTarget, shader, vertexDeclaration);
+            DXWrapper.ApplyVertexBuffer(DXWrapper.UserVertexBuffer, vertexDeclaration.VertexStride, num);
+            DXWrapper.ApplyIndexBuffer(null, Format.R16_UInt, 0);
+            DXWrapper.ApplyPrimitiveType(primitiveType);
+            DXWrapper.Context.Draw(verticesCount, 0);
+#else
             var gCHandle = GCHandle.Alloc(vertexData, GCHandleType.Pinned);
             try
             {
@@ -145,6 +157,7 @@ namespace Engine.Graphics
             {
                 gCHandle.Free();
             }
+#endif
         }
 
         public static unsafe void DrawUserIndexed<T>(PrimitiveType primitiveType, Shader shader, VertexDeclaration vertexDeclaration, T[] vertexData, int startVertex, int verticesCount, int[] indexData, int startIndex, int indicesCount) where T : struct
@@ -205,8 +218,12 @@ namespace Engine.Graphics
 
         public static void Initialize()
         {
+#if Direct3D11
+            DXWrapper.CreateDevice();
+#else
             GLWrapper.Initialize();
             GLWrapper.InitializeCache();
+#endif
             Resize();
         }
 
@@ -227,6 +244,9 @@ namespace Engine.Graphics
             BackbufferSize = new Point2(Window.Size.X, Window.Size.Y);
             Viewport = new Viewport(0, 0, Window.Size.X, Window.Size.Y);
             ScissorRectangle = new Rectangle(0, 0, Window.Size.X, Window.Size.Y);
+#if Direct3D11
+            DXWrapper.ResizeSwapChainIfNeeded();
+#endif
         }
 
         public static long GetGpuMemoryUsage()

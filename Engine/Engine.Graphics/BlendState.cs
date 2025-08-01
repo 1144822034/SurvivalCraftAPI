@@ -2,19 +2,19 @@ namespace Engine.Graphics
 {
 	public class BlendState : LockOnFirstUse
 	{
-		private BlendFunction m_alphaBlendFunction;
+        public BlendFunction m_alphaBlendFunction;
 
-		private Blend m_alphaSourceBlend = Blend.One;
+        public Blend m_alphaSourceBlend = Blend.One;
 
-		private Blend m_alphaDestinationBlend;
+        public Blend m_alphaDestinationBlend;
 
-		private BlendFunction m_colorBlendFunction;
+        public BlendFunction m_colorBlendFunction;
 
-		private Blend m_colorSourceBlend = Blend.One;
+        public Blend m_colorSourceBlend = Blend.One;
 
-		private Blend m_colorDestinationBlend;
+        public Blend m_colorDestinationBlend;
 
-		private Vector4 m_blendFactor = Vector4.Zero;
+        public Vector4 m_blendFactor = Vector4.Zero;
 
 		public static readonly BlendState Opaque = new()
 		{

@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Runtime.InteropServices;
-#if NOTOPENGLES
+#if Direct3D11
 using Silk.NET.OpenGL;
 #else
 using Silk.NET.OpenGLES;
@@ -118,7 +118,7 @@ namespace Engine.Graphics
                 bits[i] = GL.GetInteger((GetPName)(i+3410));
             }
             GL.GetInteger(GetPName.MaxTextureSize, out int maxTextureSize);
-#if NOTOPENGLES
+#if Direct3D11
             string OpenGLVendor = $"OpenGL, Vendor={GL.GetStringS(StringName.Vendor) ?? string.Empty}";
 #else
             string OpenGLVendor = $"OpenGL ES, Vendor={GL.GetStringS(StringName.Vendor) ?? string.Empty}";
@@ -900,7 +900,7 @@ namespace Engine.Graphics
 			};
 		}
 
-#if NOTOPENGLES
+#if Direct3D11
         public static Silk.NET.OpenGL.PrimitiveType TranslatePrimitiveType(PrimitiveType primitiveType)
         {
             return primitiveType switch

@@ -289,5 +289,21 @@ namespace Engine
             }
             return this;
         }
+
+        public unsafe Span<float> AsSpan()
+        {
+            fixed (float* ptr = &X)
+            {
+                return new Span<float>(ptr, 4);
+            }
+        }
+
+        public unsafe float* AsPointer()
+        {
+            fixed (float* ptr = &X)
+            {
+                return ptr;
+            }
+        }
 	}
 }
