@@ -1,7 +1,8 @@
 using System;
 using System.Runtime.InteropServices;
 #if Direct3D11
-using Silk.NET.OpenGL;
+using SharpDX;
+using SharpDX.Direct3D11;
 #else
 using Silk.NET.OpenGLES;
 #endif
@@ -11,7 +12,11 @@ namespace Engine.Graphics
 {
 	public  class IndexBuffer : GraphicsResource
 	{
+#if Direct3D11
+        public SharpDX.Direct3D11.Buffer m_buffer;
+#else
         public int m_buffer;
+#endif
 
 		public string DebugName
 		{
@@ -62,8 +67,14 @@ namespace Engine.Graphics
 			{
 				int num = Utilities.SizeOf<T>();
 				int size = IndexFormat.GetSize();
+#if Direct3D11
+                DataBox dataBox = new (gCHandle.AddrOfPinnedObject() + (sourceStartIndex * num), 1, 0);
+                ResourceRegion resourceRegion = new (targetStartIndex * size, 0, 0, (targetStartIndex * size) + (sourceCount * num), 1, 1);
+                DXWrapper.Context.UpdateSubresource(dataBox, m_buffer, 0, resourceRegion);
+#else
 				GLWrapper.BindBuffer(BufferTargetARB.ElementArrayBuffer, m_buffer);
 				GLWrapper.GL.BufferSubData(BufferTargetARB.ElementArrayBuffer, new IntPtr(targetStartIndex * size), new UIntPtr((uint)(num * sourceCount)), (gCHandle.AddrOfPinnedObject() + (sourceStartIndex * num)).ToPointer());
+#endif
 			}
 			finally
 			{
@@ -83,19 +94,27 @@ namespace Engine.Graphics
 
 		public unsafe void AllocateBuffer()
 		{
+#if Direct3D11
+            m_buffer = new SharpDX.Direct3D11.Buffer(DXWrapper.Device, IndexFormat.GetSize() * IndicesCount, ResourceUsage.Default, BindFlags.IndexBuffer, CpuAccessFlags.None, ResourceOptionFlags.None, 0);
+#else
 			GLWrapper.GL.GenBuffers(1, out uint buffer);
             m_buffer = (int)buffer;
 			GLWrapper.BindBuffer(BufferTargetARB.ElementArrayBuffer, m_buffer);
 			GLWrapper.GL.BufferData(BufferTargetARB.ElementArrayBuffer, new UIntPtr((uint)(IndexFormat.GetSize() * IndicesCount)), null, BufferUsageARB.StaticDraw);
+#endif
 		}
 
         public void DeleteBuffer()
 		{
+#if Direct3D11
+            Utilities.Dispose(ref m_buffer);
+#else
 			if (m_buffer != 0)
 			{
 				GLWrapper.DeleteBuffer(BufferTargetARB.ElementArrayBuffer, m_buffer);
 				m_buffer = 0;
 			}
+#endif
 		}
 
 		public override int GetGpuMemoryUsage()

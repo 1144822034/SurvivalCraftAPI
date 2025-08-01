@@ -2,11 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Runtime.InteropServices;
-#if Direct3D11
-using Silk.NET.OpenGL;
-#else
 using Silk.NET.OpenGLES;
-#endif
 
 namespace Engine.Graphics
 {
@@ -102,6 +98,8 @@ namespace Engine.Graphics
 
         public static int GL_MAX_COMBINED_TEXTURE_IMAGE_UNITS;
 
+        public static int GL_MAX_TEXTURE_SIZE;
+
 		public static void Initialize()
         {
             GL = GL.GetApi(Window.m_view);
@@ -117,13 +115,9 @@ namespace Engine.Graphics
             {
                 bits[i] = GL.GetInteger((GetPName)(i+3410));
             }
-            GL.GetInteger(GetPName.MaxTextureSize, out int maxTextureSize);
-#if Direct3D11
-            string OpenGLVendor = $"OpenGL, Vendor={GL.GetStringS(StringName.Vendor) ?? string.Empty}";
-#else
+            GL.GetInteger(GetPName.MaxTextureSize, out GL_MAX_TEXTURE_SIZE);
             string OpenGLVendor = $"OpenGL ES, Vendor={GL.GetStringS(StringName.Vendor) ?? string.Empty}";
-#endif
-            Display.DeviceDescription = $"{OpenGLVendor}, Renderer={GL.GetStringS(StringName.Renderer) ?? string.Empty}, Version={GL.GetStringS(StringName.Version) ?? string.Empty}, R={bits[0]} G={bits[1]} B={bits[2]} A={bits[3]}, D={bits[4]} S={bits[5]}, MaxTextureSize={maxTextureSize}";
+            Display.DeviceDescription = $"{OpenGLVendor}, Renderer={GL.GetStringS(StringName.Renderer) ?? string.Empty}, Version={GL.GetStringS(StringName.Version) ?? string.Empty}, R={bits[0]} G={bits[1]} B={bits[2]} A={bits[3]}, D={bits[4]} S={bits[5]}, MaxTextureSize={GL_MAX_TEXTURE_SIZE}";
             Log.Information("Initialized display device: " + Display.DeviceDescription);
 			string @string = GL.GetStringS(StringName.Extensions);
 			GL_EXT_texture_filter_anisotropic = @string?.Contains("GL_EXT_texture_filter_anisotropic") ?? false;
@@ -900,22 +894,6 @@ namespace Engine.Graphics
 			};
 		}
 
-#if Direct3D11
-        public static Silk.NET.OpenGL.PrimitiveType TranslatePrimitiveType(PrimitiveType primitiveType)
-        {
-            return primitiveType switch
-            {
-                PrimitiveType.LineList => Silk.NET.OpenGL.PrimitiveType.Lines,
-                PrimitiveType.LineStrip => Silk.NET.OpenGL.PrimitiveType.LineStrip,
-                PrimitiveType.TriangleList => Silk.NET.OpenGL.PrimitiveType.Triangles,
-                PrimitiveType.TriangleStrip => Silk.NET.OpenGL.PrimitiveType.TriangleStrip,
-                PrimitiveType.Points => Silk.NET.OpenGL.PrimitiveType.Points,
-                PrimitiveType.LineLoop => Silk.NET.OpenGL.PrimitiveType.LineLoop,
-                PrimitiveType.TriangleFan => Silk.NET.OpenGL.PrimitiveType.TriangleFan,
-                _ => throw new InvalidOperationException("Unsupported primitive type."),
-            };
-        }
-#else
 		public static Silk.NET.OpenGLES.PrimitiveType TranslatePrimitiveType(PrimitiveType primitiveType)
 		{
 			return primitiveType switch
@@ -930,7 +908,6 @@ namespace Engine.Graphics
 				_ => throw new InvalidOperationException("Unsupported primitive type."),
 			};
 		}
-#endif
 
 		public static TextureMinFilter TranslateTextureFilterModeMin(TextureFilterMode filterMode, bool isMipmapped)
 		{

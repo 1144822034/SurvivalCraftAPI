@@ -260,7 +260,7 @@ namespace Engine
 
 #if ANDROID
         public const string WindowingLibrary = "Silk.NET.Windowing.Sdl";
-#elif !Direct3D11
+#else
         public const string WindowingLibrary = "Silk.NET.Windowing.Glfw";
         public const string InputLibrary = "Silk.NET.Input.Glfw";
 #endif
@@ -287,10 +287,8 @@ namespace Engine
                     Environment.Exit(1);
                 }
             };
-#if !Direct3D11
             Silk.NET.Windowing.Window.ShouldLoadFirstPartyPlatforms(false);
             Silk.NET.Windowing.Window.TryAdd(WindowingLibrary);
-#endif
 #if Direct3D11
             GraphicsAPI api = GraphicsAPI.None;
 #elif DEBUG
@@ -421,7 +419,11 @@ namespace Engine
             AfterFrameAll();
             if (!m_closing)
             {
+#if Direct3D11
+                DXWrapper.Present(m_swapInterval ?? 1);
+#else
                 m_view.GLContext?.SwapBuffers();
+#endif
             }
             else
             {
@@ -534,10 +536,8 @@ namespace Engine
               Dispatcher.Initialize();
                Display.Initialize();
 #if !ANDROID
-#if !Direct3D11
                 InputWindowExtensions.ShouldLoadFirstPartyPlatforms(false);
                 InputWindowExtensions.TryAdd(InputLibrary);
-#endif
                 m_inputContext = m_view.CreateInput();
 #endif
               Keyboard.Initialize();

@@ -3,7 +3,9 @@ using System.IO;
 using System.Runtime.InteropServices;
 using Engine.Media;
 #if Direct3D11
-using Silk.NET.OpenGL;
+using SharpDX.DXGI;
+using SharpDX;
+using SharpDX.Direct3D11;
 #else
 using Silk.NET.OpenGLES;
 #endif
@@ -15,9 +17,17 @@ namespace Engine.Graphics
     {
         private DepthFormat m_depthFormat;
 
+        #if Direct3D11
+        public RenderTargetView m_colorTextureView;
+
+        public SharpDX.Direct3D11.Texture2D m_depthTexture;
+        
+        public DepthStencilView m_depthTextureView;
+#else
         public int m_frameBuffer;
 
         public int m_depthBuffer;
+#endif
 
         public DepthFormat DepthFormat
         {
@@ -71,8 +81,7 @@ namespace Engine.Graphics
             VerifyNotDisposed();
             SixLabors.ImageSharp.Image<Rgba32> image = new(Image.DefaultImageSharpConfiguration, sourceRectangle.Width, sourceRectangle.Height);
             image.DangerousTryGetSinglePixelMemory(out Memory<Rgba32> memory);
-            GLWrapper.BindFramebuffer(m_frameBuffer);
-            GLWrapper.GL.ReadPixels(sourceRectangle.Left, sourceRectangle.Top, (uint)sourceRectangle.Width, (uint)sourceRectangle.Height, PixelFormat.Rgba, PixelType.UnsignedByte, memory.Pin().Pointer);
+            GetDataInternal((nint)memory.Pin().Pointer, sourceRectangle);
             return new Image(image);
         }
 
@@ -84,14 +93,56 @@ namespace Engine.Graphics
 
         public unsafe void GetDataInternal(nint target, Rectangle sourceRectangle)
         {
+#if Direct3D11
+            int size = ColorFormat.GetSize();
+            Texture2DDescription texture2DDescription = new()
+            {
+                ArraySize = 1,
+                BindFlags = BindFlags.None,
+                CpuAccessFlags = CpuAccessFlags.Read,
+                Format = DXWrapper.TranslateColorFormat(ColorFormat),
+                MipLevels = 1,
+                OptionFlags = ResourceOptionFlags.None,
+                SampleDescription = new SampleDescription(1, 0),
+                Usage = ResourceUsage.Staging,
+                Width = sourceRectangle.Width,
+                Height = sourceRectangle.Height
+            };
+            using (SharpDX.Direct3D11.Texture2D texture2D = new(DXWrapper.Device, texture2DDescription))
+            {
+                ResourceRegion resourceRegion = new ResourceRegion(sourceRectangle.Left, sourceRectangle.Top, 0, sourceRectangle.Left + sourceRectangle.Width, sourceRectangle.Top + sourceRectangle.Height, 1);
+                DXWrapper.Context.CopySubresourceRegion(m_texture, 0, resourceRegion, texture2D, 0);
+                DataStream dataStream = null;
+                try
+                {
+                    DataBox dataBox = DXWrapper.Context.MapSubresource(texture2D, 0, MapMode.Read, SharpDX.Direct3D11.MapFlags.None, out dataStream);
+                    int num = 0;
+                    for (int i = 0; i < sourceRectangle.Height; i++)
+                    {
+                        dataStream.Position = i * dataBox.RowPitch;
+                        dataStream.Read(target, num * size, sourceRectangle.Width * size);
+                        num += sourceRectangle.Width;
+                    }
+                }
+                finally
+                {
+                    dataStream?.Dispose();
+                }
+            }
+#else
             GLWrapper.BindFramebuffer(m_frameBuffer);
             GLWrapper.GL.ReadPixels(sourceRectangle.Left, sourceRectangle.Top, (uint)sourceRectangle.Width, (uint)sourceRectangle.Height, PixelFormat.Rgba, PixelType.UnsignedByte, target.ToPointer());
+#endif
         }
 
         public void GenerateMipMaps()
         {
+#if Direct3D11
+            DXWrapper.Context.GenerateMips(m_textureView);
+#else
             GLWrapper.BindTexture(TextureTarget.Texture2D, m_texture, forceBind: false);
             GLWrapper.GL.GenerateMipmap(TextureTarget.Texture2D);
+#endif
         }
 
         public override void HandleDeviceLost()
@@ -101,11 +152,35 @@ namespace Engine.Graphics
 
         public override void HandleDeviceReset()
         {
+#if Direct3D11
+            base.HandleDeviceReset();
+#endif
             AllocateRenderTarget();
         }
 
         public void AllocateRenderTarget()
         {
+#if Direct3D11
+            m_colorTextureView = new RenderTargetView(DXWrapper.Device, m_texture);
+            if (DepthFormat != DepthFormat.None)
+            {
+                Texture2DDescription texture2DDescription = new Texture2DDescription
+                {
+                    ArraySize = 1,
+                    BindFlags = BindFlags.DepthStencil,
+                    CpuAccessFlags = CpuAccessFlags.None,
+                    Format = DXWrapper.TranslateDepthFormat(DepthFormat),
+                    MipLevels = 1,
+                    OptionFlags = ResourceOptionFlags.None,
+                    SampleDescription = new SampleDescription(1, 0),
+                    Usage = ResourceUsage.Default,
+                    Width = Width,
+                    Height = Height
+                };
+                m_depthTexture = new SharpDX.Direct3D11.Texture2D(DXWrapper.Device, texture2DDescription);
+                m_depthTextureView = new DepthStencilView(DXWrapper.Device, m_depthTexture);
+            }
+#else
             GLWrapper.GL.GenFramebuffers(1u, out uint frameBuffer);
             m_frameBuffer = (int)frameBuffer;
             GLWrapper.BindFramebuffer(m_frameBuffer);
@@ -135,10 +210,16 @@ namespace Engine.Graphics
             {
                 throw new InvalidOperationException($"Error creating framebuffer ({framebufferErrorCode.ToString()}).");
             }
+#endif
         }
 
         public void DeleteRenderTarget()
         {
+#if Direct3D11
+            Utilities.Dispose(ref m_colorTextureView);
+            Utilities.Dispose(ref m_depthTexture);
+            Utilities.Dispose(ref m_depthTextureView);
+#else
             if (m_depthBuffer != 0)
             {
                 uint depthBuffer = (uint)m_depthBuffer;
@@ -150,6 +231,7 @@ namespace Engine.Graphics
                 GLWrapper.DeleteFramebuffer(m_frameBuffer);
                 m_frameBuffer = 0;
             }
+#endif
         }
 
         public new static RenderTarget2D Load(Color color, int width, int height)
@@ -170,8 +252,12 @@ namespace Engine.Graphics
             renderTarget2D.SetData(image.m_trueImage);
             if (mipLevelsCount > 1)
             {
+#if Direct3D11
+                DXWrapper.Context.GenerateMips(renderTarget2D.m_textureView);
+#else
                 GLWrapper.BindTexture(TextureTarget.Texture2D, renderTarget2D.m_texture, forceBind: false);
                 GLWrapper.GL.GenerateMipmap(TextureTarget.Texture2D);
+#endif
             }
             return renderTarget2D;
         }
@@ -218,7 +304,7 @@ namespace Engine.Graphics
 
 		public override int GetGpuMemoryUsage()
 		{
-			return base.GetGpuMemoryUsage() + (DepthFormat.GetSize() * base.Width * base.Height);
+			return base.GetGpuMemoryUsage() + (DepthFormat.GetSize() * Width * Height);
 		}
 
 		private void InitializeRenderTarget2D(int width, int height, int mipLevelsCount, ColorFormat colorFormat, DepthFormat depthFormat)

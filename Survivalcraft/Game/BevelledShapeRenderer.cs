@@ -37,9 +37,9 @@ public static class BevelledShapeRenderer
 
 	private static DynamicArray<Vector2> TmpNormals = new DynamicArray<Vector2>();
 
-	private static DynamicArray<ushort> TmpIndices = new DynamicArray<ushort>();
+	private static DynamicArray<int> TmpIndices = new DynamicArray<int>();
 
-	private static DynamicArray<ushort> TmpIndicesTriangulation = new DynamicArray<ushort>();
+	private static DynamicArray<int> TmpIndicesTriangulation = new DynamicArray<int>();
 
 	private static DynamicArray<PathRenderer.Point> TmpPathPoints = new DynamicArray<PathRenderer.Point>();
 
@@ -78,7 +78,7 @@ public static class BevelledShapeRenderer
 			}
 			for (int k = 0; k < TmpIndices.Count; k++)
 			{
-				batch.TriangleIndices.Add((ushort)(TmpIndices[k] + count));
+				batch.TriangleIndices.Add(TmpIndices[k] + count);
 			}
 			if (antialiasSize > 0f)
 			{
@@ -104,7 +104,7 @@ public static class BevelledShapeRenderer
 			}
 			for (int m = 0; m < TmpIndices.Count; m++)
 			{
-				batch.TriangleIndices.Add((ushort)(TmpIndices[m] + count2));
+				batch.TriangleIndices.Add(TmpIndices[m] + count2);
 			}
 			if (antialiasSize > 0f)
 			{
@@ -136,7 +136,7 @@ public static class BevelledShapeRenderer
 		}
 		for (int j = 0; j < TmpIndices.Count; j++)
 		{
-			batch.TriangleIndices.Add((ushort)(TmpIndices[j] + count));
+			batch.TriangleIndices.Add(TmpIndices[j] + count);
 		}
 	}
 
@@ -158,9 +158,9 @@ public static class BevelledShapeRenderer
 			item.TexCoord = position.XY * vector + textureOffset;
 			triangleVertices.Add(item);
 		}
-		foreach (ushort triangleIndex in TmpBatch.TriangleIndices)
+		foreach (int triangleIndex in TmpBatch.TriangleIndices)
 		{
-			batch.TriangleIndices.Add((ushort)(triangleIndex + count));
+			batch.TriangleIndices.Add(triangleIndex + count);
 		}
 	}
 
@@ -240,19 +240,19 @@ public static class BevelledShapeRenderer
 		positions.Count = count;
 	}
 
-	private static void Triangulate(DynamicArray<Vector2> source, DynamicArray<ushort> destination)
+	private static void Triangulate(DynamicArray<Vector2> source, DynamicArray<int> destination)
 	{
 		TmpIndicesTriangulation.Count = source.Count;
 		for (int i = 0; i < source.Count; i++)
 		{
-			TmpIndicesTriangulation.Array[i] = (ushort)i;
+			TmpIndicesTriangulation.Array[i] = i;
 		}
 		while (true)
 		{
 			int num = TmpIndicesTriangulation.Count - 1;
-			ushort num2;
-			ushort num3;
-			ushort num4;
+			int num2;
+			int num3;
+			int num4;
 			while (true)
 			{
 				if (num >= 3)

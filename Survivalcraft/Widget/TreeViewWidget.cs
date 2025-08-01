@@ -389,7 +389,7 @@ namespace Game
 			ParentTree = null;
 			ParentNode = null;
 			//Icon?.Dispose();
-			if(Icon != null && Icon.m_texture!=0)
+			if(Icon != null)
 			{
 				if(Icon.Tag is Image image)
 				{

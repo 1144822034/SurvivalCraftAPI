@@ -78,13 +78,13 @@ namespace TemplatesDatabase
 					switch(attributeValue13)
 					{
 						case "Survivalcraft":
-							attributeValue13 = "SurvivalcraftNotOpenGLES";
+							attributeValue13 = "SurvivalcraftDirect3D11";
 							break;
 						case "Engine":
-							attributeValue13 = "EngineNotOpenGLES";
+							attributeValue13 = "EngineDirect3D11";
 							break;
 						case "EntitySystem":
-							attributeValue13 = "EntitySystemNotOpenGLES";
+							attributeValue13 = "EntitySystemDirect3D11";
 							break;
 					}
 #endif

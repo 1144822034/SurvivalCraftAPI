@@ -453,7 +453,6 @@ namespace Engine
             return new T[capacity];
         }
 
-        // Token: 0x06000578 RID: 1400 RVA: 0x0000412B File Offset: 0x0000232B
         protected virtual void Free(T[] array)
         {
         }
