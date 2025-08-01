@@ -99,6 +99,18 @@ namespace Game
         }
 
 		/// <summary>
+		/// 当前等级是否可以使用手中物品进行：挖掘，使用，伤害，瞄准
+		/// Mod开发者可以自定义物品是否符合使用条件
+		/// </summary>
+		/// <param name="toolValue">方块值</param>
+		/// <param name="canUse">能使用</param>
+		/// <param name="skip">跳过原版后，返回canUse值</param>
+		public virtual void IsLevelSufficientForTool(ComponentMiner miner,int toolValue,ref bool canUse,out bool skip)
+        {
+			skip = false;
+		}
+
+		/// <summary>
 		/// 在生物攻击时执行
 		/// </summary>
 		/// <param name="componentMiner">攻击者</param>

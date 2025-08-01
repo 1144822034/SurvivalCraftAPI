@@ -1,5 +1,6 @@
 using Engine;
 using GameEntitySystem;
+using System;
 using System.Globalization;
 using TemplatesDatabase;
 
@@ -819,7 +820,14 @@ namespace Game
 
 		public virtual bool IsLevelSufficientForTool(int toolValue)
 		{
-			if (m_subsystemGameInfo.WorldSettings.GameMode != 0 && m_subsystemGameInfo.WorldSettings.AreAdventureSurvivalMechanicsEnabled)
+			var canUse = false;
+			var skip = false;
+			ModsManager.HookAction("IsLevelSufficientForTool",modLoader => {
+				modLoader.IsLevelSufficientForTool(this,toolValue,ref canUse,out bool skip);
+				return false;
+			});
+			if(skip) return canUse;
+			if(m_subsystemGameInfo.WorldSettings.GameMode != 0 && m_subsystemGameInfo.WorldSettings.AreAdventureSurvivalMechanicsEnabled)
 			{
 				Block block = BlocksManager.Blocks[Terrain.ExtractContents(toolValue)];
 				if (ComponentPlayer != null && ComponentPlayer.PlayerData.Level < block.GetPlayerLevelRequired(toolValue))
