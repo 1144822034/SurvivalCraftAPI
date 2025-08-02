@@ -310,6 +310,9 @@ namespace Engine.Graphics
 
         public static void Dispose()
         {
+#if Direct3D11
+            DXWrapper.DisposeDevice();
+#endif
         }
 
         public static void BeforeFrame()

@@ -663,17 +663,65 @@ namespace Engine.Graphics
 
         public static unsafe bool Compare(Vector3* a, Vector3* b)
         {
-            return *(long*)a == *(long*)b && *(int*)(a + ((IntPtr)2 * 4 / sizeof(Vector3))) == *(int*)(b + ((IntPtr)2 * 4 / sizeof(Vector3)));
+            if (*(long*)a != *(long*)b)
+            {
+                return false;
+            }
+            if (*(int*)((byte*)a + (2 * (nint)4)) != *(int*)((byte*)b + (2 * (nint)4)))
+            {
+                return false;
+            }
+            return true;
         }
 
         public static unsafe bool Compare(Vector4* a, Vector4* b)
         {
-            return *(long*)a == *(long*)b && *(long*)(a + (8 / sizeof(Vector4))) == *(long*)(b + (8 / sizeof(Vector4)));
+            if (*(long*)a != *(long*)b)
+            {
+                return false;
+            }
+            if (*(long*)((byte*)a + 8) != *(long*)((byte*)b + 8))
+            {
+                return false;
+            }
+            return true;
         }
 
         public static unsafe bool Compare(Matrix* a, Matrix* b)
         {
-            return *(long*)a == *(long*)b && *(long*)(a + (8 / sizeof(Matrix))) == *(long*)(b + (8 / sizeof(Matrix))) && *(long*)(a + ((IntPtr)2 * 8 / sizeof(Matrix))) == *(long*)(b + ((IntPtr)2 * 8 / sizeof(Matrix))) && *(long*)(a + ((IntPtr)3 * 8 / sizeof(Matrix))) == *(long*)(b + ((IntPtr)3 * 8 / sizeof(Matrix))) && *(long*)(a + ((IntPtr)4 * 8 / sizeof(Matrix))) == *(long*)(b + ((IntPtr)4 * 8 / sizeof(Matrix))) && *(long*)(a + ((IntPtr)5 * 8 / sizeof(Matrix))) == *(long*)(b + ((IntPtr)5 * 8 / sizeof(Matrix))) && *(long*)(a + ((IntPtr)6 * 8 / sizeof(Matrix))) == *(long*)(b + ((IntPtr)6 * 8 / sizeof(Matrix))) && *(long*)(a + ((IntPtr)7 * 8 / sizeof(Matrix))) == *(long*)(b + ((IntPtr)7 * 8 / sizeof(Matrix)));
+            if (*(long*)a != *(long*)b)
+            {
+                return false;
+            }
+            if (*(long*)((byte*)a + 8) != *(long*)((byte*)b + 8))
+            {
+                return false;
+            }
+            if (*(long*)((byte*)a + (2 * (nint)8)) != *(long*)((byte*)b + (2 * (nint)8)))
+            {
+                return false;
+            }
+            if (*(long*)((byte*)a + (3 * (nint)8)) != *(long*)((byte*)b + (3 * (nint)8)))
+            {
+                return false;
+            }
+            if (*(long*)((byte*)a + (4 * (nint)8)) != *(long*)((byte*)b + (4 * (nint)8)))
+            {
+                return false;
+            }
+            if (*(long*)((byte*)a + (5 * (nint)8)) != *(long*)((byte*)b + (5 * (nint)8)))
+            {
+                return false;
+            }
+            if (*(long*)((byte*)a + (6 * (nint)8)) != *(long*)((byte*)b + (6 * (nint)8)))
+            {
+                return false;
+            }
+            if (*(long*)((byte*)a + (7 * (nint)8)) != *(long*)((byte*)b + (7 * (nint)8)))
+            {
+                return false;
+            }
+            return true;
         }
 	}
 }

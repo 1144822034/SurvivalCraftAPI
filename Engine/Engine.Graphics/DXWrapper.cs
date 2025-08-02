@@ -77,7 +77,6 @@ namespace Engine.Graphics
             using (Device device = new(
                 DriverType.Hardware,
                 deviceCreationFlags,
-                FeatureLevel.Level_11_1,
                 FeatureLevel.Level_11_0,
                 FeatureLevel.Level_10_1,
                 FeatureLevel.Level_10_0,

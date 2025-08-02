@@ -80,7 +80,7 @@ namespace Engine.Graphics
             return m_parametersByName.TryGetValue(name, out ShaderParameter value)
                 ? value
                 : allowNull
-                    ? new ShaderParameter("null", ShaderParameterType.Null)
+                    ? null
                     : throw new InvalidOperationException($"Parameter \"{name}\" not found.");
         }
 

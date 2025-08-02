@@ -81,7 +81,7 @@
         <Using Include="System.IO" />
         <ProjectReference Include="..\Engine\Engine.csproj" />
         <ProjectReference Include="..\EntitySystem\EntitySystem.csproj" />
-        <PackageReference Include="Jint" Version="4.2.2" />
+        <PackageReference Include="Jint" Version="4.4.1" />
         <PackageReference Include="System.Net.Http" Version="4.3.4" />
         <PackageReference Include="System.Private.Uri" Version="4.3.2" />
         <PackageReference Include="System.Text.RegularExpressions" Version="4.3.1" />
