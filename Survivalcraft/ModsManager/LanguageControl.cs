@@ -83,7 +83,6 @@ namespace Game
                     MergeJsonNode(jsonNode, newJsonNode);
                 }
             }
-			SetUsual();
 		}
 
 		public static void LoadEnglishJson(Stream stream)
@@ -110,31 +109,56 @@ namespace Game
 					MergeJsonNode(englishJsonNode, newJsonNode);
 				}
 			}
-			SetUsual();
 		}
 
-		public static void SetUsual()
+		public static void SetUsual(bool force = false)
 		{
-			Ok ??= Get("Usual", "ok");
-			Cancel ??= Get("Usual", "cancel");
-			None ??= Get("Usual", "none");
-			Nothing ??= Get("Usual", "nothing");
-			Error ??= Get("Usual", "error");
-			On ??= Get("Usual", "on");
-			Off ??= Get("Usual", "off");
-			Disable ??= Get("Usual", "disable");
-			Enable ??= Get("Usual", "enable");
-			Warning ??= Get("Usual", "warning");
-			Back ??= Get("Usual", "back");
-			Allowed ??= Get("Usual", "allowed");
-			NAllowed ??= Get("Usual", "not allowed");
-			Unknown ??= Get("Usual", "unknown");
-			Yes ??= Get("Usual", "yes");
-			No ??= Get("Usual", "no");
-			Unavailable ??= Get("Usual", "Unavailable");
-			Exists ??= Get("Usual", "exist");
-			Success ??= Get("Usual", "success");
-			Delete ??= Get("Usual", "delete");
+			if(force)
+			{
+				Ok = Get("Usual","ok");
+				Cancel = Get("Usual","cancel");
+				None = Get("Usual","none");
+				Nothing = Get("Usual","nothing");
+				Error = Get("Usual","error");
+				On = Get("Usual","on");
+				Off = Get("Usual","off");
+				Disable = Get("Usual","disable");
+				Enable = Get("Usual","enable");
+				Warning = Get("Usual","warning");
+				Back = Get("Usual","back");
+				Allowed = Get("Usual","allowed");
+				NAllowed = Get("Usual","not allowed");
+				Unknown = Get("Usual","unknown");
+				Yes = Get("Usual","yes");
+				No = Get("Usual","no");
+				Unavailable = Get("Usual","Unavailable");
+				Exists = Get("Usual","exist");
+				Success = Get("Usual","success");
+				Delete = Get("Usual","delete");
+			}
+			else
+			{
+				Ok ??= Get("Usual","ok");
+				Cancel ??= Get("Usual","cancel");
+				None ??= Get("Usual","none");
+				Nothing ??= Get("Usual","nothing");
+				Error ??= Get("Usual","error");
+				On ??= Get("Usual","on");
+				Off ??= Get("Usual","off");
+				Disable ??= Get("Usual","disable");
+				Enable ??= Get("Usual","enable");
+				Warning ??= Get("Usual","warning");
+				Back ??= Get("Usual","back");
+				Allowed ??= Get("Usual","allowed");
+				NAllowed ??= Get("Usual","not allowed");
+				Unknown ??= Get("Usual","unknown");
+				Yes ??= Get("Usual","yes");
+				No ??= Get("Usual","no");
+				Unavailable ??= Get("Usual","Unavailable");
+				Exists ??= Get("Usual","exist");
+				Success ??= Get("Usual","success");
+				Delete ??= Get("Usual","delete");
+			}
 		}
 		public static void MergeJsonNode(JsonNode oldNode, JsonNode newNode)
 		{
@@ -372,7 +396,7 @@ namespace Game
 			if(languageType == "en-US" && englishJsonNode != null)
 			{
 				jsonNode = englishJsonNode;
-				SetUsual();
+				SetUsual(true);
 			}
 			else
 			{
@@ -380,6 +404,7 @@ namespace Game
 				{
 					c.LoadLauguage();
 				}
+				SetUsual(true);
 			}
 #if WINDOWS
 			string title = $"{Get("Usual", "gameName")} {ModsManager.ShortGameVersion} - API {ModsManager.APIVersionString}";
