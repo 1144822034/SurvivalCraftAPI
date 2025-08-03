@@ -9,8 +9,8 @@
 		<RootNamespace>Engine</RootNamespace>
 		<Version>2.4.0.0</Version>
 		<WarningLevel>2</WarningLevel>
-		<AssemblyName Condition="'$(Configuration)' != 'NotOpenGLES'">Engine</AssemblyName>
-		<AssemblyName Condition="'$(Configuration)' == 'NotOpenGLES'">EngineNotOpenGLES</AssemblyName>
+		<AssemblyName Condition="'$(Configuration)' != 'Direct3D11'">Engine</AssemblyName>
+		<AssemblyName Condition="'$(Configuration)' == 'Direct3D11'">EngineDirect3D11</AssemblyName>
 		<AllowUnsafeBlocks>true</AllowUnsafeBlocks>
 		<PackageId>SurvivalcraftAPI.Engine</PackageId>
 		<Title>SurvivalcraftAPI.Engine</Title><!--For NuGet Package-->
@@ -18,7 +18,7 @@
 		<PackageProjectUrl>https://gitee.com/SC-SPM/SurvivalcraftApi</PackageProjectUrl>
 		<RepositoryUrl>https://gitee.com/SC-SPM/SurvivalcraftApi</RepositoryUrl>
 		<RepositoryType>Git</RepositoryType>
-		<Configurations>Debug;Release;NotOpenGLES</Configurations>
+		<Configurations>Debug;Release;Direct3D11</Configurations>
 		<Platforms>AnyCPU</Platforms>
 	</PropertyGroup>
 	<PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
@@ -31,10 +31,10 @@
 		<DebugType>none</DebugType>
 		<DefineConstants>TRACE</DefineConstants>
 	</PropertyGroup>
-	<PropertyGroup Condition="'$(Configuration)' == 'NotOpenGLES'">
+	<PropertyGroup Condition="'$(Configuration)' == 'Direct3D11'">
 		<TargetFramework>net9.0-windows</TargetFramework>
-		<DebugType>none</DebugType>
-		<DefineConstants>TRACE;NOTOPENGLES</DefineConstants>
+        <DebugType>none</DebugType>
+		<DefineConstants>TRACE;RELEASE;DIRECT3D11</DefineConstants>
 	</PropertyGroup>
 	<PropertyGroup Condition="'$(TargetFramework)' == 'net9.0-android'">
 		<SupportedOSPlatformVersion>23.0</SupportedOSPlatformVersion>
@@ -51,23 +51,27 @@
 	</ItemGroup>
 	<ItemGroup>
 		<PackageReference Include="NVorbis" Version="0.10.5" />
-		<PackageReference Include="SixLabors.ImageSharp" Version="3.1.10" /><!--An powerful and popular audio libaury-->
+		<PackageReference Include="SixLabors.ImageSharp" Version="3.1.11" /><!--An powerful and popular audio libaury-->
 		<PackageReference Include="NLayer.NAudioSupport" Version="1.4.0" /><!--MP3 support-->
 		<PackageReference Include="NAudio.Flac.Unknown.Mod" Version="1.0.3" PrivateAssets="all" /><!--Source: https://github.com/XiaofengdiZhu/NAudio.Flac/ -->
 		<PackageReference Include="NAudio.Core" Version="2.2.1" /><!--Resolve reference confliction between NLayer.NAudioSupport and NAudio.Flac.Unknown.Mod-->
 		<PackageReference Include="Silk.NET.Windowing" Version="2.22.0" />
-		<PackageReference Include="Silk.NET.OpenGLES" Version="2.22.0" Condition="'$(Configuration)' != 'NotOpenGLES'"/>
-		<PackageReference Include="Silk.NET.OpenGL" Version="2.22.0" Condition="'$(Configuration)' == 'NotOpenGLES'"/>
+		<PackageReference Include="Silk.NET.OpenGLES" Version="2.22.0" Condition="'$(Configuration)' != 'Direct3D11'"/>
 		<PackageReference Include="Silk.NET.OpenAL" Version="2.22.0" />
         <PackageReference Include="Silk.NET.Input" Version="2.22.0" Condition="'$(TargetFramework)' != 'net9.0-android'" />
 		<PackageReference Include="Microsoft.Extensions.DependencyModel" Version="9.0.3" /><!--To solve the warning of Silk.NET useing an old version of this-->
+        <PackageReference Include="System.Net.Http" Version="4.3.4" />
+        <PackageReference Include="System.Private.Uri" Version="4.3.2" />
+        <PackageReference Include="System.Text.RegularExpressions" Version="4.3.1" />
+        <PackageReference Include="Tomlyn" Version="0.19.0" />
 	</ItemGroup>
-	<ItemGroup>
-		<PackageReference Include="System.Net.Http" Version="4.3.4" />
-		<PackageReference Include="System.Private.Uri" Version="4.3.2" />
-		<PackageReference Include="System.Text.RegularExpressions" Version="4.3.1" />
-		<PackageReference Include="Tomlyn" Version="0.19.0" />
-	</ItemGroup>
+    <ItemGroup Condition="'$(Configuration)' == 'Direct3D11'">
+        <PackageReference Include="SharpDX" Version="4.2.0" />
+        <PackageReference Include="SharpDX.D3DCompiler" Version="4.2.0" />
+        <PackageReference Include="SharpDX.Direct3D11" Version="4.2.0" />
+        <PackageReference Include="SharpDX.DXGI" Version="4.2.0" />
+        <PackageReference Include="SharpDX.Mathematics" Version="4.2.0" />
+    </ItemGroup>
 	<ItemGroup>
 		<EditorConfigFiles Remove=".editorconfig" />
 	</ItemGroup>
@@ -75,7 +79,7 @@
 		<None Include=".editorconfig" />
 	</ItemGroup>
 	<ItemGroup>
-		<Compile Remove="Engine\EngineView.cs" />
-		<Compile Remove="Engine\Window_old.cs" />
+        <Compile Remove="Engine.Graphics\DXWrapper.cs" Condition="'$(Configuration)' != 'Direct3D11'" />
+		<Compile Remove="Engine.Graphics\GLWrapper.cs" Condition="'$(Configuration)' == 'Direct3D11'" />
 	</ItemGroup>
 </Project>

@@ -2,8 +2,11 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Xml.Linq;
-#if NOTOPENGLES
-using Silk.NET.OpenGL;
+#if DIRECT3D11
+using SharpDX;
+using System.Runtime.InteropServices;
+using SharpDX.D3DCompiler;
+using SharpDX.Direct3D11;
 #else
 using Silk.NET.OpenGLES;
 #endif
@@ -12,6 +15,25 @@ namespace Engine.Graphics
 {
 	public class Shader : GraphicsResource
 	{
+        public Dictionary<string, ShaderParameter> m_parametersByName;
+        public ShaderParameter[] m_parameters;
+        public string m_vertexShaderCode;
+        public string m_pixelShaderCode;
+        public ShaderMacro[] m_shaderMacros;
+        #if DIRECT3D11
+        public VertexShader m_vertexShader;
+        public PixelShader m_pixelShader;
+        public SharpDX.Direct3D11.Buffer[] m_allConstantBuffers;
+        public int[] m_allConstantBuffersSizes;
+        public IntPtr[] m_allConstantBuffersCpu;
+        public SharpDX.Direct3D11.Buffer[] m_vertexShaderConstantBuffers;
+        public SharpDX.Direct3D11.Buffer[] m_pixelShaderConstantBuffers;
+        public byte[] m_pixelShaderBytecode;
+        public byte[] m_vertexShaderBytecode;
+        public Dictionary<VertexDeclaration, InputLayout> m_inputLayouts = new Dictionary<VertexDeclaration, InputLayout>();
+        public VertexDeclaration m_lastVertexDeclaration;
+        public InputLayout m_lastInputLayout;
+        #else
         public struct ShaderAttributeData
 		{
 			public string Semantic;
@@ -36,11 +58,7 @@ namespace Engine.Graphics
         public Dictionary<VertexDeclaration, VertexAttributeData[]> m_vertexAttributeDataByDeclaration = [];
         public List<ShaderAttributeData> m_shaderAttributeData = [];
         public ShaderParameter m_glymulParameter;
-        public Dictionary<string, ShaderParameter> m_parametersByName;
-        public ShaderParameter[] m_parameters;
-        public string m_vertexShaderCode;
-        public string m_pixelShaderCode;
-        public ShaderMacro[] m_shaderMacros;
+#endif
 
 		public string DebugName
 		{
@@ -50,6 +68,10 @@ namespace Engine.Graphics
 			}
 			set
 			{
+#if DIRECT3D11
+                m_vertexShader.DebugName = value;
+                m_pixelShader.DebugName = value;
+#endif
 			}
 		}
 
@@ -58,7 +80,7 @@ namespace Engine.Graphics
             return m_parametersByName.TryGetValue(name, out ShaderParameter value)
                 ? value
                 : allowNull
-                    ? new ShaderParameter("null", ShaderParameterType.Null)
+                    ? null
                     : throw new InvalidOperationException($"Parameter \"{name}\" not found.");
         }
 
@@ -112,10 +134,13 @@ namespace Engine.Graphics
 
         public virtual void PrepareForDrawing()
 		{
+#if !DIRECT3D11
 			m_glymulParameter.SetValue((Display.RenderTarget != null) ? (-1f) : 1f);
+#endif
 			PrepareForDrawingOverride();
 		}
 
+#if !DIRECT3D11
         public virtual VertexAttributeData[] GetVertexAttribData(VertexDeclaration vertexDeclaration)
 		{
 			if (!m_vertexAttributeDataByDeclaration.TryGetValue(vertexDeclaration, out VertexAttributeData[] value))
@@ -237,6 +262,7 @@ namespace Engine.Graphics
 			str = str + "#line 1" + Environment.NewLine;
 			return str + shaderCode;
 		}
+#endif
 
         public override void HandleDeviceLost()
 		{
@@ -250,6 +276,34 @@ namespace Engine.Graphics
 
         public virtual void CompileShaders()
 		{
+#if DIRECT3D11
+            m_parametersByName = new Dictionary<string, ShaderParameter>();
+            List<SharpDX.Direct3D11.Buffer> list = new List<SharpDX.Direct3D11.Buffer>();
+            List<int> list2 = new List<int>();
+            List<IntPtr> list3 = new List<IntPtr>();
+            List<SharpDX.Direct3D11.Buffer> list4 = new List<SharpDX.Direct3D11.Buffer>();
+            List<SharpDX.Direct3D11.Buffer> list5 = new List<SharpDX.Direct3D11.Buffer>();
+            m_vertexShaderBytecode = CompileShader(m_vertexShaderCode, true, list, list2, list3, list4);
+            m_pixelShaderBytecode = CompileShader(m_pixelShaderCode, false, list, list2, list3, list5);
+            if (m_parameters == null)
+            {
+                m_parameters = Enumerable.ToArray<ShaderParameter>(m_parametersByName.Values);
+            }
+            else
+            {
+                ShaderParameter[] parameters = m_parameters;
+                foreach (ShaderParameter t in parameters) {
+                    t.IsChanged = true;
+                }
+            }
+            m_vertexShaderConstantBuffers = list4.ToArray();
+            m_pixelShaderConstantBuffers = list5.ToArray();
+            m_allConstantBuffers = list.ToArray();
+            m_allConstantBuffersSizes = list2.ToArray();
+            m_allConstantBuffersCpu = list3.ToArray();
+            m_vertexShader = new VertexShader(DXWrapper.Device, m_vertexShaderBytecode, null);
+            m_pixelShader = new PixelShader(DXWrapper.Device, m_pixelShaderBytecode, null);
+#else
 			DeleteShaders();
 			Dictionary<string, string> dictionary = [];
 			Dictionary<string, string> dictionary2 = [];
@@ -359,10 +413,136 @@ namespace Engine.Graphics
 			{
 				throw new InvalidOperationException("u_glymul parameter has invalid type.");
 			}
+#endif
 		}
+
+        #if DIRECT3D11
+        public virtual byte[] CompileShader(string code,
+            bool isVertexShader,
+            List<SharpDX.Direct3D11.Buffer> allConstantBuffers,
+            List<int> allConstantBuffersSizes,
+            List<IntPtr> allConstantBuffersCpu,
+            List<SharpDX.Direct3D11.Buffer> shaderConstantBuffers)
+        {
+            string text = (isVertexShader ? "vs_4_0_level_9_1" : "ps_4_0_level_9_1");
+            List<SharpDX.Direct3D.ShaderMacro> list = new List<SharpDX.Direct3D.ShaderMacro>();
+            list.Add(new SharpDX.Direct3D.ShaderMacro("HLSL", string.Empty));
+            list.AddRange(Enumerable.Select<ShaderMacro, SharpDX.Direct3D.ShaderMacro>(m_shaderMacros, (ShaderMacro s) => new SharpDX.Direct3D.ShaderMacro(s.Name, s.Value)));
+            ShaderFlags shaderFlags = ShaderFlags.OptimizationLevel1;
+            byte[] array;
+            using (CompilationResult compilationResult = ShaderBytecode.Compile(
+                code,
+                "main",
+                text,
+                shaderFlags,
+                EffectFlags.None,
+                list.ToArray(),
+                null,
+                string.Empty,
+                SecondaryDataFlags.None
+            ))
+            {
+                if (compilationResult.HasErrors)
+                {
+                    throw new InvalidOperationException(compilationResult.Message);
+                }
+                if (!string.IsNullOrWhiteSpace(compilationResult.Message))
+                {
+                    Log.Warning(compilationResult.Message);
+                }
+                array = compilationResult.Bytecode;
+            }
+            using (ShaderReflection shaderReflection = new ShaderReflection(array))
+            {
+                for (int i = 0; i < shaderReflection.Description.ConstantBuffers; i++)
+                {
+                    int count = allConstantBuffers.Count;
+                    ConstantBuffer constantBuffer = shaderReflection.GetConstantBuffer(i);
+                    SharpDX.Direct3D11.Buffer buffer = new(
+                        DXWrapper.Device,
+                        constantBuffer.Description.Size,
+                        ResourceUsage.Dynamic,
+                        BindFlags.ConstantBuffer,
+                        CpuAccessFlags.Write,
+                        ResourceOptionFlags.None,
+                        0
+                    );
+                    allConstantBuffers.Add(buffer);
+                    allConstantBuffersSizes.Add(buffer.Description.SizeInBytes);
+                    shaderConstantBuffers.Add(buffer);
+                    allConstantBuffersCpu.Add(Marshal.AllocHGlobal(constantBuffer.Description.Size));
+                    for (int j = 0; j < constantBuffer.Description.VariableCount; j++)
+                    {
+                        ShaderReflectionVariable variable = constantBuffer.GetVariable(j);
+                        ShaderReflectionType variableType = variable.GetVariableType();
+                        ShaderParameterType shaderParameterType = DXWrapper.TranslateShaderTypeDescription(variableType.Description);
+                        if (!m_parametersByName.TryGetValue(variable.Description.Name, out ShaderParameter shaderParameter))
+                        {
+                            shaderParameter = new ShaderParameter(this, variable.Description.Name, shaderParameterType, MathUtils.Max(variableType.Description.ElementCount, 1));
+                            m_parametersByName.Add(shaderParameter.Name, shaderParameter);
+                        }
+                        if (isVertexShader)
+                        {
+                            shaderParameter.VsBufferIndex = count;
+                            shaderParameter.VsBufferPtr = allConstantBuffersCpu[count] + variable.Description.StartOffset;
+                        }
+                        else
+                        {
+                            shaderParameter.PsBufferIndex = count;
+                            shaderParameter.PsBufferPtr = allConstantBuffersCpu[count] + variable.Description.StartOffset;
+                        }
+                    }
+                }
+                for (int k = 0; k < shaderReflection.Description.BoundResources; k++)
+                {
+                    InputBindingDescription resourceBindingDescription = shaderReflection.GetResourceBindingDescription(k);
+                    if (resourceBindingDescription.Type != ShaderInputType.ConstantBuffer)
+                    {
+                        ShaderParameterType shaderParameterType2 = DXWrapper.TranslateInputBindingDescription(resourceBindingDescription);
+                        if (!m_parametersByName.TryGetValue(resourceBindingDescription.Name, out ShaderParameter shaderParameter2))
+                        {
+                            shaderParameter2 = new ShaderParameter(this, resourceBindingDescription.Name, shaderParameterType2, 1);
+                            m_parametersByName.Add(shaderParameter2.Name, shaderParameter2);
+                        }
+                        if (isVertexShader)
+                        {
+                            shaderParameter2.VsResourceBindingSlot = resourceBindingDescription.BindPoint;
+                        }
+                        else
+                        {
+                            shaderParameter2.PsResourceBindingSlot = resourceBindingDescription.BindPoint;
+                        }
+                    }
+                }
+            }
+            return array;
+        }
+#endif
 
         public virtual void DeleteShaders()
 		{
+#if DIRECT3D11
+            Utilities.Dispose(ref m_vertexShader);
+            Utilities.Dispose(ref m_pixelShader);
+            if (m_allConstantBuffers != null)
+            {
+                Utilities.DisposeCollection(m_allConstantBuffers);
+                m_allConstantBuffers = null;
+            }
+            if (m_inputLayouts != null)
+            {
+                Utilities.DisposeCollection<InputLayout>(m_inputLayouts.Values);
+                m_inputLayouts = null;
+            }
+            if (m_allConstantBuffersCpu != null)
+            {
+                IntPtr[] allConstantBuffersCpu = m_allConstantBuffersCpu;
+                foreach (IntPtr t in allConstantBuffersCpu) {
+                    Marshal.FreeHGlobal(t);
+                }
+                m_allConstantBuffersCpu = null;
+            }
+#else
             uint vertexShader = (uint)m_vertexShader;
             uint pixelShader = (uint)m_pixelShader;
 			if (m_program != 0)
@@ -389,6 +569,7 @@ namespace Engine.Graphics
 				GLWrapper.GL.DeleteShader(pixelShader);
 				m_pixelShader = 0;
 			}
+#endif
 		}
 	}
 }

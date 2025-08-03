@@ -16,7 +16,7 @@ namespace Engine.Graphics
             TriangleVertices.AddRange(batch.TriangleVertices);
             for (int i = 0; i < batch.TriangleIndices.Count; i++)
             {
-                TriangleIndices.Add((ushort)(batch.TriangleIndices[i] + count));
+                TriangleIndices.Add(batch.TriangleIndices[i] + count);
             }
             if (matrix.HasValue && matrix != Matrix.Identity)
             {

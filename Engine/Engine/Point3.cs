@@ -160,5 +160,26 @@ namespace Engine
 		{
 			return new Point3(p1.X / p2.X, p1.Y / p2.Y, p1.Z / p2.Z);
 		}
+
+        public unsafe Span<int> AsSpan()
+        {
+            fixed (int* ptr = &X)
+            {
+                return new Span<int>(ptr, 3);
+            }
+        }
+
+        public unsafe int* AsPointer()
+        {
+            fixed (int* ptr = &X)
+            {
+                return ptr;
+            }
+        }
+
+        public static implicit operator Vector3(Point3 p)
+        {
+            return new Vector3(p.X, p.Y, p.Z);
+        }
 	}
 }

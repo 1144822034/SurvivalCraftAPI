@@ -7,11 +7,8 @@ namespace Engine.Graphics
 		private TextureAddressMode m_addressModeU;
 
 		private TextureAddressMode m_addressModeV;
-#if ANDROID
+
 		private int m_maxAnisotropy = 1;
-#else
-        private int m_maxAnisotropy;
-#endif
 
 		private float m_minLod = -1000f;
 

@@ -40,10 +40,10 @@ public static class VersionsManager
 	public static string PlatformTag = System.Runtime.InteropServices.RuntimeInformation.OSDescription;
 	public static BuildConfiguration BuildConfiguration => BuildConfiguration.Release;
 
-#if NOTOPENGLES
-	public static bool IsNotOpenGLES = true;
+#if DIRECT3D11
+	public static bool IsDirect3D11 = true;
 #else
-	public static bool IsNotOpenGLES = false;
+	public static bool IsDirect3D11 = false;
 #endif
 
 	public static string Version

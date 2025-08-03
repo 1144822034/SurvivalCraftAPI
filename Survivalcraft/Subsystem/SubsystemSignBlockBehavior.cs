@@ -1,15 +1,7 @@
 using Engine;
 using Engine.Graphics;
 using Engine.Media;
-using Jint.Native;
-#if NOTOPENGLES
-using Silk.NET.OpenGL;
-#else
-using Silk.NET.OpenGLES;
-#endif
-using System.Collections.Generic;
 using System.Globalization;
-using System.Linq;
 using TemplatesDatabase;
 
 namespace Game
@@ -353,7 +345,11 @@ namespace Game
 
 		public void CreateRenderTarget()
 		{
-			GLWrapper.GL.GetInteger(GetPName.MaxTextureSize, out int maxTextureSize);
+#if DIRECT3D11
+			int maxTextureSize = DXWrapper.REQ_TEXTURE2D_U_OR_V_DIMENSION;
+#else
+			int maxTextureSize = GLWrapper.GL_MAX_TEXTURE_SIZE;
+#endif
 			int eachSignHeight = (int)(m_font.GlyphHeight * m_fontScale * 4);
 			if(maxTextureSize < eachSignHeight * 32)
 			{

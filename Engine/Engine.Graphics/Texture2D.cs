@@ -1,7 +1,9 @@
 using System.Runtime.InteropServices;
 using Engine.Media;
-#if NOTOPENGLES
-using Silk.NET.OpenGL;
+#if DIRECT3D11
+using SharpDX.DXGI;
+using SharpDX;
+using SharpDX.Direct3D11;
 #else
 using Silk.NET.OpenGLES;
 #endif
@@ -16,12 +18,20 @@ namespace Engine.Graphics
         private ColorFormat m_colorFormat;
         private int m_mipLevelsCount;
         private object m_tag;
+        private string m_debugName;
+#if DIRECT3D11
+        public SharpDX.Direct3D11.Texture2D m_texture;
+        public ShaderResourceView m_textureView;
+
+        public IntPtr NativeHandle => m_texture.NativePointer;
+#else
 		public int m_texture;
 		public PixelFormat m_pixelFormat;
 		public PixelType m_pixelType;
-        private string m_debugName;
 
 		public IntPtr NativeHandle => m_texture;
+#endif
+
 
 		public string DebugName
 		{
@@ -98,6 +108,7 @@ namespace Engine.Graphics
 		public Texture2D(int width, int height, int mipLevelsCount, ColorFormat colorFormat)
 		{
 			InitializeTexture2D(width, height, mipLevelsCount, colorFormat);
+#if !DIRECT3D11
 			switch (ColorFormat)
 			{
 				case ColorFormat.Rgba8888:
@@ -119,6 +130,7 @@ namespace Engine.Graphics
 				default:
 					throw new InvalidOperationException("Unsupported surface format.");
 			}
+#endif
 			AllocateTexture();
 		}
 
@@ -150,37 +162,55 @@ namespace Engine.Graphics
 
         public void SetDataInternal(int mipLevel, nint source)
         {
+#if DIRECT3D11
+            int num = ColorFormat.GetSize() * Math.Max(Width >> mipLevel, 1);
+            DataBox dataBox = new (source, num, 0);
+            DXWrapper.Context.UpdateSubresource(dataBox, m_texture, mipLevel);
+#else
             int width = MathUtils.Max(Width >> mipLevel, 1);
             int height = MathUtils.Max(Height >> mipLevel, 1);
             GLWrapper.BindTexture(TextureTarget.Texture2D, m_texture, forceBind: false);
             GLWrapper.GL.TexImage2D(TextureTarget.Texture2D, mipLevel, (InternalFormat)m_pixelFormat, (uint)width, (uint)height, 0, m_pixelFormat, m_pixelType, in source);
+#endif
+        }
+
+        public unsafe void SetDataInternal(int mipLevel, void* source)
+        {
+#if DIRECT3D11
+            int num = ColorFormat.GetSize() * Math.Max(Width >> mipLevel, 1);
+            DataBox dataBox = new ((nint)source, num, 0);
+            DXWrapper.Context.UpdateSubresource(dataBox, m_texture, mipLevel);
+#else
+            int width = MathUtils.Max(Width >> mipLevel, 1);
+            int height = MathUtils.Max(Height >> mipLevel, 1);
+            GLWrapper.BindTexture(TextureTarget.Texture2D, m_texture, forceBind: false);
+            GLWrapper.GL.TexImage2D(TextureTarget.Texture2D, mipLevel, (InternalFormat)m_pixelFormat, (uint)width, (uint)height, 0, m_pixelFormat, m_pixelType, source);
+#endif
         }
 
 		public unsafe void SetData(SixLabors.ImageSharp.Image<Rgba32> source)
-		{
-			VerifyParametersSetData(source);
-			source.DangerousTryGetSinglePixelMemory(out Memory<Rgba32> memory);
-			GLWrapper.BindTexture(TextureTarget.Texture2D, m_texture, false);
-			GLWrapper.GL.TexImage2D(
-                TextureTarget.Texture2D,
-				0,
-				(InternalFormat)m_pixelFormat,
-				(uint)source.Width,
-                (uint)source.Height,
-				0,
-				m_pixelFormat,
-				m_pixelType,
-				memory.Pin().Pointer
-			);
-		}
+        {
+            SetData(0, source);
+        }
+
+        public unsafe void SetData(int mipLevel, SixLabors.ImageSharp.Image<Rgba32> source)
+        {
+            VerifyParametersSetData(source);
+            source.DangerousTryGetSinglePixelMemory(out Memory<Rgba32> memory);
+            SetDataInternal(mipLevel, memory.Pin().Pointer);
+        }
 
         public static void Swap(Texture2D texture1, Texture2D texture2)
         {
             VerifyParametersSwap(texture1, texture2);
             SwapTexture2D(texture1, texture2);
             Utilities.Swap(ref texture1.m_texture, ref texture2.m_texture);
+#if DIRECT3D11
+            Utilities.Swap(ref texture1.m_textureView, ref texture2.m_textureView);
+#else
             Utilities.Swap(ref texture1.m_pixelFormat, ref texture2.m_pixelFormat);
             Utilities.Swap(ref texture1.m_pixelType, ref texture2.m_pixelType);
+#endif
             Utilities.Swap(ref texture1.m_debugName, ref texture2.m_debugName);
         }
 
@@ -205,6 +235,24 @@ namespace Engine.Graphics
 
 		public unsafe void AllocateTexture()
 		{
+#if DIRECT3D11
+            bool flag = this is RenderTarget2D || MipLevelsCount > 1;
+            Texture2DDescription texture2DDescription = new Texture2DDescription
+            {
+                ArraySize = 1,
+                BindFlags = (flag ? (BindFlags.ShaderResource | BindFlags.RenderTarget) : BindFlags.ShaderResource),
+                CpuAccessFlags = CpuAccessFlags.None,
+                Format = DXWrapper.TranslateColorFormat(ColorFormat),
+                MipLevels = MipLevelsCount,
+                OptionFlags = (flag ? ResourceOptionFlags.GenerateMipMaps : ResourceOptionFlags.None),
+                SampleDescription = new SampleDescription(1, 0),
+                Usage = ResourceUsage.Default,
+                Width = Width,
+                Height = Height
+            };
+            m_texture = new SharpDX.Direct3D11.Texture2D(DXWrapper.Device, texture2DDescription);
+            m_textureView = new ShaderResourceView(DXWrapper.Device, m_texture);
+#else
 			GLWrapper.GL.GenTextures(1, out uint texture);
             m_texture = (int)texture;
 			GLWrapper.BindTexture(TextureTarget.Texture2D, m_texture, forceBind: false);
@@ -214,15 +262,21 @@ namespace Engine.Graphics
 				int height = MathUtils.Max(Height >> i, 1);
 				GLWrapper.GL.TexImage2D(TextureTarget.Texture2D, i, (InternalFormat)m_pixelFormat, (uint)width, (uint)height, 0, m_pixelFormat, m_pixelType, null);
 			}
+#endif
 		}
 
 		public void DeleteTexture()
 		{
+#if DIRECT3D11
+            Utilities.Dispose(ref m_texture);
+            Utilities.Dispose(ref m_textureView);
+#else
 			if (m_texture != 0)
 			{
 				GLWrapper.DeleteTexture(m_texture);
 				m_texture = 0;
 			}
+#endif
 		}
 		
 		public override int GetGpuMemoryUsage()
@@ -262,8 +316,12 @@ namespace Engine.Graphics
 			texture2D.SetData(image.m_trueImage);
             if(mipLevelsCount > 1)
             {
+#if DIRECT3D11
+                DXWrapper.Context.GenerateMips(texture2D.m_textureView);
+#else
                 GLWrapper.BindTexture(TextureTarget.Texture2D, texture2D.m_texture, forceBind: false);
                 GLWrapper.GL.GenerateMipmap(TextureTarget.Texture2D);
+#endif
             }
             texture2D.Tag = image;
 			return texture2D;
@@ -275,8 +333,12 @@ namespace Engine.Graphics
             texture2D.SetData(image);
             if (mipLevelsCount > 1)
             {
+#if DIRECT3D11
+                DXWrapper.Context.GenerateMips(texture2D.m_textureView);
+#else
                 GLWrapper.BindTexture(TextureTarget.Texture2D, texture2D.m_texture, forceBind: false);
                 GLWrapper.GL.GenerateMipmap(TextureTarget.Texture2D);
+#endif
             }
             texture2D.Tag = new Image(image);
             return texture2D;
@@ -299,6 +361,18 @@ namespace Engine.Graphics
 				return Load(stream, premultiplyAlpha, mipLevelsCount);
 			}
 		}
+
+        public static Texture2D Load(Color color, int width, int height)
+        {
+            Texture2D texture2D = new Texture2D(width, height, 1, ColorFormat.Rgba8888);
+            Color[] array = new Color[width * height];
+            for (int i = 0; i < array.Length; i++)
+            {
+                array[i] = color;
+            }
+            texture2D.SetData(0, array);
+            return texture2D;
+        }
 
 		internal void InitializeTexture2D(int width, int height, int mipLevelsCount, ColorFormat colorFormat)
 		{

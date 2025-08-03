@@ -31,11 +31,13 @@ namespace Game
 
 		public static void Initialize()
 		{
+#if !DEBUG
 			Task.Run(
 				async () => {
 					IsNeedUpdate = await GetIsNeedUpdate();
 				}
 			);
+#endif
 		}
 
 		/// <summary>

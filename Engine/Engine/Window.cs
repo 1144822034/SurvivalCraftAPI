@@ -289,8 +289,8 @@ namespace Engine
             };
             Silk.NET.Windowing.Window.ShouldLoadFirstPartyPlatforms(false);
             Silk.NET.Windowing.Window.TryAdd(WindowingLibrary);
-#if NOTOPENGLES
-            GraphicsAPI api = new GraphicsAPI(ContextAPI.OpenGL, ContextProfile.Compatability, ContextFlags.ForwardCompatible, new APIVersion(4, 0));
+#if DIRECT3D11
+            GraphicsAPI api = GraphicsAPI.None;
 #elif DEBUG
             GraphicsAPI api = new GraphicsAPI(ContextAPI.OpenGLES, ContextProfile.Compatability, ContextFlags.Debug, new APIVersion(3, 2));
 #elif ANDROID
@@ -334,7 +334,9 @@ namespace Engine
             m_view.ShouldSwapAutomatically = false;
             m_view.Load += LoadHandler;
             m_view.Run();//会阻塞，不要放置在前边
+#if !DIRECT3D11
             GLWrapper.GL.Dispose();
+#endif
             m_view?.Dispose();
         }
 
@@ -416,7 +418,11 @@ namespace Engine
             AfterFrameAll();
             if (!m_closing)
             {
+#if DIRECT3D11
+                DXWrapper.Present(m_swapInterval ?? 1);
+#else
                 m_view.GLContext?.SwapBuffers();
+#endif
             }
             else
             {

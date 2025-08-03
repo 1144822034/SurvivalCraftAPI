@@ -20,7 +20,7 @@ namespace Engine.Graphics
             TriangleIndices.Count += count3;
             for (int i = 0; i < count3; i++)
             {
-                TriangleIndices[i + count2] = (ushort)(batch.TriangleIndices[i] + count);
+                TriangleIndices[i + count2] = batch.TriangleIndices[i] + count;
             }
             if (matrix.HasValue && matrix != Matrix.Identity)
             {
@@ -41,7 +41,7 @@ namespace Engine.Graphics
             LineIndices.Count += count3;
             for (int i = 0; i < count3; i++)
             {
-                LineIndices[i + count2] = (ushort)(batch.LineIndices[i] + count);
+                LineIndices[i + count2] = batch.LineIndices[i] + count;
             }
             if (matrix.HasValue && matrix != Matrix.Identity)
             {

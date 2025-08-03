@@ -19,7 +19,7 @@
         <PublishWizardCompleted>true</PublishWizardCompleted>
         <BootstrapperEnabled>False</BootstrapperEnabled>
         <GenerateAssemblyInfo>False</GenerateAssemblyInfo>
-        <Configurations>Debug;Release;NotOpenGLES</Configurations>
+        <Configurations>Debug;Release;Direct3D11</Configurations>
         <RuntimeIdentifier>win-x64</RuntimeIdentifier>
         <PackageId>SurvivalcraftAPI.Survivalcraft</PackageId>
         <Title>SurvivalcraftAPI.Survivalcraft</Title><!--For NuGet Package-->
@@ -30,8 +30,8 @@
 		<AllowUnsafeBlocks>true</AllowUnsafeBlocks>
 		<GenerateSerializationAssemblies>Off</GenerateSerializationAssemblies>
 		<Platforms>AnyCPU</Platforms>
-		<AssemblyName Condition="'$(Configuration)' != 'NotOpenGLES'">Survivalcraft</AssemblyName>
-		<AssemblyName Condition="'$(Configuration)' == 'NotOpenGLES'">SurvivalcraftNotOpenGLES</AssemblyName>
+		<AssemblyName Condition="'$(Configuration)' != 'Direct3D11'">Survivalcraft</AssemblyName>
+		<AssemblyName Condition="'$(Configuration)' == 'Direct3D11'">SurvivalcraftDirect3D11</AssemblyName>
     </PropertyGroup>
     <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
 		<TargetFramework>net9.0-windows</TargetFramework>
@@ -44,10 +44,10 @@
         <DefineConstants>TRACE</DefineConstants>
 		<DebugType>embedded</DebugType>
     </PropertyGroup>
-	<PropertyGroup Condition=" '$(Configuration)' == 'NotOpenGLES' ">
+	<PropertyGroup Condition=" '$(Configuration)' == 'Direct3D11' ">
 		<TargetFramework>net9.0-windows</TargetFramework>
 		<DebugType>none</DebugType>
-		<DefineConstants>TRACE;NOTOPENGLES</DefineConstants>
+		<DefineConstants>TRACE;RELEASE;DIRECT3D11</DefineConstants>
 		<DebugType>embedded</DebugType>
 	</PropertyGroup>
 	<PropertyGroup Condition="'$(TargetFramework)' == 'net9.0-windows'">
@@ -99,7 +99,7 @@
 			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 		</EmbeddedResource>
     </ItemGroup>
-    <ItemGroup Condition="('$(Configuration)' == 'Release' Or '$(Configuration)' == 'NotOpenGLES') And '$(TargetFramework)' == 'net9.0-windows'">
+    <ItemGroup Condition="('$(Configuration)' == 'Release' Or '$(Configuration)' == 'Direct3D11') And '$(TargetFramework)' == 'net9.0-windows'">
 		<EmbeddedResource Include="init.js">
 			<CopyToOutputDirectory>Never</CopyToOutputDirectory>
 		</EmbeddedResource>

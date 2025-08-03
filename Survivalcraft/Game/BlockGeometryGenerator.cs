@@ -591,12 +591,12 @@ namespace Game
 			SetupCubeVertexFace4(x, y + 1, z + 1, 0f, rotation, faceTextureSlot, textureSlotCount, color, ref vertices.Array[count + 3]);
 			int count2 = indices.Count;
 			indices.Count += 6;
-			indices.Array[count2] = (ushort)count;
-			indices.Array[count2 + 1] = (ushort)(count + 1);
-			indices.Array[count2 + 2] = (ushort)(count + 2);
-			indices.Array[count2 + 3] = (ushort)(count + 2);
-			indices.Array[count2 + 4] = (ushort)(count + 3);
-			indices.Array[count2 + 5] = (ushort)count;
+			indices.Array[count2] = count;
+			indices.Array[count2 + 1] = count + 1;
+			indices.Array[count2 + 2] = count + 2;
+			indices.Array[count2 + 3] = count + 2;
+			indices.Array[count2 + 4] = count + 3;
+			indices.Array[count2 + 5] = count;
 		}
 
         public virtual void GenerateMeshVertices(Block block, int x, int y, int z, BlockMesh blockMesh, Color color, Matrix? matrix, TerrainGeometrySubset subset)
