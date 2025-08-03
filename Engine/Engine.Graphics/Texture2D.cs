@@ -1,6 +1,6 @@
 using System.Runtime.InteropServices;
 using Engine.Media;
-#if Direct3D11
+#if DIRECT3D11
 using SharpDX.DXGI;
 using SharpDX;
 using SharpDX.Direct3D11;
@@ -19,7 +19,7 @@ namespace Engine.Graphics
         private int m_mipLevelsCount;
         private object m_tag;
         private string m_debugName;
-#if Direct3D11
+#if DIRECT3D11
         public SharpDX.Direct3D11.Texture2D m_texture;
         public ShaderResourceView m_textureView;
 
@@ -108,7 +108,7 @@ namespace Engine.Graphics
 		public Texture2D(int width, int height, int mipLevelsCount, ColorFormat colorFormat)
 		{
 			InitializeTexture2D(width, height, mipLevelsCount, colorFormat);
-#if !Direct3D11
+#if !DIRECT3D11
 			switch (ColorFormat)
 			{
 				case ColorFormat.Rgba8888:
@@ -162,7 +162,7 @@ namespace Engine.Graphics
 
         public void SetDataInternal(int mipLevel, nint source)
         {
-#if Direct3D11
+#if DIRECT3D11
             int num = ColorFormat.GetSize() * Math.Max(Width >> mipLevel, 1);
             DataBox dataBox = new (source, num, 0);
             DXWrapper.Context.UpdateSubresource(dataBox, m_texture, mipLevel);
@@ -176,7 +176,7 @@ namespace Engine.Graphics
 
         public unsafe void SetDataInternal(int mipLevel, void* source)
         {
-#if Direct3D11
+#if DIRECT3D11
             int num = ColorFormat.GetSize() * Math.Max(Width >> mipLevel, 1);
             DataBox dataBox = new ((nint)source, num, 0);
             DXWrapper.Context.UpdateSubresource(dataBox, m_texture, mipLevel);
@@ -189,18 +189,23 @@ namespace Engine.Graphics
         }
 
 		public unsafe void SetData(SixLabors.ImageSharp.Image<Rgba32> source)
-		{
-			VerifyParametersSetData(source);
-			source.DangerousTryGetSinglePixelMemory(out Memory<Rgba32> memory);
-            SetDataInternal(0, memory.Pin().Pointer);
-		}
+        {
+            SetData(0, source);
+        }
+
+        public unsafe void SetData(int mipLevel, SixLabors.ImageSharp.Image<Rgba32> source)
+        {
+            VerifyParametersSetData(source);
+            source.DangerousTryGetSinglePixelMemory(out Memory<Rgba32> memory);
+            SetDataInternal(mipLevel, memory.Pin().Pointer);
+        }
 
         public static void Swap(Texture2D texture1, Texture2D texture2)
         {
             VerifyParametersSwap(texture1, texture2);
             SwapTexture2D(texture1, texture2);
             Utilities.Swap(ref texture1.m_texture, ref texture2.m_texture);
-#if Direct3D11
+#if DIRECT3D11
             Utilities.Swap(ref texture1.m_textureView, ref texture2.m_textureView);
 #else
             Utilities.Swap(ref texture1.m_pixelFormat, ref texture2.m_pixelFormat);
@@ -230,8 +235,8 @@ namespace Engine.Graphics
 
 		public unsafe void AllocateTexture()
 		{
-#if Direct3D11
-            bool flag = this is RenderTarget2D;
+#if DIRECT3D11
+            bool flag = this is RenderTarget2D || MipLevelsCount > 1;
             Texture2DDescription texture2DDescription = new Texture2DDescription
             {
                 ArraySize = 1,
@@ -262,7 +267,7 @@ namespace Engine.Graphics
 
 		public void DeleteTexture()
 		{
-#if Direct3D11
+#if DIRECT3D11
             Utilities.Dispose(ref m_texture);
             Utilities.Dispose(ref m_textureView);
 #else
@@ -311,7 +316,7 @@ namespace Engine.Graphics
 			texture2D.SetData(image.m_trueImage);
             if(mipLevelsCount > 1)
             {
-#if Direct3D11
+#if DIRECT3D11
                 DXWrapper.Context.GenerateMips(texture2D.m_textureView);
 #else
                 GLWrapper.BindTexture(TextureTarget.Texture2D, texture2D.m_texture, forceBind: false);
@@ -328,7 +333,7 @@ namespace Engine.Graphics
             texture2D.SetData(image);
             if (mipLevelsCount > 1)
             {
-#if Direct3D11
+#if DIRECT3D11
                 DXWrapper.Context.GenerateMips(texture2D.m_textureView);
 #else
                 GLWrapper.BindTexture(TextureTarget.Texture2D, texture2D.m_texture, forceBind: false);

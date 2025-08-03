@@ -336,5 +336,15 @@ namespace Engine.Media
                 m_trueImage.Dispose();
             }
         }
+
+        public static implicit operator Image(Image<Rgba32> image)
+        {
+            return new Image(image);
+        }
+
+        public static implicit operator Image<Rgba32>(Image image)
+        {
+            return image.m_trueImage;
+        }
     }
 }

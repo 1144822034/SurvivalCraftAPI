@@ -1,6 +1,6 @@
 using System;
 using System.Runtime.InteropServices;
-#if Direct3D11
+#if DIRECT3D11
 using SharpDX;
 using SharpDX.Direct3D11;
 using SharpDX.DXGI;
@@ -132,7 +132,7 @@ namespace Engine.Graphics
         public static void DrawUser<T>(PrimitiveType primitiveType, Shader shader, VertexDeclaration vertexDeclaration, T[] vertexData, int startVertex, int verticesCount) where T : struct
         {
             VerifyParametersDrawUser(primitiveType, shader, vertexDeclaration, vertexData, startVertex, verticesCount);
-#if Direct3D11
+#if DIRECT3D11
             int num = DXWrapper.AppendUserVertices<T>(vertexData, vertexDeclaration.VertexStride, startVertex, verticesCount);
             DXWrapper.ApplyViewportScissor(Viewport, ScissorRectangle);
             DXWrapper.ApplyRasterizerState(RasterizerState);
@@ -165,7 +165,7 @@ namespace Engine.Graphics
         public static unsafe void DrawUserIndexed<T>(PrimitiveType primitiveType, Shader shader, VertexDeclaration vertexDeclaration, T[] vertexData, int startVertex, int verticesCount, int[] indexData, int startIndex, int indicesCount) where T : struct
         {
             VerifyParametersDrawUserIndexed(primitiveType, shader, vertexDeclaration, vertexData, startVertex, verticesCount, indexData, startIndex, indicesCount);
-#if Direct3D11
+#if DIRECT3D11
             int num = DXWrapper.AppendUserVertices(vertexData, vertexDeclaration.VertexStride, startVertex, verticesCount);
             int num2 = DXWrapper.AppendUserIndices(indexData, 4, startIndex, indicesCount);
             DXWrapper.ApplyViewportScissor(Viewport, ScissorRectangle);
@@ -201,7 +201,7 @@ namespace Engine.Graphics
         public static void Draw(PrimitiveType primitiveType, Shader shader, VertexBuffer vertexBuffer, int startVertex, int verticesCount)
         {
             VerifyParametersDraw(primitiveType, shader, vertexBuffer, startVertex, verticesCount);
-#if Direct3D11
+#if DIRECT3D11
             DXWrapper.ApplyViewportScissor(Viewport, ScissorRectangle);
             DXWrapper.ApplyRasterizerState(RasterizerState);
             DXWrapper.ApplyDepthStencilState(DepthStencilState);
@@ -225,7 +225,7 @@ namespace Engine.Graphics
         public static unsafe void DrawIndexed(PrimitiveType primitiveType, Shader shader, VertexBuffer vertexBuffer, IndexBuffer indexBuffer, int startIndex, int indicesCount)
         {
             VerifyParametersDrawIndexed(primitiveType, shader, vertexBuffer, indexBuffer, startIndex, indicesCount);
-#if Direct3D11
+#if DIRECT3D11
             DXWrapper.ApplyViewportScissor(Viewport, ScissorRectangle);
             DXWrapper.ApplyRasterizerState(RasterizerState);
             DXWrapper.ApplyDepthStencilState(DepthStencilState);
@@ -248,7 +248,7 @@ namespace Engine.Graphics
 
         public static void Clear(Vector4? color, float? depth = null, int? stencil = null)
         {
-#if Direct3D11
+#if DIRECT3D11
             if (color != null)
             {
                 if (RenderTarget != null && RenderTarget.m_colorTextureView != null)
@@ -292,14 +292,14 @@ namespace Engine.Graphics
 
         public static void ResetGLStateCache()
         {
-#if !Direct3D11
+#if !DIRECT3D11
             GLWrapper.InitializeCache();
 #endif
         }
 
         public static void Initialize()
         {
-#if Direct3D11
+#if DIRECT3D11
             DXWrapper.CreateDevice();
 #else
             GLWrapper.Initialize();
@@ -310,7 +310,7 @@ namespace Engine.Graphics
 
         public static void Dispose()
         {
-#if Direct3D11
+#if DIRECT3D11
             DXWrapper.DisposeDevice();
 #endif
         }
@@ -328,7 +328,7 @@ namespace Engine.Graphics
             BackbufferSize = new Point2(Window.Size.X, Window.Size.Y);
             Viewport = new Viewport(0, 0, Window.Size.X, Window.Size.Y);
             ScissorRectangle = new Rectangle(0, 0, Window.Size.X, Window.Size.Y);
-#if Direct3D11
+#if DIRECT3D11
             DXWrapper.ResizeSwapChainIfNeeded();
 #endif
         }

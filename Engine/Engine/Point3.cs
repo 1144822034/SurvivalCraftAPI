@@ -176,5 +176,10 @@ namespace Engine
                 return ptr;
             }
         }
+
+        public static implicit operator Vector3(Point3 p)
+        {
+            return new Vector3(p.X, p.Y, p.Z);
+        }
 	}
 }

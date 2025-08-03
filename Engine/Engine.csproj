@@ -33,8 +33,8 @@
 	</PropertyGroup>
 	<PropertyGroup Condition="'$(Configuration)' == 'Direct3D11'">
 		<TargetFramework>net9.0-windows</TargetFramework>
-		<DebugType>none</DebugType>
-		<DefineConstants>TRACE;Direct3D11;DEBUG</DefineConstants>
+        <DebugType>none</DebugType>
+		<DefineConstants>TRACE;RELEASE;DIRECT3D11</DefineConstants>
 	</PropertyGroup>
 	<PropertyGroup Condition="'$(TargetFramework)' == 'net9.0-android'">
 		<SupportedOSPlatformVersion>23.0</SupportedOSPlatformVersion>

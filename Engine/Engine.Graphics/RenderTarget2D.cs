@@ -2,7 +2,7 @@ using System;
 using System.IO;
 using System.Runtime.InteropServices;
 using Engine.Media;
-#if Direct3D11
+#if DIRECT3D11
 using SharpDX.DXGI;
 using SharpDX;
 using SharpDX.Direct3D11;
@@ -17,7 +17,7 @@ namespace Engine.Graphics
     {
         private DepthFormat m_depthFormat;
 
-        #if Direct3D11
+        #if DIRECT3D11
         public RenderTargetView m_colorTextureView;
 
         public SharpDX.Direct3D11.Texture2D m_depthTexture;
@@ -93,7 +93,7 @@ namespace Engine.Graphics
 
         public unsafe void GetDataInternal(nint target, Rectangle sourceRectangle)
         {
-#if Direct3D11
+#if DIRECT3D11
             int size = ColorFormat.GetSize();
             Texture2DDescription texture2DDescription = new()
             {
@@ -137,7 +137,7 @@ namespace Engine.Graphics
 
         public void GenerateMipMaps()
         {
-#if Direct3D11
+#if DIRECT3D11
             DXWrapper.Context.GenerateMips(m_textureView);
 #else
             GLWrapper.BindTexture(TextureTarget.Texture2D, m_texture, forceBind: false);
@@ -152,7 +152,7 @@ namespace Engine.Graphics
 
         public override void HandleDeviceReset()
         {
-#if Direct3D11
+#if DIRECT3D11
             base.HandleDeviceReset();
 #endif
             AllocateRenderTarget();
@@ -160,7 +160,7 @@ namespace Engine.Graphics
 
         public void AllocateRenderTarget()
         {
-#if Direct3D11
+#if DIRECT3D11
             m_colorTextureView = new RenderTargetView(DXWrapper.Device, m_texture);
             if (DepthFormat != DepthFormat.None)
             {
@@ -215,7 +215,7 @@ namespace Engine.Graphics
 
         public void DeleteRenderTarget()
         {
-#if Direct3D11
+#if DIRECT3D11
             Utilities.Dispose(ref m_colorTextureView);
             Utilities.Dispose(ref m_depthTexture);
             Utilities.Dispose(ref m_depthTextureView);
@@ -252,7 +252,7 @@ namespace Engine.Graphics
             renderTarget2D.SetData(image.m_trueImage);
             if (mipLevelsCount > 1)
             {
-#if Direct3D11
+#if DIRECT3D11
                 DXWrapper.Context.GenerateMips(renderTarget2D.m_textureView);
 #else
                 GLWrapper.BindTexture(TextureTarget.Texture2D, renderTarget2D.m_texture, forceBind: false);

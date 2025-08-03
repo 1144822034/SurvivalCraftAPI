@@ -345,7 +345,7 @@ namespace Game
 
 		public void CreateRenderTarget()
 		{
-#if Direct3D11
+#if DIRECT3D11
 			int maxTextureSize = DXWrapper.REQ_TEXTURE2D_U_OR_V_DIMENSION;
 #else
 			int maxTextureSize = GLWrapper.GL_MAX_TEXTURE_SIZE;

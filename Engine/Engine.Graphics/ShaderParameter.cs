@@ -8,7 +8,7 @@ namespace Engine.Graphics
 		public readonly string Name;
 		public readonly ShaderParameterType Type;
 		public readonly int Count;
-#if Direct3D11
+#if DIRECT3D11
         public int VsResourceBindingSlot = -1;
         public int PsResourceBindingSlot = -1;
         public int VsBufferIndex = -1;
@@ -32,7 +32,7 @@ namespace Engine.Graphics
 			Name = name;
 			Type = type;
 			Count = count;
-#if !Direct3D11
+#if !DIRECT3D11
 			switch (type)
 			{
 				case ShaderParameterType.Texture2D:
@@ -61,7 +61,7 @@ namespace Engine.Graphics
 
 		public unsafe void SetValue(float value)
 		{
-#if Direct3D11
+#if DIRECT3D11
             if (Type != ShaderParameterType.Float || Count != 1)
             {
                 throw new InvalidOperationException("Shader parameter type mismatch.");
@@ -92,7 +92,7 @@ namespace Engine.Graphics
 
 		public unsafe void SetValue(float[] value, int count)
 		{
-#if Direct3D11
+#if DIRECT3D11
             if (Type != ShaderParameterType.Float)
             {
                 throw new InvalidOperationException("Shader parameter type mismatch.");
@@ -156,7 +156,7 @@ namespace Engine.Graphics
 
 		public unsafe void SetValue(Vector2 value)
 		{
-#if Direct3D11
+#if DIRECT3D11
             if (Type != ShaderParameterType.Vector2 || Count != 1)
             {
                 throw new InvalidOperationException("Shader parameter type mismatch.");
@@ -188,7 +188,7 @@ namespace Engine.Graphics
 
 		public unsafe void SetValue(Vector2[] value, int count)
 		{
-#if Direct3D11
+#if DIRECT3D11
             if (Type != ShaderParameterType.Vector2)
             {
                 throw new InvalidOperationException("Shader parameter type mismatch.");
@@ -260,7 +260,7 @@ namespace Engine.Graphics
 
 		public unsafe void SetValue(Vector3 value)
 		{
-#if Direct3D11
+#if DIRECT3D11
             if (Type != ShaderParameterType.Vector3 || Count != 1)
             {
                 throw new InvalidOperationException("Shader parameter type mismatch.");
@@ -293,7 +293,7 @@ namespace Engine.Graphics
 
 		public unsafe void SetValue(Vector3[] value, int count)
 		{
-#if Direct3D11
+#if DIRECT3D11
             if (Type != ShaderParameterType.Vector3)
             {
                 throw new InvalidOperationException("Shader parameter type mismatch.");
@@ -366,7 +366,7 @@ namespace Engine.Graphics
 
 		public unsafe void SetValue(Vector4 value)
 		{
-#if Direct3D11
+#if DIRECT3D11
             if (Type != ShaderParameterType.Vector4 || Count != 1)
             {
                 throw new InvalidOperationException("Shader parameter type mismatch.");
@@ -400,7 +400,7 @@ namespace Engine.Graphics
 
 		public unsafe void SetValue(Vector4[] value, int count)
 		{
-#if Direct3D11
+#if DIRECT3D11
             if (Type != ShaderParameterType.Vector4)
             {
                 throw new InvalidOperationException("Shader parameter type mismatch.");
@@ -474,7 +474,7 @@ namespace Engine.Graphics
 
 		public unsafe void SetValue(Matrix value)
 		{
-#if Direct3D11
+#if DIRECT3D11
             if (Type != ShaderParameterType.Matrix || Count != 1)
             {
                 throw new InvalidOperationException("Shader parameter type mismatch.");
@@ -520,7 +520,7 @@ namespace Engine.Graphics
 
 		public unsafe void SetValue(Matrix[] value, int count)
 		{
-#if Direct3D11
+#if DIRECT3D11
             if (Type != ShaderParameterType.Matrix)
             {
                 throw new InvalidOperationException("Shader parameter type mismatch.");
@@ -606,7 +606,7 @@ namespace Engine.Graphics
 
 		public void SetValue(Texture2D value)
 		{
-#if Direct3D11
+#if DIRECT3D11
             if (Type != ShaderParameterType.Texture2D || Count != 1)
             {
                 throw new InvalidOperationException("Shader parameter type mismatch.");
@@ -632,7 +632,7 @@ namespace Engine.Graphics
 
 		public void SetValue(SamplerState value)
 		{
-#if Direct3D11
+#if DIRECT3D11
             if (Type != ShaderParameterType.Sampler2D || Count != 1)
             {
                 throw new InvalidOperationException("Shader parameter type mismatch.");

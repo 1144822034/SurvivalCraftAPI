@@ -16,5 +16,22 @@ namespace Game
 			TopLeft = topLeft;
 			BottomRight = bottomRight;
 		}
+
+		public Subtexture(Texture2D texture)
+		{
+			Texture = texture;
+			TopLeft = Vector2.Zero;
+			BottomRight = Vector2.One;
+		}
+
+		public static implicit operator Texture2D(Subtexture subtexture)
+		{
+			return subtexture.Texture;
+		}
+
+		public static implicit operator Subtexture(Texture2D texture)
+		{
+			return new Subtexture(texture);
+		}
 	}
 }

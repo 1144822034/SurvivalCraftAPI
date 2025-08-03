@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Xml.Linq;
-#if Direct3D11
+#if DIRECT3D11
 using SharpDX;
 using System.Runtime.InteropServices;
 using SharpDX.D3DCompiler;
@@ -20,7 +20,7 @@ namespace Engine.Graphics
         public string m_vertexShaderCode;
         public string m_pixelShaderCode;
         public ShaderMacro[] m_shaderMacros;
-        #if Direct3D11
+        #if DIRECT3D11
         public VertexShader m_vertexShader;
         public PixelShader m_pixelShader;
         public SharpDX.Direct3D11.Buffer[] m_allConstantBuffers;
@@ -68,7 +68,7 @@ namespace Engine.Graphics
 			}
 			set
 			{
-#if Direct3D11
+#if DIRECT3D11
                 m_vertexShader.DebugName = value;
                 m_pixelShader.DebugName = value;
 #endif
@@ -134,13 +134,13 @@ namespace Engine.Graphics
 
         public virtual void PrepareForDrawing()
 		{
-#if !Direct3D11
+#if !DIRECT3D11
 			m_glymulParameter.SetValue((Display.RenderTarget != null) ? (-1f) : 1f);
 #endif
 			PrepareForDrawingOverride();
 		}
 
-#if !Direct3D11
+#if !DIRECT3D11
         public virtual VertexAttributeData[] GetVertexAttribData(VertexDeclaration vertexDeclaration)
 		{
 			if (!m_vertexAttributeDataByDeclaration.TryGetValue(vertexDeclaration, out VertexAttributeData[] value))
@@ -276,7 +276,7 @@ namespace Engine.Graphics
 
         public virtual void CompileShaders()
 		{
-#if Direct3D11
+#if DIRECT3D11
             m_parametersByName = new Dictionary<string, ShaderParameter>();
             List<SharpDX.Direct3D11.Buffer> list = new List<SharpDX.Direct3D11.Buffer>();
             List<int> list2 = new List<int>();
@@ -416,7 +416,7 @@ namespace Engine.Graphics
 #endif
 		}
 
-        #if Direct3D11
+        #if DIRECT3D11
         public virtual byte[] CompileShader(string code,
             bool isVertexShader,
             List<SharpDX.Direct3D11.Buffer> allConstantBuffers,
@@ -521,7 +521,7 @@ namespace Engine.Graphics
 
         public virtual void DeleteShaders()
 		{
-#if Direct3D11
+#if DIRECT3D11
             Utilities.Dispose(ref m_vertexShader);
             Utilities.Dispose(ref m_pixelShader);
             if (m_allConstantBuffers != null)

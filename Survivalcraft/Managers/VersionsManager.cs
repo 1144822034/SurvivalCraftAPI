@@ -40,7 +40,7 @@ public static class VersionsManager
 	public static string PlatformTag = System.Runtime.InteropServices.RuntimeInformation.OSDescription;
 	public static BuildConfiguration BuildConfiguration => BuildConfiguration.Release;
 
-#if Direct3D11
+#if DIRECT3D11
 	public static bool IsDirect3D11 = true;
 #else
 	public static bool IsDirect3D11 = false;
