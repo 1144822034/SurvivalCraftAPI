@@ -2034,5 +2034,15 @@ namespace Game
 		public virtual void OnEntityBehaviorBlockInteracted(object raycastResult, bool isInitialNull, ref ComponentBlockEntity componentBlockEntity)
 		{
 		}
+
+
+		/// <summary>
+		/// 在BlockMesh.AppendModelMeshPart之前执行
+		/// </summary>
+		/// <param name="skip">如果要跳过原版方法，设置此值为true</param>
+		public virtual void OnAppendModelMeshPart(ModelMeshPart meshPart,Matrix matrix,bool makeEmissive,bool flipWindingOrder,bool doubleSided,bool flipNormals,Color color,out bool skip)
+		{
+			skip = false;
+		}
 	}
 }

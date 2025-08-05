@@ -5,6 +5,7 @@ namespace Engine.Graphics
 	public class ModelMeshPart : IDisposable
 	{
         public BoundingBox m_boundingBox;
+        public object m_tag;
 
 		public string TexturePath;
 
@@ -43,6 +44,18 @@ namespace Engine.Graphics
 				m_boundingBox = value;
 			}
 		}
+
+        public object Tag
+        {
+            get
+            {
+                return m_tag;
+            }
+            set
+            {
+                m_tag = value;
+            }
+        }
 
         public ModelMeshPart()
 		{

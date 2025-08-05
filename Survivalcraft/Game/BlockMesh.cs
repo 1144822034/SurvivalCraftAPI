@@ -325,6 +325,16 @@ namespace Game
 
 		public void AppendModelMeshPart(ModelMeshPart meshPart, Matrix matrix, bool makeEmissive, bool flipWindingOrder, bool doubleSided, bool flipNormals, Color color)
 		{
+			bool skipVanilla = false;
+			ModsManager.HookAction("OnFirstPersonModelDrawing",loader => {
+				loader.OnAppendModelMeshPart(meshPart,matrix,makeEmissive,flipWindingOrder,doubleSided,flipNormals,color,out bool skip);
+				skipVanilla |= skip;
+				return false;
+			});
+			if(skipVanilla)
+			{
+				return;
+			}
 			VertexBuffer vertexBuffer = meshPart.VertexBuffer;
 			IndexBuffer indexBuffer = meshPart.IndexBuffer;
 			ReadOnlyList<VertexElement> vertexElements = vertexBuffer.VertexDeclaration.VertexElements;
