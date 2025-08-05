@@ -91,7 +91,7 @@ namespace Game
 			var craftingRecipe = new CraftingRecipe();
 			string attributeValue = XmlUtils.GetAttributeValue<string>(item, "Result");
 			string desc = XmlUtils.GetAttributeValue<string>(item, "Description");
-			if (desc.StartsWith("[") && desc.EndsWith("]") && LanguageControl.TryGetBlock(attributeValue, "CRDescription:" + desc.Substring(1, desc.Length - 2), out var r)) desc = r;
+			if (desc.StartsWith('[') && desc.EndsWith(']') && LanguageControl.TryGetBlock(attributeValue, "CRDescription:" + desc.Substring(1, desc.Length - 2), out var r)) desc = r;
 			craftingRecipe.ResultValue = DecodeResult(attributeValue);
 			craftingRecipe.ResultCount = XmlUtils.GetAttributeValue<int>(item, "ResultCount");
 			string attributeValue2 = XmlUtils.GetAttributeValue(item, "Remains", string.Empty);

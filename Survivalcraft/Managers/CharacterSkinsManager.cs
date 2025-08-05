@@ -29,7 +29,7 @@ namespace Game
 
 		public static bool IsBuiltIn(string name)
 		{
-			return name.StartsWith("$");
+			return name.StartsWith('$');
 		}
 
 		public static PlayerClass? GetPlayerClass(string name)

@@ -176,7 +176,7 @@ namespace Game
 			if (craftingRecipe != null && !string.IsNullOrEmpty(craftingRecipe.Message))
 			{
 				string message = craftingRecipe.Message;
-				if (message.StartsWith("[") && message.EndsWith("]"))
+				if (message.StartsWith('[') && message.EndsWith(']'))
 				{
 					message = LanguageControl.Get("CRMessage", message.Substring(1, message.Length - 2));
 				}

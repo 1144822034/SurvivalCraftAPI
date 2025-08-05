@@ -210,7 +210,7 @@ namespace Game
 		public static ReadOnlyList<ContentInfo> List(string directory)
 		{
 			List<ContentInfo> contents = [];
-			if (!directory.EndsWith("/")) directory += "/";
+			if (!directory.EndsWith('/')) directory += "/";
 			foreach (var content in Resources.Values)
 			{
 				if (content.ContentPath.StartsWith(directory)) contents.Add(content);

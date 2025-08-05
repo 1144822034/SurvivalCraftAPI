@@ -22,7 +22,7 @@ namespace Game
 			{
 				if (m_text != value && value != null)
 				{
-					if (value.StartsWith("[") && value.EndsWith("]"))
+					if (value.StartsWith('[') && value.EndsWith(']'))
 					{
 						string[] xp = value.Substring(1, value.Length - 2).Split(new char[] { ':' });
 						m_text = xp.Length == 2 ? LanguageControl.GetContentWidgets(xp[0], xp[1]) : LanguageControl.Get("Usual", value);

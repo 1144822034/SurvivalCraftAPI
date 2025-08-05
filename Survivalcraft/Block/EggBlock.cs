@@ -53,7 +53,7 @@ namespace Game
 				{
 					nestedValue &= 0xFFF;
                     string value = item.GetNestedValue<string>("DisplayName");
-					if (value.StartsWith("[") && value.EndsWith("]"))
+					if (value.StartsWith('[') && value.EndsWith(']'))
 					{
 						string[] lp = value.Substring(1, value.Length - 2).Split(new string[] { ":" }, StringSplitOptions.RemoveEmptyEntries);
 						value = LanguageControl.GetDatabase("DisplayName", lp[1]);

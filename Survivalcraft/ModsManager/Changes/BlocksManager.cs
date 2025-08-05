@@ -816,7 +816,7 @@ namespace Game
                             throw new InvalidOperationException(string.Format(LanguageControl.Get("BlocksManager", 5), text));
                         }
                         object obj = null;
-                        if (text2.StartsWith("#"))
+                        if (text2.StartsWith('#'))
                         {
                             string refTypeName = text2.Substring(1);
                             obj = (!string.IsNullOrEmpty(refTypeName)) ? (m_blocks.FirstOrDefault((Block v) => v.GetType().Name == refTypeName) ?? throw new InvalidOperationException(string.Format(LanguageControl.Get("BlocksManager", 6), refTypeName))).BlockIndex : ((object)block.BlockIndex);

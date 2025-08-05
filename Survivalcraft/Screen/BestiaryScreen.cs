@@ -49,7 +49,7 @@ namespace Game
 					string value = valuesDictionary.GetValue<string>("DisplayName");
 					if(value.StartsWith('[') && value.EndsWith(']'))
 					{
-						string[] lp = value.Substring(1, value.Length - 2).Split(":", StringSplitOptions.RemoveEmptyEntries);
+						string[] lp = value.Substring(1, value.Length - 2).Split(':', StringSplitOptions.RemoveEmptyEntries);
 						value = LanguageControl.GetDatabase("DisplayName", lp[1]);
 					}
 					if (!string.IsNullOrEmpty(value))
@@ -77,9 +77,9 @@ namespace Game
 							ValuesDictionary valuesDictionary8 = DatabaseManager.FindValuesDictionaryForComponent(entitiesValuesDictionary, typeof(ComponentMount));
 							ValuesDictionary valuesDictionary9 = DatabaseManager.FindValuesDictionaryForComponent(entitiesValuesDictionary, typeof(ComponentLoot));
 							string dy = valuesDictionary.GetValue<string>("Description");
-							if(dy.StartsWith('[') && dy.StartsWith(']'))
+							if(dy.StartsWith('[') && dy.EndsWith(']'))
 							{
-								string[] lp = dy.Substring(1,dy.Length - 2).Split(":",StringSplitOptions.RemoveEmptyEntries);
+								string[] lp = dy.Substring(1,dy.Length - 2).Split(':',StringSplitOptions.RemoveEmptyEntries);
 								dy = LanguageControl.GetDatabase("Description", lp[1]);
 							}
 							var bestiaryCreatureInfo = new BestiaryCreatureInfo

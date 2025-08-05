@@ -93,7 +93,7 @@ namespace Game
 			ConstantSpawn = valuesDictionary.GetValue<bool>("ConstantSpawn");
 			Category = valuesDictionary.GetValue<CreatureCategory>("Category");
 			DisplayName = valuesDictionary.GetValue<string>("DisplayName");
-			if (DisplayName.StartsWith("[") && DisplayName.EndsWith("]"))
+			if (DisplayName.StartsWith('[') && DisplayName.EndsWith(']'))
 			{
 				string[] lp = DisplayName.Substring(1, DisplayName.Length - 2).Split(new string[] { ":" }, StringSplitOptions.RemoveEmptyEntries);
 				DisplayName = LanguageControl.GetDatabase("DisplayName", lp[1]);

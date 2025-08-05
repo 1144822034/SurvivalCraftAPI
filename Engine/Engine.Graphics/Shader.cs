@@ -186,7 +186,7 @@ namespace Engine.Graphics
 					if (text.StartsWith("//"))
 					{
 						text = text.Substring(2).TrimStart();
-						if (text.StartsWith("<") && text.EndsWith("/>"))
+						if (text.StartsWith('<') && text.EndsWith("/>"))
 						{
 							var xElement = XElement.Parse(text);
 							if (xElement.Name == "Semantic")

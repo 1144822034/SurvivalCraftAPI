@@ -15,11 +15,11 @@ namespace Game
 			ClothIndex &= 0x3FF;
 			string newDescription = item.Attribute("Description")?.Value;
 			string newDisplayName = item.Attribute("DisplayName")?.Value;
-			if(newDescription != null && newDescription.StartsWith("[") && newDescription.EndsWith("]") && LanguageControl.TryGetBlock(string.Format("{0}:{1}",typeof(ClothingBlock).Name,ClothIndex),"Description",out var d))
+			if(newDescription != null && newDescription.StartsWith('[') && newDescription.EndsWith(']') && LanguageControl.TryGetBlock(string.Format("{0}:{1}",typeof(ClothingBlock).Name,ClothIndex),"Description",out var d))
 			{
 				newDescription = d;
 			}
-			if(newDisplayName != null && newDisplayName.StartsWith("[") && newDisplayName.EndsWith("]") && LanguageControl.TryGetBlock(string.Format("{0}:{1}",typeof(ClothingBlock).Name,ClothIndex),"DisplayName",out string n))
+			if(newDisplayName != null && newDisplayName.StartsWith('[') && newDisplayName.EndsWith(']') && LanguageControl.TryGetBlock(string.Format("{0}:{1}",typeof(ClothingBlock).Name,ClothIndex),"DisplayName",out string n))
 			{
 				newDisplayName = n;
 			}

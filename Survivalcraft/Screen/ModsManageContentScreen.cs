@@ -803,7 +803,7 @@ public class ModsManageContentScreen : Screen
 				foreach (string fileName in Storage.ListFileNames(validPath))
 				{
 					if (m_cancelScan) return m_count;
-					if (validPath.EndsWith("/"))
+					if (validPath.EndsWith('/'))
 					{
 						validPath = path.Substring(0, validPath.Length - 1);
 					}
@@ -868,7 +868,7 @@ public class ModsManageContentScreen : Screen
 			foreach (string directory in Storage.ListDirectoryNames(path))
 			{
 				if (m_cancelScan) return m_count;
-				if (validPath.EndsWith("/"))
+				if (validPath.EndsWith('/'))
 				{
 					validPath = path.Substring(0, validPath.Length - 1);
 				}

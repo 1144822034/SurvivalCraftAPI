@@ -643,7 +643,7 @@ namespace Game
 			IEnumerable<PropertyInfo> runtimeProperties = GetType().GetRuntimeProperties();
 			foreach (XAttribute attribute in node.Attributes())
 			{
-				if (!attribute.IsNamespaceDeclaration && !attribute.Name.LocalName.StartsWith("_"))
+				if (!attribute.IsNamespaceDeclaration && !attribute.Name.LocalName.StartsWith('_'))
 				{
 					if (attribute.Name.LocalName.Contains('.'))
 					{
@@ -678,7 +678,7 @@ namespace Game
 						{
 							throw new InvalidOperationException($"Property \"{attribute.Name.LocalName}\" not found in widget of type \"{GetType().FullName}\".");
 						}
-						if (attribute.Value.StartsWith("{") && attribute.Value.EndsWith("}"))
+						if (attribute.Value.StartsWith('{') && attribute.Value.EndsWith('}'))
 						{
 							string name = attribute.Value.Substring(1, attribute.Value.Length - 2);
 							object value = ContentManager.Get(propertyInfo.PropertyType, name, null, false);

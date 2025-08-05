@@ -168,7 +168,7 @@ public class PlayerScreen : Screen
             DatabaseManager.FindEntityValuesDictionary(m_playerData.GetEntityTemplateName(), throwIfNotFound: true),
             typeof(ComponentCreature));
         string description = valuesDictionary.GetValue<string>("Description");
-        if (description.StartsWith("[") && description.EndsWith("]"))
+        if (description.StartsWith('[') && description.EndsWith(']'))
         {
             string[] lp = description.Substring(1, description.Length - 2)
                 .Split(new string[] { ":" }, StringSplitOptions.RemoveEmptyEntries);

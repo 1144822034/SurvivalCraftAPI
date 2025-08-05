@@ -64,7 +64,7 @@ namespace Game
 					if (lines[l].StartsWith("//"))
 					{
 						string text = lines[l].Substring(2).TrimStart();
-						if (text.StartsWith("<") && text.EndsWith("/>"))
+						if (text.StartsWith('<') && text.EndsWith("/>"))
 						{
 							includeText += lines[l] + "\n";
 							continue;
