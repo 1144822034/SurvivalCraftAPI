@@ -26,7 +26,7 @@ namespace Game
 
 		public const int MinResolution = 2;
 
-		public const int maxDesign = 4096;//家具上限数量
+		public const int maxDesign = 8192;//家具上限数量
 
 		public const int MaxResolution = 256;//家具格分辨率
 
