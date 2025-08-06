@@ -60,7 +60,7 @@ namespace Engine.Graphics
 			Color = Vector4.One;
 		}
 
-		public void SetParameter()
+		public virtual void SetParameter()
 		{
 			m_worldViewProjectionMatrixParameter = base.GetParameter("u_worldViewProjectionMatrix", true);
 			m_textureParameter = base.GetParameter("u_texture", true);

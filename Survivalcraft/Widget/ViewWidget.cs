@@ -62,11 +62,11 @@ namespace Game
 			Utilities.Dispose(ref m_scalingRenderTarget);
 		}
 
-		public void DragOver(Widget dragWidget, object data)
+		public virtual void DragOver(Widget dragWidget, object data)
 		{
 		}
 
-		public void DragDrop(Widget dragWidget, object data)
+		public virtual void DragDrop(Widget dragWidget, object data)
 		{
 			var inventoryDragData = data as InventoryDragData;
 			if (inventoryDragData != null && GameManager.Project != null)
@@ -85,7 +85,7 @@ namespace Game
 			}
 		}
 
-		public void SetupScalingRenderTarget()
+		public virtual void SetupScalingRenderTarget()
 		{
 			float num = (SettingsManager.ResolutionMode == ResolutionMode.Low) ? 0.5f : ((SettingsManager.ResolutionMode != ResolutionMode.Medium) ? 1f : 0.75f);
 			float num2 = GlobalTransform.Right.Length();
@@ -111,7 +111,7 @@ namespace Game
 			}
 		}
 
-		public void ApplyScalingRenderTarget(DrawContext dc)
+		public virtual void ApplyScalingRenderTarget(DrawContext dc)
 		{
 			if (m_scalingRenderTarget != null)
 			{
@@ -124,7 +124,7 @@ namespace Game
 			}
 		}
 
-		public void DrawToScreen(DrawContext dc)
+		public virtual void DrawToScreen(DrawContext dc)
 		{
 			GameWidget.ActiveCamera.PrepareForDrawing();
 			RenderTarget2D renderTarget = Display.RenderTarget;

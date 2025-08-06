@@ -79,7 +79,7 @@ namespace Game
 
 		public int[] DrawOrders => m_drawOrders;
 
-		public void Draw(Camera camera, int drawOrder)
+		public virtual void Draw(Camera camera, int drawOrder)
 		{
 			//准备模型
 			if (drawOrder == m_drawOrders[0])
@@ -208,7 +208,7 @@ namespace Game
 			}
 		}
 
-		public void PrepareModel(ModelData modelData, Camera camera)
+		public virtual void PrepareModel(ModelData modelData, Camera camera)
 		{
 			if (Time.FrameIndex > modelData.LastAnimateFrame)
 			{
@@ -227,13 +227,13 @@ namespace Game
 			modelData.ComponentModel.CalculateAbsoluteBonesTransforms(camera);
 		}
 
-		public void DrawModels(Camera camera, List<ModelData> modelsData, float? alphaThreshold)
+		public virtual void DrawModels(Camera camera, List<ModelData> modelsData, float? alphaThreshold)
 		{
 			DrawInstancedModels(camera, modelsData, alphaThreshold);
 			DrawModelsExtras(camera, modelsData);
 		}
 
-		public void DrawInstancedModels(Camera camera, List<ModelData> modelsData, float? alphaThreshold)
+		public virtual void DrawInstancedModels(Camera camera, List<ModelData> modelsData, float? alphaThreshold)
 		{
 			ModelShader modelShader = null;
 			if (ShaderOpaque != null && ShaderAlphaTested != null)
@@ -294,7 +294,7 @@ namespace Game
 			}
 		}
 
-		public void DrawModelsExtras(Camera camera, List<ModelData> modelsData)
+		public virtual void DrawModelsExtras(Camera camera, List<ModelData> modelsData)
 		{
 			foreach (ModelData modelData in modelsData)
 			{
@@ -309,7 +309,7 @@ namespace Game
 			}
 		}
 
-		public float? CalculateModelLight(ModelData modelData)
+		public virtual float? CalculateModelLight(ModelData modelData)
 		{
 			Vector3 p;
 			if (modelData.ComponentBody != null)
@@ -326,7 +326,7 @@ namespace Game
 		}
 
 		//阴影绘制
-		public void ShadowDraw(SubsystemShadows subsystemShadows, Camera camera, Vector3 shadowPosition, float shadowDiameter, float alpha)
+		public virtual void ShadowDraw(SubsystemShadows subsystemShadows, Camera camera, Vector3 shadowPosition, float shadowDiameter, float alpha)
 		{
 			if (!SettingsManager.ObjectsShadowsEnabled)
 			{

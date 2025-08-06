@@ -75,12 +75,12 @@ namespace Engine.Graphics
 			}
 		}
 
-		public ShaderParameter GetParameter(string name, bool allowNull = false)
+		public virtual ShaderParameter GetParameter(string name, bool allowNull = false)
 		{
             return m_parametersByName.TryGetValue(name, out ShaderParameter value)
                 ? value
                 : allowNull
-                    ? null
+                    ? new ShaderParameter("null", ShaderParameterType.Null)
                     : throw new InvalidOperationException($"Parameter \"{name}\" not found.");
         }
 

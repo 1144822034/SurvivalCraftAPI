@@ -29,7 +29,7 @@ namespace Game
 			/// 绘制 rootWidget 及其子 Widget。
 			/// </summary>
 			/// <param name="rootWidget"></param>
-			public void DrawWidgetsHierarchy(Widget rootWidget)
+			public virtual void DrawWidgetsHierarchy(Widget rootWidget)
 			{
 				m_drawItems.Clear();
 				CollateDrawItems(rootWidget, Display.ScissorRectangle);
@@ -43,7 +43,7 @@ namespace Game
 			/// </summary>
 			/// <param name="widget">DrawItem 所属的 Widget。</param>
 			/// <param name="scissorRectangle">Widget 父级的 ScissorRectangle。</param>
-			public void CollateDrawItems(Widget widget, Rectangle scissorRectangle)
+			public virtual void CollateDrawItems(Widget widget, Rectangle scissorRectangle)
 			{
 				if (!widget.IsVisible || !widget.IsDrawEnabled)
 				{
@@ -113,7 +113,7 @@ namespace Game
 			/// <summary>
 			/// 指定 DrawItem 的 Layer（层级）。
 			/// </summary>
-			public void AssignDrawItemsLayers()
+			public virtual void AssignDrawItemsLayers()
 			{
 				for (int i = 0; i < m_drawItems.Count; i++)
 				{
@@ -142,7 +142,7 @@ namespace Game
 
 			/// <summary>
 			/// </summary>
-			public void RenderDrawItems()
+			public virtual void RenderDrawItems()
 			{
 				Rectangle scissorRectangle = Display.ScissorRectangle;
 				int currentLayer = 0;
@@ -207,7 +207,7 @@ namespace Game
 			/// 从缓存中获取一个 <see cref="DrawItem"/> 实例，用于减少实例创建次数以缓解 GC 压力。
 			/// </summary>
 			/// <returns>搜索到的实例</returns>
-			public DrawItem GetDrawItemFromCache()
+			public virtual DrawItem GetDrawItemFromCache()
 			{
 				if (m_drawItemsCache.Count > 0)
 				{
@@ -221,7 +221,7 @@ namespace Game
 			/// <summary>
 			/// 对 <see cref="DrawItem"/> 进行复用，并存储到缓存列表内。
 			/// </summary>
-			public void ReturnDrawItemsToCache()
+			public virtual void ReturnDrawItemsToCache()
 			{
 				foreach (DrawItem drawItem in m_drawItems)
 				{
@@ -241,7 +241,7 @@ namespace Game
 		/// <summary>
 		/// 绘制任务，有多种类型，绘制任务会按照 <see cref="Layer"/> 进行排序。
 		/// </summary>
-		public sealed class DrawItem : IComparable<DrawItem>
+		public class DrawItem : IComparable<DrawItem>
 		{
 			/// <summary>
 			/// 绘制任务所在的层级，值越小，绘制越靠前，绘制靠前的绘制任务会被靠后的覆盖。
@@ -631,14 +631,14 @@ namespace Game
 			return widget;
 		}
 
-		public void LoadContents(object eventsTarget, XElement node)
+		public virtual void LoadContents(object eventsTarget, XElement node)
 		{
 			LoadProperties(eventsTarget, node);
 			LoadChildren(eventsTarget, node);
 			ModsManager.HookAction("OnWidgetContentsLoaded",loader => { loader.OnWidgetContentsLoaded(this); return false; });
 		}
 
-		public void LoadProperties(object eventsTarget, XElement node)
+		public virtual void LoadProperties(object eventsTarget, XElement node)
 		{
 			IEnumerable<PropertyInfo> runtimeProperties = GetType().GetRuntimeProperties();
 			foreach (XAttribute attribute in node.Attributes())
@@ -705,7 +705,7 @@ namespace Game
 			}
 		}
 
-		public void LoadChildren(object eventsTarget, XElement node)
+		public virtual void LoadChildren(object eventsTarget, XElement node)
 		{
 			if (node.HasElements)
 			{
@@ -737,7 +737,7 @@ namespace Game
 			}
 		}
 
-		public bool IsChildWidgetOf(ContainerWidget containerWidget)
+		public virtual bool IsChildWidgetOf(ContainerWidget containerWidget)
 		{
 			if (containerWidget == ParentWidget)
 			{
@@ -762,7 +762,7 @@ namespace Game
 			}
 		}
 
-		public void Measure(Vector2 parentAvailableSize)
+		public virtual void Measure(Vector2 parentAvailableSize)
 		{
 			if (MeasureOverride1 == null) MeasureOverride(parentAvailableSize); else { MeasureOverride1(parentAvailableSize); return; }
 			if (DesiredSize.X != 1f / 0f && DesiredSize.Y != 1f / 0f)
@@ -782,7 +782,7 @@ namespace Game
 		{
 		}
 
-		public void Arrange(Vector2 position, Vector2 parentActualSize)
+		public virtual void Arrange(Vector2 position, Vector2 parentActualSize)
 		{
 			float num = m_layoutTransform.M11 * m_layoutTransform.M11;
 			float num2 = m_layoutTransform.M12 * m_layoutTransform.M12;
@@ -842,17 +842,17 @@ namespace Game
 			return false;
 		}
 
-		public Widget HitTestGlobal(Vector2 point, Func<Widget, bool> predicate = null)
+		public virtual Widget HitTestGlobal(Vector2 point, Func<Widget, bool> predicate = null)
 		{
 			return HitTestGlobal(RootWidget, point, predicate);
 		}
 
-		public Vector2 ScreenToWidget(Vector2 p)
+		public virtual Vector2 ScreenToWidget(Vector2 p)
 		{
 			return Vector2.Transform(p, InvertedGlobalTransform);
 		}
 
-		public Vector2 WidgetToScreen(Vector2 p)
+		public virtual Vector2 WidgetToScreen(Vector2 p)
 		{
 			return Vector2.Transform(p, GlobalTransform);
 		}
@@ -936,7 +936,7 @@ namespace Game
 			}
 		}
 
-		public BoundingRectangle TransformBoundsToParent(Vector2 size)
+		public virtual BoundingRectangle TransformBoundsToParent(Vector2 size)
 		{
 			float num = m_layoutTransform.M11 * size.X;
 			float num2 = m_layoutTransform.M21 * size.Y;
@@ -951,7 +951,7 @@ namespace Game
 			return new BoundingRectangle(x3, y, x4, y2);
 		}
 
-		public BoundingRectangle TransformBoundsToGlobal(Vector2 size)
+		public virtual BoundingRectangle TransformBoundsToGlobal(Vector2 size)
 		{
 			float num = m_globalTransform.M11 * size.X;
 			float num2 = m_globalTransform.M21 * size.Y;

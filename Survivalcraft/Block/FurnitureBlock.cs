@@ -578,7 +578,7 @@ namespace Game
 
 		public static int GetDesignIndex(int data)
 		{
-			return ((data >> 15) << 10) | ((data >> 2) & 1023);
+			return (((data >> 15) & 7) << 10) | ((data >> 2) & 1023);
 		}
 
 		public static int SetDesignIndex(int data, int designIndex, int shadowStrengthFactor, bool isLightEmitter)

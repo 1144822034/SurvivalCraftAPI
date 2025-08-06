@@ -8,6 +8,20 @@ namespace Game
 
 		public TerrainGeometryDynamicArray<int> Indices = [];
 
+		public object m_tag;
+
+		public object Tag
+		{
+			get
+			{
+				return m_tag;
+			}
+			set
+			{
+				m_tag = value;
+			}
+		}
+
 		public TerrainGeometrySubset()
 		{
 		}

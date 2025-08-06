@@ -34,9 +34,9 @@ namespace Game
 
 		public ShaderParameter m_fogColorParameter;
 
-		private ShaderParameter m_fogBottomTopDensityParameter;
+		public ShaderParameter m_fogBottomTopDensityParameter;
 
-		private ShaderParameter m_hazeStartDensityParameter;
+		public ShaderParameter m_hazeStartDensityParameter;
 
 		public ShaderParameter m_fogYMultiplierParameter;
 
@@ -192,7 +192,7 @@ namespace Game
 			SetParameter();
 		}
 
-		public void SetParameter()
+		public virtual void SetParameter()
 		{
 			m_worldMatrixParameter = GetParameter("u_worldMatrix");
 			m_worldViewProjectionMatrixParameter = GetParameter("u_worldViewProjectionMatrix");
