@@ -162,7 +162,7 @@ namespace Game
 			return 0f;
 		}
 
-		public void UpdateFluidIsTop(TerrainChunk chunk)
+		public virtual void UpdateFluidIsTop(TerrainChunk chunk)
 		{
 			_ = m_subsystemTerrain.Terrain;
 			for (int i = 0; i < 16; i++)

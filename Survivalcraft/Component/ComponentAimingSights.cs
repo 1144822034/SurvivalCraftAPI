@@ -39,12 +39,12 @@ namespace Game
 			m_sightsDirection = direction;
 		}
 
-		public void Update(float dt)
+		public virtual void Update(float dt)
 		{
 			IsSightsVisible = false;
 		}
 
-		public void Draw(Camera camera,int drawOrder)
+		public virtual void Draw(Camera camera,int drawOrder)
 		{
 			if(camera.GameWidget != m_componentPlayer.GameWidget)
 			{

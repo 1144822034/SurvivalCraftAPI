@@ -67,7 +67,7 @@ namespace Game
 			m_fireDuration = 0f;
 		}
 
-		public void Update(float dt)
+		public virtual void Update(float dt)
 		{
 			if (!IsAddedToProject)
 			{

@@ -107,7 +107,7 @@ namespace Game
 			UpdateControls();
 		}
 
-		public void UpdateControls()
+		public virtual void UpdateControls()
 		{
 			m_slider1.Value = m_maxExtension + 1;
 			m_slider1.Text = string.Format(LanguageControl.Get(GetType().Name, 1), m_maxExtension + 1);

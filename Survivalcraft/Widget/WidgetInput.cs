@@ -743,7 +743,7 @@ public class WidgetInput
 		ClearInput();
 	}
 
-	public void Update()
+	public virtual void Update()
 	{
 		m_isCleared = false;
 		ClearInput();
@@ -768,7 +768,7 @@ public class WidgetInput
 		}
 	}
 
-	public void Draw(Widget.DrawContext dc)
+	public virtual void Draw(Widget.DrawContext dc)
 	{
 		if (IsMouseCursorVisible && UseSoftMouseCursor && MousePosition.HasValue)
 		{
@@ -813,7 +813,7 @@ public class WidgetInput
 		Scroll = null;
 	}
 
-    public void UpdateInputFromKeyboard()
+    public virtual void UpdateInputFromKeyboard()
 	{
 		if (LastKey.HasValue && LastKey != Key.Escape)
 		{
@@ -846,7 +846,7 @@ public class WidgetInput
 		}
 	}
 
-    public void UpdateInputFromMouse()
+    public virtual void UpdateInputFromMouse()
 	{
 		if (IsMouseButtonDownOnce(MouseButton.Left))
 		{
@@ -922,7 +922,7 @@ public class WidgetInput
 		}
 	}
 
-    public void UpdateInputFromGamepads()
+    public virtual void UpdateInputFromGamepads()
 	{
 		if (IsPadButtonDownRepeat(GamePadButton.DPadLeft))
 		{
@@ -1019,7 +1019,7 @@ public class WidgetInput
 		}
 	}
 
-    public void UpdateInputFromTouch()
+    public virtual void UpdateInputFromTouch()
 	{
 		foreach (TouchLocation touchLocation in TouchLocations)
 		{

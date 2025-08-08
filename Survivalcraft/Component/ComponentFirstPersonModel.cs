@@ -65,7 +65,7 @@ namespace Game
 
 		public UpdateOrder UpdateOrder => UpdateOrder.FirstPersonModels;
 
-		public void Draw(Camera camera, int drawOrder)
+		public virtual void Draw(Camera camera, int drawOrder)
 		{
 			if (m_componentPlayer.ComponentHealth.Health > 0f && camera.GameWidget.IsEntityFirstPersonTarget(Entity) && !m_componentPlayer.ComponentInput.IsControlledByVr)
 			{
@@ -209,7 +209,7 @@ namespace Game
 			}
 		}
 
-		public void Update(float dt)
+		public virtual void Update(float dt)
 		{
 			Vector3 vector = m_componentPlayer.ComponentCreatureModel.EyeRotation.ToYawPitchRoll();
 			m_lagAngles *= MathF.Pow(0.2f, dt);

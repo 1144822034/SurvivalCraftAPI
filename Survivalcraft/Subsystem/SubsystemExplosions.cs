@@ -235,7 +235,7 @@ namespace Game
 			}
 		}
 
-		public void Update(float dt)
+		public virtual void Update(float dt)
 		{
 			if (m_queuedExplosions.Count <= 0)
 			{

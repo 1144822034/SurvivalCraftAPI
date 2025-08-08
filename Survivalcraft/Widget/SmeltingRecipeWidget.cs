@@ -82,7 +82,7 @@ namespace Game
 			base.MeasureOverride(parentAvailableSize);
 		}
 
-		public void UpdateWidgets()
+		public virtual void UpdateWidgets()
 		{
 			m_dirty = false;
 			if (m_recipe != null)

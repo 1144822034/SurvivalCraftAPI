@@ -32,7 +32,7 @@ namespace Game
 		};
 
 		public int[] DrawOrders => m_drawOrders;
-		public void Draw(Camera camera, int drawOrder)
+		public virtual void Draw(Camera camera, int drawOrder)
 		{
 			if (!m_componentMiner.DigCellFace.HasValue || !(m_componentMiner.DigProgress > 0f) || !(m_componentMiner.DigTime > 0.2f))
 			{

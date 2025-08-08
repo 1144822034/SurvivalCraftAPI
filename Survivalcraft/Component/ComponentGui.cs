@@ -273,7 +273,7 @@ namespace Game
 			return false;
 		}
 
-		public void Update(float dt)
+		public virtual void Update(float dt)
 		{
 			HandleInput();
 			UpdateWidgets();
@@ -840,7 +840,7 @@ namespace Game
 			return false;
 		}
 
-		public void Draw(Camera camera, int drawOrder)
+		public virtual void Draw(Camera camera, int drawOrder)
 		{
 			ModsManager.HookAction("GuiDraw", (modloader) => { modloader.GuiDraw(this, camera, drawOrder); return false; });
 		}

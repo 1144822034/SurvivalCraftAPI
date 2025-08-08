@@ -50,7 +50,7 @@ namespace Game
 			m_generateSources = generateSources;
 		}
 
-		public void UpdateIsTop(int value, int x, int y, int z)
+		public virtual void UpdateIsTop(int value, int x, int y, int z)
 		{
 			Terrain terrain = SubsystemTerrain.Terrain;
 			if (y < 255)

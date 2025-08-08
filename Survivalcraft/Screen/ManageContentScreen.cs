@@ -287,7 +287,7 @@ public class ManageContentScreen : Screen
 		}
 	}
 
-	public void UpdateList()
+	public virtual void UpdateList()
 	{
 		WorldsManager.UpdateWorldsList();
 		var list = new List<ListItem>();

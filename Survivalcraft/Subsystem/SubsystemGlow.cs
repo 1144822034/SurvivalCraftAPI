@@ -35,7 +35,7 @@ namespace Game
 			m_glowPoints.Remove(glowPoint);
 		}
 
-		public void Draw(Camera camera, int drawOrder)
+		public virtual void Draw(Camera camera, int drawOrder)
 		{
 			foreach (GlowPoint key in m_glowPoints.Keys)
 			{

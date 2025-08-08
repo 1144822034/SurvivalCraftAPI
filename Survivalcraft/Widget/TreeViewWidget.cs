@@ -61,7 +61,7 @@ namespace Game
 			}
 		}
 
-		public void UpdateNodes()
+		public virtual void UpdateNodes()
 		{
 			Children.Clear();
 

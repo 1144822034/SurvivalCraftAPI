@@ -50,7 +50,7 @@ namespace Game
 
 		public UpdateOrder UpdateOrder => UpdateOrder.FirstPersonModels;
 
-		public void Draw(Camera camera,int drawOrder)
+		public virtual void Draw(Camera camera,int drawOrder)
 		{
 			if(!(m_componentPlayer.ComponentHealth.Health > 0f)
 				|| !camera.GameWidget.IsEntityFirstPersonTarget(base.Entity)
@@ -156,7 +156,7 @@ namespace Game
 			m_primitivesRenderer.Flush(camera.ProjectionMatrix);
 		}
 
-		public void Update(float dt)
+		public virtual void Update(float dt)
 		{
 			m_pokeAnimationTime = m_componentMiner.PokingPhase;
 			m_itemOffset = Vector3.Lerp(m_itemOffset,ItemOffsetOrder,MathUtils.Saturate(10f * dt));

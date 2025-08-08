@@ -68,7 +68,7 @@ namespace Game
 				Geometry.ClearGeometry();
 			}
 
-			public void UpdateBox()
+			public virtual void UpdateBox()
 			{
 				Point3? point = null;
 				Point3? point2 = null;
@@ -304,7 +304,7 @@ namespace Game
 			return null;
 		}
 
-		public void Update(float dt)
+		public virtual void Update(float dt)
 		{
 			m_canGenerateGeometry = true;
 			foreach (MovingBlockSet movingBlockSet in m_movingBlockSets)
@@ -389,7 +389,7 @@ namespace Game
 			m_stopped.Clear();
 		}
 
-		public void Draw(Camera camera, int drawOrder)
+		public virtual void Draw(Camera camera, int drawOrder)
 		{
 			foreach (TerrainChunkGeometry.Buffer buffer in Buffers)
 			{
@@ -667,7 +667,7 @@ namespace Game
 			movingBlockSet.GeometryGenerationPosition = point;
 		}
 
-		public void DrawMovingBlockSet(Camera camera, MovingBlockSet movingBlockSet)
+		public virtual void DrawMovingBlockSet(Camera camera, MovingBlockSet movingBlockSet)
 		{
 			if (camera.ViewFrustum.Intersection(movingBlockSet.BoundingBox(extendToFillCells: false)))
 			{

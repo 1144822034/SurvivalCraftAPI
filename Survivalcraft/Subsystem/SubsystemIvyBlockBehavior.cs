@@ -16,7 +16,7 @@ namespace Game
 
 		public override int[] HandledBlocks => new int[0];
 
-		public void Update(float dt)
+		public virtual void Update(float dt)
 		{
 			if (m_subsystemTime.PeriodicGameTimeEvent(60.0, 0.0))
 			{

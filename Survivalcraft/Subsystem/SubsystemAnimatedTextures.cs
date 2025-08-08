@@ -52,7 +52,7 @@ namespace Game
 
 		public UpdateOrder UpdateOrder => UpdateOrder.Default;
 
-		public void Update(float dt)
+		public virtual void Update(float dt)
 		{
 			if (!DisableTextureAnimation
 				&& !m_subsystemTime.FixedTimeStep.HasValue
@@ -267,7 +267,7 @@ namespace Game
 			return new Rectangle((int)(num2 * num), (int)(num3 * num), (int)num, (int)(num * 3f));
 		}
 
-		public void DrawBlocksTextureSlot(TexturedBatch2D batch, int slotX, int slotY, Vector2 tc1, Vector2 tc2, Vector2 tcOffset, Color color)
+		public virtual void DrawBlocksTextureSlot(TexturedBatch2D batch, int slotX, int slotY, Vector2 tc1, Vector2 tc2, Vector2 tcOffset, Color color)
 		{
 			float s = m_animatedBlocksTexture.Width / 16f;
 			batch.QueueQuad(new Vector2(slotX, slotY) * s, new Vector2(slotX + 1, slotY + 1) * s, 0f, (tc1 + tcOffset) / 16f, (tc2 + tcOffset) / 16f, color);

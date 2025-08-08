@@ -1813,7 +1813,7 @@ public class TextBoxWidget : Widget
 	    }
 
     }
-    public void Draw_(DrawContext dc)
+    public virtual void Draw_(DrawContext dc)
     {
 	    var textToDraw = Text.Replace("\t", new string(' ',IndentWidth));
 	    var caretIndex = Text[..Caret].Sum(c => c == '\t' ? IndentWidth : 1);

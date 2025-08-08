@@ -2166,7 +2166,7 @@ namespace Game
 			}
 		}
 
-		public void UpdateFluidIsTop(TerrainChunk chunk)
+		public virtual void UpdateFluidIsTop(TerrainChunk chunk)
 		{
 			for (int i = 0; i < 16; i++)
 			{

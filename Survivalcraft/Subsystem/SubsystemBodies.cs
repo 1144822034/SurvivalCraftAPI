@@ -132,7 +132,7 @@ namespace Game
 			}
 		}
 
-		public void Update(float dt)
+		public virtual void Update(float dt)
 		{
 			foreach (ComponentBody body in Bodies)
 			{
@@ -162,7 +162,7 @@ namespace Game
 			componentBody.PositionChanged -= ComponentBody_PositionChanged;
 		}
 
-		public void UpdateBody(ComponentBody componentBody)
+		public virtual void UpdateBody(ComponentBody componentBody)
 		{
 			Vector3 position = componentBody.Position;
 			var point = new Point2((int)MathF.Floor(position.X / 8f), (int)MathF.Floor(position.Z / 8f));

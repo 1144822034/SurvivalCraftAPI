@@ -127,7 +127,7 @@ namespace Game
 			SetDestination(null, 0f, 0f, ignoreHeightDifference: false, raycastDestination: false, takeRisks: false, null);
 		}
 
-		public void Update(float dt)
+		public virtual void Update(float dt)
 		{
 			if (m_subsystemTime.GameTime >= m_nextUpdateTime)
 			{

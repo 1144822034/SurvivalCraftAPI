@@ -116,7 +116,7 @@ namespace Game
 			return result;
 		}
 
-		public void Update(float dt)
+		public virtual void Update(float dt)
 		{
 			if (m_firePointsCopy.Count == 0)
 			{

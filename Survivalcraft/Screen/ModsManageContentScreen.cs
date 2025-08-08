@@ -678,7 +678,7 @@ public class ModsManageContentScreen : Screen
 		}
 	}
 
-	public void UpdateListWithBusyDialog(bool fast = false)
+	public virtual void UpdateListWithBusyDialog(bool fast = false)
 	{
 		BusyDialog busyDialog = new(LanguageControl.Get(fName, 43), null);
 		DialogsManager.ShowDialog(null, busyDialog);
@@ -693,7 +693,7 @@ public class ModsManageContentScreen : Screen
 		});
 	}
 
-	public void UpdateList(bool fast = false)
+	public virtual void UpdateList(bool fast = false)
 	{
 		m_modsContentLabel.Text = LanguageControl.Get(fName, 40) + SetPathText(m_path);
 		if (!fast || m_updatable)
@@ -1157,7 +1157,7 @@ public class ModsManageContentScreen : Screen
 		return true;
 	}
 
-	public void UpdateModFromCommunity(ModInfo modInfo)
+	public virtual void UpdateModFromCommunity(ModInfo modInfo)
 	{
 		//从社区拉取MOD并更新
 		//CommunityContentScreen communityContentScreen = ScreensManager.FindScreen<CommunityContentScreen>("CommunityContent");

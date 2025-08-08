@@ -42,7 +42,7 @@ namespace Game
 			}
 		}
 
-		public void Update(float dt)
+		public virtual void Update(float dt)
 		{
 			m_stateMachine.Update();
 		}

@@ -14,7 +14,7 @@ namespace Game
 
 		public UpdateOrder UpdateOrder => UpdateOrder.Default;
 
-		public void Update(float dt)
+		public virtual void Update(float dt)
 		{
 			ComponentBehavior componentBehavior = null;
 			if (m_componentCreature.ComponentHealth.Health > 0f && !m_componentCreature.ComponentBody.IsEmbeddedInIce)

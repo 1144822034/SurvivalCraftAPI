@@ -37,7 +37,7 @@ namespace Game
 			m_timeToForgetAttacker = m_random.Float(10f, 20f);
 		}
 
-		public void Update(float dt)
+		public virtual void Update(float dt)
 		{
 			m_stateMachine.Update();
 		}

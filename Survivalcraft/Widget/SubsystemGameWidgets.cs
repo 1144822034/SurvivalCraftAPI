@@ -50,7 +50,7 @@ namespace Game
 			return MathF.Sqrt(CalculateSquaredDistanceFromNearestView(p));
 		}
 
-		public void Update(float dt)
+		public virtual void Update(float dt)
 		{
 			foreach (GameWidget gameWidget in GameWidgets)
 			{

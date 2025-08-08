@@ -86,7 +86,7 @@ namespace Game
 			}
 		}
 
-		public void Update(float dt)
+		public virtual void Update(float dt)
 		{
 			int num = 0;
 			while (true)

@@ -87,7 +87,7 @@ namespace Game
 			}
 		}
 
-		public void Update(float dt)
+		public virtual void Update(float dt)
 		{
 			if (DespawnTime.HasValue && m_subsystemGameInfo.TotalElapsedGameTime >= DespawnTime.Value + DespawnDuration)
 			{

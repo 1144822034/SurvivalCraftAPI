@@ -673,7 +673,7 @@ namespace Game
             attacked?.Project.FindSubsystem<SubsystemParticles>(throwOnError: true).AddParticleSystem(particleSystem);
         }
 
-        public void Update(float dt)
+        public virtual void Update(float dt)
 		{
 			float num = (m_subsystemGameInfo.WorldSettings.GameMode == GameMode.Creative) ? (1f / SettingsManager.CreativeDigTime) : 4f;
 			m_lastPokingPhase = PokingPhase;

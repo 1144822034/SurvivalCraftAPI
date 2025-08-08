@@ -74,7 +74,7 @@ namespace Game
 			}
 		}
 
-		public void UpdateCreatureProperties()
+		public virtual void UpdateCreatureProperties()
 		{
 			if (m_index >= 0 && m_index < m_infoList.Count)
 			{

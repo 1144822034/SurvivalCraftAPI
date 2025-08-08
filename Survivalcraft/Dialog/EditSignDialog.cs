@@ -170,7 +170,7 @@ namespace Game
 			}
 		}
 
-		public void UpdateControls()
+		public virtual void UpdateControls()
 		{
 			bool flag = !string.IsNullOrEmpty(m_urlTextBox.Text);
 			m_urlButton.IsVisible = m_linesPage.IsVisible;

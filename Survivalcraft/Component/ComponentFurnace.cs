@@ -102,7 +102,7 @@ namespace Game
 			m_subsystemParticles.RemoveParticleSystem(m_fireParticleSystem);
 		}
 
-		public void Update(float dt)
+		public virtual void Update(float dt)
 		{
 			m_fuelEndTime = (float)(m_subsystemGameInfo.TotalElapsedGameTime + m_fireTimeRemaining);
 			Point3 coordinates = m_componentBlockEntity.Coordinates;

@@ -105,7 +105,7 @@ namespace Game
 			base.Load(valuesDictionary);
 		}
 
-		public void Update(float dt)
+		public virtual void Update(float dt)
 		{
 			if (m_subsystemTime.PeriodicGameTimeEvent(60.0, 0.0))
 			{

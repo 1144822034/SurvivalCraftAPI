@@ -15,7 +15,7 @@ namespace Game
 			UpdateVariant(value, x, y, z);
 		}
 
-		public void UpdateVariant(int value, int x, int y, int z)
+		public virtual void UpdateVariant(int value, int x, int y, int z)
 		{
 			int num = Terrain.ExtractContents(value);
 			var fenceBlock = BlocksManager.Blocks[num] as FenceBlock;

@@ -62,7 +62,7 @@ namespace Game
 			UpdateControls();
 		}
 
-		public void UpdateControls()
+		public virtual void UpdateControls()
 		{
 			m_delaySlider.Value = m_delay;
 			m_minusButton.IsEnabled = m_delay > m_delaySlider.MinValue;

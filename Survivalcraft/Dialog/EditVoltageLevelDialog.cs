@@ -44,7 +44,7 @@ namespace Game
 			UpdateControls();
 		}
 
-		public void UpdateControls()
+		public virtual void UpdateControls()
 		{
 			m_voltageSlider.Text = string.Format("{0:0.0}V ({1})", new object[2]
 			{

@@ -49,7 +49,7 @@ namespace Game
 
 		public override float ImportanceLevel => m_importanceLevel;
 
-		public void Update(float dt)
+		public virtual void Update(float dt)
 		{
 			if (m_satiation > 0f)
 			{

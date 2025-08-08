@@ -189,7 +189,7 @@ namespace Game
 			return Math.Min(distance / 120f, 3f);
 		}
 
-		public void Update(float dt)
+		public virtual void Update(float dt)
 		{
 			m_listenerPositions.Clear();
 			foreach (GameWidget gameWidget in m_subsystemViews.GameWidgets)

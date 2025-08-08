@@ -428,7 +428,7 @@ namespace Game
 			m_persistentElementsVoltages[point] = voltage;
 		}
 
-		public void Update(float dt)
+		public virtual void Update(float dt)
 		{
 			FrameStartCircuitStep = CircuitStep;
 			SimulatedElectricElements = 0;
@@ -658,7 +658,7 @@ namespace Game
 			}
 		}
 
-		public void UpdateElectricElements()
+		public virtual void UpdateElectricElements()
 		{
 			foreach (KeyValuePair<Point3, bool> item in m_pointsToUpdate)
 			{

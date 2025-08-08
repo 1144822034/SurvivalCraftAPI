@@ -119,7 +119,7 @@ namespace Game
 			IsStuck = false;
 		}
 
-		public void Update(float dt)
+		public virtual void Update(float dt)
 		{
 			if (m_subsystemTime.GameTime >= m_nextUpdateTime)
 			{

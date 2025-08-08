@@ -92,7 +92,7 @@ namespace Game
 
 		public int[] DrawOrders => m_drawOrders;
 
-		public void Update(float dt)
+		public virtual void Update(float dt)
 		{
 			bool flag = m_subsystemSky.ViewUnderWaterDepth > 0f;
 			if (flag != m_isUnderWater)
@@ -110,7 +110,7 @@ namespace Game
 			MessageFactor = 0f;
 		}
 
-		public void Draw(Camera camera, int drawOrder)
+		public virtual void Draw(Camera camera, int drawOrder)
 		{
 			if (m_componentPlayer.GameWidget != camera.GameWidget)
 			{

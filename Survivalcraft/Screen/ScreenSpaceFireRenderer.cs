@@ -104,7 +104,7 @@ namespace Game
 			}
 		}
 
-		public void Update(float dt)
+		public virtual void Update(float dt)
 		{
 			m_toGenerate += ParticlesPerSecond * dt;
 			foreach (Particle particle in m_particles)
@@ -136,7 +136,7 @@ namespace Game
 			m_toGenerate = MathUtils.Remainder(m_toGenerate, 1f);
 		}
 
-		public void Draw(PrimitivesRenderer2D primitivesRenderer, float depth, Matrix matrix, Color color)
+		public virtual void Draw(PrimitivesRenderer2D primitivesRenderer, float depth, Matrix matrix, Color color)
 		{
 			TexturedBatch2D texturedBatch2D = primitivesRenderer.TexturedBatch(m_texture, useAlphaTest: false, 0, DepthStencilState.None, null, null, SamplerState.PointClamp);
 			int count = texturedBatch2D.TriangleVertices.Count;
@@ -150,7 +150,7 @@ namespace Game
 			texturedBatch2D.TransformTriangles(matrix, count);
 		}
 
-		public void DrawParticle(TexturedBatch2D batch, Particle particle, float depth, Color color)
+		public virtual void DrawParticle(TexturedBatch2D batch, Particle particle, float depth, Color color)
 		{
 			Vector2 corner = particle.Position - (particle.Size / 2f);
 			Vector2 corner2 = particle.Position + (particle.Size / 2f);

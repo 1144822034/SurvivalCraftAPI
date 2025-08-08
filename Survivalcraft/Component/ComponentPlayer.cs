@@ -204,7 +204,7 @@ namespace Game
 			}
 			flag = false;
 		}
-		public void Update(float dt)
+		public virtual void Update(float dt)
 		{
 			PlayerInput playerInput = ComponentInput.PlayerInput;
 			if(ComponentInput.IsControlledByTouch && m_aim.HasValue && m_doAimBlockLook)

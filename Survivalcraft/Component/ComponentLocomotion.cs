@@ -317,7 +317,7 @@ namespace Game
 
 		public UpdateOrder UpdateOrder => UpdateOrder.Locomotion;
 
-		public void Update(float dt)
+		public virtual void Update(float dt)
 		{
 			SlipSpeed = null;
 			/* 禁用创造模式飞行的操作只在开始的时候执行一次

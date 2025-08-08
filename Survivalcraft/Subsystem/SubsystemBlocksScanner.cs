@@ -34,7 +34,7 @@ namespace Game
 		public UpdateOrder UpdateOrder => UpdateOrder.BlocksScanner;
 
 		public virtual Action<TerrainChunk> ScanningChunkCompleted { get; set; }
-		public void Update(float dt)
+		public virtual void Update(float dt)
 		{
 			Terrain terrain = m_subsystemTerrain.Terrain;
 			m_pollShaftsCount += terrain.AllocatedChunks.Length * 16 * 16 * dt / ScanPeriod;

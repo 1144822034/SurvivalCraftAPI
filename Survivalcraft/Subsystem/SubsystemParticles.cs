@@ -67,7 +67,7 @@ namespace Game
 			SubsystemSky = base.Project.FindSubsystem<SubsystemSky>(throwOnError: true);
 		}
 
-		public void Update(float dt)
+		public virtual void Update(float dt)
 		{
 			if (ParticleSystemsSimulate)
 			{
@@ -94,7 +94,7 @@ namespace Game
 			}
 		}
 
-		public void Draw(Camera camera, int drawOrder)
+		public virtual void Draw(Camera camera, int drawOrder)
 		{
 			if (ParticleSystemsDraw)
 			{

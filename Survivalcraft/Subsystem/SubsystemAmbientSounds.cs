@@ -41,7 +41,7 @@ namespace Game
 
 		public UpdateOrder UpdateOrder => UpdateOrder.Default;
 
-		public void Update(float dt)
+		public virtual void Update(float dt)
 		{
 			m_fireSound.Volume = MathUtils.Lerp(m_fireSound.Volume, SettingsManager.SoundsVolume * FireSoundVolume, MathUtils.Saturate(3f * Time.FrameDuration));
 			if (m_fireSound.Volume > 0.5f * AudioManager.MinAudibleVolume)

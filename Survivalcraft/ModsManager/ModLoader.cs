@@ -2040,7 +2040,7 @@ namespace Game
 		/// 在BlockMesh.AppendModelMeshPart之前执行
 		/// </summary>
 		/// <param name="skip">如果要跳过原版方法，设置此值为true</param>
-		public virtual void OnAppendModelMeshPart(ModelMeshPart meshPart,Matrix matrix,bool makeEmissive,bool flipWindingOrder,bool doubleSided,bool flipNormals,Color color,out bool skip)
+		public virtual void OnAppendModelMeshPart(BlockMesh blockMesh,ModelMeshPart meshPart,Matrix matrix,bool makeEmissive,bool flipWindingOrder,bool doubleSided,bool flipNormals,Color color,out bool skip)
 		{
 			skip = false;
 		}

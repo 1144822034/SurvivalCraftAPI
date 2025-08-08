@@ -56,7 +56,7 @@ namespace Game
 			}
 		}
 
-		public void Draw(Camera camera, int drawOrder)
+		public virtual void Draw(Camera camera, int drawOrder)
 		{
 			if (m_eyeGlowPoints[0] == null || !m_componentCreatureModel.IsVisibleForCamera)
 			{

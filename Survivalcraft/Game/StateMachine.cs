@@ -82,7 +82,7 @@ namespace Game
 			}
 		}
 
-		public void Update()
+		public virtual void Update()
 		{
 			if (m_currentState != null && m_currentState.Update != null)
 			{

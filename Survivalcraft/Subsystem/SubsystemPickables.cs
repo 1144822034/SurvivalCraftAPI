@@ -120,7 +120,7 @@ namespace Game
 			}
 		}
 
-		public void Draw(Camera camera, int drawOrder)
+		public virtual void Draw(Camera camera, int drawOrder)
 		{
 			double totalElapsedGameTime = m_subsystemGameInfo.TotalElapsedGameTime;
 			m_drawBlockEnvironmentData.SubsystemTerrain = m_subsystemTerrain;
@@ -144,7 +144,7 @@ namespace Game
 			m_primitivesRenderer.Flush(camera.ViewProjectionMatrix);
 		}
 
-		public void Update(float dt)
+		public virtual void Update(float dt)
 		{
 			for(int i = 0; i < m_pickables.Count; i++)
 			{ 

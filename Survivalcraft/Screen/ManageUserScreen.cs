@@ -326,7 +326,7 @@ public class ManageUserScreen : Screen
 		}
 	}
 
-	public void UpdateList(string cursor)
+	public virtual void UpdateList(string cursor)
 	{
 		if (string.IsNullOrEmpty(cursor))
 		{

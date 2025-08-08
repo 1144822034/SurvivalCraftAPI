@@ -284,7 +284,7 @@ namespace Game
 			UpdateControls();
 		}
 
-		public void UpdateControls()
+		public virtual void UpdateControls()
 		{
 			m_rectangle.CenterColor = m_color;
 			m_sliderR.Value = m_color.R;

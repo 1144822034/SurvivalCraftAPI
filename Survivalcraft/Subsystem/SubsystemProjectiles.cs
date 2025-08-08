@@ -204,7 +204,7 @@ namespace Game
 			}
 		}
 
-		public void Draw(Camera camera, int drawOrder)
+		public virtual void Draw(Camera camera, int drawOrder)
 		{
 			m_drawBlockEnvironmentData.SubsystemTerrain = m_subsystemTerrain;
 			m_drawBlockEnvironmentData.InWorldMatrix = Matrix.Identity;
@@ -228,7 +228,7 @@ namespace Game
 			m_primitivesRenderer.Flush(camera.ViewProjectionMatrix);
 		}
 
-		public void Update(float dt)
+		public virtual void Update(float dt)
 		{
 			for(int i = 0; i < m_projectiles.Count; i++)
 			{

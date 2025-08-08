@@ -35,7 +35,7 @@ namespace Game
 			}
 		}
 
-		public void Update(float dt)
+		public virtual void Update(float dt)
 		{
 			foreach (KeyValuePair<Point3, TrapValue> trapValue in m_trapValues)
 			{

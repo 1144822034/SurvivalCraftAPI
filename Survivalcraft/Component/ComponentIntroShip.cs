@@ -28,7 +28,7 @@ namespace Game
 
 		public UpdateOrder UpdateOrder => UpdateOrder.Default;
 
-		public void Update(float dt)
+		public virtual void Update(float dt)
 		{
 			float s = 3.5f * MathUtils.Saturate(0.07f * ((float)m_subsystemGameInfo.TotalElapsedGameTime - 6f));
 			Matrix matrix = m_componentFrame.Matrix;

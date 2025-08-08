@@ -114,7 +114,7 @@ namespace Game
 			return false;
 		}
 
-		public void Update(float dt)
+		public virtual void Update(float dt)
 		{
 			if (Time.FrameStartTime >= m_nextAutomaticScanTime)
 			{

@@ -238,7 +238,7 @@ namespace Game
 			}
 		}
 
-		public void UpdateList()
+		public virtual void UpdateList()
 		{
 			m_directoryList.ClearItems();
 			if (m_externalContentProvider != null && m_externalContentProvider.IsLoggedIn)

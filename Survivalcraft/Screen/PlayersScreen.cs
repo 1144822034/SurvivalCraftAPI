@@ -167,7 +167,7 @@ namespace Game
 			}
 		}
 
-		public void UpdatePlayersPanel()
+		public virtual void UpdatePlayersPanel()
 		{
 			m_playersPanel.Children.Clear();
 			foreach (PlayerData playersDatum in m_subsystemPlayers.PlayersData)

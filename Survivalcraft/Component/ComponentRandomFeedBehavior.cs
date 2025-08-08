@@ -38,7 +38,7 @@ namespace Game
 			m_feedPosition = feedPosition;
 		}
 
-		public void Update(float dt)
+		public virtual void Update(float dt)
 		{
 			m_stateMachine.Update();
 		}

@@ -77,7 +77,7 @@ namespace Game
 			return null;
 		}
 
-		public void Update(float dt)
+		public virtual void Update(float dt)
 		{
 			m_playerInput = default;
 			UpdateInputFromMouseAndKeyboard(m_componentPlayer.GameWidget.Input);

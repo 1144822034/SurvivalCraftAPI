@@ -65,7 +65,7 @@ namespace Game
 			m_subsystemTime = Project.FindSubsystem<SubsystemTime>(throwOnError: true);
 		}
 
-		public void Update(float dt)
+		public virtual void Update(float dt)
 		{
 			if (m_subsystemTime.PeriodicGameTimeEvent(2.5, 0.0))
 			{

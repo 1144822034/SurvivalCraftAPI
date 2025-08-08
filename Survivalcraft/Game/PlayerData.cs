@@ -446,7 +446,7 @@ namespace Game
 			return true;
 		}
 
-		public void Update()
+		public virtual void Update()
 		{
 			m_stateMachine.Update();
 		}
@@ -813,7 +813,7 @@ namespace Game
 			return "MalePlayer";
 		}
 
-		public void UpdateSpawnDialog(string largeMessage, string smallMessage, float progress, bool resetProgress)
+		public virtual void UpdateSpawnDialog(string largeMessage, string smallMessage, float progress, bool resetProgress)
 		{
 			if (resetProgress)
 			{

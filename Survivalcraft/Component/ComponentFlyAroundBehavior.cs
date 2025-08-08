@@ -25,7 +25,7 @@ namespace Game
 
 		public override float ImportanceLevel => m_importanceLevel;
 
-		public void Update(float dt)
+		public virtual void Update(float dt)
 		{
 			if (string.IsNullOrEmpty(m_stateMachine.CurrentState))
 			{

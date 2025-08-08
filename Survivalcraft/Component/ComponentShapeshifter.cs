@@ -39,7 +39,7 @@ namespace Game
 
 		public UpdateOrder UpdateOrder => UpdateOrder.Default;
 
-		public void Update(float dt)
+		public virtual void Update(float dt)
 		{
 			bool areSupernaturalCreaturesEnabled = m_subsystemGameInfo.WorldSettings.AreSupernaturalCreaturesEnabled;
 			if (IsEnabled && !m_componentSpawn.IsDespawning && m_componentHealth.Health > 0f)

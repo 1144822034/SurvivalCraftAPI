@@ -284,7 +284,7 @@ namespace Game
 			return (Font.GlyphHeight + Font.Spacing.Y + FontSpacing.Y) * FontScale * Font.Scale;
 		}
 
-		public void UpdateLines(float availableWidth, float availableHeight)
+		public virtual void UpdateLines(float availableWidth, float availableHeight)
 		{
 			if (m_linesAvailableHeight.HasValue && m_linesAvailableHeight == availableHeight && m_linesAvailableWidth.HasValue && m_linesSize.HasValue)
 			{

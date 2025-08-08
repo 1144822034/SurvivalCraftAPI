@@ -54,7 +54,7 @@ namespace Game
 			return false;
 		}
 
-		public void Update(float dt)
+		public virtual void Update(float dt)
 		{
 			float num = float.MaxValue;
 			if (m_explosiveDataByPoint.Count > 0)

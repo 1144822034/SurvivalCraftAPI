@@ -23,7 +23,7 @@ namespace Game
 			m_timeOffset = new Random().Float(0f, 1000f);
 		}
 
-		public void DrawImage(DrawContext dc)
+		public virtual void DrawImage(DrawContext dc)
 		{
 			float num = (float)MathUtils.Remainder(Time.FrameStartTime + m_timeOffset, 10000.0);
 			float x = (2f * SimplexNoise.OctavedNoise(num, 0.02f, 4, 2f, 0.5f)) - 1f;
@@ -46,7 +46,7 @@ namespace Game
 			texturedBatch2D.TransformTriangles(GlobalTransform, count);
 		}
 
-		public void DrawSquares(DrawContext dc)
+		public virtual void DrawSquares(DrawContext dc)
 		{
 			FlatBatch2D flatBatch2D = dc.PrimitivesRenderer2D.FlatBatch(1, DepthStencilState.None, null, BlendState.AlphaBlend);
 			int count = flatBatch2D.LineVertices.Count;

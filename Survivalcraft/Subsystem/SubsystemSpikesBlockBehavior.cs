@@ -24,7 +24,7 @@ namespace Game
 
 		public UpdateOrder UpdateOrder => UpdateOrder.Default;
 
-		public void Update(float dt)
+		public virtual void Update(float dt)
 		{
 			if (m_closestSoundToPlay.HasValue)
 			{

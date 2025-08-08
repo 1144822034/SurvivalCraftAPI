@@ -327,7 +327,7 @@ namespace Game
 		{
 			bool skipVanilla = false;
 			ModsManager.HookAction("OnFirstPersonModelDrawing",loader => {
-				loader.OnAppendModelMeshPart(meshPart,matrix,makeEmissive,flipWindingOrder,doubleSided,flipNormals,color,out bool skip);
+				loader.OnAppendModelMeshPart(this,meshPart,matrix,makeEmissive,flipWindingOrder,doubleSided,flipNormals,color,out bool skip);
 				skipVanilla |= skip;
 				return false;
 			});

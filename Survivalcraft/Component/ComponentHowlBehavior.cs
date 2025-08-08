@@ -32,7 +32,7 @@ namespace Game
 
 		public override float ImportanceLevel => m_importanceLevel;
 
-		public void Update(float dt)
+		public virtual void Update(float dt)
 		{
 			m_stateMachine.Update();
 		}

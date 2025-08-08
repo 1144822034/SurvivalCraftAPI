@@ -95,7 +95,7 @@ namespace Game
 			playerData.Dispose();
 		}
 
-		public void Update(float dt)
+		public virtual void Update(float dt)
 		{
 			if (m_playersData.Count == 0)
 			{
@@ -161,7 +161,7 @@ namespace Game
 			UpdateComponentPlayers();
 		}
 
-		public void UpdateComponentPlayers()
+		public virtual void UpdateComponentPlayers()
 		{
 			m_componentPlayers.Clear();
 			foreach (PlayerData playersDatum in m_playersData)

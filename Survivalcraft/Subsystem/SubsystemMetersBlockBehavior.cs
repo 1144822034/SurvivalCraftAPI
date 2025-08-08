@@ -92,7 +92,7 @@ namespace Game
 			m_subsystemSky = Project.FindSubsystem<SubsystemSky>(throwOnError: true);
 		}
 
-		public void Update(float dt)
+		public virtual void Update(float dt)
 		{
 			if (m_thermometersToSimulateIndex < m_thermometersToSimulate.Count)
 			{

@@ -55,7 +55,7 @@ namespace Game
 			value.Move = length;
 		}
 
-		public void Update(float dt)
+		public virtual void Update(float dt)
 		{
 			if (m_subsystemTime.PeriodicGameTimeEvent(0.125, 0.0))
 			{
@@ -233,7 +233,7 @@ namespace Game
 			}
 		}
 
-		public void UpdateMovableBlocks()
+		public virtual void UpdateMovableBlocks()
 		{
 			foreach (IMovingBlockSet movingBlockSet in m_subsystemMovingBlocks.MovingBlockSets)
 			{

@@ -210,7 +210,7 @@ namespace Game
 			Sleep = MathF.Min(Sleep, sleepValue);
 		}
 
-		public void Update(float dt)
+		public virtual void Update(float dt)
 		{
 			if (m_componentPlayer.ComponentHealth.Health > 0f)
 			{

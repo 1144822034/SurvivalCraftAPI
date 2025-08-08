@@ -222,12 +222,12 @@ namespace Game
 			m_lastUpdatePositions.Clear();
 		}
 
-		public void Update(float dt)
+		public virtual void Update(float dt)
 		{
 			UpdateRenderTarget();
 		}
 
-		public void Draw(Camera camera, int drawOrder)
+		public virtual void Draw(Camera camera, int drawOrder)
 		{
 			DrawSigns(camera);
 		}
@@ -419,7 +419,7 @@ namespace Game
 				textData.UsedTextureHeight = num5;
 			}
 		}
-		public void UpdateRenderTarget()
+		public virtual void UpdateRenderTarget()
 		{
 			bool flag = false;
 			foreach (GameWidget gameWidget in m_subsystemViews.GameWidgets)
@@ -529,7 +529,7 @@ namespace Game
 			}
 		}
 
-		public void DrawSigns(Camera camera)
+		public virtual void DrawSigns(Camera camera)
 		{
 			if (m_nearTexts.Count <= 0)
 			{

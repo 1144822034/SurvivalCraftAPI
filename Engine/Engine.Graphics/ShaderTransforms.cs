@@ -63,7 +63,7 @@ namespace Engine.Graphics
 			}
 		}
 
-		public void UpdateMatrices(int count, bool worldView, bool viewProjection, bool worldViewProjection)
+		public virtual void UpdateMatrices(int count, bool worldView, bool viewProjection, bool worldViewProjection)
 		{
 			if (count < 1 || count > MaxWorldMatrices)
 			{

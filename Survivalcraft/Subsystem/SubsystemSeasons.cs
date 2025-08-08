@@ -63,7 +63,7 @@ public class SubsystemSeasons : Subsystem, IUpdateable
 		m_subsystemGameInfo = base.Project.FindSubsystem<SubsystemGameInfo>(throwOnError: true);
 	}
 
-	public void Update(float dt)
+	public virtual void Update(float dt)
 	{
 		TimeOfYearToSeason(m_subsystemGameInfo.WorldSettings.TimeOfYear, out var season, out var timeOfSeason);
 		Season = season;

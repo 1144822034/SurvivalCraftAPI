@@ -104,7 +104,7 @@ namespace Game
 			return null;
 		}
 
-		public void Update(float dt)
+		public virtual void Update(float dt)
 		{
 			if (string.IsNullOrEmpty(m_stateMachine.CurrentState) || !IsActive)
 			{

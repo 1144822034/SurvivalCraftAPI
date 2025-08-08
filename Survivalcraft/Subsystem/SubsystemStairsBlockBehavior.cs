@@ -35,7 +35,7 @@ namespace Game
 			UpdateIsCorner(value, x, y, z, updateModificationCounter: true);
 		}
 
-		public void UpdateIsCorner(int value, int x, int y, int z, bool updateModificationCounter)
+		public virtual void UpdateIsCorner(int value, int x, int y, int z, bool updateModificationCounter)
 		{
 			int value2 = Terrain.ExtractContents(value);
 			if (!HandledBlocks.Contains(value2))

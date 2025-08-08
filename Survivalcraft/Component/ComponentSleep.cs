@@ -92,7 +92,7 @@ namespace Game
 			}
 		}
 
-		public void Update(float dt)
+		public virtual void Update(float dt)
 		{
 			if (IsSleeping && m_componentPlayer.ComponentHealth.Health > 0f)
 			{

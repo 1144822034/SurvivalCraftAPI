@@ -42,7 +42,7 @@ namespace Game
 
 		public int[] DrawOrders => m_drawOrders;
 
-		public void Update(float dt)
+		public virtual void Update(float dt)
 		{
 			Camera activeCamera = m_componentPlayer.GameWidget.ActiveCamera;
 			var ray = new Ray3?(new Ray3(activeCamera.ViewPosition, activeCamera.ViewDirection));
@@ -77,7 +77,7 @@ namespace Game
 			}
 		}
 
-		public void Draw(Camera camera, int drawOrder)
+		public virtual void Draw(Camera camera, int drawOrder)
 		{
 			if (camera.GameWidget.PlayerData == m_componentPlayer.PlayerData)
 			{
@@ -103,7 +103,7 @@ namespace Game
 			m_shader = new Shader(ModsManager.GetInPakOrStorageFile<string>("Shaders/Highlight", "vsh"), ModsManager.GetInPakOrStorageFile<string>("Shaders/Highlight", "psh"), new ShaderMacro[] { new("ShadowShader") });
 		}
 
-		public void DrawRayHighlight(Camera camera)
+		public virtual void DrawRayHighlight(Camera camera)
 		{
 			if (!camera.Eye.HasValue)
 			{
@@ -145,17 +145,17 @@ namespace Game
 			flatBatch3D.Flush(camera.ViewProjectionMatrix);
 		}
 
-		public void DrawReticleHighlight(Camera camera)
+		public virtual void DrawReticleHighlight(Camera camera)
 		{
 			// TODO: 加上？
 		}
 
-		public void DrawFillHighlight(Camera camera)
+		public virtual void DrawFillHighlight(Camera camera)
 		{
 			// TODO: 加上？
 		}
 
-		public void DrawOutlineHighlight(Camera camera)
+		public virtual void DrawOutlineHighlight(Camera camera)
 		{
 			if (camera.UsesMovementControls || !(m_componentPlayer.ComponentHealth.Health > 0f) || !m_componentPlayer.ComponentGui.ControlsContainerWidget.IsVisible)
 			{

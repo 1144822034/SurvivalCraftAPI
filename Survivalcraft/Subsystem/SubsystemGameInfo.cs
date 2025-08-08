@@ -122,7 +122,7 @@ namespace Game
 			valuesDictionary.SetValue("TotalElapsedGameTime", TotalElapsedGameTime);
 		}
 
-		public void Update(float dt)
+		public virtual void Update(float dt)
 		{
 			TotalElapsedGameTime += dt;
 			TotalElapsedGameTimeDelta = m_lastTotalElapsedGameTime.HasValue ? ((float)(TotalElapsedGameTime - m_lastTotalElapsedGameTime.Value)) : 0f;

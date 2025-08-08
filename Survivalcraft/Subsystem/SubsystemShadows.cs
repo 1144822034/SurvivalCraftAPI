@@ -85,7 +85,7 @@ namespace Game
 			}
 		}
 
-		public void Draw(Camera camera, int drawOrder)
+		public virtual void Draw(Camera camera, int drawOrder)
 		{
 			m_primitivesRenderer.Flush(camera.ViewProjectionMatrix);
 		}
@@ -97,7 +97,7 @@ namespace Game
 			m_batch = m_primitivesRenderer.TexturedBatch(ContentManager.Get<Texture2D>("Textures/Shadow"), useAlphaTest: false, 0, DepthStencilState.DepthRead, RasterizerState.CullCounterClockwiseScissor, BlendState.AlphaBlend, SamplerState.LinearClamp);
 		}
 
-		public void DrawShadowOverQuad(Vector3 p1, Vector3 p2, Vector3 p3, Vector3 p4, Vector3 shadowPosition, float shadowDiameter, float alpha)
+		public virtual void DrawShadowOverQuad(Vector3 p1, Vector3 p2, Vector3 p3, Vector3 p4, Vector3 shadowPosition, float shadowDiameter, float alpha)
 		{
 			if (alpha > 0.02f)
 			{

@@ -52,7 +52,7 @@ namespace Game
 			return list;
 		}
 
-		public void Update(float dt)
+		public virtual void Update(float dt)
 		{
 			if (!m_lootDropped && m_componentCreature.ComponentHealth.DeathTime.HasValue && m_subsystemGameInfo.TotalElapsedGameTime >= m_componentCreature.ComponentHealth.DeathTime.Value + m_componentCreature.ComponentHealth.CorpseDuration)
 			{

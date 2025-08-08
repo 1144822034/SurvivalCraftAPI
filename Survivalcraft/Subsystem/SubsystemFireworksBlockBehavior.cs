@@ -86,7 +86,7 @@ namespace Game
 			m_subsystemPlayers = Project.FindSubsystem<SubsystemPlayers>(throwOnError: true);
 		}
 
-		public void Update(float dt)
+		public virtual void Update(float dt)
 		{
 			ComponentPlayer componentPlayer = (m_subsystemPlayers.ComponentPlayers.Count > 0) ? m_subsystemPlayers.ComponentPlayers[0] : null;
 			if (componentPlayer == null)

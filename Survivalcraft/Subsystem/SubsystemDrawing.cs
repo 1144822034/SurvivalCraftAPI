@@ -37,7 +37,7 @@ namespace Game
             }
 		}
 
-		public void Draw(Camera camera)
+		public virtual void Draw(Camera camera)
 		{
 			m_sortedDrawables.Clear();
 			lock (m_drawables)

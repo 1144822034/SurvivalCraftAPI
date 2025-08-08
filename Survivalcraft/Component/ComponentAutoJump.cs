@@ -22,7 +22,7 @@ namespace Game
 
 		public UpdateOrder UpdateOrder => UpdateOrder.Default;
 
-		public void Update(float dt)
+		public virtual void Update(float dt)
 		{
 			if ((SettingsManager.AutoJump || m_alwaysEnabled) && m_subsystemTime.GameTime - m_lastAutoJumpTime > 0.25)
 			{

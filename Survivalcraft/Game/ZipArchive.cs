@@ -390,7 +390,7 @@ namespace Game
 			return new DateTime((int)((_dt >> 25) + 1980), (int)((_dt >> 21) & 0xF), (int)((_dt >> 16) & 0x1F), (int)((_dt >> 11) & 0x1F), (int)((_dt >> 5) & 0x3F), (int)((_dt & 0x1F) * 2));
 		}
 
-		public void UpdateCrcAndSizes(ZipArchiveEntry _zfe)
+		public virtual void UpdateCrcAndSizes(ZipArchiveEntry _zfe)
 		{
 			long position = ZipFileStream.Position;
 			ZipFileStream.Position = _zfe.HeaderOffset + 8;

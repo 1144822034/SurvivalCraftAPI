@@ -82,7 +82,7 @@ namespace Game
 			}
 		}
 
-		public void UpdateDragPosition()
+		public virtual void UpdateDragPosition()
 		{
 			if (Input.Drag.HasValue)
 			{

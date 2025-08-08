@@ -76,7 +76,7 @@ namespace Game
 			}
 		}
 
-		public void Update(float dt)
+		public virtual void Update(float dt)
 		{
 			if (m_leavesToCheck.Count <= 0 || !m_subsystemTime.PeriodicGameTimeEvent(20.0, 0.0))
 			{

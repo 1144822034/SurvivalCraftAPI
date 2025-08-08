@@ -332,7 +332,7 @@ namespace Game
 			Display.DeviceReset -= Display_DeviceReset;
 		}
 
-		public void Update(float dt)
+		public virtual void Update(float dt)
 		{
 			//触发ClothingData.Update
 			foreach (ClothingSlot slot in m_innerSlotsOrder)

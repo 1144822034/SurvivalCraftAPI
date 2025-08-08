@@ -60,7 +60,7 @@ namespace Game
 			}
 		}
 
-		public void Update(float dt)
+		public virtual void Update(float dt)
 		{
 			if (m_subsystemTime.PeriodicGameTimeEvent(0.1, 0.0))
 			{
