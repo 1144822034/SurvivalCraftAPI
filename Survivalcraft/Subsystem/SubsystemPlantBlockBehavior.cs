@@ -15,8 +15,6 @@ namespace Game
 
 		public SubsystemSeasons m_subsystemSeasons;
 
-		public SubsystemTerrain m_subsystemTerrain;
-
 		public Random m_random = new();
 
 		public override int[] HandledBlocks => new int[11]
@@ -56,8 +54,15 @@ namespace Game
 			Block blockUnder = BlocksManager.Blocks[soilContents];
 			if(BlocksManager.Blocks[plantContents] is BasePumpkinBlock)
 			{
-				if(blockUnder.IsFaceNonAttachable(m_subsystemTerrain, 4, cellValue, plantValue))
+				if(blockUnder.IsFaceNonAttachable(SubsystemTerrain, 4, cellValue, plantValue))
 					destroyCell = true;
+			}
+			else if(plantContents == 132)
+			{
+				if (blockUnder.IsFaceTransparent(SubsystemTerrain, 4, cellValue) && !(blockUnder is FenceBlock))
+				{
+					destroyCell = true;
+				}
 			}
 			else if(!blockUnder.IsSuitableForPlants(cellValue, plantValue))
 			{
@@ -130,7 +135,6 @@ namespace Game
 			m_subsystemCellChangeQueue = base.Project.FindSubsystem<SubsystemCellChangeQueue>(throwOnError: true);
 			m_subsystemGameInfo = base.Project.FindSubsystem<SubsystemGameInfo>(throwOnError: true);
 			m_subsystemSeasons = base.Project.FindSubsystem<SubsystemSeasons>(throwOnError: true);
-			m_subsystemTerrain = Project.FindSubsystem<SubsystemTerrain>(throwOnError: true);
 		}
 
 		public void GrowTallGrass(int value, int x, int y, int z, int pollPass)
