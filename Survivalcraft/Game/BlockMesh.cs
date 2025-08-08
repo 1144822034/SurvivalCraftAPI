@@ -25,12 +25,26 @@ namespace Game
 
 		public DynamicArray<sbyte> Sides;
 
-		public BoundingBox CalculateBoundingBox()
+		public object m_tag;
+
+		public object Tag
+		{
+			get
+			{
+				return m_tag;
+			}
+			set
+			{
+				m_tag = value;
+			}
+		}
+
+		public virtual BoundingBox CalculateBoundingBox()
 		{
 			return new BoundingBox(Vertices.Select((BlockMeshVertex v) => v.Position));
 		}
 
-		public BoundingBox CalculateBoundingBox(Matrix matrix)
+		public virtual BoundingBox CalculateBoundingBox(Matrix matrix)
 		{
 			return new BoundingBox(Vertices.Select((BlockMeshVertex v) => Vector3.Transform(v.Position, matrix)));
 		}
@@ -44,7 +58,7 @@ namespace Game
 			return modelBone.Transform;
 		}
 
-		public void AppendImageExtrusion(Image image, Rectangle bounds, Vector3 size, Color color)
+		public virtual void AppendImageExtrusion(Image image, Rectangle bounds, Vector3 size, Color color)
 		{
 			var blockMesh = new BlockMesh();
 			DynamicArray<BlockMeshVertex> vertices = blockMesh.Vertices;
@@ -323,7 +337,7 @@ namespace Game
 			AppendBlockMesh(blockMesh);
 		}
 
-		public void AppendModelMeshPart(ModelMeshPart meshPart, Matrix matrix, bool makeEmissive, bool flipWindingOrder, bool doubleSided, bool flipNormals, Color color)
+		public virtual void AppendModelMeshPart(ModelMeshPart meshPart, Matrix matrix, bool makeEmissive, bool flipWindingOrder, bool doubleSided, bool flipNormals, Color color)
 		{
 			bool skipVanilla = false;
 			ModsManager.HookAction("OnFirstPersonModelDrawing",loader => {
@@ -396,7 +410,7 @@ namespace Game
 			Trim();
 		}
 
-		public void AppendBlockMesh(BlockMesh blockMesh)
+		public virtual void AppendBlockMesh(BlockMesh blockMesh)
 		{
 			int count = Vertices.Count;
 			for (int i = 0; i < blockMesh.Vertices.Count; i++)
@@ -410,7 +424,7 @@ namespace Game
 			Trim();
 		}
 
-		public void BlendBlockMesh(BlockMesh blockMesh, float factor)
+		public virtual void BlendBlockMesh(BlockMesh blockMesh, float factor)
 		{
 			if (blockMesh.Vertices.Count != Vertices.Count)
 			{
@@ -424,7 +438,7 @@ namespace Game
 			}
 		}
 
-		public void TransformPositions(Matrix matrix, int facesMask = -1)
+		public virtual void TransformPositions(Matrix matrix, int facesMask = -1)
 		{
 			for (int i = 0; i < Vertices.Count; i++)
 			{
@@ -435,7 +449,7 @@ namespace Game
 			}
 		}
 
-		public void TransformTextureCoordinates(Matrix matrix, int facesMask = -1)
+		public virtual void TransformTextureCoordinates(Matrix matrix, int facesMask = -1)
 		{
 			for (int i = 0; i < Vertices.Count; i++)
 			{
@@ -446,7 +460,7 @@ namespace Game
 			}
 		}
 
-		public void SetColor(Color color, int facesMask = -1)
+		public virtual void SetColor(Color color, int facesMask = -1)
 		{
 			for (int i = 0; i < Vertices.Count; i++)
 			{
@@ -457,7 +471,7 @@ namespace Game
 			}
 		}
 
-		public void ModulateColor(Color color, int facesMask = -1)
+		public virtual void ModulateColor(Color color, int facesMask = -1)
 		{
 			for (int i = 0; i < Vertices.Count; i++)
 			{
@@ -468,7 +482,7 @@ namespace Game
 			}
 		}
 
-		public void GenerateSidesData()
+		public virtual void GenerateSidesData()
 		{
 			Sides = [];
 			Sides.Count = Indices.Count / 3;
@@ -507,7 +521,7 @@ namespace Game
 			}
 		}
 
-		public void Trim()
+		public virtual void Trim()
 		{
 			Vertices.Capacity = Vertices.Count;
 			Indices.Capacity = Indices.Count;
@@ -574,7 +588,7 @@ namespace Game
 			return false;
 		}
 
-		public void AppendImageExtrusion(Image image, Rectangle bounds, Vector3 scale, Color color, int alphaThreshold)
+		public virtual void AppendImageExtrusion(Image image, Rectangle bounds, Vector3 scale, Color color, int alphaThreshold)
 		{
 			int count = Vertices.Count;
 			AppendImageExtrusionSlice(image, bounds, new Vector3(1f, 0f, 0f), new Vector3(0f, 1f, 0f), new Vector3(0f, 0f, 1f), new Vector3(0f, 0f, 0f), color, alphaThreshold);
@@ -641,7 +655,7 @@ namespace Game
 			}
 		}
 
-		public void AppendImageExtrusionSlice(Image slice, Rectangle bounds, Vector3 right, Vector3 up, Vector3 forward, Vector3 position, Color color, int alphaThreshold)
+		public virtual void AppendImageExtrusionSlice(Image slice, Rectangle bounds, Vector3 right, Vector3 up, Vector3 forward, Vector3 position, Color color, int alphaThreshold)
 		{
 			int num = int.MaxValue;
 			int num2 = int.MaxValue;
@@ -673,7 +687,7 @@ namespace Game
 			}
 		}
 
-		public void AppendImageExtrusionRectangle(Vector3 p11, Vector3 p21, Vector3 p12, Vector3 p22, Vector3 forward, bool flip, Color color)
+		public virtual void AppendImageExtrusionRectangle(Vector3 p11, Vector3 p21, Vector3 p12, Vector3 p22, Vector3 forward, bool flip, Color color)
 		{
 			int count = Vertices.Count;
 			Vertices.Count += 4;

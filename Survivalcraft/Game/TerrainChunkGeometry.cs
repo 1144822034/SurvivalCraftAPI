@@ -24,7 +24,7 @@ namespace Game
 
             public int[] SubsetVertexBufferEnds = new int[7];
 
-            public void Dispose()
+            public virtual void Dispose()
             {
                 Utilities.Dispose(ref VertexBuffer);
                 Utilities.Dispose(ref IndexBuffer);

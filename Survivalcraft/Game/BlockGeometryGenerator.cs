@@ -577,7 +577,7 @@ namespace Game
 			}
 		}
 
-		public void GenerateFlatVertices(Block block, int value, int x, int y, int z, int rotation, Color color, TerrainGeometrySubset[] subsetsByFace)
+		public virtual void GenerateFlatVertices(Block block, int value, int x, int y, int z, int rotation, Color color, TerrainGeometrySubset[] subsetsByFace)
 		{
 			DynamicArray<TerrainVertex> vertices = subsetsByFace[4].Vertices;
 			var indices = subsetsByFace[4].Indices;
