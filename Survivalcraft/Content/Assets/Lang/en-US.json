@@ -23,8 +23,8 @@
         "5": "Saving Community Content cache failed."
     },
     "ModsManager": {
-        "1": "Database value \"{0}\" will be modified from \"{1}\" to \"{2}\".",
-        "2": "\nOther Mods May Not Run Correctly.",
+        "1": "Do you allow a mod to replace \"{1}\" with \"{2}\"? (Database Guid=\"{0}\")",
+        "2": "\nIf you choose Yes, other mods may not work properly; if you choose No, the mod may not work properly. Additionally, either choice may cause the entire game to malfunction.",
         "3": "Change Enabled",
         "4": "Change Disabled",
         "5": "Mod Downloaded Successfully",

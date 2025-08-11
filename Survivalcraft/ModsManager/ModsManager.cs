@@ -743,7 +743,7 @@ public static class ModsManager
 								collisionsToHandle++;
 								AllowContinue = false;
 								string warningString = string.Format(LanguageControl.Get(fName,"1"),attribute1.Value,ModifiedElement[attribute1.Value],attribute.Value);
-                                DialogsManager.ShowDialog(null, new MessageDialog(LanguageControl.Warning, warningString + LanguageControl.Get(fName, "2"), LanguageControl.Ok, LanguageControl.Disable, (vt) =>
+                                DialogsManager.ShowDialog(null, new MessageDialog(LanguageControl.Warning, warningString + LanguageControl.Get(fName, "2"), LanguageControl.Yes, LanguageControl.No, new Vector2(600,320), (vt) =>
 								{
                                     if (vt == MessageDialogButton.Button1 || vt == MessageDialogButton.Button2)
 									{

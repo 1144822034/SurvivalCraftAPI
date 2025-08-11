@@ -23,8 +23,8 @@
     "5": "Lưu bộ nhớ đệm Nội dung Cộng đồng thất bại."
   },
   "ModsManager":{
-    "1": "Giá trị cơ sở dữ liệu \"{0}\" sẽ được sửa đổi từ \"{1}\" thành \"{2}\".",
-    "2": "\nCác Mod Khác Có Thể Không Chạy Đúng.",
+    "1": "Do you allow a mod to replace \"{1}\" with \"{2}\"? (Database Guid=\"{0}\")",
+    "2": "\nIf you choose Yes, other mods may not work properly; if you choose No, the mod may not work properly. Additionally, either choice may cause the entire game to malfunction.",
     "3": "Đã Bật Thay đổi",
     "4": "Đã Tắt Thay đổi", 
     "5": "Tải Mod Thành công",
