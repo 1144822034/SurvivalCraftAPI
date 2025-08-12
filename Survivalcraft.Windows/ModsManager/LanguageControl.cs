@@ -406,7 +406,7 @@ namespace Game
 				}
 				SetUsual(true);
 			}
-#if WINDOWS
+#if !ANDROID
 			string title = $"{Get("Usual", "gameName")} {ModsManager.ShortGameVersion} - API {ModsManager.APIVersionString}";
 #if DEBUG
 			title = $"[{Get("Usual","debug")}]{title}";

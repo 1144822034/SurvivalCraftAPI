@@ -2,11 +2,8 @@ using System.Diagnostics;
 using Engine;
 using Engine.Graphics;
 using System.Globalization;
-using System.Net;
 using System.Reflection;
-using System.Runtime.InteropServices;
 using Engine.Input;
-using Timer = System.Threading.Timer;
 
 #if WINDOWS
 using ImeSharp;
@@ -33,11 +30,9 @@ namespace Game
 		public static bool m_firstFramePrepared = false;
 #endif
 		
-#if WINDOWS
+#if !ANDROID
 		private static void Main(string[] args)
 		{
-
-
 			if(args != null && args.Length > 0)
 			{
 				//拖动到exe的文件解析
@@ -54,12 +49,13 @@ namespace Game
 
 			}
 			
-			
 			// Process.Start("C:\\Windows\\System32\\msg.exe",  "/server:127.0.0.1 * \"此版本为预览版 不建议长期使用");
 			Window.Created += () =>
 			{
+#if WINDOWS
 				InputMethod.Initialize(Process.GetCurrentProcess().MainWindowHandle, true);
 				InputMethod.Enabled = false;
+#endif
 			};
 			EntryPoint();
 			AppDomain.CurrentDomain.AssemblyResolve += (sender, e) => {
@@ -162,7 +158,7 @@ namespace Game
 			LastFrameTime = (float)(Time.RealTime - m_frameBeginTime);
 			LastCpuFrameTime = (float)(m_cpuEndTime - m_frameBeginTime);
 			m_frameBeginTime = Time.RealTime;
-#if WINDOWS
+#if !ANDROID
 			if (Keyboard.IsKeyDownOnce(Key.F11))
 			{
 				SettingsManager.WindowMode = SettingsManager.WindowMode == WindowMode.Fullscreen

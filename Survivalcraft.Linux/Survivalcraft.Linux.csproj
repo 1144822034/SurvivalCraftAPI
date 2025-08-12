@@ -1,0 +1,42 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+    <PropertyGroup>
+        <NoWarn>1701;1702;CA1416;1591;1572;1573;1587;NETSDK1106</NoWarn>
+        <RootNamespace>Game</RootNamespace>
+        <AssemblyName>Survivalcraft</AssemblyName>
+        <TargetFramework>net9.0</TargetFramework>
+        <RuntimeIdentifier>linux-x64</RuntimeIdentifier>
+        <ApplicationVersion>2.4.0.0</ApplicationVersion>
+        <AssemblyVersion>2.4.0.0</AssemblyVersion>
+        <FileVersion>2.4.0.0</FileVersion>
+        <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+        <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+        <GenerateDocumentationFile>true</GenerateDocumentationFile>
+        <OutputType>Exe</OutputType>
+    </PropertyGroup>
+    <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
+        <DefineConstants>DEBUG</DefineConstants>
+    </PropertyGroup>
+    <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
+        <DebugType>none</DebugType>
+        <DefineConstants>TRACE</DefineConstants>
+    </PropertyGroup>
+    <ItemGroup>
+        <ProjectReference Include="..\Engine\Engine.csproj" />
+        <ProjectReference Include="..\EntitySystem\EntitySystem.csproj" />
+    </ItemGroup>
+    <ItemGroup>
+        <PackageReference Include="Jint" Version="4.4.1" />
+        <PackageReference Include="NAudio.Flac.Unknown.Mod" Version="1.0.3" />
+    </ItemGroup>
+    <ItemGroup>
+        <None Include="..\Survivalcraft.Windows\Content.zip" Link="Content.zip">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </None>
+        <None Include="..\Survivalcraft.Windows\init.js" Link="init.js">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </None>
+    </ItemGroup>
+    <ItemGroup>
+        <Compile Include="..\Survivalcraft.Windows\**\*.cs" Exclude="..\Survivalcraft.Windows\obj\**\*.cs"/>
+    </ItemGroup>
+</Project>

@@ -8,7 +8,7 @@ namespace Engine
 	{
         public ConsoleLogSink()
 		{
-#if WINDOWS
+#if !ANDROID
             Console.OutputEncoding = Encoding.UTF8;
 #endif
 		}

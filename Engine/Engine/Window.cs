@@ -526,7 +526,7 @@ namespace Engine
         {
             try
 		    {
-#if WINDOWS
+#if !ANDROID
                 Image<Rgba32> image = SixLabors.ImageSharp.Image.Load<Rgba32>(Image.DefaultImageSharpDecoderOptions, typeof(Window).GetTypeInfo().Assembly.GetManifestResourceStream("Engine.Resources.icon.png"));
                 byte[] pixelBytes = new byte[image.Width * image.Height * Unsafe.SizeOf<Rgba32>()];
                 image.CopyPixelDataTo(pixelBytes);

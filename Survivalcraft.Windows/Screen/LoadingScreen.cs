@@ -316,7 +316,7 @@ namespace Game
 				}
 				ModsManager.ModListAllDo((modEntity) => { modEntity.LoadLauguage(); });
 				LanguageControl.SetUsual();
-#if WINDOWS
+#if !ANDROID
 				string title = $"{LanguageControl.Get("Usual", "gameName")} {ModsManager.ShortGameVersion} - {LanguageControl.Get("Usual", "api")} {ModsManager.APIVersionString}";
 #if DEBUG
 				title = $"[{LanguageControl.Get("Usual","debug")}]{title}";

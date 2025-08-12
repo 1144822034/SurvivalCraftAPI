@@ -36,12 +36,12 @@
         <SupportedOSPlatformVersion>23.0</SupportedOSPlatformVersion>
     </PropertyGroup>
     <ItemGroup>
-        <EmbeddedResource Include="Resources\Lit.psh" Condition="'$(TargetFramework)' == 'net9.0-windows'" />
-        <EmbeddedResource Include="Resources\Lit.vsh" Condition="'$(TargetFramework)' == 'net9.0-windows'" />
-        <EmbeddedResource Include="Resources\Unlit.psh" Condition="'$(TargetFramework)' == 'net9.0-windows'" />
-        <EmbeddedResource Include="Resources\Unlit.vsh" Condition="'$(TargetFramework)' == 'net9.0-windows'" />
-        <EmbeddedResource Include="Resources\Debugfont.lst" Condition="'$(TargetFramework)' == 'net9.0-windows'" />
-        <EmbeddedResource Include="Resources\Debugfont.png" Condition="'$(TargetFramework)' == 'net9.0-windows'" />
+        <EmbeddedResource Include="Resources\Lit.psh" Condition="'$(TargetFramework)' != 'net9.0-android'" />
+        <EmbeddedResource Include="Resources\Lit.vsh" Condition="'$(TargetFramework)' != 'net9.0-android'" />
+        <EmbeddedResource Include="Resources\Unlit.psh" Condition="'$(TargetFramework)' != 'net9.0-android'" />
+        <EmbeddedResource Include="Resources\Unlit.vsh" Condition="'$(TargetFramework)' != 'net9.0-android'" />
+        <EmbeddedResource Include="Resources\Debugfont.lst" Condition="'$(TargetFramework)' != 'net9.0-android'" />
+        <EmbeddedResource Include="Resources\Debugfont.png" Condition="'$(TargetFramework)' != 'net9.0-android'" />
         <EmbeddedResource Include="Resources\icon.png" />
     </ItemGroup>
     <ItemGroup>

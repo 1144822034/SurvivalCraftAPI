@@ -115,7 +115,7 @@ namespace Engine
 		public static void Error(string message)
 		{
 			Write(LogType.Error, message);
-#if WINDOWS
+#if !ANDROID
             Window.TitleSuffix = " #" + message;
 #endif
 		}

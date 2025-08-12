@@ -48,9 +48,6 @@
         <PackageReference Include="TextCopy" Version="6.2.1" Condition="'$(TargetFramework)' == 'net9.0-windows'" />
         <PackageReference Include="ImeSharp.ImmOnly" Version="1.0.0" Condition="'$(TargetFramework)' == 'net9.0-windows'" />
         <PackageReference Include="Jint" Version="4.4.1" />
-        <PackageReference Include="System.Net.Http" Version="4.3.4" />
-        <PackageReference Include="System.Private.Uri" Version="4.3.2" />
-        <PackageReference Include="System.Text.RegularExpressions" Version="4.3.1" />
         <PackageReference Include="NAudio.Flac.Unknown.Mod" Version="1.0.3" />
     </ItemGroup>
     <ItemGroup Condition="'$(TargetFramework)' == 'net9.0-windows'">

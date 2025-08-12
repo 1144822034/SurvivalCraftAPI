@@ -54,9 +54,11 @@ namespace Game
 			}
 			catch (Exception ex)
 			{
+#if !ANDROID
 #if WINDOWS
 				AllocConsole();
 				Window.Closed += () => FreeConsole();
+#endif
 				Console.Title = "Logs of Survivalcraft API";
 				Engine.Log.RemoveAllLogSinks();
 				Engine.Log.AddLogSink(new ConsoleLogSink());
