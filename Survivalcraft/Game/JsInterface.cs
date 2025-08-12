@@ -65,11 +65,6 @@ namespace Game
 				{
 					codeString = Storage.ReadAllText("app:init.js");
 				}
-				else
-				{
-					using StreamReader reader = new(typeof(JsInterface).Assembly.GetManifestResourceStream("Game.init.js"),Encoding.UTF8);
-					codeString = reader.ReadToEnd();
-				}
 			}
 			catch
 			{

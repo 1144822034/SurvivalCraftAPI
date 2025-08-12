@@ -1,14 +1,18 @@
-using System.Diagnostics;
 using Android;
 using Android.Animation;
+using Android.App;
 using Android.Content;
 using Android.Content.PM;
 using Android.OS;
 using Android.Provider;
-using Android.Runtime;
 using Android.Views;
 using Android.Views.Animations;
+using Android.Widget;
 using Android.Window;
+using Engine;
+using Game;
+using System.Collections.Generic;
+using System.Threading;
 using Environment = Android.OS.Environment;
 using Permission = Android.Content.PM.Permission;
 
@@ -110,31 +114,31 @@ namespace SC4Android
 		}
 		private static bool RunRequired { get; set; }
 
-		private bool isPaused = false;
+		private bool m_isPaused;
 
 		protected override void OnPause()
 		{
 			base.OnPause();
-			isPaused = true;
+			m_isPaused = true;
 		}
 
 		protected override void OnResume()
 		{
 			base.OnResume();
-			if(isPaused && !RunRequired)
+			if(m_isPaused && !RunRequired)
 			{
-				isPaused = false;
+				m_isPaused = false;
 				RunRequired = CheckAndRequestPermission();
 			}
 		}
 
-		protected override void OnCreate(Bundle savedInstanceState)
+		protected override void OnCreate(Bundle? savedInstanceState)
 		{
 			base.OnCreate(savedInstanceState);
-			Window.DecorView.ViewTreeObserver.AddOnPreDrawListener(new ViewTreeObserverListener());
+			Window?.DecorView.ViewTreeObserver?.AddOnPreDrawListener(new ViewTreeObserverListener());
 			if (Build.VERSION.SdkInt >= BuildVersionCodes.S)
 			{
-				SplashScreen?.SetOnExitAnimationListener(new SplashScreenOnExitAnimationListener());
+				SplashScreen.SetOnExitAnimationListener(new SplashScreenOnExitAnimationListener());
 			}
 		}
 		public class ViewTreeObserverListener : Java.Lang.Object, ViewTreeObserver.IOnPreDrawListener
@@ -148,7 +152,11 @@ namespace SC4Android
 		{
 			public void OnSplashScreenExit(SplashScreenView view)
 			{
-				var slideUp = ObjectAnimator.OfFloat(view, "alpha", 1f, 0f);
+				ObjectAnimator? slideUp = ObjectAnimator.OfFloat(view, "alpha", 1f, 0f);
+				if(slideUp == null)
+				{
+					return;
+				}
 				slideUp.SetInterpolator(new AnticipateInterpolator());
 				slideUp.SetDuration(800L);
 				slideUp.AnimationEnd += (_, _) =>

@@ -1,44 +1,41 @@
 <Project Sdk="Microsoft.NET.Sdk">
-	<PropertyGroup>
-		<NoWarn>$(NoWarn);1591;1573</NoWarn>
-		<ImplicitUsings>enable</ImplicitUsings>
-		<Nullable>disable</Nullable>
-		<GenerateDocumentationFile>True</GenerateDocumentationFile>
-		<ProduceReferenceAssembly>True</ProduceReferenceAssembly>
-		<OutputType>Library</OutputType>
-		<GenerateAssemblyInfo>false</GenerateAssemblyInfo>
-		<Configurations>Debug;Release;Direct3D11</Configurations>
-		<PackageId>SurvivalcraftAPI.EntitySystem</PackageId>
-		<Title>SurvivalcraftAPI.EntitySystem</Title><!--For NuGet Package-->
-		<Version>1.8.1.2</Version><!--For NuGet Package-->
-		<PackageProjectUrl>https://gitee.com/SC-SPM/SurvivalcraftApi</PackageProjectUrl>
-		<RepositoryUrl>https://gitee.com/SC-SPM/SurvivalcraftApi</RepositoryUrl>
-		<RepositoryType>Git</RepositoryType>
-		<Platforms>AnyCPU</Platforms>
-		<AssemblyName Condition="'$(Configuration)' != 'Direct3D11'">EntitySystem</AssemblyName>
-		<AssemblyName Condition="'$(Configuration)' == 'Direct3D11'">EntitySystemDirect3D11</AssemblyName>
-	</PropertyGroup>
-	<PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
-		<TargetFrameworks>net9.0-windows;net9.0-android</TargetFrameworks>
-		<DefineConstants>DEBUG</DefineConstants>
-		<WarningLevel>2</WarningLevel>
-	</PropertyGroup>
-	<PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
-		<TargetFrameworks>net9.0;net9.0-windows;net9.0-android</TargetFrameworks>
-		<DebugType>none</DebugType>
-		<DefineConstants>TRACE</DefineConstants>
-	</PropertyGroup>
-	<PropertyGroup Condition=" '$(Configuration)' == 'Direct3D11' ">
-		<TargetFramework>net9.0-windows</TargetFramework>
-		<DebugType>none</DebugType>
-		<DefineConstants>TRACE;RELEASE;DIRECT3D11</DefineConstants>
-	</PropertyGroup>
-	<ItemGroup>
-		<PackageReference Include="System.Net.Http" Version="4.3.4" />
-		<PackageReference Include="System.Private.Uri" Version="4.3.2" />
-		<PackageReference Include="System.Text.RegularExpressions" Version="4.3.1" />
-	</ItemGroup>
-	<ItemGroup>
-		<ProjectReference Include="..\Engine\Engine.csproj" />
-	</ItemGroup>
+    <PropertyGroup>
+        <NoWarn>$(NoWarn);1591;1573</NoWarn>
+        <RootNamespace>EntitySystem</RootNamespace>
+        <AssemblyName Condition="'$(Configuration)' != 'Direct3D11'">EntitySystem</AssemblyName>
+        <AssemblyName Condition="'$(Configuration)' == 'Direct3D11'">EntitySystemDirect3D11</AssemblyName>
+        <Configurations>Debug;Release;Direct3D11</Configurations>
+        <PackageId>SurvivalcraftAPI.EntitySystem</PackageId>
+        <Title>SurvivalcraftAPI.EntitySystem</Title><!--For NuGet Package-->
+        <Version>1.8.1.2</Version><!--For NuGet Package-->
+        <PackageProjectUrl>https://gitee.com/SC-SPM/SurvivalcraftApi</PackageProjectUrl>
+        <RepositoryUrl>https://gitee.com/SC-SPM/SurvivalcraftApi</RepositoryUrl>
+        <RepositoryType>Git</RepositoryType>
+        <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+        <GenerateDocumentationFile>true</GenerateDocumentationFile>
+        <ProduceReferenceAssembly>true</ProduceReferenceAssembly>
+    </PropertyGroup>
+    <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
+        <TargetFrameworks>net9.0-windows;net9.0-android</TargetFrameworks>
+        <DefineConstants>DEBUG</DefineConstants>
+    </PropertyGroup>
+    <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
+        <TargetFrameworks>net9.0;net9.0-windows;net9.0-android</TargetFrameworks>
+        <DebugType>none</DebugType>
+        <DefineConstants>TRACE</DefineConstants>
+    </PropertyGroup>
+    <PropertyGroup Condition=" '$(Configuration)' == 'Direct3D11' ">
+        <TargetFramework>net9.0-windows</TargetFramework>
+        <DebugType>none</DebugType>
+        <DefineConstants>TRACE;RELEASE;DIRECT3D11</DefineConstants>
+        <Optimize>true</Optimize>
+    </PropertyGroup>
+    <ItemGroup>
+        <ProjectReference Include="..\Engine\Engine.csproj" />
+    </ItemGroup>
+    <ItemGroup>
+        <PackageReference Include="System.Net.Http" Version="4.3.4" />
+        <PackageReference Include="System.Private.Uri" Version="4.3.2" />
+        <PackageReference Include="System.Text.RegularExpressions" Version="4.3.1" />
+    </ItemGroup>
 </Project>

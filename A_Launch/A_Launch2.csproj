@@ -1,82 +1,68 @@
 <Project Sdk="Microsoft.NET.Sdk">
-	<PropertyGroup>
-		<AndroidUseLatestPlatformSdk>true</AndroidUseLatestPlatformSdk>
-		<PlatformTarget>AnyCPU</PlatformTarget>
-		<AndroidApplication>True</AndroidApplication>
-		<ApplicationId>com.candy.SurvivalcraftAPI1_8</ApplicationId>
-		<AssemblyName>Launch_android</AssemblyName>
-		<RootNamespace>Game</RootNamespace>
-		<Nullable>enable</Nullable>
-		<Configurations>Release</Configurations>
-		<ImplicitUsings>enable</ImplicitUsings>
-		<Product>Survivalcraft</Product>
-		<Version>2.4.0.0</Version>
-		<AndroidStoreUncompressedFileExtensions>.dll</AndroidStoreUncompressedFileExtensions>
-		<RuntimeIdentifiers>android-arm64</RuntimeIdentifiers>
-		<NeutralLanguage>zh-CN</NeutralLanguage>
-		<!--签名-->
-		<AndroidKeyStore>True</AndroidKeyStore>
-		<AndroidSigningKeyAlias>androiddebugkey</AndroidSigningKeyAlias>
-		<AndroidSigningKeyPass>android</AndroidSigningKeyPass>
-		<AndroidSigningKeyStore>签名.keystore</AndroidSigningKeyStore>
-		<AndroidSigningStorePass>android</AndroidSigningStorePass>
-		<!--优化-->
-		<LinkAll>true</LinkAll>
-		<PublishTrimmed>False</PublishTrimmed><!--切记不要修改，如果修改会导致运行时不完整-->
-		<TrimMode>partial</TrimMode>
-	</PropertyGroup>
-	<PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
-		<TargetFramework>net9.0-android</TargetFramework>
-		<DefineConstants>DEBUG</DefineConstants>
-		<WarningLevel>2</WarningLevel>
-	</PropertyGroup>
-	<PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
-		<TargetFramework>net9.0-android</TargetFramework>
-		<DebugType>none</DebugType>
-		<DefineConstants>TRACE</DefineConstants>
-	</PropertyGroup>
-	<PropertyGroup>
-		<!--安卓优化-->
-		<AndroidDexTool>d8</AndroidDexTool>
-		<AndroidEnableSGenConcurrent>false</AndroidEnableSGenConcurrent>
-		<AndroidLinkMode>None</AndroidLinkMode>
-		<AndroidLintEnabled>false</AndroidLintEnabled>
-		<AndroidPackageFormat>apk</AndroidPackageFormat>
-		<AndroidStripILAfterAOT>true</AndroidStripILAfterAOT>
-		<AndroidUseInterpreter>false</AndroidUseInterpreter>
-		<EnableLLVM>True</EnableLLVM>
-		<RunAOTCompilation>False</RunAOTCompilation>
-	</PropertyGroup>
-	<ItemGroup>
-		<AndroidAsset Include="..\Engine\Resources\Lit.psh" Link="Assets\Lit.psh">
-			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
-		</AndroidAsset>
-		<AndroidAsset Include="..\Engine\Resources\Lit.vsh" Link="Assets\Lit.vsh">
-			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
-		</AndroidAsset>
-		<AndroidAsset Include="..\Engine\Resources\UnLit.psh" Link="Assets\Unlit.psh">
-			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
-		</AndroidAsset>
-		<AndroidAsset Include="..\Engine\Resources\UnLit.vsh" Link="Assets\Unlit.vsh">
-			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
-		</AndroidAsset>
-		<AndroidAsset Include="..\Engine\Resources\Debugfont.png" Link="Assets\Debugfont.png">
-			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
-		</AndroidAsset>
-		<AndroidAsset Include="..\Engine\Resources\Debugfont.lst" Link="Assets\Debugfont.lst">
-			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
-		</AndroidAsset>
-		<AndroidAsset Update="Assets\Content.zip">
-			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-		</AndroidAsset>
-		<AndroidAsset Include="..\Survivalcraft\Content.zip">
-			<Link>Assets\Content.zip</Link>
-		</AndroidAsset>
-		<PackageReference Include="Silk.NET.Windowing.Sdl" Version="2.22.0" />
-		<PackageReference Include="System.Net.Http" Version="4.3.4" />
-		<PackageReference Include="System.Text.RegularExpressions" Version="4.3.1" />
-		<ProjectReference Include="..\Survivalcraft_android\A_Survivalcraft.csproj" />
-		<Using Include="Engine" />
-		<Using Include="Game" />
-	</ItemGroup>
+    <PropertyGroup>
+        <RootNamespace>Game</RootNamespace>
+        <TargetFramework>net9.0-android</TargetFramework>
+        <AndroidUseLatestPlatformSdk>true</AndroidUseLatestPlatformSdk>
+        <AndroidApplication>true</AndroidApplication>
+        <ApplicationId>com.candy.SurvivalcraftAPI1_8</ApplicationId>
+        <AssemblyName>Launch_android</AssemblyName>
+        <Nullable>enable</Nullable>
+        <Product>Survivalcraft</Product>
+        <Version>2.4.0.0</Version>
+        <NeutralLanguage>zh-CN</NeutralLanguage>
+        <AndroidStoreUncompressedFileExtensions>.dll</AndroidStoreUncompressedFileExtensions>
+        <RuntimeIdentifier>android-arm64</RuntimeIdentifier>
+        <AndroidPackageFormat>apk</AndroidPackageFormat>
+        <!--签名-->
+        <AndroidKeyStore>true</AndroidKeyStore>
+        <AndroidSigningKeyAlias>androiddebugkey</AndroidSigningKeyAlias>
+        <AndroidSigningKeyStore>Signing.keystore</AndroidSigningKeyStore>
+        <AndroidSigningStorePass>android</AndroidSigningStorePass>
+        <AndroidSigningKeyPass>android</AndroidSigningKeyPass>
+        <!--优化-->
+        <LinkAll>true</LinkAll>
+        <PublishTrimmed>false</PublishTrimmed><!--切记不要修改，如果修改会导致运行时不完整-->
+        <TrimMode>partial</TrimMode>
+        <AndroidDexTool>d8</AndroidDexTool>
+        <AndroidEnableSGenConcurrent>false</AndroidEnableSGenConcurrent>
+        <AndroidLinkMode>None</AndroidLinkMode>
+        <AndroidLintEnabled>false</AndroidLintEnabled>
+        <AndroidStripILAfterAOT>true</AndroidStripILAfterAOT>
+        <AndroidUseInterpreter>false</AndroidUseInterpreter>
+        <EnableLLVM>true</EnableLLVM>
+        <RunAOTCompilation>false</RunAOTCompilation>
+    </PropertyGroup>
+    <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
+        <DefineConstants>DEBUG</DefineConstants>
+    </PropertyGroup>
+    <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
+        <DebugType>none</DebugType>
+        <DefineConstants>TRACE</DefineConstants>
+    </PropertyGroup>
+    <ItemGroup>
+        <AndroidAsset Include="..\Engine\Resources\Lit.psh" Link="Assets\Lit.psh">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </AndroidAsset>
+        <AndroidAsset Include="..\Engine\Resources\Lit.vsh" Link="Assets\Lit.vsh">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </AndroidAsset>
+        <AndroidAsset Include="..\Engine\Resources\UnLit.psh" Link="Assets\Unlit.psh">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </AndroidAsset>
+        <AndroidAsset Include="..\Engine\Resources\UnLit.vsh" Link="Assets\Unlit.vsh">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </AndroidAsset>
+        <AndroidAsset Include="..\Engine\Resources\Debugfont.png" Link="Assets\Debugfont.png">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </AndroidAsset>
+        <AndroidAsset Include="..\Engine\Resources\Debugfont.lst" Link="Assets\Debugfont.lst">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </AndroidAsset>
+        <AndroidAsset Include="..\Survivalcraft\Content.zip" Link="Assets\Content.zip">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </AndroidAsset>
+    </ItemGroup>
+    <ItemGroup>
+        <ProjectReference Include="..\Survivalcraft_android\A_Survivalcraft.csproj" />
+    </ItemGroup>
 </Project>

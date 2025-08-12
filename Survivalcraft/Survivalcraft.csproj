@@ -1,116 +1,72 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
     <PropertyGroup>
-		<OutputType Condition="'$(TargetFramework)' == 'net9.0'">library</OutputType>
-		<NoWarn>1701;1702;CA1416;1591;1572;1573;1587;NETSDK1106</NoWarn>
-		<RootNamespace>Game</RootNamespace>
-        <IsWebBootstrapper>false</IsWebBootstrapper>
-        <PublishUrl>publish\</PublishUrl>
-        <Install>true</Install>
-        <InstallFrom>Disk</InstallFrom>
-        <UpdateEnabled>false</UpdateEnabled>
-        <UpdateMode>Foreground</UpdateMode>
-        <UpdateInterval>7</UpdateInterval>
-        <UpdateIntervalUnits>Days</UpdateIntervalUnits>
-        <UpdatePeriodically>false</UpdatePeriodically>
-        <UpdateRequired>false</UpdateRequired>
-        <MapFileExtensions>true</MapFileExtensions>
-        <ApplicationVersion>2.4.0.0</ApplicationVersion>
-        <UseApplicationTrust>false</UseApplicationTrust>
-        <PublishWizardCompleted>true</PublishWizardCompleted>
-        <BootstrapperEnabled>False</BootstrapperEnabled>
-        <GenerateAssemblyInfo>False</GenerateAssemblyInfo>
+        <NoWarn>1701;1702;CA1416;1591;1572;1573;1587;NETSDK1106</NoWarn>
+        <RootNamespace>Game</RootNamespace>
+        <AssemblyName Condition="'$(Configuration)' != 'Direct3D11'">Survivalcraft</AssemblyName>
+        <AssemblyName Condition="'$(Configuration)' == 'Direct3D11'">SurvivalcraftDirect3D11</AssemblyName>
         <Configurations>Debug;Release;Direct3D11</Configurations>
-        <RuntimeIdentifier>win-x64</RuntimeIdentifier>
         <PackageId>SurvivalcraftAPI.Survivalcraft</PackageId>
         <Title>SurvivalcraftAPI.Survivalcraft</Title><!--For NuGet Package-->
         <Version>1.8.1.2</Version><!--For NuGet Package-->
         <PackageProjectUrl>https://gitee.com/SC-SPM/SurvivalcraftApi</PackageProjectUrl>
         <RepositoryUrl>https://gitee.com/SC-SPM/SurvivalcraftApi</RepositoryUrl>
         <RepositoryType>Git</RepositoryType>
-		<AllowUnsafeBlocks>true</AllowUnsafeBlocks>
-		<GenerateSerializationAssemblies>Off</GenerateSerializationAssemblies>
-		<Platforms>AnyCPU</Platforms>
-		<AssemblyName Condition="'$(Configuration)' != 'Direct3D11'">Survivalcraft</AssemblyName>
-		<AssemblyName Condition="'$(Configuration)' == 'Direct3D11'">SurvivalcraftDirect3D11</AssemblyName>
+        <ApplicationVersion>2.4.0.0</ApplicationVersion>
+        <AssemblyVersion>2.4.0.0</AssemblyVersion>
+        <FileVersion>2.4.0.0</FileVersion>
+        <NeutralLanguage>zh-CN</NeutralLanguage>
+        <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+        <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+        <GenerateDocumentationFile>true</GenerateDocumentationFile>
+        <ApplicationIcon>Content\icon.ico</ApplicationIcon>
+        <ApplicationManifest>Properties\app.manifest</ApplicationManifest>
     </PropertyGroup>
     <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
-		<TargetFramework>net9.0-windows</TargetFramework>
+        <TargetFramework>net9.0-windows</TargetFramework>
         <DefineConstants>DEBUG</DefineConstants>
-        <Optimize>True</Optimize>
     </PropertyGroup>
     <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
-		<TargetFrameworks>net9.0;net9.0-windows</TargetFrameworks>
+        <TargetFrameworks>net9.0;net9.0-windows</TargetFrameworks>
         <DebugType>none</DebugType>
         <DefineConstants>TRACE</DefineConstants>
-		<DebugType>embedded</DebugType>
     </PropertyGroup>
-	<PropertyGroup Condition=" '$(Configuration)' == 'Direct3D11' ">
-		<TargetFramework>net9.0-windows</TargetFramework>
-		<DebugType>none</DebugType>
-		<DefineConstants>TRACE;RELEASE;DIRECT3D11</DefineConstants>
-		<DebugType>embedded</DebugType>
-	</PropertyGroup>
-	<PropertyGroup Condition="'$(TargetFramework)' == 'net9.0-windows'">
-		<OutputType>WinExe</OutputType>
-		<IncludeNativeLibrariesForSelfExtract>true</IncludeNativeLibrariesForSelfExtract>
-		<SupportedOSPlatformVersion>7.0</SupportedOSPlatformVersion>
-		<ImportWindowsDesktopTargets>true</ImportWindowsDesktopTargets>
-		<IncludeNativeLibrariesForSelfExtract>true</IncludeNativeLibrariesForSelfExtract>
-		<IncludeAllContentForSelfExtract>false</IncludeAllContentForSelfExtract>
-		<UseWindowsForms>False</UseWindowsForms>
-	</PropertyGroup>
-    <PropertyGroup>
-        <StartupObject Condition="'$(TargetFramework)' == 'net9.0-windows'">Game.Program</StartupObject>
-        <GenerateManifests>false</GenerateManifests>
-        <SignManifests>false</SignManifests>
-        <ApplicationIcon>Content\icon.ico</ApplicationIcon>
-        <TargetZone>LocalIntranet</TargetZone>
-        <ApplicationManifest>Properties\app.manifest</ApplicationManifest>
-        <AutoGenerateBindingRedirects>false</AutoGenerateBindingRedirects>
+    <PropertyGroup Condition=" '$(Configuration)' == 'Direct3D11' ">
+        <TargetFramework>net9.0-windows</TargetFramework>
+        <DebugType>none</DebugType>
+        <DefineConstants>TRACE;RELEASE;DIRECT3D11</DefineConstants>
+        <Optimize>true</Optimize>
+    </PropertyGroup>
+    <PropertyGroup Condition="'$(TargetFramework)' == 'net9.0-windows'">
+        <RuntimeIdentifier>win-x64</RuntimeIdentifier>
+        <OutputType>WinExe</OutputType>
     </PropertyGroup>
     <ItemGroup>
-		<None Include="Content.zip">
-			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-		</None>
-        <Content Include="Content\icon.ico" />
-
-        <PackageReference Include="TextCopy" Version="6.2.1" Condition="'$(TargetFramework)' == 'net9.0-windows'" />
-        <PackageReference Include="ImeSharp.ImmOnly" Version="1.0.0" Condition="'$(TargetFramework)' == 'net9.0-windows'" />
-
-        <Compile Remove="SimpleJson\SimpleJson.Reflection\ReflectionUtils.cs" />
-        <Using Include="System.IO" />
         <ProjectReference Include="..\Engine\Engine.csproj" />
         <ProjectReference Include="..\EntitySystem\EntitySystem.csproj" />
+    </ItemGroup>
+    <ItemGroup>
+        <PackageReference Include="TextCopy" Version="6.2.1" Condition="'$(TargetFramework)' == 'net9.0-windows'" />
+        <PackageReference Include="ImeSharp.ImmOnly" Version="1.0.0" Condition="'$(TargetFramework)' == 'net9.0-windows'" />
         <PackageReference Include="Jint" Version="4.4.1" />
         <PackageReference Include="System.Net.Http" Version="4.3.4" />
         <PackageReference Include="System.Private.Uri" Version="4.3.2" />
         <PackageReference Include="System.Text.RegularExpressions" Version="4.3.1" />
-		<PackageReference Include="NAudio.Flac.Unknown.Mod" Version="1.0.3" />
-		<PackageReference Include="Tomlyn" Version="0.19.0" />
-		<None Update="openal32.dll">
-			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-		</None>
-		<None Update="wrap_oal.dll">
-			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-		</None>
+        <PackageReference Include="NAudio.Flac.Unknown.Mod" Version="1.0.3" />
     </ItemGroup>
-    <ItemGroup Condition="'$(Configuration)' == 'Debug' And '$(TargetFramework)' == 'net9.0-windows'">
-		<EmbeddedResource Include="init.js">
-			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-		</EmbeddedResource>
+    <ItemGroup Condition="'$(TargetFramework)' == 'net9.0-windows'">
+        <None Update="Content.zip">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </None>
+        <None Update="openal32.dll">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </None>
+        <None Update="wrap_oal.dll">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </None>
+        <None Update="init.js">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </None>
     </ItemGroup>
-    <ItemGroup Condition="('$(Configuration)' == 'Release' Or '$(Configuration)' == 'Direct3D11') And '$(TargetFramework)' == 'net9.0-windows'">
-		<EmbeddedResource Include="init.js">
-			<CopyToOutputDirectory>Never</CopyToOutputDirectory>
-		</EmbeddedResource>
-    </ItemGroup>
-    <PropertyGroup>
-        <AssemblyVersion>2.4.0.0</AssemblyVersion>
-        <FileVersion>2.4.0.0</FileVersion>
-        <ImplicitUsings>enable</ImplicitUsings>
-        <NeutralLanguage>zh-CN</NeutralLanguage>
-        <GenerateDocumentationFile>True</GenerateDocumentationFile>
-    </PropertyGroup>
     <Target Name="PreBuild" BeforeTargets="PreBuildEvent" Condition="'$(TargetFramework)' == 'net9.0-windows'">
         <Exec Command="&quot;$(ProjectDir)7za.exe&quot; a -tzip -mx=9 -r &quot;$(ProjectDir)Content.zip&quot; &quot;$(ProjectDir)Content\*&quot;" />
     </Target>
