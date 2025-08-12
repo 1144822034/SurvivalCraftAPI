@@ -9,6 +9,7 @@ using Silk.NET.Input;
 #endif
 using Monitor = Silk.NET.Windowing.Monitor;
 using System.Runtime.CompilerServices;
+using System.Runtime.InteropServices;
 using Engine.Audio;
 using Engine.Graphics;
 using Engine.Input;
@@ -333,11 +334,41 @@ namespace Engine
 #endif
             m_view.ShouldSwapAutomatically = false;
             m_view.Load += LoadHandler;
-            m_view.Run();//会阻塞，不要放置在前边
-#if !DIRECT3D11
-            GLWrapper.GL.Dispose();
+            try{
+                m_view.Run();//会阻塞，不要放置在前边
+            }
+#if !ANDROID
+            catch (Silk.NET.GLFW.GlfwException e)
+            {
+                if (e.ErrorCode == Silk.NET.GLFW.ErrorCode.VersionUnavailable)
+                {
+                    const string str = "Your graphics card driver does not support the graphics API used by the current program. Please try updating your graphics card driver or using the compatible patch.\n你的显卡驱动不支持当前程序使用的图形API，请尝试更新显卡驱动，或使用兼容补丁。";
+                    Log.Error($"str\n{e}");
+#if WINDOWS
+                    new Thread(() =>
+                    {
+                        MessageBox(IntPtr.Zero, str, null, 0x10u);
+                    }).Start();
+#else
+                    if (OperatingSystem.IsLinux())
+                    {
+                        System.Diagnostics.Process.Start("notify-send", $"-a \"Survivalcraft API\" -u critical \"Error\" \"{str}\"");
+                    }
 #endif
-            m_view?.Dispose();
+                }
+                else
+                {
+                    Log.Error($"Unhandled exception.\n{e}");
+                }
+            }
+#endif
+            finally
+            {
+#if !DIRECT3D11
+                GLWrapper.GL.Dispose();
+#endif
+                m_view?.Dispose();
+            }
         }
 
         public static void Close()
@@ -585,5 +616,10 @@ namespace Engine
             GamePad.AfterFrame();
             Mixer.AfterFrame();
         }
+
+        #if WINDOWS
+        [DllImport("user32.dll", CharSet = CharSet.Unicode)]
+        public static extern int MessageBox(IntPtr hWnd, string text, string caption, uint type);
+        #endif
     }
 }

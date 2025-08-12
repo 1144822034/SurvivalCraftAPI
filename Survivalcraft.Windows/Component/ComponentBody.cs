@@ -68,9 +68,9 @@ namespace Game
 
 		public float m_crouchFactor;
 
-		private int m_embeddedInIceCounter;
+		public int m_embeddedInIceCounter;
 
-		private float m_shakingStrength;
+		public float m_shakingStrength;
 
 		public float m_targetCrouchFactor;
 
@@ -118,7 +118,7 @@ namespace Game
 
 		public virtual float WaterTurnSpeed { get; set; }
 
-		public bool CanEmbedInIce { get; private set; }
+		public bool CanEmbedInIce { get; set; }
 
 		public virtual float ImmersionDepth { get; set; }
 

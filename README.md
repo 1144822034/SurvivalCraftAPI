@@ -5,15 +5,47 @@
 生存战争插件版源码，项目重构版
 
 
-## 用户下载
+## 用户使用和说明
 
 [点击此处](https://gitee.com/SC-SPM/SurvivalcraftApi/releases/latest) 进入下载页面
 
-* Android系统下载后缀为`.apk`的安装包，安装后即可运行，如果弹出标题为`所有文件访问`的授权窗口，请授权此APP
-* Windows系统下载后缀为`.7z`的压缩包，推荐使用 [7-Zip](https://www.7-zip.org/download.html) 进行解压，运行<font color="red">解压后</font>的`.exe`文件
+### Android 安卓系统
+> 需要 64 位 ARM 架构 CPU，最低 Android 5.0
 
-> Windows 系统请勿直接运行压缩包中的文件，务必解压后运行  
-> 如果游戏打开后语言不是系统语言，请点击左下角地球图标，即可切换语言
+请在 [下载页面](https://gitee.com/SC-SPM/SurvivalcraftApi/releases/latest) 下载后缀为`.apk`的安装包，安装后即可运行  
+第一次运行可能会跳转到标题为`所有文件访问`的授权界面，请授权此APP（名称：`生存战争2.4 API插件版1.8`），否则无法此APP无法运行
+
+### Windows系统
+> 需要 x64 架构 CPU，最低 Windows 10 版本 1607，显卡驱动需要支持OpenGL ES 3.2 图形 API（对于兼容补丁，需要支持 Direct3D 9 图形 API）
+
+请先在 [下载页面](https://gitee.com/SC-SPM/SurvivalcraftApi/releases/latest) 下载前缀为`[Windows]`，后缀为`.7z`，名称不带`兼容补丁`的压缩包，推荐使用 [7-Zip](https://www.7-zip.org/download.html) 进行解压，运行<font color="red">解压后</font>的`.exe`文件
+
+第一次启动可能系统会提示您安装 [.NET 桌面运行时 9.0](https://dotnet.microsoft.com/zh-cn/download/dotnet/9.0)，请按提示完成安装并重启您的电脑  
+如果没有任何反应，可能是因为您的Windows系统不完整，请尝试手动安装 [.NET 桌面运行时 9.0](https://dotnet.microsoft.com/zh-cn/download/dotnet/9.0)，如果安装且重启电脑后仍然没有任何反应，建议尝试重新安装微软官方且完整的Windows系统，或者使用虚拟机
+
+如果弹窗提示`你的显卡驱动不支持当前程序使用的图形API，请尝试更新显卡驱动，或使用兼容补丁。`，如果显卡驱动更新后仍然弹窗，请尝试下载名称中有`兼容补丁`的压缩包，并解压到之前解压到的目录，运行<font color="red">解压后</font>的新的`.exe`文件  
+如果使用兼容补丁后仍然弹窗，建议为您的电脑购买并装上五年内发布的显卡
+
+### Linux系统
+> 需要 x64 架构 CPU，最低系统版本详见 [此处](https://github.com/dotnet/core/blob/main/release-notes/9.0/supported-os.md#linux)，显卡驱动需要支持 OpenGL ES 3.2 图形 API
+
+1. 请先在 [下载页面](https://gitee.com/SC-SPM/SurvivalcraftApi/releases/latest) 下载前缀为`[Linux]`，后缀为`.7z`的压缩包，推荐使用 [7-Zip](https://www.7-zip.org/download.html) 进行解压
+2. 安装以下包：
+
+* **dotnet-runtime-9.0** .NET 运行时 9.0，安装方法详见[此处](https://learn.microsoft.com/zh-cn/dotnet/core/install/linux?WT.mc_id=dotnet-35129-website)
+* **libopenal-dev** 一个声音API，对于 Ubuntu 系统可运行`sudo apt-get install libopenal-dev`来安装，其他分发版类似
+* **xsel** 一个剪贴板操作API，对于 Ubuntu 系统可运行`sudo apt-get install xsel`来安装
+
+3. 在第 1 步解压出来的目录运行`dotnet Survivalcraft.dll`即可
+
+### 常见问题
+
+* 如果游戏打开后语言不是系统语言，请点击左下角第二个图标，即可切换语言
+* MOD 安装位置：
+  * Android 系统：`/storage/emulated/0/Survivalcraft2.4_API1.8/Mods`
+  * 其他系统：`(解压到的目录)/Mods`
+* 没有安装任何 MOD 时按上面说明处理后仍然打不开游戏，或者运行遇到任何错误，可在[此处](https://gitee.com/SC-SPM/SurvivalcraftApi/issues)反馈问题
+* 安装有 MOD 后打不开游戏，或者运行遇到任何错误，请先向 MOD 作者反馈问题，再由 MOD 作者向本仓库反馈问题
 
 ## 模组开发者引用
 
@@ -51,12 +83,9 @@
    
    > 还没有 Git？[官网下载](https://git-scm.com/downloads)
 
-2. 进入此仓库，使用 [Visual Studio](https://visualstudio.microsoft.com/)或[Rider](https://www.jetbrains.com/zh-cn/rider/) 打开`survivalcraft-api`目录中的`SurvivalCraft.sln`
-
-3. 如果只是在Windows系统上进行调试，请右键卸载`安卓端`文件夹中的所有项目，在`电脑端`文件夹的`Survivalcraft`项目上右键，点击`构建所选项目`即可
-
-4. 如果需要生成Android系统上的`APK`安装文件，在`安卓端`文件夹的`A_Launch2`和`A_Survivalcraft`两个项目上分别右键，点击`加载项目`，最后在`A_Launch2`上右键，点击`归档以用于发布`即可
-
+2. 进入此仓库，使用 [Visual Studio](https://visualstudio.microsoft.com/) 或 [Rider](https://www.jetbrains.com/zh-cn/rider/) 打开`survivalcraft-api`目录中的`SurvivalCraftApi.sln`
+3. 如果只是在Windows系统上进行调试，请右键卸载`Survivalcraft.Android`和`Survivalcraft.Linux`两个项目，之后在`Survivalcraft.Windows`项目上右键，点击`构建所选项目`即可
+4. 如果需要生成Android系统上的`APK`安装文件，在`Survivalcraft.Android`项目上右键，点击`加载项目`，再点击`归档以用于发布`即可
 5. 以上过程中，如果报错未安装相应功能，请按提示完成安装
 
 ## 感谢

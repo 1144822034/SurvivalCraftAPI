@@ -16,7 +16,7 @@ namespace Game
 				m_clipboardManager.Text = value;
 			}
 		}
-#elif WINDOWS
+#elif WINDOWS || LINUX
 		public static string ClipboardString
 		{
 			get
