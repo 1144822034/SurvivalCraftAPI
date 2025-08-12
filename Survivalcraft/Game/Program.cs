@@ -29,8 +29,6 @@ namespace Game
 		public static float LastCpuFrameTime { get; set; }
 
 		public static event Action<Uri> HandleUri;
-		private static Timer JamTimer = new(JamChecker,null,0,8266);
-		private static int JamCounter = 0;
 #if ANDROID
 		public static bool m_firstFramePrepared = false;
 #endif
@@ -154,20 +152,6 @@ namespace Game
 				Log.Error(e.ToString());
 			}
 		}
-		public static void JamChecker(object o)
-		{
-			if(JamCounter >= 5)
-			{
-				Window.Close();
-				Thread.Sleep(500);
-				ModsManager.Reboot();//重新启动
-				//Environment.Exit(0); // 正常关闭程序
-			}
-			else
-			{
-				JamCounter += 1;
-			}
-		}
 
 		public static void Run()
 		{
@@ -175,8 +159,6 @@ namespace Game
 			// TODO: 待完成。
 			// EngineInputConnection.Implement = new SurvivalcraftInputConnection();
 #endif
-			JamCounter = 0;
-			
 			LastFrameTime = (float)(Time.RealTime - m_frameBeginTime);
 			LastCpuFrameTime = (float)(m_cpuEndTime - m_frameBeginTime);
 			m_frameBeginTime = Time.RealTime;
