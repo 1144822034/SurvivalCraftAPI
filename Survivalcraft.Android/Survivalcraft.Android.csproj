@@ -28,7 +28,11 @@
         <PackageReference Include="System.Text.RegularExpressions" Version="4.3.1" />
     </ItemGroup>
     <ItemGroup>
-        <EmbeddedResource Include="..\Survivalcraft\init.js" />
-        <Compile Include="..\Survivalcraft\**\*.cs" Exclude="..\Survivalcraft\obj\**\*.cs"/>
+        <Compile Include="..\Survivalcraft.Windows\**\*.cs" Exclude="..\Survivalcraft.Windows\obj\**\*.cs"/>
+    </ItemGroup>
+    <ItemGroup>
+      <EmbeddedResource Include="..\Survivalcraft.Windows\init.js">
+        <Link>init.js</Link>
+      </EmbeddedResource>
     </ItemGroup>
 </Project>

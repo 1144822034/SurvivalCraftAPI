@@ -3,73 +3,56 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.7.33927.210
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "公共项目", "公共项目", "{B616DEEE-DF47-4BC3-BAA9-D223D221B6EB}"
-	ProjectSection(SolutionItems) = preProject
-		开发注意事项.md = 开发注意事项.md
-		项目开发规范.txt = 项目开发规范.txt
-	EndProjectSection
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "电脑端", "电脑端", "{528DAACD-0030-4435-B208-CEB0771F1E63}"
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "安卓端", "安卓端", "{A9146056-4560-4FC8-8AA6-903299A7FE26}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EntitySystem", "EntitySystem\EntitySystem.csproj", "{4CC1004A-3B04-4129-8FFA-B2FEFEF6644C}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Survivalcraft", "Survivalcraft\Survivalcraft.csproj", "{8DF9DBBC-F471-406E-A247-B07935723E07}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Survivalcraft.Windows", "Survivalcraft.Windows\Survivalcraft.Windows.csproj", "{8DF9DBBC-F471-406E-A247-B07935723E07}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "A_Survivalcraft", "Survivalcraft_android\A_Survivalcraft.csproj", "{8F0CB2A0-6F8C-4BB2-BDD2-EBAEBBC122B8}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Survivalcraft.Android", "Survivalcraft.Android\Survivalcraft.Android.csproj", "{8F0CB2A0-6F8C-4BB2-BDD2-EBAEBBC122B8}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Engine", "Engine\Engine.csproj", "{0F3ABA55-EDCA-4613-9651-8B3D11808D22}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "A_Launch2", "A_Launch\A_Launch2.csproj", "{CB57C581-4370-4649-8121-6268297D6B79}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Survivalcraft.Android.Launcher", "Survivalcraft.Android.Launcher\Survivalcraft.Android.Launcher.csproj", "{CB57C581-4370-4649-8121-6268297D6B79}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
-		Release|Any CPU = Release|Any CPU
 		Direct3D11|Any CPU = Direct3D11|Any CPU
+		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{4CC1004A-3B04-4129-8FFA-B2FEFEF6644C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{4CC1004A-3B04-4129-8FFA-B2FEFEF6644C}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{4CC1004A-3B04-4129-8FFA-B2FEFEF6644C}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{4CC1004A-3B04-4129-8FFA-B2FEFEF6644C}.Release|Any CPU.Build.0 = Release|Any CPU
 		{4CC1004A-3B04-4129-8FFA-B2FEFEF6644C}.Direct3D11|Any CPU.ActiveCfg = Direct3D11|Any CPU
 		{4CC1004A-3B04-4129-8FFA-B2FEFEF6644C}.Direct3D11|Any CPU.Build.0 = Direct3D11|Any CPU
+		{4CC1004A-3B04-4129-8FFA-B2FEFEF6644C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4CC1004A-3B04-4129-8FFA-B2FEFEF6644C}.Release|Any CPU.Build.0 = Release|Any CPU
 		{8DF9DBBC-F471-406E-A247-B07935723E07}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{8DF9DBBC-F471-406E-A247-B07935723E07}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{8DF9DBBC-F471-406E-A247-B07935723E07}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{8DF9DBBC-F471-406E-A247-B07935723E07}.Release|Any CPU.Build.0 = Release|Any CPU
 		{8DF9DBBC-F471-406E-A247-B07935723E07}.Direct3D11|Any CPU.ActiveCfg = Direct3D11|Any CPU
 		{8DF9DBBC-F471-406E-A247-B07935723E07}.Direct3D11|Any CPU.Build.0 = Direct3D11|Any CPU
+		{8DF9DBBC-F471-406E-A247-B07935723E07}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8DF9DBBC-F471-406E-A247-B07935723E07}.Release|Any CPU.Build.0 = Release|Any CPU
 		{8F0CB2A0-6F8C-4BB2-BDD2-EBAEBBC122B8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{8F0CB2A0-6F8C-4BB2-BDD2-EBAEBBC122B8}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{8F0CB2A0-6F8C-4BB2-BDD2-EBAEBBC122B8}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{8F0CB2A0-6F8C-4BB2-BDD2-EBAEBBC122B8}.Release|Any CPU.Build.0 = Release|Any CPU
 		{8F0CB2A0-6F8C-4BB2-BDD2-EBAEBBC122B8}.Direct3D11|Any CPU.ActiveCfg = Debug|Any CPU
 		{8F0CB2A0-6F8C-4BB2-BDD2-EBAEBBC122B8}.Direct3D11|Any CPU.Build.0 = Debug|Any CPU
+		{8F0CB2A0-6F8C-4BB2-BDD2-EBAEBBC122B8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8F0CB2A0-6F8C-4BB2-BDD2-EBAEBBC122B8}.Release|Any CPU.Build.0 = Release|Any CPU
 		{0F3ABA55-EDCA-4613-9651-8B3D11808D22}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{0F3ABA55-EDCA-4613-9651-8B3D11808D22}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{0F3ABA55-EDCA-4613-9651-8B3D11808D22}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{0F3ABA55-EDCA-4613-9651-8B3D11808D22}.Release|Any CPU.Build.0 = Release|Any CPU
 		{0F3ABA55-EDCA-4613-9651-8B3D11808D22}.Direct3D11|Any CPU.ActiveCfg = Direct3D11|Any CPU
 		{0F3ABA55-EDCA-4613-9651-8B3D11808D22}.Direct3D11|Any CPU.Build.0 = Direct3D11|Any CPU
+		{0F3ABA55-EDCA-4613-9651-8B3D11808D22}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0F3ABA55-EDCA-4613-9651-8B3D11808D22}.Release|Any CPU.Build.0 = Release|Any CPU
 		{CB57C581-4370-4649-8121-6268297D6B79}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{CB57C581-4370-4649-8121-6268297D6B79}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{CB57C581-4370-4649-8121-6268297D6B79}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{CB57C581-4370-4649-8121-6268297D6B79}.Release|Any CPU.Build.0 = Release|Any CPU
 		{CB57C581-4370-4649-8121-6268297D6B79}.Direct3D11|Any CPU.ActiveCfg = Debug|Any CPU
 		{CB57C581-4370-4649-8121-6268297D6B79}.Direct3D11|Any CPU.Build.0 = Debug|Any CPU
+		{CB57C581-4370-4649-8121-6268297D6B79}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CB57C581-4370-4649-8121-6268297D6B79}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
-	EndGlobalSection
-	GlobalSection(NestedProjects) = preSolution
-		{4CC1004A-3B04-4129-8FFA-B2FEFEF6644C} = {B616DEEE-DF47-4BC3-BAA9-D223D221B6EB}
-		{8DF9DBBC-F471-406E-A247-B07935723E07} = {528DAACD-0030-4435-B208-CEB0771F1E63}
-		{8F0CB2A0-6F8C-4BB2-BDD2-EBAEBBC122B8} = {A9146056-4560-4FC8-8AA6-903299A7FE26}
-		{0F3ABA55-EDCA-4613-9651-8B3D11808D22} = {B616DEEE-DF47-4BC3-BAA9-D223D221B6EB}
-		{CB57C581-4370-4649-8121-6268297D6B79} = {A9146056-4560-4FC8-8AA6-903299A7FE26}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {F3B94A30-8A32-415E-BF3C-0B94F6F144C0}

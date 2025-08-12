@@ -58,11 +58,12 @@
         <AndroidAsset Include="..\Engine\Resources\Debugfont.lst" Link="Assets\Debugfont.lst">
             <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
         </AndroidAsset>
-        <AndroidAsset Include="..\Survivalcraft\Content.zip" Link="Assets\Content.zip">
-            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        <AndroidAsset Include="..\Survivalcraft.Windows\Content.zip">
+          <Link>Assets\Content.zip</Link>
+          <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
         </AndroidAsset>
     </ItemGroup>
     <ItemGroup>
-        <ProjectReference Include="..\Survivalcraft_android\A_Survivalcraft.csproj" />
+        <ProjectReference Include="..\Survivalcraft.Android\Survivalcraft.Android.csproj" />
     </ItemGroup>
 </Project>
