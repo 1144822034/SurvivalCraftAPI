@@ -7,11 +7,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EntitySystem", "EntitySyste
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Survivalcraft.Windows", "Survivalcraft.Windows\Survivalcraft.Windows.csproj", "{8DF9DBBC-F471-406E-A247-B07935723E07}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Survivalcraft.Android", "Survivalcraft.Android\Survivalcraft.Android.csproj", "{8F0CB2A0-6F8C-4BB2-BDD2-EBAEBBC122B8}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Engine", "Engine\Engine.csproj", "{0F3ABA55-EDCA-4613-9651-8B3D11808D22}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Survivalcraft.Android.Launcher", "Survivalcraft.Android.Launcher\Survivalcraft.Android.Launcher.csproj", "{CB57C581-4370-4649-8121-6268297D6B79}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Survivalcraft.Android", "Survivalcraft.Android\Survivalcraft.Android.csproj", "{CB57C581-4370-4649-8121-6268297D6B79}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -32,12 +30,6 @@ Global
 		{8DF9DBBC-F471-406E-A247-B07935723E07}.Direct3D11|Any CPU.Build.0 = Direct3D11|Any CPU
 		{8DF9DBBC-F471-406E-A247-B07935723E07}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{8DF9DBBC-F471-406E-A247-B07935723E07}.Release|Any CPU.Build.0 = Release|Any CPU
-		{8F0CB2A0-6F8C-4BB2-BDD2-EBAEBBC122B8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{8F0CB2A0-6F8C-4BB2-BDD2-EBAEBBC122B8}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{8F0CB2A0-6F8C-4BB2-BDD2-EBAEBBC122B8}.Direct3D11|Any CPU.ActiveCfg = Debug|Any CPU
-		{8F0CB2A0-6F8C-4BB2-BDD2-EBAEBBC122B8}.Direct3D11|Any CPU.Build.0 = Debug|Any CPU
-		{8F0CB2A0-6F8C-4BB2-BDD2-EBAEBBC122B8}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{8F0CB2A0-6F8C-4BB2-BDD2-EBAEBBC122B8}.Release|Any CPU.Build.0 = Release|Any CPU
 		{0F3ABA55-EDCA-4613-9651-8B3D11808D22}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{0F3ABA55-EDCA-4613-9651-8B3D11808D22}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0F3ABA55-EDCA-4613-9651-8B3D11808D22}.Direct3D11|Any CPU.ActiveCfg = Direct3D11|Any CPU

@@ -30,25 +30,6 @@ namespace Game
 		public static TaskCompletionSource<HttpResponse> httpResponse = new();
 		public const string fName = "JsInterface";
 
-		public static bool CheckInitJsFileRelease()
-		//改前:是安卓或者文件释放成功或外置 init.js存在返回真(不明确)
-		//改后:本身有外置 init.js 或成功释放则返回真(最终有没有外置)
-		{
-			if (ModsManager.IsAndroid)
-			{
-				return false;
-			}
-			string fullPath = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location == "" ? AppContext.BaseDirectory : Assembly.GetExecutingAssembly().Location);//路径备选方案
-			string path = Path.Combine(fullPath, "init.js");
-/*
-			if (!File.Exists(path))
-			{
-				using FileStream destination = new(path,FileMode.Create);
-				Assembly.GetExecutingAssembly().GetManifestResourceStream("Game.init.js").CopyTo(destination);
-			}
-*/
-			return File.Exists(path);
-		}
 		public static void Initiate()
 			//修改前:先检查是否有外置 init.js 是安卓就直接加载内置,否则释放文件,释放成功就加载外置,否则报错
 			//修改后:先检查是安卓就加载内置,否则释放并检查外部有 init.js 文件则加载外置否则加载内置(如果外置出现问题可以直接加载内置)
@@ -61,7 +42,7 @@ namespace Game
 			string codeString = null;
 			try
 			{
-				if(CheckInitJsFileRelease())
+				if(Storage.FileExists("app:init.js"))
 				{
 					codeString = Storage.ReadAllText("app:init.js");
 				}

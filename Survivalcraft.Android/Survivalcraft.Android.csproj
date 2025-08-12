@@ -1,15 +1,39 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
     <PropertyGroup>
         <RootNamespace>Game</RootNamespace>
         <AssemblyName>Survivalcraft</AssemblyName>
+        <Product>Survivalcraft</Product>
         <TargetFramework>net9.0-android</TargetFramework>
+        <RuntimeIdentifier>android-arm64</RuntimeIdentifier>
         <ApplicationVersion>2.4.0.0</ApplicationVersion>
         <AssemblyVersion>2.4.0.0</AssemblyVersion>
         <FileVersion>2.4.0.0</FileVersion>
+        <Nullable>enable</Nullable>
         <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
         <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
-        <AndroidResgenFile>Resources\Resource.designer.cs</AndroidResgenFile>
         <AndroidUseLatestPlatformSdk>true</AndroidUseLatestPlatformSdk>
+        <AndroidApplication>true</AndroidApplication>
+        <ApplicationId>com.candy.SurvivalcraftAPI1_8</ApplicationId>
+        <AndroidStoreUncompressedFileExtensions>.dll</AndroidStoreUncompressedFileExtensions>
+        <AndroidPackageFormat>apk</AndroidPackageFormat>
+        <!--签名-->
+        <AndroidKeyStore>true</AndroidKeyStore>
+        <AndroidSigningKeyAlias>androiddebugkey</AndroidSigningKeyAlias>
+        <AndroidSigningKeyStore>Signing.keystore</AndroidSigningKeyStore>
+        <AndroidSigningStorePass>android</AndroidSigningStorePass>
+        <AndroidSigningKeyPass>android</AndroidSigningKeyPass>
+        <!--优化-->
+        <LinkAll>true</LinkAll>
+        <PublishTrimmed>false</PublishTrimmed><!--切记不要修改，如果修改会导致运行时不完整-->
+        <TrimMode>partial</TrimMode>
+        <AndroidDexTool>d8</AndroidDexTool>
+        <AndroidEnableSGenConcurrent>false</AndroidEnableSGenConcurrent>
+        <AndroidLinkMode>None</AndroidLinkMode>
+        <AndroidLintEnabled>false</AndroidLintEnabled>
+        <AndroidStripILAfterAOT>true</AndroidStripILAfterAOT>
+        <AndroidUseInterpreter>false</AndroidUseInterpreter>
+        <EnableLLVM>true</EnableLLVM>
+        <RunAOTCompilation>false</RunAOTCompilation>
     </PropertyGroup>
     <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
         <DefineConstants>DEBUG</DefineConstants>
@@ -19,20 +43,41 @@
         <DefineConstants>TRACE</DefineConstants>
     </PropertyGroup>
     <ItemGroup>
-        <ProjectReference Include="..\EntitySystem\EntitySystem.csproj" />
+        <AndroidAsset Include="..\Engine\Resources\Lit.psh" Link="Assets\Lit.psh">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </AndroidAsset>
+        <AndroidAsset Include="..\Engine\Resources\Lit.vsh" Link="Assets\Lit.vsh">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </AndroidAsset>
+        <AndroidAsset Include="..\Engine\Resources\UnLit.psh" Link="Assets\Unlit.psh">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </AndroidAsset>
+        <AndroidAsset Include="..\Engine\Resources\UnLit.vsh" Link="Assets\Unlit.vsh">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </AndroidAsset>
+        <AndroidAsset Include="..\Engine\Resources\Debugfont.png" Link="Assets\Debugfont.png">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </AndroidAsset>
+        <AndroidAsset Include="..\Engine\Resources\Debugfont.lst" Link="Assets\Debugfont.lst">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </AndroidAsset>
+        <AndroidAsset Include="..\Survivalcraft.Windows\Content.zip">
+            <Link>Assets\Content.zip</Link>
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </AndroidAsset>
+        <AndroidAsset Include="..\Survivalcraft.Windows\init.js">
+            <Link>Assets\init.js</Link>
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </AndroidAsset>
     </ItemGroup>
     <ItemGroup>
-        <PackageReference Include="Jint" Version="4.4.1" />
-        <PackageReference Include="NAudio.Flac.Unknown.Mod" Version="1.0.3" />
-        <PackageReference Include="System.Net.Http" Version="4.3.4" />
-        <PackageReference Include="System.Text.RegularExpressions" Version="4.3.1" />
+        <PackageReference Include="Jint" Version="4.4.1"/>
+        <PackageReference Include="NAudio.Flac.Unknown.Mod" Version="1.0.3"/>
+    </ItemGroup>
+    <ItemGroup>
+        <ProjectReference Include="..\EntitySystem\EntitySystem.csproj"/>
     </ItemGroup>
     <ItemGroup>
         <Compile Include="..\Survivalcraft.Windows\**\*.cs" Exclude="..\Survivalcraft.Windows\obj\**\*.cs"/>
-    </ItemGroup>
-    <ItemGroup>
-      <EmbeddedResource Include="..\Survivalcraft.Windows\init.js">
-        <Link>init.js</Link>
-      </EmbeddedResource>
     </ItemGroup>
 </Project>
