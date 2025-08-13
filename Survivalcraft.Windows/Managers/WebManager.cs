@@ -59,7 +59,7 @@ namespace Game
 				throw new OperationCanceledException("Operation cancelled.");
 			}
 		}
-#if !ANDROID
+#if WINDOWS
 		[DllImport("wininet.dll")]
 		public extern static bool InternetGetConnectedState(out int Description, int ReservedValue);
 #endif
@@ -69,8 +69,12 @@ namespace Game
 			{
 #if ANDROID
 				return ((ConnectivityManager)Window.Activity.GetSystemService("connectivity")).ActiveNetworkInfo?.IsConnected ?? false;
-#else
+#elif WINDOWS
 				return InternetGetConnectedState(out int Desc, 0);
+#elif LINUX
+				return System.Net.NetworkInformation.NetworkInterface.GetIsNetworkAvailable();
+#else
+				return true;
 #endif
 			}
 			catch (Exception e)
