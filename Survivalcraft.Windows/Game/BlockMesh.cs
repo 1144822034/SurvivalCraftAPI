@@ -412,6 +412,16 @@ namespace Game
 
 		public virtual void AppendBlockMesh(BlockMesh blockMesh)
 		{
+			bool skipVanilla = false;
+			ModsManager.HookAction("OnFirstPersonModelDrawing",loader => {
+				loader.OnAppendModelMesh(this,blockMesh,out bool skip);
+				skipVanilla |= skip;
+				return false;
+			});
+			if(skipVanilla)
+			{
+				return;
+			}
 			int count = Vertices.Count;
 			for (int i = 0; i < blockMesh.Vertices.Count; i++)
 			{

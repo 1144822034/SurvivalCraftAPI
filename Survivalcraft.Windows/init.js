@@ -35,7 +35,7 @@ var frameHandlers = new Array();//窗口每次刷新都会执行
         Engine.Log.Information(a.PlayersData.Count);//在日志输出当前玩家数量
     }
 });*/
-var OnMinerDigHandlers = new Array();//当Miner挖掘方块时执行，任一返回true后不执行原挖掘操作
+var OnMinerDigHandlers = new Array();//当Miner挖掘方块时执行
 /*OnMinerDigHandlers.push((miner, raycastResult, DigProgress) => {//ComponentMiner miner, TerrainRaycastResult raycastResult, ref float DigProgress
     return false;
 });*/
