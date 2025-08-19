@@ -56,6 +56,11 @@ namespace Game
 
 		public bool m_clothedTexturesValid;
 
+		/// <summary>
+		/// 穿戴衣服限制
+		/// </summary>
+		public bool EnableDressLimit;
+		
 		public static string fName = "ComponentClothing";
 
 		public List<int> m_clothesList = [];
@@ -286,6 +291,9 @@ namespace Game
 			m_componentVitalStats = Entity.FindComponent<ComponentVitalStats>(throwOnError: true);
 			m_componentLocomotion = Entity.FindComponent<ComponentLocomotion>(throwOnError: true);
 			m_componentPlayer = Entity.FindComponent<ComponentPlayer>(throwOnError: true);
+
+			EnableDressLimit = m_subsystemGameInfo.WorldSettings.GameMode != 0 && m_subsystemGameInfo.WorldSettings.AreAdventureSurvivalMechanicsEnabled;
+
 			SteedMovementSpeedFactor = 1f;
 			Insulation = 0f;
 			LeastInsulatedSlot = ClothingSlot.Feet;
@@ -354,7 +362,7 @@ namespace Game
 				}
 			}
 			//生存模式每0.5秒执行一次，不允许玩家越级穿衣物
-			if (m_subsystemGameInfo.WorldSettings.GameMode != 0 && m_subsystemGameInfo.WorldSettings.AreAdventureSurvivalMechanicsEnabled && m_subsystemTime.PeriodicGameTimeEvent(0.5, 0.0))
+			if (EnableDressLimit && m_subsystemTime.PeriodicGameTimeEvent(0.5, 0.0))
 			{
 				foreach (ClothingSlot clothingSlot in ClothingSlot.ClothingSlots.Values)
 				{
