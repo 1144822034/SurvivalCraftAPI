@@ -356,14 +356,9 @@ namespace Game
 							text2 = text2.Substring(num4, text2.Length - num4).TrimStart();
 						}
 						m_lines.Add(text3);
-						if (!flag)
+						if (flag)
 						{
-							continue;
-						}
-
-						if (m_lines.Count > MaxLines)
-						{
-							m_lines = m_lines.Take(MaxLines).ToList();
+							break;
 						}
 					}
 				}
