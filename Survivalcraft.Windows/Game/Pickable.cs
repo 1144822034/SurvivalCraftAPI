@@ -426,7 +426,7 @@ namespace Game
 				int num6 = Terrain.ToCell(position.Y);
 				int z = Terrain.ToCell(position.Z);
 				TerrainChunk chunkAtCell = CurrnetTerrain().GetChunkAtCell(x,z);
-				if(chunkAtCell != null && chunkAtCell.State >= TerrainChunkState.InvalidVertices1 && num6 >= 0 && num6 < 255)
+				if(chunkAtCell != null && chunkAtCell.State >= TerrainChunkState.InvalidVertices1 && num6 >= 0 && num6 < TerrainChunk.HeightMinusOne)
 				{
 					DrawBlockEnvironmentData().Humidity = CurrnetTerrain().GetSeasonalHumidity(x,z);
 					DrawBlockEnvironmentData().Temperature = CurrnetTerrain().GetSeasonalTemperature(x,z) + SubsystemWeather.GetTemperatureAdjustmentAtHeight(num6);

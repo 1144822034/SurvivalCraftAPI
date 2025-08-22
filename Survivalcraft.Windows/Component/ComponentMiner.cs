@@ -311,7 +311,7 @@ namespace Game
 					{
 						if (m_subsystemTerrain.Terrain.GetCellContents(num2, num3, num4) != 0) return false;
 					}
-					if (num3 > 0 && num3 < 255 && (m_canJumpToPlace || IsBlockPlacingAllowed(ComponentCreature.ComponentBody) || m_subsystemGameInfo.WorldSettings.GameMode <= GameMode.Survival))
+					if (num3 > 0 && num3 < TerrainChunk.HeightMinusOne && (m_canJumpToPlace || IsBlockPlacingAllowed(ComponentCreature.ComponentBody) || m_subsystemGameInfo.WorldSettings.GameMode <= GameMode.Survival))
 					{
 						bool flag = false;
 						if (block.IsCollidable_(value))

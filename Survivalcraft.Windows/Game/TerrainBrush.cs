@@ -286,7 +286,7 @@ namespace Game
 				int num = cell.X + x;
 				int num2 = cell.Y + y;
 				int num3 = cell.Z + z;
-				if (num >= 0 && num < 16 && num2 >= 0 && num2 < 256 && num3 >= 0 && num3 < 16)
+				if (num >= 0 && num < TerrainChunk.Size && num2 >= 0 && num2 < TerrainChunk.Height && num3 >= 0 && num3 < TerrainChunk.Size)
 				{
 					int index = TerrainChunk.CalculateCellIndex(num, num2, num3);
 					int cellValueFast = chunk.GetCellValueFast(index);
@@ -330,7 +330,7 @@ namespace Game
 				int num = cell.X + x;
 				int num2 = cell.Y + y;
 				int num3 = cell.Z + z;
-				if (num >= 0 && num < 16 && num2 >= 0 && num2 < 255 && num3 >= 0 && num3 < 16)
+				if (num >= 0 && num < TerrainChunk.Size && num2 >= 0 && num2 < TerrainChunk.Height && num3 >= 0 && num3 < TerrainChunk.Size)
 				{
 					int num4 = num + chunk.Origin.X;
 					int y2 = num2;
@@ -370,7 +370,7 @@ namespace Game
 				int num = cell.X + x;
 				int num2 = cell.Y + y;
 				int num3 = cell.Z + z;
-				if (num >= 0 && num < 16 && num2 >= 0 && num2 < 256 && num3 >= 0 && num3 < 16)
+				if (num >= 0 && num < TerrainChunk.Size && num2 >= 0 && num2 < TerrainChunk.Height && num3 >= 0 && num3 < TerrainChunk.Size)
 				{
 					chunk.SetCellValueFast(num, num2, num3, cell.Value);
 				}

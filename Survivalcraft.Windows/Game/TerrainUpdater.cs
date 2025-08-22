@@ -292,7 +292,7 @@ namespace Game
 					for (int j = point.Y; j <= point2.Y; j++)
 					{
 						TerrainChunk chunkAtCoords = m_terrain.GetChunkAtCoords(i, j);
-						float num5 = Vector2.DistanceSquared(v2: new Vector2(((float)i + 0.5f) * 16f, ((float)j + 0.5f) * 16f), v1: value.Center);
+						float num5 = Vector2.DistanceSquared(v2: new Vector2(((float)i + 0.5f) * TerrainChunk.Size, ((float)j + 0.5f) * TerrainChunk.Size), v1: value.Center);
 						if (num5 <= num3)
 						{
 							if (chunkAtCoords == null || chunkAtCoords.State < TerrainChunkState.Valid)
@@ -534,7 +534,7 @@ namespace Game
 				{
 					for (int l = point.Y; l <= point2.Y; l++)
 					{
-						Vector2 chunkCenter = new(((float)k + 0.5f) * 16f, ((float)l + 0.5f) * 16f);
+						Vector2 chunkCenter = new(((float)k + 0.5f) * TerrainChunk.Size, ((float)l + 0.5f) * TerrainChunk.Size);
 						TerrainChunk chunkAtCoords = m_terrain.GetChunkAtCoords(k, l);
 						if (chunkAtCoords == null)
 						{
@@ -893,15 +893,15 @@ namespace Game
 
 		public virtual void GenerateChunkSunLightAndHeight(TerrainChunk chunk, int skylightValue)
 		{
-			for (int i = 0; i < 16; i++)
+			for (int i = 0; i < TerrainChunk.Size; i++)
 			{
-				for (int j = 0; j < 16; j++)
+				for (int j = 0; j < TerrainChunk.Size; j++)
 				{
 					int num = 0;
-					int num2 = 255;
+					int num2 = TerrainChunk.HeightMinusOne;
 					int num3 = 0;
-					int num4 = 255;
-					int num5 = TerrainChunk.CalculateCellIndex(i, 255, j);
+					int num4 = TerrainChunk.HeightMinusOne;
+					int num5 = TerrainChunk.CalculateCellIndex(i, TerrainChunk.HeightMinusOne, j);
 					while (num4 >= 0)
 					{
 						int cellValueFast = chunk.GetCellValueFast(num5);
@@ -975,9 +975,9 @@ namespace Game
 		{
 			ModsManager.HookAction("GenerateChunkLightSources", loader => { loader.GenerateChunkLightSources(m_lightSources, chunk); return false; });
 			Block[] blocks = BlocksManager.Blocks;
-			for (int i = 0; i < 16; i++)
+			for (int i = 0; i < TerrainChunk.Size; i++)
 			{
-				for (int j = 0; j < 16; j++)
+				for (int j = 0; j < TerrainChunk.Size; j++)
 				{
                     int topHeightFast = chunk.GetTopHeightFast(i, j);
                     int bottomHeightFast = chunk.GetBottomHeightFast(i, j);
@@ -1076,30 +1076,30 @@ namespace Game
             {
                 case 0:
                     terrainChunk = chunk.Terrain.GetChunkAtCoords(chunk.Coords.X, chunk.Coords.Y + 1);
-                    num2 = 15;
+                    num2 = TerrainChunk.SizeMinusOne;
                     num4 = 0;
                     break;
                 case 1:
                     terrainChunk = chunk.Terrain.GetChunkAtCoords(chunk.Coords.X + 1, chunk.Coords.Y);
-                    num = 15;
+                    num = TerrainChunk.SizeMinusOne;
                     num3 = 0;
                     break;
                 case 2:
                     terrainChunk = chunk.Terrain.GetChunkAtCoords(chunk.Coords.X, chunk.Coords.Y - 1);
                     num2 = 0;
-                    num4 = 15;
+                    num4 = TerrainChunk.SizeMinusOne;
                     break;
                 default:
                     terrainChunk = chunk.Terrain.GetChunkAtCoords(chunk.Coords.X - 1, chunk.Coords.Y);
                     num = 0;
-                    num3 = 15;
+                    num3 = TerrainChunk.SizeMinusOne;
                     break;
             }
             if (terrainChunk == null || terrainChunk.ThreadState < TerrainChunkState.InvalidPropagatedLight)
             {
                 return;
             }
-            for (int i = 0; i < 16; i++)
+            for (int i = 0; i < TerrainChunk.Size; i++)
             {
                 switch (face)
                 {
@@ -1125,7 +1125,7 @@ namespace Game
                 int bottomHeightFast = chunk.GetBottomHeightFast(num, num2);
                 int num7 = TerrainChunk.CalculateCellIndex(num, 0, num2);
                 int num8 = TerrainChunk.CalculateCellIndex(num3, 0, num4);
-                for (int j = bottomHeightFast; j < 256; j++)
+                for (int j = bottomHeightFast; j < TerrainChunk.Height; j++)
                 {
                     int cellValueFast = chunk.GetCellValueFast(num7 + j);
                     int num9 = Terrain.ExtractContents(cellValueFast);
@@ -1193,7 +1193,7 @@ namespace Game
 					{
 						PropagateLightSource(lightSource.X, lightSource.Y - 1, lightSource.Z, light);
 					}
-					if (lightSource.Y < 255)
+					if (lightSource.Y < TerrainChunk.HeightMinusOne)
 					{
 						PropagateLightSource(lightSource.X, lightSource.Y + 1, lightSource.Z, light);
 					}
@@ -1208,8 +1208,8 @@ namespace Game
                 int x = lightSource.X;
                 int y = lightSource.Y;
                 int z = lightSource.Z;
-                int num2 = x & 15;
-                int num3 = z & 15;
+                int num2 = x & TerrainChunk.SizeMinusOne;
+                int num3 = z & TerrainChunk.SizeMinusOne;
                 TerrainChunk chunkAtCell = this.m_terrain.GetChunkAtCell(x, z);
                 if (num2 == 0)
                 {
@@ -1219,7 +1219,7 @@ namespace Game
                 {
                     this.PropagateLightSource(chunkAtCell, x - 1, y, z, light);
                 }
-                if (num2 == 15)
+                if (num2 == TerrainChunk.SizeMinusOne)
                 {
                     this.PropagateLightSource(this.m_terrain.GetChunkAtCell(x + 1, z), x + 1, y, z, light);
                 }
@@ -1235,7 +1235,7 @@ namespace Game
                 {
                     this.PropagateLightSource(chunkAtCell, x, y, z - 1, light);
                 }
-                if (num3 == 15)
+                if (num3 == TerrainChunk.SizeMinusOne)
                 {
                     this.PropagateLightSource(this.m_terrain.GetChunkAtCell(x, z + 1), x, y, z + 1, light);
                 }
@@ -1247,7 +1247,7 @@ namespace Game
                 {
                     this.PropagateLightSource(chunkAtCell, x, y - 1, z, light);
                 }
-                if (y < 255)
+                if (y < TerrainChunk.HeightMinusOne)
                 {
                     this.PropagateLightSource(chunkAtCell, x, y + 1, z, light);
                 }
@@ -1258,7 +1258,7 @@ namespace Game
         {
             if (chunk != null)
             {
-                int num = TerrainChunk.CalculateCellIndex(x & 15, y, z & 15);
+                int num = TerrainChunk.CalculateCellIndex(x & TerrainChunk.SizeMinusOne, y, z & TerrainChunk.SizeMinusOne);
                 int cellValueFast = chunk.GetCellValueFast(num);
                 int num2 = Terrain.ExtractContents(cellValueFast);
                 Block block = BlocksManager.Blocks[num2];
@@ -1295,8 +1295,8 @@ namespace Game
             TerrainChunk chunkAtCoords8 = this.m_terrain.GetChunkAtCoords(chunk.Coords.X + 1, chunk.Coords.Y + 1);
             int num1 = 0;
             int num2 = 0;
-            int num3 = 16;
-            int num4 = 16;
+            int num3 = TerrainChunk.Size;
+            int num4 = TerrainChunk.Size;
             if (chunkAtCoords4 == null)
                 ++num1;
             if (chunkAtCoords2 == null)
@@ -1305,7 +1305,7 @@ namespace Game
                 --num3;
             if (chunkAtCoords7 == null)
                 --num4;
-            for (int index = 0; index < 16; ++index)
+            for (int index = 0; index < TerrainChunk.SlicesCount; ++index)
             {
                 if (index % 2 == stage)
                 {
@@ -1334,11 +1334,11 @@ namespace Game
                             switch (x1)
                             {
                                 case 0:
-                                    if (z1 == 0 && chunkAtCoords1 == null || z1 == 15 && chunkAtCoords6 == null)
+                                    if (z1 == 0 && chunkAtCoords1 == null || z1 == TerrainChunk.SizeMinusOne && chunkAtCoords6 == null)
                                         break;
                                     goto default;
-                                case 15:
-                                    if (z1 == 0 && chunkAtCoords3 == null || z1 == 15 && chunkAtCoords8 == null)
+                                case TerrainChunk.SizeMinusOne:
+                                    if (z1 == 0 && chunkAtCoords3 == null || z1 == TerrainChunk.SizeMinusOne && chunkAtCoords8 == null)
                                         break;
                                     goto default;
                                 default:
@@ -1346,8 +1346,8 @@ namespace Game
                                     int z2 = z1 + chunk.Origin.Y;
                                     int x2_1 = MathUtils.Min(chunk.GetBottomHeightFast(x1, z1) - 1, MathUtils.Min(this.m_terrain.GetBottomHeight(x2 - 1, z2), this.m_terrain.GetBottomHeight(x2 + 1, z2), this.m_terrain.GetBottomHeight(x2, z2 - 1), this.m_terrain.GetBottomHeight(x2, z2 + 1)));
                                     int x2_2 = chunk.GetTopHeightFast(x1, z1) + 1;
-                                    int num5 = MathUtils.Max(16 * index, x2_1, 1);
-                                    int num6 = MathUtils.Min(16 * (index + 1), x2_2, (int)byte.MaxValue);
+                                    int num5 = MathUtils.Max(TerrainChunk.SliceHeight * index, x2_1, 1);
+                                    int num6 = MathUtils.Min(TerrainChunk.SliceHeight * (index + 1), x2_2, (int)byte.MaxValue);
                                     int cellIndex = TerrainChunk.CalculateCellIndex(x1, 0, z1);
                                     for (int y = num5; y < num6; ++y)
                                     {
@@ -1370,61 +1370,61 @@ namespace Game
         public virtual void CalculateChunkSliceContentsHashes(TerrainChunk chunk)
         {
             double realTime = Time.RealTime;
-            int num = 1;
-            num += m_terrain.SeasonTemperature;
-            num *= 31;
-            num += m_terrain.SeasonHumidity;
-            num *= 31;
-            for (int i = 0; i < 16; i++)
+            int hash1 = 1;
+            hash1 += m_terrain.SeasonTemperature;
+            hash1 *= 31;
+            hash1 += m_terrain.SeasonHumidity;
+            hash1 *= 31;
+            for (int i = 0; i < TerrainChunk.SlicesCount; i++)
             {
-                chunk.SliceContentsHashes[i] = num;
+                chunk.SliceContentsHashes[i] = hash1;
             }
-            int num2 = chunk.Origin.X - 1;
-            int num3 = chunk.Origin.X + 16 + 1;
-            int num4 = chunk.Origin.Y - 1;
-            int num5 = chunk.Origin.Y + 16 + 1;
-            for (int j = num2; j < num3; j++)
+            int startOriginX = chunk.Origin.X - 1;
+            int endOriginX = chunk.Origin.X + TerrainChunk.Size + 1;
+            int startOriginY = chunk.Origin.Y - 1;
+            int endOriginY = chunk.Origin.Y + TerrainChunk.Size + 1;
+            for (int originX = startOriginX; originX < endOriginX; originX++)
             {
-                for (int k = num4; k < num5; k++)
+                for (int originY = startOriginY; originY < endOriginY; originY++)
                 {
-                    TerrainChunk chunkAtCell = m_terrain.GetChunkAtCell(j, k);
+                    TerrainChunk chunkAtCell = m_terrain.GetChunkAtCell(originX, originY);
                     if (chunkAtCell != null)
                     {
-                        int num6 = j & 15;
-                        int num7 = k & 15;
-                        int shaftValueFast = chunkAtCell.GetShaftValueFast(num6, num7);
-                        int num8 = Terrain.ExtractTopHeight(shaftValueFast);
-                        int num9 = Terrain.ExtractBottomHeight(shaftValueFast);
-                        int num10 = ((num6 > 0) ? chunkAtCell.GetBottomHeightFast(num6 - 1, num7) : m_terrain.GetBottomHeight(j - 1, k));
-                        int num11 = ((num7 > 0) ? chunkAtCell.GetBottomHeightFast(num6, num7 - 1) : m_terrain.GetBottomHeight(j, k - 1));
-                        int num12 = ((num6 < 15) ? chunkAtCell.GetBottomHeightFast(num6 + 1, num7) : m_terrain.GetBottomHeight(j + 1, k));
-                        int num13 = ((num7 < 15) ? chunkAtCell.GetBottomHeightFast(num6, num7 + 1) : m_terrain.GetBottomHeight(j, k + 1));
-                        int num14 = MathUtils.Min(MathUtils.Min(num10, num11, num12, num13), num9 - 1);
-                        int num15 = num8 + 2;
-                        num14 = MathUtils.Max(num14, 0);
-                        num15 = MathUtils.Min(num15, 256);
-                        int num16 = MathUtils.Max((num14 - 1) / 16, 0);
-                        int num17 = MathUtils.Min((num15 + 1) / 16, 15);
-                        int num18 = 1;
-                        num18 += Terrain.ExtractTemperature(shaftValueFast);
-                        num18 *= 31;
-                        num18 += Terrain.ExtractHumidity(shaftValueFast);
-                        num18 *= 31;
-                        for (int l = num16; l <= num17; l++)
+                        int x = originX & TerrainChunk.SizeMinusOne;
+                        int z = originY & TerrainChunk.SizeMinusOne;
+                        int shaftValueFast = chunkAtCell.GetShaftValueFast(x, z);
+                        int topHeight = Terrain.ExtractTopHeight(shaftValueFast);
+                        int bottomHeight = Terrain.ExtractBottomHeight(shaftValueFast);
+                        int neighborBottomHeight1 = ((x > 0) ? chunkAtCell.GetBottomHeightFast(x - 1, z) : m_terrain.GetBottomHeight(originX - 1, originY));
+                        int neighborBottomHeight2 = ((z > 0) ? chunkAtCell.GetBottomHeightFast(x, z - 1) : m_terrain.GetBottomHeight(originX, originY - 1));
+                        int neighborBottomHeight3 = ((x < TerrainChunk.SizeMinusOne) ? chunkAtCell.GetBottomHeightFast(x + 1, z) : m_terrain.GetBottomHeight(originX + 1, originY));
+                        int neighborBottomHeight4 = ((z < TerrainChunk.SizeMinusOne) ? chunkAtCell.GetBottomHeightFast(x, z + 1) : m_terrain.GetBottomHeight(originX, originY + 1));
+                        int minBottomHeight = MathUtils.Min(MathUtils.Min(neighborBottomHeight1, neighborBottomHeight2, neighborBottomHeight3, neighborBottomHeight4), bottomHeight - 1);
+                        int topHeight2 = topHeight + 2;
+                        minBottomHeight = MathUtils.Max(minBottomHeight, 0);
+                        topHeight2 = MathUtils.Min(topHeight2, TerrainChunk.Height);
+                        int startSlice = MathUtils.Max((minBottomHeight - 1) / TerrainChunk.SliceHeight, 0);
+                        int endSlice = MathUtils.Min((topHeight2 + 1) / TerrainChunk.SliceHeight, TerrainChunk.SliceHeight - 1);
+                        int hash2 = 1;
+                        hash2 += Terrain.ExtractTemperature(shaftValueFast);
+                        hash2 *= 31;
+                        hash2 += Terrain.ExtractHumidity(shaftValueFast);
+                        hash2 *= 31;
+                        for (int slice = startSlice; slice <= endSlice; slice++)
                         {
-                            int num19 = num18;
-                            int num20 = MathUtils.Max(l * 16 - 1, num14);
-                            int num21 = MathUtils.Min(l * 16 + 16 + 1, num15);
-                            int m = TerrainChunk.CalculateCellIndex(num6, num20, num7);
-                            int num22 = m + num21 - num20;
-                            while (m < num22)
+                            int hash3 = hash2;
+                            int startY = MathUtils.Max(slice * TerrainChunk.SliceHeight - 1, minBottomHeight);
+                            int endY = MathUtils.Min(slice * TerrainChunk.SliceHeight + TerrainChunk.SliceHeight + 1, topHeight2);
+                            int cellIndex = TerrainChunk.CalculateCellIndex(x, startY, z);
+                            int endCellIndex = cellIndex + endY - startY;
+                            while (cellIndex < endCellIndex)
                             {
-                                num19 += chunkAtCell.GetCellValueFast(m++);
-                                num19 *= 31;
+                                hash3 += chunkAtCell.GetCellValueFast(cellIndex++);
+                                hash3 *= 31;
                             }
-                            num19 += num20;
-                            num19 *= 31;
-                            chunk.SliceContentsHashes[l] += num19;
+                            hash3 += startY;
+                            hash3 *= 31;
+                            chunk.SliceContentsHashes[slice] += hash3;
                         }
                     }
                 }
@@ -1441,15 +1441,15 @@ namespace Game
 				blockBehavior.OnChunkInitialized(chunk);
 			}
 			bool isLoaded = chunk.IsLoaded;
-			for (int i = 0; i < 16; i++)
+			for (int i = 0; i < TerrainChunk.Size; i++)
 			{
-				for (int j = 0; j < 16; j++)
+				for (int j = 0; j < TerrainChunk.Size; j++)
 				{
 					int x = i + chunk.Origin.X;
 					int z = j + chunk.Origin.Y;
 					int num = TerrainChunk.CalculateCellIndex(i, 0, j);
 					int num2 = 0;
-					while (num2 < 255)
+					while (num2 < TerrainChunk.HeightMinusOne)
 					{
 						int cellValueFast = chunk.GetCellValueFast(num);
 						int contents = Terrain.ExtractContents(cellValueFast);

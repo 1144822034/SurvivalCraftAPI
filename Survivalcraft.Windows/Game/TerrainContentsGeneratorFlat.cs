@@ -60,9 +60,9 @@ namespace Game
 
 		public void GenerateChunkContentsPass1(TerrainChunk chunk)
 		{
-			for (int i = 0; i < 16; i++)
+			for (int i = 0; i < TerrainChunk.Size; i++)
 			{
-				for (int j = 0; j < 16; j++)
+				for (int j = 0; j < TerrainChunk.Size; j++)
 				{
 					int num = i + chunk.Origin.X;
 					int num2 = j + chunk.Origin.Y;
@@ -70,7 +70,7 @@ namespace Game
 					chunk.SetHumidityFast(i, j, CalculateHumidity(num, num2));
 					bool flag = CalculateOceanShoreDistance(num, num2) >= 0f;
 					int num3 = TerrainChunk.CalculateCellIndex(i, 0, j);
-					for (int k = 0; k < 256; k++)
+					for (int k = 0; k < TerrainChunk.Height; k++)
 					{
 						int value = Terrain.MakeBlockValue(0);
 						if (flag)
@@ -165,13 +165,13 @@ namespace Game
 		public virtual void UpdateFluidIsTop(TerrainChunk chunk)
 		{
 			_ = m_subsystemTerrain.Terrain;
-			for (int i = 0; i < 16; i++)
+			for (int i = 0; i < TerrainChunk.Size; i++)
 			{
-				for (int j = 0; j < 16; j++)
+				for (int j = 0; j < TerrainChunk.Size; j++)
 				{
-					int num = TerrainChunk.CalculateCellIndex(i, 255, j);
+					int num = TerrainChunk.CalculateCellIndex(i, TerrainChunk.HeightMinusOne, j);
 					int num2 = 0;
-					int num3 = 255;
+					int num3 = TerrainChunk.HeightMinusOne;
 					while (num3 >= 0)
 					{
 						int cellValueFast = chunk.GetCellValueFast(num);

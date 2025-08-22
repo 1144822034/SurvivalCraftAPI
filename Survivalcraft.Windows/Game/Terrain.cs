@@ -182,17 +182,17 @@ namespace Game
 
 		public virtual TerrainChunk GetChunkAtCoords(int chunkX, int chunkY, int chunkZ)
 		{
-			return chunkY is >= 0 and < 16 ? m_allChunks.Get(chunkX, chunkZ) : null;
+			return chunkY is >= 0 and < TerrainChunk.Height / TerrainChunk.Size ? m_allChunks.Get(chunkX, chunkZ) : null;
 		}
 
 		public virtual TerrainChunk GetChunkAtCell(int x, int z)
 		{
-			return GetChunkAtCoords(x >> 4, z >> 4);
+			return GetChunkAtCoords(x >> TerrainChunk.SizeBits, z >> TerrainChunk.SizeBits);
 		}
 
 		public virtual TerrainChunk GetChunkAtCell(int x, int y, int z)
 		{
-			return y is >= 0 and < 256 ? m_allChunks.Get(x >> 4, z >> 4) : null;
+			return y is >= 0 and < TerrainChunk.Height ? m_allChunks.Get(x >> TerrainChunk.SizeBits, z >> TerrainChunk.SizeBits) : null;
 		}
 
 		public virtual TerrainChunk AllocateChunk(int chunkX, int chunkZ)
@@ -239,7 +239,7 @@ namespace Game
 
 		public static Point2 ToChunk(int x, int z)
 		{
-			return new Point2(x >> 4, z >> 4);
+			return new Point2(x >> TerrainChunk.SizeBits, z >> TerrainChunk.SizeBits);
 		}
 
 		public static int ToCell(float x)
@@ -269,7 +269,7 @@ namespace Game
 
 		public virtual bool IsCellValid(int x, int y, int z)
 		{
-			return y >= 0 && y < 256;
+			return y >= 0 && y < TerrainChunk.Height;
 		}
 
 		public virtual int GetCellValue(int x, int y, int z)

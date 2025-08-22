@@ -645,7 +645,7 @@ namespace Game
 				{
 					for (int num5 = 1; num5 < point2.Z + 1; num5++)
 					{
-						if (num4 + num > 0 && num4 + num < 255)
+						if (num4 + num > 0 && num4 + num < TerrainChunk.HeightMinusOne)
 						{
 							int cellValueFast = m_blockGeometryGenerator.Terrain.GetCellValueFast(n, num4 + num, num5);
 							int num6 = Terrain.ExtractContents(cellValueFast);
