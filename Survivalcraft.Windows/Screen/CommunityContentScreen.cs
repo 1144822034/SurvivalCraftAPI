@@ -32,8 +32,8 @@ namespace Game
 		public ButtonWidget m_downloadButton;
 		public ButtonWidget m_actionButton;
 		public ButtonWidget m_action2Button;
-		public ButtonWidget m_action3Button;
-		public ButtonWidget m_moreOptionsButton;
+		public ButtonWidget m_webPageButton;
+		public ButtonWidget m_loginButton;
 		public ButtonWidget m_searchKey;
 		public ButtonWidget m_searchTypeButton;
 		public TextBoxWidget m_inputKey;
@@ -70,8 +70,8 @@ namespace Game
 			m_downloadButton = Children.Find<ButtonWidget>("Download");
 			m_actionButton = Children.Find<ButtonWidget>("Action");
 			m_action2Button = Children.Find<ButtonWidget>("Action2");
-			m_action3Button = Children.Find<ButtonWidget>("Action3");
-			m_moreOptionsButton = Children.Find<ButtonWidget>("MoreOptions");
+			m_webPageButton = Children.Find<ButtonWidget>("WebPage");
+			m_loginButton = Children.Find<ButtonWidget>("Login");
 			m_inputKey = Children.Find<TextBoxWidget>("key");
 			m_placeHolder = Children.Find<LabelWidget>("placeholder");
 			m_clearSearchLink = Children.Find<LinkWidget>("ClearSearchLink");
@@ -164,7 +164,7 @@ namespace Game
 			{
 				m_actionButton.IsVisible = false;
 				m_action2Button.IsVisible = false;
-				m_action3Button.IsVisible = false;
+				m_webPageButton.IsVisible = false;
 			}
 			var communityContentEntry = m_treePanel.SelectedNode?.Tag as CommunityContentEntry;
 			m_downloadButton.IsEnabled = communityContentEntry != null;
@@ -354,11 +354,9 @@ namespace Game
 					DialogsManager.ShowDialog(null, new MessageDialog(LanguageControl.Error, e.Message, LanguageControl.Ok, null, null));
 				});
 			}
-			m_action3Button.Text = "申精";
-			if (m_action3Button.IsClicked)
+			if (m_webPageButton.IsClicked)
 			{
-				string msg = "如果你觉得你的作品足够优秀，\n可以申请加入精品区，让更多人看到。\n加精作品将会是社区认证的作品，是有机会上游戏公告推广的。\n\n具体申精方式\n请加[SC中文社区存档交流群(745540296)]了解。\n同时，如果你对某个作品有异议，\n也可加群举报，本群会受理作品归属问题，守护玩家的劳动成果！\n";
-				DialogsManager.ShowDialog(null, new MessageDialog("作品如何申精？", msg, LanguageControl.Ok, null, null));
+				WebBrowserManager.LaunchBrowser("https://www.schub.top/");
 			}
 			if (m_searchTypeButton.IsClicked)
 			{
@@ -375,7 +373,7 @@ namespace Game
 					else if (m_searchType == SearchType.ByUserId) m_searchType = SearchType.ByName;
 				}
 			}
-			if (m_moreOptionsButton.IsClicked)
+			if (m_loginButton.IsClicked)
 			{
 				//DialogsManager.ShowDialog(null, new MoreCommunityLinkDialog());
 				if (m_provider.IsLoggedIn)

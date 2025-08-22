@@ -30,8 +30,9 @@
             <TextBoxWidget Size="Infinity, 60" Name="key" VerticalAlignment="Center" Margin="10,0"/>
             <LinkWidget Name="ClearSearchLink" Text="[OriginalCommunityContentScreen:7]" Color="64, 192, 64" HorizontalAlignment="Far" VerticalAlignment="Center" DropShadow="true" Margin="10, 0" />
           </CanvasWidget>
-          <BevelledButtonWidget Name="Search" Text="[CommunityContentScreen:10]" Style="{Styles/ButtonStyle_70x60}" VerticalAlignment="Center"/>
-          <BevelledButtonWidget Name="SearchType" Text="[CommunityContentScreen:10]" Size="100,60" VerticalAlignment="Center"/>
+          <CanvasWidget Size="5, 0"/>
+          <BevelledButtonWidget Name="Search" Text="[CommunityContentScreen:10]" Style="{Styles/ButtonStyle_115x60}" VerticalAlignment="Center"/>
+          <BevelledButtonWidget Name="SearchType" Text="[CommunityContentScreen:10]" Size="115, 60" VerticalAlignment="Center"/>
         </StackPanelWidget>
       </StackPanelWidget>
 
@@ -51,9 +52,9 @@
         <CanvasWidget Size="10, 0"/>
         <BevelledButtonWidget Name="Action2" Style="{Styles/ButtonStyle_160x60}" Text="[CommunityContentScreen:7]"/>
         <CanvasWidget Size="10, 0"/>
-        <BevelledButtonWidget Name="Action3" Style="{Styles/ButtonStyle_160x60}" Text="[CommunityContentScreen:11]"/>
+        <BevelledButtonWidget Name="WebPage" Style="{Styles/ButtonStyle_160x60}" Text="[CommunityContentScreen:12]"/>
         <CanvasWidget Size="10, 0"/>
-        <BevelledButtonWidget Name="MoreOptions" Style="{Styles/ButtonStyle_70x60}" Text="[CommunityContentScreen:8]"/>
+        <BevelledButtonWidget Name="Login" Style="{Styles/ButtonStyle_160x60}" Text="[CommunityContentScreen:13]"/>
       </StackPanelWidget>
 
       <CanvasWidget Size="0, 5" />

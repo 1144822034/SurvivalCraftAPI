@@ -22,7 +22,7 @@ namespace Game
 		public override void Load(ValuesDictionary valuesDictionary)
 		{
 			m_blockBehaviorsByContents = new SubsystemBlockBehavior[BlocksManager.Blocks.Length][];
-			Dictionary<int, List<SubsystemBlockBehavior>> dictionary = [];
+			Dictionary<int, HashSet<SubsystemBlockBehavior>> dictionary = [];
 			for (int i = 0; i < m_blockBehaviorsByContents.Length; i++)
 			{
 				dictionary[i] = [];
