@@ -130,7 +130,7 @@ namespace Game
 
 		public void ScanDesign(CellFace start, Vector3 direction, ComponentMiner componentMiner)
 		{
-			FurnitureDesign design = null;
+			FurnitureDesign design;
 			FurnitureDesign furnitureDesign = null;
 			Dictionary<Point3,int> valuesDictionary = new();
 			Point3 point = start.Point;

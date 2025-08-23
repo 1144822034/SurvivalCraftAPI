@@ -87,6 +87,7 @@ namespace Game
             }
 			catch
 			{
+				// ignored
 			}
 		}
 		public override void Load(ValuesDictionary valuesDictionary, IdToEntityMap idToEntityMap)

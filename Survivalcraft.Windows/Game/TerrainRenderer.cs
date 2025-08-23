@@ -73,9 +73,9 @@ namespace Game
 			m_subsystemTerrain = subsystemTerrain;
 			m_subsystemSky = subsystemTerrain.Project.FindSubsystem<SubsystemSky>(throwOnError: true);
 			m_subsystemAnimatedTextures = subsystemTerrain.SubsystemAnimatedTextures;
-			if (m_opaqueShader == null) m_opaqueShader = new Shader(ShaderCodeManager.GetFast("Shaders/Opaque.vsh"), ShaderCodeManager.GetFast("Shaders/Opaque.psh"),[new("Opaque")]);
-			if (m_alphaTestedShader == null) m_alphaTestedShader = new Shader(ShaderCodeManager.GetFast("Shaders/AlphaTested.vsh"), ShaderCodeManager.GetFast("Shaders/AlphaTested.psh"),[new("ALPHATESTED")]);
-			if (m_transparentShader == null) m_transparentShader = new Shader(ShaderCodeManager.GetFast("Shaders/Transparent.vsh"), ShaderCodeManager.GetFast("Shaders/Transparent.psh"),[new("Transparent")]);
+			m_opaqueShader ??= new Shader(ShaderCodeManager.GetFast("Shaders/Opaque.vsh"), ShaderCodeManager.GetFast("Shaders/Opaque.psh"), [new("Opaque")]);
+			m_alphaTestedShader ??= new Shader(ShaderCodeManager.GetFast("Shaders/AlphaTested.vsh"), ShaderCodeManager.GetFast("Shaders/AlphaTested.psh"), [new("ALPHATESTED")]);
+			m_transparentShader ??= new Shader(ShaderCodeManager.GetFast("Shaders/Transparent.vsh"), ShaderCodeManager.GetFast("Shaders/Transparent.psh"), [new("Transparent")]);
 			Display.DeviceReset += Display_DeviceReset;
 		}
 
@@ -151,8 +151,8 @@ namespace Game
 			m_opaqueShader.GetParameter("u_fogBottomTopDensity").SetValue(new Vector3(m_subsystemSky.ViewFogBottom, m_subsystemSky.ViewFogTop, m_subsystemSky.ViewFogDensity));
 			ShaderParameter parameter = m_opaqueShader.GetParameter("u_hazeStartDensity");
 			ModsManager.HookAction("SetShaderParameter", modLoader => { modLoader.SetShaderParameter(m_opaqueShader, camera); return true; });
-			Point2 point = Terrain.ToChunk(camera.ViewPosition.XZ);
-			TerrainChunk chunk = m_subsystemTerrain.Terrain.GetChunkAtCoords(point.X, point.Y);
+			//Point2 point = Terrain.ToChunk(camera.ViewPosition.XZ);
+			//TerrainChunk chunk = m_subsystemTerrain.Terrain.GetChunkAtCoords(point.X, point.Y);
 			for (int i = 0; i < m_chunksToDraw.Count; i++)
 			{
 				TerrainChunk terrainChunk = m_chunksToDraw[i];

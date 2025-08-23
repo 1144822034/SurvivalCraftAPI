@@ -479,7 +479,7 @@ namespace Game
 
 		public void MovingBlocksCollidedWithTerrain(IMovingBlockSet movingBlockSet, Point3 p)
 		{
-			if (!(movingBlockSet.Id == "Piston"))
+			if (movingBlockSet.Id != "Piston")
 			{
 				return;
 			}
@@ -507,17 +507,16 @@ namespace Game
 
 		public void MovingBlocksStopped(IMovingBlockSet movingBlockSet)
 		{
-			if (!(movingBlockSet.Id == "Piston") || !(movingBlockSet.Tag is Point3))
+			if (movingBlockSet.Id != "Piston" || movingBlockSet.Tag is not Point3 tag)
 			{
 				return;
 			}
-			Point3 key = (Point3)movingBlockSet.Tag;
-			if (Terrain.ExtractContents(m_subsystemTerrain.Terrain.GetCellValue(key.X, key.Y, key.Z)) == 237)
+			if (Terrain.ExtractContents(m_subsystemTerrain.Terrain.GetCellValue(tag.X, tag.Y, tag.Z)) == 237)
 			{
-				if (!m_actions.TryGetValue(key, out QueuedAction value))
+				if (!m_actions.TryGetValue(tag, out QueuedAction value))
 				{
 					value = new QueuedAction();
-					m_actions.Add(key, value);
+					m_actions.Add(tag, value);
 				}
 				value.Stop = true;
 			}
@@ -526,7 +525,7 @@ namespace Game
 		public static bool IsBlockMovable(int value, int pistonFace, int y, out bool isEnd)
 		{
 			int num = Terrain.ExtractContents(value);
-			int data = Terrain.ExtractData(value);
+			Terrain.ExtractData(value);
 			Block block = BlocksManager.Blocks[num];
 			return block.IsMovableByPiston(value, pistonFace, y, out isEnd);
 		}

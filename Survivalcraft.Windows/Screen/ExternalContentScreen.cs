@@ -1,4 +1,5 @@
 using Engine;
+using System.Globalization;
 using System.Xml.Linq;
 
 namespace Game
@@ -58,8 +59,7 @@ namespace Game
 			{
 				if (m_directoryList.SelectedItem == item)
 				{
-					ExternalContentEntry externalContentEntry = item as ExternalContentEntry;
-					if (externalContentEntry != null && externalContentEntry.Type == ExternalContentType.Directory)
+					if (item is ExternalContentEntry externalContentEntry && externalContentEntry.Type == ExternalContentType.Directory)
 					{
 						SetPath(externalContentEntry.Path);
 					}
@@ -192,7 +192,7 @@ namespace Game
                         DialogsManager.ShowDialog(null, new MessageDialog(LanguageControl.Get(GetType().Name, 13), LanguageControl.Get(GetType().Name, 14) + ExternalContentManager.openFilePath, LanguageControl.Yes, null, delegate {
 
                         }));
-                        Log.Error("Unsopported file type!");
+                        Log.Error("Unsupported file type!");
 					}
 				}
 				catch (Exception e)
@@ -238,14 +238,11 @@ namespace Game
 				m_externalContentProvider.List(m_path, busyDialog.Progress, delegate (ExternalContentEntry entry)
 				{
 					DialogsManager.HideDialog(busyDialog);
-					List<ExternalContentEntry> list = new(entry.ChildEntries.Where(e => EntryFilter(e)).Take(1000));
+					List<ExternalContentEntry> list = new(entry.ChildEntries.Where(EntryFilter).Take(1000));
 					m_directoryList.ClearItems();
-					list.Sort(delegate (ExternalContentEntry e1, ExternalContentEntry e2)
-					{
-						return e1.Type == ExternalContentType.Directory && e2.Type != ExternalContentType.Directory
-							? -1
-							: (e1.Type != ExternalContentType.Directory && e2.Type == ExternalContentType.Directory) ? 1 : string.Compare(e1.Path, e2.Path);
-					});
+					list.Sort((e1,e2) => e1.Type == ExternalContentType.Directory && e2.Type != ExternalContentType.Directory ? -1 :
+					(e1.Type != ExternalContentType.Directory && e2.Type == ExternalContentType.Directory) ? 1 : string.Compare(e1.Path,e2.Path,CultureInfo.InvariantCulture,CompareOptions.None)
+					);
 					foreach (ExternalContentEntry item in list)
 					{
 						m_directoryList.AddItem(item);

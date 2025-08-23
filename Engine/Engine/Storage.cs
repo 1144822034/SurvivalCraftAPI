@@ -24,7 +24,7 @@ namespace Engine
 #if ANDROID
                 try
                 {
-                    StatFs statFs = new(Environment.DataDirectory.Path);
+                    StatFs statFs = new(Environment.DataDirectory?.Path);
                     long num = statFs.BlockSizeLong;
                     return statFs.AvailableBlocksLong * num;
                 }
@@ -56,7 +56,7 @@ namespace Engine
             string path2 = ProcessPath(path, false, false, out bool isApp);
             if (isApp)
             {
-                return EngineActivity.m_activity.ApplicationContext.Assets.List(GetDirectoryName(path2))?.Contains(GetFileName(path2)) ?? false;
+                return EngineActivity.m_activity.ApplicationContext?.Assets?.List(GetDirectoryName(path2))?.Contains(GetFileName(path2)) ?? false;
             }
 #endif
             return File.Exists(ProcessPath(path, writeAccess: false, failIfApp: m_isAndroidPlatform));
@@ -84,11 +84,10 @@ namespace Engine
                 throw new ArgumentException("openFileMode");
             }
 #if ANDROID
-            bool isApp;
-            string path2 = ProcessPath(path, openFileMode != OpenFileMode.Read, failIfApp: false, out isApp);
+            string path2 = ProcessPath(path, openFileMode != OpenFileMode.Read, failIfApp: false, out bool isApp);
             if (isApp)
             {
-                return EngineActivity.m_activity.ApplicationContext.Assets.Open(path2);
+                return EngineActivity.m_activity.ApplicationContext?.Assets?.Open(path2);
             }
 #else
             string path2 = ProcessPath(path, openFileMode != OpenFileMode.Read, failIfApp: false);
@@ -252,8 +251,7 @@ namespace Engine
 #if ANDROID
         public static string ProcessPath(string path, bool writeAccess, bool failIfApp)
         {
-            bool isApp;
-            return ProcessPath(path, writeAccess, failIfApp, out isApp);
+            return ProcessPath(path, writeAccess, failIfApp, out _);
         }
         public static string ProcessPath(string path, bool writeAccess, bool failIfApp, out bool isApp)
         {
@@ -283,7 +281,7 @@ namespace Engine
             if (path.StartsWith("android:"))
             {
                 isApp = false;
-                return Path.Combine(CombinePaths(Environment.ExternalStorageDirectory.AbsolutePath, path.Substring(8).TrimStart(Path.DirectorySeparatorChar)));
+                return Path.Combine(CombinePaths(Environment.ExternalStorageDirectory?.AbsolutePath, path.Substring(8).TrimStart(Path.DirectorySeparatorChar)));
             }
             if (path.StartsWith("config:"))
             {

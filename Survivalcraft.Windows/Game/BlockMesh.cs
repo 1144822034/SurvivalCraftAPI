@@ -534,8 +534,7 @@ namespace Game
 
 		public static T[] GetVertexData<T>(VertexBuffer vertexBuffer)
 		{
-			byte[] array = vertexBuffer.Tag as byte[];
-			if (array == null)
+			if (vertexBuffer.Tag is not byte[] array)
 			{
 				throw new InvalidOperationException("VertexBuffer does not contain source data in Tag.");
 			}
@@ -558,8 +557,7 @@ namespace Game
 
 		public static T[] GetIndexData<T>(IndexBuffer indexBuffer)
 		{
-			byte[] array = indexBuffer.Tag as byte[];
-			if (array == null)
+			if (indexBuffer.Tag is not byte[] array)
 			{
 				throw new InvalidOperationException("IndexBuffer does not contain source data in Tag.");
 			}

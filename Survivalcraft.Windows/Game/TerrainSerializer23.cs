@@ -313,8 +313,7 @@ namespace Game
 				Log.Information("{0} nodes, FreeNode={1:0}:", num, FreeNode);
 				for (int i = 0; i < num; i++)
 				{
-					int nextNode;
-					int num2 = ReadNode(i, null, 0, out nextNode);
+					int num2 = ReadNode(i, null, 0, out int nextNode);
 					Log.Information("    Node {0:0}: next={1:0}, dataSize={2}", i, nextNode, num2);
 				}
 			}
@@ -531,7 +530,7 @@ namespace Game
 
             public virtual string GetRegionPath(Point2 region)
 			{
-				return string.Format("{0}/Region {1},{2}.dat", new object[3] { RegionsDirectoryName, region.X, region.Y });
+				return RegionsDirectoryName + "/Region " + region.X + "," + region.Y + ".dat";
 			}
 
             public virtual Stream GetRegionStream(Point2 region, bool createNew)
@@ -753,11 +752,7 @@ namespace Game
 				}
 				catch (Exception e)
 				{
-					Log.Error(ExceptionManager.MakeFullErrorMessage(string.Format("Error loading chunk ({0},{1}).", new object[2]
-					{
-						chunk.Coords.X,
-						chunk.Coords.Y
-					}), e));
+					Log.Error(ExceptionManager.MakeFullErrorMessage("Error loading chunk (" + chunk.Coords.X + "," + chunk.Coords.Y + ").", e));
 				}
 				_ = Time.RealTime;
 				return true;
@@ -776,11 +771,7 @@ namespace Game
 				}
 				catch (Exception e)
 				{
-					Log.Error(ExceptionManager.MakeFullErrorMessage(string.Format("Error saving chunk ({0},{1}).", new object[2]
-					{
-						chunk.Coords.X,
-						chunk.Coords.Y
-					}), e));
+					Log.Error(ExceptionManager.MakeFullErrorMessage("Error saving chunk (" + chunk.Coords.X + "," + chunk.Coords.Y + ").", e));
 				}
 				_ = Time.RealTime;
 			}

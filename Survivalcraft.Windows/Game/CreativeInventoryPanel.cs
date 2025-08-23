@@ -95,8 +95,7 @@ namespace Game
 				int num5 = m_componentCreativeInventory.PageIndex * num4;
 				foreach (Widget child in m_inventoryGrid.Children)
 				{
-					InventorySlotWidget inventorySlotWidget = child as InventorySlotWidget;
-					if (inventorySlotWidget != null)
+					if (child is InventorySlotWidget inventorySlotWidget)
 					{
 						if (num5 < m_slotIndices.Count)
 						{

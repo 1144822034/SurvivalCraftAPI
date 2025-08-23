@@ -296,8 +296,7 @@ namespace Game
 
 		public void DeleteFurnitureSet()
 		{
-			FurnitureSet furnitureSet = m_furnitureSetList.SelectedItem as FurnitureSet;
-			if (furnitureSet != null)
+			if (m_furnitureSetList.SelectedItem is FurnitureSet furnitureSet)
 			{
 				int num = SubsystemFurnitureBlockBehavior.FurnitureSets.IndexOf(furnitureSet);
 				SubsystemFurnitureBlockBehavior.DeleteFurnitureSet(furnitureSet);
@@ -309,8 +308,7 @@ namespace Game
 
 		public void RenameFurnitureSet()
 		{
-			FurnitureSet furnitureSet = m_furnitureSetList.SelectedItem as FurnitureSet;
-			if (furnitureSet != null)
+			if (m_furnitureSetList.SelectedItem is FurnitureSet furnitureSet)
 			{
 				ComponentPlayer componentPlayer = ComponentFurnitureInventory.Entity.FindComponent<ComponentPlayer>(throwOnError: true);
 				DialogsManager.ShowDialog(null, new TextBoxDialog(LanguageControl.Get(fName, 15), LanguageControl.Get(fName, 16), 30, delegate (string s)
@@ -326,8 +324,7 @@ namespace Game
 
 		public void MoveFurnitureSet(int move)
 		{
-			FurnitureSet furnitureSet = m_furnitureSetList.SelectedItem as FurnitureSet;
-			if (furnitureSet != null)
+			if (m_furnitureSetList.SelectedItem is FurnitureSet furnitureSet)
 			{
 				SubsystemFurnitureBlockBehavior.MoveFurnitureSet(furnitureSet, move);
 				Invalidate();

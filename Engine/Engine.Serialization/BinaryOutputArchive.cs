@@ -101,12 +101,11 @@ namespace Engine.Serialization
 
 		public override void Serialize(string name, string value)
 		{
-            int value2;
             if (value == null)
             {
                 m_writer.Write7BitEncodedInt(0);
             }
-            else if (!m_stringIds.TryGetValue(value, out value2))
+            else if (!m_stringIds.TryGetValue(value, out int value2))
             {
                 value2 = m_stringIds.Count + 1;
                 m_stringIds.Add(value, value2);

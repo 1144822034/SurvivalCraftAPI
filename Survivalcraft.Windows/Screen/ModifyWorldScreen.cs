@@ -182,11 +182,9 @@ namespace Game
 			foreach (KeyValuePair<string, object> item in d1)
 			{
 				object value = d2.GetValue<object>(item.Key, null);
-				ValuesDictionary valuesDictionary = value as ValuesDictionary;
-				if (valuesDictionary != null)
+				if (value is ValuesDictionary valuesDictionary)
 				{
-					ValuesDictionary valuesDictionary2 = item.Value as ValuesDictionary;
-					if (valuesDictionary2 == null || !CompareValueDictionaries(valuesDictionary, valuesDictionary2))
+					if (item.Value is not ValuesDictionary valuesDictionary2 || !CompareValueDictionaries(valuesDictionary, valuesDictionary2))
 					{
 						return false;
 					}

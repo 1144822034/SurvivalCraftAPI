@@ -105,27 +105,22 @@ namespace Engine.Serialization
 				if (!m_humanReadableConvertersByType.TryGetValue(type, out IHumanReadableConverter value))
 				{
 					ScanAssembliesForConverters();
-					if (!m_humanReadableConvertersByType.TryGetValue(type, out value))
-					{
-						if (value == null)
-						{
-							foreach (KeyValuePair<Type, IHumanReadableConverter> item in m_humanReadableConvertersByType)
-							{
-								if (type.GetTypeInfo().IsSubclassOf(item.Key))
-								{
-									value = item.Value;
-									break;
-								}
-							}
-						}
-						m_humanReadableConvertersByType.Add(type, value);
-					}
-				}
-                return value != null
-                    ? value
-                    : throwIfNotFound
-                    ?                    throw new InvalidOperationException($"IHumanReadableConverter for type \"{type.FullName}\" not found in any loaded assembly.")
-                    : null;
+                    if (!m_humanReadableConvertersByType.TryGetValue(type, out value))
+                    {
+                        foreach (KeyValuePair<Type, IHumanReadableConverter> item in m_humanReadableConvertersByType)
+                        {
+                            if (type.GetTypeInfo().IsSubclassOf(item.Key))
+                            {
+                                value = item.Value;
+                                break;
+                            }
+                        }
+                        m_humanReadableConvertersByType.Add(type, value);
+                    }
+                }
+                return value ?? (throwIfNotFound
+                ?                    throw new InvalidOperationException($"IHumanReadableConverter for type \"{type.FullName}\" not found in any loaded assembly.")
+                : null);
             }
         }
 

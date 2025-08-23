@@ -437,6 +437,7 @@ namespace Game
 			}
 			catch
 			{
+				// ignored
 			}
 			return false;
 		}

@@ -171,7 +171,7 @@ namespace Game
 				return result;
 			}
 			m_openHeap.Array[0] = m_openHeap.Array[m_openHeap.Count - 1];
-			int num = --m_openHeap.Count;
+			--m_openHeap.Count;
 			HeapifyFromPosToEnd(0);
 			return result;
 		}

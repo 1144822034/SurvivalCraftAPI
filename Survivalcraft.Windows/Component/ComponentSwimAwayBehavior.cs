@@ -98,7 +98,7 @@ namespace Game
 		public virtual Vector3 FindSafePlace()
 		{
 			Vector3 vector = 0.5f * (m_componentCreature.ComponentBody.BoundingBox.Min + m_componentCreature.ComponentBody.BoundingBox.Max);
-			Vector3? herdPosition = (m_componentHerdBehavior != null) ? m_componentHerdBehavior.FindHerdCenter() : null;
+			Vector3? herdPosition = m_componentHerdBehavior?.FindHerdCenter();
 			float num = float.NegativeInfinity;
 			Vector3 result = vector;
 			for (int i = 0; i < 40; i++)
@@ -107,7 +107,7 @@ namespace Game
 				float y = 0.4f * m_random.Float(-1f, 1f);
 				Vector3 v = Vector3.Normalize(new Vector3(vector2.X, y, vector2.Y));
 				Vector3 vector3 = vector + (m_random.Float(10f, 20f) * v);
-				TerrainRaycastResult? terrainRaycastResult = m_subsystemTerrain.Raycast(vector, vector3, useInteractionBoxes: false, skipAirBlocks: false, delegate (int value, float d)
+				TerrainRaycastResult? terrainRaycastResult = m_subsystemTerrain.Raycast(vector, vector3, useInteractionBoxes: false, skipAirBlocks: false, delegate (int value, float _)
 				{
 					int num3 = Terrain.ExtractContents(value);
 					return !(BlocksManager.Blocks[num3] is WaterBlock);

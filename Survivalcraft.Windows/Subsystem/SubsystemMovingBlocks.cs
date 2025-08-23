@@ -253,8 +253,7 @@ namespace Game
 			{
 				foreach(IMovingBlockSet item in m_result.Array)
 				{
-					MovingBlockSet item1 = item as MovingBlockSet;
-					if(item1 == null || item1.Stop) continue;
+					if(item is not MovingBlockSet item1 || item1.Stop) continue;
 					BoundingBox box = item.BoundingBox(extendToFillCells);
 					float? num2 = ray.Intersection(box);
 					if(num2.HasValue && num2.Value < num)

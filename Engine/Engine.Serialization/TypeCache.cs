@@ -102,8 +102,7 @@ namespace Engine.Serialization
 		{
 			lock (m_typesByName)
 			{
-				Type value = null;
-				if (!m_typesByName.TryGetValue(typeName, out value))
+                if (!m_typesByName.TryGetValue(typeName, out Type value))
 				{
 					string longTypeName = GetLongTypeName(typeName);
 					foreach (Assembly loadedAssembly in LoadedAssemblies)

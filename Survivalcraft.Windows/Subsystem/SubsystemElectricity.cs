@@ -331,8 +331,7 @@ namespace Game
 		public void GetAllConnectedNeighbors(int x, int y, int z, int mountingFace, DynamicArray<ElectricConnectionPath> list)
 		{
 			int cellValue = SubsystemTerrain.Terrain.GetCellValue(x, y, z);
-			IElectricElementBlock electricElementBlock = BlocksManager.Blocks[Terrain.ExtractContents(cellValue)] as IElectricElementBlock;
-			if (electricElementBlock == null)
+			if (BlocksManager.Blocks[Terrain.ExtractContents(cellValue)] is not IElectricElementBlock electricElementBlock)
 			{
 				return;
 			}
@@ -434,12 +433,11 @@ namespace Game
 			while (m_remainingSimulationTime >= 0.01f)
 			{
 				UpdateElectricElements();
-				int num = ++CircuitStep;
+				++CircuitStep;
 				m_remainingSimulationTime -= 0.01f;
 				m_nextStepSimulateList = null;
-				if (m_futureSimulateLists.TryGetValue(CircuitStep, out Dictionary<ElectricElement, bool> value))
+				if (m_futureSimulateLists.Remove(CircuitStep, out Dictionary<ElectricElement, bool> value))
 				{
-					m_futureSimulateLists.Remove(CircuitStep);
 					SimulatedElectricElements += value.Count;
 					if(UpdateTimeDebug)
 					{
@@ -605,10 +603,10 @@ namespace Game
 					{
 						int cellValue = SubsystemTerrain.Terrain.GetCellValue(cellFace2.X, cellFace2.Y, cellFace2.Z);
 						int num = Terrain.ExtractContents(cellValue);
-						ElectricConnectorType value2 = ((IElectricElementBlock)BlocksManager.Blocks[num]).GetConnectorType(SubsystemTerrain, cellValue, cellFace2.Face, tmpConnectionPath.ConnectorFace, cellFace2.X, cellFace2.Y, cellFace2.Z).Value;
+						ElectricConnectorType value2 = ((IElectricElementBlock)BlocksManager.Blocks[num]).GetConnectorType(SubsystemTerrain, cellValue, cellFace2.Face, tmpConnectionPath.ConnectorFace, cellFace2.X, cellFace2.Y, cellFace2.Z)!.Value;
 						int cellValue2 = SubsystemTerrain.Terrain.GetCellValue(cellFace.X, cellFace.Y, cellFace.Z);
 						int num2 = Terrain.ExtractContents(cellValue2);
-						ElectricConnectorType value3 = ((IElectricElementBlock)BlocksManager.Blocks[num2]).GetConnectorType(SubsystemTerrain, cellValue2, cellFace.Face, tmpConnectionPath.NeighborConnectorFace, cellFace.X, cellFace.Y, cellFace.Z).Value;
+						ElectricConnectorType value3 = ((IElectricElementBlock)BlocksManager.Blocks[num2]).GetConnectorType(SubsystemTerrain, cellValue2, cellFace.Face, tmpConnectionPath.NeighborConnectorFace, cellFace.X, cellFace.Y, cellFace.Z)!.Value;
 						electricElement.Connections.Add(new ElectricConnection
 						{
 							CellFace = cellFace2,
@@ -688,8 +686,7 @@ namespace Game
 				}
 				else
 				{
-					IElectricElementBlock electricElementBlock = BlocksManager.Blocks[num] as IElectricElementBlock;
-					if (electricElementBlock != null)
+					if (BlocksManager.Blocks[num] is IElectricElementBlock electricElementBlock)
 					{
 						ElectricElement electricElement2 = electricElementBlock.CreateElectricElement(this, cellValue, key.X, key.Y, key.Z);
 						if (electricElement2 != null)
@@ -785,8 +782,7 @@ namespace Game
 				}
 				int cellValue = SubsystemTerrain.Terrain.GetCellValue(key.X, key.Y, key.Z);
 				int num = Terrain.ExtractContents(cellValue);
-				IElectricWireElementBlock electricWireElementBlock = BlocksManager.Blocks[num] as IElectricWireElementBlock;
-				if (electricWireElementBlock == null)
+				if (BlocksManager.Blocks[num] is not IElectricWireElementBlock electricWireElementBlock)
 				{
 					continue;
 				}

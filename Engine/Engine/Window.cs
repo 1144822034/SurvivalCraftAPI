@@ -274,7 +274,7 @@ namespace Engine
             {
                 throw new ArgumentOutOfRangeException("size");
             }
-            AppDomain.CurrentDomain.UnhandledException += delegate (object sender, UnhandledExceptionEventArgs args)
+            AppDomain.CurrentDomain.UnhandledException += delegate (object _, UnhandledExceptionEventArgs args)
             {
                 Exception ex = args.ExceptionObject as Exception;
                 ex ??= new Exception($"Unknown exception. Additional information: {args.ExceptionObject}");

@@ -168,8 +168,7 @@ namespace Game
 
 		public virtual TerrainChunk LoopChunks(int startChunkX, int startChunkZ, bool skipStartChunk)
 		{
-			bool hasLooped;
-			return LoopChunks(startChunkX, startChunkZ, skipStartChunk, out hasLooped);
+			return LoopChunks(startChunkX, startChunkZ, skipStartChunk, out bool _);
 		}
 
 		public virtual TerrainChunk GetChunkAtCoords(int chunkX, int chunkZ)

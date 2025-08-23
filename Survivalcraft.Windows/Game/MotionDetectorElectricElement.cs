@@ -112,7 +112,7 @@ namespace Game
 		public float TestPoint(Vector3 p)
 		{
 			float num = Vector3.DistanceSquared(p, m_center);
-			if (num < 64f && Vector3.Dot(Vector3.Normalize(p - (m_center - (0.75f * m_direction))), m_direction) > 0.5f && !SubsystemElectricity.SubsystemTerrain.Raycast(m_center, p, useInteractionBoxes: false, skipAirBlocks: true, delegate (int value, float d)
+			if (num < 64f && Vector3.Dot(Vector3.Normalize(p - (m_center - (0.75f * m_direction))), m_direction) > 0.5f && !SubsystemElectricity.SubsystemTerrain.Raycast(m_center, p, useInteractionBoxes: false, skipAirBlocks: true, delegate (int value, float _)
 			{
 				Block block = BlocksManager.Blocks[Terrain.ExtractContents(value)];
 				return block.IsCollidable_(value) && block.BlockIndex != 15 && block.BlockIndex != 60 && block.BlockIndex != 44 && block.BlockIndex != 18;

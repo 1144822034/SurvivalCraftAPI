@@ -38,8 +38,7 @@ namespace Game
                 catch (Exception e)
                 {
                     Log.Error($"Spawning creature from egg (index: {((data >> 4) & 0xFFF)}) error: {e}");
-                    Projectile projectile = worldItem as Projectile;
-                    if (projectile != null)
+                    if (worldItem is Projectile projectile)
                     {
                         ComponentGui componentGui = projectile.Owner?.Entity.FindComponent<ComponentGui>();
                         if (componentGui != null)

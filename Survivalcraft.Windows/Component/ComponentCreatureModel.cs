@@ -167,9 +167,8 @@ namespace Game
 			if(!Animated)
 			{
 				bool flag = false;
-				bool skip = false;
 				ModsManager.HookAction("OnModelAnimate",loader => {
-					loader.OnModelAnimate(this,out skip);
+					loader.OnModelAnimate(this,out bool skip);
 					flag = flag | skip;
 					return false;
 				});

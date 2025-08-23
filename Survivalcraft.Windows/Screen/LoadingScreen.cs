@@ -65,7 +65,6 @@ namespace Game
 				LogType.Advice => Color.Cyan,
 				LogType.Error => Color.Red,
 				LogType.Warning => Color.Yellow,
-				LogType.Info => Color.White,
 				_ => Color.White,
 			};
 		}
@@ -248,7 +247,7 @@ namespace Game
 				foreach(ContentInfo contentInfo in ContentManager.List("Lang"))
 				{
 					string px = Path.GetFileNameWithoutExtension(contentInfo.Filename);
-					CultureInfo cultureInfo = new (px,false);
+					CultureInfo cultureInfo = new (px!,false);
 					LanguageControl.LanguageTypes.TryAdd(px, cultureInfo);//第二个参数应为CultureInfo
 				}
 				//<<<结束
@@ -264,13 +263,13 @@ namespace Game
 					{
 						//如果不支持系统语言，英语是最佳选择
 						LanguageControl.Initialize("en-US");
-						languageNotLoaded = false;
+						//languageNotLoaded = false;
 						Log.Information("Language is not specified, and system language is not detected, en-US is loaded instead.");
 					}
 					else if(LanguageControl.LanguageTypes.ContainsKey(systemLanguage))
 					{
 						LanguageControl.Initialize(systemLanguage);
-						languageNotLoaded = false;
+						//languageNotLoaded = false;
 						Log.Information($"Language is not specified, system language ({systemLanguage}) is successfully loaded.");
 					}
 					else
@@ -340,10 +339,7 @@ namespace Game
 					ModLoadingActoins.Add(ac);
 				}
 			});
-			AddLoadAction(delegate
-			{
-				ClothingSlot.Initialize();
-			});
+			AddLoadAction(ClothingSlot.Initialize);
 			AddLoadAction(delegate
 			{//初始化TextureAtlas
 				Info(LanguageControl.Get(fName, "2"));
@@ -379,10 +375,7 @@ namespace Game
 				Info(LanguageControl.Get(fName, "4"));
 				BlocksManager.Initialize();
 			});
-			AddLoadAction(delegate
-			{ //初始化合成谱
-				CraftingRecipesManager.Initialize();
-			});
+			AddLoadAction(CraftingRecipesManager.Initialize);//初始化合成谱
 			AddLoadAction(delegate
 			{
 				Info(LanguageControl.Get(fName,"7"));
@@ -412,10 +405,7 @@ namespace Game
 						}
 					});
 			});
-			AddLoadAction(delegate
-			{//初始化按键兼容组
-				KeyCompatibleGroupsManager.Initialize();
-			});
+			AddLoadAction(KeyCompatibleGroupsManager.Initialize);//初始化按键兼容组
 			AddLoadAction(delegate
 			{
 				ScreensManager.SwitchScreen("MainMenu");
@@ -423,7 +413,6 @@ namespace Game
 		}
 		private void InitScreens()
 		{
-
 			AddLoadAction(delegate
 			{
 				AddScreen("Nag", new NagScreen());

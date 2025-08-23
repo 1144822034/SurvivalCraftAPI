@@ -91,12 +91,11 @@ namespace Engine.Serialization
 		public override void Serialize(string name, ref string value)
 		{
             int num = m_reader.Read7BitEncodedInt();
-            string value2;
             if (num == 0)
             {
                 value = null;
             }
-            else if (!m_stringIds.TryGetValue(num, out value2))
+            else if (!m_stringIds.TryGetValue(num, out string value2))
             {
                 value = m_reader.ReadString();
                 m_stringIds.Add(num, value);

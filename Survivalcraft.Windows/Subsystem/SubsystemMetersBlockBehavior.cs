@@ -238,7 +238,7 @@ namespace Game
 						if (num33 >= 0 && num33 < 256)
 						{
 							float heat2 = GetHeat(chunkAtCell2.GetCellValueFast(x3, num33, z3));
-							if (heat2 > 0f && !SubsystemTerrain.Raycast(new Vector3(x, y, z) + new Vector3(0.5f, 0.75f, 0.5f), new Vector3(x + j, y + l, z + k) + new Vector3(0.5f, 0.75f, 0.5f), useInteractionBoxes: false, skipAirBlocks: true, delegate (int raycastValue, float d)
+							if (heat2 > 0f && !SubsystemTerrain.Raycast(new Vector3(x, y, z) + new Vector3(0.5f, 0.75f, 0.5f), new Vector3(x + j, y + l, z + k) + new Vector3(0.5f, 0.75f, 0.5f), useInteractionBoxes: false, skipAirBlocks: true, delegate (int raycastValue, float _)
 							{
 								Block block2 = BlocksManager.Blocks[Terrain.ExtractContents(raycastValue)];
 								return block2.IsCollidable_(raycastValue) && !block2.IsTransparent_(raycastValue);

@@ -202,7 +202,7 @@ public class PlayerScreen : Screen
                     containerWidget.Children.Find<LabelWidget>("CharacterSkinItem.Text").Text =
                         CharacterSkinsManager.GetDisplayName((string)item);
                     containerWidget.Children.Find<LabelWidget>("CharacterSkinItem.Details").Text =
-                        string.Format("{0}x{1}", new object[2] { texture.Width, texture.Height });
+                        texture.Width + "x" + texture.Height;
                     PlayerModelWidget playerModelWidget =
                         containerWidget.Children.Find<PlayerModelWidget>("CharacterSkinItem.Model");
                     playerModelWidget.PlayerClass = m_playerData.PlayerClass;

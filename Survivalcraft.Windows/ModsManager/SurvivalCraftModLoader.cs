@@ -45,8 +45,8 @@ namespace Game
 			//第一个参数声明一个新的摄像机
 			//第二个参数为一个Func委托，输入gameWidget可对当前条件进行判断(例如判断是否为创造模式、是否乘坐载具等)，若不符合条件则在玩家切换视角时会跳过当前摄像机
 			//如果不用判断条件(任何条件都不跳过该摄像机)，第二个参数可传入null或不填
-			gameWidget.AddCamera(debugCamera, gameWidget => {
-				SubsystemGameInfo subsystemGameInfo = gameWidget.Target.Project.FindSubsystem<SubsystemGameInfo>();
+			gameWidget.AddCamera(debugCamera, gameWidget1 => {
+				SubsystemGameInfo subsystemGameInfo = gameWidget1.Target.Project.FindSubsystem<SubsystemGameInfo>();
 				return subsystemGameInfo.WorldSettings.GameMode == GameMode.Creative;
 			});
 		}
@@ -163,7 +163,8 @@ namespace Game
                                               out Action afterWidgetDraw, ref Rectangle scissorRectangle,
                                               Widget.DrawContext drawContext)
         {
-            if (drawItem.Widget is TextBoxWidget apiTextBoxWidget && drawItem.IsOverdraw)
+            if (drawItem.Widget is TextBoxWidget
+	            && drawItem.IsOverdraw)
             {
                 // 如果绘制的 Widget 是文本框控件，则提前取消 ScissorRectangle 并 Flush ，最后还原 ScissorRectangle 以达到显示候选窗内容的效果。
                 Rectangle rect = scissorRectangle;

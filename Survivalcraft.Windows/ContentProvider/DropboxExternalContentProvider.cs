@@ -6,7 +6,7 @@ using System.Text.Json.Nodes;
 
 namespace Game
 {
-	public class DropboxExternalContentProvider : IExternalContentProvider, IDisposable
+	public class DropboxExternalContentProvider : IExternalContentProvider
 	{
 		public class LoginProcessData
 		{

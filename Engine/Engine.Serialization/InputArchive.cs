@@ -170,7 +170,7 @@ namespace Engine.Serialization
 
 		private void ReadObjectWithoutObjectInfo(SerializeData staticSerializeData, ref object value)
 		{
-			Type type = (value != null) ? value.GetType() : null;
+			Type type = value?.GetType();
 			SerializeData serializeData = (!(type == null) && !(staticSerializeData.Type == type)) ? GetSerializeData(type, allowEmptySerializer: false) : staticSerializeData;
 			if (serializeData.AutoConstruct == AutoConstructMode.Yes && value == null)
 			{
@@ -199,7 +199,7 @@ namespace Engine.Serialization
 				value = m_objectById[objectId.Value];
 				return;
 			}
-			Type type = (value != null) ? value.GetType() : null;
+			Type type = value?.GetType();
 			SerializeData serializeData;
 			if (!(type != null))
 			{

@@ -250,7 +250,7 @@ namespace Game
 		public virtual void UpdateFood()
 		{
 			float gameTimeDelta = m_subsystemTime.GameTimeDelta;
-			float num = m_componentPlayer.ComponentLocomotion.LastWalkOrder.HasValue ? m_componentPlayer.ComponentLocomotion.LastWalkOrder.Value.Length() : 0f;
+			float num = m_componentPlayer.ComponentLocomotion.LastWalkOrder?.Length() ?? 0f;
 			float lastJumpOrder = m_componentPlayer.ComponentLocomotion.LastJumpOrder;
 			float num2 = m_componentPlayer.ComponentCreatureModel.EyePosition.Y - m_componentPlayer.ComponentBody.Position.Y;
 			bool flag = m_componentPlayer.ComponentBody.ImmersionDepth > num2;
@@ -323,7 +323,7 @@ namespace Game
 		public virtual void UpdateStamina()
 		{
 			float gameTimeDelta = m_subsystemTime.GameTimeDelta;
-			float lastWalkOrder = m_componentPlayer.ComponentLocomotion.LastWalkOrder.HasValue ? m_componentPlayer.ComponentLocomotion.LastWalkOrder.Value.Length() : 0f;
+			float lastWalkOrder = m_componentPlayer.ComponentLocomotion.LastWalkOrder?.Length() ?? 0f;
 			float lastJumpOrder = m_componentPlayer.ComponentLocomotion.LastJumpOrder;
 			float playerHeight = m_componentPlayer.ComponentCreatureModel.EyePosition.Y - m_componentPlayer.ComponentBody.Position.Y;
 			bool IsImmersedCompletely = m_componentPlayer.ComponentBody.ImmersionDepth > playerHeight;
@@ -481,7 +481,7 @@ namespace Game
 			{
 				num = (num * 1.5f) + 1f;
 			}
-			string arg = string.Empty;
+			string arg;
 			ClothingSlot leastInsulatedSlot = m_componentPlayer.ComponentClothing.LeastInsulatedSlot;
 			arg = leastInsulatedSlot.MessageWhenLeastInsulated;
 			if (m_subsystemTime.PeriodicGameTimeEvent(1.0, 1.0 * (GetHashCode() % 1000 / 1000.0)))

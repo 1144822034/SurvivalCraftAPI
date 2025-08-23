@@ -59,8 +59,7 @@ namespace Game
 						: MathUtils.Max(MovementAnimationPhase - (2f * dt), num2);
 				}
 			}
-			float num3 = 0f;
-			num3 = (0f - m_walkBobHeight) * MathUtils.Sqr(MathF.Sin((float)Math.PI * 2f * MovementAnimationPhase));
+			float num3 = (0f - m_walkBobHeight) * MathUtils.Sqr(MathF.Sin((float)Math.PI * 2f * MovementAnimationPhase));
 			float num4 = MathUtils.Min(12f * m_subsystemTime.GameTimeDelta, 1f);
 			Bob += num4 * (num3 - Bob);
 			if (m_hasWings)

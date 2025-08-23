@@ -1,3 +1,4 @@
+using System.Globalization;
 using System.Xml.Linq;
 
 namespace Game
@@ -37,7 +38,7 @@ namespace Game
 			m_virtualRealityButton.IsEnabled = false;
 			m_virtualRealityButton.Text = SettingsManager.UseVr ? "Enabled" : "Disabled";
 			m_brightnessSlider.Value = SettingsManager.Brightness;
-			m_brightnessSlider.Text = MathF.Round(SettingsManager.Brightness * 10f).ToString();
+			m_brightnessSlider.Text = MathF.Round(SettingsManager.Brightness * 10f).ToString(CultureInfo.InvariantCulture);
 			m_viewAngleSlider.Value = SettingsManager.ViewAngle;
 			m_viewAngleSlider.Text = $"{MathF.Round(SettingsManager.ViewAngle * 100f)}%";
 			if (Input.Back || Input.Cancel || Children.Find<ButtonWidget>("TopBar.Back").IsClicked)

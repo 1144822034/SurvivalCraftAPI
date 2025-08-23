@@ -152,7 +152,7 @@ namespace Game
 			{
 				if(m_dragHostWidget == null)
 				{
-					m_dragHostWidget = (GameWidget != null) ? GameWidget.Children.Find<DragHostWidget>(throwIfNotFound: false) : null;
+					m_dragHostWidget = GameWidget?.Children.Find<DragHostWidget>(throwIfNotFound: false);
 				}
 				return m_dragHostWidget;
 			}
@@ -502,8 +502,7 @@ namespace Game
 			{
 				return;
 			}
-			ComponentCreativeInventory componentCreativeInventory = ComponentMiner.Inventory as ComponentCreativeInventory;
-			if(componentCreativeInventory == null)
+			if(ComponentMiner.Inventory is not ComponentCreativeInventory componentCreativeInventory)
 			{
 				return;
 			}

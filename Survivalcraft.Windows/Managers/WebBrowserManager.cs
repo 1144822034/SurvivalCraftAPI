@@ -10,7 +10,7 @@ namespace Game
 
 			if (!url.Contains("://"))
 			{
-				url = "http://" + url;
+				url = $"https://{url}";
 			}
 			try
 			{
@@ -22,11 +22,7 @@ namespace Game
 			}
 			catch (Exception ex)
 			{
-				Log.Error(string.Format("Error launching web browser with URL \"{0}\". Reason: {1}", new object[2]
-				{
-					url,
-					ex.Message
-				}));
+				Log.Error("Error launching web browser with URL \"" + url + "\". Reason: " + ex.Message);
 			}
 		}
 	}

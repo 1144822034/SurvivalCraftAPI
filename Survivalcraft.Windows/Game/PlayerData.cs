@@ -571,7 +571,7 @@ namespace Game
 			for (int k = -1; k <= 1; k++)
 			{
 				Vector3 end = vector2 + new Vector3(30f * vector.X, 5f * k, 30f * vector.Y);
-				TerrainRaycastResult? terrainRaycastResult = m_subsystemTerrain.Raycast(vector2, end, useInteractionBoxes: false, skipAirBlocks: true, (value,distance) => Terrain.ExtractContents(value) != 0);
+				TerrainRaycastResult? terrainRaycastResult = m_subsystemTerrain.Raycast(vector2, end, useInteractionBoxes: false, skipAirBlocks: true, (value,_) => Terrain.ExtractContents(value) != 0);
 				if (terrainRaycastResult.HasValue)
 				{
 					CellFace cellFace = terrainRaycastResult.Value.CellFace;

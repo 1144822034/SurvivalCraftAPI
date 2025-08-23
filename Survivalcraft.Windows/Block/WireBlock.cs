@@ -3,7 +3,7 @@ using Engine.Graphics;
 
 namespace Game
 {
-	public class WireBlock : Block, IElectricWireElementBlock, IElectricElementBlock, IPaintableBlock
+	public class WireBlock : Block, IElectricWireElementBlock, IPaintableBlock
 	{
 		public static int Index = 133;
 

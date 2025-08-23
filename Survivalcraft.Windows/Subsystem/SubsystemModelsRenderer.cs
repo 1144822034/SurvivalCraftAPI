@@ -21,8 +21,8 @@ namespace Game
 
 			public int CompareTo(ModelData other)
 			{
-				int num = (ComponentModel != null) ? ComponentModel.PrepareOrder : 0;
-				int num2 = (other.ComponentModel != null) ? other.ComponentModel.PrepareOrder : 0;
+				int num = ComponentModel?.PrepareOrder ?? 0;
+				int num2 = other.ComponentModel?.PrepareOrder ?? 0;
 				return num - num2;
 			}
 		}
@@ -231,15 +231,8 @@ namespace Game
 
 		public virtual void DrawInstancedModels(Camera camera, List<ModelData> modelsData, float? alphaThreshold)
 		{
-			ModelShader modelShader = null;
-			if (ShaderOpaque != null && ShaderAlphaTested != null)
-			{
-				modelShader = alphaThreshold.HasValue ? ShaderAlphaTested : ShaderOpaque;
-			}
-			else
-			{
-				modelShader = alphaThreshold.HasValue ? m_shaderAlphaTested : m_shaderOpaque;
-			}
+			ModelShader modelShader = ShaderOpaque != null && ShaderAlphaTested != null ? alphaThreshold.HasValue ? ShaderAlphaTested : ShaderOpaque :
+			alphaThreshold.HasValue ? m_shaderAlphaTested : m_shaderOpaque;
 			modelShader.LightDirection1 = -Vector3.TransformNormal(LightingManager.DirectionToLight1, camera.ViewMatrix);
 			modelShader.LightDirection2 = -Vector3.TransformNormal(LightingManager.DirectionToLight2, camera.ViewMatrix);
 			modelShader.FogColor = new Vector3(m_subsystemSky.ViewFogColor);

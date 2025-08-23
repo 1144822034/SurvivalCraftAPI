@@ -4,7 +4,7 @@ using TemplatesDatabase;
 
 namespace Game
 {
-	public class ComponentInventory : ComponentInventoryBase, IInventory
+	public class ComponentInventory : ComponentInventoryBase
 	{
 		public int m_activeSlotIndex;
 

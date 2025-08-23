@@ -1,6 +1,7 @@
 using Engine;
 using GameEntitySystem;
 using TemplatesDatabase;
+// ReSharper disable ConditionIsAlwaysTrueOrFalse
 
 namespace Game
 {
@@ -318,7 +319,9 @@ namespace Game
 			Injury explosionInjury = new ExplosionInjury(damage);
 			ModsManager.HookAction("OnComponentBodyExploded", loader =>
 			{
+				// ReSharper disable AccessToModifiedClosure
 				loader.OnComponentBodyExploded(this, ref explosionInjury, ref impulse, ref setOnFire, ref fluctuation);
+				// ReSharper restore AccessToModifiedClosure
 				return false;
 			});
             impulse *= m_random.Float(1f - fluctuation, 1f + fluctuation);
@@ -582,8 +585,7 @@ namespace Game
 			int x = Terrain.ToCell(position.X);
 			int y = Terrain.ToCell(position.Y + 0.01f);
 			int z = Terrain.ToCell(position.Z);
-			FluidBlock surfaceFluidBlock;
-			float? surfaceHeight = m_subsystemFluidBlockBehavior.GetSurfaceHeight(x, y, z, out surfaceFluidBlock);
+			float? surfaceHeight = m_subsystemFluidBlockBehavior.GetSurfaceHeight(x, y, z, out _);
 			if (surfaceHeight.HasValue)
 			{
 				int cellValue = m_subsystemTerrain.Terrain.GetCellValue(x, y, z);
@@ -667,12 +669,9 @@ namespace Game
 				if(IsColliding(boxThere,m_collisionBoxes))//目标碰撞箱存在碰撞
 				{
 					m_stoppedTime = 0f;
-					CollisionBox pushingCollisionBox;
-					float pushBack_X = CalculatePushBack(boxThere,0,m_collisionBoxes,out pushingCollisionBox);
-					CollisionBox pushingCollisionBox2;
-					float pushBack_Y = CalculatePushBack(boxThere,1,m_collisionBoxes,out pushingCollisionBox2);
-					CollisionBox pushingCollisionBox3;
-					float pushBack_Z = CalculatePushBack(boxThere,2,m_collisionBoxes,out pushingCollisionBox3);
+					float pushBack_X = CalculatePushBack(boxThere,0,m_collisionBoxes,out _);
+					float pushBack_Y = CalculatePushBack(boxThere,1,m_collisionBoxes,out _);
+					float pushBack_Z = CalculatePushBack(boxThere,2,m_collisionBoxes,out _);
 					float pushBackXLength = pushBack_X * pushBack_X;
 					float pushBackYLength = pushBack_Y * pushBack_Y;
 					float pushBackZLength = pushBack_Z * pushBack_Z;
@@ -755,7 +754,7 @@ namespace Game
 		}
 		public bool MoveToFreeSpaceHelper(float maxMoveFraction)
 		{
-			bool hasFreeSpaceToMove = IsSpaceFreeToMove(maxMoveFraction, out Vector3? freePosition, out bool teleport);
+			IsSpaceFreeToMove(maxMoveFraction, out Vector3? freePosition, out bool _);
 			if(freePosition.HasValue)
 			{
 				Position = freePosition.Value;
@@ -783,8 +782,7 @@ namespace Game
 			m_collisionBoxes.Clear();
 			FindTerrainCollisionBoxes(box, m_collisionBoxes);
 			m_collisionBoxes.AddRange(m_movingBlocksCollisionBoxes);
-			CollisionBox pushingCollisionBox;
-			float num = MathUtils.Max(CalculatePushBack(box, 1, m_collisionBoxes, out pushingCollisionBox), 0f);
+			float num = MathUtils.Max(CalculatePushBack(box, 1, m_collisionBoxes, out CollisionBox pushingCollisionBox), 0f);
 			if (!BlocksManager.Blocks[Terrain.ExtractContents(pushingCollisionBox.BlockValue)].NoSmoothRise && num > 0.04f)
 			{
 				float x = MathUtils.Min(4.5f * dt, num);
@@ -838,8 +836,7 @@ namespace Game
 				num = CalculatePushBack(boundingBox, axis, m_collisionBoxes, out pushingCollisionBox);
 			}
 			BoundingBox box = new(position - new Vector3(stanceBoxSize.X / 2f, 0f, stanceBoxSize.Z / 2f) + vector, position + new Vector3(stanceBoxSize.X / 2f, stanceBoxSize.Y, stanceBoxSize.Z / 2f) - vector);
-			CollisionBox pushingCollisionBox2;
-			float num2 = CalculatePushBack(box, axis, m_bodiesCollisionBoxes, out pushingCollisionBox2);
+			float num2 = CalculatePushBack(box, axis, m_bodiesCollisionBoxes, out CollisionBox pushingCollisionBox2);
 			if (MathF.Abs(num) > MathF.Abs(num2))
 			{
 				if (num == 0f)
@@ -1310,9 +1307,9 @@ namespace Game
 				else
 				{
 					m_stoppedTime = 0f;
-					float num = CalculatePushBack(box, 0, m_collisionBoxes, out CollisionBox pushingCollisionBox);
-					float num2 = CalculatePushBack(box, 1, m_collisionBoxes, out CollisionBox pushingCollisionBox2);
-					float num3 = CalculatePushBack(box, 2, m_collisionBoxes, out CollisionBox pushingCollisionBox3);
+					float num = CalculatePushBack(box, 0, m_collisionBoxes, out CollisionBox _);
+					float num2 = CalculatePushBack(box, 1, m_collisionBoxes, out CollisionBox _);
+					float num3 = CalculatePushBack(box, 2, m_collisionBoxes, out CollisionBox _);
 					float num4 = num * num;
 					float num5 = num2 * num2;
 					float num6 = num3 * num3;

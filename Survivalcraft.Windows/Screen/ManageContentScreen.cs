@@ -1,6 +1,7 @@
 using Engine;
 using Engine.Graphics;
 using Game;
+using System.Globalization;
 using System.Xml.Linq;
 
 public class ManageContentScreen : Screen
@@ -158,7 +159,7 @@ public class ManageContentScreen : Screen
 			ListItem listItem = (ListItem)obj;
 			if (listItem.Type == ExternalContentType.Mod && listItem.IsClick)
 			{
-				MessageDialog messageDialog = new(listItem.ModEntity.modInfo.Name, listItem.ModEntity.modInfo.Description, LanguageControl.Ok, LanguageControl.Cancel, btn =>
+				MessageDialog messageDialog = new(listItem.ModEntity.modInfo.Name, listItem.ModEntity.modInfo.Description, LanguageControl.Ok, LanguageControl.Cancel, _ =>
 				{
 					DialogsManager.HideAllDialogs();
 					listItem.IsClick = false;
@@ -369,7 +370,7 @@ public class ManageContentScreen : Screen
 			{
 				return -1;
 			}
-			return (!string.IsNullOrEmpty(o1.Name) && string.IsNullOrEmpty(o2.Name)) ? 1 : string.Compare(o1.DisplayName, o2.DisplayName);
+			return (!string.IsNullOrEmpty(o1.Name) && string.IsNullOrEmpty(o2.Name)) ? 1 : string.Compare(o1.DisplayName, o2.DisplayName,CultureInfo.InvariantCulture,CompareOptions.None);
 		});
 		m_contentList.ClearItems();
 		foreach (ListItem item in list)

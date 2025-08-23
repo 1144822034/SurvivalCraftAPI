@@ -99,7 +99,7 @@ namespace Game
 				float y = 0.3f * m_random.Float(-0.9f, 1f);
 				Vector3 v = Vector3.Normalize(new Vector3(vector2.X, y, vector2.Y));
 				Vector3 vector3 = vector + (num2 * v);
-				TerrainRaycastResult? terrainRaycastResult = m_subsystemTerrain.Raycast(vector, vector3, useInteractionBoxes: false, skipAirBlocks: false, delegate (int value, float d)
+				TerrainRaycastResult? terrainRaycastResult = m_subsystemTerrain.Raycast(vector, vector3, useInteractionBoxes: false, skipAirBlocks: false, delegate (int value, float _)
 				{
 					int num3 = Terrain.ExtractContents(value);
 					return !(BlocksManager.Blocks[num3] is WaterBlock);

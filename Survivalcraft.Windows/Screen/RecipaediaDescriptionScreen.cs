@@ -1,4 +1,5 @@
 using Engine;
+using System.Globalization;
 using System.Xml.Linq;
 
 namespace Game
@@ -84,13 +85,13 @@ namespace Game
 			}
 			if (block.GetFuelFireDuration(value) > 0f)
 			{
-				dictionary.Add("Fuel Value", block.GetFuelFireDuration(value).ToString());
+				dictionary.Add("Fuel Value", block.GetFuelFireDuration(value).ToString(CultureInfo.InvariantCulture));
 			}
 			dictionary.Add("Is Stackable", (block.GetMaxStacking(value) > 1) ? string.Format(LanguageControl.Get(fName, 1), block.GetMaxStacking(value).ToString()) : LanguageControl.No);
 			dictionary.Add("Is Flammable", (block.GetFireDuration(value) > 0f) ? LanguageControl.Yes : LanguageControl.No);
 			if (block.GetNutritionalValue(value) > 0f)
 			{
-				dictionary.Add("Nutrition", block.GetNutritionalValue(value).ToString());
+				dictionary.Add("Nutrition", block.GetNutritionalValue(value).ToString(CultureInfo.InvariantCulture));
 			}
 			if (block.GetRotPeriod(value) > 0)
 			{
@@ -99,20 +100,20 @@ namespace Game
 			if (block.GetBlockDigMethod(value) != 0)
 			{
 				dictionary.Add("Digging Method", LanguageControl.Get("DigMethod", block.GetBlockDigMethod(value).ToString()));
-				dictionary.Add("Digging Resilience", block.GetDigResilience(value).ToString());
+				dictionary.Add("Digging Resilience", block.GetDigResilience(value).ToString(CultureInfo.InvariantCulture));
 			}
 			if (block.GetExplosionResilience(value) > 0f)
 			{
-				dictionary.Add("Explosion Resilience", block.GetExplosionResilience(value).ToString());
+				dictionary.Add("Explosion Resilience", block.GetExplosionResilience(value).ToString(CultureInfo.InvariantCulture));
 			}
 			if (block.GetExplosionPressure(value) > 0f)
 			{
-				dictionary.Add("Explosive Power", block.GetExplosionPressure(value).ToString());
+				dictionary.Add("Explosive Power", block.GetExplosionPressure(value).ToString(CultureInfo.InvariantCulture));
 			}
 			bool flag = false;
 			if (block.GetMeleePower(value) > 1f)
 			{
-				dictionary.Add("Melee Power", block.GetMeleePower(value).ToString());
+				dictionary.Add("Melee Power", block.GetMeleePower(value).ToString(CultureInfo.InvariantCulture));
 				flag = true;
 			}
 			if (block.GetMeleePower(value) > 1f)
@@ -122,22 +123,22 @@ namespace Game
 			}
 			if (block.GetProjectilePower(value) > 1f)
 			{
-				dictionary.Add("Projectile Power", block.GetProjectilePower(value).ToString());
+				dictionary.Add("Projectile Power", block.GetProjectilePower(value).ToString(CultureInfo.InvariantCulture));
 				flag = true;
 			}
 			if (block.GetShovelPower(value) > 1f)
 			{
-				dictionary.Add("Shoveling", block.GetShovelPower(value).ToString());
+				dictionary.Add("Shoveling", block.GetShovelPower(value).ToString(CultureInfo.InvariantCulture));
 				flag = true;
 			}
 			if (block.GetHackPower(value) > 1f)
 			{
-				dictionary.Add("Hacking", block.GetHackPower(value).ToString());
+				dictionary.Add("Hacking", block.GetHackPower(value).ToString(CultureInfo.InvariantCulture));
 				flag = true;
 			}
 			if (block.GetQuarryPower(value) > 1f)
 			{
-				dictionary.Add("Quarrying", block.GetQuarryPower(value).ToString());
+				dictionary.Add("Quarrying", block.GetQuarryPower(value).ToString(CultureInfo.InvariantCulture));
 				flag = true;
 			}
 			if (flag && block.GetDurability(value) > 0)
@@ -146,14 +147,14 @@ namespace Game
 			}
 			if (block.DefaultExperienceCount > 0f)
 			{
-				dictionary.Add("Experience Orbs", block.DefaultExperienceCount.ToString());
+				dictionary.Add("Experience Orbs", block.DefaultExperienceCount.ToString(CultureInfo.InvariantCulture));
 			}
 			if (block.CanWear(value))
 			{
 				ClothingData clothingData = block.GetClothingData(value);
 				dictionary.Add("Can Be Dyed", clothingData.CanBeDyed ? LanguageControl.Yes : LanguageControl.No);
 				dictionary.Add("Armor Protection", $"{(int)(clothingData.ArmorProtection * 100f)}%");
-				dictionary.Add("Armor Durability", clothingData.Sturdiness.ToString());
+				dictionary.Add("Armor Durability", clothingData.Sturdiness.ToString(CultureInfo.InvariantCulture));
 				dictionary.Add("Insulation", $"{clothingData.Insulation:0.0} clo");
 				dictionary.Add("Movement Speed", $"{clothingData.MovementSpeedFactor * 100f:0}%");
 			}

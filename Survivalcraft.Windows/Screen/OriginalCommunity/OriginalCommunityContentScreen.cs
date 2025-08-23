@@ -79,11 +79,7 @@ public class OriginalCommunityContentScreen : Screen
 				ContainerWidget containerWidget = (ContainerWidget)LoadWidget(this, node2, null);
 				containerWidget.Children.Find<RectangleWidget>("CommunityContentItem.Icon").Subtexture = ExternalContentManager.GetEntryTypeIcon(communityContentEntry.Type);
 				containerWidget.Children.Find<LabelWidget>("CommunityContentItem.Text").Text = communityContentEntry.Name;
-				containerWidget.Children.Find<LabelWidget>("CommunityContentItem.Details").Text = string.Format("{0} {1}", new object[2]
-				{
-					ExternalContentManager.GetEntryTypeDescription(communityContentEntry.Type),
-					DataSizeFormatter.Format(communityContentEntry.Size)
-				});
+				containerWidget.Children.Find<LabelWidget>("CommunityContentItem.Details").Text = ExternalContentManager.GetEntryTypeDescription(communityContentEntry.Type) + " " + DataSizeFormatter.Format(communityContentEntry.Size);
 				containerWidget.Children.Find<StarRatingWidget>("CommunityContentItem.Rating").Rating = communityContentEntry.RatingsAverage;
 				containerWidget.Children.Find<StarRatingWidget>("CommunityContentItem.Rating").IsVisible = communityContentEntry.RatingsAverage > 0f;
 				containerWidget.Children.Find<LabelWidget>("CommunityContentItem.ExtraText").Text = communityContentEntry.ExtraText;

@@ -283,7 +283,9 @@ namespace Game
 					bool placed = false;
 					bool placementNotAllowed_ = false;
 					ModsManager.HookAction("BeforeMinerPlace",loader => {
+						// ReSharper disable AccessToModifiedClosure
 						loader.BeforeMinerPlace(this, raycastResult, num2, num3, num4, placementData, out bool placementNotAllowed);
+						// ReSharper restore AccessToModifiedClosure
 						placementNotAllowed_ |= placementNotAllowed;
 						return false;
 					});
@@ -419,8 +421,8 @@ namespace Game
 				Poke(forceRestart: false);
 				return;
 			}
-			float num = 0f;//伤害
-			float num2 = 1f;//玩家命中率
+			float num;//伤害
+			float num2;//玩家命中率
 			float num3 = 1f;//生物命中率
 			if (ActiveBlockValue != 0)
 			{
@@ -437,7 +439,9 @@ namespace Game
 
             ModsManager.HookAction("OnMinerHit", modLoader =>
 			{
-				modLoader.OnMinerHit(this, componentBody, hitPoint, hitDirection, ref num, ref num2, ref num3, out bool Hitted);
+				// ReSharper disable AccessToModifiedClosure
+				modLoader.OnMinerHit(this, componentBody, hitPoint, hitDirection, ref num, ref num2, ref num3, out bool _);
+				// ReSharper restore AccessToModifiedClosure
 				return false;
 			});
 
@@ -534,51 +538,52 @@ namespace Game
 			MovingBlocksRaycastResult? movingBlocksRaycastResult = null;
 			if(raycastMovingBlocks) movingBlocksRaycastResult = m_subsystemMovingBlocks.Raycast(start, end, extendToFillCells: true);
 			TerrainRaycastResult? terrainRaycastResult = null;
-			if(raycastTerrain) terrainRaycastResult = m_subsystemTerrain.Raycast(start, end, useInteractionBoxes: true, skipAirBlocks: true, delegate (int value, float distance)
+			if(raycastTerrain)
 			{
-				if (Vector3.DistanceSquared(start + (distance * direction), creaturePosition) <= reach * reach)
-				{
-					Block block = BlocksManager.Blocks[Terrain.ExtractContents(value)];
-					if (distance == 0f && block is CrossBlock && Vector3.Dot(direction, new Vector3(startCell) + new Vector3(0.5f) - start) < 0f)
-					{
+				terrainRaycastResult = m_subsystemTerrain.Raycast(start, end, useInteractionBoxes: true, skipAirBlocks: true,
+					(value,distance) => {
+						if(Vector3.DistanceSquared(start + (distance * direction),creaturePosition) <= reach * reach)
+						{
+							Block block = BlocksManager.Blocks[Terrain.ExtractContents(value)];
+							if(distance == 0f
+								&& block is CrossBlock
+								&& Vector3.Dot(direction,new Vector3(startCell) + new Vector3(0.5f) - start) < 0f)
+							{
+								return false;
+							}
+							if(mode == RaycastMode.Digging)
+							{
+								return !block.IsDiggingTransparent;
+							}
+							if(mode == RaycastMode.Interaction)
+							{
+								if(block.IsPlacementTransparent_(value))
+								{
+									return block.IsInteractive(m_subsystemTerrain,value);
+								}
+								return true;
+							}
+							if(mode == RaycastMode.Gathering)
+							{
+								return block.IsGatherable_(value);
+							}
+						}
 						return false;
 					}
-					if (mode == RaycastMode.Digging)
-					{
-						return !block.IsDiggingTransparent;
-					}
-					if (mode == RaycastMode.Interaction)
-					{
-						if (block.IsPlacementTransparent_(value))
-						{
-							return block.IsInteractive(m_subsystemTerrain, value);
-						}
-						return true;
-					}
-					if (mode == RaycastMode.Gathering)
-					{
-						return block.IsGatherable_(value);
-					}
-				}
-				return false;
-			});
-
-            if (!raycastBodies) bodyRaycastResult = null;
-            if (!raycastTerrain) terrainRaycastResult = null;
-            if (!raycastMovingBlocks) movingBlocksRaycastResult = null;
-
-            float num = bodyRaycastResult.HasValue ? bodyRaycastResult.Value.Distance : float.PositiveInfinity;
-			float num2 = movingBlocksRaycastResult.HasValue ? movingBlocksRaycastResult.Value.Distance : float.PositiveInfinity;
-			float num3 = terrainRaycastResult.HasValue ? terrainRaycastResult.Value.Distance : float.PositiveInfinity;
-			if (num < num2 && num < num3)
+				);
+			}
+			float num = bodyRaycastResult?.Distance ?? float.PositiveInfinity;
+			float num2 = movingBlocksRaycastResult?.Distance ?? float.PositiveInfinity;
+			float num3 = terrainRaycastResult?.Distance ?? float.PositiveInfinity;
+			if (bodyRaycastResult.HasValue && num < num2 && num < num3)
 			{
 				return bodyRaycastResult.Value;
 			}
-			if (num2 < num && num2 < num3)
+			if (movingBlocksRaycastResult.HasValue && num2 < num && num2 < num3)
 			{
 				return movingBlocksRaycastResult.Value;
 			}
-			if (num3 < num && num3 < num2)
+			if (terrainRaycastResult.HasValue && num3 < num && num3 < num2)
 			{
 				return terrainRaycastResult.Value;
 			}
@@ -588,11 +593,7 @@ namespace Game
 		public T? Raycast<T>(Ray3 ray, RaycastMode mode, bool raycastTerrain = true, bool raycastBodies = true, bool raycastMovingBlocks = true, float? reach = null) where T : struct
 		{
 			object obj = Raycast(ray, mode, raycastTerrain, raycastBodies, raycastMovingBlocks, reach);
-			if (!(obj is T))
-			{
-				return null;
-			}
-			return (T)obj;
+			return obj is T obj1 ? obj1 : null;
 		}
 
 		public virtual void RemoveActiveTool(int removeCount)
@@ -811,7 +812,7 @@ namespace Game
 			bool canUse = false;
 			bool skip = false;
 			ModsManager.HookAction("IsLevelSufficientForTool",modLoader => {
-				modLoader.IsLevelSufficientForTool(this,toolValue,ref canUse,out bool skip);
+				modLoader.IsLevelSufficientForTool(this,toolValue,ref canUse,out skip);
 				return false;
 			});
 			if(skip) return canUse;

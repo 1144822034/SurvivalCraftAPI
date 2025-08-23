@@ -74,12 +74,10 @@ namespace Game
 			bool hydration = GetHydration(data);
 			if (nitrogen > 0 && hydration)
 			{
-				string nm = LanguageControl.Get(fName, 2);
 				return LanguageControl.Get(fName, 1);
 			}
 			if (nitrogen > 0)
 			{
-				string nm = LanguageControl.Get(fName, 2);
 				return LanguageControl.Get(fName, 2);
 			}
 			if (hydration)

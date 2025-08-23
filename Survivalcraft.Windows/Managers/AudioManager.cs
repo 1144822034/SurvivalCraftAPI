@@ -23,8 +23,9 @@ namespace Game
                         Sound sound = new(soundBuffer, num, ToEnginePitch(pitch), pan, isLooped: false, disposeOnStop: true);
 						sound.Play(new Vector3(vector.X,vector.Y,vector.Z));
 					}
-					catch (Exception)
+					catch(Exception)
 					{
+						// ignored
 					}
 				}
 			}

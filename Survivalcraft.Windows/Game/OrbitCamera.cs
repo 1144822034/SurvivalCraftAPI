@@ -62,7 +62,7 @@ namespace Game
 					Vector3 v4 = 0.6f * ((vector4 * i) + (v3 * j));
 					Vector3 vector5 = vector + v4;
 					Vector3 end = vector5 + vector3 + (Vector3.Normalize(vector3) * 0.6f);
-					TerrainRaycastResult? terrainRaycastResult = subsystemTerrain.Raycast(vector5, end, useInteractionBoxes: false, skipAirBlocks: true, delegate(int value, float distance)
+					TerrainRaycastResult? terrainRaycastResult = subsystemTerrain.Raycast(vector5, end, useInteractionBoxes: false, skipAirBlocks: true, delegate(int value, float _)
 					{
 						Block block = BlocksManager.Blocks[Terrain.ExtractContents(value)];
 						for (int k = 0; k < 6; k++)

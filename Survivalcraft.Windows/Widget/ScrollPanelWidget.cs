@@ -108,7 +108,7 @@ namespace Game
 			{
 				if (Input.Press.HasValue)
 				{
-					float num2 = 0f;
+					float num2;
 					Vector2 vector = ScreenToWidget(Input.Press.Value);
 					Vector2 vector2 = vector - m_lastDragPosition.Value;
 					if (Direction == LayoutDirection.Horizontal)

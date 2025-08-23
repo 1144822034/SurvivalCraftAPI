@@ -46,10 +46,9 @@ namespace Game
 			if(num >= 0)//投掷的Slot
 			{
 				int num2 = 1;
-				int itemDispense = 0;
                 for (int i = 0; i < num2 && GetSlotCount(num) > 0; i++)
                 {
-                    itemDispense = DispenseItem(m_componentBlockEntity.Position, direction, slotValue, mode);
+					int itemDispense = DispenseItem(m_componentBlockEntity.Position, direction, slotValue, mode);
 					try
 					{
                         RemoveSlotItems(num, itemDispense);

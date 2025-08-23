@@ -28,7 +28,7 @@ namespace Game
 
 		public override bool OnInteract(TerrainRaycastResult raycastResult, ComponentMiner componentMiner)
 		{
-			int num = ++Rotation;
+			++Rotation;
 			return true;
 		}
 	}

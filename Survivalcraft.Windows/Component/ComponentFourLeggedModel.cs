@@ -236,11 +236,11 @@ namespace Game
 				{
 					float y = 0f - MathUtils.DegToRad(25f + (45f * SimplexNoise.OctavedNoise((float)m_subsystemTime.GameTime, 3f, 2, 2f, 0.75f)));
 					vector2 = Vector2.Lerp(v2: new Vector2(0f, y), v1: vector2, f: m_feedFactor);
-					if (m_moveLegWhenFeeding)
-					{
-						float x = MathUtils.DegToRad(20f) + (MathUtils.PowSign(SimplexNoise.OctavedNoise((float)m_subsystemTime.GameTime, 1f, 1, 1f, 1f) - 0.5f, 0.33f) / 0.5f * MathUtils.DegToRad(25f) * (float)Math.Sin(17.0 * m_subsystemTime.GameTime));
-						num2 = MathUtils.Lerp(num2, x, m_feedFactor);
-					}
+					//if (m_moveLegWhenFeeding)
+					//{
+						//float x = MathUtils.DegToRad(20f) + (MathUtils.PowSign(SimplexNoise.OctavedNoise((float)m_subsystemTime.GameTime, 1f, 1, 1f, 1f) - 0.5f, 0.33f) / 0.5f * MathUtils.DegToRad(25f) * (float)Math.Sin(17.0 * m_subsystemTime.GameTime));
+						//num2 = MathUtils.Lerp(num2, x, m_feedFactor);
+					//}
 				}
 				if (m_buttFactor != 0f)
 				{

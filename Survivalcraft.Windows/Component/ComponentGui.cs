@@ -241,7 +241,9 @@ namespace Game
 			MessageWidget.Message message = new(text,color,blinking);
 			DisplaySmallMessage(message, playNotificationSound);
 		}
+		// ReSharper disable MethodOverloadWithOptionalParameter
 		public virtual void DisplaySmallMessage(string text, Color color, bool blinking, bool playNotificationSound, float fontScale=1f)
+		// ReSharper restore MethodOverloadWithOptionalParameter
 		{
 			MessageWidget.Message message = new(text,color,blinking,fontScale); 
 			DisplaySmallMessage(message, playNotificationSound);
@@ -448,9 +450,9 @@ namespace Game
 		{
 			ComponentRider componentRider = m_componentPlayer.ComponentRider;
 			ComponentSleep componentSleep = m_componentPlayer.ComponentSleep;
-			ComponentInput componentInput = m_componentPlayer.ComponentInput;
-			WorldSettings worldSettings = m_subsystemGameInfo.WorldSettings;
-			GameMode gameMode = worldSettings.GameMode;
+			//ComponentInput componentInput = m_componentPlayer.ComponentInput;
+			//WorldSettings worldSettings = m_subsystemGameInfo.WorldSettings;
+			//GameMode gameMode = worldSettings.GameMode;
 			UpdateSidePanelsAnimation();
 			if (m_modalPanelAnimationData != null)
 			{
@@ -585,10 +587,7 @@ namespace Game
 			}
 			if (playerInput.GamepadHelp)
 			{
-				if (m_gamepadHelpDialog == null)
-				{
-					m_gamepadHelpDialog = new GamepadHelpDialog();
-				}
+				m_gamepadHelpDialog ??= new GamepadHelpDialog();
 				if (m_gamepadHelpDialog.ParentWidget != null)
 				{
 					DialogsManager.HideDialog(m_gamepadHelpDialog);
@@ -666,14 +665,7 @@ namespace Game
 				}
 				if (componentRider.Mount != null != flag)
 				{
-					if (componentRider.Mount != null)
-					{
-						DisplaySmallMessage(LanguageControl.Get(fName, 5), Color.White, blinking: false, playNotificationSound: false);
-					}
-					else
-					{
-						DisplaySmallMessage(LanguageControl.Get(fName, 6), Color.White, blinking: false, playNotificationSound: false);
-					}
+					DisplaySmallMessage(componentRider.Mount != null ? LanguageControl.Get(fName,5) : LanguageControl.Get(fName,6),Color.White,blinking: false,playNotificationSound: false);
 				}
 			}
 			if ((m_editItemButton.IsClicked || playerInput.EditItem) && m_componentPlayer.ComponentBlockHighlight.NearbyEditableCell.HasValue)

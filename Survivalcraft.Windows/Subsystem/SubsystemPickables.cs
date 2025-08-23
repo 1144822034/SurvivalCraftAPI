@@ -144,17 +144,15 @@ namespace Game
 
 		public virtual void Update(float dt)
 		{
-			for(int i = 0; i < m_pickables.Count; i++)
-			{ 
-				Pickable pickable = m_pickables[i];
+			foreach (Pickable pickable in m_pickables) {
 				lock (pickable)
 				{
-                    if (pickable.ToRemove)
-                    {
-                        m_pickablesToRemove.Add(pickable);
-                    }
-                    else
-                    {
+					if (pickable.ToRemove)
+					{
+						m_pickablesToRemove.Add(pickable);
+					}
+					else
+					{
 						try
 						{
 							pickable.Project = Project;
@@ -165,8 +163,8 @@ namespace Game
 							Log.Error("Pickable update error: " + e);
 							pickable.ToRemove = true;
 						}
-                    }
-                }
+					}
+				}
 			}
 			foreach (Pickable item in m_pickablesToRemove)
 			{
@@ -198,17 +196,22 @@ namespace Game
 				{
 					string className = item.GetValue("Class",typeof(Pickable).FullName);
 					Type type = TypeCache.FindType(className,false,true);
-					Pickable pickable = (Pickable)Activator.CreateInstance(type);
-					pickable.Project = Project;
-					pickable.InitializeData(() => m_subsystemTerrain.Terrain, () => m_drawBlockEnvironmentData,DefaultCalcVisibilityRange, () => m_subsystemSky.CalculateFog, () => m_primitivesRenderer);
-					pickable.Load(item);
-					ModsManager.HookAction("OnPickableAdded",loader => {
-						loader.OnPickableAdded(this,ref pickable,item);
-						return false;
-					});
-					lock(m_pickables)
+					if(Activator.CreateInstance(type) is Pickable pickable)
 					{
-						m_pickables.Add(pickable);
+						pickable.Project = Project;
+						pickable.InitializeData(() => m_subsystemTerrain.Terrain,() => m_drawBlockEnvironmentData,DefaultCalcVisibilityRange,() => m_subsystemSky.CalculateFog,() => m_primitivesRenderer);
+						pickable.Load(item);
+						ModsManager.HookAction(
+							"OnPickableAdded",
+							loader => {
+								loader.OnPickableAdded(this,ref pickable,item);
+								return false;
+							}
+						);
+						lock(m_pickables)
+						{
+							m_pickables.Add(pickable);
+						}
 					}
 				}
 				catch(Exception ex)

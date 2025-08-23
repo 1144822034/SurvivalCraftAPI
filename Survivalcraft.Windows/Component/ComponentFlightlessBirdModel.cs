@@ -52,8 +52,7 @@ namespace Game
 				MovementAnimationPhase = 0f;
 				m_footstepsPhase = 0f;
 			}
-			float num2 = 0f;
-			num2 = (0f - m_walkBobHeight) * MathUtils.Sqr(MathF.Sin((float)Math.PI * 2f * MovementAnimationPhase));
+			float num2 = (0f - m_walkBobHeight) * MathUtils.Sqr(MathF.Sin((float)Math.PI * 2f * MovementAnimationPhase));
 			float num3 = MathUtils.Min(12f * m_subsystemTime.GameTimeDelta, 1f);
 			Bob += num3 * (num2 - Bob);
 			float num4 = MathF.Floor(m_footstepsPhase);

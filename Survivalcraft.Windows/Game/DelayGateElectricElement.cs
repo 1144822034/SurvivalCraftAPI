@@ -45,8 +45,7 @@ namespace Game
 				{
 					if (connection.ConnectorType == ElectricConnectorType.Input)
 					{
-						DelayGateElectricElement delayGateElectricElement = connection.NeighborElectricElement as DelayGateElectricElement;
-						if (delayGateElectricElement != null)
+						if (connection.NeighborElectricElement is DelayGateElectricElement delayGateElectricElement)
 						{
 							count++;
 							CountDelayPredecessors(delayGateElectricElement, ref count);

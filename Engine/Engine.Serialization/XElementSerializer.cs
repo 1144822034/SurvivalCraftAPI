@@ -6,8 +6,7 @@ namespace Engine.Serialization
 	{
 		public void Serialize(InputArchive archive, ref XElement value)
 		{
-			XmlInputArchive xmlInputArchive = archive as XmlInputArchive;
-			if (xmlInputArchive != null)
+            if (archive is XmlInputArchive xmlInputArchive)
 			{
 				value = xmlInputArchive.Node.Elements().First();
 				return;
@@ -19,8 +18,7 @@ namespace Engine.Serialization
 
 		public void Serialize(OutputArchive archive, XElement value)
 		{
-			XmlOutputArchive xmlOutputArchive = archive as XmlOutputArchive;
-			if (xmlOutputArchive != null)
+            if (archive is XmlOutputArchive xmlOutputArchive)
 			{
 				xmlOutputArchive.Node.Add(value);
 			}

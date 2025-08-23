@@ -166,7 +166,7 @@ namespace Game
 								}
 							}
 						}
-						float num = 0f;
+						float num;
 						if (m_subsystemGameInfo.WorldSettings.GameMode == GameMode.Creative)
 						{
 							num = 1f;

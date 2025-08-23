@@ -190,7 +190,7 @@ namespace Game
             Vector3 positionAtdt = position + (Velocity * dt);
             Vector3 v = block.ProjectileTipOffset * Vector3.Normalize(Velocity);
             if (TerrainCollidable)
-                terrainRaycastResult = SubsystemTerrain == null ? SubsystemTerrain.Raycast(CurrnetTerrain(), position + v, positionAtdt + v, useInteractionBoxes: false, skipAirBlocks: true, (value,distance) => BlocksManager.Blocks[Terrain.ExtractContents(value)].IsCollidable_(value)) : SubsystemTerrain.Raycast(position + v, positionAtdt + v, useInteractionBoxes: false, skipAirBlocks: true, (value,distance) => BlocksManager.Blocks[Terrain.ExtractContents(value)].IsCollidable_(value));
+                terrainRaycastResult = SubsystemTerrain == null ? SubsystemTerrain.Raycast(CurrnetTerrain(), position + v, positionAtdt + v, useInteractionBoxes: false, skipAirBlocks: true, (value,_) => BlocksManager.Blocks[Terrain.ExtractContents(value)].IsCollidable_(value)) : SubsystemTerrain.Raycast(position + v, positionAtdt + v, useInteractionBoxes: false, skipAirBlocks: true, (value,_) => BlocksManager.Blocks[Terrain.ExtractContents(value)].IsCollidable_(value));
             else
                 terrainRaycastResult = null;
             if(BodyCollidable && Project != null)
@@ -345,7 +345,7 @@ namespace Game
                 for (int k = 0; k < 8; k++)
                 {
                     Vector3 v2 = (k == 0) ? Vector3.Normalize(Velocity) : m_random.Vector3(1.5f);
-                    TerrainRaycastResult? terrainRaycastResult2 = SubsystemTerrain.Raycast(vector3, vector3 + v2, useInteractionBoxes: false, skipAirBlocks: true, (value,distance) => true);
+                    TerrainRaycastResult? terrainRaycastResult2 = SubsystemTerrain.Raycast(vector3, vector3 + v2, useInteractionBoxes: false, skipAirBlocks: true, (_,_) => true);
                     if (terrainRaycastResult2.HasValue)
                     {
                         SubsystemProjectiles.m_subsystemFireBlockBehavior.SetCellOnFire(terrainRaycastResult2.Value.CellFace.X, terrainRaycastResult2.Value.CellFace.Y, terrainRaycastResult2.Value.CellFace.Z, 1f);
@@ -496,7 +496,7 @@ namespace Game
                         if(!IsFireProof)
                         {
                             ToRemove = true;
-                            SubsystemProjectiles.m_subsystemExplosions.TryExplodeBlock(Terrain.ToCell(Position.X), Terrain.ToCell(Position.Y), Terrain.ToCell(Position.Z), Value);
+                            SubsystemProjectiles?.m_subsystemExplosions.TryExplodeBlock(Terrain.ToCell(Position.X), Terrain.ToCell(Position.Y), Terrain.ToCell(Position.Z), Value);
                         }
                     }
                     else

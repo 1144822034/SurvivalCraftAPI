@@ -263,7 +263,10 @@ namespace Game
 			try {
 				httpListener.Stop();
 			}
-			catch{}
+			catch
+			{
+				// ignored
+			}
 		}
 
 		public static void Update() {

@@ -573,7 +573,7 @@ namespace Game
 			}
 			foreach (Pickable pickable in m_subsystemPickables.Pickables)
 			{
-				Block block2 = BlocksManager.Blocks[Terrain.ExtractContents(pickable.Value)];
+				//Block block2 = BlocksManager.Blocks[Terrain.ExtractContents(pickable.Value)];
 				CalculateImpulseAndDamage(pickable.Position + new Vector3(0f, 0.5f, 0f), pickable.ExplosionMass, null, out Vector3 impulse2, out float damage2);
 				pickable.Project = Project;
 				pickable.UnderExplosion(impulse2, damage2);
@@ -655,10 +655,7 @@ namespace Game
 		public virtual void CalculateImpulseAndDamage(Vector3 position, float mass, float? obstaclePressure, out Vector3 impulse, out float damage)
 		{
 			Point3 point = Terrain.ToCell(position);
-			if (!obstaclePressure.HasValue)
-			{
-				obstaclePressure = m_pressureByPoint.Get(point.X, point.Y, point.Z);
-			}
+			obstaclePressure ??= m_pressureByPoint.Get(point.X, point.Y, point.Z);
 			float num = 0f;
 			Vector3 zero = Vector3.Zero;
 			for (int i = -1; i <= 1; i++)

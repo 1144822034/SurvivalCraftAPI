@@ -226,7 +226,7 @@ namespace Game
 					{
 						if (RaycastDestination)
 						{
-							if (!m_subsystemTerrain.Raycast(position + new Vector3(0f, 0.5f, 0f), v + new Vector3(0f, 0.5f, 0f), useInteractionBoxes: false, skipAirBlocks: true, (value,distance) => BlocksManager.Blocks[Terrain.ExtractContents(value)].IsCollidable_(value)).HasValue)
+							if (!m_subsystemTerrain.Raycast(position + new Vector3(0f, 0.5f, 0f), v + new Vector3(0f, 0.5f, 0f), useInteractionBoxes: false, skipAirBlocks: true, (value,_) => BlocksManager.Blocks[Terrain.ExtractContents(value)].IsCollidable_(value)).HasValue)
 							{
 								Destination = null;
 							}

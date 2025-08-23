@@ -587,8 +587,7 @@ namespace Game
 			{
 				throw new NotImplementedException("Node property specification not implemented.");
 			}
-			Widget widget = Activator.CreateInstance(FindTypeFromXmlName(node.Name.LocalName, node.Name.NamespaceName)) as Widget;
-			if (widget == null)
+			if (Activator.CreateInstance(FindTypeFromXmlName(node.Name.LocalName, node.Name.NamespaceName)) is not Widget widget)
 			{
 				throw new Exception($"Type \"{node.Name.LocalName}\" is not a Widget.");
 			}
@@ -677,8 +676,7 @@ namespace Game
 		{
 			if (node.HasElements)
 			{
-				ContainerWidget containerWidget = this as ContainerWidget;
-				if (containerWidget == null)
+				if (this is not ContainerWidget containerWidget)
 				{
 					throw new Exception($"Type \"{node.Name.LocalName}\" is not a ContainerWidget, but it contains child widgets.");
 				}
@@ -951,8 +949,7 @@ namespace Game
 		{
 			if (widget != null && widget.IsVisible && (!widget.ClampToBounds || widget.HitTest(point)))
 			{
-				ContainerWidget containerWidget = widget as ContainerWidget;
-				if (containerWidget != null)
+				if (widget is ContainerWidget containerWidget)
 				{
 					WidgetsList children = containerWidget.Children;
 					for (int num = children.Count - 1; num >= 0; num--)
@@ -983,8 +980,7 @@ namespace Game
 				widget.WidgetsHierarchyInput.Update();
 				isMouseCursorVisible |= widget.WidgetsHierarchyInput.IsMouseCursorVisible;
 			}
-			ContainerWidget containerWidget = widget as ContainerWidget;
-			if (containerWidget != null)
+			if (widget is ContainerWidget containerWidget)
 			{
 				WidgetsList children = containerWidget.Children;
 				for (int num = children.Count - 1; num >= 0; num--)

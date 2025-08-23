@@ -120,8 +120,7 @@ namespace Engine.Graphics
 
         public bool BaseEquals(object obj)
         {
-            BlendState blendState = obj as BlendState;
-            if (blendState == null)
+            if (obj is not BlendState blendState)
             {
                 return false;
             }

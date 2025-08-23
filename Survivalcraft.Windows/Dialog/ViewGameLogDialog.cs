@@ -71,7 +71,7 @@ namespace Game {
             }
             if (m_uploadButton.IsClicked) {
                 if (string.IsNullOrEmpty(SettingsManager.ScpboxAccessToken)) {
-                    MessageDialog messageDialog = new(LanguageControl.Get(fName, 1), LanguageControl.Get(fName, 2), LanguageControl.Get(fName, 3), LanguageControl.Get(fName, 4), btn => {
+                    MessageDialog messageDialog = new(LanguageControl.Get(fName, 1), LanguageControl.Get(fName, 2), LanguageControl.Get(fName, 3), LanguageControl.Get(fName, 4), _ => {
                         DialogsManager.HideAllDialogs();
                     });
                     DialogsManager.ShowDialog(this, messageDialog);

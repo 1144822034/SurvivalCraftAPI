@@ -10,7 +10,9 @@ namespace Game
 		public RectangleWidget rectangleWidget;
 		public Color pressColor = Color.Red;
 		public Color BorderColor = Color.Transparent;
+		// ReSharper disable UnusedParameter.Local
 		public ClickTextWidget(Vector2 vector2, string text, Action click, bool box = false)
+		// ReSharper restore UnusedParameter.Local
 		{
 			Size = vector2;
 			HorizontalAlignment = WidgetAlignment.Center;

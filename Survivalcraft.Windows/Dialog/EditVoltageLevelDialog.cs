@@ -45,11 +45,7 @@ namespace Game
 
 		public virtual void UpdateControls()
 		{
-			m_voltageSlider.Text = string.Format("{0:0.0}V ({1})", new object[2]
-			{
-				1.5f * m_voltageLevel / 15f,
-				(m_voltageLevel < 8) ? LanguageControl.Get("EditBatteryDialog", 1) : LanguageControl.Get("EditBatteryDialog", 2)
-			});
+			m_voltageSlider.Text = $"{1.5f * m_voltageLevel / 15f:0.0}V ({((m_voltageLevel < 8) ? LanguageControl.Get("EditBatteryDialog",1) : LanguageControl.Get("EditBatteryDialog",2))})";
 			m_voltageSlider.Value = m_voltageLevel;
 		}
 

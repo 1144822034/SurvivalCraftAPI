@@ -7,19 +7,19 @@ namespace Game
 	{
 		public static int Index = 199;
 
-		public BoundingBox[][] m_boundingBoxes = new BoundingBox[4][]
+		public BoundingBox[][] m_boundingBoxes = new BoundingBox[][]
 		{
 			[
-				new(new Vector3(0f, 0f, 0f), new Vector3(1f, 1f, 0.0625f))
+				new BoundingBox(new Vector3(0f, 0f, 0f), new Vector3(1f, 1f, 0.0625f))
 			],
 			[
-				new(new Vector3(0f, 0f, 0f), new Vector3(0.0625f, 1f, 1f))
+				new BoundingBox(new Vector3(0f, 0f, 0f), new Vector3(0.0625f, 1f, 1f))
 			],
 			[
-				new(new Vector3(0f, 0f, 0.9375f), new Vector3(1f, 1f, 1f))
+				new BoundingBox(new Vector3(0f, 0f, 0.9375f), new Vector3(1f, 1f, 1f))
 			],
 			[
-				new(new Vector3(0.9375f, 0f, 0f), new Vector3(1f, 1f, 1f))
+				new BoundingBox(new Vector3(0.9375f, 0f, 0f), new Vector3(1f, 1f, 1f))
 			]
 		};
 

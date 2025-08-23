@@ -634,8 +634,7 @@ namespace Game
 				m_threadUpdateParameters = m_updateParameters;
 				SendReceiveChunkStatesThread();
 			}
-			TerrainChunkState desiredState;
-			TerrainChunk terrainChunk = FindBestChunkToUpdate(out desiredState);
+			TerrainChunk terrainChunk = FindBestChunkToUpdate(out TerrainChunkState desiredState);
 			if (terrainChunk != null)
 			{
 				double realTime = Time.RealTime;
@@ -894,7 +893,6 @@ namespace Game
 				{
 					int num = 0;
 					int num2 = TerrainChunk.HeightMinusOne;
-					int num3 = 0;
 					int num4 = TerrainChunk.HeightMinusOne;
 					int num5 = TerrainChunk.CalculateCellIndex(i, TerrainChunk.HeightMinusOne, j);
 					while (num4 >= 0)
@@ -950,7 +948,7 @@ namespace Game
 							num5--;
 						}
 					}
-					num3 = num4 + 1;
+					int num3 = num4 + 1;
 					while (num4 >= num2)
 					{
 						int cellValueFast4 = chunk.GetCellValueFast(num5);

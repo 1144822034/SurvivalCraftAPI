@@ -117,8 +117,7 @@ namespace Game
 				{
 					for (ContainerWidget parentWidget = ParentWidget; parentWidget != null; parentWidget = parentWidget.ParentWidget)
 					{
-						GameWidget gameWidget = parentWidget as GameWidget;
-						if (gameWidget != null)
+						if (parentWidget is GameWidget gameWidget)
 						{
 							m_gameWidget = gameWidget;
 							break;
@@ -135,7 +134,7 @@ namespace Game
 			{
 				if (m_dragHostWidget == null)
 				{
-					m_dragHostWidget = (GameWidget != null) ? GameWidget.Children.Find<DragHostWidget>(throwIfNotFound: false) : null;
+					m_dragHostWidget = GameWidget?.Children.Find<DragHostWidget>(throwIfNotFound: false);
 				}
 				return m_dragHostWidget;
 			}
@@ -496,8 +495,7 @@ namespace Game
 
 		public virtual void DragDrop(Widget dragWidget, object data)
 		{
-			InventoryDragData inventoryDragData = data as InventoryDragData;
-			if (m_inventory != null && inventoryDragData != null)
+			if (m_inventory != null && data is InventoryDragData inventoryDragData)
 			{
 				HandleDragDrop(inventoryDragData.Inventory, inventoryDragData.SlotIndex, inventoryDragData.DragMode, m_inventory, m_slotIndex);
 			}

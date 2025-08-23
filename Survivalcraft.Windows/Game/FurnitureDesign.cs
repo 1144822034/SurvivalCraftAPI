@@ -372,7 +372,7 @@ namespace Game
 				int num = m_values[i];
 				int num2 = Terrain.ExtractContents(num);
 				IPaintableBlock paintableBlock = BlocksManager.Blocks[num2] as IPaintableBlock;
-				array[i] = paintableBlock != null ? paintableBlock.Paint(null, num, color) : num;
+				array[i] = paintableBlock?.Paint(null, num, color) ?? num;
 			}
 			SetValues(Resolution, array);
 		}
@@ -837,8 +837,7 @@ namespace Game
 								int num14 = block.GetFaceTextureSlot(i, value2);
 								bool isEmissive = false;
 								Color color = Color.White;
-								IPaintableBlock paintableBlock = block as IPaintableBlock;
-								if (paintableBlock != null)
+								if (block is IPaintableBlock paintableBlock)
 								{
 									int? paintColor = paintableBlock.GetPaintColor(value2);
 									color = SubsystemPalette.GetColor(m_subsystemTerrain, paintColor);

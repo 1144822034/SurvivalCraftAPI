@@ -66,8 +66,7 @@ namespace GameEntitySystem
 						{
 							throw ex.InnerException;
 						}
-						Subsystem subsystem = obj as Subsystem;
-						if (subsystem == null)
+						if (obj is not Subsystem subsystem)
 						{
 							throw new InvalidOperationException($"Type \"{value2}\" cannot be used as a subsystem because it does not inherit from Subsystem class.");
 						}
@@ -188,8 +187,7 @@ namespace GameEntitySystem
 		{
 			foreach (Subsystem subsystem in m_subsystems)
 			{
-				T val = subsystem as T;
-				if (val != null)
+				if (subsystem is T val)
 				{
 					yield return val;
 				}

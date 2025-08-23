@@ -334,20 +334,18 @@ namespace Game
 		{
 			foreach (Widget widget in widgets)
 			{
-				if (widget is TextBoxWidget)
+				if (widget is TextBoxWidget textBox)
 				{
 					if (!MoveNextFlag && widget == this) MoveNextFlag = true;
 					else if (MoveNextFlag)
 					{
-						TextBoxWidget textBox = widget as TextBoxWidget;
 						textBox.HasFocus = true;
 						HasFocus = false;
 						MoveNextFlag = false;
 					}
 				}
-				if (widget is ContainerWidget)
+				if (widget is ContainerWidget container)
 				{
-					ContainerWidget container = widget as ContainerWidget;
 					MoveNext(container.Children);
 				}
 			}
@@ -360,14 +358,7 @@ namespace Game
 				DesiredSize = m_size.Value;
 				return;
 			}
-			if (Text.Length == 0)
-			{
-				DesiredSize = Font.MeasureText(" ", new Vector2(FontScale), FontSpacing);
-			}
-			else
-			{
-				DesiredSize = Font.MeasureText(Text, new Vector2(FontScale), FontSpacing);
-			}
+			DesiredSize = Font.MeasureText(Text.Length == 0 ? " " : Text, new Vector2(FontScale), FontSpacing);
 			DesiredSize += new Vector2(1f * FontScale * Font.Scale, 0f);
 		}
 
@@ -414,9 +405,7 @@ namespace Game
 				{
 					if (CaretPosition < m_text.Length)
 					{
-						string text = Text;
-						text = text.Remove(CaretPosition, s.Length);
-						text = Text = text.Insert(CaretPosition, s);
+						Text = Text.Remove(CaretPosition, s.Length).Insert(CaretPosition, s);
 					}
 					else
 					{

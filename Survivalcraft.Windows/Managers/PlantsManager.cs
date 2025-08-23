@@ -41,7 +41,7 @@ namespace Game
 				];
 				int height4 = array[i];
 				int branchesCount = (int)MathUtils.Lerp(10f, 22f, i / 16f);
-				TerrainBrush item = CreateTreeBrush(random, GetTreeTrunkValue(TreeType.Oak), GetTreeLeavesValue(TreeType.Oak), height4, branchesCount, 3, delegate (int y, int round)
+				TerrainBrush item = CreateTreeBrush(random, GetTreeTrunkValue(TreeType.Oak), GetTreeLeavesValue(TreeType.Oak), height4, branchesCount, 3, delegate (int y, int _)
 				{
 					float num7 = 0.4f;
 					if (y < 0.2f * height4)
@@ -73,7 +73,7 @@ namespace Game
 				];
 				int height3 = array2[j];
 				int branchesCount2 = (int)MathUtils.Lerp(0f, 20f, j / 16f);
-				TerrainBrush item2 = CreateTreeBrush(random, GetTreeTrunkValue(TreeType.Birch), GetTreeLeavesValue(TreeType.Birch), height3, branchesCount2, 3, delegate (int y, int round)
+				TerrainBrush item2 = CreateTreeBrush(random, GetTreeTrunkValue(TreeType.Birch), GetTreeLeavesValue(TreeType.Birch), height3, branchesCount2, 3, delegate (int y, int _)
 				{
 					float num5 = 0.66f;
 					if (y < (height3 / 2) - 1)
@@ -112,7 +112,7 @@ namespace Game
 				];
 				int height2 = array3[k];
 				int branchesCount3 = height2 * 3;
-				TerrainBrush item3 = CreateTreeBrush(random, GetTreeTrunkValue(TreeType.Spruce), GetTreeLeavesValue(TreeType.Spruce), height2, branchesCount3, 3, delegate (int y, int round)
+				TerrainBrush item3 = CreateTreeBrush(random, GetTreeTrunkValue(TreeType.Spruce), GetTreeLeavesValue(TreeType.Spruce), height2, branchesCount3, 3, delegate (int y, int _)
 				{
 					float num4 = MathUtils.Lerp(1.4f, 0.3f, y / (float)height2);
 					if (y < 3)
@@ -144,7 +144,7 @@ namespace Game
 				int height = array4[l];
 				int branchesCount4 = height * 3;
 				float startHeight = (0.3f + (l % 4 * 0.05f)) * height;
-				TerrainBrush item4 = CreateTreeBrush(random, GetTreeTrunkValue(TreeType.TallSpruce), GetTreeLeavesValue(TreeType.TallSpruce), height, branchesCount4, 3, delegate (int y, int round)
+				TerrainBrush item4 = CreateTreeBrush(random, GetTreeTrunkValue(TreeType.TallSpruce), GetTreeLeavesValue(TreeType.TallSpruce), height, branchesCount4, 3, delegate (int y, int _)
 				{
 					float num2 = MathUtils.Saturate(y / (float)height);
 					float num3 = MathUtils.Lerp(1.5f, 0f, MathUtils.Saturate((num2 - 0.6f) / 0.4f));
@@ -199,7 +199,7 @@ namespace Game
 						return 0f;
 					}
 					return (y == num8 + 1) ? 0.5f : MathUtils.LinearStep(height5 - 1, num8 + 2, y);
-				}, y => 0f);
+				}, _ => 0f);
 				m_treeBrushesByType[5].Add(item5);
 			}
 		}

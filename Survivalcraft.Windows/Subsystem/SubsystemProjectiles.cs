@@ -156,7 +156,7 @@ namespace Game
                 }
             }
             Vector3 end = firePosition + (v * block.ProjectileTipOffset);
-			return !m_subsystemTerrain.Raycast(position, end, useInteractionBoxes: false, skipAirBlocks: true, (testValue,distance) =>
+			return !m_subsystemTerrain.Raycast(position, end, useInteractionBoxes: false, skipAirBlocks: true, (testValue,_) =>
 			BlocksManager.Blocks[Terrain.ExtractContents(testValue)].IsCollidable_(testValue)).HasValue;
         }
         public virtual T FireProjectile<T>(int value, Vector3 position, Vector3 velocity, Vector3 angularVelocity, ComponentCreature owner) where T : Projectile, new()

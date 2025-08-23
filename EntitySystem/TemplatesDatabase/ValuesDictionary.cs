@@ -118,8 +118,7 @@ namespace TemplatesDatabase
 		{
 			foreach (KeyValuePair<string, object> item in m_dictionary)
 			{
-				ValuesDictionary valuesDictionary = item.Value as ValuesDictionary;
-				if (valuesDictionary != null)
+				if (item.Value is ValuesDictionary valuesDictionary)
 				{
 					XElement node2 = XmlUtils.AddElement(node, "Values");
 					XmlUtils.SetAttributeValue(node2, "Name", item.Key);
@@ -165,11 +164,9 @@ namespace TemplatesDatabase
 		{
 			foreach (KeyValuePair<string, object> item in overridesValuesDictionary)
 			{
-				ValuesDictionary valuesDictionary = item.Value as ValuesDictionary;
-				if (valuesDictionary != null)
+				if (item.Value is ValuesDictionary valuesDictionary)
 				{
-					ValuesDictionary valuesDictionary2 = GetValue<object>(item.Key, null) as ValuesDictionary;
-					if (valuesDictionary2 == null)
+					if (GetValue<object>(item.Key, null) is not ValuesDictionary valuesDictionary2)
 					{
 						valuesDictionary2 = [];
 						SetValue(item.Key, valuesDictionary2);
@@ -224,9 +221,7 @@ namespace TemplatesDatabase
 					string attributeValue4 = XmlUtils.GetAttributeValue<string>(item, "Name");
 					if (overrideExistOnly && !m_dictionary.ContainsKey(attributeValue4))
 						continue;
-
-					ValuesDictionary valuesDictionary = GetValue<object>(attributeValue4, null) as ValuesDictionary;
-					if (valuesDictionary == null)
+					if (GetValue<object>(attributeValue4, null) is not ValuesDictionary valuesDictionary)
 					{
 						valuesDictionary = [];
 						SetValue(attributeValue4, valuesDictionary);

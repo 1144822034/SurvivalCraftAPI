@@ -80,7 +80,7 @@ namespace Game
 				{
 					Vector3 position = particle.Position;
 					Vector3 vector = position + (particle.Velocity * dt);
-					TerrainRaycastResult? terrainRaycastResult = m_subsystemTerrain.Raycast(position, vector, useInteractionBoxes: false, skipAirBlocks: true, delegate(int value, float distance)
+					TerrainRaycastResult? terrainRaycastResult = m_subsystemTerrain.Raycast(position, vector, useInteractionBoxes: false, skipAirBlocks: true, delegate(int value, float _)
 					{
 						Block block = BlocksManager.Blocks[Terrain.ExtractContents(value)];
 						return block.IsCollidable && !(block is LeavesBlock);

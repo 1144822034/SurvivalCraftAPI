@@ -36,8 +36,10 @@ namespace Game
 			set;
 		}
 
+		// ReSharper disable UnusedParameter.Local
 		public WhalePlumeParticleSystem(SubsystemTerrain terrain, float size, float duration)
-			: base(100)
+		// ReSharper restore UnusedParameter.Local
+		: base(100)
 		{
 			Texture = ContentManager.Get<Texture2D>("Textures/WaterSplashParticle");
 			TextureSlotsCount = 2;

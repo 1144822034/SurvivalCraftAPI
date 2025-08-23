@@ -45,8 +45,7 @@ namespace Game
 				{
 					float pitch = m_random.Float(-0.2f, 0.2f);
 					m_subsystemAudio.PlayRandomSound(value, 0.75f * loudnessMultiplier, pitch, componentCreature.ComponentBody.Position, 2f * loudnessMultiplier, autoDelay: true);
-					ComponentPlayer componentPlayer = componentCreature as ComponentPlayer;
-					if (componentPlayer != null && componentPlayer.ComponentVitalStats.Wetness > 0f)
+					if (componentCreature is ComponentPlayer componentPlayer && componentPlayer.ComponentVitalStats.Wetness > 0f)
 					{
 						string value2 = m_footstepSoundsValuesDictionary.GetValue<string>("Squishy", null);
 						if (!string.IsNullOrEmpty(value2))

@@ -91,10 +91,7 @@ public static class ModsManager
 
 		public void Remove(ModLoader modLoader)
 		{
-			if (Loaders.TryGetValue(modLoader, out _))
-			{
-				Loaders.Remove(modLoader);
-			}
+			Loaders.Remove(modLoader, out _);
 		}
 
 		public void Disable(ModLoader from, ModLoader toDisable, string reason)
@@ -415,7 +412,7 @@ public static class ModsManager
 			List<ModEntity> modEntities = ModListAll.FindAll(px => px.modInfo.PackageName == modInfo.PackageName);
 			if (modEntities.Count > 1) AddException(new Exception($"Multiple installed [{modInfo.PackageName}], please keep only one."));
 		}
-		AppDomain.CurrentDomain.AssemblyResolve += (sender, args) =>
+		AppDomain.CurrentDomain.AssemblyResolve += (_, args) =>
 		{
 			try
             {
@@ -476,7 +473,7 @@ public static class ModsManager
 		foreach (string dir in Storage.ListDirectoryNames(path))
 		{
 			if(dir != ModDisPath)
-			GetScmods(Storage.CombinePaths(path, dir));
+				GetScmods(Storage.CombinePaths(path, dir));
 		}
 	}
 
@@ -571,11 +568,11 @@ public static class ModsManager
 		XElement MergeXml = XmlUtils.LoadXmlFromStream(cloorcr, Encoding.UTF8, true);
 		foreach (XElement element in MergeXml.Elements())
 		{
-			if (HasAttribute(element, name => { return name.StartsWith("new-"); }, out XAttribute attribute))
+			if (HasAttribute(element, name => name.StartsWith("new-"), out XAttribute attribute))
 			{
-				if (HasAttribute(element, name => { return name == "Index"; }, out XAttribute xAttribute))
+				if (HasAttribute(element, name => name == "Index", out XAttribute xAttribute))
 				{
-					if (FindElement(xElement, ele => { return element.Attribute("Index").Value == xAttribute.Value; }, out XElement element1))
+					if (FindElement(xElement, _ => element.Attribute("Index")?.Value == xAttribute.Value, out XElement element1))
 					{
 						string[] px = attribute.Name.ToString().Split(["new-"], StringSplitOptions.RemoveEmptyEntries);
 						if (px.Length == 1)
@@ -585,11 +582,11 @@ public static class ModsManager
 					}
 				}
 			}
-			else if (HasAttribute(element, name => { return name.StartsWith("r-"); }, out XAttribute attribute1))
+			else if (HasAttribute(element, name => name.StartsWith("r-"), out XAttribute _))
 			{
-				if (HasAttribute(element, name => { return name == "Index"; }, out XAttribute xAttribute))
+				if (HasAttribute(element, name => name == "Index", out XAttribute xAttribute))
 				{
-					if (FindElement(xElement, ele => { return element.Attribute("Index").Value == xAttribute.Value; }, out XElement element1))
+					if (FindElement(xElement, _ => element.Attribute("Index")?.Value == xAttribute.Value, out XElement element1))
 					{
 						element1.Remove();
 						element.Remove();
@@ -609,22 +606,22 @@ public static class ModsManager
 	{
 		foreach (XElement element in needCombine.Elements())
 		{
-			if (HasAttribute(element, name => { return name == "Result"; }, out XAttribute xAttribute1))
+			if (HasAttribute(element, name => name == "Result", out XAttribute _))
 			{
-				if (HasAttribute(element, name => { return name.StartsWith("new-"); }, out XAttribute attribute))
+				if (HasAttribute(element, name => name.StartsWith("new-"), out XAttribute attribute))
 				{
 					string[] px = attribute.Name.ToString().Split(["new-"], StringSplitOptions.RemoveEmptyEntries);
-					string editName = "";
+					/*string editName = "";
 					if (px.Length == 1)
 					{
 						editName = px[0];
-					}
+					}*/
 					if (FindElement(xElement, ele =>
 					{//原始标签
 						foreach (XAttribute xAttribute in element.Attributes())//待修改的标签
 						{
 							if (xAttribute.Name == attribute.Name) continue;
-							if (!HasAttribute(ele, tname => { return tname == xAttribute.Name; }, out XAttribute attribute1)) { return false; }
+							if (!HasAttribute(ele, tname => tname == xAttribute.Name, out XAttribute _)) { return false; }
 						}
 						return true;
 					}, out XElement element1))
@@ -636,14 +633,14 @@ public static class ModsManager
 						}
 					}
 				}
-				else if (HasAttribute(element, name => { return name.StartsWith("r-"); }, out XAttribute attribute1))
+				else if (HasAttribute(element, name => name.StartsWith("r-"), out XAttribute attribute1))
 				{
 					if (FindElement(xElement, ele =>
 					{//原始标签
 						foreach (XAttribute xAttribute in element.Attributes())//待修改的标签
 						{
 							if (xAttribute.Name == attribute1.Name) continue;
-							if (!HasAttribute(ele, tname => { return tname == xAttribute.Name; }, out XAttribute attribute2)) { return false; }
+							if (!HasAttribute(ele, tname => tname == xAttribute.Name, out XAttribute _)) { return false; }
 						}
 						return true;
 					}, out XElement element1))
@@ -663,7 +660,7 @@ public static class ModsManager
 
 	public static void Modify(XElement source, XElement change)
 	{
-		if (FindElement(source, item => { return item.Name.LocalName == change.Name.LocalName && item.Attribute("Guid") != null && change.Attribute("Guid") != null && item.Attribute("Guid").Value == change.Attribute("Guid").Value; }, out XElement xElement1))
+		if (FindElement(source, item => item.Name.LocalName == change.Name.LocalName && item.Attribute("Guid") != null && change.Attribute("Guid") != null && item.Attribute("Guid")?.Value == change.Attribute("Guid")?.Value, out XElement xElement1))
 		{
 			foreach (XElement xElement in change.Elements())
 			{
@@ -730,9 +727,9 @@ public static class ModsManager
 				}
 			}
 			//处理修改
-			if(HasAttribute(element, str => { return str.Contains("new-"); }, out XAttribute attribute))
+			if(HasAttribute(element, str => str.Contains("new-"), out XAttribute attribute))
 			{
-				if (HasAttribute(element, str => { return str == "Guid"; }, out XAttribute attribute1))
+				if (HasAttribute(element, str => str == "Guid", out XAttribute attribute1))
 				{
 					if (FindElementByGuid(DataObjects, attribute1.Value, out XElement xElement))
 					{

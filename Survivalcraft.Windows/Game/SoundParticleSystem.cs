@@ -20,8 +20,10 @@ namespace Game
 
 		public Vector3 m_direction;
 
+		// ReSharper disable UnusedParameter.Local
 		public SoundParticleSystem(SubsystemTerrain terrain, Vector3 position, Vector3 direction)
-			: base(15)
+		// ReSharper restore UnusedParameter.Local
+		: base(15)
 		{
 			m_position = position;
 			m_direction = direction;

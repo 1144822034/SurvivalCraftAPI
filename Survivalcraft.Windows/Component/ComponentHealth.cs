@@ -205,7 +205,7 @@ namespace Game
         public virtual void Injure(Injury injury)
         {
             if (injury == null) return;
-            if (injury.ComponentHealth == null) injury.ComponentHealth = this;
+            injury.ComponentHealth ??= this;
             if (Health > 0f)
             {
                 lock(this) {
@@ -246,50 +246,47 @@ namespace Game
                     Cause = CauseOfDeath
                 });
             }
-            if (attacker != null)
+            ComponentPlayer componentPlayer = attacker?.Entity.FindComponent<ComponentPlayer>();
+            if (componentPlayer != null)
             {
-                ComponentPlayer componentPlayer = attacker?.Entity.FindComponent<ComponentPlayer>();
-                if (componentPlayer != null)
-                {
-                    if (calculateInKill)
-                    {
-                        if (m_componentPlayer != null)
-                        {
-                            componentPlayer.PlayerStats.PlayerKills++;
-                        }
-                        else if (m_componentCreature.Category == CreatureCategory.LandPredator || m_componentCreature.Category == CreatureCategory.LandOther)
-                        {
-                            componentPlayer.PlayerStats.LandCreatureKills++;
-                        }
-                        else if (m_componentCreature.Category == CreatureCategory.WaterPredator || m_componentCreature.Category == CreatureCategory.WaterOther)
-                        {
-                            componentPlayer.PlayerStats.WaterCreatureKills++;
-                        }
-                        else
-                        {
-                            componentPlayer.PlayerStats.AirCreatureKills++;
-                        }
-                    }
+	            if (calculateInKill)
+	            {
+		            if (m_componentPlayer != null)
+		            {
+			            componentPlayer.PlayerStats.PlayerKills++;
+		            }
+		            else if (m_componentCreature.Category == CreatureCategory.LandPredator || m_componentCreature.Category == CreatureCategory.LandOther)
+		            {
+			            componentPlayer.PlayerStats.LandCreatureKills++;
+		            }
+		            else if (m_componentCreature.Category == CreatureCategory.WaterPredator || m_componentCreature.Category == CreatureCategory.WaterOther)
+		            {
+			            componentPlayer.PlayerStats.WaterCreatureKills++;
+		            }
+		            else
+		            {
+			            componentPlayer.PlayerStats.AirCreatureKills++;
+		            }
+	            }
 
-                    if (StackExperienceOnKill)
-                    {
-                        for (int i = 0; i < Math.Min(100, experienceOrbDropCount); i++) //调整经验球的掉落逻辑，多于100个时则成组掉落防止卡顿
-                        {
-                            Vector2 vector = m_random.Vector2(2.5f, 3.5f);
-                            int dropInWave = experienceOrbDropCount / 100;
-                            if (i < experienceOrbDropCount % 100) dropInWave++;
-                            m_subsystemPickables.AddPickable(ExperienceOrbBlockIndex, dropInWave, m_componentCreature.ComponentBody.Position, new Vector3(vector.X, 6f, vector.Y), null, Entity);
-                        }
-                    }
-                    else
-                    {
-                        for (int i = 0; i < experienceOrbDropCount; i++)
-                        {
-                            Vector2 vector = m_random.Vector2(2.5f, 3.5f);
-                            m_subsystemPickables.AddPickable(ExperienceOrbBlockIndex, 1, m_componentCreature.ComponentBody.Position, new Vector3(vector.X, 6f, vector.Y), null, Entity);
-                        }
-                    }
-                }
+	            if (StackExperienceOnKill)
+	            {
+		            for (int i = 0; i < Math.Min(100, experienceOrbDropCount); i++) //调整经验球的掉落逻辑，多于100个时则成组掉落防止卡顿
+		            {
+			            Vector2 vector = m_random.Vector2(2.5f, 3.5f);
+			            int dropInWave = experienceOrbDropCount / 100;
+			            if (i < experienceOrbDropCount % 100) dropInWave++;
+			            m_subsystemPickables.AddPickable(ExperienceOrbBlockIndex, dropInWave, m_componentCreature.ComponentBody.Position, new Vector3(vector.X, 6f, vector.Y), null, Entity);
+		            }
+	            }
+	            else
+	            {
+		            for (int i = 0; i < experienceOrbDropCount; i++)
+		            {
+			            Vector2 vector = m_random.Vector2(2.5f, 3.5f);
+			            m_subsystemPickables.AddPickable(ExperienceOrbBlockIndex, 1, m_componentCreature.ComponentBody.Position, new Vector3(vector.X, 6f, vector.Y), null, Entity);
+		            }
+	            }
             }
         }
         public virtual void Update(float dt)
@@ -388,7 +385,7 @@ namespace Game
                 HealthChange = Health - m_lastHealth;
                 m_lastHealth = Health;
                 float redScreenFactorCalculated = m_redScreenFactor;
-				float creatureModelRedFactorCalculated = MathUtils.Saturate(m_componentCreature.ComponentCreatureModel.m_injuryColorFactor - (3f * dt)); ;
+				float creatureModelRedFactorCalculated = MathUtils.Saturate(m_componentCreature.ComponentCreatureModel.m_injuryColorFactor - (3f * dt));
                 bool playPainSound = true;
                 int healthBarFlashCount = Math.Clamp((int)((0f - HealthChange) * 30f), 0, 10);
                 if (redScreenFactorCalculated > 0.01f)

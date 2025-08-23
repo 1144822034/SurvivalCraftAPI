@@ -67,8 +67,7 @@ namespace Game
 
 		public virtual void DragDrop(Widget dragWidget, object data)
 		{
-			InventoryDragData inventoryDragData = data as InventoryDragData;
-			if (inventoryDragData != null && GameManager.Project != null)
+			if (data is InventoryDragData inventoryDragData && GameManager.Project != null)
 			{
 				SubsystemPickables subsystemPickables = GameManager.Project.FindSubsystem<SubsystemPickables>(throwOnError: true);
 				ComponentPlayer componentPlayer = GameWidget.PlayerData.ComponentPlayer;

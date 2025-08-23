@@ -96,7 +96,7 @@ namespace Game
 			int num = Terrain.ExtractData(value);
 			if (num < m_matricesByData.Length)
 			{
-				int num2 = (generator.SubsystemMetersBlockBehavior != null) ? generator.SubsystemMetersBlockBehavior.GetThermometerReading(x, y, z) : 8;
+				int num2 = generator.SubsystemMetersBlockBehavior?.GetThermometerReading(x, y, z) ?? 8;
 				float y2 = MathUtils.Lerp(1.02f,3.91f,MathUtils.Saturate(num2 / 20f));
 				Matrix matrix = m_matricesByData[num];
 				Matrix value2 = Matrix.CreateTranslation(0f, 0f - m_fluidBottomPosition, 0f) * Matrix.CreateScale(1f, y2, 1f) * Matrix.CreateTranslation(0f, m_fluidBottomPosition, 0f) * matrix;

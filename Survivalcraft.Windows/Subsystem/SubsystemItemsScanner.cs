@@ -21,8 +21,9 @@ namespace Game
 			m_items.Clear();
 			foreach (Subsystem subsystem in Project.Subsystems)
 			{
-				IInventory inventory = subsystem as IInventory;
-				if (inventory != null)
+				// ReSharper disable SuspiciousTypeConversion.Global
+				if (subsystem is IInventory inventory)
+				// ReSharper restore SuspiciousTypeConversion.Global
 				{
 					ScanInventory(inventory, m_items);
 				}
@@ -31,8 +32,7 @@ namespace Game
 			{
 				foreach (Component component in entity.Components)
 				{
-					IInventory inventory2 = component as IInventory;
-					if (inventory2 != null)
+					if (component is IInventory inventory2)
 					{
 						ScanInventory(inventory2, m_items);
 					}

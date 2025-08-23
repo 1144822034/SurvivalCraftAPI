@@ -223,7 +223,7 @@ namespace Game
 					{
 						Vector3 start = m_componentPlayer.ComponentBody.Position + new Vector3(i,1f,j);
 						Vector3 end = new(start.X,255f,start.Z);
-						if(!m_subsystemTerrain.Raycast(start,end,useInteractionBoxes: false,skipAirBlocks: true,(value,distance) => Terrain.ExtractContents(value) != 0).HasValue)
+						if(!m_subsystemTerrain.Raycast(start,end,useInteractionBoxes: false,skipAirBlocks: true,(value,_) => Terrain.ExtractContents(value) != 0).HasValue)
 						{
 							return LanguageControl.Get(fName,5);
 						}

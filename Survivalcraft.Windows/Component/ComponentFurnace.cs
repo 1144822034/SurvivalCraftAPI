@@ -104,7 +104,6 @@ namespace Game
 		public virtual void Update(float dt)
 		{
 			m_fuelEndTime = (float)(m_subsystemGameInfo.TotalElapsedGameTime + m_fireTimeRemaining);
-			Point3 coordinates = m_componentBlockEntity.Coordinates;
 			if (m_heatLevel > 0f)
 			{
 				m_fireTimeRemaining = MathUtils.Max(0f, m_fireTimeRemaining - dt);
@@ -285,7 +284,7 @@ namespace Game
 				}
 				ComponentPlayer componentPlayer = FindInteractingPlayer();
 				float playerLevel = componentPlayer?.PlayerData.Level ?? 1f;
-				CraftingRecipe craftingRecipe = null;
+				CraftingRecipe craftingRecipe;
 				craftingRecipe = CraftingRecipesManager.FindMatchingRecipe(m_subsystemTerrain, m_matchedIngredients, heatLevel, playerLevel);
 				if (craftingRecipe != null && craftingRecipe.ResultValue != 0)
 				{

@@ -23,8 +23,7 @@ namespace Game
 		/// </summary>
 		public virtual void OnTopicsListItemClicked(object item)
 		{
-			HelpTopic helpTopic2 = item as HelpTopic;
-			if(helpTopic2 != null)
+			if(item is HelpTopic helpTopic2)
 			{
 				ShowTopic(helpTopic2);
 			}
@@ -46,54 +45,47 @@ namespace Game
 				return obj;
 			};
 			m_topicsList.ItemClicked += OnTopicsListItemClicked;
-            foreach (KeyValuePair<string,JsonNode> item in LanguageControl.jsonNode["Help"].AsObject())
+			JsonObject helpObject = LanguageControl.jsonNode["Help"]?.AsObject();
+			if(helpObject != null)
 			{
-				JsonNode item3 = item.Value;
-				JsonNode displa = item3["DisabledPlatforms"];
-                if (displa != null && displa.GetValueKind() == JsonValueKind.String)
+				foreach(KeyValuePair<string,JsonNode> item in helpObject)
 				{
-					if ((displa.GetValue<string>()).Split([","], StringSplitOptions.None).FirstOrDefault(s => s.Trim().Equals(VersionsManager.PlatformString,StringComparison.CurrentCultureIgnoreCase)) == null) continue;
-				}
-				JsonNode Title = item3["Title"];
-                JsonNode Name = item3["Name"];
-				JsonNode value = item3["value"];
-                string attributeValue = Name != null && Name.GetValueKind() == JsonValueKind.String ? Name.GetValue<string>() : string.Empty;
-				string attributeValue2 = Title != null && Title.GetValueKind() == JsonValueKind.String ? Title.GetValue<string>() : string.Empty;
-				string text = string.Empty;
-				if (value != null)
-				{
-					string[] array = value.GetValue<string>().Split(["\n"], StringSplitOptions.None);
-					foreach (string text2 in array)
+					JsonNode item3 = item.Value;
+					JsonNode displa = item3["DisabledPlatforms"];
+					if(displa != null
+						&& displa.GetValueKind() == JsonValueKind.String)
 					{
-						text = text + text2.Trim() + " ";
+						if((displa.GetValue<string>()).Split([","],StringSplitOptions.None).FirstOrDefault(s => s.Trim().Equals(VersionsManager.PlatformString,StringComparison.CurrentCultureIgnoreCase)) == null) continue;
 					}
-					text = text.Replace("\r", "");
-					text = text.Replace("’", "'");
-					text = text.Replace("\\n", "\n");
-				}
-				bool floatParseSucceed = float.TryParse(item.Key, out float index);
-                HelpTopic helpTopic = new()
-                {
-					Index = floatParseSucceed ? index : 0f,
-					Name = attributeValue,
-					Title = attributeValue2,
-					Text = text
-				};
-				if (!string.IsNullOrEmpty(helpTopic.Name))
-				{
-					if(m_topics.TryAdd(helpTopic.Name,helpTopic))
+					JsonNode Title = item3["Title"];
+					JsonNode Name1 = item3["Name"];
+					JsonNode value = item3["value"];
+					string attributeValue = Name1 != null && Name1.GetValueKind() == JsonValueKind.String ? Name1.GetValue<string>() : string.Empty;
+					string attributeValue2 = Title != null && Title.GetValueKind() == JsonValueKind.String ? Title.GetValue<string>() : string.Empty;
+					string text = string.Empty;
+					if(value != null)
 					{
-						m_topicsList.m_items.Add(helpTopic);
+						string[] array = value.GetValue<string>().Split(["\n"],StringSplitOptions.None);
+						foreach(string text2 in array)
+						{
+							text = text + text2.Trim() + " ";
+						}
+						text = text.Replace("\r","");
+						text = text.Replace("’","'");
+						text = text.Replace("\\n","\n");
+					}
+					bool floatParseSucceed = float.TryParse(item.Key,out float index);
+					HelpTopic helpTopic = new() { Index = floatParseSucceed ? index : 0f,Name = attributeValue,Title = attributeValue2,Text = text };
+					if(!string.IsNullOrEmpty(helpTopic.Name))
+					{
+						if(m_topics.TryAdd(helpTopic.Name,helpTopic))
+						{
+							m_topicsList.m_items.Add(helpTopic);
+						}
 					}
 				}
 			}
-			m_topicsList.m_items.Sort((x, y) => {
-				HelpTopic x_topic = x as HelpTopic;
-				HelpTopic y_topic = y as HelpTopic;
-				if(x == null || y == null) return 0;
-				return x_topic.Index.CompareTo(y_topic.Index);
-			}
-			);
+			m_topicsList.m_items.Sort((x, y) => x is not HelpTopic x_topic || y is not HelpTopic y_topic ? 0 : x_topic.Index.CompareTo(y_topic.Index));
 		}
 
 		public override void Enter(object[] parameters)

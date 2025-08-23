@@ -92,7 +92,7 @@ namespace TemplatesDatabase
 				}
 				catch (Exception ex)
 				{
-					Log.Warning(string.Format("Error loading assembly {0}. {1}", new object[2] { attributeValue13, ex }));
+					Log.Warning("Error loading assembly " + attributeValue13 + ". " + ex);
 				}
 			}
 			XElement node2 = XmlUtils.FindChildElement(node, "DatabaseObjects", throwIfNotFound: true);

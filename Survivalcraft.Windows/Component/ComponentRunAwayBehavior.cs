@@ -143,7 +143,7 @@ namespace Game
 		public virtual Vector3 FindSafePlace()
 		{
 			Vector3 position = m_componentCreature.ComponentBody.Position;
-			Vector3? herdPosition = (m_componentHerdBehavior != null) ? m_componentHerdBehavior.FindHerdCenter() : null;
+			Vector3? herdPosition = m_componentHerdBehavior?.FindHerdCenter();
 			if (herdPosition.HasValue && Vector3.DistanceSquared(position, herdPosition.Value) < 144f)
 			{
 				herdPosition = null;

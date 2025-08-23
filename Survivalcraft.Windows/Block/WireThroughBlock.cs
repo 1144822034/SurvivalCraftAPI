@@ -2,7 +2,7 @@ using Engine;
 
 namespace Game
 {
-	public abstract class WireThroughBlock : CubeBlock, IElectricWireElementBlock, IElectricElementBlock
+	public abstract class WireThroughBlock : CubeBlock, IElectricWireElementBlock
 	{
 		public int m_wiredTextureSlot;
 

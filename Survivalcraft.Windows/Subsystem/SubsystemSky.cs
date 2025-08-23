@@ -346,8 +346,7 @@ namespace Game
 				int x = Terrain.ToCell(viewPosition.X);
 				int y = Terrain.ToCell(viewPosition.Y);
 				int z = Terrain.ToCell(viewPosition.Z);
-				FluidBlock surfaceFluidBlock;
-				float? surfaceHeight = m_subsystemFluidBlockBehavior.GetSurfaceHeight(x, y, z, out surfaceFluidBlock);
+				float? surfaceHeight = m_subsystemFluidBlockBehavior.GetSurfaceHeight(x, y, z, out FluidBlock surfaceFluidBlock);
 				if (surfaceHeight.HasValue)
 				{
 					if (surfaceFluidBlock is WaterBlock)

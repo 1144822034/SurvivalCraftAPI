@@ -129,7 +129,7 @@ namespace Game
 				m_footstepsPhase = 0f;
 			}
 			float num3 = 0f;
-			ComponentMount componentMount = (m_componentRider != null) ? m_componentRider.Mount : null;
+			ComponentMount componentMount = m_componentRider?.Mount;
 			if (componentMount != null)
 			{
 				ComponentCreatureModel componentCreatureModel = componentMount.Entity.FindComponent<ComponentCreatureModel>();
@@ -218,7 +218,7 @@ namespace Game
 			if (OnAnimate != null && OnAnimate()) return;
 			if (m_lieDownFactorModel == 0f)
 			{
-				ComponentMount componentMount = (m_componentRider != null) ? m_componentRider.Mount : null;
+				ComponentMount componentMount = m_componentRider?.Mount;
 				float num = MathF.Sin((float)Math.PI * 2f * MovementAnimationPhase);
 				position.Y += Bob;
 				vector.X += m_headingOffset;
@@ -329,7 +329,7 @@ namespace Game
 					m_legAngles2 *= 0.5f;
 				}
 				float f = MathUtils.Sigmoid(m_componentCreature.ComponentBody.CrouchFactor, 4f);
-				Vector3 position2 = new(0f, MathUtils.Lerp(0f, 4f, f), MathUtils.Lerp(0f, -3.3f, f));
+				//Vector3 position2 = new(0f, MathUtils.Lerp(0f, 4f, f), MathUtils.Lerp(0f, -3.3f, f));
 				Vector3 position3 = new(position.X, position.Y - MathUtils.Lerp(0f, 0.7f, f), position.Z);
 				Vector3 position4 = new(0f, MathUtils.Lerp(0f, 7f, f), MathUtils.Lerp(0f, 28f, f));
 				Vector3 scale = new(1f, 1f, MathUtils.Lerp(1f, 0.5f, f));

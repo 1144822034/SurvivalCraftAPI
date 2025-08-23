@@ -57,7 +57,7 @@ namespace Game
 				{
 					ModsManager.HookAction("OnProjectLoaded", loader => { loader.OnProjectLoaded(project); return false; });
 				};
-				Project.EntityAdded += (s, arg) =>
+				Project.EntityAdded += (_, arg) =>
 				{
 					ModsManager.HookAction("OnEntityAdd", loader =>
 					{
@@ -65,7 +65,7 @@ namespace Game
 						return false;
 					});
 				};
-				Project.EntityRemoved += (s, arg) =>
+				Project.EntityRemoved += (_, arg) =>
 				{
 					ModsManager.HookAction("OnEntityRemove", loader =>
 					{

@@ -66,8 +66,7 @@ namespace Game
 					Block block = BlocksManager.Blocks[num2];
 					if (explosiveData.FuseParticleSystem == null)
 					{
-						GunpowderKegBlock gunpowderKegBlock = block as GunpowderKegBlock;
-						if (gunpowderKegBlock != null)
+						if (block is GunpowderKegBlock gunpowderKegBlock)
 						{
 							explosiveData.FuseParticleSystem = new FuseParticleSystem(new Vector3(point.X, point.Y, point.Z) + gunpowderKegBlock.FuseOffset);
 							m_subsystemParticles.AddParticleSystem(explosiveData.FuseParticleSystem);

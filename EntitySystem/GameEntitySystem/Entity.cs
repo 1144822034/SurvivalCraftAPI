@@ -138,8 +138,7 @@ namespace GameEntitySystem
 					{
 						throw ex.InnerException;
 					}
-					Component component = obj as Component;
-					if(component == null)
+					if(obj is not Component component)
 					{
 						throw new InvalidOperationException($"Type \"{className}\" cannot be used as a component because it does not inherit from Component class.");
 					}
@@ -253,7 +252,7 @@ namespace GameEntitySystem
 			foreach (Component component in m_components)
 			{
 				IEnumerable<Entity> ownedEntities = component.GetOwnedEntities();
-				list = (list != null) ? list : [];
+				list = list ?? [];
 				list.AddRange(ownedEntities);
 			}
 			return list;

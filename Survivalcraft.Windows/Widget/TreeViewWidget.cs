@@ -421,7 +421,7 @@ namespace Game
 		public TreeViewNodeContentItem(TreeViewNode node, float xOffset)
 		{
 			m_node = node;
-			OnClicked = viewNode => { };
+			OnClicked = _ => { };
 			node.LinkedWidget = this;
 			XElement node2 = ContentManager.Get<XElement>("Widgets/TreeViewNodeContentItem");
 			LoadContents(this, node2);

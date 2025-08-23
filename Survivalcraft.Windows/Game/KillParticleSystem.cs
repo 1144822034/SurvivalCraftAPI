@@ -61,7 +61,7 @@ namespace Game
 					particle.TimeToLive -= dt;
 					if (particle.TimeToLive > 0f)
 					{
-						Vector3 vector = particle.Position += particle.Velocity * dt;
+						particle.Position += particle.Velocity * dt;
 						particle.Velocity.Y += 1f * dt;
 						particle.Velocity *= num;
 						particle.TextureSlot = (int)(3.99f * MathUtils.Saturate(2f - particle.TimeToLive));

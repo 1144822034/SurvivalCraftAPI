@@ -17,7 +17,15 @@ namespace Game
 		public bool UpdateTimeDebug = false;
 
 
-		public int DrawablesCount => m_drawables.Count;
+		public int DrawablesCount
+		{
+			get
+			{
+				lock (m_drawables) {
+					return m_drawables.Count;
+				}
+			}
+		}
 
 		public void AddDrawable(IDrawable drawable)
 		{

@@ -13,8 +13,7 @@ namespace Game
 				foreach (Widget childWidget in Children)
 				{
 					yield return childWidget;
-					ContainerWidget containerWidget = childWidget as ContainerWidget;
-					if (containerWidget != null)
+					if (childWidget is ContainerWidget containerWidget)
 					{
 						foreach (Widget allChild in containerWidget.AllChildren)
 						{
