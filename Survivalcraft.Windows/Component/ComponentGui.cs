@@ -340,16 +340,16 @@ namespace Game
 			m_keyboardHelpMessageShown = valuesDictionary.GetValue<bool>("KeyboardHelpMessageShown");
 			m_gamepadHelpMessageShown = valuesDictionary.GetValue<bool>("GamepadHelpMessageShown");
 
-			var worldSettings = m_subsystemGameInfo.WorldSettings;
-			var gameMode = worldSettings.GameMode;
-			var isCreative = gameMode == GameMode.Creative;
+			WorldSettings worldSettings = m_subsystemGameInfo.WorldSettings;
+			GameMode gameMode = worldSettings.GameMode;
+			bool isCreative = gameMode == GameMode.Creative;
 			m_creativeFlyButtonWidget.IsVisible = isCreative;
 			m_timeOfDayButtonWidget.IsVisible = isCreative;
 			m_lightningButtonWidget.IsVisible = isCreative;
 			m_precipitationButtonWidget.IsVisible = isCreative && worldSettings.AreWeatherEffectsEnabled;
 			m_fogButtonWidget.IsVisible = isCreative && worldSettings.AreWeatherEffectsEnabled;
 			//启动冒险模式
-			var adventureEnabled = worldSettings.AreAdventureSurvivalMechanicsEnabled;
+			bool adventureEnabled = worldSettings.AreAdventureSurvivalMechanicsEnabled;
 			HealthBarWidget.IsVisible = !isCreative;
 			FoodBarWidget.IsVisible = !isCreative && adventureEnabled;
 			TemperatureBarWidget.IsVisible = !isCreative && adventureEnabled;
@@ -623,7 +623,7 @@ namespace Game
 				}
 				else
 				{
-					var clothingWidget = new ClothingWidget(m_componentPlayer);
+					ClothingWidget clothingWidget = new(m_componentPlayer);
 					ModsManager.HookAction("ClothingWidgetOpen", modLoader =>
 					{
 						modLoader.ClothingWidgetOpen(this, clothingWidget);
@@ -739,7 +739,7 @@ namespace Game
 			}
 			if (m_lightningButtonWidget.IsVisible && (m_lightningButtonWidget.IsClicked || playerInput.Lighting))
 			{
-				var matrix = Matrix.CreateFromQuaternion(m_componentPlayer.ComponentCreatureModel.EyeRotation);
+				Matrix matrix = Matrix.CreateFromQuaternion(m_componentPlayer.ComponentCreatureModel.EyeRotation);
 				m_subsystemWeather.ManualLightingStrike(m_componentPlayer.ComponentCreatureModel.EyePosition, matrix.Forward);
 			}
 			if (m_precipitationButtonWidget.IsVisible && (m_precipitationButtonWidget.IsClicked || playerInput.Precipitation))

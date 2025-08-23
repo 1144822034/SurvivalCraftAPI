@@ -68,7 +68,7 @@ namespace Game
 		public virtual void GatherPickable(WorldItem worldItem)
 		{
 			if(m_inventoryToGatherPickable == null) return;
-			var pickable = worldItem as Pickable;
+			Pickable pickable = worldItem as Pickable;
 			int num = pickable?.Count ?? 1;
 			int num2 = ComponentInventoryBase.AcquireItems(m_inventoryToGatherPickable, worldItem.Value, num);
 			if(num2 < num)

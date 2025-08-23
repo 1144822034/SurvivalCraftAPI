@@ -31,7 +31,7 @@ namespace Game
 			{
 				int.TryParse(item.Attribute("Index").Value, out int ClothIndex);
 				ClothIndex &= 0x3FF;
-				ClothingData clothingData = new ClothingData(item);
+				ClothingData clothingData = new(item);
 				string className = item.Attribute("Class")?.Value ?? typeof(ClothingData).FullName;
 				if(!string.IsNullOrEmpty(className))
 				{
@@ -63,7 +63,7 @@ namespace Game
 			ModsManager.ModListAllDo(modEntity => { modEntity.LoadClo(this, ref xElement); });
 			LoadClothingData(xElement);
 			Model playerModel = CharacterSkinsManager.GetPlayerModel(PlayerClass.Male);
-			var array = new Matrix[playerModel.Bones.Count];
+			Matrix[] array = new Matrix[playerModel.Bones.Count];
 			playerModel.CopyAbsoluteBoneTransformsTo(array);
 			int index = playerModel.FindBone("Hand1").Index;
 			int index2 = playerModel.FindBone("Hand2").Index;
@@ -82,7 +82,7 @@ namespace Game
 				}
 			}
 			Model outerClothingModel = CharacterSkinsManager.GetOuterClothingModel(PlayerClass.Male);
-			var array2 = new Matrix[outerClothingModel.Bones.Count];
+			Matrix[] array2 = new Matrix[outerClothingModel.Bones.Count];
 			outerClothingModel.CopyAbsoluteBoneTransformsTo(array2);
 			int index3 = outerClothingModel.FindBone("Leg1").Index;
 			int index4 = outerClothingModel.FindBone("Leg2").Index;
@@ -192,7 +192,7 @@ namespace Game
 			{
 				return null;
 			}
-			var list = ingredients.Where(i => !string.IsNullOrEmpty(i)).ToList();
+			List<string> list = ingredients.Where(i => !string.IsNullOrEmpty(i)).ToList();
 			if (list.Count == 2)
 			{
 				int num = 0;

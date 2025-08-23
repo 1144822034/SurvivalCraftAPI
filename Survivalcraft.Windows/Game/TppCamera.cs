@@ -27,7 +27,7 @@ namespace Game
 			{
 				return;
 			}
-			var matrix = Matrix.CreateFromQuaternion(GameWidget.Target.ComponentCreatureModel.EyeRotation);
+			Matrix matrix = Matrix.CreateFromQuaternion(GameWidget.Target.ComponentCreatureModel.EyeRotation);
 			matrix.Translation = GameWidget.Target.ComponentBody.Position + (0.9f * GameWidget.Target.ComponentBody.BoxSize.Y * Vector3.UnitY);
 			Vector3 v = (-2.25f * matrix.Forward) + (1.75f * matrix.Up);
 			Vector3 vector = matrix.Translation + v;
@@ -43,8 +43,8 @@ namespace Game
 			}
 			Vector3 vector2 = m_position - matrix.Translation;
 			float? num = null;
-			var vector3 = Vector3.Normalize(Vector3.Cross(vector2, Vector3.UnitY));
-			var v3 = Vector3.Normalize(Vector3.Cross(vector2, vector3));
+			Vector3 vector3 = Vector3.Normalize(Vector3.Cross(vector2, Vector3.UnitY));
+			Vector3 v3 = Vector3.Normalize(Vector3.Cross(vector2, vector3));
 			SubsystemTerrain subsystemTerrain = GameWidget.SubsystemGameWidgets.SubsystemTerrain;
 			for (int i = 0; i <= 0; i++)
 			{

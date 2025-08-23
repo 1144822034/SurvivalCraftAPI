@@ -104,7 +104,7 @@ namespace Game
 
 		public string SaveString(bool saveLastOutput)
 		{
-			var stringBuilder = new StringBuilder();
+			StringBuilder stringBuilder = new();
 			int num = 0;
 			for (int i = 0; i < Data.Count; i++)
 			{

@@ -142,10 +142,7 @@ namespace Game
 
 		public Vector2 LookAngles
 		{
-			get
-			{
-				return m_lookAngles;
-			}
+			get => m_lookAngles;
 			set
 			{
 				value.X = Math.Clamp(value.X, 0f - MathUtils.DegToRad(140f), MathUtils.DegToRad(140f));
@@ -162,10 +159,7 @@ namespace Game
 
 		public Vector2? WalkOrder
 		{
-			get
-			{
-				return m_walkOrder;
-			}
+			get => m_walkOrder;
 			set
 			{
 				m_walkOrder = value;
@@ -182,10 +176,7 @@ namespace Game
 
 		public Vector3? FlyOrder
 		{
-			get
-			{
-				return m_flyOrder;
-			}
+			get => m_flyOrder;
 			set
 			{
 				m_flyOrder = value;
@@ -202,10 +193,7 @@ namespace Game
 
 		public Vector3? SwimOrder
 		{
-			get
-			{
-				return m_swimOrder;
-			}
+			get => m_swimOrder;
 			set
 			{
 				m_swimOrder = value;
@@ -222,38 +210,20 @@ namespace Game
 
 		public Vector2 TurnOrder
 		{
-			get
-			{
-				return m_turnOrder;
-			}
-			set
-			{
-				m_turnOrder = value;
-			}
+			get => m_turnOrder;
+			set => m_turnOrder = value;
 		}
 
 		public Vector2 LookOrder
 		{
-			get
-			{
-				return m_lookOrder;
-			}
-			set
-			{
-				m_lookOrder = value;
-			}
+			get => m_lookOrder;
+			set => m_lookOrder = value;
 		}
 
 		public float JumpOrder
 		{
-			get
-			{
-				return m_jumpOrder;
-			}
-			set
-			{
-				m_jumpOrder = MathUtils.Saturate(value);
-			}
+			get => m_jumpOrder;
+			set => m_jumpOrder = MathUtils.Saturate(value);
 		}
 
 		public Vector3? VrMoveOrder
@@ -511,12 +481,12 @@ namespace Game
 			m_componentCreature.ComponentBody.IsWaterDragEnabled = true;
 			Vector3 velocity = m_componentCreature.ComponentBody.Velocity;
 			Vector3 right = m_componentCreature.ComponentBody.Matrix.Right;
-			var vector = Vector3.Transform(m_componentCreature.ComponentBody.Matrix.Forward, Quaternion.CreateFromAxisAngle(right, LookAngles.Y));
+			Vector3 vector = Vector3.Transform(m_componentCreature.ComponentBody.Matrix.Forward, Quaternion.CreateFromAxisAngle(right, LookAngles.Y));
 			if (WalkSpeed > 0f && WalkOrder.HasValue)
 			{
 				if (IsCreativeFlyEnabled || IsCreativeFlyEnabledSet)
 				{
-					var v = new Vector3(WalkOrder.Value.X, 0f, WalkOrder.Value.Y);
+					Vector3 v = new(WalkOrder.Value.X, 0f, WalkOrder.Value.Y);
 					if (FlyOrder.HasValue)
 					{
 						v += FlyOrder.Value;

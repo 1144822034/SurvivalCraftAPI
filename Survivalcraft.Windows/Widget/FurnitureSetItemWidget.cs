@@ -59,7 +59,7 @@ namespace Game
 
 		public FurnitureDesign GetFurnitureDesign(object dragData)
 		{
-			var inventoryDragData = dragData as InventoryDragData;
+			InventoryDragData inventoryDragData = dragData as InventoryDragData;
 			if (inventoryDragData != null)
 			{
 				int slotValue = inventoryDragData.Inventory.GetSlotValue(inventoryDragData.SlotIndex);

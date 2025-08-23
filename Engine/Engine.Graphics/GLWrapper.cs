@@ -583,15 +583,8 @@ namespace Engine.Graphics
 			if (state.DepthBufferTestEnable || state.DepthBufferWriteEnable)
 			{
 				Enable(EnableCap.DepthTest);
-				if (state.DepthBufferTestEnable)
-				{
-					DepthFunc(TranslateCompareFunction(state.DepthBufferFunction));
-				}
-				else
-				{
-					DepthFunc(DepthFunction.Always);
-				}
-				DepthMask(state.DepthBufferWriteEnable);
+                DepthFunc(state.DepthBufferTestEnable ? TranslateCompareFunction(state.DepthBufferFunction) : DepthFunction.Always);
+                DepthMask(state.DepthBufferWriteEnable);
 			}
 			else
 			{
@@ -632,18 +625,11 @@ namespace Engine.Graphics
 		}
 
 		public static void ApplyRenderTarget(RenderTarget2D renderTarget)
-		{
-			if (renderTarget != null)
-			{
-				BindFramebuffer(renderTarget.m_frameBuffer);
-			}
-			else
-			{
-				BindFramebuffer(m_mainFramebuffer);
-			}
-		}
+        {
+            BindFramebuffer(renderTarget?.m_frameBuffer ?? m_mainFramebuffer);
+        }
 
-		public unsafe static void ApplyShaderAndBuffers(Shader shader, VertexDeclaration vertexDeclaration, IntPtr vertexOffset, int arrayBuffer, int? elementArrayBuffer)
+		public static unsafe void ApplyShaderAndBuffers(Shader shader, VertexDeclaration vertexDeclaration, IntPtr vertexOffset, int arrayBuffer, int? elementArrayBuffer)
 		{
 			shader.PrepareForDrawing();
 			BindBuffer(BufferTargetARB.ArrayBuffer, arrayBuffer);
@@ -725,8 +711,8 @@ namespace Engine.Graphics
 						GL.Uniform1(shaderParameter.Location, num);
 					}
 					ShaderParameter obj = shader.m_parameters[num2 + 1];
-					var texture2D = (Texture2D)shaderParameter.Resource;
-					var samplerState = (SamplerState)obj.Resource;
+					Texture2D texture2D = (Texture2D)shaderParameter.Resource;
+					SamplerState samplerState = (SamplerState)obj.Resource;
 					if (texture2D != null)
 					{
 						if (samplerState == null)
@@ -1079,7 +1065,7 @@ namespace Engine.Graphics
 			};
         }
 #if DEBUG
-        static readonly DebugProc DebugMessageDelegate = (source, type, id, severity, length, pMessage, param) =>
+        static readonly DebugProc DebugMessageDelegate = (_, type, _, _, length, pMessage, _) =>
         {
             if (type == GLEnum.DebugTypeOther)
             {

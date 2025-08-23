@@ -8,14 +8,8 @@ namespace Game
 
 		public float ParticlesPerSecond
 		{
-			get
-			{
-				return m_fireRenderer.ParticlesPerSecond;
-			}
-			set
-			{
-				m_fireRenderer.ParticlesPerSecond = value;
-			}
+			get => m_fireRenderer.ParticlesPerSecond;
+			set => m_fireRenderer.ParticlesPerSecond = value;
 		}
 
 		public FireWidget()

@@ -5,6 +5,7 @@ namespace Game
 {
 	public abstract class StairsBlock : Block, IPaintableBlock
 	{
+		[Flags]
 		public enum CornerType
 		{
 			None,
@@ -41,7 +42,7 @@ namespace Game
 				bool isUpsideDown = GetIsUpsideDown(i);
 				CornerType cornerType = GetCornerType(i);
 				Matrix m = (!isUpsideDown) ? (Matrix.CreateRotationY(rotation * (float)Math.PI / 2f) * Matrix.CreateTranslation(0.5f, 0f, 0.5f)) : (Matrix.CreateRotationY(rotation * (float)Math.PI / 2f) * Matrix.CreateTranslation(0.5f, -0.5f, 0.5f) * Matrix.CreateScale(1f, -1f, 1f) * Matrix.CreateTranslation(0f, 0.5f, 0f));
-				var blockMesh = new BlockMesh();
+				BlockMesh blockMesh = new();
 				switch (cornerType)
 				{
 					case CornerType.None:

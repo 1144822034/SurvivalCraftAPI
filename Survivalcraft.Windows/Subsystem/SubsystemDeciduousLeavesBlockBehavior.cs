@@ -26,7 +26,7 @@ public class SubsystemDeciduousLeavesBlockBehavior : SubsystemPollableBlockBehav
 
 	public SubsystemCellChangeQueue m_subsystemCellChangeQueue;
 
-	private Random m_random = new Random();
+	private Random m_random = new();
 
 	private DynamicArray<LeafParticles> m_leafParticles = [];
 

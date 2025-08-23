@@ -206,14 +206,8 @@ public class WidgetInput
 
 	public bool UseSoftMouseCursor
 	{
-		get
-		{
-			return m_useSoftMouseCursor;
-		}
-		set
-		{
-			m_useSoftMouseCursor = value;
-		}
+		get => m_useSoftMouseCursor;
+		set => m_useSoftMouseCursor = value;
 	}
 
 	public bool IsMouseCursorVisible
@@ -226,10 +220,7 @@ public class WidgetInput
 			}
 			return m_isMouseCursorVisible;
 		}
-		set
-		{
-			m_isMouseCursorVisible = value;
-		}
+		set => m_isMouseCursorVisible = value;
 	}
 
 	public Vector2? MousePosition
@@ -357,18 +348,12 @@ public class WidgetInput
 			}
 			return false;
 		}
-		set
-		{
-			m_isPadCursorVisible = value;
-		}
+		set => m_isPadCursorVisible = value;
 	}
 
 	public Vector2 PadCursorPosition
 	{
-		get
-		{
-			return m_padCursorPosition;
-		}
+		get => m_padCursorPosition;
 		set
 		{
 			Vector2 corner1;
@@ -416,15 +401,12 @@ public class WidgetInput
 			}
 			return false;
 		}
-		set
-		{
-			m_isVrCursorVisible = value;
-		}
+		set => m_isVrCursorVisible = value;
 	}
 
 	public Vector2? VrCursorPosition { get; set; }
 
-	public static WidgetInput EmptyInput { get; } = new WidgetInput(WidgetInputDevice.None);
+	public static WidgetInput EmptyInput { get; } = new(WidgetInputDevice.None);
 
 
 	public Widget Widget => m_widget;
@@ -1010,7 +992,7 @@ public class WidgetInput
 		{
 			Vector2 v = Vector2.Transform(PadCursorPosition, Widget.InvertedGlobalTransform);
 			Vector2 padStickPosition = GetPadStickPosition(GamePadStick.Left, SettingsManager.GamepadDeadZone);
-			Vector2 v2 = new Vector2(padStickPosition.X, 0f - padStickPosition.Y);
+			Vector2 v2 = new(padStickPosition.X, 0f - padStickPosition.Y);
 			v2 = 1200f * SettingsManager.GamepadCursorSpeed * v2.LengthSquared() * Vector2.Normalize(v2) * Time.FrameDuration;
 			v += v2;
 			PadCursorPosition = Vector2.Transform(v, Widget.GlobalTransform);

@@ -47,7 +47,7 @@ namespace Game
 			bool flag = Keyboard.IsKeyDown(Key.Control);
 			Vector3 direction = m_direction;
 			Vector3 unitY = Vector3.UnitY;
-			var vector3 = Vector3.Normalize(Vector3.Cross(direction, unitY));
+			Vector3 vector3 = Vector3.Normalize(Vector3.Cross(direction, unitY));
 			float num2 = 10f;
 			if (num)
 			{
@@ -70,7 +70,7 @@ namespace Game
 			m_position += m_velocity * dt;
 			m_direction = Vector3.Transform(m_direction, Matrix.CreateFromAxisAngle(unitY, 0.05f * m_rollAngle));
 			m_direction = Vector3.Transform(m_direction, Matrix.CreateFromAxisAngle(vector3, 0.2f * m_pitchSpeed));
-			var up = Vector3.TransformNormal(Vector3.UnitY, Matrix.CreateFromAxisAngle(m_direction, 0f - m_rollAngle));
+			Vector3 up = Vector3.TransformNormal(Vector3.UnitY, Matrix.CreateFromAxisAngle(m_direction, 0f - m_rollAngle));
 			SetupPerspectiveCamera(m_position, m_direction, up);
 		}
 	}

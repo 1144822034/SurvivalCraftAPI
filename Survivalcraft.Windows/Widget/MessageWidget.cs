@@ -58,7 +58,7 @@ namespace Game
 
 		public const int MaxMessages = 3;
 
-		public DynamicArray<Message> m_messages = new DynamicArray<Message>();
+		public DynamicArray<Message> m_messages = new();
 
 		public MessageWidget()
 		{

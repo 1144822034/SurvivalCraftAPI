@@ -59,7 +59,7 @@ namespace Game
 			EntryPoint();
 			AppDomain.CurrentDomain.AssemblyResolve += (sender, e) => {
 				//在程序目录下面寻找dll,解决部分设备找不到目录下程序集的问题
-				var location = new FileInfo(typeof(Program).Assembly.Location).Directory!.FullName;
+				string location = new FileInfo(typeof(Program).Assembly.Location).Directory!.FullName;
 				return Assembly.LoadFrom(Path.Combine(location, e.Name));
 			};
 
@@ -197,7 +197,7 @@ namespace Game
 				try
 				{
 					ScreensManager.SwitchScreen("MainMenu");
-					ViewGameLogDialog dialog = new ViewGameLogDialog();
+					ViewGameLogDialog dialog = new();
 					dialog.SetErrorHead(9,10);
 					DialogsManager.ShowDialog(null,dialog);
 					GameManager.DisposeProject();

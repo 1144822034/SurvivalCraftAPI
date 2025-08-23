@@ -50,11 +50,8 @@ namespace Engine.Graphics
 
 		public BlendFunction AlphaBlendFunction
 		{
-			get
-			{
-				return m_alphaBlendFunction;
-			}
-			set
+			get => m_alphaBlendFunction;
+            set
 			{
 				ThrowIfLocked();
 				m_alphaBlendFunction = value;
@@ -63,11 +60,8 @@ namespace Engine.Graphics
 
 		public Blend AlphaSourceBlend
 		{
-			get
-			{
-				return m_alphaSourceBlend;
-			}
-			set
+			get => m_alphaSourceBlend;
+            set
 			{
 				ThrowIfLocked();
 				m_alphaSourceBlend = value;
@@ -76,11 +70,8 @@ namespace Engine.Graphics
 
 		public Blend AlphaDestinationBlend
 		{
-			get
-			{
-				return m_alphaDestinationBlend;
-			}
-			set
+			get => m_alphaDestinationBlend;
+            set
 			{
 				ThrowIfLocked();
 				m_alphaDestinationBlend = value;
@@ -89,11 +80,8 @@ namespace Engine.Graphics
 
 		public BlendFunction ColorBlendFunction
 		{
-			get
-			{
-				return m_colorBlendFunction;
-			}
-			set
+			get => m_colorBlendFunction;
+            set
 			{
 				ThrowIfLocked();
 				m_colorBlendFunction = value;
@@ -102,11 +90,8 @@ namespace Engine.Graphics
 
 		public Blend ColorSourceBlend
 		{
-			get
-			{
-				return m_colorSourceBlend;
-			}
-			set
+			get => m_colorSourceBlend;
+            set
 			{
 				ThrowIfLocked();
 				m_colorSourceBlend = value;
@@ -115,11 +100,8 @@ namespace Engine.Graphics
 
 		public Blend ColorDestinationBlend
 		{
-			get
-			{
-				return m_colorDestinationBlend;
-			}
-			set
+			get => m_colorDestinationBlend;
+            set
 			{
 				ThrowIfLocked();
 				m_colorDestinationBlend = value;
@@ -128,11 +110,8 @@ namespace Engine.Graphics
 
 		public Vector4 BlendFactor
 		{
-			get
-			{
-				return m_blendFactor;
-			}
-			set
+			get => m_blendFactor;
+            set
 			{
 				ThrowIfLocked();
 				m_blendFactor = value;

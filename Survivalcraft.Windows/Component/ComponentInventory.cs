@@ -14,22 +14,13 @@ namespace Game
 
 		public override int ActiveSlotIndex
 		{
-			get
-			{
-				return m_activeSlotIndex;
-			}
-			set
-			{
-				m_activeSlotIndex = Math.Clamp(value, 0, VisibleSlotsCount - 1);
-			}
+			get => m_activeSlotIndex;
+			set => m_activeSlotIndex = Math.Clamp(value, 0, VisibleSlotsCount - 1);
 		}
 
 		public override int VisibleSlotsCount
 		{
-			get
-			{
-				return m_visibleSlotsCount;
-			}
+			get => m_visibleSlotsCount;
 			set
 			{
 				value = Math.Clamp(value, 0, 10);

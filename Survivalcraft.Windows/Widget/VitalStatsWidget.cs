@@ -143,25 +143,25 @@ namespace Game
 			}
 			if (m_strengthLink.IsClicked)
 			{
-				var factors = m_componentPlayer.ComponentLevel.m_strengthFactors;
+				List<ComponentLevel.Factor> factors = m_componentPlayer.ComponentLevel.m_strengthFactors;
 				float total = m_componentPlayer.ComponentLevel.StrengthFactor;
 				DialogsManager.ShowDialog(m_componentPlayer.GuiWidget, new LevelFactorDialog(LanguageControl.GetContentWidgets(GetType().Name, "Strength"), LanguageControl.GetContentWidgets(GetType().Name, 16), factors, total));
 			}
 			if (m_resilienceLink.IsClicked)
 			{
-				var factors2 = m_componentPlayer.ComponentLevel.m_resilienceFactors;
+				List<ComponentLevel.Factor> factors2 = m_componentPlayer.ComponentLevel.m_resilienceFactors;
                 float total2 = m_componentPlayer.ComponentLevel.ResilienceFactor;
 				DialogsManager.ShowDialog(m_componentPlayer.GuiWidget, new LevelFactorDialog(LanguageControl.GetContentWidgets(GetType().Name, "Resilience"), LanguageControl.GetContentWidgets(GetType().Name, 17), factors2, total2));
 			}
 			if (m_speedLink.IsClicked)
 			{
-				var factors3 = m_componentPlayer.ComponentLevel.m_speedFactors;
+				List<ComponentLevel.Factor> factors3 = m_componentPlayer.ComponentLevel.m_speedFactors;
                 float total3 = m_componentPlayer.ComponentLevel.SpeedFactor;
 				DialogsManager.ShowDialog(m_componentPlayer.GuiWidget, new LevelFactorDialog(LanguageControl.GetContentWidgets(GetType().Name, "Speed"), LanguageControl.GetContentWidgets(GetType().Name, 18), factors3, total3));
 			}
 			if (m_hungerLink.IsClicked)
 			{
-				var factors4 = m_componentPlayer.ComponentLevel.m_hungerFactors;
+				List<ComponentLevel.Factor> factors4 = m_componentPlayer.ComponentLevel.m_hungerFactors;
 				float total4 = m_componentPlayer.ComponentLevel.HungerFactor;
 				DialogsManager.ShowDialog(m_componentPlayer.GuiWidget, new LevelFactorDialog(LanguageControl.GetContentWidgets(GetType().Name, "Hunger"), LanguageControl.GetContentWidgets(GetType().Name, 19), factors4, total4));
 			}

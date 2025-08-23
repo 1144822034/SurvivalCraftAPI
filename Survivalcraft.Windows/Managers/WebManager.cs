@@ -62,7 +62,7 @@ namespace Game
 		}
 #if WINDOWS
 		[DllImport("wininet.dll")]
-		public extern static bool InternetGetConnectedState(out int Description, int ReservedValue);
+		public static extern bool InternetGetConnectedState(out int Description, int ReservedValue);
 #endif
 		public static bool IsInternetConnectionAvailable()
 		{
@@ -178,7 +178,7 @@ namespace Game
 
 		public static string UrlParametersToString(Dictionary<string, string> values)
 		{
-			var stringBuilder = new StringBuilder();
+			StringBuilder stringBuilder = new();
 			string value = string.Empty;
 			foreach (KeyValuePair<string, string> value2 in values)
 			{
@@ -206,7 +206,7 @@ namespace Game
 
 		public static Dictionary<string, string> UrlParametersFromString(string s)
 		{
-			var dictionary = new Dictionary<string, string>();
+			Dictionary<string,string> dictionary = new();
 			string[] array = s.Split('&', StringSplitOptions.RemoveEmptyEntries);
 			for (int i = 0; i < array.Length; i++)
 			{
@@ -236,8 +236,8 @@ namespace Game
 					{
 						throw new InvalidOperationException("Internet connection is unavailable.");
 					}
-					using var client = new HttpClient();
-					var dictionary = new Dictionary<string,string>();
+					using HttpClient client = new();
+					Dictionary<string,string> dictionary = new();
 					if(headers != null)
 					{
 						foreach(KeyValuePair<string,string> header in headers)
@@ -249,7 +249,7 @@ namespace Game
 						}
 					}
 #if !ANDROID
-					var httpContent = new ProgressHttpContent(data, progress);
+					ProgressHttpContent httpContent = new(data, progress);
 #else
 					HttpContent httpContent = (progress != null) ? ((HttpContent)new ProgressHttpContent(data,progress)) : ((HttpContent)new StreamContent(data));
 #endif

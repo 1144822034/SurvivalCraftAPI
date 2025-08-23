@@ -4,9 +4,9 @@ namespace Engine.Serialization
 	{
 		private Dictionary<int, object> m_objectById = [];
 
-        private DynamicArray<object> m_stack = new DynamicArray<object>();
+        private DynamicArray<object> m_stack = new();
 
-        public ReadOnlyList<object> Stack => new ReadOnlyList<object>(m_stack);
+        public ReadOnlyList<object> Stack => new(m_stack);
 
         protected InputArchive(int version, object context)
         : base(version, context)
@@ -80,14 +80,14 @@ namespace Engine.Serialization
 
 		public void Serialize<T>(string name, Action<T> setter)
 		{
-			var value = default(T);
+			T value = default(T);
             ReadObject(name, GetSerializeData(typeof(T), allowEmptySerializer: true), ref value, allowOverwriteOfExistingObject: true);
 			setter(value);
 		}
 
 		public T Serialize<T>(string name)
 		{
-			var value = default(T);
+			T value = default(T);
             ReadObject(name, GetSerializeData(typeof(T), allowEmptySerializer: true), ref value, allowOverwriteOfExistingObject: true);
 			return value;
 		}
@@ -101,14 +101,14 @@ namespace Engine.Serialization
 
 		public List<T> SerializeCollection<T>(string name)
 		{
-			var list = new List<T>();
+			List<T> list = new();
 			SerializeCollection(name, list);
 			return list;
 		}
 
         public void SerializeCollection<T>(string name, Action<T> adder)
         {
-            List<T> list = new List<T>();
+            List<T> list = new();
             SerializeCollection(name, list);
             foreach (T item in list)
             {
@@ -118,7 +118,7 @@ namespace Engine.Serialization
 
 		public Dictionary<K, V> SerializeDictionary<K, V>(string name)
 		{
-			var dictionary = new Dictionary<K, V>();
+			Dictionary<K, V> dictionary = new();
 			SerializeDictionary(name, dictionary);
 			return dictionary;
 		}

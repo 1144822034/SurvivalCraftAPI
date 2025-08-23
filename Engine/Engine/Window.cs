@@ -61,7 +61,7 @@ namespace Engine
 #if ANDROID
                 return new Point2(m_view.Size.X, m_view.Size.Y);
 #else
-                var size = m_gameWindow?.Monitor?.Bounds.Size ?? Monitor.GetMainMonitor(null).Bounds.Size;
+                Vector2D<int> size = m_gameWindow?.Monitor?.Bounds.Size ?? Monitor.GetMainMonitor(null).Bounds.Size;
                 return new Point2(size.X, size.Y);
 #endif
             }
@@ -291,7 +291,7 @@ namespace Engine
 #if DIRECT3D11
             GraphicsAPI api = GraphicsAPI.None;
 #elif DEBUG
-            GraphicsAPI api = new GraphicsAPI(ContextAPI.OpenGLES, ContextProfile.Compatability, ContextFlags.Debug, new APIVersion(3, 2));
+            GraphicsAPI api = new(ContextAPI.OpenGLES, ContextProfile.Compatability, ContextFlags.Debug, new APIVersion(3, 2));
 #elif ANDROID
             Activity.GetGlEsVersion(out int major, out int minor);
             GraphicsAPI api = new GraphicsAPI(ContextAPI.OpenGLES, new APIVersion(major, minor));

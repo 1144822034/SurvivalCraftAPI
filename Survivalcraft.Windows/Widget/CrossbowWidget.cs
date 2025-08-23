@@ -32,7 +32,7 @@ namespace Game
 			{
 				for (int j = 0; j < m_inventoryGrid.ColumnsCount; j++)
 				{
-					var widget = new InventorySlotWidget();
+					InventorySlotWidget widget = new();
 					m_inventoryGrid.Children.Add(widget);
 					m_inventoryGrid.SetWidgetCell(widget, new Point2(j, i));
 				}

@@ -156,22 +156,13 @@ namespace Game
 
 		public int Index
 		{
-			get
-			{
-				return m_index;
-			}
-			set
-			{
-				m_index = value;
-			}
+			get => m_index;
+			set => m_index = value;
 		}
 
 		public string Name
 		{
-			get
-			{
-				return m_name;
-			}
+			get => m_name;
 			set
 			{
 				if (value.Length > 0)
@@ -199,22 +190,13 @@ namespace Game
 
 		public FurnitureSet FurnitureSet
 		{
-			get
-			{
-				return m_furnitureSet;
-			}
-			set
-			{
-				m_furnitureSet = value;
-			}
+			get => m_furnitureSet;
+			set => m_furnitureSet = value;
 		}
 
 		public FurnitureDesign LinkedDesign
 		{
-			get
-			{
-				return m_linkedDesign;
-			}
+			get => m_linkedDesign;
 			set
 			{
 				if (value != m_linkedDesign)
@@ -227,10 +209,7 @@ namespace Game
 
 		public FurnitureInteractionMode InteractionMode
 		{
-			get
-			{
-				return m_interactionMode;
-			}
+			get => m_interactionMode;
 			set
 			{
 				if (value != m_interactionMode)
@@ -392,7 +371,7 @@ namespace Game
 			{
 				int num = m_values[i];
 				int num2 = Terrain.ExtractContents(num);
-				var paintableBlock = BlocksManager.Blocks[num2] as IPaintableBlock;
+				IPaintableBlock paintableBlock = BlocksManager.Blocks[num2] as IPaintableBlock;
 				array[i] = paintableBlock != null ? paintableBlock.Paint(null, num, color) : num;
 			}
 			SetValues(Resolution, array);
@@ -470,7 +449,7 @@ namespace Game
 					for (int k = 0; k < m_resolution; k++)
 					{
 						Vector3 vector = RotatePoint(new Vector3(k, j, i) - new Vector3((m_resolution / 2f) - 0.5f), axis, steps) + new Vector3((m_resolution / 2f) - 0.5f);
-						var point = new Point3((int)MathF.Round(vector.X), (int)MathF.Round(vector.Y), (int)MathF.Round(vector.Z));
+						Point3 point = new((int)MathF.Round(vector.X), (int)MathF.Round(vector.Y), (int)MathF.Round(vector.Z));
 						if (point.X >= 0 && point.X < m_resolution && point.Y >= 0 && point.Y < m_resolution && point.Z >= 0 && point.Z < m_resolution)
 						{
 							array[point.X + (point.Y * m_resolution) + (point.Z * m_resolution * m_resolution)] = m_values[k + (j * m_resolution) + (i * m_resolution * m_resolution)];
@@ -491,7 +470,7 @@ namespace Game
 					for (int k = 0; k < m_resolution; k++)
 					{
 						Vector3 vector = MirrorPoint(new Vector3(k, j, i) - new Vector3((m_resolution / 2f) - 0.5f), axis) + new Vector3((m_resolution / 2f) - 0.5f);
-						var point = new Point3((int)MathF.Round(vector.X), (int)MathF.Round(vector.Y), (int)MathF.Round(vector.Z));
+						Point3 point = new((int)MathF.Round(vector.X), (int)MathF.Round(vector.Y), (int)MathF.Round(vector.Z));
 						if (point.X >= 0 && point.X < m_resolution && point.Y >= 0 && point.Y < m_resolution && point.Z >= 0 && point.Z < m_resolution)
 						{
 							array[point.X + (point.Y * m_resolution) + (point.Z * m_resolution * m_resolution)] = m_values[k + (j * m_resolution) + (i * m_resolution * m_resolution)];
@@ -504,7 +483,7 @@ namespace Game
 
 		public ValuesDictionary Save()
 		{
-			var stringBuilder = new StringBuilder();
+			StringBuilder stringBuilder = new();
 			int num = m_values[0];
 			int num2 = 1;
 			for (int i = 1; i < m_values.Length; i++)
@@ -527,7 +506,7 @@ namespace Game
 			stringBuilder.Append('*');
 			stringBuilder.Append(num.ToString(CultureInfo.InvariantCulture));
 			stringBuilder.Append(',');
-			var valuesDictionary = new ValuesDictionary();
+			ValuesDictionary valuesDictionary = new();
 			if (!string.IsNullOrEmpty(Name))
 			{
 				valuesDictionary.SetValue("Name", Name);
@@ -587,7 +566,7 @@ namespace Game
 
 		public FurnitureDesign Clone()
 		{
-			var furnitureDesign = new FurnitureDesign(m_subsystemTerrain);
+			FurnitureDesign furnitureDesign = new(m_subsystemTerrain);
 			furnitureDesign.SetValues(Resolution, m_values);
 			furnitureDesign.Name = Name;
 			furnitureDesign.LinkedDesign = LinkedDesign;
@@ -598,7 +577,7 @@ namespace Game
 		public List<FurnitureDesign> CloneChain()
 		{
 			List<FurnitureDesign> list = ListChain();
-			var list2 = new List<FurnitureDesign>(list.Count);
+			List<FurnitureDesign> list2 = new(list.Count);
 			for (int i = 0; i < list.Count; i++)
 			{
 				list2.Add(list[i].Clone());
@@ -618,8 +597,8 @@ namespace Game
 		public List<FurnitureDesign> ListChain()
 		{
 			FurnitureDesign furnitureDesign = this;
-			var hashSet = new HashSet<FurnitureDesign>();
-			var list = new List<FurnitureDesign>();
+			HashSet<FurnitureDesign> hashSet = new();
+			List<FurnitureDesign> list = new();
 			do
 			{
 				hashSet.Add(furnitureDesign);
@@ -632,8 +611,8 @@ namespace Game
 
 		public static List<List<FurnitureDesign>> ListChains(IEnumerable<FurnitureDesign> designs)
 		{
-			var list = new List<List<FurnitureDesign>>();
-			var list2 = new List<FurnitureDesign>(designs);
+			List<List<FurnitureDesign>> list = new();
+			List<FurnitureDesign> list2 = new(designs);
 			while (list2.Count > 0)
 			{
 				List<FurnitureDesign> list3 = list2[0].ListChain();
@@ -793,11 +772,11 @@ namespace Game
 						point5 = new Point3(m_resolution - 1, m_resolution - 1, m_resolution - 1);
 						break;
 				}
-				var blockMesh = new BlockMesh();
-				var blockMesh2 = new BlockMesh();
+				BlockMesh blockMesh = new();
+				BlockMesh blockMesh2 = new();
 				for (int j = 0; j < m_resolution; j++)
 				{
-					var array = new Cell[m_resolution * m_resolution];
+					Cell[] array = new Cell[m_resolution * m_resolution];
 					for (int k = 0; k < m_resolution; k++)
 					{
 						for (int l = 0; l < m_resolution; l++)
@@ -858,7 +837,7 @@ namespace Game
 								int num14 = block.GetFaceTextureSlot(i, value2);
 								bool isEmissive = false;
 								Color color = Color.White;
-								var paintableBlock = block as IPaintableBlock;
+								IPaintableBlock paintableBlock = block as IPaintableBlock;
 								if (paintableBlock != null)
 								{
 									int? paintColor = paintableBlock.GetPaintColor(value2);
@@ -960,7 +939,7 @@ namespace Game
 		public void CreateCollisionAndInteractionBoxes()
 		{
 			Subdivision subdivision = CreateBoundingBoxesHelper(Box, 0, CreatePrecedingEmptySpacesArray());
-			var list = new List<BoundingBox>(subdivision.Boxes.Count);
+			List<BoundingBox> list = new(subdivision.Boxes.Count);
 			for (int i = 0; i < subdivision.Boxes.Count; i++)
 			{
 				Box box = subdivision.Boxes[i];
@@ -975,13 +954,13 @@ namespace Game
 				m_collisionBoxesByRotation[j] = new BoundingBox[list.Count];
 				for (int k = 0; k < list.Count; k++)
 				{
-					var v = Vector3.Transform(list[k].Min, m);
-					var v2 = Vector3.Transform(list[k].Max, m);
-					var boundingBox = new BoundingBox(Vector3.Min(v, v2), Vector3.Max(v, v2));
+					Vector3 v = Vector3.Transform(list[k].Min, m);
+					Vector3 v2 = Vector3.Transform(list[k].Max, m);
+					BoundingBox boundingBox = new(Vector3.Min(v, v2), Vector3.Max(v, v2));
 					m_collisionBoxesByRotation[j][k] = boundingBox;
 				}
 			}
-			var list2 = new List<BoundingBox>(list);
+			List<BoundingBox> list2 = new(list);
 			while (true)
 			{
 				int num = 0;
@@ -1032,9 +1011,9 @@ namespace Game
 						m_interactionBoxesByRotation[num3] = new BoundingBox[list2.Count];
 						for (int num4 = 0; num4 < list2.Count; num4++)
 						{
-							var v3 = Vector3.Transform(list2[num4].Min, m2);
-							var v4 = Vector3.Transform(list2[num4].Max, m2);
-							var boundingBox2 = new BoundingBox(Vector3.Min(v3, v4), Vector3.Max(v3, v4));
+							Vector3 v3 = Vector3.Transform(list2[num4].Min, m2);
+							Vector3 v4 = Vector3.Transform(list2[num4].Max, m2);
+							BoundingBox boundingBox2 = new(Vector3.Min(v3, v4), Vector3.Max(v3, v4));
 							m_interactionBoxesByRotation[num3][num4] = boundingBox2;
 						}
 					}
@@ -1050,7 +1029,7 @@ namespace Game
 
 		public void CreateTorchPoints()
 		{
-			var list = new List<BoundingBox>();
+			List<BoundingBox> list = new();
 			for (int i = 0; i < Resolution; i++)
 			{
 				for (int j = 0; j < Resolution; j++)
@@ -1062,7 +1041,7 @@ namespace Game
 						{
 							continue;
 						}
-						var boundingBox = new BoundingBox(new Vector3(k, j, i) / Resolution, new Vector3(k + 1, j + 1, i + 1) / Resolution);
+						BoundingBox boundingBox = new(new Vector3(k, j, i) / Resolution, new Vector3(k + 1, j + 1, i + 1) / Resolution);
 						int num2 = -1;
 						for (int l = 0; l < list.Count; l++)
 						{
@@ -1096,8 +1075,8 @@ namespace Game
 				m_torchPointsByRotation[m] = new BoundingBox[list.Count];
 				for (int n = 0; n < list.Count; n++)
 				{
-					var v = Vector3.Transform(list[n].Min, m2);
-					var v2 = Vector3.Transform(list[n].Max, m2);
+					Vector3 v = Vector3.Transform(list[n].Min, m2);
+					Vector3 v2 = Vector3.Transform(list[n].Max, m2);
 					m_torchPointsByRotation[m][n] = new BoundingBox(Vector3.Min(v, v2), Vector3.Max(v, v2));
 				}
 			}
@@ -1105,7 +1084,7 @@ namespace Game
 
 		public void CalculateMainValue()
 		{
-			var dictionary = new Dictionary<int, int>();
+			Dictionary<int,int> dictionary = new();
 			for (int i = 0; i < Resolution; i++)
 			{
 				for (int j = 0; j < Resolution; j++)
@@ -1298,7 +1277,7 @@ namespace Game
 					if (j == num || surface[j + (i * m_resolution)].Value != value)
 					{
 						num = j;
-						var point = new Point2(num - start.X, i - start.Y + 1);
+						Point2 point = new(num - start.X, i - start.Y + 1);
 						if (point.X * point.Y > result.X * result.Y)
 						{
 							result = point;

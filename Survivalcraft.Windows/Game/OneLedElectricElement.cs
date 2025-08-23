@@ -24,10 +24,10 @@ namespace Game
 			int data = Terrain.ExtractData(SubsystemElectricity.SubsystemTerrain.Terrain.GetCellValue(cellFace.X, cellFace.Y, cellFace.Z));
 			int mountingFace = FourLedBlock.GetMountingFace(data);
 			m_color = LedBlock.LedColors[FourLedBlock.GetColor(data)];
-			var v = new Vector3(cellFace.X + 0.5f, cellFace.Y + 0.5f, cellFace.Z + 0.5f);
+			Vector3 v = new(cellFace.X + 0.5f, cellFace.Y + 0.5f, cellFace.Z + 0.5f);
 			Vector3 vector = CellFace.FaceToVector3(mountingFace);
 			Vector3 vector2 = (mountingFace < 4) ? Vector3.UnitY : Vector3.UnitX;
-			var right = Vector3.Cross(vector, vector2);
+			Vector3 right = Vector3.Cross(vector, vector2);
 			m_glowPoint = m_subsystemGlow.AddGlowPoint();
 			m_glowPoint.Position = v - (0.4375f * CellFace.FaceToVector3(mountingFace));
 			m_glowPoint.Forward = vector;

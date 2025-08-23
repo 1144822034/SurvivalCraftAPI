@@ -14,34 +14,22 @@ namespace Engine.Graphics
 
 		public Texture2D Texture
 		{
-			set
-			{
-				m_textureParameter.SetValue(value);
-			}
+			set => m_textureParameter.SetValue(value);
 		}
 
 		public SamplerState SamplerState
 		{
-			set
-			{
-				m_samplerStateParameter.SetValue(value);
-			}
+			set => m_samplerStateParameter.SetValue(value);
 		}
 
 		public Vector4 Color
 		{
-			set
-			{
-				m_colorParameter.SetValue(value);
-			}
+			set => m_colorParameter.SetValue(value);
 		}
 
 		public float AlphaThreshold
 		{
-			set
-			{
-				m_alphaThresholdParameter.SetValue(value);
-			}
+			set => m_alphaThresholdParameter.SetValue(value);
 		}
 
 		public SkyShader(string vsc, string psc, bool useVertexColor, bool useTexture, bool useAlphaThreshold)

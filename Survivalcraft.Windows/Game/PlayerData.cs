@@ -120,10 +120,7 @@ namespace Game
 
 		public string Name
 		{
-			get
-			{
-				return m_name;
-			}
+			get => m_name;
 			set
 			{
 				if (value != m_name)
@@ -142,10 +139,7 @@ namespace Game
 
 		public PlayerClass PlayerClass
 		{
-			get
-			{
-				return m_playerClass;
-			}
+			get => m_playerClass;
 			set
 			{
 				if (SubsystemPlayers.PlayersData.Contains(this))
@@ -326,7 +320,7 @@ namespace Game
 								Log.Error("Spawning Player Error!");
 								Log.Error(ex);
                                 ScreensManager.SwitchScreen(ScreensManager.FindScreen<PlayScreen>("Play"));
-                                ViewGameLogDialog dialog = new ViewGameLogDialog();
+                                ViewGameLogDialog dialog = new();
 								dialog.SetErrorHead(12, 10);
                                 DialogsManager.ShowDialog(null, dialog);
 								GameManager.DisposeProject();
@@ -420,7 +414,7 @@ namespace Game
 
 		public void RandomizeCharacterSkin()
 		{
-			var random = new Random();
+			Random random = new();
 			CharacterSkinsManager.UpdateCharacterSkinsList();
 			string[] array = CharacterSkinsManager.CharacterSkinsNames.Where(n => CharacterSkinsManager.IsBuiltIn(n) && CharacterSkinsManager.GetPlayerClass(n) == m_playerClass).ToArray();
 			string[] second = SubsystemPlayers.PlayersData.Select(pd => pd.CharacterSkinName).ToArray();
@@ -573,7 +567,7 @@ namespace Game
 				}
 			}
 			Vector2 vector = ComponentIntro.FindOceanDirection(m_subsystemTerrain.TerrainContentsGenerator, new Vector2(x, z));
-			var vector2 = new Vector3(x, num2 + 1.5f, z);
+			Vector3 vector2 = new(x, num2 + 1.5f, z);
 			for (int k = -1; k <= 1; k++)
 			{
 				Vector3 end = vector2 + new Vector3(30f * vector.X, 5f * k, 30f * vector.Y);

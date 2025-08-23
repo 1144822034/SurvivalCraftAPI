@@ -8,14 +8,8 @@ namespace Game
 
 		public static bool IsTrialMode
 		{
-			get
-			{
-				return m_isTrialMode;
-			}
-			set
-			{
-				m_isTrialMode = value;
-			}
+			get => m_isTrialMode;
+			set => m_isTrialMode = value;
 		}
 
 		public static void Initialize()

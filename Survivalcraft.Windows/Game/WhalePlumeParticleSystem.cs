@@ -58,7 +58,7 @@ namespace Game
 			}
 			float num = MathF.Pow(0.001f, dt);
 			float num2 = MathUtils.Lerp(4f, 10f, MathUtils.Saturate(2f * m_time / m_duration));
-			var v = new Vector3(0f, 1f, 2f);
+			Vector3 v = new(0f, 1f, 2f);
 			bool flag = false;
 			for (int i = 0; i < Particles.Length; i++)
 			{

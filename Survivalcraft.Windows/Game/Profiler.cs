@@ -56,8 +56,7 @@ namespace Game
 			{
 				if (!m_metrics.TryGetValue(name, out m_metric))
 				{
-					m_metric = new Metric();
-					m_metric.Name = name;
+					m_metric = new Metric { Name = name };
 					m_maxNameLength = MathUtils.Max(m_maxNameLength, name.Length);
 					m_metrics.Add(name, m_metric);
 					m_sortedMetrics.Add(m_metric);

@@ -35,7 +35,7 @@ namespace Game
 					}
 				}
 				DynamicArray<TerrainVertex> vertices = alphaTestSubsetsByFace[0].Vertices;
-				var indices = alphaTestSubsetsByFace[0].Indices;
+				TerrainGeometryDynamicArray<int> indices = alphaTestSubsetsByFace[0].Indices;
 				int count = vertices.Count;
 				vertices.Count += 4;
 				BlockGeometryGenerator.SetupLitCornerVertex(x, y, z + 1, Color.White, num5, 0, ref vertices.Array[count]);
@@ -73,7 +73,7 @@ namespace Game
 					}
 				}
 				DynamicArray<TerrainVertex> vertices2 = alphaTestSubsetsByFace[1].Vertices;
-				var indices2 = alphaTestSubsetsByFace[1].Indices;
+				TerrainGeometryDynamicArray<int> indices2 = alphaTestSubsetsByFace[1].Indices;
 				int count2 = vertices2.Count;
 				vertices2.Count += 4;
 				BlockGeometryGenerator.SetupLitCornerVertex(x + 1, y, z, Color.White, num8, 0, ref vertices2.Array[count2]);
@@ -111,7 +111,7 @@ namespace Game
 					}
 				}
 				DynamicArray<TerrainVertex> vertices3 = alphaTestSubsetsByFace[2].Vertices;
-				var indices3 = alphaTestSubsetsByFace[2].Indices;
+				TerrainGeometryDynamicArray<int> indices3 = alphaTestSubsetsByFace[2].Indices;
 				int count3 = vertices3.Count;
 				vertices3.Count += 4;
 				BlockGeometryGenerator.SetupLitCornerVertex(x, y, z, Color.White, num11, 0, ref vertices3.Array[count3]);
@@ -151,7 +151,7 @@ namespace Game
 				}
 			}
 			DynamicArray<TerrainVertex> vertices4 = alphaTestSubsetsByFace[3].Vertices;
-			var indices4 = alphaTestSubsetsByFace[3].Indices;
+			TerrainGeometryDynamicArray<int> indices4 = alphaTestSubsetsByFace[3].Indices;
 			int count4 = vertices4.Count;
 			vertices4.Count += 4;
 			BlockGeometryGenerator.SetupLitCornerVertex(x, y, z, Color.White, num14, 0, ref vertices4.Array[count4]);

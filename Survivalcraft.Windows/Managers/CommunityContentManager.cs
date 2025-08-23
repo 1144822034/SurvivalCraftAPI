@@ -36,10 +36,7 @@ namespace Game
 			{
 				m_idToAddressMap.Remove(MakeContentIdString(ExternalContentType.FurniturePack, path));
 			};
-			Window.Deactivated += delegate
-			{
-				Save();
-			};
+			Window.Deactivated += Save;
 		}
 
 		public static string GetDownloadedContentAddress(ExternalContentType type, string name)
@@ -62,8 +59,8 @@ namespace Game
 				failure(new InvalidOperationException(LanguageControl.Get(fName, "1")));
 				return;
 			}
-			var dictionary = new Dictionary<string, string>();
-			var Header = new Dictionary<string, string>
+			Dictionary<string,string> dictionary = new();
+			Dictionary<string,string> Header = new()
 			{
 				{ "Content-Type", "application/x-www-form-urlencoded" }
 			};
@@ -85,7 +82,7 @@ namespace Game
 					string data = Encoding.UTF8.GetString(result,0,result.Length);
 					XElement xElement = XmlUtils.LoadXmlFromString(data, throwOnError: true);
 					string attributeValue = XmlUtils.GetAttributeValue<string>(xElement, "NextCursor");
-					var list = new List<CommunityContentEntry>();
+					List<CommunityContentEntry> list = new();
 					foreach (XElement item in xElement.Elements())
 					{
 						try
@@ -109,8 +106,9 @@ namespace Game
 								Index = XmlUtils.GetAttributeValue<int>(item, "Id")
 							});
 						}
-						catch (Exception)
+						catch(Exception)
 						{
+							// ignored
 						}
 					}
 					success(list, attributeValue);
@@ -119,10 +117,7 @@ namespace Game
 				{
 					failure(obj);
 				}
-			}, delegate (Exception error)
-			{
-				failure(error);
-			});
+			}, failure);
 		}
 
 		public static void Download(string address, string name, ExternalContentType type, string userId, CancellableProgress progress, Action success, Action<Exception> failure)
@@ -224,10 +219,7 @@ namespace Game
 					}), progress, delegate
 					{
 						success();
-					}, delegate (Exception error)
-					{
-						failure(error);
-					});
+					}, failure);
 				}, failure);
 			}
 		}
@@ -240,7 +232,7 @@ namespace Game
 				failure(new InvalidOperationException(LanguageControl.Get(fName, "1")));
 				return;
 			}
-			var dictionary = new Dictionary<string, string>
+			Dictionary<string,string> dictionary = new()
 			{
 				{ "Action", "delete" },
 				{ "UserId", userId },
@@ -251,12 +243,7 @@ namespace Game
 			WebManager.Post(m_scResDirAddress, null, null, WebManager.UrlParametersToStream(dictionary), progress, delegate
 			{
 				success();
-
-			}, delegate (Exception error)
-			{
-				failure(error);
-
-			});
+			}, failure);
 		}
 
 		public static void Rate(string address, string userId, int rating, CancellableProgress progress, Action success, Action<Exception> failure)
@@ -297,7 +284,7 @@ namespace Game
 				return;
 			}
 
-			var dictionary = new Dictionary<string, string>
+			Dictionary<string,string> dictionary = new()
 			{
 				{ "Action", "feedback" },
 				{ "Feedback", feedback }
@@ -324,7 +311,7 @@ namespace Game
 			WebManager.Post(m_scResDirAddress, null, null, WebManager.UrlParametersToStream(dictionary), progress, delegate
 			{
 				string key = MakeFeedbackCacheKey(address, feedback, userId);
-				if (m_feedbackCache.ContainsKey(key))
+				if (!m_feedbackCache.TryAdd(key, true))
 				{
 					Task.Run(delegate
 					{
@@ -333,12 +320,8 @@ namespace Game
 					});
 					return;
 				}
-				m_feedbackCache[key] = true;
 				success();
-			}, delegate (Exception error)
-			{
-				failure(error);
-			});
+			}, failure);
 		}
 
 /*
@@ -438,11 +421,11 @@ namespace Game
 				failure(new InvalidOperationException(LanguageControl.Get(fName, "1")));
 				return;
 			}
-			var header = new Dictionary<string, string>
+			Dictionary<string,string> header = new()
 			{
 				{ "Content-Type", "application/x-www-form-urlencoded" }
 			};
-			var dictionary = new Dictionary<string, string>
+			Dictionary<string,string> dictionary = new()
 			{
 				{ "Action", "UpdateLockState" },
 				{ "Id", id.ToString() },
@@ -451,13 +434,7 @@ namespace Game
 				{ "Duration", duration.ToString() },
 				{ "Reason", reason }
 			};
-			WebManager.Post("https://m.schub.top/com/api/zh/userList", null, header, WebManager.UrlParametersToStream(dictionary), progress, delegate (byte[] data)
-			{
-				success(data);
-			}, delegate (Exception error)
-			{
-				failure(error);
-			});
+			WebManager.Post("https://m.schub.top/com/api/zh/userList", null, header, WebManager.UrlParametersToStream(dictionary), progress, success, failure);
 		}
 
 		public static void ResetPassword(int id, CancellableProgress progress, Action<byte[]> success, Action<Exception> failure)
@@ -468,23 +445,17 @@ namespace Game
 				failure(new InvalidOperationException(LanguageControl.Get(fName, "1")));
 				return;
 			}
-			var header = new Dictionary<string, string>
+			Dictionary<string,string> header = new()
 			{
 				{ "Content-Type", "application/x-www-form-urlencoded" }
 			};
-			var dictionary = new Dictionary<string, string>
+			Dictionary<string,string> dictionary = new()
 			{
 				{ "Action", "ResetPassword" },
 				{ "Id", id.ToString() },
 				{ "Operater", SettingsManager.ScpboxAccessToken }
 			};
-			WebManager.Post("https://m.schub.top/com/api/zh/userList", null, header, WebManager.UrlParametersToStream(dictionary), progress, delegate (byte[] data)
-			{
-				success(data);
-			}, delegate (Exception error)
-			{
-				failure(error);
-			});
+			WebManager.Post("https://m.schub.top/com/api/zh/userList", null, header, WebManager.UrlParametersToStream(dictionary), progress, success, failure);
 		}
 
 		public static void UpdateBoutique(string type, int id, int boutique, CancellableProgress progress, Action<byte[]> success, Action<Exception> failure)
@@ -495,24 +466,18 @@ namespace Game
 				failure(new InvalidOperationException(LanguageControl.Get(fName, "1")));
 				return;
 			}
-			var header = new Dictionary<string, string>
+			Dictionary<string,string> header = new()
 			{
 				{ "Content-Type", "application/x-www-form-urlencoded" }
 			};
-			var dictionary = new Dictionary<string, string>
+			Dictionary<string,string> dictionary = new()
 			{
 				{ "Type", type },
 				{ "Id", id.ToString() },
 				{ "Operater", SettingsManager.ScpboxAccessToken },
 				{ "Boutique", boutique.ToString() }
 			};
-			WebManager.Post("https://m.schub.top/com/api/zh/boutique", null, header, WebManager.UrlParametersToStream(dictionary), progress, delegate (byte[] data)
-			{
-				success(data);
-			}, delegate (Exception error)
-			{
-				failure(error);
-			});
+			WebManager.Post("https://m.schub.top/com/api/zh/boutique", null, header, WebManager.UrlParametersToStream(dictionary), progress, success, failure);
 		}
 
 		public static void UpdateHidePara(int id, int isShow, CancellableProgress progress, Action<byte[]> success, Action<Exception> failure)
@@ -523,23 +488,17 @@ namespace Game
 				failure(new InvalidOperationException(LanguageControl.Get(fName, "1")));
 				return;
 			}
-			var header = new Dictionary<string, string>
+			Dictionary<string,string> header = new()
 			{
 				{ "Content-Type", "application/x-www-form-urlencoded" }
 			};
-			var dictionary = new Dictionary<string, string>
+			Dictionary<string,string> dictionary = new()
 			{
 				{ "Id", id.ToString() },
 				{ "Operater", SettingsManager.ScpboxAccessToken },
 				{ "IsShow", isShow.ToString() }
 			};
-			WebManager.Post("https://m.schub.top/com/api/zh/hide", null, header, WebManager.UrlParametersToStream(dictionary), progress, delegate (byte[] data)
-			{
-				success(data);
-			}, delegate (Exception error)
-			{
-				failure(error);
-			});
+			WebManager.Post("https://m.schub.top/com/api/zh/hide", null, header, WebManager.UrlParametersToStream(dictionary), progress, success, failure);
 		}
 
 		public static void DeleteFile(int id, CancellableProgress progress, Action<byte[]> success, Action<Exception> failure)
@@ -550,22 +509,16 @@ namespace Game
 				failure(new InvalidOperationException(LanguageControl.Get(fName, "1")));
 				return;
 			}
-			var header = new Dictionary<string, string>
+			Dictionary<string,string> header = new()
 			{
 				{ "Content-Type", "application/x-www-form-urlencoded" }
 			};
-			var dictionary = new Dictionary<string, string>
+			Dictionary<string,string> dictionary = new()
 			{
 				{ "Id", id.ToString() },
 				{ "Operater", SettingsManager.ScpboxAccessToken }
 			};
-			WebManager.Post("https://m.schub.top/com/api/zh/deleteFile", null, header, WebManager.UrlParametersToStream(dictionary), progress, delegate (byte[] data)
-			{
-				success(data);
-			}, delegate (Exception error)
-			{
-				failure(error);
-			});
+			WebManager.Post("https://m.schub.top/com/api/zh/deleteFile", null, header, WebManager.UrlParametersToStream(dictionary), progress, success, failure);
 		}
 
 		public static void IsAdmin(CancellableProgress progress, Action<bool> success, Action<Exception> failure)
@@ -576,11 +529,11 @@ namespace Game
 				failure(new InvalidOperationException(LanguageControl.Get(fName, "1")));
 				return;
 			}
-			var header = new Dictionary<string, string>
+			Dictionary<string,string> header = new()
 			{
 				{ "Content-Type", "application/x-www-form-urlencoded" }
 			};
-			var dictionary = new Dictionary<string, string>
+			Dictionary<string,string> dictionary = new()
 			{
 				{ "Operater", SettingsManager.ScpboxAccessToken }
 			};
@@ -596,10 +549,7 @@ namespace Game
                     }
 					i++;
 				}
-			}, delegate (Exception error)
-			{
-				failure(error);
-			});
+			}, failure);
 		}
 
 		public static string CalculateContentHashString(byte[] data)
@@ -625,16 +575,24 @@ namespace Game
 				{
 					using Stream stream = Storage.OpenFile(ModsManager.CommunityContentCachePath,OpenFileMode.Read);
 					XElement xElement = XmlUtils.LoadXmlFromStream(stream,null,throwOnError: true);
-					foreach(XElement item in xElement.Element("Feedback").Elements())
+					IEnumerable<XElement> feedbackElements = xElement.Element("Feedback")?.Elements();
+					if(feedbackElements != null)
 					{
-						string attributeValue = XmlUtils.GetAttributeValue<string>(item,"Key");
-						m_feedbackCache[attributeValue] = true;
+						foreach(XElement item in feedbackElements)
+						{
+							string attributeValue = XmlUtils.GetAttributeValue<string>(item,"Key");
+							m_feedbackCache[attributeValue] = true;
+						}
 					}
-					foreach(XElement item2 in xElement.Element("Content").Elements())
+					IEnumerable<XElement> contentElements = xElement.Element("Content")?.Elements();
+					if(contentElements != null)
 					{
-						string attributeValue2 = XmlUtils.GetAttributeValue<string>(item2,"Path");
-						string attributeValue3 = XmlUtils.GetAttributeValue<string>(item2,"Address");
-						m_idToAddressMap[attributeValue2] = attributeValue3;
+						foreach(XElement item2 in contentElements)
+						{
+							string attributeValue2 = XmlUtils.GetAttributeValue<string>(item2,"Path");
+							string attributeValue3 = XmlUtils.GetAttributeValue<string>(item2,"Address");
+							m_idToAddressMap[attributeValue2] = attributeValue3;
+						}
 					}
 				}
 			}
@@ -648,20 +606,20 @@ namespace Game
 		{
 			try
 			{
-				var xElement = new XElement("Cache");
-				var xElement2 = new XElement("Feedback");
+				XElement xElement = new("Cache");
+				XElement xElement2 = new("Feedback");
 				xElement.Add(xElement2);
 				foreach (string key in m_feedbackCache.Keys)
 				{
-					var xElement3 = new XElement("Item");
+					XElement xElement3 = new("Item");
 					XmlUtils.SetAttributeValue(xElement3, "Key", key);
 					xElement2.Add(xElement3);
 				}
-				var xElement4 = new XElement("Content");
+				XElement xElement4 = new("Content");
 				xElement.Add(xElement4);
 				foreach (KeyValuePair<string, string> item in m_idToAddressMap)
 				{
-					var xElement5 = new XElement("Item");
+					XElement xElement5 = new("Item");
 					XmlUtils.SetAttributeValue(xElement5, "Path", item.Key);
 					XmlUtils.SetAttributeValue(xElement5, "Address", item.Value);
 					xElement4.Add(xElement5);

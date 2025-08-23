@@ -44,10 +44,7 @@ namespace Game
 
 		public Point3 Point
 		{
-			get
-			{
-				return new Point3(X, Y, Z);
-			}
+			get => new(X, Y, Z);
 			set
 			{
 				X = value.X;

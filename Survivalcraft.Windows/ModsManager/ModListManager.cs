@@ -43,7 +43,7 @@ namespace Game
 		/// <returns>整合包的模组路径</returns>
 		public static string AnalysisModList(string filePath)
 		{
-			var model = Toml.ToModel(File.ReadAllText(filePath));
+			TomlTable model = Toml.ToModel(File.ReadAllText(filePath));
 			AggregationPackageInfo packageInfo = new()
 			{
 				PackageName = (string)((TomlTable)model["packageinfo"]!)["PackageName"],
@@ -56,7 +56,7 @@ namespace Game
 			if(((TomlTable)model["requisite"]).Count!=0){
 				string packagePath = ModsManager.ProcessModListPath + '/' + packageInfo.PackageName;
 				Storage.CreateDirectory(packagePath);
-				foreach(var item in ((TomlTable)model["requisite"]!))
+				foreach(KeyValuePair<string,object> item in ((TomlTable)model["requisite"]!))
 				{
 					Log.Information(item.Key);
 					Log.Information(item.Value);

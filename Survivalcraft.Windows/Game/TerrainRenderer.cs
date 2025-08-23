@@ -152,7 +152,7 @@ namespace Game
 			ShaderParameter parameter = m_opaqueShader.GetParameter("u_hazeStartDensity");
 			ModsManager.HookAction("SetShaderParameter", modLoader => { modLoader.SetShaderParameter(m_opaqueShader, camera); return true; });
 			Point2 point = Terrain.ToChunk(camera.ViewPosition.XZ);
-			var chunk = m_subsystemTerrain.Terrain.GetChunkAtCoords(point.X, point.Y);
+			TerrainChunk chunk = m_subsystemTerrain.Terrain.GetChunkAtCoords(point.X, point.Y);
 			for (int i = 0; i < m_chunksToDraw.Count; i++)
 			{
 				TerrainChunk terrainChunk = m_chunksToDraw[i];
@@ -281,21 +281,21 @@ namespace Game
 			public int totalVertextCount;
 			public TerrainChunkGeometry.Buffer Buffer;
 		}
-		public static Dictionary<Texture2D,SubsetStat> stat = new Dictionary<Texture2D,SubsetStat>();
+		public static Dictionary<Texture2D,SubsetStat> stat = new();
 		public static void CompileDrawSubsets(TerrainGeometry[] chunkSliceGeometries, DynamicArray<TerrainChunkGeometry.Buffer> buffers, Func<TerrainVertex, TerrainVertex> vertexTransform = null)
 		{
 			stat.Clear();
 			//按贴图进行分组统计Subset的顶点数与索引数
 			for(int k = 0; k < chunkSliceGeometries.Length; k++)
 			{
-				var geometry = chunkSliceGeometries[k];//第k个slice
+				TerrainGeometry geometry = chunkSliceGeometries[k];//第k个slice
 				//统计每个subset的indexCount与VertexCount
-				foreach(var drawItem in geometry.Draws)
+				foreach(KeyValuePair<Texture2D,TerrainGeometry> drawItem in geometry.Draws)
 				{
-					var subGeometry = drawItem.Value;
+					TerrainGeometry subGeometry = drawItem.Value;
 					for(int i = 0; i < subGeometry.Subsets.Length; i++)
 					{
-						if(!stat.TryGetValue(drawItem.Key,out var subsetStat))
+						if(!stat.TryGetValue(drawItem.Key,out SubsetStat subsetStat))
 						{
 							subsetStat = new SubsetStat();
 							stat.Add(drawItem.Key,subsetStat);
@@ -311,10 +311,10 @@ namespace Game
 				}
 			}
 			//按贴图分组完成，生成buffer
-			foreach(var statItem in stat)
+			foreach(KeyValuePair<Texture2D,SubsetStat> statItem in stat)
 			{
 				if(statItem.Value.totalIndexCount == 0) continue;
-				var buffer = new TerrainChunkGeometry.Buffer();
+				TerrainChunkGeometry.Buffer buffer = new();
 				buffer.IndexBuffer = new IndexBuffer(IndexFormat.ThirtyTwoBits,statItem.Value.totalIndexCount);
 				buffer.VertexBuffer = new VertexBuffer(TerrainVertex.VertexDeclaration,statItem.Value.totalVertextCount);
 				buffer.Texture = statItem.Key;
@@ -351,21 +351,21 @@ namespace Game
 			//将顶点列表与索引列表写入buffer
 			for(int k = 0; k < chunkSliceGeometries.Length; k++)
 			{
-				var geometry = chunkSliceGeometries[k];//第k个slice
+				TerrainGeometry geometry = chunkSliceGeometries[k];//第k个slice
 				//统计每个subset的indexCount与VertexCount
-				foreach(var drawItem in geometry.Draws)
+				foreach(KeyValuePair<Texture2D,TerrainGeometry> drawItem in geometry.Draws)
 				{
-					var subGeometry = drawItem.Value;
+					TerrainGeometry subGeometry = drawItem.Value;
 					for(int i = 0; i < subGeometry.Subsets.Length; i++)
 					{
-						if(stat.TryGetValue(drawItem.Key,out var subsetStat))
+						if(stat.TryGetValue(drawItem.Key,out SubsetStat subsetStat))
 						{
 							if(subsetStat.totalIndexCount==0)continue;
-							var indices = subGeometry.Subsets[i].Indices;
-							var vertices = subGeometry.Subsets[i].Vertices;
+							TerrainGeometryDynamicArray<int> indices = subGeometry.Subsets[i].Indices;
+							TerrainGeometryDynamicArray<TerrainVertex> vertices = subGeometry.Subsets[i].Vertices;
 							if(indices.Count > 0)
 							{
-								var buffer = subsetStat.Buffer;
+								TerrainChunkGeometry.Buffer buffer = subsetStat.Buffer;
 								m_tmpIndices.Count = indices.Count;
 								ShiftIndices(indices.Array,m_tmpIndices.Array,buffer.SubsetVertexBufferStarts[i] + subsetStat.subsetSettedVertexCount[i],indices.Count);
 								buffer.IndexBuffer.SetData(m_tmpIndices.Array,0,indices.Count,buffer.SubsetIndexBufferStarts[i] + subsetStat.subsetSettedIndexCount[i]);

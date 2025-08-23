@@ -76,7 +76,7 @@ namespace Game
 				{
 					float num = (m_random.Float(0f, 1f) < 0.2f) ? m_random.Float(0.4f, 0.6f) : (0f - m_random.Float(0.4f, 0.6f));
 					m_angle = MathUtils.NormalizeAngle(m_angle + num);
-					var vector = Vector2.CreateFromAngle(m_angle);
+					Vector2 vector = Vector2.CreateFromAngle(m_angle);
 					Vector3 value = position + (new Vector3(vector.X, 0f, vector.Y) * 10f);
 					value.Y = EstimateHeight(new Vector2(value.X, value.Z), 8) + m_random.Float(3f, 5f);
 					m_componentPathfinding.SetDestination(value, m_random.Float(0.6f, 1.05f), 6f, 0, useRandomMovements: false, ignoreHeightDifference: true, raycastDestination: false, null);

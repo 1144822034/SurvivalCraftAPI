@@ -37,26 +37,14 @@ namespace Game
 
 		public static float SoundsVolume
 		{
-			get
-			{
-				return m_soundsVolume;
-			}
-			set
-			{
-				m_soundsVolume = MathUtils.Saturate(value);
-			}
+			get => m_soundsVolume;
+			set => m_soundsVolume = MathUtils.Saturate(value);
 		}
 
 		public static float MusicVolume
 		{
-			get
-			{
-				return m_musicVolume;
-			}
-			set
-			{
-				m_musicVolume = MathUtils.Saturate(value);
-			}
+			get => m_musicVolume;
+			set => m_musicVolume = MathUtils.Saturate(value);
 		}
 
 		public static int VisibilityRange
@@ -75,10 +63,7 @@ namespace Game
 
 		public static ResolutionMode ResolutionMode
 		{
-			get
-			{
-				return m_resolutionMode;
-			}
+			get => m_resolutionMode;
 			set
 			{
 				if (value != m_resolutionMode)
@@ -115,10 +100,7 @@ namespace Game
 
 		public static float Brightness
 		{
-			get
-			{
-				return m_brightness;
-			}
+			get => m_brightness;
 			set
 			{
 				value = Math.Clamp(value, 0f, 1f);
@@ -156,10 +138,7 @@ namespace Game
 
 		public static WindowMode WindowMode
 		{
-			get
-			{
-				return m_windowMode;
-			}
+			get => m_windowMode;
 			set
 			{
 				if (value != m_windowMode)
@@ -442,10 +421,7 @@ namespace Game
 		#endregion
 		public static bool FullScreenMode
 		{
-			get
-			{
-				return Window.WindowMode == WindowMode.Fullscreen;
-			}
+			get => Window.WindowMode == WindowMode.Fullscreen;
 			set
 			{
 				if(value && Window.WindowMode != WindowMode.Fullscreen)
@@ -506,7 +482,7 @@ namespace Game
 		public static ValuesDictionary KeyboardMappingSettings { get; set; }
 		public static ValuesDictionary CameraManageSettings { get; set; }
 
-		private static readonly Lock m_saveLock = new Lock();
+		private static readonly Lock m_saveLock = new();
 
 		public static void Initialize()
 		{
@@ -631,7 +607,7 @@ namespace Game
 			{//原版设置
 				return result;
 			}
-			foreach(var item in ModSettingsManager.ModKeyboardMapSettings.Values)
+			foreach(ValuesDictionary item in ModSettingsManager.ModKeyboardMapSettings.Values)
 			{//模组设置
 				if(item.TryGetValue(keyName,out object result2))
 				{
@@ -653,7 +629,7 @@ namespace Game
 			}
 			else
 			{
-				foreach(var item in ModSettingsManager.ModKeyboardMapSettings.Values)
+				foreach(ValuesDictionary item in ModSettingsManager.ModKeyboardMapSettings.Values)
 				{//模组设置
 					if(item.ContainsKey(keyName))
 					{
@@ -669,7 +645,7 @@ namespace Game
 			{//原版设置
 				return Convert.ToInt32(result);
 			}
-			foreach(var item in ModSettingsManager.ModCameraManageSettings.Values)
+			foreach(ValuesDictionary item in ModSettingsManager.ModCameraManageSettings.Values)
 			{//模组设置
 				if(item.TryGetValue(keyName,out object result2))
 				{
@@ -691,7 +667,7 @@ namespace Game
 			}
 			else
 			{
-				foreach(var item in ModSettingsManager.ModCameraManageSettings.Values)
+				foreach(ValuesDictionary item in ModSettingsManager.ModCameraManageSettings.Values)
 				{//模组设置
 					if(item.ContainsKey(keyName))
 					{
@@ -722,7 +698,7 @@ namespace Game
 						}
 						else
 						{
-							ValuesDictionary valuesDictionary = new ValuesDictionary();
+							ValuesDictionary valuesDictionary = new();
 							valuesDictionary.ApplyOverrides(xElement);
 							foreach(string name in valuesDictionary.Keys)
 							{
@@ -792,16 +768,16 @@ namespace Game
 				{
 					//ignore
 				}
-				ValuesDictionary settingsValuesDictionary = new ValuesDictionary();
+				ValuesDictionary settingsValuesDictionary = new();
 				//原生设置
-				var xElement = new XElement("Settings");
+				XElement xElement = new("Settings");
 				foreach (PropertyInfo item in from pi in typeof(SettingsManager).GetRuntimeProperties()
 											  where pi.GetMethod.IsStatic && pi.GetMethod.IsPublic && pi.SetMethod.IsPublic
 											  select pi)
 				{
 					try
 					{
-						var value = item.GetValue(null,null);
+						object value = item.GetValue(null,null);
 						settingsValuesDictionary.SetValue(item.Name,value);
 					}
 					catch (Exception ex)

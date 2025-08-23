@@ -38,7 +38,7 @@ namespace Game
 			{
 				for (int j = 0; j < m_dispenserGrid.ColumnsCount; j++)
 				{
-					var inventorySlotWidget = new InventorySlotWidget();
+					InventorySlotWidget inventorySlotWidget = new();
 					inventorySlotWidget.AssignInventorySlot(componentDispenser, num++);
 					m_dispenserGrid.Children.Add(inventorySlotWidget);
 					m_dispenserGrid.SetWidgetCell(inventorySlotWidget, new Point2(j, i));
@@ -49,7 +49,7 @@ namespace Game
 			{
 				for (int l = 0; l < m_inventoryGrid.ColumnsCount; l++)
 				{
-					var inventorySlotWidget2 = new InventorySlotWidget();
+					InventorySlotWidget inventorySlotWidget2 = new();
 					inventorySlotWidget2.AssignInventorySlot(inventory, num++);
 					m_inventoryGrid.Children.Add(inventorySlotWidget2);
 					m_inventoryGrid.SetWidgetCell(inventorySlotWidget2, new Point2(l, k));

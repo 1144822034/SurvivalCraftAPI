@@ -13,13 +13,8 @@ public static class VersionsManager
 	{
 		Windows,Android,Linux,Other
 	}
-	public static string PlatformString
-	{
-		get
-		{
-			return CurrentPlatform.ToString();
-		}
-	}
+	public static string PlatformString => CurrentPlatform.ToString();
+
 	public static Platform CurrentPlatform
 	{
 		get
@@ -66,14 +61,14 @@ public static class VersionsManager
 	{
 		m_versionConverters = [];//List
 		Assembly assembly = typeof(VersionsManager).GetTypeInfo().Assembly;
-		AssemblyName assemblyName = new AssemblyName(assembly.FullName);
+		AssemblyName assemblyName = new(assembly.FullName);
 		Version = $"{assemblyName.Version.Major}.{assemblyName.Version.Minor}.{assemblyName.Version.Build}.{assemblyName.Version.Revision}";
 		SerializationVersion = $"{assemblyName.Version.Major}.{assemblyName.Version.Minor}";
 		foreach(TypeInfo definedType in assembly.DefinedTypes)
 		{
 			if (!definedType.IsAbstract && !definedType.IsInterface && typeof(VersionConverter).GetTypeInfo().IsAssignableFrom(definedType))
 			{
-				var item = (VersionConverter)Activator.CreateInstance(definedType.AsType());
+				VersionConverter item = (VersionConverter)Activator.CreateInstance(definedType.AsType());
 				m_versionConverters.Add(item);
 			}
 		}

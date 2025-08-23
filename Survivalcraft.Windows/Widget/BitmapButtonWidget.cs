@@ -18,50 +18,26 @@ namespace Game
 
 		public override bool IsChecked
 		{
-			get
-			{
-				return m_clickableWidget.IsChecked;
-			}
-			set
-			{
-				m_clickableWidget.IsChecked = value;
-			}
+			get => m_clickableWidget.IsChecked;
+			set => m_clickableWidget.IsChecked = value;
 		}
 
 		public override bool IsAutoCheckingEnabled
 		{
-			get
-			{
-				return m_clickableWidget.IsAutoCheckingEnabled;
-			}
-			set
-			{
-				m_clickableWidget.IsAutoCheckingEnabled = value;
-			}
+			get => m_clickableWidget.IsAutoCheckingEnabled;
+			set => m_clickableWidget.IsAutoCheckingEnabled = value;
 		}
 
 		public override string Text
 		{
-			get
-			{
-				return m_labelWidget.Text;
-			}
-			set
-			{
-				m_labelWidget.Text = value;
-			}
+			get => m_labelWidget.Text;
+			set => m_labelWidget.Text = value;
 		}
 
 		public override BitmapFont Font
 		{
-			get
-			{
-				return m_labelWidget.Font;
-			}
-			set
-			{
-				m_labelWidget.Font = value;
-			}
+			get => m_labelWidget.Font;
+			set => m_labelWidget.Font = value;
 		}
 
 		public Subtexture NormalSubtexture

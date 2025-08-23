@@ -765,10 +765,10 @@ namespace Game
 				m *= Matrix.CreateRotationZ(0f - angle);
 				m *= Matrix.CreateRotationX(CalculateSeasonAngle());
 				m *= Matrix.CreateTranslation(viewPosition);
-				Vector3 v = new Vector3(0f - radius, 0f, 0f - radius);
-				Vector3 v2 = new Vector3(radius, 0f, 0f - radius);
-				Vector3 v3 = new Vector3(radius, 0f, radius);
-				Vector3 v4 = new Vector3(0f - radius, 0f, radius);
+				Vector3 v = new(0f - radius, 0f, 0f - radius);
+				Vector3 v2 = new(radius, 0f, 0f - radius);
+				Vector3 v3 = new(radius, 0f, radius);
+				Vector3 v4 = new(0f - radius, 0f, radius);
 				Vector3.Transform(ref v, ref m, out v);
 				Vector3.Transform(ref v2, ref m, out v2);
 				Vector3.Transform(ref v3, ref m, out v3);
@@ -865,7 +865,7 @@ namespace Game
 
 		public virtual void FillStarsBuffers()
 		{
-			Random random = new Random(10);
+			Random random = new(10);
 			StarVertex[] array = new StarVertex[m_starsCount * 4];
 			for (int i = 0; i < m_starsCount; i++)
 			{
@@ -1008,13 +1008,13 @@ namespace Game
 			Vector2 vector = Vector2.Normalize(new Vector2(direction.X,direction.Z));
 			float num = CalculateLightIntensity(timeOfDay);
 			float f2 = MathUtils.Saturate(temperature / 15f);
-			Vector3 v = new Vector3(0.65f,0.68f,0.7f);
+			Vector3 v = new(0.65f,0.68f,0.7f);
 			Vector3 v2 = Vector3.Lerp(new Vector3(0.33f,0.39f,0.46f),new Vector3(0.15f,0.3f,0.56f),f2);
 			Vector3 v3 = Vector3.Lerp(new Vector3(0.79f,0.83f,0.88f),new Vector3(0.64f,0.77f,0.91f),f2);
 			Vector3 v4 = Vector3.Lerp(v2,v,f) * num;
 			Vector3 vector2 = Vector3.Lerp(v3,v,f) * num;
-			Vector3 vector3 = new Vector3(1f,0.3f,-0.2f);
-			Vector3 vector4 = new Vector3(1f,0.3f,-0.2f);
+			Vector3 vector3 = new(1f,0.3f,-0.2f);
+			Vector3 vector4 = new(1f,0.3f,-0.2f);
 			if(m_lightningStrikePosition.HasValue)
 			{
 				v4 = Vector3.Max(new Vector3(m_lightningStrikeBrightness),v4);
@@ -1024,7 +1024,7 @@ namespace Game
 			float f3 = MathUtils.Saturate((direction.Y - 0.1f) / 0.4f);
 			float num4 = num2 * MathUtils.Sqr(MathUtils.Saturate(0f - vector.X));
 			float num5 = num3 * MathUtils.Sqr(MathUtils.Saturate(vector.X));
-			Color color = new Color(Vector3.Lerp(vector2 + vector3 * num4 + vector4 * num5,v4,f3));
+			Color color = new(Vector3.Lerp(vector2 + vector3 * num4 + vector4 * num5,v4,f3));
 			ModsManager.HookAction("ChangeSkyColor",loader => {
 				color = loader.ChangeSkyColor(color,direction,timeOfDay,temperature);
 				return true;

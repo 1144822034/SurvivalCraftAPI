@@ -44,130 +44,82 @@ namespace Game
 
 		public Texture2D Texture
 		{
-			set
-			{
-				m_textureParameter.SetValue(value);
-			}
+			set => m_textureParameter.SetValue(value);
 		}
 
 		public SamplerState SamplerState
 		{
-			set
-			{
-				m_samplerStateParameter.SetValue(value);
-			}
+			set => m_samplerStateParameter.SetValue(value);
 		}
 
 		public Vector4 MaterialColor
 		{
-			set
-			{
-				m_materialColorParameter.SetValue(value);
-			}
+			set => m_materialColorParameter.SetValue(value);
 		}
 
 		public Vector4 EmissionColor
 		{
-			set
-			{
-				m_emissionColorParameter.SetValue(value);
-			}
+			set => m_emissionColorParameter.SetValue(value);
 		}
 
 		public float AlphaThreshold
 		{
-			set
-			{
-				m_alphaThresholdParameter.SetValue(value);
-			}
+			set => m_alphaThresholdParameter.SetValue(value);
 		}
 
 		public Vector3 AmbientLightColor
 		{
-			set
-			{
-				m_ambientLightColorParameter.SetValue(value);
-			}
+			set => m_ambientLightColorParameter.SetValue(value);
 		}
 
 		public Vector3 DiffuseLightColor1
 		{
-			set
-			{
-				m_diffuseLightColor1Parameter.SetValue(value);
-			}
+			set => m_diffuseLightColor1Parameter.SetValue(value);
 		}
 
 		public Vector3 DiffuseLightColor2
 		{
-			set
-			{
-				m_diffuseLightColor2Parameter.SetValue(value);
-			}
+			set => m_diffuseLightColor2Parameter.SetValue(value);
 		}
 
 		public Vector3 LightDirection1
 		{
-			set
-			{
-				m_directionToLight1Parameter.SetValue(-value);
-			}
+			set => m_directionToLight1Parameter.SetValue(-value);
 		}
 
 		public Vector3 LightDirection2
 		{
-			set
-			{
-				m_directionToLight2Parameter.SetValue(-value);
-			}
+			set => m_directionToLight2Parameter.SetValue(-value);
 		}
 
 		public Vector3 FogColor
 		{
-			set
-			{
-				m_fogColorParameter.SetValue(value);
-			}
+			set => m_fogColorParameter.SetValue(value);
 		}
 
 		public Vector3 FogBottomTopDensity
 		{
-			set
-			{
-				m_fogBottomTopDensityParameter.SetValue(value);
-			}
+			set => m_fogBottomTopDensityParameter.SetValue(value);
 		}
 
 		public Vector2 HazeStartDensity
 		{
-			set
-			{
-				m_hazeStartDensityParameter.SetValue(value);
-			}
+			set => m_hazeStartDensityParameter.SetValue(value);
 		}
 
 		public float FogYMultiplier
 		{
-			set
-			{
-				m_fogYMultiplierParameter.SetValue(value);
-			}
+			set => m_fogYMultiplierParameter.SetValue(value);
 		}
 
 		public Vector3 WorldUp
 		{
-			set
-			{
-				m_worldUpParameter.SetValue(value);
-			}
+			set => m_worldUpParameter.SetValue(value);
 		}
 
 		public int InstancesCount
 		{
-			get
-			{
-				return m_instancesCount;
-			}
+			get => m_instancesCount;
 			set
 			{
 				if (value < 0 || value > Transforms.MaxWorldMatrices)
@@ -220,7 +172,7 @@ namespace Game
 
 		public static ShaderMacro[] PrepareShaderMacros(bool useAlphaThreshold, int maxInstancesCount, ShaderMacro[] shaderMacros = null)
 		{
-			var list = new List<ShaderMacro>();
+			List<ShaderMacro> list = new();
 			if (useAlphaThreshold)
 			{
 				list.Add(new ShaderMacro("ALPHATESTED"));

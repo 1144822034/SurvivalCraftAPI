@@ -49,7 +49,7 @@ namespace Game
 
 		public virtual ComponentMount FindNearestMount()
 		{
-			var point = new Vector2(ComponentCreature.ComponentBody.Position.X, ComponentCreature.ComponentBody.Position.Z);
+			Vector2 point = new(ComponentCreature.ComponentBody.Position.X, ComponentCreature.ComponentBody.Position.Z);
 			m_componentBodies.Clear();
 			m_subsystemBodies.FindBodiesAroundPoint(point, DetectSurroundingMountRange, m_componentBodies);
 			float num = 0f;

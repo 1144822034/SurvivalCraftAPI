@@ -309,10 +309,7 @@ namespace Game
 
 		public WidgetInput WidgetsHierarchyInput
 		{
-			get
-			{
-				return m_widgetsHierarchyInput;
-			}
+			get => m_widgetsHierarchyInput;
 			set
 			{
 				if (value != null)
@@ -352,10 +349,7 @@ namespace Game
 
 		public Matrix LayoutTransform
 		{
-			get
-			{
-				return m_layoutTransform;
-			}
+			get => m_layoutTransform;
 			set
 			{
 				m_layoutTransform = value;
@@ -365,10 +359,7 @@ namespace Game
 
 		public Matrix RenderTransform
 		{
-			get
-			{
-				return m_renderTransform;
-			}
+			get => m_renderTransform;
 			set
 			{
 				m_renderTransform = value;
@@ -406,14 +397,8 @@ namespace Game
 
 		public Color ColorTransform
 		{
-			get
-			{
-				return m_colorTransform;
-			}
-			set
-			{
-				m_colorTransform = value;
-			}
+			get => m_colorTransform;
+			set => m_colorTransform = value;
 		}
 
 		public Color GlobalColorTransform => m_globalColorTransform;
@@ -437,10 +422,7 @@ namespace Game
 
 		public virtual bool IsVisible
 		{
-			get
-			{
-				return m_isVisible;
-			}
+			get => m_isVisible;
 			set
 			{
 				if (value != m_isVisible)
@@ -456,10 +438,7 @@ namespace Game
 
 		public virtual bool IsEnabled
 		{
-			get
-			{
-				return m_isEnabled;
-			}
+			get => m_isEnabled;
 			set
 			{
 				if (value != m_isEnabled)
@@ -539,14 +518,8 @@ namespace Game
 
 		public Vector2 DesiredSize
 		{
-			get
-			{
-				return m_desiredSize;
-			}
-			set
-			{
-				m_desiredSize = value;
-			}
+			get => m_desiredSize;
+			set => m_desiredSize = value;
 		}
 
 		public Vector2 ParentDesiredSize => m_parentDesiredSize;
@@ -579,10 +552,7 @@ namespace Game
 
 		public XElement Style
 		{
-			set
-			{
-				LoadContents(null, value);
-			}
+			set => LoadContents(null, value);
 		}
 
 		public ContainerWidget ParentWidget
@@ -617,7 +587,7 @@ namespace Game
 			{
 				throw new NotImplementedException("Node property specification not implemented.");
 			}
-			var widget = Activator.CreateInstance(FindTypeFromXmlName(node.Name.LocalName, node.Name.NamespaceName)) as Widget;
+			Widget widget = Activator.CreateInstance(FindTypeFromXmlName(node.Name.LocalName, node.Name.NamespaceName)) as Widget;
 			if (widget == null)
 			{
 				throw new Exception($"Type \"{node.Name.LocalName}\" is not a Widget.");
@@ -707,7 +677,7 @@ namespace Game
 		{
 			if (node.HasElements)
 			{
-				var containerWidget = this as ContainerWidget;
+				ContainerWidget containerWidget = this as ContainerWidget;
 				if (containerWidget == null)
 				{
 					throw new Exception($"Type \"{node.Name.LocalName}\" is not a ContainerWidget, but it contains child widgets.");
@@ -967,7 +937,7 @@ namespace Game
 		{
 			if (!string.IsNullOrEmpty(namespaceName))
 			{
-				var uri = new Uri(namespaceName);
+				Uri uri = new(namespaceName);
 				if (uri.Scheme == "runtime-namespace")
 				{
 					return TypeCache.FindType(uri.AbsolutePath + "." + name, skipSystemAssemblies: false, throwIfNotFound: true);
@@ -981,7 +951,7 @@ namespace Game
 		{
 			if (widget != null && widget.IsVisible && (!widget.ClampToBounds || widget.HitTest(point)))
 			{
-				var containerWidget = widget as ContainerWidget;
+				ContainerWidget containerWidget = widget as ContainerWidget;
 				if (containerWidget != null)
 				{
 					WidgetsList children = containerWidget.Children;
@@ -1013,7 +983,7 @@ namespace Game
 				widget.WidgetsHierarchyInput.Update();
 				isMouseCursorVisible |= widget.WidgetsHierarchyInput.IsMouseCursorVisible;
 			}
-			var containerWidget = widget as ContainerWidget;
+			ContainerWidget containerWidget = widget as ContainerWidget;
 			if (containerWidget != null)
 			{
 				WidgetsList children = containerWidget.Children;

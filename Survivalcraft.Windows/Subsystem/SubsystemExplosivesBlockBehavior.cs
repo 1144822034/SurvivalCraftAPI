@@ -66,7 +66,7 @@ namespace Game
 					Block block = BlocksManager.Blocks[num2];
 					if (explosiveData.FuseParticleSystem == null)
 					{
-						var gunpowderKegBlock = block as GunpowderKegBlock;
+						GunpowderKegBlock gunpowderKegBlock = block as GunpowderKegBlock;
 						if (gunpowderKegBlock != null)
 						{
 							explosiveData.FuseParticleSystem = new FuseParticleSystem(new Vector3(point.X, point.Y, point.Z) + gunpowderKegBlock.FuseOffset);
@@ -106,13 +106,13 @@ namespace Game
 
 		public override void OnBlockRemoved(int value, int newValue, int x, int y, int z)
 		{
-			var point = new Point3(x, y, z);
+			Point3 point = new(x, y, z);
 			RemoveExplosive(point);
 		}
 
 		public override void OnChunkDiscarding(TerrainChunk chunk)
 		{
-			var list = new List<Point3>();
+			List<Point3> list = new();
 			foreach (Point3 key in m_explosiveDataByPoint.Keys)
 			{
 				if (key.X >= chunk.Origin.X && key.X < chunk.Origin.X + 16 && key.Z >= chunk.Origin.Y && key.Z < chunk.Origin.Y + 16)
@@ -158,11 +158,11 @@ namespace Game
 		{
 			base.Save(valuesDictionary);
 			int num = 0;
-			var valuesDictionary2 = new ValuesDictionary();
+			ValuesDictionary valuesDictionary2 = new();
 			valuesDictionary.SetValue("Explosives", valuesDictionary2);
 			foreach (ExplosiveData value in m_explosiveDataByPoint.Values)
 			{
-				var valuesDictionary3 = new ValuesDictionary();
+				ValuesDictionary valuesDictionary3 = new();
 				valuesDictionary2.SetValue(num++.ToString(CultureInfo.InvariantCulture), valuesDictionary3);
 				valuesDictionary3.SetValue("Point", value.Point);
 				valuesDictionary3.SetValue("TimeToExplosion", value.TimeToExplosion);
@@ -178,9 +178,7 @@ namespace Game
 		{
 			if (!m_explosiveDataByPoint.ContainsKey(point))
 			{
-				var explosiveData = new ExplosiveData();
-				explosiveData.Point = point;
-				explosiveData.TimeToExplosion = timeToExplosion;
+				ExplosiveData explosiveData = new() { Point = point,TimeToExplosion = timeToExplosion };
 				m_explosiveDataByPoint.Add(point, explosiveData);
 			}
 		}

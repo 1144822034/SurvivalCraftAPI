@@ -436,7 +436,7 @@ namespace Game
 			{
 				return;
 			}
-			var v = new Vector2(SettingsManager.LeftHandedLayout ? 96 : (-96), -96f);
+			Vector2 v = new(SettingsManager.LeftHandedLayout ? 96 : (-96), -96f);
 			v = Vector2.TransformNormal(v, input.Widget.GlobalTransform);
 			if (m_componentGui.ViewWidget != null && m_componentGui.ViewWidget.TouchInput.HasValue)
 			{
@@ -445,8 +445,8 @@ namespace Game
 				Camera activeCamera = m_componentPlayer.GameWidget.ActiveCamera;
 				Vector3 viewPosition = activeCamera.ViewPosition;
 				Vector3 viewDirection = activeCamera.ViewDirection;
-				var direction = Vector3.Normalize(activeCamera.ScreenToWorld(new Vector3(value.Position, 1f), Matrix.Identity) - viewPosition);
-				var direction2 = Vector3.Normalize(activeCamera.ScreenToWorld(new Vector3(value.Position + v, 1f), Matrix.Identity) - viewPosition);
+				Vector3 direction = Vector3.Normalize(activeCamera.ScreenToWorld(new Vector3(value.Position, 1f), Matrix.Identity) - viewPosition);
+				Vector3 direction2 = Vector3.Normalize(activeCamera.ScreenToWorld(new Vector3(value.Position + v, 1f), Matrix.Identity) - viewPosition);
 				if (value.InputType == TouchInputType.Tap)
 				{
 					if (SettingsManager.LookControlMode == LookControlMode.SplitTouch)
@@ -478,7 +478,7 @@ namespace Game
 				{
 					if (SettingsManager.LookControlMode == LookControlMode.EntireScreen || SettingsManager.LookControlMode == LookControlMode.SplitTouch)
 					{
-						var v2 = Vector2.TransformNormal(value.Move, m_componentGui.ViewWidget.InvertedGlobalTransform);
+						Vector2 v2 = Vector2.TransformNormal(value.Move, m_componentGui.ViewWidget.InvertedGlobalTransform);
 						Vector2 vector = num2 / num3 * new Vector2(0.0006f, -0.0006f) * v2 * MathF.Pow(v2.LengthSquared(), 0.125f);
 						m_playerInput.Look += vector;
 					}
@@ -512,11 +512,11 @@ namespace Game
 				}
 				else if (value2.InputType == TouchInputType.Move || value2.InputType == TouchInputType.Hold)
 				{
-					var v3 = Vector2.TransformNormal(value2.Move, m_componentGui.ViewWidget.InvertedGlobalTransform);
+					Vector2 v3 = Vector2.TransformNormal(value2.Move, m_componentGui.ViewWidget.InvertedGlobalTransform);
 					Vector2 vector2 = num / num3 * new Vector2(0.003f, -0.003f) * v3 * MathF.Pow(v3.LengthSquared(), 0.175f);
 					m_playerInput.CrouchMove.X += vector2.X;
 					m_playerInput.CrouchMove.Z += vector2.Y;
-					var vector3 = Vector2.TransformNormal(value2.TotalMoveLimited, m_componentGui.ViewWidget.InvertedGlobalTransform);
+					Vector2 vector3 = Vector2.TransformNormal(value2.TotalMoveLimited, m_componentGui.ViewWidget.InvertedGlobalTransform);
 					m_playerInput.Move.X += ProcessInputValue(vector3.X * viewWidget.GlobalScale, 0.2f * radius, radius);
 					m_playerInput.Move.Z += ProcessInputValue((0f - vector3.Y) * viewWidget.GlobalScale, 0.2f * radius, radius);
 				}
@@ -541,7 +541,7 @@ namespace Game
 				}
 				else if (value3.InputType == TouchInputType.Move)
 				{
-					var v4 = Vector2.TransformNormal(value3.Move, m_componentGui.ViewWidget.InvertedGlobalTransform);
+					Vector2 v4 = Vector2.TransformNormal(value3.Move, m_componentGui.ViewWidget.InvertedGlobalTransform);
 					Vector2 vector4 = num2 / num3 * new Vector2(0.0006f, -0.0006f) * v4 * MathF.Pow(v4.LengthSquared(), 0.125f);
 					m_playerInput.Look += vector4;
 				}

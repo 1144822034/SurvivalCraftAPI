@@ -47,15 +47,9 @@ namespace Game
 		/// </summary>
 		public virtual double HitInterval 
 		{
-			get
-			{
-				return m_basicHitInterval / ComponentFactors.GetOtherFactorResult("AttackSpeed");
-			}
+			get => m_basicHitInterval / ComponentFactors.GetOtherFactorResult("AttackSpeed");
 			[Obsolete("Do not set the added hit interval, set m_basicHitInterval instead.")]
-			set
-			{
-				m_basicHitInterval = value;
-			}
+			set => m_basicHitInterval = value;
 		}
 		public double m_basicHitInterval;
 
@@ -103,13 +97,8 @@ namespace Game
 			set;
 		}
 
-		public float StrengthFactor
-		{
-			get
-			{
-				return ComponentFactors?.StrengthFactor ?? 1;
-			}
-		}
+		public float StrengthFactor => ComponentFactors?.StrengthFactor ?? 1;
+
 		/// <summary>
 		/// 挖掘速度是否受玩家力量属性加成
 		/// </summary>
@@ -120,7 +109,7 @@ namespace Game
 			{
 				float ans = 1f;
 				if(m_digSpeedBasedOnStrengthFactor) ans *= StrengthFactor;
-				if(ComponentFactors?.OtherFactorsResults.TryGetValue("DigSpeed", out var result) ?? false)
+				if(ComponentFactors?.OtherFactorsResults.TryGetValue("DigSpeed", out float result) ?? false)
 				{
 					ans *= result;
 				}
@@ -413,7 +402,7 @@ namespace Game
 
 		public void Hit(ComponentBody componentBody, Vector3 hitPoint, Vector3 hitDirection)
 		{
-			var hitInterval = HitInterval;
+			double hitInterval = HitInterval;
 			ModsManager.HookAction("SetHitInterval",modLoader => {
 				modLoader.SetHitInterval(this,ref hitInterval);
 				return false;
@@ -537,7 +526,7 @@ namespace Game
 			reach = Math.Min(reach, SettingsManager.VisibilityRange);
 			Vector3 creaturePosition = ComponentCreature.ComponentCreatureModel.EyePosition;
 			Vector3 start = ray.Position;
-			var direction = Vector3.Normalize(ray.Direction);
+			Vector3 direction = Vector3.Normalize(ray.Direction);
 			Vector3 end = ray.Position + (direction * (reach + 1f));
 			Point3 startCell = Terrain.ToCell(start);
 			BodyRaycastResult? bodyRaycastResult = null;
@@ -819,8 +808,8 @@ namespace Game
 
 		public virtual bool IsLevelSufficientForTool(int toolValue)
 		{
-			var canUse = false;
-			var skip = false;
+			bool canUse = false;
+			bool skip = false;
 			ModsManager.HookAction("IsLevelSufficientForTool",modLoader => {
 				modLoader.IsLevelSufficientForTool(this,toolValue,ref canUse,out bool skip);
 				return false;

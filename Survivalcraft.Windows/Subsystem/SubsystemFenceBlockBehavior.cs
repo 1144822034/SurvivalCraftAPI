@@ -18,7 +18,7 @@ namespace Game
 		public virtual void UpdateVariant(int value, int x, int y, int z)
 		{
 			int num = Terrain.ExtractContents(value);
-			var fenceBlock = BlocksManager.Blocks[num] as FenceBlock;
+			FenceBlock fenceBlock = BlocksManager.Blocks[num] as FenceBlock;
 			if (fenceBlock != null)
 			{
 				int cellValue = SubsystemTerrain.Terrain.GetCellValue(x + 1, y, z);

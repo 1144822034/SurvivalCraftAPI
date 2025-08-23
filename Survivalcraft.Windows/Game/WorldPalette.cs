@@ -73,7 +73,7 @@ namespace Game
 
 		public ValuesDictionary Save()
 		{
-			var valuesDictionary = new ValuesDictionary();
+			ValuesDictionary valuesDictionary = new();
 			string value = string.Join(";", Colors.Select((c,i) => (!(c == DefaultColors[i])) ? HumanReadableConverter.ConvertToString(c) : string.Empty));
 			string value2 = string.Join(";", Names.Select((n,i) => (!(n == LanguageControl.Get(GetType().Name, i))) ? n : string.Empty));
 			valuesDictionary.SetValue("Colors", value);

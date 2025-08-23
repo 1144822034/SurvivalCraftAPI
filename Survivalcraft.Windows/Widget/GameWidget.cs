@@ -5,8 +5,8 @@ using System.Xml.Linq;
 
 public class GameWidget : CanvasWidget
 {
-    public List<Camera> m_cameras = new List<Camera>();
-	public Dictionary<Camera,Func<GameWidget,bool>> m_isCameraEnable = new Dictionary<Camera, Func<GameWidget, bool>>();
+    public List<Camera> m_cameras = new();
+	public Dictionary<Camera,Func<GameWidget,bool>> m_isCameraEnable = new();
 
     public Camera m_activeCamera;
 
@@ -20,7 +20,7 @@ public class GameWidget : CanvasWidget
 
 	public PlayerData PlayerData { get; set; }
 
-	public ReadOnlyList<Camera> Cameras => new ReadOnlyList<Camera>(m_cameras);
+	public ReadOnlyList<Camera> Cameras => new(m_cameras);
 
 	public Camera ActiveCamera
 	{
@@ -66,9 +66,9 @@ public class GameWidget : CanvasWidget
 			modLoader.ManageCameras(this);
 			return false;
 		});
-		var list = ModSettingsManager.CombinedCameraManageSettings.OrderBy(x => x.Value).ToList();
+		List<KeyValuePair<string,int>> list = ModSettingsManager.CombinedCameraManageSettings.OrderBy(x => x.Value).ToList();
 		int num = 0;
-		foreach(var item in list)
+		foreach(KeyValuePair<string,int> item in list)
 		{
 			string name = item.Key;
 			int value = item.Value;
@@ -94,7 +94,7 @@ public class GameWidget : CanvasWidget
 
 	public Camera FindCamera(Type type, bool throwOnError = true)
 	{
-		var val = m_cameras.FirstOrDefault(c => c.GetType() == type);
+		Camera val = m_cameras.FirstOrDefault(c => c.GetType() == type);
 		if (val != null || !throwOnError)
 		{
 			return val;
@@ -111,7 +111,7 @@ public class GameWidget : CanvasWidget
 	public Camera FindCamera(Type type, out bool isEnable, bool throwOnError = true)
 	{
 		isEnable = true;
-		var result = FindCamera(type,throwOnError);
+		Camera result = FindCamera(type,throwOnError);
 		if(m_isCameraEnable.TryGetValue(result,out Func<GameWidget,bool> func))
 			isEnable = func?.Invoke(this) ?? true;
 		return result;

@@ -105,7 +105,7 @@ namespace Engine.Media
 #else
 		public static StreamingSource Stream(Stream stream)
 		{
-			var peekStream = new PeekStream(stream, 64);
+			PeekStream peekStream = new(stream, 64);
 			SoundFileFormat format = DetermineFileFormat(peekStream.GetInitialBytesStream());
 			return Stream(peekStream, format);
 		}
@@ -145,7 +145,7 @@ namespace Engine.Media
 
 		public static SoundData Load(Stream stream)
 		{
-			var peekStream = new PeekStream(stream, 64);
+			PeekStream peekStream = new(stream, 64);
 			SoundFileFormat format = DetermineFileFormat(peekStream.GetInitialBytesStream());
 			return Load(peekStream, format);
 		}

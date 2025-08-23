@@ -103,7 +103,7 @@ namespace Game
 		public virtual void GenerateCrossfaceVertices(Block block, int value, int x, int y, int z, Color color, int textureSlot, TerrainGeometrySubset subset)
 		{
 			DynamicArray<TerrainVertex> vertices = subset.Vertices;
-			var indices = subset.Indices;
+			TerrainGeometryDynamicArray<int> indices = subset.Indices;
 			int num = Terrain.ExtractLight(value);
 			float num2 = LightingManager.LightIntensityByLightValueAndFace[num + 64];
 			Color color2 = new((byte)(color.R * num2), (byte)(color.G * num2), (byte)(color.B * num2), color.A);
@@ -179,7 +179,7 @@ namespace Game
 			if ((block.GenerateFacesForSameNeighbors || Terrain.ExtractContents(cellValueFast) != blockIndex) && block.ShouldGenerateFace(SubsystemTerrain, 0, value, cellValueFast, x, y, z))
 			{
 				DynamicArray<TerrainVertex> vertices = subsetsByFace[0].Vertices;
-				var indices = subsetsByFace[0].Indices;
+				TerrainGeometryDynamicArray<int> indices = subsetsByFace[0].Indices;
 				int faceTextureSlot = block.GetFaceTextureSlot(0, value);
 				int count = vertices.Count;
 				vertices.Count += 4;
@@ -200,7 +200,7 @@ namespace Game
 			if ((block.GenerateFacesForSameNeighbors || Terrain.ExtractContents(cellValueFast) != blockIndex) && block.ShouldGenerateFace(SubsystemTerrain, 1, value, cellValueFast, x, y, z))
 			{
 				DynamicArray<TerrainVertex> vertices2 = subsetsByFace[1].Vertices;
-				var indices2 = subsetsByFace[1].Indices;
+				TerrainGeometryDynamicArray<int> indices2 = subsetsByFace[1].Indices;
 				int faceTextureSlot2 = block.GetFaceTextureSlot(1, value);
 				int count3 = vertices2.Count;
 				vertices2.Count += 4;
@@ -221,7 +221,7 @@ namespace Game
 			if ((block.GenerateFacesForSameNeighbors || Terrain.ExtractContents(cellValueFast) != blockIndex) && block.ShouldGenerateFace(SubsystemTerrain, 2, value, cellValueFast, x, y, z))
 			{
 				DynamicArray<TerrainVertex> vertices3 = subsetsByFace[2].Vertices;
-				var indices3 = subsetsByFace[2].Indices;
+				TerrainGeometryDynamicArray<int> indices3 = subsetsByFace[2].Indices;
 				int faceTextureSlot3 = block.GetFaceTextureSlot(2, value);
 				int count5 = vertices3.Count;
 				vertices3.Count += 4;
@@ -242,7 +242,7 @@ namespace Game
 			if ((block.GenerateFacesForSameNeighbors || Terrain.ExtractContents(cellValueFast) != blockIndex) && block.ShouldGenerateFace(SubsystemTerrain, 3, value, cellValueFast, x, y, z))
 			{
 				DynamicArray<TerrainVertex> vertices4 = subsetsByFace[3].Vertices;
-				var indices4 = subsetsByFace[3].Indices;
+				TerrainGeometryDynamicArray<int> indices4 = subsetsByFace[3].Indices;
 				int faceTextureSlot4 = block.GetFaceTextureSlot(3, value);
 				int count7 = vertices4.Count;
 				vertices4.Count += 4;
@@ -263,7 +263,7 @@ namespace Game
 			if ((block.GenerateFacesForSameNeighbors || Terrain.ExtractContents(cellValueFast) != blockIndex) && block.ShouldGenerateFace(SubsystemTerrain, 4, value, cellValueFast, x, y, z))
 			{
 				DynamicArray<TerrainVertex> vertices5 = subsetsByFace[4].Vertices;
-				var indices5 = subsetsByFace[4].Indices;
+				TerrainGeometryDynamicArray<int> indices5 = subsetsByFace[4].Indices;
 				int faceTextureSlot5 = block.GetFaceTextureSlot(4, value);
 				int count9 = vertices5.Count;
 				vertices5.Count += 4;
@@ -284,7 +284,7 @@ namespace Game
 			if ((block.GenerateFacesForSameNeighbors || Terrain.ExtractContents(cellValueFast) != blockIndex) && block.ShouldGenerateFace(SubsystemTerrain, 5, value, cellValueFast, x, y, z))
 			{
 				DynamicArray<TerrainVertex> vertices6 = subsetsByFace[5].Vertices;
-				var indices6 = subsetsByFace[5].Indices;
+				TerrainGeometryDynamicArray<int> indices6 = subsetsByFace[5].Indices;
 				int faceTextureSlot6 = block.GetFaceTextureSlot(5, value);
 				int count11 = vertices6.Count;
 				vertices6.Count += 4;
@@ -316,7 +316,7 @@ namespace Game
 			if ((block.GenerateFacesForSameNeighbors || Terrain.ExtractContents(cellValueFast) != blockIndex) && block.ShouldGenerateFace(SubsystemTerrain, 0, value, cellValueFast, x, y, z))
 			{
 				DynamicArray<TerrainVertex> vertices = subsetsByFace[0].Vertices;
-				var indices = subsetsByFace[0].Indices;
+				TerrainGeometryDynamicArray<int> indices = subsetsByFace[0].Indices;
 				int faceTextureSlot = block.GetFaceTextureSlot(0, value);
 				int count = vertices.Count;
 				vertices.Count += 4;
@@ -337,7 +337,7 @@ namespace Game
 			if ((block.GenerateFacesForSameNeighbors || Terrain.ExtractContents(cellValueFast) != blockIndex) && block.ShouldGenerateFace(SubsystemTerrain, 1, value, cellValueFast, x, y, z))
 			{
 				DynamicArray<TerrainVertex> vertices2 = subsetsByFace[1].Vertices;
-				var indices2 = subsetsByFace[1].Indices;
+				TerrainGeometryDynamicArray<int> indices2 = subsetsByFace[1].Indices;
 				int faceTextureSlot2 = block.GetFaceTextureSlot(1, value);
 				int count3 = vertices2.Count;
 				vertices2.Count += 4;
@@ -358,7 +358,7 @@ namespace Game
 			if ((block.GenerateFacesForSameNeighbors || Terrain.ExtractContents(cellValueFast) != blockIndex) && block.ShouldGenerateFace(SubsystemTerrain, 2, value, cellValueFast, x, y, z))
 			{
 				DynamicArray<TerrainVertex> vertices3 = subsetsByFace[2].Vertices;
-				var indices3 = subsetsByFace[2].Indices;
+				TerrainGeometryDynamicArray<int> indices3 = subsetsByFace[2].Indices;
 				int faceTextureSlot3 = block.GetFaceTextureSlot(2, value);
 				int count5 = vertices3.Count;
 				vertices3.Count += 4;
@@ -379,7 +379,7 @@ namespace Game
 			if ((block.GenerateFacesForSameNeighbors || Terrain.ExtractContents(cellValueFast) != blockIndex) && block.ShouldGenerateFace(SubsystemTerrain, 3, value, cellValueFast, x, y, z))
 			{
 				DynamicArray<TerrainVertex> vertices4 = subsetsByFace[3].Vertices;
-				var indices4 = subsetsByFace[3].Indices;
+				TerrainGeometryDynamicArray<int> indices4 = subsetsByFace[3].Indices;
 				int faceTextureSlot4 = block.GetFaceTextureSlot(3, value);
 				int count7 = vertices4.Count;
 				vertices4.Count += 4;
@@ -400,7 +400,7 @@ namespace Game
 			if (((block.GenerateFacesForSameNeighbors || Terrain.ExtractContents(cellValueFast) != blockIndex) && block.ShouldGenerateFace(SubsystemTerrain, 4, value, cellValueFast, x, y, z)) || height11 < 1f || height12 < 1f || height21 < 1f || height22 < 1f)
 			{
 				DynamicArray<TerrainVertex> vertices5 = subsetsByFace[4].Vertices;
-				var indices5 = subsetsByFace[4].Indices;
+				TerrainGeometryDynamicArray<int> indices5 = subsetsByFace[4].Indices;
 				int textureSlot = (overrideTopTextureSlot >= 0) ? overrideTopTextureSlot : block.GetFaceTextureSlot(4, value);
 				int count9 = vertices5.Count;
 				vertices5.Count += 4;
@@ -421,7 +421,7 @@ namespace Game
 			if (((block.GenerateFacesForSameNeighbors || Terrain.ExtractContents(cellValueFast) != blockIndex) && block.ShouldGenerateFace(SubsystemTerrain, 4, value, cellValueFast, x, y, z)))
 			{
 				DynamicArray<TerrainVertex> vertices6 = subsetsByFace[5].Vertices;
-				var indices6 = subsetsByFace[5].Indices;
+				TerrainGeometryDynamicArray<int> indices6 = subsetsByFace[5].Indices;
 				int faceTextureSlot5 = block.GetFaceTextureSlot(5, value);
 				int count11 = vertices6.Count;
 				vertices6.Count += 4;
@@ -453,7 +453,7 @@ namespace Game
 			if ((block.GenerateFacesForSameNeighbors || Terrain.ExtractContents(cellValueFast) != blockIndex) && block.ShouldGenerateFace(SubsystemTerrain, 0, value, cellValueFast, x, y, z))
 			{
 				DynamicArray<TerrainVertex> vertices = subsetsByFace[0].Vertices;
-				var indices = subsetsByFace[0].Indices;
+				TerrainGeometryDynamicArray<int> indices = subsetsByFace[0].Indices;
 				int faceTextureSlot = block.GetFaceTextureSlot(0, value);
 				int count = vertices.Count;
 				vertices.Count += 4;
@@ -474,7 +474,7 @@ namespace Game
 			if ((block.GenerateFacesForSameNeighbors || Terrain.ExtractContents(cellValueFast) != blockIndex) && block.ShouldGenerateFace(SubsystemTerrain, 1, value, cellValueFast, x, y, z))
 			{
 				DynamicArray<TerrainVertex> vertices2 = subsetsByFace[1].Vertices;
-				var indices2 = subsetsByFace[1].Indices;
+				TerrainGeometryDynamicArray<int> indices2 = subsetsByFace[1].Indices;
 				int faceTextureSlot2 = block.GetFaceTextureSlot(1, value);
 				int count3 = vertices2.Count;
 				vertices2.Count += 4;
@@ -495,7 +495,7 @@ namespace Game
 			if ((block.GenerateFacesForSameNeighbors || Terrain.ExtractContents(cellValueFast) != blockIndex) && block.ShouldGenerateFace(SubsystemTerrain, 2, value, cellValueFast, x, y, z))
 			{
 				DynamicArray<TerrainVertex> vertices3 = subsetsByFace[2].Vertices;
-				var indices3 = subsetsByFace[2].Indices;
+				TerrainGeometryDynamicArray<int> indices3 = subsetsByFace[2].Indices;
 				int faceTextureSlot3 = block.GetFaceTextureSlot(2, value);
 				int count5 = vertices3.Count;
 				vertices3.Count += 4;
@@ -516,7 +516,7 @@ namespace Game
 			if ((block.GenerateFacesForSameNeighbors || Terrain.ExtractContents(cellValueFast) != blockIndex) && block.ShouldGenerateFace(SubsystemTerrain, 3, value, cellValueFast, x, y, z))
 			{
 				DynamicArray<TerrainVertex> vertices4 = subsetsByFace[3].Vertices;
-				var indices4 = subsetsByFace[3].Indices;
+				TerrainGeometryDynamicArray<int> indices4 = subsetsByFace[3].Indices;
 				int faceTextureSlot4 = block.GetFaceTextureSlot(3, value);
 				int count7 = vertices4.Count;
 				vertices4.Count += 4;
@@ -537,7 +537,7 @@ namespace Game
 			if ((block.GenerateFacesForSameNeighbors || Terrain.ExtractContents(cellValueFast) != blockIndex) && block.ShouldGenerateFace(SubsystemTerrain, 4, value, cellValueFast, x, y, z))
 			{
 				DynamicArray<TerrainVertex> vertices5 = subsetsByFace[4].Vertices;
-				var indices5 = subsetsByFace[4].Indices;
+				TerrainGeometryDynamicArray<int> indices5 = subsetsByFace[4].Indices;
 				int faceTextureSlot5 = block.GetFaceTextureSlot(4, value);
 				int count9 = vertices5.Count;
 				vertices5.Count += 4;
@@ -558,7 +558,7 @@ namespace Game
 			if ((block.GenerateFacesForSameNeighbors || Terrain.ExtractContents(cellValueFast) != blockIndex) && block.ShouldGenerateFace(SubsystemTerrain, 5, value, cellValueFast, x, y, z))
 			{
 				DynamicArray<TerrainVertex> vertices6 = subsetsByFace[5].Vertices;
-				var indices6 = subsetsByFace[5].Indices;
+				TerrainGeometryDynamicArray<int> indices6 = subsetsByFace[5].Indices;
 				int faceTextureSlot6 = block.GetFaceTextureSlot(5, value);
 				int count11 = vertices6.Count;
 				vertices6.Count += 4;
@@ -580,7 +580,7 @@ namespace Game
 		public virtual void GenerateFlatVertices(Block block, int value, int x, int y, int z, int rotation, Color color, TerrainGeometrySubset[] subsetsByFace)
 		{
 			DynamicArray<TerrainVertex> vertices = subsetsByFace[4].Vertices;
-			var indices = subsetsByFace[4].Indices;
+			TerrainGeometryDynamicArray<int> indices = subsetsByFace[4].Indices;
 			int faceTextureSlot = block.GetFaceTextureSlot(4, value);
 			int textureSlotCount = block.GetTextureSlotCount(value);
 			int count = vertices.Count;
@@ -602,7 +602,7 @@ namespace Game
         public virtual void GenerateMeshVertices(Block block, int x, int y, int z, BlockMesh blockMesh, Color color, Matrix? matrix, TerrainGeometrySubset subset)
 		{
 			DynamicArray<TerrainVertex> vertices = subset.Vertices;
-			var indices = subset.Indices;
+			TerrainGeometryDynamicArray<int> indices = subset.Indices;
 			int count = vertices.Count;
 			int cellLightFast = Terrain.GetCellLightFast(x, y, z);
 			float num = LightingManager.LightIntensityByLightValue[cellLightFast];
@@ -659,7 +659,7 @@ namespace Game
 		{
 			CalculateCornerLights(x, y, z);
 			DynamicArray<TerrainVertex> vertices = subset.Vertices;
-			var indices = subset.Indices;
+			TerrainGeometryDynamicArray<int> indices = subset.Indices;
 			int count = vertices.Count;
 			vertices.Count += blockMesh.Vertices.Count;
 			for (int i = 0; i < blockMesh.Vertices.Count; i++)
@@ -815,7 +815,7 @@ namespace Game
 						SetupVertex(vector8.X, vector8.Y, vector8.Z, color10, vector15.X, vector15.Y, ref array[count + 5]);
 						int count2 = subset.Indices.Count;
 						subset.Indices.Count += (connectorDirection == ElectricConnectorDirection.In) ? 15 : 12;
-						var array2 = subset.Indices.Array;
+						int[] array2 = subset.Indices.Array;
 						array2[count2] = count;
 						array2[count2 + 1] = count + 5;
 						array2[count2 + 2] = count + 1;
@@ -872,7 +872,7 @@ namespace Game
 					SetupVertex(vector17.X, vector17.Y, vector17.Z, color12, vector21.X, vector21.Y, ref array3[count3 + 2]);
 					int count4 = subset.Indices.Count;
 					subset.Indices.Count += 3;
-					var array4 = subset.Indices.Array;
+					int[] array4 = subset.Indices.Array;
 					array4[count4] = count3;
 					array4[count4 + 1] = count3 + 2;
 					array4[count4 + 2] = count3 + 1;

@@ -66,7 +66,7 @@ namespace Game
 						for (int j = 0; j < num5; j++)
 						{
 							float x2 = ((float)Math.PI * 2f * j / num5) + num4;
-							var v2 = new Vector3(MathF.Sin(x2) + (0.1f * m_random.Float(-1f, 1f)), 0f, MathF.Cos(x2) + (0.1f * m_random.Float(-1f, 1f)));
+							Vector3 v2 = new(MathF.Sin(x2) + (0.1f * m_random.Float(-1f, 1f)), 0f, MathF.Cos(x2) + (0.1f * m_random.Float(-1f, 1f)));
 							Particle obj2 = Particles[m_nextParticle++];
 							obj2.IsActive = true;
 							obj2.Position = position;
@@ -91,7 +91,7 @@ namespace Game
 							for (int n = 0; n < num13; n++)
 							{
 								float x5 = ((float)Math.PI * 2f * n / num13) + num10;
-								var v4 = new Vector3((num12 * MathF.Sin(x5)) + (0.1f * m_random.Float(-1f, 1f)), 0f, (num12 * MathF.Cos(x5)) + (0.1f * m_random.Float(-1f, 1f)));
+								Vector3 v4 = new((num12 * MathF.Sin(x5)) + (0.1f * m_random.Float(-1f, 1f)), 0f, (num12 * MathF.Cos(x5)) + (0.1f * m_random.Float(-1f, 1f)));
 								Particle obj4 = Particles[m_nextParticle++];
 								obj4.IsActive = true;
 								obj4.Position = position;
@@ -175,7 +175,7 @@ namespace Game
 						for (int i = 0; i < num3; i++)
 						{
 							float x = ((float)Math.PI * 2f * i / num3) + num2;
-							var v = new Vector3(MathF.Sin(x) + (0.1f * m_random.Float(-1f, 1f)), 0f, MathF.Cos(x) + (0.1f * m_random.Float(-1f, 1f)));
+							Vector3 v = new(MathF.Sin(x) + (0.1f * m_random.Float(-1f, 1f)), 0f, MathF.Cos(x) + (0.1f * m_random.Float(-1f, 1f)));
 							Particle obj = Particles[m_nextParticle++];
 							obj.IsActive = true;
 							obj.Position = position;

@@ -78,7 +78,7 @@ namespace Game
 		public override string GetDisplayName(SubsystemTerrain subsystemTerrain, int value)
 		{
 			int data = Terrain.ExtractData(value);
-			return SubsystemPalette.GetName(subsystemTerrain, GetColor(data), LanguageControl.GetBlock(string.Format("{0}:{1}", GetType().Name, data.ToString()), "DisplayName"));
+			return SubsystemPalette.GetName(subsystemTerrain, GetColor(data), LanguageControl.GetBlock($"{GetType().Name}:{data.ToString()}", "DisplayName"));
 		}
 
 		public override string GetCategory(int value)

@@ -81,10 +81,7 @@ namespace Game
 		[Obsolete("A ModelWidget may contains multiple models, please use Models field instead. This field only represents the first model of Models field.")]
 		public Model Model
 		{
-			get
-			{
-				return Models?[0] ?? null;
-			}
+			get => Models?[0] ?? null;
 			set
 			{
 				if(value != null)
@@ -120,14 +117,8 @@ namespace Game
 		[Obsolete("A ModelWidget may contains multiple models. TextureOverride only represents the texture of the first model.")]
 		public Texture2D TextureOverride
 		{
-			get
-			{
-				return Textures[Models[0]];
-			}
-			set
-			{
-				Textures[Models[0]] = value;
-			}
+			get => Textures[Models[0]];
+			set => Textures[Models[0]] = value;
 		}
 
 		public ModelWidget()

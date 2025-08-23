@@ -5,6 +5,7 @@ namespace Game
 {
 	public class ArrowBlock : Block
 	{
+		[Flags]
 		public enum ArrowType
 		{
 			WoodenArrow,
@@ -177,16 +178,16 @@ namespace Game
 				Matrix boneAbsoluteTransform = BlockMesh.GetBoneAbsoluteTransform(model.FindMesh(m_shaftNames[enumValue]).ParentBone);
 				Matrix boneAbsoluteTransform2 = BlockMesh.GetBoneAbsoluteTransform(model.FindMesh(m_stabilizerNames[enumValue]).ParentBone);
 				Matrix boneAbsoluteTransform3 = BlockMesh.GetBoneAbsoluteTransform(model.FindMesh(m_tipNames[enumValue]).ParentBone);
-				var blockMesh = new BlockMesh();
+				BlockMesh blockMesh = new();
 				blockMesh.AppendModelMeshPart(model.FindMesh(m_tipNames[enumValue]).MeshParts[0], boneAbsoluteTransform3 * Matrix.CreateTranslation(0f, m_offsets[enumValue], 0f), makeEmissive: false, flipWindingOrder: false, doubleSided: false, flipNormals: false, Color.White);
 				blockMesh.TransformTextureCoordinates(Matrix.CreateTranslation(m_tipTextureSlots[enumValue] % 16 / 16f, m_tipTextureSlots[enumValue] / 16 / 16f, 0f));
-				var blockMesh2 = new BlockMesh();
+				BlockMesh blockMesh2 = new();
 				blockMesh2.AppendModelMeshPart(model.FindMesh(m_shaftNames[enumValue]).MeshParts[0], boneAbsoluteTransform * Matrix.CreateTranslation(0f, m_offsets[enumValue], 0f), makeEmissive: false, flipWindingOrder: false, doubleSided: false, flipNormals: false, Color.White);
 				blockMesh2.TransformTextureCoordinates(Matrix.CreateTranslation(m_shaftTextureSlots[enumValue] % 16 / 16f, m_shaftTextureSlots[enumValue] / 16 / 16f, 0f));
-				var blockMesh3 = new BlockMesh();
+				BlockMesh blockMesh3 = new();
 				blockMesh3.AppendModelMeshPart(model.FindMesh(m_stabilizerNames[enumValue]).MeshParts[0], boneAbsoluteTransform2 * Matrix.CreateTranslation(0f, m_offsets[enumValue], 0f), makeEmissive: false, flipWindingOrder: false, doubleSided: true, flipNormals: false, Color.White);
 				blockMesh3.TransformTextureCoordinates(Matrix.CreateTranslation(m_stabilizerTextureSlots[enumValue] % 16 / 16f, m_stabilizerTextureSlots[enumValue] / 16 / 16f, 0f));
-				var blockMesh4 = new BlockMesh();
+				BlockMesh blockMesh4 = new();
 				blockMesh4.AppendBlockMesh(blockMesh);
 				blockMesh4.AppendBlockMesh(blockMesh2);
 				blockMesh4.AppendBlockMesh(blockMesh3);

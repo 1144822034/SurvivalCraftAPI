@@ -122,11 +122,11 @@ namespace GameEntitySystem
 											  where x != null && x.DatabaseObject != null && x.DatabaseObject.Type == project.GameDatabase.MemberComponentTemplateType
 											  select x)
 			{
-				var isOptional = item.GetValue<bool>("IsOptional");
-				var className = item.GetValue<string>("Class");
-				var loadOrder = item.GetValue<int>("LoadOrder");
+				bool isOptional = item.GetValue<bool>("IsOptional");
+				string className = item.GetValue<string>("Class");
+				int loadOrder = item.GetValue<int>("LoadOrder");
 
-				var type = TypeCache.FindType(className, skipSystemAssemblies: false,!isOptional);
+				Type type = TypeCache.FindType(className, skipSystemAssemblies: false,!isOptional);
 				if(type != null)
 				{
 					object obj;
@@ -144,7 +144,7 @@ namespace GameEntitySystem
 						throw new InvalidOperationException($"Type \"{className}\" cannot be used as a component because it does not inherit from Component class.");
 					}
 					component.Initialize(this, item);
-					var isModComponent = type.Namespace != "Game";
+					bool isModComponent = type.Namespace != "Game";
 					//如果是原版的组件，则按原来顺序，否则往后
 					int adjustedLoadOrder = isModComponent ? loadOrder + 10000 : loadOrder;
 					list.Add(new KeyValuePair<int,Component>(adjustedLoadOrder,component));

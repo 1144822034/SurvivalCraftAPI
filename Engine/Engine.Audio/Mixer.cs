@@ -17,11 +17,8 @@ namespace Engine.Audio
 
 		public static float MasterVolume
 		{
-			get
-			{
-				return m_masterVolume;
-			}
-			set
+			get => m_masterVolume;
+            set
 			{
 				value = MathUtils.Saturate(value);
 				if (value != m_masterVolume)
@@ -46,7 +43,7 @@ namespace Engine.Audio
                 Log.Error("Could not create audio device");
                 return;
             }
-            var c = m_audioContext.CreateContext(device, null);
+            Context* c = m_audioContext.CreateContext(device, null);
             m_audioContext.MakeContextCurrent(c);
 			if (!CheckALErrorFull())
 			{

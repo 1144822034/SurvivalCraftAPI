@@ -71,22 +71,22 @@ namespace Game {
             }
             if (m_uploadButton.IsClicked) {
                 if (string.IsNullOrEmpty(SettingsManager.ScpboxAccessToken)) {
-                    var messageDialog = new MessageDialog(LanguageControl.Get(fName, 1), LanguageControl.Get(fName, 2), LanguageControl.Get(fName, 3), LanguageControl.Get(fName, 4), btn => {
+                    MessageDialog messageDialog = new(LanguageControl.Get(fName, 1), LanguageControl.Get(fName, 2), LanguageControl.Get(fName, 3), LanguageControl.Get(fName, 4), btn => {
                         DialogsManager.HideAllDialogs();
                     });
                     DialogsManager.ShowDialog(this, messageDialog);
                 }
                 else {
-                    var cancellableProgress = new CancellableProgress();
-                    var dialog = new CancellableBusyDialog(LanguageControl.Get(fName, 5), true);
+                    CancellableProgress cancellableProgress = new();
+                    CancellableBusyDialog dialog = new(LanguageControl.Get(fName, 5), true);
                     DialogsManager.ShowDialog(this, dialog);
-                    var jsonObject = new JsonObject();
-                    var dictionary = new Dictionary<string, string>();
+                    JsonObject jsonObject = new();
+                    Dictionary<string,string> dictionary = new();
                     jsonObject.Add("path", "/GameLog/" + DateTime.Now.Ticks + ".log");
                     dictionary.Add("Authorization", "Bearer " + SettingsManager.ScpboxAccessToken);
                     dictionary.Add("Content-Type", "application/octet-stream");
                     dictionary.Add("Dropbox-API-Arg", jsonObject.ToJsonString());
-                    var memoryStream = new MemoryStream();
+                    MemoryStream memoryStream = new();
                     GameLogSink.m_stream.Seek(0, SeekOrigin.Begin);
                     GameLogSink.m_stream.CopyTo(memoryStream);
                     memoryStream.Seek(0, SeekOrigin.Begin);

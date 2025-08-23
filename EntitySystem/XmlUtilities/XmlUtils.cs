@@ -84,10 +84,7 @@ namespace XmlUtilities
 
 		public static XElement LoadXmlFromTextReader(TextReader textReader, bool throwOnError)
 		{
-			XmlReaderSettings xmlReaderSettings = new();
-			xmlReaderSettings.CheckCharacters = false;
-			xmlReaderSettings.IgnoreComments = true;
-			xmlReaderSettings.IgnoreProcessingInstructions = true;
+			XmlReaderSettings xmlReaderSettings = new() { CheckCharacters = false,IgnoreComments = true,IgnoreProcessingInstructions = true };
 			using (XmlReader reader = XmlReader.Create(textReader, xmlReaderSettings))
 			{
 				return XElement.Load(reader, LoadOptions.None);
@@ -112,11 +109,7 @@ namespace XmlUtilities
 
 		public static void SaveXmlToTextWriter(XElement node, TextWriter textWriter, bool throwOnError)
 		{
-			XmlWriterSettings xmlWriterSettings = new();
-			xmlWriterSettings.OmitXmlDeclaration = true;
-			xmlWriterSettings.Indent = true;
-			xmlWriterSettings.Encoding = Encoding.UTF8;
-			xmlWriterSettings.CloseOutput = true;
+			XmlWriterSettings xmlWriterSettings = new() { OmitXmlDeclaration = true,Indent = true,Encoding = Encoding.UTF8,CloseOutput = true };
 			using (XmlWriter xmlWriter = XmlWriter.Create(textWriter, xmlWriterSettings))
 			{
 				node.Save(xmlWriter);

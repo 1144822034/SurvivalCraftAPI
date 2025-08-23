@@ -97,7 +97,7 @@ namespace Game
 			{
 				Vector2 vector2 = m_random.Vector2(1f, 1f);
 				float y = 0.3f * m_random.Float(-0.9f, 1f);
-				var v = Vector3.Normalize(new Vector3(vector2.X, y, vector2.Y));
+				Vector3 v = Vector3.Normalize(new Vector3(vector2.X, y, vector2.Y));
 				Vector3 vector3 = vector + (num2 * v);
 				TerrainRaycastResult? terrainRaycastResult = m_subsystemTerrain.Raycast(vector, vector3, useInteractionBoxes: false, skipAirBlocks: false, delegate (int value, float d)
 				{

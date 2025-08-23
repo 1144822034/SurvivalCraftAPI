@@ -41,10 +41,7 @@ namespace Engine.Graphics
 
         public static RasterizerState RasterizerState
         {
-            get
-            {
-                return m_rasterizerState;
-            }
+            get => m_rasterizerState;
             set
             {
                 ArgumentNullException.ThrowIfNull(value);
@@ -55,10 +52,7 @@ namespace Engine.Graphics
 
         public static DepthStencilState DepthStencilState
         {
-            get
-            {
-                return m_depthStencilState;
-            }
+            get => m_depthStencilState;
             set
             {
                 ArgumentNullException.ThrowIfNull(value);
@@ -69,10 +63,7 @@ namespace Engine.Graphics
 
         public static BlendState BlendState
         {
-            get
-            {
-                return m_blendState;
-            }
+            get => m_blendState;
             set
             {
                 ArgumentNullException.ThrowIfNull(value);
@@ -83,10 +74,7 @@ namespace Engine.Graphics
 
         public static RenderTarget2D RenderTarget
         {
-            get
-            {
-                return m_renderTarget;
-            }
+            get => m_renderTarget;
             set
             {
                 m_renderTarget = value;
@@ -105,10 +93,7 @@ namespace Engine.Graphics
         
                         public static bool UseReducedZRange
         {
-            get
-            {
-                return m_useReducedZRange;
-            }
+            get => m_useReducedZRange;
             set
             {
                 if (value != m_useReducedZRange)
@@ -143,7 +128,7 @@ namespace Engine.Graphics
             DXWrapper.ApplyPrimitiveType(primitiveType);
             DXWrapper.Context.Draw(verticesCount, 0);
 #else
-            var gCHandle = GCHandle.Alloc(vertexData, GCHandleType.Pinned);
+            GCHandle gCHandle = GCHandle.Alloc(vertexData, GCHandleType.Pinned);
             try
             {
                 GLWrapper.ApplyRenderTarget(RenderTarget);
@@ -177,8 +162,8 @@ namespace Engine.Graphics
             DXWrapper.ApplyPrimitiveType(primitiveType);
             DXWrapper.Context.DrawIndexed(indicesCount, 0, 0);
 #else
-            var gCHandle = GCHandle.Alloc(vertexData, GCHandleType.Pinned);
-            var gCHandle2 = GCHandle.Alloc(indexData, GCHandleType.Pinned);
+            GCHandle gCHandle = GCHandle.Alloc(vertexData, GCHandleType.Pinned);
+            GCHandle gCHandle2 = GCHandle.Alloc(indexData, GCHandleType.Pinned);
             try
             {
                 GLWrapper.ApplyRenderTarget(RenderTarget);

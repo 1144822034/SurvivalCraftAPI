@@ -69,7 +69,7 @@ namespace Game
 			Keyboard.BackButtonQuitsApp = !MarketplaceManager.IsTrialMode;
 			if (string.IsNullOrEmpty(m_versionString) || MarketplaceManager.IsTrialMode != m_versionStringTrial)
 			{
-				m_versionString = string.Format("Version {0}{1}", VersionsManager.Version, MarketplaceManager.IsTrialMode ? " (Day One)" : string.Empty);
+				m_versionString = $"Version {VersionsManager.Version}{(MarketplaceManager.IsTrialMode ? " (Day One)" : string.Empty)}";
 				m_versionStringTrial = MarketplaceManager.IsTrialMode;
 			}
 			Children.Find("Buy").IsVisible = MarketplaceManager.IsTrialMode;
@@ -79,7 +79,7 @@ namespace Game
 			rectangleWidget.RenderTransform = Matrix.CreateTranslation((0f - rectangleWidget.ActualSize.X) / 2f, (0f - rectangleWidget.ActualSize.Y) / 2f, 0f) * Matrix.CreateScale(num, num, 1f) * Matrix.CreateTranslation(rectangleWidget.ActualSize.X / 2f, rectangleWidget.ActualSize.Y / 2f, 0f);
 			if (m_languageSwitchButton?.IsClicked ?? false)
 			{
-				var sorted = LanguageControl.LanguageTypes.OrderBy(item => {
+				IOrderedEnumerable<KeyValuePair<string,CultureInfo>> sorted = LanguageControl.LanguageTypes.OrderBy(item => {
 					if(item.Key == "en-US")
 						return 0;
 					if(item.Key == "zh-CN")

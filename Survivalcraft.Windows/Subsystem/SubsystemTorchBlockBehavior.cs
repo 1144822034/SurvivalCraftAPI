@@ -69,7 +69,7 @@ namespace Game
 
 		public override void OnChunkDiscarding(TerrainChunk chunk)
 		{
-			var list = new List<Point3>();
+			List<Point3> list = new();
 			foreach (Point3 key in m_particleSystemsByCell.Keys)
 			{
 				if (key.X >= chunk.Origin.X && key.X < chunk.Origin.X + 16 && key.Z >= chunk.Origin.Y && key.Z < chunk.Origin.Y + 16)
@@ -125,14 +125,14 @@ namespace Game
 					size = 0.2f;
 					break;
 			}
-			var fireParticleSystem = new FireParticleSystem(new Vector3(x, y, z) + v, size, 32f);
+			FireParticleSystem fireParticleSystem = new(new Vector3(x, y, z) + v, size, 32f);
 			m_subsystemParticles.AddParticleSystem(fireParticleSystem);
 			m_particleSystemsByCell[new Point3(x, y, z)] = fireParticleSystem;
 		}
 
 		public void RemoveTorch(int x, int y, int z)
 		{
-			var key = new Point3(x, y, z);
+			Point3 key = new(x, y, z);
 			FireParticleSystem particleSystem = m_particleSystemsByCell[key];
 			m_subsystemParticles.RemoveParticleSystem(particleSystem);
 			m_particleSystemsByCell.Remove(key);

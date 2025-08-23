@@ -286,8 +286,8 @@ namespace Game
 		public virtual string GetDisplayName(SubsystemTerrain subsystemTerrain, int value)
 		{
 			int data = Terrain.ExtractData(value);
-			string bn = string.Format("{0}:{1}", GetType().Name, data);
-			if (LanguageControl.TryGetBlock(bn, "DisplayName", out var result))
+			string bn = $"{GetType().Name}:{data}";
+			if (LanguageControl.TryGetBlock(bn, "DisplayName", out string result))
 			{
 				return result;
 			}
@@ -372,8 +372,8 @@ namespace Game
 		public virtual string GetDescription(int value)
 		{
 			int data = Terrain.ExtractData(value);
-			string bn = string.Format("{0}:{1}", GetType().Name, data);
-			if (LanguageControl.TryGetBlock(bn, "Description", out var r)) return r;
+			string bn = $"{GetType().Name}:{data}";
+			if (LanguageControl.TryGetBlock(bn, "Description", out string r)) return r;
 			return DefaultDescription;
 		}
 		public virtual FoodType GetFoodType(int value) { return FoodType; }

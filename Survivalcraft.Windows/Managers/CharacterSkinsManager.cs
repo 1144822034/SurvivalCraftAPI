@@ -238,7 +238,7 @@ namespace Game
 
 		public static void ValidateCharacterSkin(Stream stream)
 		{
-			var image = Image.Load(stream);
+			Image image = Image.Load(stream);
 			if (image.Width > 65536 || image.Height > 65536)
 			{
 				throw new InvalidOperationException($"Character skin is larger than 65536x65536 pixels (size={image.Width}x{image.Height})");

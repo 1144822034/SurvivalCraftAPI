@@ -5,8 +5,8 @@ namespace Game
 		/// <summary>
 		/// 调用自定义部位（比如手臂）的ClothingSlot，可以用ClothingSlot.ClothingSlots["Arms"]
 		/// </summary>
-		public static Dictionary<string,ClothingSlot> ClothingSlots = new Dictionary<string, ClothingSlot>();
-		public static Dictionary<int, ClothingSlot> ClothingSlotsByInt = new Dictionary<int, ClothingSlot>();
+		public static Dictionary<string,ClothingSlot> ClothingSlots = new();
+		public static Dictionary<int, ClothingSlot> ClothingSlotsByInt = new();
 		public static ClothingSlot Head => ClothingSlotsByInt[0];
 		public static ClothingSlot Torso => ClothingSlotsByInt[1];
 		public static ClothingSlot Legs => ClothingSlotsByInt[2];
@@ -50,6 +50,6 @@ namespace Game
 
 		// 显式转换操作符
 		public static explicit operator int(ClothingSlot slot) => slot.StableId;
-		public static implicit operator ClothingSlot(int id) => ClothingSlotsByInt.TryGetValue(id,out var slot) ? slot : null;
+		public static implicit operator ClothingSlot(int id) => ClothingSlotsByInt.TryGetValue(id,out ClothingSlot slot) ? slot : null;
 	}
 }

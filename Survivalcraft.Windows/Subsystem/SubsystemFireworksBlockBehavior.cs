@@ -35,7 +35,7 @@ namespace Game
 		{
 			for (int i = 0; i < 3; i++)
 			{
-				var v = new Vector3(m_random.Float(-3f, 3f), -15f, m_random.Float(-3f, 3f));
+				Vector3 v = new(m_random.Float(-3f, 3f), -15f, m_random.Float(-3f, 3f));
 				if (m_subsystemTerrain.Raycast(position, position + v, useInteractionBoxes: false, skipAirBlocks: true, null).HasValue)
 				{
 					return;
@@ -121,7 +121,7 @@ namespace Game
 					data = FireworksBlock.SetAltitude(data, m_random.Int(0, 1));
 					data = FireworksBlock.SetFlickering(data, m_random.Float(0f, 1f) < 0.25f);
 					int value = Terrain.MakeBlockValue(215, 0, data);
-					var position = new Vector3(terrainRaycastResult.Value.CellFace.Point.X, terrainRaycastResult.Value.CellFace.Point.Y + 1, terrainRaycastResult.Value.CellFace.Point.Z);
+					Vector3 position = new(terrainRaycastResult.Value.CellFace.Point.X, terrainRaycastResult.Value.CellFace.Point.Y + 1, terrainRaycastResult.Value.CellFace.Point.Z);
 					m_subsystemProjectiles.FireProjectile(value, position, new Vector3(m_random.Float(-3f, 3f), 45f, m_random.Float(-3f, 3f)), Vector3.Zero, null);
 				}
 			}

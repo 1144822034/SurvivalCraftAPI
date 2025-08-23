@@ -18,11 +18,8 @@ namespace Engine.Media
 
 			public override long Position
 			{
-				get
-				{
-					return m_position;
-				}
-				set
+				get => m_position;
+                set
 				{
 					m_reader.Position = value;
                     if (m_reader.CanSeek)
@@ -86,7 +83,7 @@ namespace Engine.Media
             long position = stream.Position;
 			stream.Position = 0;
             ID3v2.SkipTag(stream);
-            var beginSync = new byte[4];
+            byte[] beginSync = new byte[4];
             int read = stream.Read(beginSync, 0, beginSync.Length);
             stream.Position = position;
             return read < beginSync.Length
@@ -110,7 +107,7 @@ namespace Engine.Media
 				}
 				byte[] array = new byte[(int)streamingSource.BytesCount];
 				streamingSource.Read(array, 0, array.Length);
-				var soundData = new SoundData(streamingSource.ChannelsCount, streamingSource.SamplingFrequency, array.Length);
+				SoundData soundData = new(streamingSource.ChannelsCount, streamingSource.SamplingFrequency, array.Length);
 				Buffer.BlockCopy(array, 0, soundData.Data, 0, array.Length);
 				return soundData;
 			}

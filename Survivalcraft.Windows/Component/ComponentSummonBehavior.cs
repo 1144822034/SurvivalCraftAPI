@@ -105,7 +105,7 @@ namespace Game
 				float num = Vector3.Distance(m_componentCreature.ComponentBody.Position, SummonTarget.Position);
 				if (num > 4f)
 				{
-					var v = Vector3.Normalize(Vector3.Cross(Vector3.UnitY, SummonTarget.Position - m_componentCreature.ComponentBody.Position));
+					Vector3 v = Vector3.Normalize(Vector3.Cross(Vector3.UnitY, SummonTarget.Position - m_componentCreature.ComponentBody.Position));
 					v *= 0.75f * ((GetHashCode() % 2 != 0) ? 1 : (-1)) * (1 + (GetHashCode() % 3));
 					float speed = MathUtils.Lerp(0.4f, 1f, MathUtils.Saturate(0.25f * (num - 5f)));
 					m_componentPathfinding.SetDestination(SummonTarget.Position + v, speed, 3.75f, 2000, useRandomMovements: true, ignoreHeightDifference: false, raycastDestination: true, null);

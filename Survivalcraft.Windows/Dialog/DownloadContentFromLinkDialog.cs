@@ -84,7 +84,7 @@ namespace Game
 			}
 			else if (m_downloadButtonWidget.IsClicked)
 			{
-				var busyDialog = new CancellableBusyDialog("Downloading", autoHideOnCancel: false);
+				CancellableBusyDialog busyDialog = new("Downloading", autoHideOnCancel: false);
 				DialogsManager.ShowDialog(ParentWidget, busyDialog);
 				WebManager.Get(text, null, null, busyDialog.Progress, delegate (byte[] data)
 				{

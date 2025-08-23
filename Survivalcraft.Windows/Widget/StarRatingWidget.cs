@@ -29,14 +29,8 @@ namespace Game
 
 		public float Rating
 		{
-			get
-			{
-				return m_rating;
-			}
-			set
-			{
-				m_rating = Math.Clamp(value, 0f, 5f);
-			}
+			get => m_rating;
+			set => m_rating = Math.Clamp(value, 0f, 5f);
 		}
 
 		public StarRatingWidget()

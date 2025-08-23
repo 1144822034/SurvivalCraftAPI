@@ -42,7 +42,7 @@ namespace Game
 
 			public string Save()
 			{
-				var stringBuilder = new StringBuilder();
+				StringBuilder stringBuilder = new();
 				stringBuilder.Append(Day.ToString("R", CultureInfo.InvariantCulture));
 				stringBuilder.Append(',');
 				stringBuilder.Append(Location.X.ToString("R", CultureInfo.InvariantCulture));
@@ -59,7 +59,7 @@ namespace Game
 			/// 模组如果需要添加或使用额外信息，可以在这个ValuesDictionary读写元素
 			/// 目前API暂不支持直接保存到存档死亡信息中，建议模组自行保存额外死亡信息到自己的Subsystem中
 			/// </summary>
-			public ValuesDictionary ValuesDictionaryForMods = new ValuesDictionary();
+			public ValuesDictionary ValuesDictionaryForMods = new();
 		}
 
 		public List<DeathRecord> m_deathRecords = [];
@@ -190,7 +190,7 @@ namespace Game
 		/// 模组如果需要添加或使用额外信息，可以在这个ValuesDictionary读写元素
 		/// 目前API暂不支持直接保存到存档中，建议模组自行保存额外信息到自己的Subsystem中
 		/// </summary>
-		public ValuesDictionary ValuesDictionaryForMods = new ValuesDictionary();
+		public ValuesDictionary ValuesDictionaryForMods = new();
 
 		public void AddDeathRecord(DeathRecord deathRecord)
 		{
@@ -221,7 +221,7 @@ namespace Game
 
 		public void Save(ValuesDictionary valuesDictionary)
 		{
-			var stringBuilder = new StringBuilder();
+			StringBuilder stringBuilder = new();
 			foreach (DeathRecord deathRecord in m_deathRecords)
 			{
 				stringBuilder.Append(deathRecord.Save());

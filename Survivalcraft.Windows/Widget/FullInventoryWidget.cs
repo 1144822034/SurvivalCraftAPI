@@ -26,7 +26,7 @@ namespace Game
 			{
 				for (int j = 0; j < m_inventoryGrid.ColumnsCount; j++)
 				{
-					var inventorySlotWidget = new InventorySlotWidget();
+					InventorySlotWidget inventorySlotWidget = new();
 					inventorySlotWidget.AssignInventorySlot(inventory, num++);
 					m_inventoryGrid.Children.Add(inventorySlotWidget);
 					m_inventoryGrid.SetWidgetCell(inventorySlotWidget, new Point2(j, i));
@@ -37,7 +37,7 @@ namespace Game
 			{
 				for (int l = 0; l < m_craftingGrid.ColumnsCount; l++)
 				{
-					var inventorySlotWidget2 = new InventorySlotWidget();
+					InventorySlotWidget inventorySlotWidget2 = new();
 					inventorySlotWidget2.AssignInventorySlot(componentCraftingTable, num++);
 					m_craftingGrid.Children.Add(inventorySlotWidget2);
 					m_craftingGrid.SetWidgetCell(inventorySlotWidget2, new Point2(l, k));

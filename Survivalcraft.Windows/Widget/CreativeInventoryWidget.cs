@@ -55,12 +55,12 @@ namespace Game
 			m_pageDownButton = Children.Find<ButtonWidget>("PageDownButton");
 			m_pageLabel = Children.Find<LabelWidget>("PageLabel");
 			m_panelContainer = Children.Find<ContainerWidget>("PanelContainer");
-			var creativeInventoryPanel = new CreativeInventoryPanel(this)
+			CreativeInventoryPanel creativeInventoryPanel = new(this)
 			{
 				IsVisible = false
 			};
 			m_panelContainer.Children.Add(creativeInventoryPanel);
-			var furnitureInventoryPanel = new FurnitureInventoryPanel(this)
+			FurnitureInventoryPanel furnitureInventoryPanel = new(this)
 			{
 				IsVisible = false
 			};

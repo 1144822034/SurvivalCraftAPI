@@ -22,9 +22,9 @@ namespace Game
 			m_creaturesList = Children.Find<ListPanelWidget>("CreaturesList");
 			m_creaturesList.ItemWidgetFactory = delegate (object item)
 			{
-				var bestiaryCreatureInfo2 = (BestiaryCreatureInfo)item;
+				BestiaryCreatureInfo bestiaryCreatureInfo2 = (BestiaryCreatureInfo)item;
 				XElement node2 = ContentManager.Get<XElement>("Widgets/BestiaryItem");
-				var obj = (ContainerWidget)LoadWidget(this, node2, null);
+				ContainerWidget obj = (ContainerWidget)LoadWidget(this, node2, null);
 				ModelWidget modelWidget = obj.Children.Find<ModelWidget>("BestiaryItem.Model");
 				SetupBestiaryModelWidget(bestiaryCreatureInfo2, modelWidget, (m_creaturesList.Items.IndexOf(item) % 2 == 0) ? new Vector3(-1f, 0f, -1f) : new Vector3(1f, 0f, -1f), autoRotate: false, autoAspect: false);
 				obj.Children.Find<LabelWidget>("BestiaryItem.Text").Text = bestiaryCreatureInfo2.DisplayName;
@@ -37,7 +37,7 @@ namespace Game
 				return obj;
 			};
 			m_creaturesList.ItemClicked += OnCreaturesListItemClicked;
-			var list = new List<BestiaryCreatureInfo>();
+			List<BestiaryCreatureInfo> list = new();
 			foreach (ValuesDictionary entitiesValuesDictionary in DatabaseManager.EntitiesValuesDictionaries)
 			{
 				ValuesDictionary valuesDictionary = DatabaseManager.FindValuesDictionaryForComponent(entitiesValuesDictionary, typeof(ComponentCreature));
@@ -79,7 +79,7 @@ namespace Game
 								string[] lp = dy.Substring(1,dy.Length - 2).Split(':',StringSplitOptions.RemoveEmptyEntries);
 								dy = LanguageControl.GetDatabase("Description", lp[1]);
 							}
-							var bestiaryCreatureInfo = new BestiaryCreatureInfo
+							BestiaryCreatureInfo bestiaryCreatureInfo = new()
 							{
 								EntityValuesDictionary = entitiesValuesDictionary,
 								Order = order,

@@ -99,7 +99,7 @@ namespace Game
 
 		public override BoundingBox[] GetCustomCollisionBoxes(SubsystemTerrain terrain, int value)
 		{
-			var array = new BoundingBox[6];
+			BoundingBox[] array = new BoundingBox[6];
 			for (int i = 0; i < 6; i++)
 			{
 				array[i] = WireExistsOnFace(value, i) ? m_collisionBoxesByFace[i] : default;

@@ -28,12 +28,12 @@ namespace Game
 		{
 			get
 			{//合并模组设置和原版设置
-				Dictionary<string,object> dictionary = new Dictionary<string,object>();
-				foreach(var item in SettingsManager.KeyboardMappingSettings)
+				Dictionary<string,object> dictionary = new();
+				foreach(KeyValuePair<string,object> item in SettingsManager.KeyboardMappingSettings)
 					dictionary.TryAdd(item.Key,item.Value);
-				foreach(var item in ModKeyboardMapSettings.Values)
+				foreach(ValuesDictionary item in ModKeyboardMapSettings.Values)
 				{
-					foreach(var item2 in item)
+					foreach(KeyValuePair<string,object> item2 in item)
 						dictionary.TryAdd(item2.Key,item2.Value);
 				}
 				return dictionary;
@@ -43,12 +43,12 @@ namespace Game
 		{
 			get
 			{
-				Dictionary<string,int> dictionary = new Dictionary<string,int>();
-				foreach(var item in SettingsManager.CameraManageSettings)
+				Dictionary<string,int> dictionary = new();
+				foreach(KeyValuePair<string,object> item in SettingsManager.CameraManageSettings)
 					dictionary.TryAdd(item.Key,Convert.ToInt32(item.Value));
-				foreach(var item in ModCameraManageSettings.Values)
+				foreach(ValuesDictionary item in ModCameraManageSettings.Values)
 				{
-					foreach(var item2 in item)
+					foreach(KeyValuePair<string,object> item2 in item)
 						dictionary.TryAdd(item2.Key,Convert.ToInt32(item2.Value));
 				}
 				return dictionary;
@@ -65,7 +65,7 @@ namespace Game
 				using(Stream stream = Storage.OpenFile(ModsManager.ModsSettingsPath,OpenFileMode.Read))
 				{
 					XElement element = XElement.Load(stream);
-					foreach(var modXElement in element.Elements("Mod"))
+					foreach(XElement modXElement in element.Elements("Mod"))
 					{
 						string packageName = XmlUtils.GetAttributeValue<string>(modXElement, "PackageName");
 						ModSettingsCache[packageName] = modXElement;
@@ -85,17 +85,17 @@ namespace Game
 			//遍历每个模组，加载设置项，如果设置项已加载，就从ModSettingsCache中删除
 			try
 			{
-				foreach(var modEntity in ModsManager.ModList)
+				foreach(ModEntity modEntity in ModsManager.ModList)
 				{
 					string packageName = modEntity.modInfo.PackageName;
 
 					ValuesDictionary modKeyboardSettings = [];
 					ValuesDictionary modCameraSettings = [];
-					var keysToAdd = modEntity.Loader?.GetKeyboardMappings() ?? [];//初始化模组默认键位设置
-					var camerasToAdd = modEntity.Loader?.GetCameraList() ?? [];//初始化模组默认相机设置
-					foreach(var item1 in keysToAdd)
+					IEnumerable<KeyValuePair<string,object>> keysToAdd = modEntity.Loader?.GetKeyboardMappings() ?? [];//初始化模组默认键位设置
+					IEnumerable<KeyValuePair<string,int>> camerasToAdd = modEntity.Loader?.GetCameraList() ?? [];//初始化模组默认相机设置
+					foreach(KeyValuePair<string,object> item1 in keysToAdd)
 						modKeyboardSettings.Add(item1.Key, item1.Value);
-					foreach(var item2 in camerasToAdd)
+					foreach(KeyValuePair<string,int> item2 in camerasToAdd)
 						modCameraSettings.Add(item2.Key, item2.Value);
 
 					if(ModSettingsCache.TryGetValue(packageName, out XElement setting))
@@ -134,10 +134,10 @@ namespace Game
 
 		public static void SaveModSettings()
 		{
-			foreach(var modEntity in ModsManager.ModList)
+			foreach(ModEntity modEntity in ModsManager.ModList)
 			{
 				string packageName = modEntity.modInfo.PackageName;
-				XElement settingsElement = new XElement("Mod");
+				XElement settingsElement = new("Mod");
 				XmlUtils.SetAttributeValue(settingsElement, "PackageName", packageName);
 				try
 				{
@@ -152,14 +152,14 @@ namespace Game
 					Log.Warning($"{string.Format(str,packageName)} {e}");
 				}
 				//保存模组的键位映射设置
-				XElement keyboardMapping = new XElement("KeyboardMapping");
+				XElement keyboardMapping = new("KeyboardMapping");
 				if(ModKeyboardMapSettings.TryGetValue(packageName,out ValuesDictionary modKeyboardSettings) && modKeyboardSettings.Count > 0)
 				{
 					modKeyboardSettings.Save(keyboardMapping);
 					settingsElement.Add(keyboardMapping);
 				}
 				//保存模组的相机设置
-				XElement cameraList = new XElement("CameraList");
+				XElement cameraList = new("CameraList");
 				if(ModCameraManageSettings.TryGetValue(packageName,out ValuesDictionary modCameraSettings) && modCameraSettings.Count > 0)
 				{
 					modCameraSettings.Save(cameraList);
@@ -171,7 +171,7 @@ namespace Game
 			}
 
 			XElement xElement = new("ModSettings");
-			foreach(var settingElement in ModSettingsCache)
+			foreach(KeyValuePair<string,XElement> settingElement in ModSettingsCache)
 			{
 				xElement.Add(settingElement.Value);
 			}
@@ -201,14 +201,14 @@ namespace Game
 
 		public static void ResetModsKeyboardMappingSettings()
 		{
-			foreach(var modEntity in ModsManager.ModList)
+			foreach(ModEntity modEntity in ModsManager.ModList)
 			{
 				string packageName = modEntity.modInfo.PackageName;
 				if(ModKeyboardMapSettings.TryGetValue(packageName,out ValuesDictionary keyboardSettings))
 				{
 					keyboardSettings.Clear();
-					var keysToAdd = modEntity.Loader?.GetKeyboardMappings() ?? [];
-					foreach(var item1 in keysToAdd)
+					IEnumerable<KeyValuePair<string,object>> keysToAdd = modEntity.Loader?.GetKeyboardMappings() ?? [];
+					foreach(KeyValuePair<string,object> item1 in keysToAdd)
 						keyboardSettings.Add(item1.Key,item1.Value);
 				}
 			}
@@ -217,14 +217,14 @@ namespace Game
 
 		public static void ResetModsCameraManageSettings()
 		{
-			foreach(var modEntity in ModsManager.ModList)
+			foreach(ModEntity modEntity in ModsManager.ModList)
 			{
 				string packageName = modEntity.modInfo.PackageName;
 				if(ModCameraManageSettings.TryGetValue(packageName,out ValuesDictionary cameraSettings))
 				{
 					cameraSettings.Clear();
-					var camerasToAdd = modEntity.Loader?.GetCameraList() ?? [];
-					foreach(var item1 in camerasToAdd)
+					IEnumerable<KeyValuePair<string,int>> camerasToAdd = modEntity.Loader?.GetCameraList() ?? [];
+					foreach(KeyValuePair<string,int> item1 in camerasToAdd)
 						cameraSettings.Add(item1.Key,item1.Value);
 				}
 			}

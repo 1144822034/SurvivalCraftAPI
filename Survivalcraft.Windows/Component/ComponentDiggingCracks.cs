@@ -49,17 +49,17 @@ namespace Game
 				m_value = cellValue;
                 m_vertices.Count = 0;
                 m_indices.Count = 0;
-                foreach(var drawGroup in m_geometry.Draws)
+                foreach(KeyValuePair<Texture2D,TerrainGeometry> drawGroup in m_geometry.Draws)
                 {
-	                foreach(var geometry in drawGroup.Value.Subsets)
+	                foreach(TerrainGeometrySubset geometry in drawGroup.Value.Subsets)
 	                {
-		                foreach(var index in geometry.Indices)
+		                foreach(int index in geometry.Indices)
 		                {
 			                m_indices.Add(index + m_vertices.Count);
 		                }
-		                foreach(var vertex in geometry.Vertices)
+		                foreach(TerrainVertex vertex in geometry.Vertices)
 		                {
-			                var terrainVertex = block.SetDiggingCrackingTextureTransform(vertex);
+			                TerrainVertex terrainVertex = block.SetDiggingCrackingTextureTransform(vertex);
 			                m_vertices.Add(terrainVertex);
 		                }
 	                }

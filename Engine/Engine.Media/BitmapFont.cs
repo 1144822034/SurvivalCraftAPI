@@ -105,7 +105,7 @@ namespace Engine.Media
 			set;
 		}
 
-        public static Glyph EmptyGlyph = new Glyph(
+        public static Glyph EmptyGlyph = new(
             (char)0,
             Vector2.Zero,
             Vector2.Zero,
@@ -155,7 +155,7 @@ namespace Engine.Media
 				BitmapFont bitmapFont = new();
 				StreamReader streamReader = new(GlyphsStream);
 				int num = int.Parse(streamReader.ReadLine());
-				var array = new Glyph[num];
+				Glyph[] array = new Glyph[num];
 				for (int i = 0; i < num; i++)
 				{
 					string line = streamReader.ReadLine();
@@ -249,7 +249,7 @@ namespace Engine.Media
 			scale *= Scale;
 			spacing += Spacing;
             float num = GlyphHeight + spacing.Y;
-            Vector2 vector = new Vector2(0f, num);
+            Vector2 vector = new(0f, num);
 			Vector2 vector2 = vector;
             int i = start;
 			for (int num2 = start + count; i < num2; i++)
@@ -434,7 +434,7 @@ namespace Engine.Media
                     array[l] = ApplyKerningBulking(array[l], kerningSettings.BulkingRadius, kerningSettings.BulkingGradient);
                     array2[l] = ApplyKerningBulking(array2[l], kerningSettings.BulkingRadius, kerningSettings.BulkingGradient);
                 }
-                Counter counter = new Counter();
+                Counter counter = new();
                 for (int m = 0; m < list.Count; m++)
                 {
                     for (int n = 0; n < list.Count; n++)

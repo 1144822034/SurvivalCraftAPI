@@ -22,7 +22,7 @@ namespace Game
 
 		protected float m_distanceToFlyToTarget = 1.75f;
 
-        private Random m_random = new Random();
+        private Random m_random = new();
 		public virtual double TimeWaitToAutoPick => m_timeWaitToAutoPick;
 		public virtual float DistanceToPick => m_distanceToPick;
 		public virtual float DistanceToFlyToTarget => m_distanceToFlyToTarget;

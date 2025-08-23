@@ -5,17 +5,19 @@ public static class MultiKeyboard
 {
 	private class KeyboardData
 	{
-		public bool IsConnected;
-
-		public bool[] KeysDownArray = new bool[Enum.GetValues(typeof(Key)).Length];
-
-		public bool[] KeysDownOnceArray = new bool[Enum.GetValues(typeof(Key)).Length];
-
-		public double[] KeysDownRepeatArray = new double[Enum.GetValues(typeof(Key)).Length];
+        // ReSharper disable MemberHidesStaticFromOuterClass
+        public bool IsConnected;
 
 		public Key? LastKey;
 
 		public char? LastChar;
+        // ReSharper restore MemberHidesStaticFromOuterClass
+
+        public bool[] KeysDownArray = new bool[Enum.GetValues(typeof(Key)).Length];
+
+		public bool[] KeysDownOnceArray = new bool[Enum.GetValues(typeof(Key)).Length];
+
+		public double[] KeysDownRepeatArray = new double[Enum.GetValues(typeof(Key)).Length];
 	}
 
 	private static double KeyFirstRepeatTime = 0.3;

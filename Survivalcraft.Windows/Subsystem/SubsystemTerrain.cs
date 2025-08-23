@@ -140,7 +140,7 @@ namespace Game
 			{
 				end = start + (1000f * Vector3.Normalize(end - start));
 			}
-			var ray = new Ray3(start, Vector3.Normalize(end - start));
+			Ray3 ray = new(start, Vector3.Normalize(end - start));
 			float x = start.X;
 			float y = start.Y;
 			float z = start.Z;
@@ -177,7 +177,7 @@ namespace Game
 				int num24 = Terrain.ExtractContents(cellValue);
 				if (num24 != 0 || !skipAirBlocks)
 				{
-					var ray2 = new Ray3(ray.Position - new Vector3(num2, num3, num4), ray.Direction);
+					Ray3 ray2 = new(ray.Position - new Vector3(num2, num3, num4), ray.Direction);
 					float? num25 = BlocksManager.Blocks[num24].Raycast(ray2, this, cellValue, useInteractionBoxes, out int nearestBoxIndex, out BoundingBox nearestBox);
 					if (num25.HasValue && (!num23.HasValue || num25.Value < num23.Value))
 					{
@@ -291,7 +291,7 @@ namespace Game
 			{
 				end = start + (1000f * Vector3.Normalize(end - start));
 			}
-			var ray = new Ray3(start, Vector3.Normalize(end - start));
+			Ray3 ray = new(start, Vector3.Normalize(end - start));
 			float x = start.X;
 			float y = start.Y;
 			float z = start.Z;
@@ -328,7 +328,7 @@ namespace Game
 				int num24 = Terrain.ExtractContents(cellValue);
 				if (num24 != 0 || !skipAirBlocks)
 				{
-					var ray2 = new Ray3(ray.Position - new Vector3(num2, num3, num4), ray.Direction);
+					Ray3 ray2 = new(ray.Position - new Vector3(num2, num3, num4), ray.Direction);
 					float? num25 = BlocksManager.Blocks[num24].Raycast(ray2, null, cellValue, useInteractionBoxes, out int nearestBoxIndex, out BoundingBox nearestBox);
 					if (num25.HasValue && (!num23.HasValue || num25.Value < num23.Value))
 					{

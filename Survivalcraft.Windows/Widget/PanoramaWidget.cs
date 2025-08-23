@@ -38,8 +38,8 @@ namespace Game
 			float y2 = m_position.Y;
 			Vector2 zero = Vector2.Zero;
 			Vector2 actualSize = ActualSize;
-			var texCoord = new Vector2(x2 - num2, y2 - num3);
-			var texCoord2 = new Vector2(x2 + num2, y2 + num3);
+			Vector2 texCoord = new(x2 - num2, y2 - num3);
+			Vector2 texCoord2 = new(x2 + num2, y2 + num3);
 			TexturedBatch2D texturedBatch2D = dc.PrimitivesRenderer2D.TexturedBatch(Texture, useAlphaTest: false, 0, DepthStencilState.DepthWrite, null, BlendState.AlphaBlend, SamplerState.LinearWrap);
 			int count = texturedBatch2D.TriangleVertices.Count;
 			texturedBatch2D.QueueQuad(zero, actualSize, 1f, texCoord, texCoord2, GlobalColorTransform);
@@ -60,8 +60,8 @@ namespace Game
 				{
 					float num6 = 0.35f * MathF.Pow(MathUtils.Saturate(SimplexNoise.OctavedNoise(num4 + 1000f, num5, 0.7f * num, 0.5f, 1, 2f, 1f) - 0.1f), 1f) * num3;
 					float num7 = 0.7f * MathF.Pow(SimplexNoise.OctavedNoise(num4, num5, 0.5f * num, 0.5f, 1, 2f, 1f), 3f) * num3;
-					var corner = new Vector2(num4, num5);
-					var corner2 = new Vector2(num4 + num2, num5 + num2);
+					Vector2 corner = new(num4, num5);
+					Vector2 corner2 = new(num4 + num2, num5 + num2);
 					if (num6 > 0.01f)
 					{
 						flatBatch2D.QueueRectangle(corner, corner2, 0f, new Color(0f, 0f, 0f, num6));

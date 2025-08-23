@@ -75,7 +75,7 @@ namespace Game
 
 		public override void Save(ValuesDictionary valuesDictionary)
 		{
-			var valuesDictionary2 = new ValuesDictionary();
+			ValuesDictionary valuesDictionary2 = new();
 			valuesDictionary.SetValue("Saplings", valuesDictionary2);
 			int num = 0;
 			foreach (SaplingData value in m_saplings.Values)

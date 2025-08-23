@@ -13,10 +13,7 @@ namespace Game
 
 		public ulong State
 		{
-			get
-			{
-				return m_s0 + ((ulong)m_s1 << 32);
-			}
+			get => m_s0 + ((ulong)m_s1 << 32);
 			set
 			{
 				m_s0 = (uint)value;

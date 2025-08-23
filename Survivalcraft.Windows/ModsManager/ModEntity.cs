@@ -15,7 +15,9 @@ namespace Game
 		public string ModFilePath;
 		public bool IsDependencyChecked;
 		public const string fName = "ModEntity";
-		public ModLoader Loader { get { return ModLoader_; } set { ModLoader_ = value; } }
+		public ModLoader Loader { get => ModLoader_;
+			set => ModLoader_ = value;
+		}
 		private ModLoader ModLoader_;
 
 		public ModEntity() { }
@@ -53,7 +55,7 @@ namespace Game
 			{
 				if (Storage.GetExtension(zipArchiveEntry.FilenameInZip) == extension)
 				{
-					var stream = new MemoryStream();
+					MemoryStream stream = new();
 					ModArchive.ExtractFile(zipArchiveEntry, stream);
 					stream.Position = 0L;
 					try
@@ -62,7 +64,7 @@ namespace Game
 					}
 					catch (Exception e)
 					{
-						Log.Error(string.Format("Get file [{0}] failed: {1}", zipArchiveEntry.FilenameInZip, e));
+						Log.Error($"Get file [{zipArchiveEntry.FilenameInZip}] failed: {e}");
 					}
 					finally
 					{
@@ -170,7 +172,7 @@ namespace Game
 			{
 				LoadIcon(stream);
 			});
-			foreach (var c in ModFiles)
+			foreach (KeyValuePair<string,ZipArchiveEntry> c in ModFiles)
 			{
 				ZipArchiveEntry zipArchiveEntry = c.Value;
 				string filename = zipArchiveEntry.FilenameInZip;
@@ -195,7 +197,7 @@ namespace Game
 		public virtual void LoadBlocksData()
 		{
 			bool flag = true;
-			GetFiles(".csv", (filename, stream) =>
+			GetFiles(".csv", (_, stream) =>
 			{
 				if (flag)
 				{
@@ -213,7 +215,7 @@ namespace Game
 		{
 			bool flag = true;
 			XElement element = xElement;
-			GetFiles(".xdb", (filename, stream) =>
+			GetFiles(".xdb", (_, stream) =>
 			{
 				if (flag)
 				{
@@ -229,11 +231,11 @@ namespace Game
 		/// </summary>
 		/// <param name="block"></param>
 		/// <param name="xElement"></param>
-		public virtual void LoadClo(ClothingBlock block, ref XElement xElement)
+		public virtual void LoadClo(ClothingBlock _, ref XElement xElement)
 		{
 			bool flag = true;
 			XElement element = xElement;
-			GetFiles(".clo", (filename, stream) =>
+			GetFiles(".clo", (_, stream) =>
 			{
 				if (flag)
 				{
@@ -252,7 +254,7 @@ namespace Game
 			bool flag = true;
 			XElement element = xElement;
 			GetFiles(".cr",
-				(filename,stream) => {
+				(_,stream) => {
 					if(flag)
 					{
 						LoadingScreen.Info($"[{modInfo.Name}] {LanguageControl.Get(fName, "4")}");
@@ -268,7 +270,7 @@ namespace Game
 		public virtual Assembly[] GetAssemblies()
 		{
 			bool flag = true;
-			var assemblies = new List<Assembly>();
+			List<Assembly> assemblies = new();
 			
 			GetFiles(".dll", (filename, stream) =>
 			{
@@ -285,23 +287,24 @@ namespace Game
 		}
 		public virtual void HandleAssembly(Assembly assembly)
 		{
-			var blockTypes = new List<Type>();
+			List<Type> blockTypes = new();
 			Type[] types = assembly.GetTypes();
 			for (int i = 0; i < types.Length; i++)
 			{
 				Type type = types[i];
 				if (type.IsSubclassOf(typeof(ModLoader)) && !type.IsAbstract)
 				{
-					var modLoader = Activator.CreateInstance(types[i]) as ModLoader;
-					modLoader.Entity = this;
-					Loader = modLoader;
-					modLoader.__ModInitialize();
-					ModsManager.ModLoaders.Add(modLoader);
+					if(Activator.CreateInstance(types[i]) is ModLoader modLoader)
+					{
+						modLoader.Entity = this;
+						Loader = modLoader;
+						modLoader.__ModInitialize();
+						ModsManager.ModLoaders.Add(modLoader);
+					}
 				}
-				if (type.IsSubclassOf(typeof(IContentReader.IContentReader)) && !type.IsAbstract)
+				if (type.IsSubclassOf(typeof(IContentReader.IContentReader)) && !type.IsAbstract && Activator.CreateInstance(type) is IContentReader.IContentReader reader)
 				{
-					IContentReader.IContentReader reader = Activator.CreateInstance(type) as IContentReader.IContentReader;
-					if (!ContentManager.ReaderList.ContainsKey(reader.Type)) ContentManager.ReaderList.Add(reader.Type, reader);
+					ContentManager.ReaderList.TryAdd(reader.Type,reader);
 				}
 				if (type.IsSubclassOf(typeof(Block)) && !type.IsAbstract)
 				{
@@ -317,7 +320,7 @@ namespace Game
 		public virtual void LoadJs()
 		{
 			bool flag = true;
-			GetFiles(".js", (filename, stream) =>
+			GetFiles(".js", (_, stream) =>
 			{
 				if(flag)
 				{
@@ -344,7 +347,7 @@ namespace Game
 				int k = j;
 				string name = modInfo.Dependencies[k];
 				string dn = "";
-				var dnversion = new Version();
+				Version dnversion = new();
 				bool noNeedToCheckVersion = false;
 				if (name.Contains(":"))
 				{
@@ -353,7 +356,6 @@ namespace Game
 					{
 						dn = tmpa[0];
 						dnversion = new Version(tmpa[1]);
-						noNeedToCheckVersion = false;
 					}
 				}
 				else
@@ -402,7 +404,11 @@ namespace Game
 		//释放资源
 		public virtual void Dispose()
 		{
-			try { Loader?.ModDispose(); } catch { }
+			try { Loader?.ModDispose(); }
+			catch
+			{
+				// ignored
+			}
 			ModArchive?.ZipFileStream.Close();
 		}
 		public override bool Equals(object obj)
@@ -416,7 +422,9 @@ namespace Game
 
 		public override int GetHashCode()
 		{
+			// ReSharper disable NonReadonlyMemberInGetHashCode
 			return modInfo.GetHashCode();
+			// ReSharper restore NonReadonlyMemberInGetHashCode
 		}
 	}
 }

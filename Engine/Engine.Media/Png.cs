@@ -84,7 +84,7 @@ namespace Engine.Media
                 default:
                     throw new InvalidOperationException("Unsupported PNG pixel format.");
             }
-            PngEncoder encoder = new PngEncoder
+            PngEncoder encoder = new()
             {
 				ColorType = pngColorType,
 				CompressionLevel = compressionLevel,

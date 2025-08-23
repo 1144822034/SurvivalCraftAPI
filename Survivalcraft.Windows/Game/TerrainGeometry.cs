@@ -78,21 +78,21 @@ namespace Game
         public virtual TerrainGeometry GetGeometry(Texture2D texture)
         {
             Draws ??= [];
-            if (Draws.TryGetValue(texture, out var geometries)) return geometries;
-            var geometry = new TerrainGeometry();
+            if (Draws.TryGetValue(texture, out TerrainGeometry geometries)) return geometries;
+            TerrainGeometry geometry = new();
             Draws.Add(texture, geometry);
             return geometry;
         }
 
         public virtual void ClearGeometry()
         {
-	        foreach(var subset in Subsets)
+	        foreach(TerrainGeometrySubset subset in Subsets)
 	        {
 		        subset.Indices.Clear();
 		        subset.Vertices.Clear();
 	        }
 	        if(Draws==null) return;
-	        foreach(var drawItem in Draws)
+	        foreach(KeyValuePair<Texture2D,TerrainGeometry> drawItem in Draws)
 	        {
 		        if(drawItem.Value!=this) drawItem.Value.ClearGeometry();   
 	        }

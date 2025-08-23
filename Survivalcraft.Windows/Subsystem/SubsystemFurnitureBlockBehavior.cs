@@ -132,7 +132,7 @@ namespace Game
 		{
 			FurnitureDesign design = null;
 			FurnitureDesign furnitureDesign = null;
-			var valuesDictionary = new Dictionary<Point3, int>();
+			Dictionary<Point3,int> valuesDictionary = new();
 			Point3 point = start.Point;
 			Point3 point2 = start.Point;
 			int startValue = SubsystemTerrain.Terrain.GetCellValue(start.Point.X, start.Point.Y, start.Point.Z);
@@ -155,7 +155,7 @@ namespace Game
 			}
 			else
 			{
-				var val = new Stack<Point3>();
+				Stack<Point3> val = new();
 				val.Push(start.Point);
 				HashSet<Point3> scannedPoints = [];
 				while (val.Count > 0)
@@ -260,10 +260,10 @@ namespace Game
 				design.Rotate(1, steps);
 				Point3 location = design.Box.Location;
 				Point3 point5 = new Point3(design.Resolution) - (design.Box.Location + design.Box.Size);
-				var delta = new Point3((point5.X - location.X) / 2, -location.Y, (point5.Z - location.Z) / 2);
+				Point3 delta = new((point5.X - location.X) / 2, -location.Y, (point5.Z - location.Z) / 2);
 				design.Shift(delta);
 			}
-			var dialog = new BuildFurnitureDialog(design, furnitureDesign, delegate (bool result)
+			BuildFurnitureDialog dialog = new(design, furnitureDesign, delegate (bool result)
 			{
 				if (result)
 				{
@@ -327,11 +327,11 @@ namespace Game
 
 		public void SwitchToNextState(int x, int y, int z, bool playSound)
 		{
-			var hashSet = new HashSet<Point3>();
-			var list = new List<Point3>
-			{
-				new(x, y, z)
-			};
+			HashSet<Point3> hashSet = [];
+			List<Point3> list =
+			[
+				new(x,y,z)
+			];
 			int num = 0;
 			while (num < list.Count && num < 4096)
 			{
@@ -387,7 +387,7 @@ namespace Game
 				num++;
 				name = (num > 0) ? (name + num.ToString(CultureInfo.InvariantCulture)) : name;
 			}
-			var furnitureSet = new FurnitureSet
+			FurnitureSet furnitureSet = new()
 			{
 				Name = name,
 				ImportedFrom = importedFrom
@@ -430,12 +430,12 @@ namespace Game
 
 		public static List<FurnitureDesign> LoadFurnitureDesigns(SubsystemTerrain subsystemTerrain, ValuesDictionary valuesDictionary)
 		{
-			var list = new List<FurnitureDesign>();
+			List<FurnitureDesign> list = [];
 			foreach (KeyValuePair<string, object> item2 in valuesDictionary)
 			{
 				int index = int.Parse(item2.Key, CultureInfo.InvariantCulture);
-				var valuesDictionary2 = (ValuesDictionary)item2.Value;
-				var item = new FurnitureDesign(index, subsystemTerrain, valuesDictionary2);
+				ValuesDictionary valuesDictionary2 = (ValuesDictionary)item2.Value;
+				FurnitureDesign item = new(index, subsystemTerrain, valuesDictionary2);
 				list.Add(item);
 			}
 			foreach (FurnitureDesign design in list)
@@ -487,7 +487,7 @@ namespace Game
 
 		public override void OnChunkDiscarding(TerrainChunk chunk)
 		{
-			var list = new List<Point3>();
+			List<Point3> list = [];
 			foreach (Point3 key in m_particleSystemsByCell.Keys)
 			{
 				if (key.X >= chunk.Origin.X && key.X < chunk.Origin.X + 16 && key.Z >= chunk.Origin.Y && key.Z < chunk.Origin.Y + 16)
@@ -537,7 +537,7 @@ namespace Game
 				string value3 = item2.GetValue<string>("ImportedFrom", null);
 				string value4 = item2.GetValue<string>("Indices");
 				int[] array = HumanReadableConverter.ValuesListFromString<int>(';', value4);
-				var furnitureSet = new FurnitureSet
+				FurnitureSet furnitureSet = new()
 				{
 					Name = value2,
 					ImportedFrom = value3
@@ -559,15 +559,15 @@ namespace Game
 		{
 			base.Save(valuesDictionary);
 			GarbageCollectDesigns();
-			var valuesDictionary2 = new ValuesDictionary();
+			ValuesDictionary valuesDictionary2 = new();
 			valuesDictionary.SetValue("FurnitureDesigns", valuesDictionary2);
 			SaveFurnitureDesigns(valuesDictionary2, m_furnitureDesigns.Where(d => d != null).ToArray());
-			var valuesDictionary3 = new ValuesDictionary();
+			ValuesDictionary valuesDictionary3 = new();
 			valuesDictionary.SetValue("FurnitureSets", valuesDictionary3);
 			int num = 0;
 			foreach (FurnitureSet furnitureSet in FurnitureSets)
 			{
-				var valuesDictionary4 = new ValuesDictionary();
+				ValuesDictionary valuesDictionary4 = new();
 				valuesDictionary3.SetValue(num.ToString(CultureInfo.InvariantCulture), valuesDictionary4);
 				valuesDictionary4.SetValue("Name", furnitureSet.Name);
 				if (furnitureSet.ImportedFrom != null)
@@ -687,7 +687,7 @@ namespace Game
 			{
 				return;
 			}
-			var list = new List<FireParticleSystem>();
+			List<FireParticleSystem> list = [];
 			BoundingBox[] torchPoints = design.GetTorchPoints(rotation);
 			if (torchPoints.Length != 0)
 			{
@@ -697,7 +697,7 @@ namespace Game
 					BoundingBox boundingBox = array[i];
 					float num = (boundingBox.Size().X + boundingBox.Size().Y + boundingBox.Size().Z) / 3f;
 					float size = Math.Clamp(1.5f * num, 0.1f, 1f);
-					var fireParticleSystem = new FireParticleSystem(new Vector3(x, y, z) + boundingBox.Center(), size, 32f);
+					FireParticleSystem fireParticleSystem = new(new Vector3(x, y, z) + boundingBox.Center(), size, 32f);
 					m_subsystemParticles.AddParticleSystem(fireParticleSystem);
 					list.Add(fireParticleSystem);
 				}

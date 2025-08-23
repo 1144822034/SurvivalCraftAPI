@@ -42,6 +42,7 @@ namespace Engine
                     }
                     catch
                     {
+                        // ignored
                     }
                 }
                 return long.MaxValue;
@@ -376,7 +377,7 @@ namespace Engine
 
         public static string SanitizeFileName(string filename, string replacement = "-")
         {
-            StringBuilder sanitized = new StringBuilder();
+            StringBuilder sanitized = new();
             foreach (char c in filename)
             {
                 sanitized.Append(InvalidFileNameChars.Contains(c) ? replacement : c);

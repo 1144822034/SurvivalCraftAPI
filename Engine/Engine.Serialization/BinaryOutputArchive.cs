@@ -6,7 +6,7 @@ namespace Engine.Serialization
         private int m_nextTypeId;
 #pragma warning restore CS0169 // 字段从未被使用
 
-        private Dictionary<string, int> m_stringIds = new Dictionary<string, int>();
+        private Dictionary<string, int> m_stringIds = new();
 
 		private EngineBinaryWriter m_writer;
 

@@ -7,7 +7,7 @@ namespace Game
 	{
 		public static int Index = 168;
 
-		public new static string fName = "SoilBlock";
+		public static new string fName = "SoilBlock";
 
 		public static BoundingBox[] m_collisionBoxes =
 		[

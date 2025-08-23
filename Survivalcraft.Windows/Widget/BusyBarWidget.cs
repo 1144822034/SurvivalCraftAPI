@@ -51,7 +51,7 @@ namespace Game
 			int count = flatBatch2D.TriangleVertices.Count;
 			for (int i = 0; i < 5; i++)
 			{
-				var v = new Vector2((i + 0.5f) * 24f, 6f);
+				Vector2 v = new((i + 0.5f) * 24f, 6f);
 				Color c = (i == m_boxIndex % 5) ? LitBarColor : UnlitBarColor;
 				float v2 = (i == m_boxIndex % 5) ? 12f : 8f;
 				flatBatch2D.QueueQuad(v - (new Vector2(v2) / 2f), v + (new Vector2(v2) / 2f), 0f, c * GlobalColorTransform);

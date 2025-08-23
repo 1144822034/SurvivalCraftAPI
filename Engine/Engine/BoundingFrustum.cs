@@ -24,11 +24,8 @@ namespace Engine
 
 		public Matrix Matrix
 		{
-			get
-			{
-				return m_viewProjection;
-			}
-			set
+			get => m_viewProjection;
+            set
 			{
 				m_viewProjection = value;
 				m_planes[0].Normal.X = 0f - value.M13;
@@ -102,8 +99,10 @@ namespace Engine
 
         public override int GetHashCode()
 		{
-			return m_viewProjection.GetHashCode();
-		}
+            // ReSharper disable NonReadonlyMemberInGetHashCode
+            return m_viewProjection.GetHashCode();
+            // ReSharper restore NonReadonlyMemberInGetHashCode
+        }
 
 		public bool Equals(BoundingFrustum other)
 		{

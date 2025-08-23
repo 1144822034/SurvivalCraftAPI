@@ -95,7 +95,7 @@ namespace Game
 			{
 				try
 				{
-					using (FileStream destination = new FileStream(Path.Combine(LocalPath, path), FileMode.Create, FileAccess.Write, FileShare.None))
+					using (FileStream destination = new(Path.Combine(LocalPath, path), FileMode.Create, FileAccess.Write, FileShare.None))
 					{
 						stream.CopyTo(destination);
 					}
@@ -115,10 +115,7 @@ namespace Game
 		}
         public ExternalContentEntry GetDirectoryEntry(string internalPath, bool scanContents)
 		{
-			var externalContentEntry = new ExternalContentEntry();
-			externalContentEntry.Type = ExternalContentType.Directory;
-			externalContentEntry.Path = internalPath;
-			externalContentEntry.Time = new DateTime(1970, 1, 1);
+			ExternalContentEntry externalContentEntry = new() { Type = ExternalContentType.Directory,Path = internalPath,Time = new DateTime(1970, 1, 1) };
 			if (scanContents)
 			{
 				string[] directories = Directory.GetDirectories(internalPath);
@@ -129,12 +126,8 @@ namespace Game
 				directories = Directory.GetFiles(internalPath);
 				foreach (string text in directories)
 				{
-					var fileInfo = new FileInfo(text);
-					var externalContentEntry2 = new ExternalContentEntry();
-					externalContentEntry2.Type = ExternalContentManager.ExtensionToType(Path.GetExtension(text));
-					externalContentEntry2.Path = text;
-					externalContentEntry2.Size = fileInfo.Length;
-					externalContentEntry2.Time = fileInfo.CreationTime;
+					FileInfo fileInfo = new(text);
+					ExternalContentEntry externalContentEntry2 = new() { Type = ExternalContentManager.ExtensionToType(Path.GetExtension(text)),Path = text,Size = fileInfo.Length,Time = fileInfo.CreationTime };
 					externalContentEntry.ChildEntries.Add(externalContentEntry2);
 				}
 			}

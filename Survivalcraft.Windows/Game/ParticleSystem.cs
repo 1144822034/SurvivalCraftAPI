@@ -23,10 +23,7 @@ namespace Game
 
 		public Texture2D Texture
 		{
-			get
-			{
-				return m_texture;
-			}
+			get => m_texture;
 			set
 			{
 				if (value != m_texture)
@@ -92,8 +89,8 @@ namespace Game
 					}
 					else if (particle.BillboardingMode == ParticleBillboardingMode.Horizontal && rotation != 0f)
 					{
-						Vector3 vector = new Vector3(MathF.Cos(rotation), 0f, MathF.Sin(rotation));
-						Vector3 vector2 = new Vector3(vector.Z, 0f, 0f - vector.X);
+						Vector3 vector = new(MathF.Cos(rotation), 0f, MathF.Sin(rotation));
+						Vector3 vector2 = new(vector.Z, 0f, 0f - vector.X);
 						vector2 *= size.Y;
 						vector *= size.X;
 						p = position + (-vector2 - vector);
@@ -126,7 +123,7 @@ namespace Game
 						p4 = position + (-vector6 + vector7);
 					}
 					TexturedBatch3D obj = particle.UseAdditiveBlending ? AdditiveBatch : AlphaBlendedBatch;
-					var v3 = new Vector2(textureSlot % TextureSlotsCount, textureSlot / TextureSlotsCount);
+					Vector2 v3 = new(textureSlot % TextureSlotsCount, textureSlot / TextureSlotsCount);
 					float num = 0f;
 					float num2 = 1f;
 					float num3 = 1f;

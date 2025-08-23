@@ -26,15 +26,15 @@ namespace Game
 		{
 			Matrix m = GlobalTransform;
 			Vector2 v = Vector2.Zero;
-			var v2 = new Vector2(ActualSize.X, 0f);
+			Vector2 v2 = new(ActualSize.X, 0f);
 			Vector2 v3 = ActualSize;
-			var v4 = new Vector2(0f, ActualSize.Y);
+			Vector2 v4 = new(0f, ActualSize.Y);
 			Vector2.Transform(ref v, ref m, out Vector2 result);
 			Vector2.Transform(ref v2, ref m, out Vector2 result2);
 			Vector2.Transform(ref v3, ref m, out Vector2 result3);
 			Vector2.Transform(ref v4, ref m, out Vector2 result4);
 			FlatBatch2D flatBatch2D = dc.PrimitivesRenderer2D.FlatBatch(1, DepthStencilState.DepthWrite);
-			var vector = Vector2.Normalize(GlobalTransform.Right.XY);
+			Vector2 vector = Vector2.Normalize(GlobalTransform.Right.XY);
 			Vector2 v5 = -Vector2.Normalize(GlobalTransform.Up.XY);
 			for (int i = 0; i < 1; i++)
 			{

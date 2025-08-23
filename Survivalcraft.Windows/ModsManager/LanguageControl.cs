@@ -174,7 +174,7 @@ namespace Game
 						{
 							JsonObject oldObject = oldNode.AsObject();
 							JsonObject newObject = newNode.AsObject();
-							foreach(var newChild in newObject)
+							foreach(KeyValuePair<string,JsonNode> newChild in newObject)
 							{
 								if(newChild.Value == null)
 								{
@@ -355,7 +355,7 @@ namespace Game
 		}
 		public static string GetBlock(string blockName, string prop)
 		{
-			TryGetBlock(blockName,prop,out var result);
+			TryGetBlock(blockName,prop,out string result);
 			return result;
 		}
 		public static bool TryGetBlock(string blockName, string prop, out string result)
@@ -397,7 +397,7 @@ namespace Game
 			}
 			else
 			{
-				foreach(var c in ModsManager.ModList)
+				foreach(ModEntity c in ModsManager.ModList)
 				{
 					c.LoadLauguage();
 				}
@@ -411,13 +411,13 @@ namespace Game
 			Window.TitlePrefix = title;
 #endif
 			Dictionary<string, object> objs = [];
-			foreach (var c in ScreensManager.m_screens)
+			foreach (KeyValuePair<string,Screen> c in ScreensManager.m_screens)
 			{
 				Type type = c.Value.GetType();
 				object obj = Activator.CreateInstance(type);
 				objs.Add(c.Key, obj);
 			}
-			foreach (var c in objs)
+			foreach (KeyValuePair<string,object> c in objs)
 			{
 				ScreensManager.m_screens[c.Key] = c.Value as Screen;
 			}

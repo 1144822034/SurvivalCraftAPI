@@ -14,7 +14,7 @@ namespace Game
     {
         public Entity Target;
         public Entity Attacker;
-        protected Random m_random = new Random();
+        protected Random m_random = new();
         public Attackment(Entity target, Entity attacker, Vector3 hitPoint, Vector3 hitDirection, float attackPower)
         {
             Target = target;
@@ -44,14 +44,8 @@ namespace Game
         }
         public virtual ComponentBody TargetBody
         {
-            get
-            {
-                return Target.FindComponent<ComponentBody>();
-            }
-            set
-            {
-                Target = value.Entity;
-            }
+            get => Target.FindComponent<ComponentBody>();
+            set => Target = value.Entity;
         }
         public Vector3 HitPoint;
         public Vector3 HitDirection;
@@ -80,7 +74,7 @@ namespace Game
 		/// <summary>
 		/// 模组可以向Dictionary里面添加内容，另一个模组可以从Dictionary读取内容，以实现模组联动效果
 		/// </summary>
-		public ValuesDictionary DictionaryForOtherMods = new ValuesDictionary();
+		public ValuesDictionary DictionaryForOtherMods = new();
 		public virtual float CalculateInjuryAmount()
         {
 			if(m_injuryAmount != null) return m_injuryAmount.Value;

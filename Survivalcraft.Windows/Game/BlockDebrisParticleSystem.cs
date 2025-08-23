@@ -52,7 +52,7 @@ namespace Game
 			{
 				Particle obj = Particles[i];
 				obj.IsActive = true;
-				var vector = new Vector3(m_random.Float(-1f, 1f), m_random.Float(-1f, 1f), m_random.Float(-1f, 1f));
+				Vector3 vector = new(m_random.Float(-1f, 1f), m_random.Float(-1f, 1f), m_random.Float(-1f, 1f));
 				obj.Position = position + (strength * 0.45f * vector);
 				obj.Color = Color.MultiplyColorOnly(color, m_random.Float(0.7f, 1f));
 				obj.Size = num5 * scale * new Vector2(m_random.Float(0.05f, 0.06f));

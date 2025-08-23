@@ -80,7 +80,7 @@ namespace Game
 										}
 										catch(Exception e)
 										{
-											Log.Error(array[i] + " Poll " + BlocksManager.Blocks[num3].GetType().Name + " " + cellValueFast + " at " + string.Format("({0},{1},{2}) ", x, y, z) + "\n" + e);
+											Log.Error(array[i] + " Poll " + BlocksManager.Blocks[num3].GetType().Name + " " + cellValueFast + " at " + $"({x},{y},{z}) " + "\n" + e);
 										}
 									}
 								}
@@ -95,7 +95,7 @@ namespace Game
 					m_pollX = 0;
 				}
 				ScanningChunkCompleted?.Invoke(terrainChunk);
-				terrainChunk = terrain.LoopChunks(terrainChunk.Coords.X, terrainChunk.Coords.Y, true, out var hasLooped);
+				terrainChunk = terrain.LoopChunks(terrainChunk.Coords.X, terrainChunk.Coords.Y, true, out bool hasLooped);
 				if (terrainChunk == null)
 				{
 					break;

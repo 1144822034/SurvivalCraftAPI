@@ -51,11 +51,8 @@ namespace Engine.Graphics
 
 		public CullMode CullMode
 		{
-			get
-			{
-				return m_cullMode;
-			}
-			set
+			get => m_cullMode;
+            set
 			{
 				ThrowIfLocked();
 				m_cullMode = value;
@@ -64,11 +61,8 @@ namespace Engine.Graphics
 
 		public bool ScissorTestEnable
 		{
-			get
-			{
-				return m_scissorTestEnable;
-			}
-			set
+			get => m_scissorTestEnable;
+            set
 			{
 				ThrowIfLocked();
 				m_scissorTestEnable = value;
@@ -77,11 +71,8 @@ namespace Engine.Graphics
 
 		public float DepthBias
 		{
-			get
-			{
-				return m_depthBias;
-			}
-			set
+			get => m_depthBias;
+            set
 			{
 				ThrowIfLocked();
 				m_depthBias = value;
@@ -90,11 +81,8 @@ namespace Engine.Graphics
 
 		public float SlopeScaleDepthBias
 		{
-			get
-			{
-				return m_slopeScaleDepthBias;
-			}
-			set
+			get => m_slopeScaleDepthBias;
+            set
 			{
 				ThrowIfLocked();
 				m_slopeScaleDepthBias = value;

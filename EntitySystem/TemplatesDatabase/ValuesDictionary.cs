@@ -21,26 +21,14 @@ namespace TemplatesDatabase
 
 		public DatabaseObject DatabaseObject
 		{
-			get
-			{
-				return m_databaseObject;
-			}
-			set
-			{
-				m_databaseObject = value;
-			}
+			get => m_databaseObject;
+			set => m_databaseObject = value;
 		}
 
 		public object this[string key]
 		{
-			get
-			{
-				return GetValue<object>(key);
-			}
-			set
-			{
-				SetValue(key, value);
-			}
+			get => GetValue<object>(key);
+			set => SetValue(key, value);
 		}
 
 		public bool ContainsKey(string key)

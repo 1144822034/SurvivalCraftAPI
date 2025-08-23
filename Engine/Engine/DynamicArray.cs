@@ -1,8 +1,9 @@
+// ReSharper disable SuspiciousTypeConversion.Global
 namespace Engine
 {
-	public class DynamicArray<T> : IEnumerable<T>, IEnumerable, IList<T>, ICollection<T>
+	public class DynamicArray<T> : IList<T>
 	{
-		public struct Enumerator : IEnumerator<T>, IDisposable, IEnumerator
+		public struct Enumerator : IEnumerator<T>
 		{
 			private DynamicArray<T> m_array;
 
@@ -42,7 +43,7 @@ namespace Engine
             {
                 if (comparison == null)
                 {
-                    throw new ArgumentNullException("comparison");
+                    throw new ArgumentNullException(nameof(comparison));
                 }
                 Comparison = comparison;
             }
@@ -63,11 +64,8 @@ namespace Engine
 
 		public int Capacity
 		{
-			get
-			{
-				return m_array.Length;
-			}
-			set
+			get => m_array.Length;
+            set
 			{
                 if (value != Capacity)
                 {
@@ -82,11 +80,8 @@ namespace Engine
 
 		public int Count
 		{
-			get
-			{
-				return m_count;
-			}
-			set
+			get => m_count;
+            set
 			{
                 if (value > Capacity)
                 {
@@ -102,10 +97,7 @@ namespace Engine
 
 		public T this[int index]
 		{
-			get
-			{
-                return index >= m_count ? throw new IndexOutOfRangeException() : m_array[index];
-            }
+			get => index >= m_count ? throw new IndexOutOfRangeException() : m_array[index];
             set
 			{
 				if (index >= m_count)
@@ -193,7 +185,7 @@ namespace Engine
             }
             if (items == null)
             {
-                throw new ArgumentNullException("items");
+                throw new ArgumentNullException(nameof(items));
             }
             AddRangeTyped(items);
         }
@@ -217,7 +209,7 @@ namespace Engine
             }
             if (items == null)
             {
-                throw new ArgumentNullException("items");
+                throw new ArgumentNullException(nameof(items));
             }
             AddRangeTyped(items);
         }
@@ -231,7 +223,7 @@ namespace Engine
             }
             if (items == null)
             {
-                throw new ArgumentNullException("items");
+                throw new ArgumentNullException(nameof(items));
             }
             AddRangeTyped(items);
         }
@@ -245,7 +237,7 @@ namespace Engine
             }
             if (items == null)
             {
-                throw new ArgumentNullException("items");
+                throw new ArgumentNullException(nameof(items));
             }
             AddRangeTyped(items);
         }
@@ -254,7 +246,7 @@ namespace Engine
 		{
             if (items == null)
             {
-                throw new ArgumentNullException("items");
+                throw new ArgumentNullException(nameof(items));
             }
             AddRangeTyped(items);
         }

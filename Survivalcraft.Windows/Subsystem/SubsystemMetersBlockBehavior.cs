@@ -69,7 +69,7 @@ namespace Game
 
 		public override void OnChunkDiscarding(TerrainChunk chunk)
 		{
-			var list = new List<Point3>();
+			List<Point3> list = new();
 			foreach (Point3 key in m_thermometersByPoint.Keys)
 			{
 				if (key.X >= chunk.Origin.X && key.X < chunk.Origin.X + 16 && key.Z >= chunk.Origin.Y && key.Z < chunk.Origin.Y + 16)
@@ -294,13 +294,12 @@ namespace Game
 
 		public void SimulateThermometer(int x, int y, int z, bool invalidateTerrainOnChange)
 		{
-			var key = new Point3(x, y, z);
-			if (!m_thermometersByPoint.ContainsKey(key))
+			Point3 key = new(x, y, z);
+			if (!m_thermometersByPoint.TryGetValue(key, out int num))
 			{
 				return;
 			}
-			int num = m_thermometersByPoint[key];
-			CalculateTemperature(x, y, z, 0f, 0f, out var _, out var _, out var environmentTemperature);
+			CalculateTemperature(x, y, z, 0f, 0f, out float _, out float _, out float environmentTemperature);
 			int num2 = (int)MathF.Round(environmentTemperature);
 			if (num2 == num)
 			{

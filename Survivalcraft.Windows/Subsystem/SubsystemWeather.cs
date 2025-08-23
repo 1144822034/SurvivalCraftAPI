@@ -231,7 +231,7 @@ namespace Game
 			ModsManager.HookAction("SetRainAndSnowColor", modloader => { modloader.SetRainAndSnowColor(ref rainColor, ref snowColor); return false; });
 			RainColor = rainColor;
 			SnowColor = snowColor;
-			var vector = new Vector2(camera.ViewPosition.X, camera.ViewPosition.Z);
+			Vector2 vector = new(camera.ViewPosition.X, camera.ViewPosition.Z);
 			Point2 point = Terrain.ToCell(vector);
 			m_lastShaftsUpdatePositions.TryGetValue(camera.GameWidget, out Vector2? value);
 			if (value.HasValue && !(Vector2.DistanceSquared(value.Value, vector) > 1f))
@@ -261,10 +261,10 @@ namespace Game
 				{
 					if (MathUtils.Sqr(i + 0.5f - vector.X) + MathUtils.Sqr(j + 0.5f - vector.Y) <= num2)
 					{
-						var point2 = new Point2(i, j);
+						Point2 point2 = new(i, j);
 						if (!activeShafts.ContainsKey(point2))
 						{
-							var precipitationShaftParticleSystem = new PrecipitationShaftParticleSystem(camera.GameWidget, this, m_random, point2);
+							PrecipitationShaftParticleSystem precipitationShaftParticleSystem = new(camera.GameWidget, this, m_random, point2);
 							m_subsystemParticles.AddParticleSystem(precipitationShaftParticleSystem);
 							activeShafts.Add(point2, precipitationShaftParticleSystem);
 						}

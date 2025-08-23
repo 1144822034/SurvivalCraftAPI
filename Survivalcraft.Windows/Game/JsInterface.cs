@@ -254,7 +254,7 @@ namespace Game
 				Log.Error("Remote control server starts failed: " + e);
 			}
 			while (httpListener.IsListening) {
-				var context = await httpListener.GetContextAsync();
+				HttpListenerContext context = await httpListener.GetContextAsync();
 				_ = Task.Run(() => HandleHttpRequest(context));
 			}
 		}

@@ -2,6 +2,7 @@ using Engine;
 using Engine.Graphics;
 using Engine.Serialization;
 using GameEntitySystem;
+using System.Globalization;
 using System.Reflection;
 
 namespace Game
@@ -47,19 +48,19 @@ namespace Game
 
         public static Block[] Blocks => m_blocks;
 
-        public static List<BlockAllocateData> BlocksAllocateData = new List<BlockAllocateData>();
+        public static List<BlockAllocateData> BlocksAllocateData = new();
         public static FluidBlock[] FluidBlocks => m_fluidBlocks;
 
         //将ModBlock和BlockIndex联系起来的表格。
-        public static Dictionary<string, int> BlockNameToIndex = new Dictionary<string, int>();
-        public static Dictionary<Type, int> BlockTypeToIndex = new Dictionary<Type, int>();
+        public static Dictionary<string, int> BlockNameToIndex = new();
+        public static Dictionary<Type, int> BlockTypeToIndex = new();
 
         public static ReadOnlyList<string> Categories => new(m_categories);
 
 		[Obsolete("Use BlockTypeToOriginalIndex.")]
         public static int[] m_originalBlockIndex = new int[1024];
 
-		public static Dictionary<Type, int> BlockTypeToOriginalIndex = new Dictionary<Type, int>();
+		public static Dictionary<Type, int> BlockTypeToOriginalIndex = new();
 
         public const int SurvivalCraftBlockCount = 299;
 
@@ -72,6 +73,8 @@ namespace Game
 
             public int Compare(BlockAllocateData u1, BlockAllocateData u2)
             {
+				ArgumentNullException.ThrowIfNull(u1);
+				ArgumentNullException.ThrowIfNull(u2);
                 //首先比对是否已分配，未分配的排前面
                 int blockAllocate = (u1.Allocated ? 1 : 0) - (u2.Allocated ? 1 : 0);
                 if (blockAllocate != 0) return blockAllocate;
@@ -80,9 +83,9 @@ namespace Game
                 if (modEntitySub != 0) return modEntitySub;
                 //mod相同，则比对BlockIndex
                 int blockIndexSub = u1.Block.BlockIndex - u2.Block.BlockIndex;
-                if (blockIndexSub != 0) return blockIndexSub;
+                return blockIndexSub != 0 ? blockIndexSub :
                 //方块的Index相同（均未分配），则按方块名顺序分配
-                return string.Compare(u1.Block.GetType().Name, u2.Block.GetType().Name);
+                string.Compare(u1.Block.GetType().Name, u2.Block.GetType().Name, CultureInfo.InvariantCulture, CompareOptions.None);
             }
         }
 
@@ -304,7 +307,7 @@ namespace Game
                             Block = block,
                             Index = 0,
                             Allocated = false,
-                            StaticBlockIndex = (!block.IsIndexDynamic || entity == ModsManager.SurvivalCraftModEntity || staticBlockIndexBefore),
+                            StaticBlockIndex = (!block.IsIndexDynamic || Equals(entity, ModsManager.SurvivalCraftModEntity) || staticBlockIndexBefore),
                             ModEntity = entity
                         });
                     }
@@ -321,8 +324,7 @@ namespace Game
                     BlockAllocateData allocateData = BlocksAllocateData[i];
                     if(allocateData.Block.BlockIndex >= 0)
                     {
-                        int originalIndex = 0;
-						BlockTypeToOriginalIndex.TryGetValue(allocateData.Block.GetType(),out originalIndex);
+						BlockTypeToOriginalIndex.TryGetValue(allocateData.Block.GetType(),out int originalIndex);
                         if (originalIndex == 0) originalIndex = allocateData.Block.BlockIndex;
                         if (allocateData.StaticBlockIndex)
                         {
@@ -364,9 +366,8 @@ namespace Game
                 }
             }
             //分配剩余动态ID方块
-            int num = 0;
             int allocateDataIndex = 0;
-            for (num = SurvivalCraftBlockCount + 1; allocateDataIndex < BlocksAllocateData.Count; num++)
+            for (int num = SurvivalCraftBlockCount + 1; allocateDataIndex < BlocksAllocateData.Count; num++)
             {
                 if (num == 1024) throw new Exception("Too many blocks! Please reduce the mods count.");
                 if (m_blocks[num] == null)
@@ -383,16 +384,14 @@ namespace Game
                     }
                     catch
                     {
+						// ignored
                     }
                 }
             }
             //对未分配方块进行空置操作
-            for (num = 0; num < m_blocks.Length; num++)
+            for (int num = 0; num < m_blocks.Length; num++)
             {
-                if (m_blocks[num] == null)
-                {
-                    m_blocks[num] = Blocks[0];
-                }
+	            m_blocks[num] ??= Blocks[0];
             }
         }
         public static void PostProcessBlocksLoad()
@@ -448,7 +447,7 @@ namespace Game
         public static Block[] FindBlocksByCraftingId(string craftingId)
         {
             List<Block> blocks = [];
-            foreach (var c in Blocks)
+            foreach (Block c in Blocks)
             {
                 if (c.MatchCrafingId(craftingId)) blocks.Add(c);
             }
@@ -583,10 +582,7 @@ namespace Game
             int num = Terrain.ExtractContents(value);
             Block block = Blocks[num];
             Vector4 vector;
-            if (texture == null)
-            {
-                texture = (environmentData.SubsystemTerrain != null) ? environmentData.SubsystemTerrain.SubsystemAnimatedTextures.AnimatedBlocksTexture : BlocksTexturesManager.DefaultBlocksTexture;
-            }
+            texture ??= (environmentData.SubsystemTerrain != null) ? environmentData.SubsystemTerrain.SubsystemAnimatedTextures.AnimatedBlocksTexture : BlocksTexturesManager.DefaultBlocksTexture;
             int textureSlotCount = block.GetTextureSlotCount(value);
             int textureSlot = block.GetFaceTextureSlot(-1, value);
             if (textureSlotCount == 16)
@@ -650,8 +646,9 @@ namespace Game
                 BlockMesh imageExtrusionBlockMesh = GetImageExtrusionBlockMesh(image, block.GetFaceTextureSlot(-1, value));
                 DrawMeshBlock(primitivesRenderer, imageExtrusionBlockMesh, color, 1.7f * size, ref matrix, environmentData);
             }
-            catch (Exception)
+            catch(Exception)
             {
+				// ignored
             }
         }
 
@@ -660,7 +657,7 @@ namespace Game
             ImageExtrusionKey imageExtrusionKey = default;
             imageExtrusionKey.Image = image;
             imageExtrusionKey.Slot = slot;
-            if (!m_imageExtrusionsCache.TryGetValue(imageExtrusionKey, out var value))
+            if (!m_imageExtrusionsCache.TryGetValue(imageExtrusionKey, out BlockMesh value))
             {
                 value = new BlockMesh();
                 int num = (int)MathF.Round(m_slotTexCoords[slot].X * image.Width);
@@ -692,8 +689,8 @@ namespace Game
         {
             environmentData = environmentData ?? m_defaultEnvironmentData;
             float num = LightingManager.LightIntensityByLightValue[environmentData.Light];
-            var vector = new Vector4(color);
-            Vector4 vector2 = new Vector4(new Vector3(vector.X, vector.Y, vector.Z) * num, vector.W);
+            Vector4 vector = new(color);
+            Vector4 vector2 = new(new Vector3(vector.X, vector.Y, vector.Z) * num, vector.W);
             TexturedBatch3D texturedBatch3D = primitivesRenderer.TexturedBatch(texture, useAlphaTest: true, 0, null, RasterizerState.CullCounterClockwiseScissor, null, SamplerState.PointClamp);
             bool flag = false;
             Matrix m = (!environmentData.ViewProjectionMatrix.HasValue) ? matrix : (matrix * environmentData.ViewProjectionMatrix.Value);
@@ -718,7 +715,7 @@ namespace Game
                 BlockMeshVertex blockMeshVertex = array[i];
                 if (flag)
                 {
-                    var v2 = new Vector4(blockMeshVertex.Position, 1f);
+                    Vector4 v2 = new(blockMeshVertex.Position, 1f);
                     Vector4.Transform(ref v2, ref m, out v2);
                     float num2 = 1f / v2.W;
                     blockMeshVertex.Position = new Vector3(v2.X * num2, v2.Y * num2, v2.Z * num2);
@@ -766,7 +763,6 @@ namespace Game
 
         public static void LoadBlocksData(string data)
         {
-            var dictionary = new Dictionary<Block, bool>();
             data = data.Replace("\r", string.Empty);
             string[] array = data.Split('\n', StringSplitOptions.RemoveEmptyEntries);
             string[] firstLine = array[0].Split(';');
@@ -791,8 +787,7 @@ namespace Game
                     Log.Warning(string.Format(LanguageControl.Get("BlocksManager", 3), typeName));
                     continue;
                 }
-                dictionary.Add(block, value: true);
-                var dictionary2 = new Dictionary<string, FieldInfo>();
+                Dictionary<string,FieldInfo> dictionary2 = new();
                 foreach (FieldInfo runtimeField in block.GetType().GetRuntimeFields())
                 {
                     if (runtimeField.IsPublic && !runtimeField.IsStatic)
@@ -810,7 +805,7 @@ namespace Game
                         {
                             throw new InvalidOperationException(string.Format(LanguageControl.Get("BlocksManager", 5), text));
                         }
-                        object obj = null;
+                        object obj;
                         if (text2.StartsWith('#'))
                         {
                             string refTypeName = text2.Substring(1);

@@ -22,21 +22,22 @@ namespace Engine
 
 		public static void Write(LogType type, string message)
 		{
-			if (m_logSinks.Count > 0 && type >= MinimumLogType)
-			{
-				lock (m_lock)
-				{
-					foreach (ILogSink logSink in m_logSinks)
-					{
-						try
-						{
-							logSink.Log(type, message);
-						}
-						catch
-						{
-						}
-					}
-				}
+            lock (m_lock)
+            {
+                if (m_logSinks.Count > 0 && type >= MinimumLogType)
+                {
+                    foreach (ILogSink logSink in m_logSinks)
+                    {
+                        try
+                        {
+                            logSink.Log(type, message);
+                        }
+                        catch
+                        {
+                            // ignored
+                        }
+                    }
+                }
 			}
 #if ANDROID
             Console.WriteLine("SCAPI["+ type +"]" + message);

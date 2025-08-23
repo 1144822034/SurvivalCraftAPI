@@ -145,7 +145,7 @@ namespace Game
 
 		public static void ValidateBlocksTexture(Stream stream)
 		{
-			var image = Image.Load(stream);
+			Image image = Image.Load(stream);
 			if (image.Width > 65536 || image.Height > 65536)
 			{
 				throw new InvalidOperationException(string.Format(LanguageControl.Get(fName,"4"),image.Width,image.Height));

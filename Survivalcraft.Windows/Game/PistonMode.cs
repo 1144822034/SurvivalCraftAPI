@@ -1,5 +1,6 @@
 namespace Game
 {
+	[Flags]
 	public enum PistonMode
 	{
 		Pushing,

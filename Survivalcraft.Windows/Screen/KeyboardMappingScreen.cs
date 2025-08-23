@@ -10,7 +10,7 @@ namespace Game
 		{
 			XElement node = ContentManager.Get<XElement>("Widgets/KeyboardMappingItem");
 			node.SetAttributeValue("Name","KeyboardMappingItem_" + item);
-			var containerWidget = (ContainerWidget)LoadWidget(this,node,null);
+			ContainerWidget containerWidget = (ContainerWidget)LoadWidget(this,node,null);
 			LabelWidget labelWidget = containerWidget.Children.Find<LabelWidget>("Name");
 			LabelWidget labelWidget2 = containerWidget.Children.Find<LabelWidget>("BoundKey");
 			labelWidget.Text = LanguageControl.Get(fName,item.ToString());
@@ -27,8 +27,8 @@ namespace Game
 		public BevelledButtonWidget m_setKeyButton;
 		public BevelledButtonWidget m_disableKeyButton;
 		public bool IsWaitingForKeyInput;
-		public Dictionary<string, ContainerWidget> m_widgetsByString = new Dictionary<string, ContainerWidget>();
-		public Dictionary<object, List<string>> m_conflicts = new Dictionary<object,List<string>>();
+		public Dictionary<string, ContainerWidget> m_widgetsByString = new();
+		public Dictionary<object, List<string>> m_conflicts = new();
 		public KeyboardMappingScreen()
 		{
 			XElement node = ContentManager.Get<XElement>("Screens/KeyboardMappingScreen");
@@ -56,7 +56,7 @@ namespace Game
 				ScreensManager.SwitchScreen(ScreensManager.PreviousScreen);
 				return;
 			}
-			foreach(var key in m_widgetsByString.Keys)
+			foreach(string key in m_widgetsByString.Keys)
 			{
 				LabelWidget labelWidget = m_widgetsByString[key].Children.Find<LabelWidget>("BoundKey");
 				object value = SettingsManager.GetKeyboardMapping(key);
@@ -79,7 +79,7 @@ namespace Game
 			}
 			if(m_resetButton.IsClicked)
 			{
-				MessageDialog dialog = new MessageDialog(LanguageControl.Get("ContentWidgets",fName,"ResetTitle"),
+				MessageDialog dialog = new(LanguageControl.Get("ContentWidgets",fName,"ResetTitle"),
 					LanguageControl.Get("ContentWidgets",fName,"ResetText"),LanguageControl.Yes,LanguageControl.No,
 					delegate (MessageDialogButton button)
 					{
@@ -155,7 +155,7 @@ namespace Game
 		public void RefreshConflicts()
 		{
 			m_conflicts.Clear();
-			foreach(var item in ModSettingsManager.CombinedKeyboardMappingSettings)
+			foreach(KeyValuePair<string,object> item in ModSettingsManager.CombinedKeyboardMappingSettings)
 			{
 				string name = item.Key;
 				object obj = item.Value;

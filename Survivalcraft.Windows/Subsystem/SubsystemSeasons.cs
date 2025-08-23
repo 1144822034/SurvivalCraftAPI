@@ -36,7 +36,7 @@ public class SubsystemSeasons : Subsystem, IUpdateable
 
 	public static string GetTimeOfYearName(float timeOfYear)
 	{
-		TimeOfYearToSeason(timeOfYear, out var season, out var timeOfSeason);
+		TimeOfYearToSeason(timeOfYear, out Season season, out float timeOfSeason);
 		int num = timeOfSeason switch
 		{
 			< 0.25f => 0,
@@ -63,7 +63,7 @@ public class SubsystemSeasons : Subsystem, IUpdateable
 
 	public virtual void Update(float dt)
 	{
-		TimeOfYearToSeason(m_subsystemGameInfo.WorldSettings.TimeOfYear, out var season, out var timeOfSeason);
+		TimeOfYearToSeason(m_subsystemGameInfo.WorldSettings.TimeOfYear, out Season season, out float timeOfSeason);
 		Season = season;
 		TimeOfSeason = timeOfSeason;
 	}

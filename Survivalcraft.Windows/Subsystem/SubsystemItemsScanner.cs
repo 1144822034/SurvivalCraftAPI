@@ -21,7 +21,7 @@ namespace Game
 			m_items.Clear();
 			foreach (Subsystem subsystem in Project.Subsystems)
 			{
-				var inventory = subsystem as IInventory;
+				IInventory inventory = subsystem as IInventory;
 				if (inventory != null)
 				{
 					ScanInventory(inventory, m_items);
@@ -31,7 +31,7 @@ namespace Game
 			{
 				foreach (Component component in entity.Components)
 				{
-					var inventory2 = component as IInventory;
+					IInventory inventory2 = component as IInventory;
 					if (inventory2 != null)
 					{
 						ScanInventory(inventory2, m_items);
@@ -89,7 +89,7 @@ namespace Game
 		{
 			if (itemData.Container is IInventory)
 			{
-				var obj = (IInventory)itemData.Container;
+				IInventory obj = (IInventory)itemData.Container;
 				int slotCapacity = obj.GetSlotCapacity(itemData.IndexInContainer,newValue);
 				if(slotCapacity < itemData.Count) return false;
 				obj.RemoveSlotItems(itemData.IndexInContainer, itemData.Count);
@@ -103,7 +103,7 @@ namespace Game
 			}
 			if (itemData.Container is IMovingBlockSet)
 			{
-				var obj2 = (IMovingBlockSet)itemData.Container;
+				IMovingBlockSet obj2 = (IMovingBlockSet)itemData.Container;
 				MovingBlock movingBlock = obj2.Blocks.ElementAt(itemData.IndexInContainer);
 				obj2.SetBlock(movingBlock.Offset, newValue);
 				return true;

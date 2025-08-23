@@ -84,10 +84,10 @@ namespace Game
 
 		public static CraftingRecipe DecodeElementToCraftingRecipe(XElement item, int HorizontalLen = 3)
 		{
-			var craftingRecipe = new CraftingRecipe();
+			CraftingRecipe craftingRecipe = new();
 			string attributeValue = XmlUtils.GetAttributeValue<string>(item, "Result");
 			string desc = XmlUtils.GetAttributeValue<string>(item, "Description");
-			if (desc.StartsWith('[') && desc.EndsWith(']') && LanguageControl.TryGetBlock(attributeValue, "CRDescription:" + desc.Substring(1, desc.Length - 2), out var r)) desc = r;
+			if (desc.StartsWith('[') && desc.EndsWith(']') && LanguageControl.TryGetBlock(attributeValue, "CRDescription:" + desc.Substring(1, desc.Length - 2), out string r)) desc = r;
 			craftingRecipe.ResultValue = DecodeResult(attributeValue);
 			craftingRecipe.ResultCount = XmlUtils.GetAttributeValue<int>(item, "ResultCount");
 			string attributeValue2 = XmlUtils.GetAttributeValue(item, "Remains", string.Empty);
@@ -101,7 +101,7 @@ namespace Game
 			craftingRecipe.Description = desc;
 			craftingRecipe.Message = XmlUtils.GetAttributeValue<string>(item, "Message", null);
 			craftingRecipe.DisplayOrder = XmlUtils.GetAttributeValue(item,"DisplayOrder", 0);
-			var dictionary = new Dictionary<char, string>();
+			Dictionary<char,string> dictionary = new();
 			foreach (XAttribute item2 in from a in item.Attributes()
 										 where a.Name.LocalName.Length == 1 && char.IsLower(a.Name.LocalName[0])
 										 select a)

@@ -27,11 +27,11 @@ namespace Game
 
 		public int m_itemLight;
 
-		public DrawBlockEnvironmentData m_drawBlockEnvironmentData = new DrawBlockEnvironmentData();
+		public DrawBlockEnvironmentData m_drawBlockEnvironmentData = new();
 
-		public PrimitivesRenderer3D m_primitivesRenderer = new PrimitivesRenderer3D();
+		public PrimitivesRenderer3D m_primitivesRenderer = new();
 
-		public static LitShader m_shader = new LitShader(
+		public static LitShader m_shader = new(
 			2,
 			useEmissionColor: false,
 			useVertexColor: false,

@@ -20,7 +20,7 @@ namespace Game
 			for (int i = 0; i < 4; i++)
 			{
 				float radians = i * (float)Math.PI / 2f;
-				var blockMesh = new BlockMesh();
+				BlockMesh blockMesh = new();
 				blockMesh.AppendModelMeshPart(model.FindMesh("JackOLantern").MeshParts[0], boneAbsoluteTransform * Matrix.CreateRotationY(radians) * Matrix.CreateTranslation(0.5f, 0f, 0.5f), makeEmissive: false, flipWindingOrder: false, doubleSided: false, flipNormals: false, new Color(232, 232, 232));
 				blockMesh.AppendModelMeshPart(model.FindMesh("JackOLantern").MeshParts[0], boneAbsoluteTransform * Matrix.CreateRotationY(radians) * Matrix.CreateTranslation(0.5f, 0f, 0.5f), makeEmissive: true, flipWindingOrder: true, doubleSided: false, flipNormals: false, Color.White);
 				m_blockMeshesByData[i] = blockMesh;

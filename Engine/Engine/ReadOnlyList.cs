@@ -41,15 +41,9 @@ namespace Engine
 
 		public T this[int index]
 		{
-			get
-			{
-				return m_list[index];
-			}
-			set
-			{
-				throw new NotSupportedException("List is readonly.");
-			}
-		}
+			get => m_list[index];
+            set => throw new NotSupportedException("List is readonly.");
+        }
 
 		public int Count => m_list.Count;
 

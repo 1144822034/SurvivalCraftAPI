@@ -19,14 +19,8 @@ namespace Game
 
 		public Vector2 ContentSize
 		{
-			get
-			{
-				return m_contentWidget.Size;
-			}
-			set
-			{
-				m_contentWidget.Size = value;
-			}
+			get => m_contentWidget.Size;
+			set => m_contentWidget.Size = value;
 		}
 
 		public ListSelectionDialog(string title, IEnumerable items, float itemSize, Func<object, Widget> itemWidgetFactory, Action<object> selectionHandler)

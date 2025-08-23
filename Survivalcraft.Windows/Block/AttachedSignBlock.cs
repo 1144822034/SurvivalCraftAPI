@@ -41,7 +41,7 @@ namespace Game
 			{
 				float radians = (float)Math.PI / 2f * i;
 				Matrix m = Matrix.CreateTranslation(0f, 0f, -15f / 32f) * Matrix.CreateRotationY(radians) * Matrix.CreateTranslation(0.5f, -0.3125f, 0.5f);
-				var blockMesh = new BlockMesh();
+				BlockMesh blockMesh = new();
 				blockMesh.AppendModelMeshPart(model.FindMesh("Sign").MeshParts[0], boneAbsoluteTransform * m, makeEmissive: false, flipWindingOrder: false, doubleSided: false, flipNormals: false, Color.White);
 				m_blockMeshes[i] = new BlockMesh();
 				m_blockMeshes[i].AppendBlockMesh(blockMesh);

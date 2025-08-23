@@ -7,7 +7,7 @@ namespace Game
 		public Widget KeyInfoWidget(Object item)
 		{
 			XElement node = ContentManager.Get<XElement>("Widgets/KeyboardMappingItem");
-			var containerWidget = (ContainerWidget)LoadWidget(this,node,null);
+			ContainerWidget containerWidget = (ContainerWidget)LoadWidget(this,node,null);
 			LabelWidget labelWidget = containerWidget.Children.Find<LabelWidget>("Name");
 			LabelWidget labelWidget2 = containerWidget.Children.Find<LabelWidget>("BoundKey");
 			bool enable = SettingsManager.GetCameraManageSetting(item.ToString()) >= 0;
@@ -24,7 +24,7 @@ namespace Game
 		public BevelledButtonWidget m_upButton;
 		public BevelledButtonWidget m_downButton;
 		public BevelledButtonWidget m_resetButton;
-		public Dictionary<string, ContainerWidget> m_widgetsByString = new Dictionary<string, ContainerWidget>();
+		public Dictionary<string, ContainerWidget> m_widgetsByString = new();
 
 		public static int EnabledCamerasCount => ModSettingsManager.CombinedCameraManageSettings.Count(item => Convert.ToInt32(item.Value) >= 0);
 		public CameraManageScreen()
@@ -62,7 +62,7 @@ namespace Game
 			m_disableButton.IsEnabled = !string.IsNullOrEmpty(selectedCameraName) && selectedItemValue >= 0 && selectedCameraName != "Game.FppCamera" && enabledCount > 2;//至少保留2个摄像机，当现存小于等于2个时无法点击禁用按钮
 			m_upButton.IsEnabled = !string.IsNullOrEmpty(selectedCameraName) && selectedItemValue > 0;
 			m_downButton.IsEnabled = !string.IsNullOrEmpty(selectedCameraName) && selectedItemValue >= 0 && selectedItemValue < enabledCount - 1;
-			foreach(var key in m_widgetsByString.Keys)
+			foreach(string key in m_widgetsByString.Keys)
 			 {
 				LabelWidget labelWidget = m_widgetsByString[key].Children.Find<LabelWidget>("BoundKey");
 				bool enable = SettingsManager.GetCameraManageSetting(key) >= 0;
@@ -83,7 +83,7 @@ namespace Game
 			}
 			if(m_upButton.IsClicked)
 			{
-				foreach(var item in ModSettingsManager.CombinedCameraManageSettings)
+				foreach(KeyValuePair<string,int> item in ModSettingsManager.CombinedCameraManageSettings)
 				{//找到选中摄像机的上一个并将其序号进行替换
 					string key = item.Key;
 					if(SettingsManager.GetCameraManageSetting(key) == selectedItemValue - 1)
@@ -99,7 +99,7 @@ namespace Game
 			}
 			if(m_downButton.IsClicked)
 			{
-				foreach(var item in ModSettingsManager.CombinedCameraManageSettings)
+				foreach(KeyValuePair<string,int> item in ModSettingsManager.CombinedCameraManageSettings)
 				{//找到选中摄像机的下一个并将其序号进行替换
 					string key = item.Key;
 					if(SettingsManager.GetCameraManageSetting(key) == selectedItemValue + 1)
@@ -115,7 +115,7 @@ namespace Game
 			}
 			if(m_resetButton.IsClicked)
 			{
-				MessageDialog dialog = new MessageDialog(LanguageControl.Get("ContentWidgets","CameraManageScreen","ResetTitle"),
+				MessageDialog dialog = new(LanguageControl.Get("ContentWidgets","CameraManageScreen","ResetTitle"),
 					LanguageControl.Get("ContentWidgets","CameraManageScreen","ResetText"),LanguageControl.Yes,LanguageControl.No,
 					delegate (MessageDialogButton button)
 					{
@@ -145,9 +145,9 @@ namespace Game
 		void RefreshList()
 		{
 			m_camerasList.ClearItems();
-			var list = ModSettingsManager.CombinedCameraManageSettings.OrderBy(x => x.Value).ToList();
+			List<KeyValuePair<string,int>> list = ModSettingsManager.CombinedCameraManageSettings.OrderBy(x => x.Value).ToList();
 			int num = 0;
-			foreach(var item in list)
+			foreach(KeyValuePair<string,int> item in list)
 			{
 				string name = item.Key;
 				m_camerasList.AddItem(name);

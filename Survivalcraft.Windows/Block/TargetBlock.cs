@@ -48,7 +48,7 @@ namespace Game
 		{
 			TerrainGeometrySubset subsetAlphaTest = geometry.SubsetAlphaTest;
 			DynamicArray<TerrainVertex> vertices = subsetAlphaTest.Vertices;
-			var indices = subsetAlphaTest.Indices;
+			TerrainGeometryDynamicArray<int> indices = subsetAlphaTest.Indices;
 			int count = vertices.Count;
 			int data = Terrain.ExtractData(value);
 			int num = Terrain.ExtractLight(value);

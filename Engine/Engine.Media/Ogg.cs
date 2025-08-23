@@ -18,15 +18,9 @@ namespace Engine.Media
 
 			public override long Position
 			{
-				get
-				{
-					return m_reader.SamplePosition;
-				}
-				set
-				{
-					m_reader.SamplePosition = value;
-				}
-			}
+				get => m_reader.SamplePosition;
+                set => m_reader.SamplePosition = value;
+            }
 			public override long BytesCount => m_reader.TotalSamples * 2;
 			public OggStreamingSource(Stream stream, bool leaveOpen = false)
 			{
@@ -123,7 +117,7 @@ namespace Engine.Media
 				}
 				byte[] array = new byte[(int)streamingSource.BytesCount];
 				streamingSource.Read(array, 0, array.Length);
-				var soundData = new SoundData(streamingSource.ChannelsCount, streamingSource.SamplingFrequency, array.Length);
+				SoundData soundData = new(streamingSource.ChannelsCount, streamingSource.SamplingFrequency, array.Length);
 				Buffer.BlockCopy(array, 0, soundData.Data, 0, array.Length);
 				return soundData;
 			}

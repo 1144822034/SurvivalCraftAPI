@@ -26,14 +26,8 @@ namespace Game
 
 		public object Tag
 		{
-			get
-			{
-				return m_tag;
-			}
-			set
-			{
-				m_tag = value;
-			}
+			get => m_tag;
+			set => m_tag = value;
 		}
 
 		public virtual BoundingBox CalculateBoundingBox()
@@ -57,10 +51,10 @@ namespace Game
 
 		public virtual void AppendImageExtrusion(Image image, Rectangle bounds, Vector3 size, Color color)
 		{
-			var blockMesh = new BlockMesh();
+			BlockMesh blockMesh = new();
 			DynamicArray<BlockMeshVertex> vertices = blockMesh.Vertices;
 			DynamicArray<int> indices = blockMesh.Indices;
-			var item = new BlockMeshVertex
+			BlockMeshVertex item = new()
 			{
 				Position = new Vector3(bounds.Left, bounds.Top, -1f),
 				TextureCoordinates = new Vector2(bounds.Left, bounds.Top)
@@ -355,7 +349,7 @@ namespace Game
 			}
 			InternalVertex[] vertexData = GetVertexData<InternalVertex>(vertexBuffer);
 			int[] indexData = GetIndexData<int>(indexBuffer);
-			var dictionary = new Dictionary<int, int>();
+			Dictionary<int,int> dictionary = new();
 			for (int i = meshPart.StartIndex; i < meshPart.StartIndex + meshPart.IndicesCount; i++)
 			{
 				int num = indexData[i];
@@ -365,7 +359,7 @@ namespace Game
 					BlockMeshVertex item = default;
 					item.Position = Vector3.Transform(vertexData[num].Position, matrix);
 					item.TextureCoordinates = vertexData[num].TextureCoordinate;
-					var vector = Vector3.Normalize(Vector3.TransformNormal(flipNormals ? (-vertexData[num].Normal) : vertexData[num].Normal, matrix));
+					Vector3 vector = Vector3.Normalize(Vector3.TransformNormal(flipNormals ? (-vertexData[num].Normal) : vertexData[num].Normal, matrix));
 					if (makeEmissive)
 					{
 						item.IsEmissive = true;
@@ -549,8 +543,8 @@ namespace Game
 			{
 				throw new InvalidOperationException("VertexBuffer data size is not a whole multiply of target type size.");
 			}
-			var array2 = new T[array.Length / Utilities.SizeOf<T>()];
-			var gCHandle = GCHandle.Alloc(array2, GCHandleType.Pinned);
+			T[] array2 = new T[array.Length / Utilities.SizeOf<T>()];
+			GCHandle gCHandle = GCHandle.Alloc(array2, GCHandleType.Pinned);
 			try
 			{
 				Marshal.Copy(array, 0, gCHandle.AddrOfPinnedObject(), Utilities.SizeOf<T>() * array2.Length);
@@ -573,8 +567,8 @@ namespace Game
 			{
 				throw new InvalidOperationException("IndexBuffer data size is not a whole multiply of target type size.");
 			}
-			var array2 = new T[array.Length / Utilities.SizeOf<T>()];
-			var gCHandle = GCHandle.Alloc(array2, GCHandleType.Pinned);
+			T[] array2 = new T[array.Length / Utilities.SizeOf<T>()];
+			GCHandle gCHandle = GCHandle.Alloc(array2, GCHandleType.Pinned);
 			try
 			{
 				Marshal.Copy(array, 0, gCHandle.AddrOfPinnedObject(), Utilities.SizeOf<T>() * array2.Length);

@@ -20,15 +20,9 @@ namespace Engine.Graphics
 
 		public BoundingBox BoundingBox
 		{
-			get
-			{
-				return m_boundingBox;
-			}
-			set
-			{
-				m_boundingBox = value;
-			}
-		}
+			get => m_boundingBox;
+            set => m_boundingBox = value;
+        }
 
 		public ReadOnlyList<ModelMeshPart> MeshParts => new(m_meshParts);
 
@@ -45,7 +39,7 @@ namespace Engine.Graphics
 			{
 				throw new InvalidOperationException("Specified range is outside of index buffer.");
 			}
-			var modelMeshPart = new ModelMeshPart();
+			ModelMeshPart modelMeshPart = new();
 			m_meshParts.Add(modelMeshPart);
 			modelMeshPart.VertexBuffer = vertexBuffer;
 			modelMeshPart.IndexBuffer = indexBuffer;

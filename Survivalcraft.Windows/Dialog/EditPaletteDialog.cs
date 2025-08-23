@@ -30,7 +30,7 @@ namespace Game
 			m_cancelButton = Children.Find<ButtonWidget>("EditPaletteDialog.Cancel");
 			for (int i = 0; i < 16; i++)
 			{
-				var obj = new StackPanelWidget
+				StackPanelWidget obj = new()
 				{
 					Direction = LayoutDirection.Horizontal,
 					Children =

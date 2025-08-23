@@ -165,7 +165,7 @@ namespace Game
 					int cellValue = m_subsystemTerrain.Terrain.GetCellValue(num2, num4, num3);
 					if (BlocksManager.Blocks[Terrain.ExtractContents(cellValue)].IsCollidable_(cellValue) || Terrain.ExtractContents(cellValue) == 18)
 					{
-						var vector = new Vector3(num2 + 0.5f, num4 + 1.1f, num3 + 0.5f);
+						Vector3 vector = new(num2 + 0.5f, num4 + 1.1f, num3 + 0.5f);
 						float num5 = ScoreSafePlace(position, vector, null);
 						if (num5 > num)
 						{
@@ -215,8 +215,8 @@ namespace Game
 		{
 			if (entity != Entity)
 			{
-				var isPredator = false;
-				var skipVanilla = false;
+				bool isPredator = false;
+				bool skipVanilla = false;
 				ModsManager.HookAction("IsPredator",modLoader => {
 					modLoader.IsPredator(this,entity,out isPredator,out skipVanilla);
 					return false;

@@ -65,9 +65,9 @@ namespace Game
 		public static ClothingSlot[] m_innerSlotsOrder => m_innerSlotsOrderList.ToArray();
 		public static ClothingSlot[] m_outerSlotsOrder => m_outerSlotsOrderList.ToArray();
 
-		public static List<ClothingSlot> m_innerSlotsOrderList = new List<ClothingSlot>();
+		public static List<ClothingSlot> m_innerSlotsOrderList = [];
 
-		public static List<ClothingSlot> m_outerSlotsOrderList = new List<ClothingSlot>();
+		public static List<ClothingSlot> m_outerSlotsOrderList = [];
 
 		public static bool ShowClothedTexture = false;
 
@@ -103,10 +103,7 @@ namespace Game
 
 		public int VisibleSlotsCount
 		{
-			get
-			{
-				return SlotsCount;
-			}
+			get => SlotsCount;
 			set
 			{
 			}
@@ -114,10 +111,7 @@ namespace Game
 
 		public int ActiveSlotIndex
 		{
-			get
-			{
-				return -1;
-			}
+			get => -1;
 			set
 			{
 			}
@@ -217,7 +211,7 @@ namespace Game
 					loader.DecideArmorProtectionSequence(this,attackment, num, listBeforeProtection);
 					return false;
 				});
-				List<int> listAfterProtection = new List<int>(listBeforeProtection);
+				List<int> listAfterProtection = new(listBeforeProtection);
 				//对每件衣物，结算护甲
 				for (int i = 0; i < listBeforeProtection.Count; i++)
 				{
@@ -307,7 +301,7 @@ namespace Game
 
 		public override void Save(ValuesDictionary valuesDictionary, EntityToIdMap entityToIdMap)
 		{
-			var valuesDictionary2 = new ValuesDictionary();
+			ValuesDictionary valuesDictionary2 = new();
 			valuesDictionary.SetValue("Clothes", valuesDictionary2);
 			foreach(string key in ClothingSlot.ClothingSlots.Keys)
 			{
@@ -538,10 +532,11 @@ namespace Game
 					return;
 				}
 				clothingData.Mount?.Invoke(value, this);
-				var list = new List<int>(GetClothes(clothingData.Slot))
-				{
+				List<int> list =
+				[
+					..GetClothes(clothingData.Slot),
 					value
-				};
+				];
 				SetClothes(clothingData.Slot, list);
 			}
 		}
@@ -550,7 +545,7 @@ namespace Game
 		{
 			if (count == 1)
 			{
-				var list = new List<int>(GetClothes(slotIndex));
+				List<int> list = new(GetClothes(slotIndex));
 				if (list.Count > 0)
 				{
 					int value = list[^1];
@@ -567,7 +562,7 @@ namespace Game
 
 		public virtual void DropAllItems(Vector3 position)
 		{
-			var random = new Random();
+			Random random = new();
 			SubsystemPickables subsystemPickables = Project.FindSubsystem<SubsystemPickables>(throwOnError: true);
 			for (int i = 0; i < SlotsCount; i++)
 			{

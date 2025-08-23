@@ -65,7 +65,7 @@ namespace Game
 				int num = Terrain.ExtractContents(value);
 				Block block = BlocksManager.Blocks[num];
 				XElement node2 = ContentManager.Get<XElement>("Widgets/RecipaediaItem");
-				var obj = (ContainerWidget)LoadWidget(this, node2, null);
+				ContainerWidget obj = (ContainerWidget)LoadWidget(this, node2, null);
 				obj.Children.Find<BlockIconWidget>("RecipaediaItem.Icon").Value = value;
 				obj.Children.Find<LabelWidget>("RecipaediaItem.Text").Text = block.GetDisplayName(null, value);
 				string description = block.GetDescription(value);
@@ -103,7 +103,7 @@ namespace Game
 			}
 			if (num > 0)
 			{
-				m_recipesButton.Text = string.Format("{0} {1}", num, (num == 1) ? LanguageControl.Get(GetType().Name, 1) : LanguageControl.Get(GetType().Name, 2));
+				m_recipesButton.Text = $"{num} {((num == 1) ? LanguageControl.Get(GetType().Name,1) : LanguageControl.Get(GetType().Name,2))}";
 				m_recipesButton.IsEnabled = true;
 			}
 			else
@@ -153,8 +153,8 @@ namespace Game
 					if (string.IsNullOrEmpty(text) || item.GetCategory(creativeValue) == text) orders.Add(new Order(item, item.GetDisplayOrder(creativeValue), creativeValue));
 				}
 			}
-			var orderList = orders.OrderBy(o => o.order);
-			foreach (var c in orderList)
+			IOrderedEnumerable<Order> orderList = orders.OrderBy(o => o.order);
+			foreach (Order c in orderList)
 			{
 				m_blocksList.AddItem(c.value);
 			}

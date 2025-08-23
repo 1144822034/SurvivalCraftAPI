@@ -33,7 +33,7 @@ namespace Game
 			m_outerClothingModelWidget = Children.Find<PlayerModelWidget>("OuterClothingModel");
 			for (int i = 0; i < 4; i++)
 			{
-				var inventorySlotWidget = new InventorySlotWidget();
+				InventorySlotWidget inventorySlotWidget = new();
 				float y = float.PositiveInfinity;
 				if (i == 0)
 				{
@@ -60,7 +60,7 @@ namespace Game
 			{
 				for (int k = 0; k < m_inventoryGrid.ColumnsCount; k++)
 				{
-					var inventorySlotWidget2 = new InventorySlotWidget();
+					InventorySlotWidget inventorySlotWidget2 = new();
 					inventorySlotWidget2.AssignInventorySlot(componentPlayer.ComponentMiner.Inventory, num++);
 					m_inventoryGrid.Children.Add(inventorySlotWidget2);
 					m_inventoryGrid.SetWidgetCell(inventorySlotWidget2, new Point2(k, j));

@@ -23,10 +23,7 @@ namespace Game
 
 		public string LargeMessage
 		{
-			get
-			{
-				return m_largeLabelWidget.Text;
-			}
+			get => m_largeLabelWidget.Text;
 			set
 			{
 				m_largeLabelWidget.Text = value ?? string.Empty;
@@ -36,26 +33,14 @@ namespace Game
 
 		public string SmallMessage
 		{
-			get
-			{
-				return m_smallLabelWidget.Text;
-			}
-			set
-			{
-				m_smallLabelWidget.Text = value ?? string.Empty;
-			}
+			get => m_smallLabelWidget.Text;
+			set => m_smallLabelWidget.Text = value ?? string.Empty;
 		}
 
 		public bool IsCancelButtonEnabled
 		{
-			get
-			{
-				return m_cancelButtonWidget.IsEnabled;
-			}
-			set
-			{
-				m_cancelButtonWidget.IsEnabled = value;
-			}
+			get => m_cancelButtonWidget.IsEnabled;
+			set => m_cancelButtonWidget.IsEnabled = value;
 		}
 
 		public bool ShowProgressMessage

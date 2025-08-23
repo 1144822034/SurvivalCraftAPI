@@ -34,7 +34,7 @@ namespace Game
 						break;
 					}
 					string key = prefix + array2[0];
-					var value = new Rectangle
+					Rectangle value = new()
 					{
 						Left = int.Parse(array2[1], CultureInfo.InvariantCulture),
 						Top = int.Parse(array2[2], CultureInfo.InvariantCulture),

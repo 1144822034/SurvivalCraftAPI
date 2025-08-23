@@ -186,7 +186,7 @@ namespace Game
 		{
 			foreach (ComponentModel item in entity.FindComponents<ComponentModel>())
 			{
-				var value = new ModelData
+				ModelData value = new()
 				{
 					ComponentModel = item,
 					ComponentBody = item.Entity.FindComponent<ComponentBody>(),

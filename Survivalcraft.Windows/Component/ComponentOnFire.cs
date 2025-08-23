@@ -187,7 +187,7 @@ namespace Game
 							case 104:
 								if (num8 == 0)
 								{
-									var box2 = new BoundingBox(new Vector3(i, j, k), new Vector3(i + 1, j + 1, k + 1));
+									BoundingBox box2 = new(new Vector3(i, j, k), new Vector3(i + 1, j + 1, k + 1));
 									if (boundingBox.Intersection(box2))
 									{
 										return true;
@@ -196,7 +196,7 @@ namespace Game
 								}
 								if ((num8 & 1) != 0)
 								{
-									var box3 = new BoundingBox(new Vector3(i, j, k + 0.5f), new Vector3(i + 1, j + 1, k + 1));
+									BoundingBox box3 = new(new Vector3(i, j, k + 0.5f), new Vector3(i + 1, j + 1, k + 1));
 									if (boundingBox.Intersection(box3))
 									{
 										return true;
@@ -204,7 +204,7 @@ namespace Game
 								}
 								if ((num8 & 2) != 0)
 								{
-									var box4 = new BoundingBox(new Vector3(i + 0.5f, j, k), new Vector3(i + 1, j + 1, k + 1));
+									BoundingBox box4 = new(new Vector3(i + 0.5f, j, k), new Vector3(i + 1, j + 1, k + 1));
 									if (boundingBox.Intersection(box4))
 									{
 										return true;
@@ -212,7 +212,7 @@ namespace Game
 								}
 								if ((num8 & 4) != 0)
 								{
-									var box5 = new BoundingBox(new Vector3(i, j, k), new Vector3(i + 1, j + 1, k + 0.5f));
+									BoundingBox box5 = new(new Vector3(i, j, k), new Vector3(i + 1, j + 1, k + 0.5f));
 									if (boundingBox.Intersection(box5))
 									{
 										return true;
@@ -220,7 +220,7 @@ namespace Game
 								}
 								if ((num8 & 8) != 0)
 								{
-									var box6 = new BoundingBox(new Vector3(i, j, k), new Vector3(i + 0.5f, j + 1, k + 1));
+									BoundingBox box6 = new(new Vector3(i, j, k), new Vector3(i + 0.5f, j + 1, k + 1));
 									if (boundingBox.Intersection(box6))
 									{
 										return true;
@@ -230,7 +230,7 @@ namespace Game
 							case 209:
 								if (num8 > 0)
 								{
-									var box = new BoundingBox(new Vector3(i, j, k) + new Vector3(0.2f), new Vector3(i + 1, j + 1, k + 1) - new Vector3(0.2f));
+									BoundingBox box = new(new Vector3(i, j, k) + new Vector3(0.2f), new Vector3(i + 1, j + 1, k + 1) - new Vector3(0.2f));
 									if (boundingBox.Intersection(box))
 									{
 										return true;

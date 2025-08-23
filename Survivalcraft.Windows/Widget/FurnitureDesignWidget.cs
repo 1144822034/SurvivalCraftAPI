@@ -63,9 +63,9 @@ namespace Game
 			if (Mode == ViewMode.Perspective)
 			{
 				Viewport viewport = Display.Viewport;
-				var vector = new Vector3(0.5f, 0.5f, 0.5f);
-				var m = Matrix.CreateLookAt((2.65f * m_direction) + vector, vector, Vector3.UnitY);
-				var m2 = Matrix.CreatePerspectiveFieldOfView(1.2f, ActualSize.X / ActualSize.Y, 0.4f, 4f);
+				Vector3 vector = new(0.5f, 0.5f, 0.5f);
+				Matrix m = Matrix.CreateLookAt((2.65f * m_direction) + vector, vector, Vector3.UnitY);
+				Matrix m2 = Matrix.CreatePerspectiveFieldOfView(1.2f, ActualSize.X / ActualSize.Y, 0.4f, 4f);
 				Matrix m3 = MatrixUtils.CreateScaleTranslation(ActualSize.X, 0f - ActualSize.Y, ActualSize.X / 2f, ActualSize.Y / 2f) * GlobalTransform * MatrixUtils.CreateScaleTranslation(2f / viewport.Width, -2f / viewport.Height, -1f, 1f);
 				matrix = m * m2 * m3;
 				FlatBatch3D flatBatch3D = m_primitivesRenderer3d.FlatBatch(1, DepthStencilState.DepthRead);
@@ -111,8 +111,8 @@ namespace Game
 				}
 				Viewport viewport2 = Display.Viewport;
 				float num2 = MathUtils.Min(ActualSize.X, ActualSize.Y);
-				var m4 = Matrix.CreateLookAt(position, new Vector3(0f, 0f, 0f), up);
-				var m5 = Matrix.CreateOrthographic(2f, 2f, -10f, 10f);
+				Matrix m4 = Matrix.CreateLookAt(position, new Vector3(0f, 0f, 0f), up);
+				Matrix m5 = Matrix.CreateOrthographic(2f, 2f, -10f, 10f);
 				Matrix m6 = MatrixUtils.CreateScaleTranslation(num2, 0f - num2, ActualSize.X / 2f, ActualSize.Y / 2f) * GlobalTransform * MatrixUtils.CreateScaleTranslation(2f / viewport2.Width, -2f / viewport2.Height, -1f, 1f);
 				matrix = Matrix.CreateTranslation(-0.5f, -0.5f, -0.5f) * m4 * m5 * m6;
 				FlatBatch2D flatBatch2D = m_primitivesRenderer2d.FlatBatch();
@@ -120,10 +120,10 @@ namespace Game
 				for (int j = 1; j < Design.Resolution; j++)
 				{
 					float num3 = j / (float)Design.Resolution;
-					var v = new Vector2(ActualSize.X * num3, 0f);
-					var v2 = new Vector2(ActualSize.X * num3, ActualSize.Y);
-					var v3 = new Vector2(0f, ActualSize.Y * num3);
-					var v4 = new Vector2(ActualSize.X, ActualSize.Y * num3);
+					Vector2 v = new(ActualSize.X * num3, 0f);
+					Vector2 v2 = new(ActualSize.X * num3, ActualSize.Y);
+					Vector2 v3 = new(0f, ActualSize.Y * num3);
+					Vector2 v4 = new(ActualSize.X, ActualSize.Y * num3);
 					Vector2.Transform(ref v, ref m7, out v);
 					Vector2.Transform(ref v2, ref m7, out v2);
 					Vector2.Transform(ref v3, ref m7, out v3);
@@ -204,7 +204,7 @@ namespace Game
 		public void Rotate(Vector2 angles)
 		{
 			float num = MathUtils.DegToRad(1f);
-			var axis = Vector3.Normalize(Vector3.Cross(m_direction, Vector3.UnitY));
+			Vector3 axis = Vector3.Normalize(Vector3.Cross(m_direction, Vector3.UnitY));
 			m_direction = Vector3.TransformNormal(m_direction, Matrix.CreateRotationY(angles.Y));
 			float num2 = MathF.Acos(Vector3.Dot(m_direction, Vector3.UnitY));
 			float num3 = MathF.Acos(Vector3.Dot(m_direction, -Vector3.UnitY));

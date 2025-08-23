@@ -37,7 +37,7 @@ namespace Game
 			m_angles.X = MathUtils.NormalizeAngle(m_angles.X + (4f * cameraLook.X * dt) + (0.5f * cameraSneakMove.X * dt));
 			m_angles.Y = Math.Clamp(MathUtils.NormalizeAngle(m_angles.Y + (4f * cameraLook.Y * dt)), MathUtils.DegToRad(-20f), MathUtils.DegToRad(70f));
 			m_distance = Math.Clamp(m_distance - (10f * cameraSneakMove.Z * dt), 2f, 16f);
-			var v = Vector3.Transform(new Vector3(m_distance, 0f, 0f), Matrix.CreateFromYawPitchRoll(m_angles.X, 0f, m_angles.Y));
+			Vector3 v = Vector3.Transform(new Vector3(m_distance, 0f, 0f), Matrix.CreateFromYawPitchRoll(m_angles.X, 0f, m_angles.Y));
 			Vector3 vector = GameWidget.Target.ComponentBody.Position + 0.9f * GameWidget.Target.ComponentBody.BoxSize.Y * Vector3.UnitY;
 			Vector3 vector2 = vector + v;
 			if (Vector3.Distance(vector2, m_position) < 10f)
@@ -52,8 +52,8 @@ namespace Game
 			}
 			Vector3 vector3 = m_position - vector;
 			float? num = null;
-			var vector4 = Vector3.Normalize(Vector3.Cross(vector3, Vector3.UnitY));
-			var v3 = Vector3.Normalize(Vector3.Cross(vector3, vector4));
+			Vector3 vector4 = Vector3.Normalize(Vector3.Cross(vector3, Vector3.UnitY));
+			Vector3 v3 = Vector3.Normalize(Vector3.Cross(vector3, vector4));
 			SubsystemTerrain subsystemTerrain = GameWidget.SubsystemGameWidgets.SubsystemTerrain;
 			for (int i = 0; i <= 0; i++)
 			{

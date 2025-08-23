@@ -16,13 +16,7 @@ namespace Game
 			return false;
 		}
 
-		public Vector3 Position
-		{
-			get
-			{
-				return MovingBlockSet.Position + new Vector3(Offset);
-			}
-		}
+		public Vector3 Position => MovingBlockSet.Position + new Vector3(Offset);
 
 		public static MovingBlock LoadFromPositionAndOffset(Project project, Vector3 movingBlocksPosition, Point3 offset, bool throwOnError = true)
 		{

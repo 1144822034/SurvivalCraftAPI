@@ -153,9 +153,9 @@ namespace Game
 			public int Light;
 		}
 
-		public FloatCurve TemperatureCurve = new FloatCurve(new Vector2(0f, 0f), new Vector2(0.125f, 0f), new Vector2(0.25f, 0f), new Vector2(0.375f, -4f), new Vector2(0.5f, -12f), new Vector2(0.625f, -24f), new Vector2(0.75f, -12f), new Vector2(0.875f, -4f), new Vector2(1f, 0f));
+		public FloatCurve TemperatureCurve = new(new Vector2(0f, 0f), new Vector2(0.125f, 0f), new Vector2(0.25f, 0f), new Vector2(0.375f, -4f), new Vector2(0.5f, -12f), new Vector2(0.625f, -24f), new Vector2(0.75f, -12f), new Vector2(0.875f, -4f), new Vector2(1f, 0f));
 
-		public FloatCurve HumidityCurve = new FloatCurve(new Vector2(0f, 0f), new Vector2(0.25f, 0f), new Vector2(0.5f, 0f), new Vector2(0.75f, 0f), new Vector2(1f, 0f));
+		public FloatCurve HumidityCurve = new(new Vector2(0f, 0f), new Vector2(0.25f, 0f), new Vector2(0.5f, 0f), new Vector2(0.75f, 0f), new Vector2(1f, 0f));
 
 		public const int m_lightAttenuationWithDistance = 1;
 
@@ -1313,7 +1313,7 @@ namespace Game
 
 	                chunk.GeneratedSliceContentsHashes[index] = 0;
 	                ++m_statistics.GeneratedSlices;
-	                var geometry = chunk.ChunkSliceGeometries[index];
+	                TerrainGeometry geometry = chunk.ChunkSliceGeometries[index];
 	                if(geometry == null)
 	                {
 		                geometry = new(m_subsystemAnimatedTextures.AnimatedBlocksTexture);

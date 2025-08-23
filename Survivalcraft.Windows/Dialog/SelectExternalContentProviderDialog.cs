@@ -8,9 +8,9 @@ namespace Game
 		public SelectExternalContentProviderDialog(string title, bool listingSupportRequired, Action<IExternalContentProvider> selectionHandler)
 			: base(title, ExternalContentManager.Providers.Where(p => !listingSupportRequired || p.SupportsListing), 100f, delegate (object item)
 			{
-				var externalContentProvider = (IExternalContentProvider)item;
+				IExternalContentProvider externalContentProvider = (IExternalContentProvider)item;
 				XElement node = ContentManager.Get<XElement>("Widgets/SelectExternalContentProviderItem");
-				var obj = (ContainerWidget)LoadWidget(null, node, null);
+				ContainerWidget obj = (ContainerWidget)LoadWidget(null, node, null);
 				obj.Children.Find<LabelWidget>("SelectExternalContentProvider.Text").Text = externalContentProvider.DisplayName;
 				obj.Children.Find<LabelWidget>("SelectExternalContentProvider.Details").Text = externalContentProvider.Description;
 				return obj;

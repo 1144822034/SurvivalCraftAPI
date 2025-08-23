@@ -14,11 +14,8 @@ namespace Engine
 
 		public Point2 Location
 		{
-			get
-			{
-				return new Point2(Left, Top);
-			}
-			set
+			get => new(Left, Top);
+            set
 			{
 				Left = value.X;
 				Top = value.Y;
@@ -27,11 +24,8 @@ namespace Engine
 
 		public Point2 Size
 		{
-			get
-			{
-				return new Point2(Width, Height);
-			}
-			set
+			get => new(Width, Height);
+            set
 			{
 				Width = value.X;
 				Height = value.Y;

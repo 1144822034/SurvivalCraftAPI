@@ -93,38 +93,20 @@ namespace Game
 
 		public virtual Color CenterColor
 		{
-			get
-			{
-				return m_rectangleWidget.CenterColor;
-			}
-			set
-			{
-				m_rectangleWidget.CenterColor = value;
-			}
+			get => m_rectangleWidget.CenterColor;
+			set => m_rectangleWidget.CenterColor = value;
 		}
 
 		public virtual Color BevelColor
 		{
-			get
-			{
-				return m_rectangleWidget.BevelColor;
-			}
-			set
-			{
-				m_rectangleWidget.BevelColor = value;
-			}
+			get => m_rectangleWidget.BevelColor;
+			set => m_rectangleWidget.BevelColor = value;
 		}
 
 		public virtual Matrix? CustomViewMatrix
 		{
-			get
-			{
-				return m_blockIconWidget.CustomViewMatrix;
-			}
-			set
-			{
-				m_blockIconWidget.CustomViewMatrix = value;
-			}
+			get => m_blockIconWidget.CustomViewMatrix;
+			set => m_blockIconWidget.CustomViewMatrix = value;
 		}
 
 		public virtual GameWidget GameWidget
@@ -135,7 +117,7 @@ namespace Game
 				{
 					for (ContainerWidget parentWidget = ParentWidget; parentWidget != null; parentWidget = parentWidget.ParentWidget)
 					{
-						var gameWidget = parentWidget as GameWidget;
+						GameWidget gameWidget = parentWidget as GameWidget;
 						if (gameWidget != null)
 						{
 							m_gameWidget = gameWidget;
@@ -162,7 +144,7 @@ namespace Game
 		public InventorySlotWidget()
 		{
 			Size = new Vector2(72f, 72f);
-			var list = new List<Widget>();
+			List<Widget> list = new();
 			//不知道做什么的
 			m_rectangleWidget = new BevelledRectangleWidget
 			{
@@ -211,7 +193,7 @@ namespace Game
 			};
 			list.Add(m_healthBarWidget);
 			//右上角显示物品的编辑、交互、腐烂信息的面板
-			var stackPanelWidget = new StackPanelWidget
+			StackPanelWidget stackPanelWidget = new()
 			{
 				Direction = LayoutDirection.Horizontal,
 				HorizontalAlignment = WidgetAlignment.Far,
@@ -370,7 +352,7 @@ namespace Game
 				}
 				int num3 = (dragMode != 0) ? 1 : slotCount;
 				if (dragMode == DragMode.HalfItems) num3 = (slotCount + 1) / 2;
-				var containerWidget = (ContainerWidget)LoadWidget(null, ContentManager.Get<XElement>("Widgets/InventoryDragWidget"), null);
+				ContainerWidget containerWidget = (ContainerWidget)LoadWidget(null, ContentManager.Get<XElement>("Widgets/InventoryDragWidget"), null);
 				containerWidget.Children.Find<BlockIconWidget>("InventoryDragWidget.Icon").Value = Terrain.ReplaceLight(slotValue, 15);
 				containerWidget.Children.Find<LabelWidget>("InventoryDragWidget.Name").Text = block.GetDisplayName(m_subsystemTerrain, slotValue);
 				containerWidget.Children.Find<LabelWidget>("InventoryDragWidget.Count").Text = num3.ToString();
@@ -496,7 +478,7 @@ namespace Game
 				if (m_inventory.GetSlotProcessCapacity(m_slotIndex, slotValue) >= 0 || m_inventory.GetSlotCapacity(m_slotIndex, slotValue) > 0)
 				{
 					float num = 80f * GlobalTransform.Right.Length();
-					var center = Vector2.Transform(ActualSize / 2f, GlobalTransform);
+					Vector2 center = Vector2.Transform(ActualSize / 2f, GlobalTransform);
 					FlatBatch2D flatBatch2D = dc.PrimitivesRenderer2D.FlatBatch(100);
 					flatBatch2D.QueueEllipse(center, new Vector2(num), 0f, new Color(0, 0, 0, 96) * GlobalColorTransform, 64);
 					flatBatch2D.QueueEllipse(center, new Vector2(num - 0.5f), 0f, new Color(0, 0, 0, 64) * GlobalColorTransform, 64);
@@ -514,7 +496,7 @@ namespace Game
 
 		public virtual void DragDrop(Widget dragWidget, object data)
 		{
-			var inventoryDragData = data as InventoryDragData;
+			InventoryDragData inventoryDragData = data as InventoryDragData;
 			if (m_inventory != null && inventoryDragData != null)
 			{
 				HandleDragDrop(inventoryDragData.Inventory, inventoryDragData.SlotIndex, inventoryDragData.DragMode, m_inventory, m_slotIndex);

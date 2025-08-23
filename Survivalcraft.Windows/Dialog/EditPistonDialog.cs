@@ -65,7 +65,7 @@ namespace Game
 			m_maxExtension = PistonBlock.GetMaxExtension(data);
 			m_pullCount = PistonBlock.GetPullCount(data);
 			m_speed = PistonBlock.GetSpeed(data);
-			m_languageType = ModsManager.Configs.ContainsKey("Language") ? ModsManager.Configs["Language"] : "zh-CN";
+			m_languageType = ModsManager.Configs.TryGetValue("Language", out string config) ? config : "zh-CN";
 			m_title.Text = BlocksManager.Blocks[237].GetDisplayName(null, Terrain.MakeBlockValue(237, 0, data));
 			m_slider1.Granularity = 1f;
 			m_slider1.MinValue = 1f;

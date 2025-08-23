@@ -42,7 +42,7 @@ public class OriginalCommunityContentScreen : Screen
 	public const string fName = "OriginalCommunityContentScreen";
 	public const string fName1 = "CommunityContentScreen";
 
-	public CancellableBusyDialog m_busyDialog = new CancellableBusyDialog($"[{fName}:2]", autoHideOnCancel: false);
+	public CancellableBusyDialog m_busyDialog = new($"[{fName}:2]", autoHideOnCancel: false);
 
 	public object m_filter;
 
@@ -54,7 +54,7 @@ public class OriginalCommunityContentScreen : Screen
 
 	public int m_populatingListCount;
 
-	public Dictionary<string, IEnumerable<object>> m_itemsCache = new Dictionary<string, IEnumerable<object>>();
+	public Dictionary<string, IEnumerable<object>> m_itemsCache = new();
 
 	public OriginalCommunityContentScreen()
 	{
@@ -235,7 +235,7 @@ public class OriginalCommunityContentScreen : Screen
 		string text6 = m_order.ToString();
 		string cacheKey = text + "\n" + text2 + "\n" + text4 + "\n" + text5 + "\n" + m_search + "\n" + text6;
 		m_moreLink = null;
-		if (string.IsNullOrEmpty(cursor) && m_itemsCacheExpiryTime != 0.0 && Time.RealTime < m_itemsCacheExpiryTime && m_itemsCache.TryGetValue(cacheKey, out var value))
+		if (string.IsNullOrEmpty(cursor) && m_itemsCacheExpiryTime != 0.0 && Time.RealTime < m_itemsCacheExpiryTime && m_itemsCache.TryGetValue(cacheKey, out IEnumerable<object> value))
 		{
 			m_listPanel.ClearItems();
 			m_listPanel.AddItems(value);
@@ -270,7 +270,7 @@ public class OriginalCommunityContentScreen : Screen
 	public void DownloadEntry(OriginalCommunityContentEntry entry)
 	{
 		string userId = ((UserManager.ActiveUser != null) ? UserManager.ActiveUser.UniqueId : string.Empty);
-		CancellableBusyDialog busyDialog = new CancellableBusyDialog(string.Format(LanguageControl.Get(fName1, "1"), entry.Name), autoHideOnCancel: false);
+		CancellableBusyDialog busyDialog = new(string.Format(LanguageControl.Get(fName1, "1"), entry.Name), autoHideOnCancel: false);
 		DialogsManager.ShowDialog(null, busyDialog);
 		OriginalCommunityContentManager.Download(entry.Url, entry.Name, entry.Type, userId, busyDialog.Progress, delegate
 		{
@@ -292,7 +292,7 @@ public class OriginalCommunityContentScreen : Screen
 		{
 			if (button == MessageDialogButton.Button1)
 			{
-				CancellableBusyDialog busyDialog = new CancellableBusyDialog(string.Format(LanguageControl.Get(fName1, "3"), entry.Name), autoHideOnCancel: false);
+				CancellableBusyDialog busyDialog = new(string.Format(LanguageControl.Get(fName1, "3"), entry.Name), autoHideOnCancel: false);
 				DialogsManager.ShowDialog(null, busyDialog);
 				OriginalCommunityContentManager.Delete(entry.Url, UserManager.ActiveUser.UniqueId, busyDialog.Progress, delegate
 				{

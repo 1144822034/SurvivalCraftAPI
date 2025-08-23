@@ -401,7 +401,7 @@ namespace Game
 					}
 				}
 			}
-			Vector3 ans = new Vector3(vector.X, CalculateHeight(vector.X, vector.Y), vector.Y);
+			Vector3 ans = new(vector.X, CalculateHeight(vector.X, vector.Y), vector.Y);
 			Log.Information("Survivalcraft FindCoarseSpawnPosition");
             ModsManager.HookAction("FindCoarseSpawnPosition", loader =>
             {
@@ -701,7 +701,7 @@ namespace Game
 				{
 					for (int num14 = 0; num14 < grid3d.SizeY - 1; num14++)
 					{
-						grid3d.Get8(n, num14, num13, out var v2, out var v3, out var v4, out var v5, out var v6, out var v7, out var v8, out var v9);
+						grid3d.Get8(n, num14, num13, out float v2, out float v3, out float v4, out float v5, out float v6, out float v7, out float v8, out float v9);
 						float num15 = (v3 - v2) / 4f;
 						float num16 = (v5 - v4) / 4f;
 						float num17 = (v7 - v6) / 4f;

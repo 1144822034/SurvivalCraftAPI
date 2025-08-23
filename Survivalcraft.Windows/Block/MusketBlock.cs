@@ -5,6 +5,7 @@ namespace Game
 {
 	public class MusketBlock : Block
 	{
+		[Flags]
 		public enum LoadState
 		{
 			Empty,

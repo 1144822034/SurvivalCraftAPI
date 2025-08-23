@@ -111,7 +111,7 @@ namespace Game
 			m_buildButton.IsEnabled = m_isValid;
 			if (m_nameButton.IsClicked)
 			{
-				var list = new List<Tuple<string, Action>>();
+				List<Tuple<string,Action>> list = new();
 				if (m_sourceDesign != null)
 				{
 					list.Add(new Tuple<string, Action>(LanguageControl.Get(fName, 7), delegate

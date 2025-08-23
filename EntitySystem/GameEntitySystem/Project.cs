@@ -77,7 +77,7 @@ namespace GameEntitySystem
 					}
 				}
 				Dictionary<Subsystem, bool> loadedSubsystems = [];
-				List<Entity> entities = new List<Entity> ();
+				List<Entity> entities = new();
                 if (projectData.EntityDataList != null)
                 {
                     entities = InitializeEntities(projectData.EntityDataList);
@@ -320,13 +320,12 @@ namespace GameEntitySystem
 				dictionary2.Add(key, num);
 				num++;
 			}
-			EntityDataList entityDataList = new();
-			entityDataList.EntitiesData = new List<EntityData>(dictionary.Keys.Count);
+			EntityDataList entityDataList = new() { EntitiesData = new List<EntityData>(dictionary.Keys.Count) };
 			foreach (Entity key2 in entities)
 			{
-				EntityData entityData = new();
-				entityData.Id = key2.Id;
-				entityData.ValuesDictionary = [];
+				EntityData entityData = new() { Id = key2.Id,ValuesDictionary =
+				[]
+				};
 				entityData.ValuesDictionary.DatabaseObject = key2.ValuesDictionary.DatabaseObject;
 				key2.InternalSaveEntity(entityData.ValuesDictionary, entityToIdMap);
 				entityDataList.EntitiesData.Add(entityData);
@@ -336,8 +335,9 @@ namespace GameEntitySystem
 
 		public ProjectData Save()
 		{
-			ProjectData projectData = new();
-			projectData.ValuesDictionary = [];
+			ProjectData projectData = new() { ValuesDictionary =
+			[]
+			};
 			projectData.ValuesDictionary.DatabaseObject = ProjectTemplate;
 			foreach (Subsystem subsystem in Subsystems)
 			{

@@ -143,7 +143,7 @@ namespace Game
 		}
 		private void InitActions()
 		{
-		    var isLoadSucceed = true;
+		    bool isLoadSucceed = true;
 			Exception exception = null;
 			AddLoadAction(delegate
 			{//将所有的有效的scmod读取为ModEntity，并自动添加SurvivalCraftModEntity
@@ -156,12 +156,12 @@ namespace Game
 			{//检查所有Mod依赖项 
 			 //根据加载顺序排序后的结果
 				ModsManager.ModList.Clear();
-				foreach (var item in ModsManager.ModListAll)
+				foreach (ModEntity item in ModsManager.ModListAll)
 				{
 					if (item.IsDependencyChecked) continue;
 					item.CheckDependencies(ModsManager.ModList);
 				}
-				foreach (var item in ModsManager.ModListAll) item.IsDependencyChecked = false;
+				foreach (ModEntity item in ModsManager.ModListAll) item.IsDependencyChecked = false;
 			});
 			AddLoadAction(() =>
 			{
@@ -169,7 +169,7 @@ namespace Game
 				ModsManager.ModListAllDo(modEntity => {
 					bool flag = true;
 				    assemblies[modEntity.modInfo.PackageName] = modEntity.GetAssemblies();
-				    foreach (var assembly in assemblies[modEntity.modInfo.PackageName])
+				    foreach (Assembly assembly in assemblies[modEntity.modInfo.PackageName])
 				    {
 					    if(flag)
 					    {
@@ -196,7 +196,7 @@ namespace Game
 				ModsManager.ModListAllDo(modEntity =>
 				{
 					if (!isLoadSucceed) return;
-				    foreach(var asm in assemblies[modEntity.modInfo.PackageName])
+				    foreach(Assembly asm in assemblies[modEntity.modInfo.PackageName])
 				    {
 					    Log.Information($"[{modEntity.modInfo.Name}] Handling assembly [{asm.FullName}]");
 					    try
@@ -335,7 +335,7 @@ namespace Game
 					loader.OnLoadingStart(actions);
 					return false;
 				});
-				foreach (var ac in actions)
+				foreach (Action ac in actions)
 				{
 					ModLoadingActoins.Add(ac);
 				}
@@ -582,13 +582,13 @@ namespace Game
 		public override void Enter(object[] parameters)
 		{
 			Window.PresentationInterval = 1;
-			var remove = new List<string>();
-			foreach (var screen in ScreensManager.m_screens)
+			List<string> remove = new();
+			foreach (KeyValuePair<string,Screen> screen in ScreensManager.m_screens)
 			{
 				if (screen.Value == this) continue;
 				remove.Add(screen.Key);
 			}
-			foreach (var screen in remove)
+			foreach (string screen in remove)
 			{
 				ScreensManager.m_screens.Remove(screen);
 			}

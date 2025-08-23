@@ -40,7 +40,7 @@ namespace Game
 
 		public void CallNearbyCreaturesHelp(ComponentCreature target, float maxRange, float maxChaseTime, bool isPersistent)
 		{
-			var skipVanilla = false;
+			bool skipVanilla = false;
 			ModsManager.HookAction("CallNearbyCreaturesHelp",modLoader => {
 				modLoader.CallNearbyCreaturesHelp(this,target,maxRange,maxChaseTime,isPersistent,out skipVanilla);
 				return false;
@@ -66,7 +66,7 @@ namespace Game
 
 		public Vector3? FindHerdCenter()
 		{
-			var skipVanilla = false;
+			bool skipVanilla = false;
 			Vector3? herdCenterFromMod = null;
 			ModsManager.HookAction("FindHerdCenter",modLoader => {
 				modLoader.FindHerdCenter(m_componentCreature, out Vector3? herdCenterFromMod, out skipVanilla);

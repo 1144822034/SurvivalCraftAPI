@@ -73,8 +73,8 @@ namespace Game
 
 		public static InstancedModelData CreateInstancedModelData(Model model, int[] meshDrawOrders)
 		{
-			var dynamicArray = new DynamicArray<InstancedVertex>();
-			var dynamicArray2 = new DynamicArray<int>();
+			DynamicArray<InstancedVertex> dynamicArray = new();
+			DynamicArray<int> dynamicArray2 = new();
 			for (int i = 0; i < meshDrawOrders.Length; i++)
 			{
 				ModelMesh modelMesh = model.Meshes[meshDrawOrders[i]];
@@ -85,7 +85,7 @@ namespace Game
 					IndexBuffer indexBuffer = meshPart.IndexBuffer;
 					ReadOnlyList<VertexElement> vertexElements = vertexBuffer.VertexDeclaration.VertexElements;
 					int[] indexData = BlockMesh.GetIndexData<int>(indexBuffer);
-					var dictionary = new Dictionary<int, int>();
+					Dictionary<int,int> dictionary = new();
 					if (vertexElements.Count != 3 || vertexElements[0].Offset != 0 || !(vertexElements[0].Semantic == VertexElementSemantic.Position.GetSemanticString()) || vertexElements[1].Offset != 12 || !(vertexElements[1].Semantic == VertexElementSemantic.Normal.GetSemanticString()) || vertexElements[2].Offset != 24 || !(vertexElements[2].Semantic == VertexElementSemantic.TextureCoordinate.GetSemanticString()))
 					{
 						throw new InvalidOperationException("Unsupported vertex format.");
@@ -119,9 +119,7 @@ namespace Game
 					}
 				}
 			}
-			var instancedModelData = new InstancedModelData();
-			instancedModelData.VertexBuffer = new VertexBuffer(InstancedModelData.VertexDeclaration, dynamicArray.Count);
-			instancedModelData.IndexBuffer = new IndexBuffer(IndexFormat.ThirtyTwoBits, dynamicArray2.Count);
+			InstancedModelData instancedModelData = new() { VertexBuffer = new VertexBuffer(InstancedModelData.VertexDeclaration,dynamicArray.Count),IndexBuffer = new IndexBuffer(IndexFormat.ThirtyTwoBits, dynamicArray2.Count) };
 			instancedModelData.VertexBuffer.SetData(dynamicArray.Array, 0, dynamicArray.Count);
 			instancedModelData.IndexBuffer.SetData(dynamicArray2.Array, 0, dynamicArray2.Count);
 			return instancedModelData;

@@ -124,11 +124,11 @@ namespace Game
 
 		public override void Enter(object[] parameters)
 		{
-			foreach (var provider in ExternalContentManager.m_providers)
+			foreach (IExternalContentProvider provider in ExternalContentManager.m_providers)
 			{
-				if (provider is SchubExternalContentProvider)
+				if (provider is SchubExternalContentProvider contentProvider)
 				{
-					m_provider = (SchubExternalContentProvider)provider;
+					m_provider = contentProvider;
 					break;
 				}
 			}
@@ -167,7 +167,7 @@ namespace Game
 				m_action2Button.IsVisible = false;
 				m_webPageButton.IsVisible = false;
 			}
-			var communityContentEntry = m_treePanel.SelectedNode?.Tag as CommunityContentEntry;
+			CommunityContentEntry communityContentEntry = m_treePanel.SelectedNode?.Tag as CommunityContentEntry;
 			m_downloadButton.IsEnabled = communityContentEntry != null;
 			if (communityContentEntry != null)
 			{
@@ -198,7 +198,7 @@ namespace Game
 			m_searchTypeButton.Text = GetSearchTypeDisplayName(m_searchType);
 			if (m_changeOrderButton.IsClicked)
 			{
-				var items = EnumUtils.GetEnumValues(typeof(Order)).Cast<Order>().ToList();
+				List<Order> items = EnumUtils.GetEnumValues(typeof(Order)).Cast<Order>().ToList();
 				if (!m_isAdmin)
 				{
 					items.Remove(Order.ByHide);
@@ -215,10 +215,10 @@ namespace Game
 			}
 			if (m_changeFilterButton.IsClicked)
 			{
-				var list = new List<object>
-				{
+				List<object> list =
+				[
 					string.Empty
-				};
+				];
 				foreach (ExternalContentType item in from ExternalContentType t in EnumUtils.GetEnumValues(typeof(ExternalContentType))
 													 where ExternalContentManager.IsEntryTypeDownloadSupported(t)
 													 select t)
@@ -229,7 +229,7 @@ namespace Game
 				{
 					list.Add(SettingsManager.ScpboxAccessToken);
 				}
-				DialogsManager.ShowDialog(null, new ListSelectionDialog(LanguageControl.Get(GetType().Name, "Filter"), list, 60f, item => GetFilterDisplayName(item), delegate (object item)
+				DialogsManager.ShowDialog(null, new ListSelectionDialog(LanguageControl.Get(GetType().Name, "Filter"), list, 60f, GetFilterDisplayName, delegate (object item)
 				{
 					m_filter = item;
 					m_isOwn = item is string str && !string.IsNullOrEmpty(str);
@@ -253,7 +253,7 @@ namespace Game
 					{
 						if (button == MessageDialogButton.Button1)
 						{
-							var busyDialog = new CancellableBusyDialog(LanguageControl.Get(GetType().Name, 2), autoHideOnCancel: false);
+							CancellableBusyDialog busyDialog = new(LanguageControl.Get(GetType().Name, 2), autoHideOnCancel: false);
 							DialogsManager.ShowDialog(null, busyDialog);
 							CommunityContentManager.DeleteFile(communityContentEntry.Index, busyDialog.Progress, delegate (byte[] data)
 							{
@@ -285,8 +285,9 @@ namespace Game
 								}
 								catch
 								{
+									// ignored
 								}
-								var busyDialog = new CancellableBusyDialog(LanguageControl.Get(GetType().Name, 2), autoHideOnCancel: false);
+								CancellableBusyDialog busyDialog = new(LanguageControl.Get(GetType().Name, 2), autoHideOnCancel: false);
 								DialogsManager.ShowDialog(null, busyDialog);
 								CommunityContentManager.UpdateBoutique(communityContentEntry.Type.ToString(), communityContentEntry.Index, boutique, busyDialog.Progress, delegate (byte[] data)
 								{
@@ -310,7 +311,7 @@ namespace Game
 						{
 							if (button == MessageDialogButton.Button1)
 							{
-								var busyDialog = new CancellableBusyDialog(LanguageControl.Get(GetType().Name, 2), autoHideOnCancel: false);
+								CancellableBusyDialog busyDialog = new(LanguageControl.Get(GetType().Name, 2), autoHideOnCancel: false);
 								DialogsManager.ShowDialog(null, busyDialog);
 								CommunityContentManager.UpdateBoutique(communityContentEntry.Type.ToString(), communityContentEntry.Index, 0, busyDialog.Progress, delegate (byte[] data)
 								{
@@ -331,7 +332,7 @@ namespace Game
 			}
 			if (m_action2Button.IsClicked && communityContentEntry != null)
 			{
-				var busyDialog = new CancellableBusyDialog(LanguageControl.Get(GetType().Name, 2), autoHideOnCancel: false);
+				CancellableBusyDialog busyDialog = new(LanguageControl.Get(GetType().Name, 2), autoHideOnCancel: false);
 				DialogsManager.ShowDialog(null, busyDialog);
 				int isShow = (communityContentEntry.IsShow + 1) % 2;
 				string sucessMsg = (isShow == 1) ? LanguageControl.Get(GetType().Name, 28) : LanguageControl.Get(GetType().Name, 29);
@@ -417,7 +418,7 @@ namespace Game
 			{
 				text = "0";
 			}
-			string text2 = (m_filter is string) ? ((string)m_filter) : string.Empty;
+			string text2 = (m_filter is string s) ? s : string.Empty;
 			string text3 = (m_filter is ExternalContentType) ? LanguageControl.Get(GetType().Name, m_filter.ToString()) : string.Empty;
 			string text4 = m_order.ToString();
 			string cacheKey = text2 + "\n" + text3 + "\n" + text4 + "\n" + text + "\n" + m_inputKey.Text;
@@ -439,7 +440,7 @@ namespace Game
 			{
 				m_treePanel.Clear();
 			}
-			var busyDialog = new CancellableBusyDialog(LanguageControl.Get(GetType().Name, 2), autoHideOnCancel: false);
+			CancellableBusyDialog busyDialog = new(LanguageControl.Get(GetType().Name, 2), autoHideOnCancel: false);
 			DialogsManager.ShowDialog(null, busyDialog);
 			CommunityContentManager.List(cursor, text2, text3, text, text4, m_inputKey.Text, m_searchType.ToString(), busyDialog.Progress, delegate (List<CommunityContentEntry> list, string nextCursor)
 			{
@@ -451,7 +452,7 @@ namespace Game
 				}
 				foreach (CommunityContentEntry item2 in list)
 				{
-					var rootNode = m_treePanel.Nodes.FirstOrDefault(x => x.Tag is int id && id == item2.CollectionID);
+					TreeViewNode rootNode = m_treePanel.Nodes.FirstOrDefault(x => x.Tag is int id && id == item2.CollectionID);
 					if(rootNode == null)
 					{
 						rootNode = CreateCollectionNode(item2);
@@ -487,7 +488,7 @@ namespace Game
 											float ratio = (float)image.Width / image.Height;
 											iconMargin = new Vector2((1f - ratio) * 32f, 0f);
 										}
-										var texture = Texture2D.Load(image);
+										Texture2D texture = Texture2D.Load(image);
 										item2.Icon = texture;
 										TreeViewNode linkedNode = item2.LinkedNode;
 										if(linkedNode != null)
@@ -538,7 +539,7 @@ namespace Game
 		public void DownloadEntry(CommunityContentEntry entry)
 		{
 			string userId = (UserManager.ActiveUser != null) ? UserManager.ActiveUser.UniqueId : string.Empty;
-			var busyDialog = new CancellableBusyDialog(string.Format(LanguageControl.Get(GetType().Name, 1), entry.Name), autoHideOnCancel: false);
+			CancellableBusyDialog busyDialog = new(string.Format(LanguageControl.Get(GetType().Name, 1), entry.Name), autoHideOnCancel: false);
 			DialogsManager.ShowDialog(null, busyDialog);
 			CommunityContentManager.Download(entry.Address, entry.Name, entry.Type, userId, busyDialog.Progress, delegate
 			{
@@ -558,7 +559,7 @@ namespace Game
 				{
 					if (button == MessageDialogButton.Button1)
 					{
-						var busyDialog = new CancellableBusyDialog(string.Format(LanguageControl.Get(GetType().Name, 3), entry.Name), autoHideOnCancel: false);
+						CancellableBusyDialog busyDialog = new(string.Format(LanguageControl.Get(GetType().Name, 3), entry.Name), autoHideOnCancel: false);
 						DialogsManager.ShowDialog(null, busyDialog);
 						CommunityContentManager.Delete(entry.Address, UserManager.ActiveUser.UniqueId, busyDialog.Progress, delegate
 						{
@@ -576,12 +577,11 @@ namespace Game
 
 		public string GetFilterDisplayName(object filter)
 		{
-			return filter is string
-				? !string.IsNullOrEmpty((string)filter)
+			return filter is string s ? !string.IsNullOrEmpty(s)
 					? LanguageControl.Get(nameof(CommunityContentScreen), 8)
 					: LanguageControl.Get(nameof(CommunityContentScreen), 9)
-				: filter is ExternalContentType
-				? ExternalContentManager.GetEntryTypeDescription((ExternalContentType)filter)
+				: filter is ExternalContentType externalContentType
+				? ExternalContentManager.GetEntryTypeDescription(externalContentType)
 				:            throw new InvalidOperationException(LanguageControl.Get(nameof(CommunityContentScreen), 10));
 		}
 

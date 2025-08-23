@@ -65,7 +65,7 @@ namespace Game
 
 		public Dictionary<Point3, TextData> m_textsByPoint = [];
 
-		public Dictionary<MovingBlock, TextData> m_textsByMovingBlock = new Dictionary<MovingBlock, TextData>();
+		public Dictionary<MovingBlock, TextData> m_textsByMovingBlock = new();
 
 		public List<RenderTarget2D> m_texturesByPoint = [];
 
@@ -123,8 +123,7 @@ namespace Game
 
 		public void SetSignData(Point3 point, string[] lines, Color[] colors, string url, MovingBlock movingBlock = null)
 		{
-			var textData = new TextData();
-			textData.Point = point;
+			TextData textData = new() { Point = point };
 			for (int i = 0; i < 4; i++)
 			{
 				textData.Lines[i] = lines[i];
@@ -173,7 +172,7 @@ namespace Game
 		public override bool OnInteract(TerrainRaycastResult raycastResult, ComponentMiner componentMiner)
 		{
 			AudioManager.PlaySound("Audio/UI/ButtonClick", 1f, 0f, 0f);
-			var point = new Point3(raycastResult.CellFace.X, raycastResult.CellFace.Y, raycastResult.CellFace.Z);
+			Point3 point = new(raycastResult.CellFace.X, raycastResult.CellFace.Y, raycastResult.CellFace.Z);
 			if (m_subsystemGameInfo.WorldSettings.GameMode == GameMode.Adventure)
 			{
 				SignData signData = GetSignData(point);
@@ -191,7 +190,7 @@ namespace Game
 
 		public override void OnBlockStartMoving(int value,int newValue,int x,int y,int z,MovingBlock movingBlock)
 		{
-			var key = new Point3(x,y,z);
+			Point3 key = new(x,y,z);
 			bool valueGotten = m_textsByPoint.TryGetValue(key,out TextData textData);
 			m_textsByPoint.Remove(key);
 			if(valueGotten)
@@ -217,7 +216,7 @@ namespace Game
 
 		public override void OnBlockRemoved(int value, int newValue, int x, int y, int z)
 		{
-			var key = new Point3(x, y, z);
+			Point3 key = new(x, y, z);
 			m_textsByPoint.Remove(key);
 			m_lastUpdatePositions.Clear();
 		}
@@ -315,18 +314,18 @@ namespace Game
 		public override void Save(ValuesDictionary valuesDictionary)
 		{
 			int num = 0;
-			var valuesDictionary2 = new ValuesDictionary();
+			ValuesDictionary valuesDictionary2 = new();
 			valuesDictionary.SetValue("Texts", valuesDictionary2);
 			foreach (TextData value in m_textsByPoint.Values)
 			{
 				if(!MovingBlock.IsNullOrStopped(value.MovingBlock)) continue;
-				var valuesDictionary3 = new ValuesDictionary();
+				ValuesDictionary valuesDictionary3 = new();
 				SaveTextData(value, valuesDictionary3);
 				valuesDictionary2.SetValue(num++.ToString(CultureInfo.InvariantCulture), valuesDictionary3);
 			}
 			foreach(TextData textData in m_textsByMovingBlock.Values)
 			{
-				var valuesDictionary3 = new ValuesDictionary();
+				ValuesDictionary valuesDictionary3 = new();
 				SaveTextData(textData, valuesDictionary3);
 				valuesDictionary2.SetValue(num++.ToString(CultureInfo.InvariantCulture),valuesDictionary3);
 			}

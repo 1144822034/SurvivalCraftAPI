@@ -75,7 +75,7 @@ namespace Game
 			{
 				return;
 			}
-			var list = new List<MovingBlock>();
+			List<MovingBlock> list = new();
 			for (int i = p.Y; i < 256; i++)
 			{
 				int cellValue2 = SubsystemTerrain.Terrain.GetCellValue(p.X, i, p.Z);

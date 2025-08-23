@@ -68,11 +68,8 @@ namespace Engine.Graphics
 
 		public TextureFilterMode FilterMode
 		{
-			get
-			{
-				return m_filterMode;
-			}
-			set
+			get => m_filterMode;
+            set
 			{
 				ThrowIfLocked();
 				m_filterMode = value;
@@ -81,11 +78,8 @@ namespace Engine.Graphics
 
 		public TextureAddressMode AddressModeU
 		{
-			get
-			{
-				return m_addressModeU;
-			}
-			set
+			get => m_addressModeU;
+            set
 			{
 				ThrowIfLocked();
 				m_addressModeU = value;
@@ -94,11 +88,8 @@ namespace Engine.Graphics
 
 		public TextureAddressMode AddressModeV
 		{
-			get
-			{
-				return m_addressModeV;
-			}
-			set
+			get => m_addressModeV;
+            set
 			{
 				ThrowIfLocked();
 				m_addressModeV = value;
@@ -107,11 +98,8 @@ namespace Engine.Graphics
 
 		public int MaxAnisotropy
 		{
-			get
-			{
-				return m_maxAnisotropy;
-			}
-			set
+			get => m_maxAnisotropy;
+            set
 			{
 				ThrowIfLocked();
 				m_maxAnisotropy = MathUtils.Max(value, 1);
@@ -120,11 +108,8 @@ namespace Engine.Graphics
 
 		public float MinLod
 		{
-			get
-			{
-				return m_minLod;
-			}
-			set
+			get => m_minLod;
+            set
 			{
 				ThrowIfLocked();
 				m_minLod = value;
@@ -133,11 +118,8 @@ namespace Engine.Graphics
 
 		public float MaxLod
 		{
-			get
-			{
-				return m_maxLod;
-			}
-			set
+			get => m_maxLod;
+            set
 			{
 				ThrowIfLocked();
 				m_maxLod = value;
@@ -146,11 +128,8 @@ namespace Engine.Graphics
 
 		public float MipLodBias
 		{
-			get
-			{
-				return m_mipLodBias;
-			}
-			set
+			get => m_mipLodBias;
+            set
 			{
 				ThrowIfLocked();
 				m_mipLodBias = value;

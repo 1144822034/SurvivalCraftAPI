@@ -107,7 +107,7 @@ namespace Game
 		public void PopulateReleasesList()//向左侧版本列表中加入Release条目
 		{
 			m_releasesListPanel.ClearItems();
-			foreach(var releaseInfo in Releases)
+			foreach(ReleaseInfo releaseInfo in Releases)
 			{
 				m_releasesListPanel.AddItem(releaseInfo);
 			}
@@ -127,12 +127,12 @@ namespace Game
 
 		public void PopulateAssetsList(ReleaseInfo releaseInfo)
 		{
-			foreach(var assetButton in m_assetButtons.Keys)
+			foreach(BevelledButtonWidget assetButton in m_assetButtons.Keys)
 			{
 				m_releaseInfoPanel.Children.Remove(assetButton);
 			}
 			m_assetButtons.Clear();
-			foreach(var asset in releaseInfo.assets)
+			foreach(Asset asset in releaseInfo.assets)
 			{
 				BevelledButtonWidget button = new() { Size = new Vector2(float.PositiveInfinity,56),Text = asset.name, FontScale = 0.85f};
 				m_assetButtons.Add(button, asset);
@@ -151,7 +151,7 @@ namespace Game
 
 		public override void Update()
 		{
-			foreach(var assetButton in m_assetButtons)
+			foreach(KeyValuePair<BevelledButtonWidget,Asset> assetButton in m_assetButtons)
 			{
 				if(assetButton.Key.IsClicked)
 				{

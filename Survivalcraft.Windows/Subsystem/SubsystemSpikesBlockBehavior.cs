@@ -41,7 +41,7 @@ namespace Game
 				int data = SpikedPlankBlock.SetSpikesState(Terrain.ExtractData(cellValue), extend);
 				int value = Terrain.ReplaceData(cellValue, data);
 				SubsystemTerrain.ChangeCell(x, y, z, value);
-				var vector = new Vector3(x, y, z);
+				Vector3 vector = new(x, y, z);
 				float num2 = m_subsystemAudio.CalculateListenerDistance(vector);
 				if (!m_closestSoundToPlay.HasValue || num2 < m_subsystemAudio.CalculateListenerDistance(m_closestSoundToPlay.Value))
 				{

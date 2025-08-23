@@ -29,10 +29,10 @@ public static class MultiMouse
 
 	private static MouseData[] _MouseData =
     [
-        new MouseData(),
-		new MouseData(),
-		new MouseData(),
-		new MouseData()
+        new(),
+		new(),
+		new(),
+		new()
     ];
 
 	public static event Action<MultiMouseEvent> MouseMove;

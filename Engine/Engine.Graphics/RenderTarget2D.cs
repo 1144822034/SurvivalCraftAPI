@@ -30,14 +30,8 @@ namespace Engine.Graphics
 
         public DepthFormat DepthFormat
         {
-            get
-            {
-                return m_depthFormat;
-            }
-            set
-            {
-                m_depthFormat = value;
-            }
+            get => m_depthFormat;
+            set => m_depthFormat = value;
         }
 
         public RenderTarget2D(int width, int height, int mipLevelsCount, ColorFormat colorFormat, DepthFormat depthFormat)
@@ -64,7 +58,7 @@ namespace Engine.Graphics
         public void GetData<T>(T[] target, int targetStartIndex, Rectangle sourceRectangle) where T : struct
         {
             VerifyParametersGetData(target, targetStartIndex, sourceRectangle);
-            var gCHandle = GCHandle.Alloc(target, GCHandleType.Pinned);
+            GCHandle gCHandle = GCHandle.Alloc(target, GCHandleType.Pinned);
             try
             {
                 int num = Utilities.SizeOf<T>();
@@ -233,9 +227,9 @@ namespace Engine.Graphics
 #endif
         }
 
-        public new static RenderTarget2D Load(Color color, int width, int height)
+        public static new RenderTarget2D Load(Color color, int width, int height)
         {
-            RenderTarget2D renderTarget2D = new RenderTarget2D(width, height, 1, ColorFormat.Rgba8888, DepthFormat.None);
+            RenderTarget2D renderTarget2D = new(width, height, 1, ColorFormat.Rgba8888, DepthFormat.None);
             Color[] array = new Color[width * height];
             for (int i = 0; i < array.Length; i++)
             {
@@ -245,9 +239,9 @@ namespace Engine.Graphics
             return renderTarget2D;
         }
 
-        public new static RenderTarget2D Load(Image image, int mipLevelsCount = 1)
+        public static new RenderTarget2D Load(Image image, int mipLevelsCount = 1)
         {
-            RenderTarget2D renderTarget2D = new RenderTarget2D(image.Width, image.Height, mipLevelsCount, ColorFormat.Rgba8888, DepthFormat.None);
+            RenderTarget2D renderTarget2D = new(image.Width, image.Height, mipLevelsCount, ColorFormat.Rgba8888, DepthFormat.None);
             renderTarget2D.SetData(image.m_trueImage);
             if (mipLevelsCount > 1)
             {
@@ -261,7 +255,7 @@ namespace Engine.Graphics
             return renderTarget2D;
         }
 
-        public new static RenderTarget2D Load(Stream stream, bool premultiplyAlpha = false, int mipLevelsCount = 1)
+        public static new RenderTarget2D Load(Stream stream, bool premultiplyAlpha = false, int mipLevelsCount = 1)
         {
             Image image = Image.Load(stream);
             if (premultiplyAlpha)
@@ -271,7 +265,7 @@ namespace Engine.Graphics
             return Load(image, mipLevelsCount);
         }
 
-        public new static RenderTarget2D Load(string fileName, bool premultiplyAlpha = false, int mipLevelsCount = 1)
+        public static new RenderTarget2D Load(string fileName, bool premultiplyAlpha = false, int mipLevelsCount = 1)
         {
             using Stream stream = Storage.OpenFile(fileName, OpenFileMode.Read);
             return Load(stream, premultiplyAlpha, mipLevelsCount);
@@ -306,8 +300,10 @@ namespace Engine.Graphics
 			return base.GetGpuMemoryUsage() + (DepthFormat.GetSize() * Width * Height);
 		}
 
-		private void InitializeRenderTarget2D(int width, int height, int mipLevelsCount, ColorFormat colorFormat, DepthFormat depthFormat)
-		{
+        // ReSharper disable UnusedParameter.Local
+        private void InitializeRenderTarget2D(int width, int height, int mipLevelsCount, ColorFormat colorFormat, DepthFormat depthFormat)
+        // ReSharper restore UnusedParameter.Local
+        {
 			DepthFormat = depthFormat;
 		}
 
@@ -327,11 +323,11 @@ namespace Engine.Graphics
 			}
 			if (sourceRectangle.Left < 0 || sourceRectangle.Width <= 0 || sourceRectangle.Top < 0 || sourceRectangle.Height <= 0 || sourceRectangle.Left + sourceRectangle.Width > Width || sourceRectangle.Top + sourceRectangle.Height > Height)
 			{
-				throw new ArgumentOutOfRangeException("sourceRectangle");
+				throw new ArgumentOutOfRangeException(nameof(sourceRectangle));
 			}
 			if (targetStartIndex < 0 || targetStartIndex >= target.Length)
 			{
-				throw new ArgumentOutOfRangeException("targetStartIndex");
+				throw new ArgumentOutOfRangeException(nameof(targetStartIndex));
 			}
 			if ((target.Length - targetStartIndex) * num < sourceRectangle.Width * sourceRectangle.Height * size)
 			{
@@ -344,11 +340,11 @@ namespace Engine.Graphics
             VerifyNotDisposed();
             if (target == IntPtr.Zero)
             {
-                throw new ArgumentNullException("target");
+                throw new ArgumentNullException(nameof(target));
             }
             if (sourceRectangle.Left < 0 || sourceRectangle.Width <= 0 || sourceRectangle.Top < 0 || sourceRectangle.Height <= 0 || sourceRectangle.Left + sourceRectangle.Width > Width || sourceRectangle.Top + sourceRectangle.Height > Height)
             {
-                throw new ArgumentOutOfRangeException("sourceRectangle");
+                throw new ArgumentOutOfRangeException(nameof(sourceRectangle));
             }
         }
 
@@ -356,11 +352,11 @@ namespace Engine.Graphics
         {
             if (renderTarget1 == null)
             {
-                throw new ArgumentNullException("renderTarget1");
+                throw new ArgumentNullException(nameof(renderTarget1));
             }
             if (renderTarget2 == null)
             {
-                throw new ArgumentNullException("renderTarget2");
+                throw new ArgumentNullException(nameof(renderTarget2));
             }
             renderTarget1.VerifyNotDisposed();
             renderTarget2.VerifyNotDisposed();

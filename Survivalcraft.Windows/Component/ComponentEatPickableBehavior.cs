@@ -64,7 +64,7 @@ namespace Game
 			m_foodFactors = new float[EnumUtils.GetEnumValues(typeof(FoodType)).Max() + 1];
 			foreach (KeyValuePair<string, object> item in valuesDictionary.GetValue<ValuesDictionary>("FoodFactors"))
 			{
-				var foodType = (FoodType)Enum.Parse(typeof(FoodType), item.Key, ignoreCase: false);
+				FoodType foodType = (FoodType)Enum.Parse(typeof(FoodType), item.Key, ignoreCase: false);
 				m_foodFactors[(int)foodType] = (float)item.Value;
 			}
 			m_subsystemPickables.PickableAdded += pickable =>

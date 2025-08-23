@@ -17,7 +17,7 @@ public class SubsystemCellChangeQueue : Subsystem, IUpdateable
 
 	public SubsystemTerrain m_subsystemTerrain;
 
-	private Dictionary<Point3, CellChange> m_toChange = new Dictionary<Point3, CellChange>();
+	private Dictionary<Point3, CellChange> m_toChange = new();
 
 	UpdateOrder IUpdateable.UpdateOrder => UpdateOrder.Default;
 

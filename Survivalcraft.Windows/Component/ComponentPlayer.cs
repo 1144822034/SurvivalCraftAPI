@@ -434,7 +434,7 @@ namespace Game
 				});
 				if(!skipVanilla_ && !flag && m_subsystemTime.GameTime - m_lastActionTime > timeIntervalHit && block.GetMeleeHitProbability(ComponentMiner.ActiveBlockValue) > 0 && meleeAttackRange > 0)
 				{
-					var bodyRaycastResult = ComponentMiner.Raycast<BodyRaycastResult>(playerInput.Hit.Value,RaycastMode.Interaction,reach: meleeAttackRange);
+					BodyRaycastResult? bodyRaycastResult = ComponentMiner.Raycast<BodyRaycastResult>(playerInput.Hit.Value,RaycastMode.Interaction,reach: meleeAttackRange);
 					if(bodyRaycastResult.HasValue)
 					{
 						flag = true;
@@ -502,7 +502,7 @@ namespace Game
 			{
 				return;
 			}
-			var componentCreativeInventory = ComponentMiner.Inventory as ComponentCreativeInventory;
+			ComponentCreativeInventory componentCreativeInventory = ComponentMiner.Inventory as ComponentCreativeInventory;
 			if(componentCreativeInventory == null)
 			{
 				return;
@@ -524,7 +524,7 @@ namespace Game
 			}
 			if(num5 == 0 && !block2.IsNonDuplicable_(value3))
 			{
-				var list = new List<BlockDropValue>();
+				List<BlockDropValue> list = new();
 				block2.GetDropValues(m_subsystemTerrain,value3,0,int.MaxValue,list,out bool _);
 				if(list.Count > 0 && list[0].Count > 0)
 				{

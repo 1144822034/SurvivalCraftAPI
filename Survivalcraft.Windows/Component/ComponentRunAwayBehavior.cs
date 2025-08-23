@@ -159,7 +159,7 @@ namespace Game
 					int cellValue = m_subsystemTerrain.Terrain.GetCellValue(num2, num4, num3);
 					if (BlocksManager.Blocks[Terrain.ExtractContents(cellValue)].IsCollidable_(cellValue) || Terrain.ExtractContents(cellValue) == 18)
 					{
-						var vector = new Vector3(num2 + 0.5f, num4 + 1.1f, num3 + 0.5f);
+						Vector3 vector = new(num2 + 0.5f, num4 + 1.1f, num3 + 0.5f);
 						float num5 = ScoreSafePlace(position, vector, herdPosition, m_lastNoiseSourcePosition, Terrain.ExtractContents(cellValue));
 						if (num5 > num)
 						{
@@ -176,13 +176,13 @@ namespace Game
 		public virtual float ScoreSafePlace(Vector3 currentPosition, Vector3 safePosition, Vector3? herdPosition, Vector3? noiseSourcePosition, int contents)
 		{
 			float num = 0f;
-			var vector = new Vector2(currentPosition.X, currentPosition.Z);
-			var vector2 = new Vector2(safePosition.X, safePosition.Z);
-			var s = new Segment2(vector, vector2);
+			Vector2 vector = new(currentPosition.X, currentPosition.Z);
+			Vector2 vector2 = new(safePosition.X, safePosition.Z);
+			Segment2 s = new(vector, vector2);
 			if (m_attacker != null)
 			{
 				Vector3 position = m_attacker.Position;
-				var vector3 = new Vector2(position.X, position.Z);
+				Vector2 vector3 = new(position.X, position.Z);
 				float num2 = Vector2.Distance(vector3, vector2);
 				float num3 = Segment2.Distance(s, vector3);
 				num += num2 + (3f * num3);

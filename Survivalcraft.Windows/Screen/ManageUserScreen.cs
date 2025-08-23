@@ -1,4 +1,5 @@
-using Engine;
+//abandoned
+/*using Engine;
 using Engine.Graphics;
 using Game;
 using System.Text.Json;
@@ -100,7 +101,7 @@ public class ManageUserScreen : Screen
 		m_searchKeyTextBox = Children.Find<TextBoxWidget>("SearchKey");
 		m_contentList.ItemWidgetFactory = delegate (object obj)
 		{
-			var listItem = obj as ComUserInfo;
+			ComUserInfo listItem = obj as ComUserInfo;
 			if (listItem != null)
 			{
 				XElement node2 = ContentManager.Get<XElement>("Widgets/BlocksTextureItem");
@@ -143,7 +144,7 @@ public class ManageUserScreen : Screen
 			else
 			{
 				XElement node2 = ContentManager.Get<XElement>("Widgets/CommunityContentItemMore");
-				var containerWidget = (ContainerWidget)LoadWidget(this, node2, null);
+				ContainerWidget containerWidget = (ContainerWidget)LoadWidget(this, node2, null);
 				m_moreLink = containerWidget.Children.Find<LinkWidget>("CommunityContentItemMore.Link");
 				m_moreLink.Tag = obj as string;
 				return containerWidget;
@@ -151,7 +152,7 @@ public class ManageUserScreen : Screen
 		};
 		m_contentList.ItemClicked += obj =>
 		{
-			var listItem = obj as ComUserInfo;
+			ComUserInfo listItem = obj as ComUserInfo;
 			if (listItem != null && m_contentList.SelectedItem == listItem)
 			{
 				string msg = $"用户ID: {listItem.Id}\n用户名: {GetMsg(listItem.UserNo)}\n昵称: {GetMsg(listItem.Name)}\n邮箱{GetMsg(listItem.Email)}\nIP:{GetMsg(listItem.LoginIP)}";
@@ -162,7 +163,7 @@ public class ManageUserScreen : Screen
 				msg += $"\n手机号: {GetMsg(listItem.Moblie)}\n区号: {GetMsg(listItem.AreaCode)}";
 				msg += "\n上次锁定时间: " + GetMsg(listItem.LockTime) + "\n锁定原因: " + GetMsg(listItem.LockReason);
 				msg += "\n锁定时长: " + ((int)(listItem.LockDuration / 8.64f) / 10000f) + "天\n解锁时间: " + GetMsg(listItem.UnlockTime);
-				var messageDialog = new MessageDialog("详细信息:" + listItem.Name, msg, LanguageControl.Ok, null, null);
+				MessageDialog messageDialog = new("详细信息:" + listItem.Name, msg, LanguageControl.Ok, null, null);
 				DialogsManager.ShowDialog(null, messageDialog);
 			}
 		};
@@ -232,7 +233,7 @@ public class ManageUserScreen : Screen
 					{
 						if (!string.IsNullOrEmpty(reason) && !string.IsNullOrEmpty(duration))
 						{
-							var busyDialog = new CancellableBusyDialog("操作等待中", autoHideOnCancel: false);
+							CancellableBusyDialog busyDialog = new("操作等待中", autoHideOnCancel: false);
 							DialogsManager.ShowDialog(null, busyDialog);
 							int s_duration = (int)(double.Parse(duration) * 86400);
 							CommunityContentManager.UpdateLockState(item.Id, 1, reason, s_duration, busyDialog.Progress, delegate (byte[] data)
@@ -257,7 +258,7 @@ public class ManageUserScreen : Screen
 				{
 					if (button == MessageDialogButton.Button1)
 					{
-						var busyDialog = new CancellableBusyDialog("操作等待中", autoHideOnCancel: false);
+						CancellableBusyDialog busyDialog = new("操作等待中", autoHideOnCancel: false);
 						DialogsManager.ShowDialog(null, busyDialog);
 						CommunityContentManager.UpdateLockState(item.Id, 0, "", 0, busyDialog.Progress, delegate (byte[] data)
 						{
@@ -282,7 +283,7 @@ public class ManageUserScreen : Screen
 			{
 				if (button == MessageDialogButton.Button1)
 				{
-					var busyDialog = new CancellableBusyDialog("操作等待中", autoHideOnCancel: false);
+					CancellableBusyDialog busyDialog = new("操作等待中", autoHideOnCancel: false);
 					DialogsManager.ShowDialog(null, busyDialog);
 					CommunityContentManager.ResetPassword(item.Id, busyDialog.Progress, delegate (byte[] data)
 					{
@@ -329,31 +330,29 @@ public class ManageUserScreen : Screen
 			m_contentList.ClearItems();
 			m_contentList.ScrollPosition = 0f;
 		}
-		var busyDialog = new CancellableBusyDialog(LanguageControl.Get("CommunityContentScreen", 2), autoHideOnCancel: false);
+		CancellableBusyDialog busyDialog = new(LanguageControl.Get("CommunityContentScreen", 2), autoHideOnCancel: false);
 		DialogsManager.ShowDialog(null, busyDialog);
 		int order = m_order ? 1 : 0;
-		/*
-		CommunityContentManager.UserList(cursor, m_searchKeyTextBox.Text, m_searchType.ToString(), m_filter.ToString(), order, busyDialog.Progress, delegate (List<ComUserInfo> list, string nextCursor)
-		{
-			DialogsManager.HideDialog(busyDialog);
-			while (m_contentList.Items.Count > 0 && !(m_contentList.Items[^1] is ComUserInfo))
-			{
-				m_contentList.RemoveItemAt(m_contentList.Items.Count - 1);
-			}
-			foreach (ComUserInfo item in list)
-			{
-				m_contentList.AddItem(item);
-			}
-			if (list.Count > 0 && !string.IsNullOrEmpty(nextCursor))
-			{
-				m_contentList.AddItem(nextCursor);
-			}
-		}, delegate (Exception error)
-		{
-			DialogsManager.HideDialog(busyDialog);
-			DialogsManager.ShowDialog(null, new MessageDialog(LanguageControl.Error, error.Message, LanguageControl.Ok, null, null));
-		});
-		*/
+		//CommunityContentManager.UserList(cursor, m_searchKeyTextBox.Text, m_searchType.ToString(), m_filter.ToString(), order, busyDialog.Progress, delegate (List<ComUserInfo> list, string nextCursor)
+		//{
+			//DialogsManager.HideDialog(busyDialog);
+			//while (m_contentList.Items.Count > 0 && !(m_contentList.Items[^1] is ComUserInfo))
+			//{
+				//m_contentList.RemoveItemAt(m_contentList.Items.Count - 1);
+			//}
+			//foreach (ComUserInfo item in list)
+			//{
+				//m_contentList.AddItem(item);
+			//}
+			//if (list.Count > 0 && !string.IsNullOrEmpty(nextCursor))
+			//{
+				//m_contentList.AddItem(nextCursor);
+			//}
+		//}, delegate (Exception error)
+		//{
+			//DialogsManager.HideDialog(busyDialog);
+			//DialogsManager.ShowDialog(null, new MessageDialog(LanguageControl.Error, error.Message, LanguageControl.Ok, null, null));
+		//});
 	}
 
 	public string GetFilterDisplayName(Filter filter)
@@ -384,3 +383,4 @@ public class ManageUserScreen : Screen
 		return "";
 	}
 }
+*/

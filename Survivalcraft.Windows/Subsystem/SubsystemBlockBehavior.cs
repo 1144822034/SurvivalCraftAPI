@@ -6,13 +6,8 @@ namespace Game
 {
 	public abstract class SubsystemBlockBehavior : Subsystem
 	{
-		public virtual int[] HandledBlocks
-		{
-			get
-			{
-				return [];
-			}
-		}
+		public virtual int[] HandledBlocks =>
+		[];
 
 		public SubsystemTerrain SubsystemTerrain
 		{

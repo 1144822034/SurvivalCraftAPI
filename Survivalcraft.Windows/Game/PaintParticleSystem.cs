@@ -42,13 +42,13 @@ namespace Game
 			float s = LightingManager.LightIntensityByLightValue[x];
 			m_color = color * s;
 			m_color.A = color.A;
-			var vector = Vector3.Normalize(Vector3.Cross(normal, new Vector3(0.37f, 0.15f, 0.17f)));
-			var v = Vector3.Normalize(Vector3.Cross(normal, vector));
+			Vector3 vector = Vector3.Normalize(Vector3.Cross(normal, new Vector3(0.37f, 0.15f, 0.17f)));
+			Vector3 v = Vector3.Normalize(Vector3.Cross(normal, vector));
 			for (int i = 0; i < Particles.Length; i++)
 			{
 				Particle obj = Particles[i];
 				obj.IsActive = true;
-				var vector2 = new Vector2(m_random.Float(-1f, 1f), m_random.Float(-1f, 1f));
+				Vector2 vector2 = new(m_random.Float(-1f, 1f), m_random.Float(-1f, 1f));
 				obj.Position = position + (0.4f * ((vector2.X * vector) + (vector2.Y * v))) + (0.03f * normal);
 				obj.Color = m_color;
 				obj.Size = new Vector2(m_random.Float(0.025f, 0.035f));

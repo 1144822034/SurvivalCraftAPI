@@ -17,14 +17,8 @@ namespace Game
         [Obsolete("Use IsInFluid instead.")]
 		public bool IsInWater
         {
-            get
-            {
-                return IsInFluid;
-            }
-            set
-            {
-                IsInFluid = value;
-            }
+            get => IsInFluid;
+            set => IsInFluid = value;
         }
 
 		public double LastNoiseTime;
@@ -96,7 +90,7 @@ namespace Game
         /// <summary>
         /// 弹射物飞行的时候会忽略List中的ComponentBody
         /// </summary>
-        public List<ComponentBody> BodiesToIgnore = new List<ComponentBody>();
+        public List<ComponentBody> BodiesToIgnore = new();
 
         protected SubsystemProjectiles? m_subsystemProjectiles;
         public SubsystemProjectiles? SubsystemProjectiles
@@ -364,7 +358,7 @@ namespace Game
             }
             if (projectileGetStuck)
             {
-                var v3 = Vector3.Normalize(Velocity);
+                Vector3 v3 = Vector3.Normalize(Velocity);
                 float s = MathUtils.Lerp(0.1f, 0.2f, MathUtils.Saturate((velocityLength - 15f) / 20f));
                 pickableStuckMatrix = Position + (terrainRaycastResult.Distance * Vector3.Normalize(Velocity)) + (v3 * s);
             }

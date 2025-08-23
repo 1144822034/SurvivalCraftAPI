@@ -20,10 +20,19 @@ namespace Engine.Graphics
 		{
 			get
 			{
+#if DIRECT3D11
+                return m_buffer.DebugName;
+#else
 				return string.Empty;
+#endif
 			}
-			set
-			{
+            // ReSharper disable ValueParameterNotUsed
+            set
+            // ReSharper restore ValueParameterNotUsed
+            {
+#if DIRECT3D11
+                m_buffer.DebugName = value;
+#endif
 			}
 		}
 
@@ -60,7 +69,7 @@ namespace Engine.Graphics
 		public unsafe void SetData<T>(T[] source, int sourceStartIndex, int sourceCount, int targetStartIndex = 0) where T : struct
 		{
 			VerifyParametersSetData(source, sourceStartIndex, sourceCount, targetStartIndex);
-			var gCHandle = GCHandle.Alloc(source, GCHandleType.Pinned);
+			GCHandle gCHandle = GCHandle.Alloc(source, GCHandleType.Pinned);
 			try
 			{
 				int num = Utilities.SizeOf<T>();

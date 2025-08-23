@@ -101,7 +101,7 @@ namespace Game
 			bool flag = true;
 			if (Destination.HasValue && destination.HasValue)
 			{
-				var v = Vector3.Normalize(Destination.Value - m_componentCreature.ComponentBody.Position);
+				Vector3 v = Vector3.Normalize(Destination.Value - m_componentCreature.ComponentBody.Position);
 				if (Vector3.Dot(Vector3.Normalize(destination.Value - m_componentCreature.ComponentBody.Position), v) > 0.5f)
 				{
 					flag = false;
@@ -270,16 +270,16 @@ namespace Game
 		/// </summary>
 		public virtual bool IsTerrainSafeToGo(Vector3 position, Vector3 direction)
 		{
-			var isTerrainSafeToGo = false;
-			var skipVanilla = false;
+			bool isTerrainSafeToGo = false;
+			bool skipVanilla = false;
 			ModsManager.HookAction("IsTerrainSafeToGo",modLoader => {
 				modLoader.IsTerrainSafeToGo(this,position,direction,out isTerrainSafeToGo,out skipVanilla);
 				return false;
 			});
 			if(skipVanilla) return isTerrainSafeToGo;
 			//vector是自己判断移动后的位置
-			var vector = position + new Vector3(0f, 0.1f, 0f) + ((direction.LengthSquared() < 1.2f) ? new Vector3(direction.X, 0f, direction.Z) : (1.2f * Vector3.Normalize(new Vector3(direction.X, 0f, direction.Z))));
-			var vector2 = position + new Vector3(0f, 0.1f, 0f) + ((direction.LengthSquared() < 1f) ? new Vector3(direction.X, 0f, direction.Z) : (1f * Vector3.Normalize(new Vector3(direction.X, 0f, direction.Z))));
+			Vector3 vector = position + new Vector3(0f, 0.1f, 0f) + ((direction.LengthSquared() < 1.2f) ? new Vector3(direction.X, 0f, direction.Z) : (1.2f * Vector3.Normalize(new Vector3(direction.X, 0f, direction.Z))));
+			Vector3 vector2 = position + new Vector3(0f, 0.1f, 0f) + ((direction.LengthSquared() < 1f) ? new Vector3(direction.X, 0f, direction.Z) : (1f * Vector3.Normalize(new Vector3(direction.X, 0f, direction.Z))));
             for (int i = -1; i <= 1; i++)
 			{
 				for (int j = -1; j <= 1; j++)
@@ -363,7 +363,7 @@ namespace Game
 				if (v2.LengthSquared() < num * num)
 				{
 					float num2 = v.Length();
-					var v3 = Vector2.Normalize(xZ + (Vector2.Normalize(v2) * num) - position.XZ);
+					Vector2 v3 = Vector2.Normalize(xZ + (Vector2.Normalize(v2) * num) - position.XZ);
 					if (Vector2.Dot(v / num2, v3) > 0.5f)
 					{
 						return new Vector3(position.X + (v3.X * num2), destination.Y, position.Z + (v3.Y * num2));

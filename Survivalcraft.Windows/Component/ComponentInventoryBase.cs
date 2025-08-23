@@ -24,10 +24,7 @@ namespace Game
 
 		public virtual int VisibleSlotsCount
 		{
-			get
-			{
-				return SlotsCount;
-			}
+			get => SlotsCount;
 			set
 			{
 			}
@@ -35,10 +32,7 @@ namespace Game
 
 		public virtual int ActiveSlotIndex
 		{
-			get
-			{
-				return -1;
-			}
+			get => -1;
 			set
 			{
 			}
@@ -86,7 +80,7 @@ namespace Game
 				ComponentBlockEntity componentBlockEntity = Entity.FindComponent<ComponentBlockEntity>();
 				if (componentBlockEntity != null)
 				{
-					var position = new Vector3(componentBlockEntity.Coordinates);
+					Vector3 position = new(componentBlockEntity.Coordinates);
 					componentPlayer = Project.FindSubsystem<SubsystemPlayers>(throwOnError: true).FindNearestPlayer(position);
 				}
 			}
@@ -132,14 +126,14 @@ namespace Game
 
 		public override void Save(ValuesDictionary valuesDictionary, EntityToIdMap entityToIdMap)
 		{
-			var valuesDictionary2 = new ValuesDictionary();
+			ValuesDictionary valuesDictionary2 = new();
 			valuesDictionary.SetValue("Slots", valuesDictionary2);
 			for (int i = 0; i < m_slots.Count; i++)
 			{
 				Slot slot = m_slots[i];
 				if (slot.Count > 0)
 				{
-					var valuesDictionary3 = new ValuesDictionary();
+					ValuesDictionary valuesDictionary3 = new();
 					valuesDictionary2.SetValue("Slot" + i.ToString(CultureInfo.InvariantCulture), valuesDictionary3);
 					valuesDictionary3.SetValue("Contents", slot.Value);
 					valuesDictionary3.SetValue("Count", slot.Count);
@@ -207,11 +201,11 @@ namespace Game
 				int slotCapacity = GetSlotCapacity(slotIndex,value);
 				if (slotCount != 0 && slotValue != value)
 				{
-					throw new InvalidOperationException(string.Format("Cannot add slot items because items are different. Slot {0} Contains BlockValue {1} with count {2}. The value to add is {3} with count {4}. Slot capacity is {5}", slotIndex, slotValue, slotCount, value, count, slotCapacity));
+					throw new InvalidOperationException($"Cannot add slot items because items are different. Slot {slotIndex} Contains BlockValue {slotValue} with count {slotCount}. The value to add is {value} with count {count}. Slot capacity is {slotCapacity}");
 				}
 				if(GetSlotCount(slotIndex) + count > slotCapacity)
 				{
-					throw new InvalidOperationException(string.Format("Cannot add slot items because it exceeded capacity. Slot {0} Contains BlockValue {1} with count {2}. The value to add is {3} with count {4}. Slot capacity is {5}",slotIndex,slotValue,slotCount,value,count,slotCapacity));
+					throw new InvalidOperationException($"Cannot add slot items because it exceeded capacity. Slot {slotIndex} Contains BlockValue {slotValue} with count {slotCount}. The value to add is {value} with count {count}. Slot capacity is {slotCapacity}");
 				}
 				slot.Value = value;
 				slot.Count += count;

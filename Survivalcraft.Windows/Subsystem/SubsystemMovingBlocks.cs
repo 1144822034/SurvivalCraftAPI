@@ -251,7 +251,7 @@ namespace Game
 			MovingBlockSet movingBlockSet = null;
 			try
 			{
-				foreach(var item in m_result.Array)
+				foreach(IMovingBlockSet item in m_result.Array)
 				{
 					MovingBlockSet item1 = item as MovingBlockSet;
 					if(item1 == null || item1.Stop) continue;
@@ -278,7 +278,7 @@ namespace Game
 				{
 					int blockValue = movingBlock.Value;
 					Block block = BlocksManager.Blocks[Terrain.ExtractContents(blockValue)];
-					Ray3 equalRay = new Ray3(ray.Position - movingBlockSet.Position - new Vector3(movingBlock.Offset.X, movingBlock.Offset.Y, movingBlock.Offset.Z), ray.Direction);
+					Ray3 equalRay = new(ray.Position - movingBlockSet.Position - new Vector3(movingBlock.Offset.X, movingBlock.Offset.Y, movingBlock.Offset.Z), ray.Direction);
 					float? dist = block.Raycast(equalRay, m_subsystemTerrain, blockValue, true, out int collisionBoxIndex, out BoundingBox nearestBox);
 					if(dist.HasValue && dist.Value < distance && (action == null || action(blockValue, dist.Value)))
 					{
@@ -413,7 +413,7 @@ namespace Game
 			}
 			for(int i = 0; i < Buffers.Count; i++)
 			{
-				var buffer = Buffers[i];
+				TerrainChunkGeometry.Buffer buffer = Buffers[i];
 				Vector3 viewPosition = camera.ViewPosition;
 				Vector3 vector = new(MathF.Floor(viewPosition.X), 0f, MathF.Floor(viewPosition.Z));
 				Matrix value = Matrix.CreateTranslation(vector - viewPosition) * camera.ViewMatrix.OrientationMatrix * camera.ProjectionMatrix;
@@ -456,7 +456,7 @@ namespace Game
 				string[] array = value9.GetValue<string>("Blocks").Split([';'], StringSplitOptions.RemoveEmptyEntries);
 				foreach (string obj2 in array)
 				{
-					MovingBlock item = new MovingBlock();
+					MovingBlock item = new();
 					string[] array2 = obj2.Split([','], StringSplitOptions.RemoveEmptyEntries);
 					item.Value = HumanReadableConverter.ConvertFromString<int>(array2[0]);
 					item.Offset.X = HumanReadableConverter.ConvertFromString<int>(array2[1]);

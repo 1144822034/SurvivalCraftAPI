@@ -54,7 +54,7 @@ public class ManageContentScreen : Screen
 		m_filterLabel = Children.Find<LabelWidget>("Filter");
 		m_contentList.ItemWidgetFactory = delegate (object obj)
 		{
-			var listItem = (ListItem)obj;
+			ListItem listItem = (ListItem)obj;
 			ContainerWidget containerWidget;
 			switch (listItem.Type)
 			{
@@ -155,10 +155,10 @@ public class ManageContentScreen : Screen
 		};
 		m_contentList.ItemClicked += obj =>
 		{
-			var listItem = (ListItem)obj;
+			ListItem listItem = (ListItem)obj;
 			if (listItem.Type == ExternalContentType.Mod && listItem.IsClick)
 			{
-				var messageDialog = new MessageDialog(listItem.ModEntity.modInfo.Name, listItem.ModEntity.modInfo.Description, LanguageControl.Ok, LanguageControl.Cancel, btn =>
+				MessageDialog messageDialog = new(listItem.ModEntity.modInfo.Name, listItem.ModEntity.modInfo.Description, LanguageControl.Ok, LanguageControl.Cancel, btn =>
 				{
 					DialogsManager.HideAllDialogs();
 					listItem.IsClick = false;
@@ -184,7 +184,7 @@ public class ManageContentScreen : Screen
 
 	public override void Update()
 	{
-		var selectedItem = (ListItem)m_contentList.SelectedItem;
+		ListItem selectedItem = (ListItem)m_contentList.SelectedItem;
 		m_deleteButton.Text = LanguageControl.Get("ModsManageContentScreen", 9);
 		if (selectedItem != null)
 		{
@@ -247,13 +247,16 @@ public class ManageContentScreen : Screen
 		}
 		if (m_changeFilterButton.IsClicked)
 		{
-			var list = new List<ExternalContentType>
-			{
+			List<ExternalContentType> list =
+			[
 				ExternalContentType.Unknown,
+
 				ExternalContentType.BlocksTexture,
+
 				ExternalContentType.CharacterSkin,
+
 				ExternalContentType.FurniturePack
-			};
+			];
 			DialogsManager.ShowDialog(null, new ListSelectionDialog(LanguageControl.Get(fName, 7), list, 60f, item => GetFilterDisplayName((ExternalContentType)item), delegate (object item)
 			{
 				if ((ExternalContentType)item != m_filter)
@@ -287,7 +290,7 @@ public class ManageContentScreen : Screen
 	public virtual void UpdateList()
 	{
 		WorldsManager.UpdateWorldsList();
-		var list = new List<ListItem>();
+		List<ListItem> list = [];
 		if (m_filter == ExternalContentType.BlocksTexture || m_filter == ExternalContentType.Unknown)
 		{
 			BlocksTexturesManager.UpdateBlocksTexturesList();

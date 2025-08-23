@@ -40,10 +40,7 @@ namespace Game
                 if (SubsystemTerrain == null || CellFace == null) return -1;
                 return SubsystemTerrain.Terrain.GetCellValue(CellFace.Value.X, CellFace.Value.Y, CellFace.Value.Z);
             }
-            set
-            {
-                m_blockValue = value;
-            }
+            set => m_blockValue = value;
         }
         public BlockInjury(float amount, CellFace? cellFace, string cause, SubsystemTerrain subsystemTerrain)
             : base(amount, null, false, cause)

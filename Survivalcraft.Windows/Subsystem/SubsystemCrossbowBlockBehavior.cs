@@ -101,7 +101,7 @@ namespace Game
 									else
 									{
 										Vector3 vector = componentMiner.ComponentCreature.ComponentCreatureModel.EyePosition + (componentMiner.ComponentCreature.ComponentBody.Matrix.Right * 0.3f) - (componentMiner.ComponentCreature.ComponentBody.Matrix.Up * 0.2f);
-										var v2 = Vector3.Normalize(vector + (aim.Direction * 10f) - vector);
+										Vector3 v2 = Vector3.Normalize(vector + (aim.Direction * 10f) - vector);
 										int value2 = Terrain.MakeBlockValue(m_ArrowBlockIndex, 0, ArrowBlock.SetArrowType(0, arrowType.Value));
 										float s = 38f;
 										Vector3 velocity = componentMiner.ComponentCreature.ComponentBody.Velocity + s * v2;

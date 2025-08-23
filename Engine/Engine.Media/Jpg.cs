@@ -26,7 +26,8 @@ namespace Engine.Media
 			{
 				throw new ArgumentOutOfRangeException(nameof(quality));
             }
-            JpegEncoder encoder = new JpegEncoder {
+            JpegEncoder encoder = new()
+            {
                 Quality = quality,
                 ColorType = JpegEncodingColor.YCbCrRatio420
             };

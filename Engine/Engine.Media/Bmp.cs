@@ -101,7 +101,7 @@ namespace Engine.Media
             {
                 throw new InvalidOperationException("Unsupported BMP pixel format.");
             }
-            BmpEncoder encoder = new BmpEncoder { BitsPerPixel= bitsPerPixel };
+            BmpEncoder encoder = new() { BitsPerPixel= bitsPerPixel };
 			if (sync)
 			{
 				image.m_trueImage.SaveAsBmp(stream, encoder);

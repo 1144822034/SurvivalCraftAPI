@@ -101,8 +101,8 @@ namespace Game
 				try
 				{
 					m_stream.Position = Math.Max(m_stream.Position - bytesCount, 0L);
-					var streamReader = new StreamReader(m_stream);
-					var list = new List<string>();
+					StreamReader streamReader = new(m_stream);
+					List<string> list = new();
 					while (true)
 					{
 						string text = streamReader.ReadLine();

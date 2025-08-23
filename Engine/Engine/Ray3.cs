@@ -144,7 +144,7 @@ namespace Engine
 
         public static Ray3 Transform(Ray3 r, Matrix m)
         {
-            Transform(ref r, ref m, out var result);
+            Transform(ref r, ref m, out Ray3 result);
             return result;
         }
 

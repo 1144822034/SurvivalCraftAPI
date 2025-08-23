@@ -21,7 +21,7 @@ namespace Game
 
 		public override IEnumerable<int> GetCreativeValues()
 		{
-			var list = new List<int>();
+			List<int> list = new();
 			foreach (int enumValue in EnumUtils.GetEnumValues(typeof(SeedType)))
 			{
 				list.Add(Terrain.MakeBlockValue(173, 0, enumValue));

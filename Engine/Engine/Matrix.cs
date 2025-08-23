@@ -25,11 +25,8 @@ namespace Engine
 
 		public Vector3 Right
 		{
-			get
-			{
-				return new Vector3(M11, M12, M13);
-			}
-			set
+			get => new(M11, M12, M13);
+            set
 			{
 				M11 = value.X;
 				M12 = value.Y;
@@ -39,11 +36,8 @@ namespace Engine
 
 		public Vector3 Up
 		{
-			get
-			{
-				return new Vector3(M21, M22, M23);
-			}
-			set
+			get => new(M21, M22, M23);
+            set
 			{
 				M21 = value.X;
 				M22 = value.Y;
@@ -53,11 +47,8 @@ namespace Engine
 
 		public Vector3 Forward
 		{
-			get
-			{
-				return new Vector3(0f - M31, 0f - M32, 0f - M33);
-			}
-			set
+			get => new(0f - M31, 0f - M32, 0f - M33);
+            set
 			{
 				M31 = 0f - value.X;
 				M32 = 0f - value.Y;
@@ -67,11 +58,8 @@ namespace Engine
 
 		public Vector3 Translation
 		{
-			get
-			{
-				return new Vector3(M41, M42, M43);
-			}
-			set
+			get => new(M41, M42, M43);
+            set
 			{
 				M41 = value.X;
 				M42 = value.Y;
@@ -81,11 +69,8 @@ namespace Engine
 
 		public Matrix TranslationMatrix
 		{
-			get
-			{
-				return new Matrix(1f, 0f, 0f, 0f, 0f, 1f, 0f, 0f, 0f, 0f, 1f, 0f, M41, M42, M43, 1f);
-			}
-			set
+			get => new(1f, 0f, 0f, 0f, 0f, 1f, 0f, 0f, 0f, 0f, 1f, 0f, M41, M42, M43, 1f);
+            set
 			{
 				M41 = value.M41;
 				M42 = value.M42;
@@ -95,11 +80,8 @@ namespace Engine
 
 		public Matrix OrientationMatrix
 		{
-			get
-			{
-				return new Matrix(M11, M12, M13, 0f, M21, M22, M23, 0f, M31, M32, M33, 0f, 0f, 0f, 0f, 1f);
-			}
-			set
+			get => new(M11, M12, M13, 0f, M21, M22, M23, 0f, M31, M32, M33, 0f, 0f, 0f, 0f, 1f);
+            set
 			{
 				M11 = value.M11;
 				M12 = value.M12;

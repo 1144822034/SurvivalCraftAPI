@@ -81,14 +81,8 @@ namespace Game
 
 		public Model Model
 		{
-			get
-			{
-				return m_model;
-			}
-			set
-			{
-				SetModel(value);
-			}
+			get => m_model;
+			set => SetModel(value);
 		}
 
 		public Texture2D TextureOverride
@@ -142,8 +136,8 @@ namespace Game
 
 		public virtual void SetBoneTransform(int boneIndex, Matrix? transformation)
 		{
-			var canScale = boneIndex == Model.RootBone.Index;
-			var tf = canScale ? Matrix.CreateScale(ModelScale) * transformation : transformation;
+			bool canScale = boneIndex == Model.RootBone.Index;
+			Matrix? tf = canScale ? Matrix.CreateScale(ModelScale) * transformation : transformation;
 			m_boneTransforms[boneIndex] = tf * Matrix.CreateTranslation(ModelOffset);
 		}
 
@@ -184,7 +178,7 @@ namespace Game
 			vector.Y *= m_subsystemSky.VisibilityRangeYMultiplier;
 			if (vector.LengthSquared() < num)
 			{
-				var sphere = new BoundingSphere(m_componentFrame.Position, m_boundingSphereRadius);
+				BoundingSphere sphere = new(m_componentFrame.Position, m_boundingSphereRadius);
 				IsVisibleForCamera = camera.ViewFrustum.Intersection(sphere);
 			}
 			else

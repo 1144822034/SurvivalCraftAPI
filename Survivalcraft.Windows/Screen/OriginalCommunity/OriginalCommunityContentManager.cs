@@ -1,3 +1,4 @@
+
 using Engine;
 using Game;
 using System.Globalization;
@@ -10,9 +11,9 @@ public static class OriginalCommunityContentManager
 {
 	private const string m_scResDirAddress = "https://scresdir.appspot.com/resource";
 
-	private static Dictionary<string, string> m_idToAddressMap = new Dictionary<string, string>();
+	private static Dictionary<string, string> m_idToAddressMap = new();
 
-	private static Dictionary<string, bool> m_feedbackCache = new Dictionary<string, bool>();
+	private static Dictionary<string, bool> m_feedbackCache = new();
 
 	public const string fName1 = "CommunityContentManager";
 
@@ -43,7 +44,7 @@ public static class OriginalCommunityContentManager
 
 	public static string GetDownloadedContentAddress(ExternalContentType type, string name)
 	{
-		m_idToAddressMap.TryGetValue(MakeContentIdString(type, name), out var value);
+		m_idToAddressMap.TryGetValue(MakeContentIdString(type, name), out string value);
 		return value;
 	}
 
@@ -61,7 +62,7 @@ public static class OriginalCommunityContentManager
 			failure(new InvalidOperationException(LanguageControl.Get(fName1, "1")));
 			return;
 		}
-		Dictionary<string, string> dictionary = new Dictionary<string, string>();
+		Dictionary<string, string> dictionary = new();
 		dictionary.Add("Action", "list");
 		dictionary.Add("Cursor", cursor ?? string.Empty);
 		dictionary.Add("UserId", userId ?? string.Empty);
@@ -78,7 +79,7 @@ public static class OriginalCommunityContentManager
 			{
 				XElement xElement = XmlUtils.LoadXmlFromString(Encoding.UTF8.GetString(result, 0, result.Length), throwOnError: true);
 				string attributeValue = XmlUtils.GetAttributeValue<string>(xElement, "NextCursor");
-				List<OriginalCommunityContentEntry> list = new List<OriginalCommunityContentEntry>();
+				List<OriginalCommunityContentEntry> list = new();
 				string downloadString = LanguageControl.Get("OriginalCommunityContentScreen","10");
 				foreach (XElement item in xElement.Elements())
 				{
@@ -95,8 +96,9 @@ public static class OriginalCommunityContentManager
 							RatingsAverage = XmlUtils.GetAttributeValue(item, "RatingsAverage", 0f)
 						});
 					}
-					catch (Exception)
+					catch(Exception)
 					{
+						// ignored
 					}
 				}
 				success(list, attributeValue);
@@ -213,7 +215,7 @@ public static class OriginalCommunityContentManager
 			failure(new InvalidOperationException(LanguageControl.Get(fName1, "1")));
 			return;
 		}
-		Dictionary<string, string> dictionary = new Dictionary<string, string>();
+		Dictionary<string, string> dictionary = new();
 		dictionary.Add("Action", "delete");
 		dictionary.Add("UserId", userId);
 		dictionary.Add("Url", address);
@@ -246,7 +248,9 @@ public static class OriginalCommunityContentManager
 		Feedback(address, "PlayTime", Math.Round(time).ToString(CultureInfo.InvariantCulture), null, 0L, userId, progress, success, failure);
 	}
 
+	// ReSharper disable UnusedParameter.Local
 	private static void VerifyLinkContent(string address, string name, ExternalContentType type, CancellableProgress progress, Action<byte[]> success, Action<Exception> failure)
+	// ReSharper restore UnusedParameter.Local
 	{
 		progress = progress ?? new CancellableProgress();
 		WebManager.Get(address, null, null, progress, delegate(byte[] data)
@@ -268,7 +272,7 @@ public static class OriginalCommunityContentManager
 			return;
 		}
 		string key = MakeFeedbackCacheKey(address, feedback, userId);
-		if (m_feedbackCache.ContainsKey(key))
+		if (!m_feedbackCache.TryAdd(key, true))
 		{
 			Task.Run(delegate
 			{
@@ -277,8 +281,7 @@ public static class OriginalCommunityContentManager
 			});
 			return;
 		}
-		m_feedbackCache[key] = true;
-		Dictionary<string, string> dictionary = new Dictionary<string, string>();
+		Dictionary<string, string> dictionary = new();
 		dictionary.Add("Action", "feedback");
 		dictionary.Add("Feedback", feedback);
 		if (feedbackParameter != null)
@@ -334,16 +337,24 @@ public static class OriginalCommunityContentManager
 			}
 			using Stream stream = Storage.OpenFile(ModsManager.OriginalCommunityContentCachePath, OpenFileMode.Read);
 			XElement xElement = XmlUtils.LoadXmlFromStream(stream, null, throwOnError: true);
-			foreach (XElement item in xElement.Element("Feedback").Elements())
+			IEnumerable<XElement> feedbackElements = xElement.Element("Feedback")?.Elements();
+			if(feedbackElements != null)
 			{
-				string attributeValue = XmlUtils.GetAttributeValue<string>(item, "Key");
-				m_feedbackCache[attributeValue] = true;
+				foreach(XElement item in feedbackElements)
+				{
+					string attributeValue = XmlUtils.GetAttributeValue<string>(item,"Key");
+					m_feedbackCache[attributeValue] = true;
+				}
 			}
-			foreach (XElement item2 in xElement.Element("Content").Elements())
+			IEnumerable<XElement> contentElements = xElement.Element("Content")?.Elements();
+			if(contentElements != null)
 			{
-				string attributeValue2 = XmlUtils.GetAttributeValue<string>(item2, "Path");
-				string attributeValue3 = XmlUtils.GetAttributeValue<string>(item2, "Address");
-				m_idToAddressMap[attributeValue2] = attributeValue3;
+				foreach (XElement item2 in contentElements)
+				{
+					string attributeValue2 = XmlUtils.GetAttributeValue<string>(item2, "Path");
+					string attributeValue3 = XmlUtils.GetAttributeValue<string>(item2, "Address");
+					m_idToAddressMap[attributeValue2] = attributeValue3;
+				}
 			}
 		}
 		catch (Exception e)
@@ -356,20 +367,20 @@ public static class OriginalCommunityContentManager
 	{
 		try
 		{
-			XElement xElement = new XElement("Cache");
-			XElement xElement2 = new XElement("Feedback");
+			XElement xElement = new("Cache");
+			XElement xElement2 = new("Feedback");
 			xElement.Add(xElement2);
 			foreach (string key in m_feedbackCache.Keys)
 			{
-				XElement xElement3 = new XElement("Item");
+				XElement xElement3 = new("Item");
 				XmlUtils.SetAttributeValue(xElement3, "Key", key);
 				xElement2.Add(xElement3);
 			}
-			XElement xElement4 = new XElement("Content");
+			XElement xElement4 = new("Content");
 			xElement.Add(xElement4);
 			foreach (KeyValuePair<string, string> item in m_idToAddressMap)
 			{
-				XElement xElement5 = new XElement("Item");
+				XElement xElement5 = new("Item");
 				XmlUtils.SetAttributeValue(xElement5, "Path", item.Key);
 				XmlUtils.SetAttributeValue(xElement5, "Address", item.Value);
 				xElement4.Add(xElement5);

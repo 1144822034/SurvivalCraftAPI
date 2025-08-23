@@ -36,12 +36,8 @@ namespace Engine.Graphics
 				}
 			}
 			m_sortNeeded |= m_allBatches.Count > 0 && m_allBatches[^1].Layer > layer;
-			var val = new T1();
-			val.Layer = layer;
-			val.DepthStencilState = depthStencilState;
-			val.RasterizerState = rasterizerState;
-			val.BlendState = blendState;
-			m_flatBatches.AddFirst(val);
+			T1 val = new() { Layer = layer, DepthStencilState = depthStencilState, RasterizerState = rasterizerState, BlendState = blendState };
+            m_flatBatches.AddFirst(val);
 			m_allBatches.Add(val);
 			return val;
 		}
@@ -63,15 +59,10 @@ namespace Engine.Graphics
 				}
 			}
 			m_sortNeeded |= m_allBatches.Count > 0 && m_allBatches[^1].Layer > layer;
-			var val = new T2();
-			val.Layer = layer;
-			val.UseAlphaTest = useAlphaTest;
-			val.Texture = texture;
-			val.SamplerState = samplerState;
-			val.DepthStencilState = depthStencilState;
-			val.RasterizerState = rasterizerState;
-			val.BlendState = blendState;
-			m_texturedBatches.AddFirst(val);
+			T2 val = new() { Layer = layer, UseAlphaTest = useAlphaTest, Texture = texture, SamplerState = samplerState, DepthStencilState = depthStencilState, RasterizerState = rasterizerState,
+                BlendState = blendState
+            };
+            m_texturedBatches.AddFirst(val);
 			m_allBatches.Add(val);
 			return val;
 		}
@@ -93,14 +84,8 @@ namespace Engine.Graphics
 				}
 			}
 			m_sortNeeded |= m_allBatches.Count > 0 && m_allBatches[^1].Layer > layer;
-			var val = new T3();
-			val.Layer = layer;
-			val.Font = font;
-			val.SamplerState = samplerState;
-			val.DepthStencilState = depthStencilState;
-			val.RasterizerState = rasterizerState;
-			val.BlendState = blendState;
-			m_fontBatches.AddFirst(val);
+			T3 val = new() { Layer = layer, Font = font, SamplerState = samplerState, DepthStencilState = depthStencilState, RasterizerState = rasterizerState, BlendState = blendState };
+            m_fontBatches.AddFirst(val);
 			m_allBatches.Add(val);
 			return val;
 		}

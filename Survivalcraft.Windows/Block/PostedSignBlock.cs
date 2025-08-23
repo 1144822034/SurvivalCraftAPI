@@ -49,9 +49,9 @@ namespace Game
 					m *= Matrix.CreateScale(1f, -1f, 1f) * Matrix.CreateTranslation(0f, 1f, 0f);
 				}
 				m_directions[i] = m.Forward;
-				var blockMesh = new BlockMesh();
+				BlockMesh blockMesh = new();
 				blockMesh.AppendModelMeshPart(model.FindMesh("Sign").MeshParts[0], boneAbsoluteTransform * m, makeEmissive: false, hanging, doubleSided: false, flipNormals: false, Color.White);
-				var blockMesh2 = new BlockMesh();
+				BlockMesh blockMesh2 = new();
 				blockMesh2.AppendModelMeshPart(model.FindMesh("Post").MeshParts[0], boneAbsoluteTransform2 * m, makeEmissive: false, hanging, doubleSided: false, flipNormals: false, Color.White);
 				m_blockMeshes[i] = new BlockMesh();
 				m_blockMeshes[i].AppendBlockMesh(blockMesh);

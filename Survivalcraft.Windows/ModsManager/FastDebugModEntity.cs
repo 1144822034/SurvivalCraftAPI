@@ -55,12 +55,12 @@ namespace Game
 
 		public override Assembly[] GetAssemblies()
 		{
-		    var assemblies = new List<Assembly>();
+		    List<Assembly> assemblies = new();
 			foreach (string c in Storage.ListFileNames(ModsManager.ModsPath))
 			{
 				if (c.EndsWith(".dll") && !(c.StartsWith("EntitySystem") || c.StartsWith("Engine") || c.StartsWith("Survivalcraft") || c.StartsWith("OpenTK")))
 				{
-					var assemblyStream = Storage.OpenFile(Storage.CombinePaths(ModsManager.ModsPath, c), OpenFileMode.Read);
+					Stream assemblyStream = Storage.OpenFile(Storage.CombinePaths(ModsManager.ModsPath, c), OpenFileMode.Read);
 					
 					assemblies.Add(Assembly.Load(ModsManager.StreamToBytes(assemblyStream)));
 				}
@@ -133,7 +133,7 @@ namespace Game
 			bool skip = false;
 			Loader?.GetModFiles(extension,action,out skip);
 			if(skip) return;
-			foreach (var item in FModFiles)
+			foreach (KeyValuePair<string,FileInfo> item in FModFiles)
 			{
 				if (item.Key.EndsWith(extension))
 				{
@@ -145,7 +145,7 @@ namespace Game
 						}
 						catch (Exception e)
 						{
-							Log.Error(string.Format("GetFile {0} Error:{1}", item.Key, e));
+							Log.Error($"GetFile {item.Key} Error:{e}");
 						}
 					}
 				}
@@ -167,7 +167,7 @@ namespace Game
 					}
 					catch (Exception e)
 					{
-						Log.Error(string.Format("GetFile {0} Error:{1}", filename, e));
+						Log.Error($"GetFile {filename} Error:{e}");
 					}
 				}
 				return true;

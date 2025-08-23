@@ -22,7 +22,7 @@ namespace Game
 		{
 			if (GameWidget.Target != null)
 			{
-				var matrix = Matrix.CreateFromQuaternion(GameWidget.Target.ComponentCreatureModel.EyeRotation);
+				Matrix matrix = Matrix.CreateFromQuaternion(GameWidget.Target.ComponentCreatureModel.EyeRotation);
 				matrix.Translation = GameWidget.Target.ComponentCreatureModel.EyePosition;
 				SetupPerspectiveCamera(matrix.Translation, matrix.Forward, matrix.Up);
 			}

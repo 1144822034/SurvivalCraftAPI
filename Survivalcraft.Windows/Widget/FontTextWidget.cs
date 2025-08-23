@@ -39,10 +39,7 @@ namespace Game
 
 		public virtual string Text
 		{
-			get
-			{
-				return m_text;
-			}
+			get => m_text;
 			set
 			{
 				if (m_text != value && value != null)
@@ -61,10 +58,7 @@ namespace Game
 
 		public TextOrientation TextOrientation
 		{
-			get
-			{
-				return m_textOrientation;
-			}
+			get => m_textOrientation;
 			set
 			{
 				if (value != m_textOrientation)
@@ -77,10 +71,7 @@ namespace Game
 
 		public BitmapFont Font
 		{
-			get
-			{
-				return m_font ?? (LabelWidget.BitmapFont ?? BitmapFont.DebugFont);
-			}
+			get => m_font ?? (LabelWidget.BitmapFont ?? BitmapFont.DebugFont);
 			set
 			{
 				if (value != m_font)
@@ -93,10 +84,7 @@ namespace Game
 
 		public float FontScale
 		{
-			get
-			{
-				return m_fontScale;
-			}
+			get => m_fontScale;
 			set
 			{
 				if (value != m_fontScale)
@@ -109,10 +97,7 @@ namespace Game
 
 		public Vector2 FontSpacing
 		{
-			get
-			{
-				return m_fontSpacing;
-			}
+			get => m_fontSpacing;
 			set
 			{
 				if (value != m_fontSpacing)
@@ -125,10 +110,7 @@ namespace Game
 
 		public bool WordWrap
 		{
-			get
-			{
-				return m_wordWrap;
-			}
+			get => m_wordWrap;
 			set
 			{
 				if (value != m_wordWrap)
@@ -141,10 +123,7 @@ namespace Game
 
 		public bool Ellipsis
 		{
-			get
-			{
-				return m_ellipsis;
-			}
+			get => m_ellipsis;
 			set
 			{
 				if (value != m_ellipsis)
@@ -157,10 +136,7 @@ namespace Game
 
 		public int MaxLines
 		{
-			get
-			{
-				return m_maxLines;
-			}
+			get => m_maxLines;
 			set
 			{
 				if (value != m_maxLines)

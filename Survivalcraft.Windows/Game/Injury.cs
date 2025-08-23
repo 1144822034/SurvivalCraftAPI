@@ -19,14 +19,8 @@ namespace Game
         }
         private float Health
         {
-            get
-            {
-                return ComponentHealth.Health;
-            }
-            set
-            {
-                ComponentHealth.Health = value;
-            }
+            get => ComponentHealth.Health;
+            set => ComponentHealth.Health = value;
         }
 
         public virtual ComponentCreature Attacker
@@ -36,10 +30,7 @@ namespace Game
                 if(m_attacker != null) return m_attacker;
                 return m_attacker = Attackment?.Attacker?.FindComponent<ComponentCreature>();
             }
-            set
-            {
-                m_attacker = value;
-            }
+            set => m_attacker = value;
         }
 
         public virtual ComponentPlayer AttackerPlayer => Attacker as ComponentPlayer;

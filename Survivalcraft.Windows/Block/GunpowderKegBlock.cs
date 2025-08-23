@@ -32,7 +32,7 @@ namespace Game
 			Model model = ContentManager.Get<Model>(m_modelName);
 			Matrix boneAbsoluteTransform = BlockMesh.GetBoneAbsoluteTransform(model.FindMesh("Keg").ParentBone);
 			FuseOffset = BlockMesh.GetBoneAbsoluteTransform(model.FindMesh("Fuse").ParentBone).Translation + new Vector3(0.5f, 0f, 0.5f);
-			var blockMesh = new BlockMesh();
+			BlockMesh blockMesh = new();
 			blockMesh.AppendModelMeshPart(model.FindMesh("Keg").MeshParts[0], boneAbsoluteTransform * Matrix.CreateTranslation(0.5f, 0f, 0.5f), makeEmissive: false, flipWindingOrder: false, doubleSided: false, flipNormals: false, Color.White);
 			m_blockMesh.AppendBlockMesh(blockMesh);
 			if (m_isIncendiary)

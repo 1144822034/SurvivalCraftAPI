@@ -11,7 +11,7 @@ namespace Game
 		public new const string fName = "SurvivalCraftModEntity";
 		public SurvivalCraftModEntity()
 		{
-			var readers = new List<IContentReader.IContentReader>();
+			List<IContentReader.IContentReader> readers = new();
 			readers.AddRange(
 			[
 				new AssemblyReader(),
@@ -73,8 +73,8 @@ namespace Game
 		}
 		public override void HandleAssembly(Assembly assembly)
 		{
-			var types = assembly.GetTypes();
-			foreach (var type in types)
+			Type[] types = assembly.GetTypes();
+			foreach (Type type in types)
 			{
 				if (type.IsSubclassOf(typeof(ModLoader)) && !type.IsAbstract)
 				{
@@ -86,7 +86,7 @@ namespace Game
 				}
 				else if (type.IsSubclassOf(typeof(Block)) && !type.IsAbstract)
 				{
-					var fieldInfo = type.GetRuntimeFields().FirstOrDefault(p => p.Name == "Index" && p.IsPublic && p.IsStatic);
+					FieldInfo fieldInfo = type.GetRuntimeFields().FirstOrDefault(p => p.Name == "Index" && p.IsPublic && p.IsStatic);
 					if (fieldInfo == null || fieldInfo.FieldType != typeof(int))
 					{
 						ModsManager.AddException(new InvalidOperationException($"Block type \"{type.FullName}\" does not have static field Index of type int."));

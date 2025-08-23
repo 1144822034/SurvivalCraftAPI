@@ -29,10 +29,7 @@ namespace Game
 
 		public bool DepthWriteEnabled
 		{
-			get
-			{
-				return m_depthWriteEnabled;
-			}
+			get => m_depthWriteEnabled;
 			set
 			{
 				if (value != m_depthWriteEnabled)
@@ -44,10 +41,7 @@ namespace Game
 
 		public Subtexture Subtexture
 		{
-			get
-			{
-				return m_subtexture;
-			}
+			get => m_subtexture;
 			set
 			{
 				if (value != m_subtexture)
@@ -59,10 +53,7 @@ namespace Game
 
 		public bool TextureWrap
 		{
-			get
-			{
-				return m_textureWrap;
-			}
+			get => m_textureWrap;
 			set
 			{
 				if (value != m_textureWrap)
@@ -74,10 +65,7 @@ namespace Game
 
 		public bool TextureLinearFilter
 		{
-			get
-			{
-				return m_textureLinearFilter;
-			}
+			get => m_textureLinearFilter;
 			set
 			{
 				if (value != m_textureLinearFilter)
@@ -89,10 +77,7 @@ namespace Game
 
 		public bool TextureAnisotropicFilter
 		{
-			get
-			{
-				return m_textureAnisotropicFilter;
-			}
+			get => m_textureAnisotropicFilter;
 			set
 			{
 				if (value != m_textureAnisotropicFilter)
@@ -171,9 +156,9 @@ namespace Game
 			DepthStencilState depthStencilState = DepthWriteEnabled ? DepthStencilState.DepthWrite : DepthStencilState.None;
 			Matrix m = GlobalTransform;
 			Vector2 v = Vector2.Zero;
-			var v2 = new Vector2(ActualSize.X, 0f);
+			Vector2 v2 = new(ActualSize.X, 0f);
 			Vector2 v3 = ActualSize;
-			var v4 = new Vector2(0f, ActualSize.Y);
+			Vector2 v4 = new(0f, ActualSize.Y);
 			Vector2.Transform(ref v, ref m, out Vector2 result);
 			Vector2.Transform(ref v2, ref m, out Vector2 result2);
 			Vector2.Transform(ref v3, ref m, out Vector2 result3);
@@ -234,7 +219,7 @@ namespace Game
 			if (color2.A != 0 && OutlineThickness > 0f)
 			{
 				FlatBatch2D flatBatch2D = dc.PrimitivesRenderer2D.FlatBatch(1, depthStencilState);
-				var vector = Vector2.Normalize(GlobalTransform.Right.XY);
+				Vector2 vector = Vector2.Normalize(GlobalTransform.Right.XY);
 				Vector2 v5 = -Vector2.Normalize(GlobalTransform.Up.XY);
 				int num = (int)MathUtils.Max(MathF.Round(OutlineThickness * GlobalTransform.Right.Length()), 1f);
 				for (int i = 0; i < num; i++)

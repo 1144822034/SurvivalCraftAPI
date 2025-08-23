@@ -65,7 +65,7 @@ namespace Game
 		/// <summary>
 		/// 版本号X.X.X.X的正则表达式s
 		/// </summary>
-		public static Regex VersionRegex = new Regex(@"(\d+)\.?(\d+)?\.?(\d+)?\.?(\d+)?");
+		public static Regex VersionRegex = new(@"(\d+)\.?(\d+)?\.?(\d+)?\.?(\d+)?");
 
 		/// <summary>
 		/// 将API版本字符串以点分十进制数转为uint

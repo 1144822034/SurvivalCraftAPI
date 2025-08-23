@@ -193,7 +193,7 @@ public class PlayerScreen : Screen
             IEnumerable<string> items = CharacterSkinsManager.CharacterSkinsNames.Where(n =>
                 CharacterSkinsManager.GetPlayerClass(n) == m_playerData.PlayerClass ||
                 !CharacterSkinsManager.GetPlayerClass(n).HasValue);
-            ListSelectionDialog dialog = new ListSelectionDialog("Select Character Skin", items, 64f,
+            ListSelectionDialog dialog = new("Select Character Skin", items, 64f,
                 delegate(object item)
                 {
                     XElement node = ContentManager.Get<XElement>("Widgets/CharacterSkinItem");

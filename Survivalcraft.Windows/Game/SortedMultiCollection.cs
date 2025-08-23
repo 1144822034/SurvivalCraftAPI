@@ -69,16 +69,13 @@ namespace Game
 
 		public int Capacity
 		{
-			get
-			{
-				return m_array.Length;
-			}
+			get => m_array.Length;
 			set
 			{
 				value = Math.Max(Math.Max(4, m_count), value);
 				if (value != m_array.Length)
 				{
-					var array = new KeyValuePair<TKey, TValue>[value];
+					KeyValuePair<TKey,TValue>[] array = new KeyValuePair<TKey, TValue>[value];
 					Array.Copy(m_array, array, m_count);
 					m_array = array;
 				}

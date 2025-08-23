@@ -22,10 +22,7 @@ namespace Game
 
 		public float Width
 		{
-			get
-			{
-				return m_width;
-			}
+			get => m_width;
 			set
 			{
 				m_width = value;
@@ -35,10 +32,7 @@ namespace Game
 
 		public float ArrowWidth
 		{
-			get
-			{
-				return m_arrowWidth;
-			}
+			get => m_arrowWidth;
 			set
 			{
 				m_arrowWidth = value;
@@ -54,10 +48,7 @@ namespace Game
 
 		public string PointsString
 		{
-			get
-			{
-				return m_pointsString;
-			}
+			get => m_pointsString;
 			set
 			{
 				m_pointsString = value;
@@ -67,10 +58,7 @@ namespace Game
 
 		public bool AbsoluteCoordinates
 		{
-			get
-			{
-				return m_absoluteCoordinates;
-			}
+			get => m_absoluteCoordinates;
 			set
 			{
 				m_absoluteCoordinates = value;
@@ -118,7 +106,7 @@ namespace Game
 		public void ParsePoints()
 		{
 			m_parsingPending = false;
-			var list = new List<Vector2>();
+			List<Vector2> list = new();
 			string[] array = m_pointsString.Split([";"], StringSplitOptions.None);
 			foreach (string data in array)
 			{
@@ -131,7 +119,7 @@ namespace Game
 				{
 					Vector2 vector = list[j - 1];
 					Vector2 vector2 = list[j];
-					var vector3 = Vector2.Normalize(vector2 - vector);
+					Vector2 vector3 = Vector2.Normalize(vector2 - vector);
 					Vector2 vector4 = vector3;
 					Vector2 v = vector3;
 					if (j >= 2)
@@ -142,8 +130,8 @@ namespace Game
 					{
 						v = Vector2.Normalize(list[j + 1] - vector2);
 					}
-					var v2 = Vector2.Perpendicular(vector4);
-					var v3 = Vector2.Perpendicular(vector3);
+					Vector2 v2 = Vector2.Perpendicular(vector4);
+					Vector2 v3 = Vector2.Perpendicular(vector3);
 					float num = (float)Math.PI - Vector2.Angle(vector4, vector3);
 					float s = 0.5f * Width / MathF.Tan(num / 2f);
 					Vector2 v4 = (0.5f * v2 * Width) - (vector4 * s);

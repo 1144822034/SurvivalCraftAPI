@@ -27,9 +27,9 @@ namespace Engine.Media
             new TiffConfigurationModule(),
             new WebpConfigurationModule()
             ];
-        public static Configuration DefaultImageSharpConfiguration = new Configuration(ImageSharpModules) { PreferContiguousImageBuffers = true };
-        public static DecoderOptions DefaultImageSharpDecoderOptions = new DecoderOptions { Configuration = DefaultImageSharpConfiguration};
-        public static readonly JpegEncoder DefaultJpegEncoder = new JpegEncoder { Quality = 95, ColorType = JpegEncodingColor.YCbCrRatio420 };
+        public static Configuration DefaultImageSharpConfiguration = new(ImageSharpModules) { PreferContiguousImageBuffers = true };
+        public static DecoderOptions DefaultImageSharpDecoderOptions = new() { Configuration = DefaultImageSharpConfiguration};
+        public static readonly JpegEncoder DefaultJpegEncoder = new() { Quality = 95, ColorType = JpegEncodingColor.YCbCrRatio420 };
         public static readonly GifEncoder DefaultGifEncoder = new() { ColorTableMode = GifColorTableMode.Local };
 
         public int Width => m_trueImage.Width;
@@ -313,7 +313,7 @@ namespace Engine.Media
             }, shouldUpdatePixelsCache);
         }
 
-        public readonly static Dictionary<string, ImageFileFormat> Name2EngineImageFormat = new()
+        public static readonly Dictionary<string, ImageFileFormat> Name2EngineImageFormat = new()
         {
             {"bmp", ImageFileFormat.Bmp },
             {"png", ImageFileFormat.Png },

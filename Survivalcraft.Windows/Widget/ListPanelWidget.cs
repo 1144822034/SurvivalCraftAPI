@@ -33,10 +33,7 @@ namespace Game
 
 		public override LayoutDirection Direction
 		{
-			get
-			{
-				return base.Direction;
-			}
+			get => base.Direction;
 			set
 			{
 				if (value != Direction)
@@ -49,10 +46,7 @@ namespace Game
 
 		public override float ScrollPosition
 		{
-			get
-			{
-				return base.ScrollPosition;
-			}
+			get => base.ScrollPosition;
 			set
 			{
 				if (value != ScrollPosition)
@@ -65,10 +59,7 @@ namespace Game
 
 		public float ItemSize
 		{
-			get
-			{
-				return m_itemSize;
-			}
+			get => m_itemSize;
 			set
 			{
 				if (value != m_itemSize)
@@ -81,10 +72,7 @@ namespace Game
 
 		public int? SelectedIndex
 		{
-			get
-			{
-				return m_selectedItemIndex;
-			}
+			get => m_selectedItemIndex;
 			set
 			{
 				if (value.HasValue && (value.Value < 0 || value.Value >= m_items.Count))
@@ -240,12 +228,12 @@ namespace Game
 			{
 				if (Direction == LayoutDirection.Horizontal)
 				{
-					var vector = new Vector2((num * ItemSize) - ScrollPosition, 0f);
+					Vector2 vector = new((num * ItemSize) - ScrollPosition, 0f);
 					ArrangeChildWidgetInCell(vector, vector + new Vector2(ItemSize, ActualSize.Y), child);
 				}
 				else
 				{
-					var vector2 = new Vector2(0f, (num * ItemSize) - ScrollPosition);
+					Vector2 vector2 = new(0f, (num * ItemSize) - ScrollPosition);
 					ArrangeChildWidgetInCell(vector2, vector2 + new Vector2(ActualSize.X, ItemSize), child);
 				}
 				num++;

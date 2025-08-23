@@ -20,27 +20,15 @@ namespace Engine.Graphics
 
 		public Matrix View
 		{
-			get
-			{
-				return m_view;
-			}
-			set
-			{
-				m_view = value;
-			}
-		}
+			get => m_view;
+            set => m_view = value;
+        }
 
 		public Matrix Projection
 		{
-			get
-			{
-				return m_projection;
-			}
-			set
-			{
-				m_projection = value;
-			}
-		}
+			get => m_projection;
+            set => m_projection = value;
+        }
 
 		public Matrix ViewProjection => m_viewProjection;
 

@@ -110,7 +110,7 @@ namespace Game
 			{
 				int num = CellFace.OppositeFace((i < 4) ? ((i + rotation) % 4) : i);
 				byte b = (byte)(LightingManager.LightIntensityByLightValueAndFace[15 + (16 * num)] * 255f);
-				var color = new Color(b, b, b);
+				Color color = new(b, b, b);
 				if (geometry2.SubsetOpaqueByFace[i] != null)
 				{
 					generator.GenerateShadedMeshVertices(this, x, y, z, geometry2.SubsetOpaqueByFace[i], color, m_matrices[rotation], m_facesMaps[rotation], geometry.OpaqueSubsetsByFace[num]);
@@ -148,7 +148,7 @@ namespace Game
 			for (int i = 0; i < 6; i++)
 			{
 				float s = LightingManager.LightIntensityByLightValueAndFace[environmentData.Light + (16 * CellFace.OppositeFace(i))];
-				var color2 = Color.MultiplyColorOnly(color, s);
+				Color color2 = Color.MultiplyColorOnly(color, s);
 				if (geometry.SubsetOpaqueByFace[i] != null)
 				{
 					BlocksManager.DrawMeshBlock(primitivesRenderer, geometry.SubsetOpaqueByFace[i], color2, size, ref matrix2, environmentData);
@@ -395,7 +395,7 @@ namespace Game
 			int num = 0;
 			int num2 = 0;
 			int num3 = 0;
-			var list = new List<FurnitureDesign>();
+			List<FurnitureDesign> list = new();
 			for (int i = 0; i < ingredients.Length; i++)
 			{
 				if (string.IsNullOrEmpty(ingredients[i]))
@@ -449,7 +449,7 @@ namespace Game
 			}
 			if (list.Count == 2 && num == 0 && num2 == 1 && num3 == 0)
 			{
-				var list2 = list.Select(d => d.Clone()).ToList();
+				List<FurnitureDesign> list2 = list.Select(d => d.Clone()).ToList();
 				for (int j = 0; j < list2.Count; j++)
 				{
 					list2[j].InteractionMode = FurnitureInteractionMode.ElectricSwitch;
@@ -471,7 +471,7 @@ namespace Game
 			}
 			if (list.Count >= 2 && num == 0 && num2 == 0 && num3 <= 1)
 			{
-				var list3 = list.Select(d => d.Clone()).ToList();
+				List<FurnitureDesign> list3 = list.Select(d => d.Clone()).ToList();
 				for (int k = 0; k < list3.Count; k++)
 				{
 					list3[k].InteractionMode = (num3 == 0) ? FurnitureInteractionMode.Multistate : FurnitureInteractionMode.ConnectedMultistate;

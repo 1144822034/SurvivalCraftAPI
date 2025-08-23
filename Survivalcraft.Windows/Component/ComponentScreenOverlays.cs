@@ -172,11 +172,11 @@ namespace Game
 		public virtual void DrawOverlay(Camera camera, Color color, float innerFactor, float outerFactor)
 		{
 			Vector2 viewportSize = camera.ViewportSize;
-			var vector = new Vector2(0f, 0f);
-			var vector2 = new Vector2(viewportSize.X, 0f);
-			var vector3 = new Vector2(viewportSize.X, viewportSize.Y);
-			var vector4 = new Vector2(0f, viewportSize.Y);
-			var p = new Vector2(viewportSize.X / 2f, viewportSize.Y / 2f);
+			Vector2 vector = new(0f, 0f);
+			Vector2 vector2 = new(viewportSize.X, 0f);
+			Vector2 vector3 = new(viewportSize.X, viewportSize.Y);
+			Vector2 vector4 = new(0f, viewportSize.Y);
+			Vector2 p = new(viewportSize.X / 2f, viewportSize.Y / 2f);
 			Color color2 = color * outerFactor;
 			Color color3 = color * innerFactor;
 			FlatBatch2D flatBatch2D = m_primitivesRenderer2D.FlatBatch(0, DepthStencilState.None, null, BlendState.AlphaBlend);
@@ -193,11 +193,11 @@ namespace Game
 		{
 			Vector2 viewportSize = camera.ViewportSize;
 			float num = viewportSize.X / viewportSize.Y;
-			var vector = new Vector2(0f, 0f);
-			var vector2 = new Vector2(viewportSize.X, 0f);
-			var vector3 = new Vector2(viewportSize.X, viewportSize.Y);
-			var vector4 = new Vector2(0f, viewportSize.Y);
-			var p = new Vector2(viewportSize.X / 2f, viewportSize.Y / 2f);
+			Vector2 vector = new(0f, 0f);
+			Vector2 vector2 = new(viewportSize.X, 0f);
+			Vector2 vector3 = new(viewportSize.X, viewportSize.Y);
+			Vector2 vector4 = new(0f, viewportSize.Y);
+			Vector2 p = new(viewportSize.X / 2f, viewportSize.Y / 2f);
 			offset.X = MathUtils.Remainder(offset.X, 1f);
 			offset.Y = MathUtils.Remainder(offset.Y, 1f);
 			Vector2 vector5 = new Vector2(0f, 0f) + offset;
@@ -224,7 +224,7 @@ namespace Game
 			float num = factor;
 			Vector2 v = Vector2.One;
 			float num2 = v.Length();
-			var point = new Point2((int)MathF.Round(12f * viewportSize.X / viewportSize.Y), (int)MathF.Round(12f));
+			Point2 point = new((int)MathF.Round(12f * viewportSize.X / viewportSize.Y), (int)MathF.Round(12f));
 			if (m_iceVertices == null || m_cellsCount != point)
 			{
 				m_cellsCount = point;
@@ -257,12 +257,12 @@ namespace Game
 			{
 				m_light = LightingManager.CalculateSmoothLight(m_subsystemTerrain, camera.ViewPosition) ?? m_light ?? 1f;
 			}
-			var color = Color.MultiplyColorOnly(Color.White, m_light.Value);
+			Color color = Color.MultiplyColorOnly(Color.White, m_light.Value);
 			m_random.Seed(0);
 			Texture2D texture = ContentManager.Get<Texture2D>("Textures/IceOverlay");
 			TexturedBatch3D texturedBatch3D = m_primitivesRenderer3D.TexturedBatch(texture, useAlphaTest: false, 0, DepthStencilState.None, RasterizerState.CullNoneScissor, BlendState.AlphaBlend, SamplerState.PointWrap);
-			var v3 = new Vector2(viewportSize.X / viewportSize.Y, 1f);
-			var vector3 = new Vector2(point.X - 1, point.Y - 1);
+			Vector2 v3 = new(viewportSize.X / viewportSize.Y, 1f);
+			Vector2 vector3 = new(point.X - 1, point.Y - 1);
 			for (int k = 0; k < point.X; k++)
 			{
 				for (int l = 0; l < point.Y; l++)
@@ -306,7 +306,7 @@ namespace Game
 		public virtual void DrawMessage(Camera camera, string message, float factor)
 		{
 			BitmapFont font = LabelWidget.BitmapFont;
-			var position = new Vector2(camera.ViewportSize.X / 2f, camera.ViewportSize.Y - 25f);
+			Vector2 position = new(camera.ViewportSize.X / 2f, camera.ViewportSize.Y - 25f);
 			FontBatch2D fontBatch2D = m_primitivesRenderer2D.FontBatch(font, 0, DepthStencilState.None, null, BlendState.AlphaBlend);
 			int count = fontBatch2D.TriangleVertices.Count;
 			fontBatch2D.QueueText(message, position, 0f, Color.Gray * factor, TextAnchor.HorizontalCenter | TextAnchor.Bottom, Vector2.One * camera.GameWidget.GlobalScale, Vector2.Zero);

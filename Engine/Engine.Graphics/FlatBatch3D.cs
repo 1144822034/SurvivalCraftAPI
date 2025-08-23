@@ -18,30 +18,30 @@ namespace Engine.Graphics
             if (stacks < 2)
                 stacks = 2;
 
-            var latitudeStep = (float)Math.PI / stacks;
-            var longitudeStep = 2.0f * (float)Math.PI / slices;
+            float latitudeStep = (float)Math.PI / stacks;
+            float longitudeStep = 2.0f * (float)Math.PI / slices;
 
             for (int lat = 0; lat <= stacks; lat++)
             {
-                var a1 = (float)(-Math.PI / 2 + lat * latitudeStep);
-                var a2 = (float)(-Math.PI / 2 + (lat + 1) * latitudeStep);
+                float a1 = (float)(-Math.PI / 2 + lat * latitudeStep);
+                float a2 = (float)(-Math.PI / 2 + (lat + 1) * latitudeStep);
 
                 for (int lon = 0; lon <= slices; lon++)
                 {
-                    var b1 = lon * longitudeStep;
-                    var b2 = (lon + 1) * longitudeStep;
+                    float b1 = lon * longitudeStep;
+                    float b2 = (lon + 1) * longitudeStep;
 
                     // 上半球顶点
-                    var v1 = center + new Vector3((float)(Math.Sin(a1) * Math.Cos(b1)) * radius, (float)(Math.Cos(a1)) * radius, (float)(Math.Sin(a1) * Math.Sin(b1)) * radius);
-                    var v2 = center + new Vector3((float)(Math.Sin(a2) * Math.Cos(b1)) * radius, (float)(Math.Cos(a2)) * radius, (float)(Math.Sin(a2) * Math.Sin(b1)) * radius);
-                    var v3 = center + new Vector3((float)(Math.Sin(a1) * Math.Cos(b2)) * radius, (float)(Math.Cos(a1)) * radius, (float)(Math.Sin(a1) * Math.Sin(b2)) * radius);
-                    var v4 = center + new Vector3((float)(Math.Sin(a2) * Math.Cos(b2)) * radius, (float)(Math.Cos(a2)) * radius, (float)(Math.Sin(a2) * Math.Sin(b2)) * radius);
+                    Vector3 v1 = center + new Vector3((float)(Math.Sin(a1) * Math.Cos(b1)) * radius, (float)(Math.Cos(a1)) * radius, (float)(Math.Sin(a1) * Math.Sin(b1)) * radius);
+                    Vector3 v2 = center + new Vector3((float)(Math.Sin(a2) * Math.Cos(b1)) * radius, (float)(Math.Cos(a2)) * radius, (float)(Math.Sin(a2) * Math.Sin(b1)) * radius);
+                    Vector3 v3 = center + new Vector3((float)(Math.Sin(a1) * Math.Cos(b2)) * radius, (float)(Math.Cos(a1)) * radius, (float)(Math.Sin(a1) * Math.Sin(b2)) * radius);
+                    Vector3 v4 = center + new Vector3((float)(Math.Sin(a2) * Math.Cos(b2)) * radius, (float)(Math.Cos(a2)) * radius, (float)(Math.Sin(a2) * Math.Sin(b2)) * radius);
 
                     // 下半球顶点
-                    var v5 = center - new Vector3((float)(Math.Sin(-a1) * Math.Cos(b1)) * radius, (float)(Math.Cos(-a1)) * radius, (float)(Math.Sin(-a1) * Math.Sin(b1)) * radius);
-                    var v6 = center - new Vector3((float)(Math.Sin(-a1) * Math.Cos(b2)) * radius, (float)(Math.Cos(-a1)) * radius, (float)(Math.Sin(-a1) * Math.Sin(b2)) * radius);
-                    var v7 = center - new Vector3((float)(Math.Sin(-a2) * Math.Cos(b2)) * radius, (float)(Math.Cos(-a2)) * radius, (float)(Math.Sin(-a2) * Math.Sin(b2)) * radius);
-                    var v8 = center - new Vector3((float)(Math.Sin(-a2) * Math.Cos(b1)) * radius, (float)(Math.Cos(-a2)) * radius, (float)(Math.Sin(-a2) * Math.Sin(b1)) * radius);
+                    Vector3 v5 = center - new Vector3((float)(Math.Sin(-a1) * Math.Cos(b1)) * radius, (float)(Math.Cos(-a1)) * radius, (float)(Math.Sin(-a1) * Math.Sin(b1)) * radius);
+                    Vector3 v6 = center - new Vector3((float)(Math.Sin(-a1) * Math.Cos(b2)) * radius, (float)(Math.Cos(-a1)) * radius, (float)(Math.Sin(-a1) * Math.Sin(b2)) * radius);
+                    Vector3 v7 = center - new Vector3((float)(Math.Sin(-a2) * Math.Cos(b2)) * radius, (float)(Math.Cos(-a2)) * radius, (float)(Math.Sin(-a2) * Math.Sin(b2)) * radius);
+                    Vector3 v8 = center - new Vector3((float)(Math.Sin(-a2) * Math.Cos(b1)) * radius, (float)(Math.Cos(-a2)) * radius, (float)(Math.Sin(-a2) * Math.Sin(b1)) * radius);
 
 
                     // 上半球三角形
@@ -73,9 +73,9 @@ namespace Engine.Graphics
                 // 绘制纬线球
                 for (int lat = 0; lat <= latitudeLines; lat++)
                 {
-                    var angle = (float)(Math.PI / 2 - lat * Math.PI / latitudeLines);
-                    var radiusAtLatitude = radius * (float)Math.Cos(angle); // 计算纬度上的圆半径
-                    var offset = new Vector3(0, (float)(Math.Sin(angle) * radius), 0);
+                    float angle = (float)(Math.PI / 2 - lat * Math.PI / latitudeLines);
+                    float radiusAtLatitude = radius * (float)Math.Cos(angle); // 计算纬度上的圆半径
+                    Vector3 offset = new(0, (float)(Math.Sin(angle) * radius), 0);
                     QueueCircle(center + offset, radiusAtLatitude, longitudeLines, color);
                 }
             }
@@ -84,12 +84,12 @@ namespace Engine.Graphics
                 // 绘制经线球
                 for (int lon = 0; lon < longitudeLines; lon++) // 注意：这里不需要包括最后一个经度线，因为它会和第一个经度线重合
                 {
-                    var longitudeAngle = lon * 2 * (float)Math.PI / longitudeLines; // 经度角度
-                    var points = new List<Vector3>();
+                    float longitudeAngle = lon * 2 * (float)Math.PI / longitudeLines; // 经度角度
+                    List<Vector3> points = new();
 
                     for (int lat = 0; lat <= latitudeLines; lat++)
                     {
-                        var latitudeAngle = (float)(Math.PI / 2 - lat * Math.PI / latitudeLines);
+                        float latitudeAngle = (float)(Math.PI / 2 - lat * Math.PI / latitudeLines);
                         points.Add(center + new Vector3(
                             (float)(Math.Cos(latitudeAngle) * Math.Cos(longitudeAngle)) * radius,
                             (float)(Math.Sin(latitudeAngle)) * radius,
@@ -108,14 +108,14 @@ namespace Engine.Graphics
             if (segments < 3)
                 segments = 3;
 
-            var step = (float)(2 * Math.PI) / segments;
+            float step = (float)(2 * Math.PI) / segments;
 
-            var points = new List<Vector3>();
+            List<Vector3> points = new();
 
             for (int i = 0; i <= segments; i++)
             {
-                var angle = step * i;
-                var point = center + new Vector3((float)Math.Cos(angle) * radius, 0, (float)Math.Sin(angle) * radius);
+                float angle = step * i;
+                Vector3 point = center + new Vector3((float)Math.Cos(angle) * radius, 0, (float)Math.Sin(angle) * radius);
                 points.Add(point);
             }
 

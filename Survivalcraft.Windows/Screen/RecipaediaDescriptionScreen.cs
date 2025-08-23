@@ -28,7 +28,7 @@ namespace Game
 		public IList<int> m_valuesList;
 		public static string fName = "RecipaediaDescriptionScreen";
 
-		public static RecipaediaDescriptionScreen Default => new RecipaediaDescriptionScreen();
+		public static RecipaediaDescriptionScreen Default => new();
 
 		public RecipaediaDescriptionScreen()
 		{
@@ -75,7 +75,7 @@ namespace Game
 
 		public virtual Dictionary<string, string> GetBlockProperties(int value)
 		{
-			var dictionary = new Dictionary<string, string>();
+			Dictionary<string,string> dictionary = new();
 			int num = Terrain.ExtractContents(value);
 			Block block = BlocksManager.Blocks[num];
 			if (block.GetEmittedLightAmount(value) > 0)

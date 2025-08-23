@@ -178,7 +178,7 @@ namespace Game
 					AnimateCreature();
 				}
 			}
-			var qpacity = (m_componentCreature.ComponentSpawn.SpawnDuration > 0f) ? ((float)MathUtils.Saturate((m_subsystemGameInfo.TotalElapsedGameTime - m_componentCreature.ComponentSpawn.SpawnTime) / m_componentCreature.ComponentSpawn.SpawnDuration)) : 1f;
+			float qpacity = (m_componentCreature.ComponentSpawn.SpawnDuration > 0f) ? ((float)MathUtils.Saturate((m_subsystemGameInfo.TotalElapsedGameTime - m_componentCreature.ComponentSpawn.SpawnTime) / m_componentCreature.ComponentSpawn.SpawnDuration)) : 1f;
 			Opacity = MathUtils.Min(qpacity, Transparent);
 			if (m_componentCreature.ComponentSpawn.DespawnTime.HasValue)
 			{
@@ -234,7 +234,7 @@ namespace Game
 			if (LookRandomOrder)
 			{
 				Matrix matrix = m_componentCreature.ComponentBody.Matrix;
-				var v = Vector3.Normalize(m_randomLookPoint - m_componentCreature.ComponentCreatureModel.EyePosition);
+				Vector3 v = Vector3.Normalize(m_randomLookPoint - m_componentCreature.ComponentCreatureModel.EyePosition);
 				if (m_random.Float(0f, 1f) < 0.25f * dt || Vector3.Dot(matrix.Forward, v) < 0.2f)
 				{
 					float s = m_random.Float(-5f, 5f);

@@ -30,7 +30,7 @@ namespace Game
 				if (terrainRaycastResult.HasValue)
 				{
 					Vector3 position = terrainRaycastResult.Value.HitPoint();
-					var dynamicArray = new DynamicArray<ComponentBody>();
+					DynamicArray<ComponentBody> dynamicArray = new();
 					m_subsystemBodies.FindBodiesInArea(new Vector2(position.X, position.Z) - new Vector2(8f), new Vector2(position.X, position.Z) + new Vector2(8f), dynamicArray);
 					if ((dynamicArray.Count(b => b.Entity.ValuesDictionary.DatabaseObject.Name == "Boat") < 6) || m_subsystemGameInfo.WorldSettings.GameMode == GameMode.Creative)
 					{

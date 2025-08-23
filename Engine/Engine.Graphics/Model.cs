@@ -53,10 +53,8 @@ namespace Engine.Graphics
 			{
 				throw new InvalidOperationException("Parent bone must belong to the same model.");
 			}
-			var modelBone = new ModelBone();
-			modelBone.Model = this;
-			modelBone.Index = m_bones.Count;
-			m_bones.Add(modelBone);
+			ModelBone modelBone = new() { Model = this, Index = m_bones.Count };
+            m_bones.Add(modelBone);
 			modelBone.Name = name;
 			modelBone.Transform = transform;
 			if (parentBone != null)
@@ -141,7 +139,7 @@ namespace Engine.Graphics
 			{
 				throw new ArgumentOutOfRangeException(nameof(absoluteTransforms));
 			}
-			var result = default(BoundingBox);
+			BoundingBox result = default(BoundingBox);
 			bool flag = false;
 			foreach (ModelMesh mesh in Meshes)
 			{
@@ -166,7 +164,7 @@ namespace Engine.Graphics
 
 		public static Model Load(ModelData modelData, bool keepSourceVertexDataInTags = false)
 		{
-			var model = new Model();
+			Model model = new();
 			model.Initialize(modelData, keepSourceVertexDataInTags);
 			return model;
 		}
@@ -186,8 +184,8 @@ namespace Engine.Graphics
             ModelData = modelData;
 			ArgumentNullException.ThrowIfNull(modelData);
 			InternalDispose();
-			var array = new VertexBuffer[modelData.Buffers.Count];
-			var array2 = new IndexBuffer[modelData.Buffers.Count];
+			VertexBuffer[] array = new VertexBuffer[modelData.Buffers.Count];
+			IndexBuffer[] array2 = new IndexBuffer[modelData.Buffers.Count];
 			for (int i = 0; i < modelData.Buffers.Count; i++)
 			{
 				ModelBuffersData modelBuffersData = modelData.Buffers[i];

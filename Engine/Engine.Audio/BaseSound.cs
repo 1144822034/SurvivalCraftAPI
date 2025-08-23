@@ -38,11 +38,8 @@ namespace Engine.Audio
 
 		public float Volume
 		{
-			get
-			{
-				return m_volume;
-			}
-			set
+			get => m_volume;
+            set
 			{
 				value = MathUtils.Saturate(value);
 				if (value != m_volume)
@@ -55,11 +52,8 @@ namespace Engine.Audio
 
 		public float Pitch
 		{
-			get
-			{
-				return m_pitch;
-			}
-			set
+			get => m_pitch;
+            set
 			{
 				value = Math.Clamp(value, 0.5f, 2f);
 				if (value != m_pitch)
@@ -72,11 +66,8 @@ namespace Engine.Audio
 
 		public float Pan
 		{
-			get
-			{
-				return m_pan;
-			}
-			set
+			get => m_pan;
+            set
 			{
 				if (ChannelsCount == 1)
 				{
@@ -92,11 +83,8 @@ namespace Engine.Audio
 
 		public bool IsLooped
 		{
-			get
-			{
-				return m_isLooped;
-			}
-			set
+			get => m_isLooped;
+            set
 			{
 				lock (m_lock)
 				{
@@ -110,11 +98,8 @@ namespace Engine.Audio
 
 		public bool DisposeOnStop
 		{
-			get
-			{
-				return m_disposeOnStop;
-			}
-			set
+			get => m_disposeOnStop;
+            set
 			{
 				lock (m_lock)
 				{

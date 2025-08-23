@@ -45,35 +45,27 @@ namespace Game
 		public virtual void Update(float dt)
 		{
 			Camera activeCamera = m_componentPlayer.GameWidget.ActiveCamera;
-			var ray = new Ray3?(new Ray3(activeCamera.ViewPosition, activeCamera.ViewDirection));
+			Ray3 ray = new Ray3(activeCamera.ViewPosition,activeCamera.ViewDirection);
 			NearbyEditableCell = null;
-			if (ray.HasValue)
+			m_highlightRaycastResult = m_componentPlayer.ComponentMiner.Raycast(ray,RaycastMode.Digging);
+			if(!(m_highlightRaycastResult is TerrainRaycastResult terrainRaycastResult))
 			{
-				m_highlightRaycastResult = m_componentPlayer.ComponentMiner.Raycast(ray.Value, RaycastMode.Digging);
-				if (!(m_highlightRaycastResult is TerrainRaycastResult))
-				{
-					return;
-				}
-				var terrainRaycastResult = (TerrainRaycastResult)m_highlightRaycastResult;
-				if (terrainRaycastResult.Distance < 3f)
-				{
-					Point3 point = terrainRaycastResult.CellFace.Point;
-					int cellValue = m_subsystemTerrain.Terrain.GetCellValue(point.X, point.Y, point.Z);
-					Block obj = BlocksManager.Blocks[Terrain.ExtractContents(cellValue)];
-					if (obj is CrossBlock)
-					{
-						terrainRaycastResult.Distance = MathUtils.Max(terrainRaycastResult.Distance, 0.1f);
-						m_highlightRaycastResult = terrainRaycastResult;
-					}
-					if (obj.IsEditable_(cellValue))
-					{
-						NearbyEditableCell = terrainRaycastResult.CellFace.Point;
-					}
-				}
+				return;
 			}
-			else
+			if(terrainRaycastResult.Distance < 3f)
 			{
-				m_highlightRaycastResult = null;
+				Point3 point = terrainRaycastResult.CellFace.Point;
+				int cellValue = m_subsystemTerrain.Terrain.GetCellValue(point.X,point.Y,point.Z);
+				Block obj = BlocksManager.Blocks[Terrain.ExtractContents(cellValue)];
+				if(obj is CrossBlock)
+				{
+					terrainRaycastResult.Distance = MathUtils.Max(terrainRaycastResult.Distance,0.1f);
+					m_highlightRaycastResult = terrainRaycastResult;
+				}
+				if(obj.IsEditable_(cellValue))
+				{
+					NearbyEditableCell = terrainRaycastResult.CellFace.Point;
+				}
 			}
 		}
 
@@ -111,35 +103,32 @@ namespace Game
 			}
 			Ray3 ray;
 			float num;
-			if (m_highlightRaycastResult is TerrainRaycastResult)
+			if (m_highlightRaycastResult is TerrainRaycastResult terrainRaycastResult)
 			{
-				var obj = (TerrainRaycastResult)m_highlightRaycastResult;
-				ray = obj.Ray;
-				num = MathUtils.Min(obj.Distance, 2f);
+				ray = terrainRaycastResult.Ray;
+				num = MathUtils.Min(terrainRaycastResult.Distance, 2f);
 			}
-			else if (m_highlightRaycastResult is BodyRaycastResult)
+			else if (m_highlightRaycastResult is BodyRaycastResult bodyRaycastResult)
 			{
-				var obj2 = (BodyRaycastResult)m_highlightRaycastResult;
-				ray = obj2.Ray;
-				num = MathUtils.Min(obj2.Distance, 2f);
+				ray = bodyRaycastResult.Ray;
+				num = MathUtils.Min(bodyRaycastResult.Distance, 2f);
 			}
-			else if (m_highlightRaycastResult is MovingBlocksRaycastResult)
+			else if (m_highlightRaycastResult is MovingBlocksRaycastResult movingBlocksRaycastResult)
 			{
-				var obj3 = (MovingBlocksRaycastResult)m_highlightRaycastResult;
-				ray = obj3.Ray;
-				num = MathUtils.Min(obj3.Distance, 2f);
+				ray = movingBlocksRaycastResult.Ray;
+				num = MathUtils.Min(movingBlocksRaycastResult.Distance, 2f);
 			}
 			else
 			{
-				if (!(m_highlightRaycastResult is Ray3))
+				if (!(m_highlightRaycastResult is Ray3 ray3))
 				{
 					return;
 				}
-				ray = (Ray3)m_highlightRaycastResult;
+				ray = ray3;
 				num = 2f;
 			}
 			Color color = Color.White * 0.5f;
-			var color2 = Color.Lerp(color, Color.Transparent, MathUtils.Saturate(num / 2f));
+			Color color2 = Color.Lerp(color, Color.Transparent, MathUtils.Saturate(num / 2f));
 			FlatBatch3D flatBatch3D = m_primitivesRenderer3D.FlatBatch();
 			flatBatch3D.QueueLine(ray.Position, ray.Position + (ray.Direction * num), color, color2);
 			flatBatch3D.Flush(camera.ViewProjectionMatrix);
@@ -171,9 +160,9 @@ namespace Game
 			}
 			else
 			{
-				if (!m_componentPlayer.ComponentAimingSights.IsSightsVisible && (SettingsManager.LookControlMode == LookControlMode.SplitTouch || !m_componentPlayer.ComponentInput.IsControlledByTouch) && m_highlightRaycastResult is TerrainRaycastResult)
+				if (!m_componentPlayer.ComponentAimingSights.IsSightsVisible && (SettingsManager.LookControlMode == LookControlMode.SplitTouch || !m_componentPlayer.ComponentInput.IsControlledByTouch) && m_highlightRaycastResult is TerrainRaycastResult terrainRaycastResult)
 				{
-					CellFace cellFace = ((TerrainRaycastResult)m_highlightRaycastResult).CellFace;
+					CellFace cellFace = terrainRaycastResult.CellFace;
 					BoundingBox cellFaceBoundingBox2 = GetCellFaceBoundingBox(cellFace.Point);
 					float num2 = m_subsystemSky.CalculateFog(camera.ViewPosition, cellFaceBoundingBox2.Center());
 					Color color2 = Color.MultiplyNotSaturated(Color.Black, 1f - num2);
@@ -237,7 +226,7 @@ namespace Game
 		{
 			int cellValue = m_subsystemTerrain.Terrain.GetCellValue(point.X, point.Y, point.Z);
 			BoundingBox[] customCollisionBoxes = BlocksManager.Blocks[Terrain.ExtractContents(cellValue)].GetCustomCollisionBoxes(m_subsystemTerrain, cellValue);
-			var vector = new Vector3(point.X, point.Y, point.Z);
+			Vector3 vector = new(point.X, point.Y, point.Z);
 			if (customCollisionBoxes.Length != 0)
 			{
 				BoundingBox? boundingBox = null;
@@ -248,10 +237,7 @@ namespace Game
 						boundingBox = boundingBox.HasValue ? BoundingBox.Union(boundingBox.Value, customCollisionBoxes[i]) : customCollisionBoxes[i];
 					}
 				}
-				if (!boundingBox.HasValue)
-				{
-					boundingBox = new BoundingBox(Vector3.Zero, Vector3.One);
-				}
+				boundingBox ??= new BoundingBox(Vector3.Zero, Vector3.One);
 				return new BoundingBox(boundingBox.Value.Min + vector, boundingBox.Value.Max + vector);
 			}
 			return new BoundingBox(vector, vector + Vector3.One);

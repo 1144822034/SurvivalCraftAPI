@@ -36,38 +36,20 @@ namespace Game
 
 		public string Text
 		{
-			get
-			{
-				return m_labelWidget.Text;
-			}
-			set
-			{
-				m_labelWidget.Text = value;
-			}
+			get => m_labelWidget.Text;
+			set => m_labelWidget.Text = value;
 		}
 
 		public BitmapFont Font
 		{
-			get
-			{
-				return m_labelWidget.Font;
-			}
-			set
-			{
-				m_labelWidget.Font = value;
-			}
+			get => m_labelWidget.Font;
+			set => m_labelWidget.Font = value;
 		}
 
 		public Subtexture TickSubtexture
 		{
-			get
-			{
-				return m_tickWidget.Subtexture;
-			}
-			set
-			{
-				m_tickWidget.Subtexture = value;
-			}
+			get => m_tickWidget.Subtexture;
+			set => m_tickWidget.Subtexture = value;
 		}
 
 		public Color Color
@@ -78,14 +60,8 @@ namespace Game
 
 		public Vector2 CheckboxSize
 		{
-			get
-			{
-				return m_canvasWidget.Size;
-			}
-			set
-			{
-				m_canvasWidget.Size = value;
-			}
+			get => m_canvasWidget.Size;
+			set => m_canvasWidget.Size = value;
 		}
 
 		public CheckboxWidget()

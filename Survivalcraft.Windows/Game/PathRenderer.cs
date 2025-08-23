@@ -31,34 +31,22 @@ internal static class PathRenderer
 
 		public float InnerRadius
 		{
-			set
-			{
-				InnerRadiusL = (InnerRadiusR = value);
-			}
+			set => InnerRadiusL = (InnerRadiusR = value);
 		}
 
 		public float OuterRadius
 		{
-			set
-			{
-				OuterRadiusL = (OuterRadiusR = value);
-			}
+			set => OuterRadiusL = (OuterRadiusR = value);
 		}
 
 		public Color InnerColor
 		{
-			set
-			{
-				InnerColorL = (InnerColorR = value);
-			}
+			set => InnerColorL = (InnerColorR = value);
 		}
 
 		public Color OuterColor
 		{
-			set
-			{
-				OuterColorL = (OuterColorR = value);
-			}
+			set => OuterColorL = (OuterColorR = value);
 		}
 
 		public Color Color
@@ -80,11 +68,11 @@ internal static class PathRenderer
 		}
 	}
 
-	private static DynamicArray<Point> TmpPoints = new DynamicArray<Point>();
+	private static DynamicArray<Point> TmpPoints = new();
 
-	private static DynamicArray<Vector2> TmpPositions = new DynamicArray<Vector2>();
+	private static DynamicArray<Vector2> TmpPositions = new();
 
-	private static DynamicArray<Vector2> TmpNormals = new DynamicArray<Vector2>();
+	private static DynamicArray<Vector2> TmpNormals = new();
 
 	public static int TrimPathStart(DynamicArray<Vector2> positions, BoundingRectangle rectangle)
 	{
@@ -105,7 +93,7 @@ internal static class PathRenderer
 		else if (num > 0)
 		{
 			positions.RemoveRange(0, num - 1);
-			Ray2 ray = new Ray2(positions[1], Vector2.Normalize(positions[0] - positions[1]));
+			Ray2 ray = new(positions[1], Vector2.Normalize(positions[0] - positions[1]));
 			float num2 = ray.Intersection(rectangle) ?? 0f;
 			positions[0] = ray.Position + ray.Direction * num2;
 		}
@@ -139,7 +127,7 @@ internal static class PathRenderer
 		else if (num > 0)
 		{
 			positions.RemoveRange(0, num - 1);
-			Ray2 ray = new Ray2(positions[1], Vector2.Normalize(positions[0] - positions[1]));
+			Ray2 ray = new(positions[1], Vector2.Normalize(positions[0] - positions[1]));
 			float num2 = ray.Intersection(circle) ?? 0f;
 			positions[0] = ray.Position + ray.Direction * num2;
 		}
@@ -390,19 +378,19 @@ internal static class PathRenderer
 			{
 				vector3 = Normal1(position2 - position);
 			}
-			Vector2 vector4 = new Vector2(num, 0.5f);
+			Vector2 vector4 = new(num, 0.5f);
 			num += num4 * num3;
-			Vector2 vector5 = new Vector2(num, 0.5f);
+			Vector2 vector5 = new(num, 0.5f);
 			if (point.OuterRadiusL > 0f || point2.OuterRadiusL > 0f)
 			{
 				Vector2 vector6 = vector2 * (0f - point.InnerRadiusL);
 				Vector2 vector7 = vector2 * (0f - point.OuterRadiusL);
 				Vector2 vector8 = vector3 * (0f - point2.InnerRadiusL);
 				Vector2 vector9 = vector3 * (0f - point2.OuterRadiusL);
-				Vector2 vector10 = new Vector2(Vector2.Dot(vector6, v), -0.5f * point.InnerRadiusL / point.OuterRadiusL);
-				Vector2 vector11 = new Vector2(Vector2.Dot(vector7, v), -0.5f);
-				Vector2 vector12 = new Vector2(Vector2.Dot(vector8, v), -0.5f * point2.InnerRadiusL / point2.OuterRadiusL);
-				Vector2 vector13 = new Vector2(Vector2.Dot(vector9, v), -0.5f);
+				Vector2 vector10 = new(Vector2.Dot(vector6, v), -0.5f * point.InnerRadiusL / point.OuterRadiusL);
+				Vector2 vector11 = new(Vector2.Dot(vector7, v), -0.5f);
+				Vector2 vector12 = new(Vector2.Dot(vector8, v), -0.5f * point2.InnerRadiusL / point2.OuterRadiusL);
+				Vector2 vector13 = new(Vector2.Dot(vector9, v), -0.5f);
 				if (flatShading)
 				{
 					batch.QueueQuad(position + vector7, position + vector6, position2 + vector8, position2 + vector9, 0f, vector4 + vector11, vector4 + vector10, vector5 + vector12, vector5 + vector13, point.OuterColorR, point.InnerColorR, point.InnerColorR, point.OuterColorR);
@@ -418,10 +406,10 @@ internal static class PathRenderer
 				Vector2 vector15 = vector2 * point.OuterRadiusR;
 				Vector2 vector16 = vector3 * point2.InnerRadiusR;
 				Vector2 vector17 = vector3 * point2.OuterRadiusR;
-				Vector2 vector18 = new Vector2(Vector2.Dot(vector14, v), 0.5f * point.InnerRadiusR / point.OuterRadiusR);
-				Vector2 vector19 = new Vector2(Vector2.Dot(vector15, v), 0.5f);
-				Vector2 vector20 = new Vector2(Vector2.Dot(vector16, v), 0.5f * point2.InnerRadiusR / point2.OuterRadiusR);
-				Vector2 vector21 = new Vector2(Vector2.Dot(vector17, v), 0.5f);
+				Vector2 vector18 = new(Vector2.Dot(vector14, v), 0.5f * point.InnerRadiusR / point.OuterRadiusR);
+				Vector2 vector19 = new(Vector2.Dot(vector15, v), 0.5f);
+				Vector2 vector20 = new(Vector2.Dot(vector16, v), 0.5f * point2.InnerRadiusR / point2.OuterRadiusR);
+				Vector2 vector21 = new(Vector2.Dot(vector17, v), 0.5f);
 				if (flatShading)
 				{
 					batch.QueueQuad(position + vector15, position + vector14, position2 + vector16, position2 + vector17, 0f, vector4 + vector19, vector4 + vector18, vector5 + vector20, vector5 + vector21, point.OuterColorR, point.InnerColorR, point.InnerColorR, point.OuterColorR);

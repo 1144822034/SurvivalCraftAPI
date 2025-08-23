@@ -20,7 +20,7 @@ namespace Game
 		public ButtonWidget m_controlsButton;
 
 		public StackPanelWidget m_leftStack, m_rightPanel;
-		readonly Dictionary<ButtonWidget,Action> m_buttonActions = new Dictionary<ButtonWidget,Action>();
+		readonly Dictionary<ButtonWidget,Action> m_buttonActions = new();
 		public SettingsScreen()
 		{
 			XElement node = ContentManager.Get<XElement>("Screens/SettingsScreen");
@@ -38,7 +38,7 @@ namespace Game
 				loader.OnSettingsScreenCreated(this,out Dictionary<ButtonWidget,Action> buttonsToAdd);
 				if(buttonsToAdd != null)
 				{
-					foreach(var child in buttonsToAdd)
+					foreach(KeyValuePair<ButtonWidget,Action> child in buttonsToAdd)
 					{
 						AddSettingButton(child.Key,child.Value);
 					}
@@ -82,7 +82,7 @@ namespace Game
 			{
 				ScreensManager.SwitchScreen("SettingsControls");
 			}
-			foreach(var buttonAction in m_buttonActions)
+			foreach(KeyValuePair<ButtonWidget,Action> buttonAction in m_buttonActions)
 			{
 				if(buttonAction.Key.IsClicked)
 					buttonAction.Value?.Invoke();
@@ -102,11 +102,10 @@ namespace Game
 		public void AddSettingButton(ButtonWidget button,Action onClicked)
 		{
 			ArgumentNullException.ThrowIfNull(button);
-			if(m_buttonActions.ContainsKey(button))
+			if(!m_buttonActions.TryAdd(button, onClicked))
 			{
 				throw new InvalidOperationException("Button already has an action assigned");
 			}
-			m_buttonActions.Add(button,onClicked);
 			int index = m_buttonActions.Count - 1;
 			if(index % 2 == 0)
 				m_leftStack.Children.Add(button);

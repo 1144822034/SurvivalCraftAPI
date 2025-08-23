@@ -8,14 +8,8 @@ namespace Game
 
 		public static UserInfo ActiveUser
 		{
-			get
-			{
-				return GetUser(SettingsManager.UserId) ?? GetUsers().FirstOrDefault();
-			}
-			set
-			{
-				SettingsManager.UserId = (value != null) ? value.UniqueId : string.Empty;
-			}
+			get => GetUser(SettingsManager.UserId) ?? GetUsers().FirstOrDefault();
+			set => SettingsManager.UserId = (value != null) ? value.UniqueId : string.Empty;
 		}
 
 		static UserManager()

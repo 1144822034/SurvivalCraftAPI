@@ -31,7 +31,7 @@ namespace Game
 
 			public BlockMesh BlockMesh;
 		}
-		public new static string fName = "EggBlock";
+		public static new string fName = "EggBlock";
 		public static int Index = 118;
 		public Dictionary<int, EggType> m_eggTypes = [];
 		public ReadOnlyList<EggType> EggTypes => new(m_eggTypes.Values.ToList());
@@ -39,7 +39,7 @@ namespace Game
 		{
 			m_eggTypes.Clear();
 			DatabaseObjectType parameterSetType = DatabaseManager.GameDatabase.ParameterSetType;
-			var eggParameterSetGuid = new Guid("300ff557-775f-4c7c-a88a-26655369f00b");
+			Guid eggParameterSetGuid = new("300ff557-775f-4c7c-a88a-26655369f00b");
 			foreach (DatabaseObject item in from o in DatabaseManager.GameDatabase.Database.Root.GetExplicitNestingChildren(parameterSetType, directChildrenOnly: false)
 											where o.EffectiveInheritanceRoot.Guid == eggParameterSetGuid
 											select o)
@@ -190,7 +190,7 @@ namespace Game
 					int rot = 0;
 					while (rot <= 1)
 					{
-						var craftingRecipe = new CraftingRecipe
+						CraftingRecipe craftingRecipe = new()
 						{
 							ResultCount = 1,
 							ResultValue = Terrain.MakeBlockValue(118, 0, SetEggType(SetIsCooked(0, isCooked: true), eggType.EggTypeIndex)),
@@ -224,7 +224,7 @@ namespace Game
 		public EggType GetEggType(int data)
 		{
 			int index = (data >> 4) & 0xFFF;
-			bool found = m_eggTypes.TryGetValue(index, out var eggType);
+			bool found = m_eggTypes.TryGetValue(index, out EggType eggType);
 			if(found) return eggType;
 			return m_eggTypes[0];
 		}

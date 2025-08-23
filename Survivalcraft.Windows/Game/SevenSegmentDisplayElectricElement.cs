@@ -68,10 +68,10 @@ namespace Game
 			m_color = LedBlock.LedColors[SevenSegmentDisplayBlock.GetColor(data)];
 			for (int i = 0; i < 7; i++)
 			{
-				var v = new Vector3(cellFace.X + 0.5f, cellFace.Y + 0.5f, cellFace.Z + 0.5f);
+				Vector3 v = new(cellFace.X + 0.5f, cellFace.Y + 0.5f, cellFace.Z + 0.5f);
 				Vector3 vector = CellFace.FaceToVector3(mountingFace);
 				Vector3 vector2 = (mountingFace < 4) ? Vector3.UnitY : Vector3.UnitX;
-				var v2 = Vector3.Cross(vector, vector2);
+				Vector3 v2 = Vector3.Cross(vector, vector2);
 				m_glowPoints[i] = m_subsystemGlow.AddGlowPoint();
 				m_glowPoints[i].Position = v - (0.4375f * CellFace.FaceToVector3(mountingFace)) + (m_centers[i].X * 0.0625f * v2) + (m_centers[i].Y * 0.0625f * vector2);
 				m_glowPoints[i].Forward = vector;

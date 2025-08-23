@@ -38,72 +38,50 @@ namespace Engine.Graphics
 		{
 			get
 			{
+#if DIRECT3D11
+                return m_texture.DebugName;
+#else
 				return m_debugName;
-			}
-			set
-			{
+#endif
+            }
+            set
+            {
+#if DIRECT3D11
+                m_texture.DebugName = value;
+#else
                 m_debugName = value;
+#endif
 			}
 		}
 
         public int Width
         {
-            get
-            {
-                return m_width;
-            }
-            private set
-            {
-                m_width = value;
-            }
+            get => m_width;
+            private set => m_width = value;
         }
 
         public int Height
         {
-            get
-            {
-                return m_height;
-            }
-            private set
-            {
-                m_height = value;
-            }
+            get => m_height;
+            private set => m_height = value;
         }
 
         public ColorFormat ColorFormat
         {
-            get
-            {
-                return m_colorFormat;
-            }
-            private set
-            {
-                m_colorFormat = value;
-            }
+            get => m_colorFormat;
+            private set => m_colorFormat = value;
         }
 
         public int MipLevelsCount
         {
-            get
-            {
-                return m_mipLevelsCount;
-            }
-            private set
-            {
-                m_mipLevelsCount = value;
-            }
+            get => m_mipLevelsCount;
+            private set => m_mipLevelsCount = value;
         }
 
         public object Tag
         {
-            get
-            {
-                return m_tag;
-            }
-            set
-            {
-                m_tag = value;
-            }
+            get => m_tag;
+            set => m_tag = value;
         }
 
 		public Texture2D(int width, int height, int mipLevelsCount, ColorFormat colorFormat)
@@ -144,7 +122,7 @@ namespace Engine.Graphics
 		public void SetData<T>(int mipLevel, T[] source, int sourceStartIndex = 0) where T : struct
 		{
 			VerifyParametersSetData(mipLevel, source, sourceStartIndex);
-			var gCHandle = GCHandle.Alloc(source, GCHandleType.Pinned);
+			GCHandle gCHandle = GCHandle.Alloc(source, GCHandleType.Pinned);
 			try
 			{
                 int num = Utilities.SizeOf<T>();
@@ -294,7 +272,7 @@ namespace Engine.Graphics
 
 		public static Texture2D Load(LegacyImage image, int mipLevelsCount = 1)
 		{
-			var texture2D = new Texture2D(image.Width, image.Height, mipLevelsCount, ColorFormat.Rgba8888);
+			Texture2D texture2D = new(image.Width, image.Height, mipLevelsCount, ColorFormat.Rgba8888);
 			if (mipLevelsCount > 1)
 			{
                 LegacyImage[] array = LegacyImage.GenerateMipmaps(image, mipLevelsCount).ToArray();
@@ -313,7 +291,7 @@ namespace Engine.Graphics
 
 		public static Texture2D Load(Image image, int mipLevelsCount = 1)
 		{
-			var texture2D = new Texture2D(image.Width, image.Height, mipLevelsCount, ColorFormat.Rgba8888);
+			Texture2D texture2D = new(image.Width, image.Height, mipLevelsCount, ColorFormat.Rgba8888);
 			texture2D.SetData(image.m_trueImage);
             if(mipLevelsCount > 1)
             {
@@ -330,7 +308,7 @@ namespace Engine.Graphics
 
         public static Texture2D Load(Image<Rgba32> image, int mipLevelsCount = 1)
         {
-            var texture2D = new Texture2D(image.Width, image.Height, mipLevelsCount, ColorFormat.Rgba8888);
+            Texture2D texture2D = new(image.Width, image.Height, mipLevelsCount, ColorFormat.Rgba8888);
             texture2D.SetData(image);
             if (mipLevelsCount > 1)
             {
@@ -347,7 +325,7 @@ namespace Engine.Graphics
 
         public static Texture2D Load(Stream stream, bool premultiplyAlpha = false, int mipLevelsCount = 1)
 		{
-			var image = Image.Load(stream);
+			Image image = Image.Load(stream);
 			if (premultiplyAlpha)
 			{
 				Image.PremultiplyAlpha(image);
@@ -365,7 +343,7 @@ namespace Engine.Graphics
 
         public static Texture2D Load(Color color, int width, int height)
         {
-            Texture2D texture2D = new Texture2D(width, height, 1, ColorFormat.Rgba8888);
+            Texture2D texture2D = new(width, height, 1, ColorFormat.Rgba8888);
             Color[] array = new Color[width * height];
             for (int i = 0; i < array.Length; i++)
             {
@@ -439,11 +417,11 @@ namespace Engine.Graphics
             VerifyNotDisposed();
             if (source == IntPtr.Zero)
             {
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             }
             if (mipLevel < 0 || mipLevel >= MipLevelsCount)
             {
-                throw new ArgumentOutOfRangeException("mipLevel");
+                throw new ArgumentOutOfRangeException(nameof(mipLevel));
             }
         }
 
@@ -451,11 +429,11 @@ namespace Engine.Graphics
         {
             if (texture1 == null)
             {
-                throw new ArgumentNullException("texture1");
+                throw new ArgumentNullException(nameof(texture1));
             }
             if (texture2 == null)
             {
-                throw new ArgumentNullException("texture2");
+                throw new ArgumentNullException(nameof(texture2));
             }
             if (texture1.GetType() != typeof(Texture2D))
             {

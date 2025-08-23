@@ -1,5 +1,7 @@
 using System.Globalization;
+#if !ANDROID
 using System.Reflection;
+#endif
 
 namespace Engine.Graphics
 {
@@ -51,139 +53,88 @@ namespace Engine.Graphics
 
 		public Texture2D Texture
 		{
-			set
-			{
-				m_textureParameter.SetValue(value);
-			}
-		}
+			set => m_textureParameter.SetValue(value);
+        }
 
 		public SamplerState SamplerState
 		{
-			set
-			{
-				m_samplerStateParameter.SetValue(value);
-			}
-		}
+			set => m_samplerStateParameter.SetValue(value);
+        }
 
 		public Vector4 MaterialColor
 		{
-			set
-			{
-				m_materialColorParameter.SetValue(value);
-			}
-		}
+			set => m_materialColorParameter.SetValue(value);
+        }
 
 		public Vector4 EmissionColor
 		{
-			set
-			{
-				m_emissionColorParameter.SetValue(value);
-			}
-		}
+			set => m_emissionColorParameter.SetValue(value);
+        }
 
 		public float AlphaThreshold
 		{
-			set
-			{
-				m_alphaThresholdParameter.SetValue(value);
-			}
-		}
+			set => m_alphaThresholdParameter.SetValue(value);
+        }
 
 		public Vector3 AmbientLightColor
 		{
-			set
-			{
-				m_ambientLightColorParameter.SetValue(value);
-			}
-		}
+			set => m_ambientLightColorParameter.SetValue(value);
+        }
 
 		public Vector3 DiffuseLightColor1
 		{
-			set
-			{
-				m_diffuseLightColor1Parameter.SetValue(value);
-			}
-		}
+			set => m_diffuseLightColor1Parameter.SetValue(value);
+        }
 
 		public Vector3 DiffuseLightColor2
 		{
-			set
-			{
-				m_diffuseLightColor2Parameter.SetValue(value);
-			}
-		}
+			set => m_diffuseLightColor2Parameter.SetValue(value);
+        }
 
 		public Vector3 DiffuseLightColor3
 		{
-			set
-			{
-				m_diffuseLightColor3Parameter.SetValue(value);
-			}
-		}
+			set => m_diffuseLightColor3Parameter.SetValue(value);
+        }
 
 		public Vector3 LightDirection1
 		{
-			set
-			{
-				m_directionToLight1Parameter.SetValue(-value);
-			}
-		}
+			set => m_directionToLight1Parameter.SetValue(-value);
+        }
 
 		public Vector3 LightDirection2
 		{
-			set
-			{
-				m_directionToLight2Parameter.SetValue(-value);
-			}
-		}
+			set => m_directionToLight2Parameter.SetValue(-value);
+        }
 
 		public Vector3 LightDirection3
 		{
-			set
-			{
-				m_directionToLight3Parameter.SetValue(-value);
-			}
-		}
+			set => m_directionToLight3Parameter.SetValue(-value);
+        }
 
 		public float FogStart
 		{
-			set
-			{
-				m_fogStartParameter.SetValue(value);
-			}
-		}
+			set => m_fogStartParameter.SetValue(value);
+        }
 
 		public float FogLength
 		{
-			set
-			{
-				m_fogLengthParameter.SetValue(value);
-			}
-		}
+			set => m_fogLengthParameter.SetValue(value);
+        }
 
 		public Vector3 FogColor
 		{
-			set
-			{
-				m_fogColorParameter.SetValue(value);
-			}
-		}
+			set => m_fogColorParameter.SetValue(value);
+        }
 
 		public float Time
 		{
-			set
-			{
-				m_time.SetValue(value);
-			}
-		}
+			set => m_time.SetValue(value);
+        }
 
 		public int InstancesCount
 		{
-			get
-			{
-				return m_instancesCount;
-			}
-			set
+			get => m_instancesCount;
+            set
 			{
 				if (value < 0 || value > Transforms.MaxWorldMatrices)
 				{
@@ -254,12 +205,8 @@ namespace Engine.Graphics
 		}
 
 		public LitShader(int lightsCount, bool useEmissionColor, bool useVertexColor, bool useTexture, bool useFog, bool useAlphaThreshold, int maxInstancesCount = 1)
-#if ANDROID
-			: base(new StreamReader(Storage.OpenFile("app:Lit.vsh", OpenFileMode.Read)).ReadToEnd(), new StreamReader(Storage.OpenFile("app:Lit.psh", OpenFileMode.Read)).ReadToEnd(), maxInstancesCount, PrepareShaderMacros(lightsCount, useEmissionColor, useVertexColor, useTexture, useFog, useAlphaThreshold, maxInstancesCount))
-#else
-            : base(new StreamReader(typeof(Shader).GetTypeInfo().Assembly.GetManifestResourceStream("Engine.Resources.Lit.vsh")).ReadToEnd(), new StreamReader(typeof(Shader).GetTypeInfo().Assembly.GetManifestResourceStream("Engine.Resources.Lit.psh")).ReadToEnd(), maxInstancesCount, PrepareShaderMacros(lightsCount, useEmissionColor, useVertexColor, useTexture, useFog, useAlphaThreshold, maxInstancesCount))
-#endif
-		{
+            : base(GetLitVshString(), GetLitPshString(), maxInstancesCount, PrepareShaderMacros(lightsCount, useEmissionColor, useVertexColor, useTexture, useFog, useAlphaThreshold, maxInstancesCount))
+        {
 			if (lightsCount < 0 || lightsCount > 3)
 			{
 				throw new ArgumentException("lightsCount");
@@ -315,6 +262,28 @@ namespace Engine.Graphics
 				FogLength = 100f;
 			}
 		}
+
+        public static string GetLitVshString()
+        {
+#if ANDROID
+            Stream stream = Storage.OpenFile("app:Lit.vsh", OpenFileMode.Read);
+#else
+            Stream stream = typeof(Shader).GetTypeInfo().Assembly.GetManifestResourceStream("Engine.Resources.Lit.vsh");
+#endif
+            ArgumentNullException.ThrowIfNull(stream);
+            return new StreamReader(stream).ReadToEnd();
+        }
+
+        public static string GetLitPshString()
+        {
+#if ANDROID
+            Stream stream = Storage.OpenFile("app:Lit.psh", OpenFileMode.Read);
+#else
+            Stream stream = typeof(Shader).GetTypeInfo().Assembly.GetManifestResourceStream("Engine.Resources.Lit.psh");
+#endif
+            ArgumentNullException.ThrowIfNull(stream);
+            return new StreamReader(stream).ReadToEnd();
+        }
 
         public override void PrepareForDrawingOverride()
 		{

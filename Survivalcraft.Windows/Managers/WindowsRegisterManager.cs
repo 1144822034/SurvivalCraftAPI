@@ -5,13 +5,8 @@ namespace Game.Managers
 {
     internal static class WindowsRegisterManager
     {
-        public static string SurvivalcraftPath
-        {
-            get
-            {
-                return ModsManager.ExternalPath + "Survivalcraft.exe";
-            }
-        }
+        public static string SurvivalcraftPath => ModsManager.ExternalPath + "Survivalcraft.exe";
+
         public static void RegisterFileType(string keyName, string keyValue, string extension)
         {
             //keyName = "WPCFile";

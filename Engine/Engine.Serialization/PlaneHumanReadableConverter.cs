@@ -5,7 +5,7 @@ namespace Engine.Serialization
 	{
 		public string ConvertToString(object value)
 		{
-			var plane = (Plane)value;
+			Plane plane = (Plane)value;
 			return HumanReadableConverter.ValuesListToString(',', plane.Normal.X, plane.Normal.Y, plane.Normal.Z, plane.D);
 		}
 

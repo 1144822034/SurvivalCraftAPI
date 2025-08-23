@@ -76,65 +76,35 @@ namespace Game
 		/// 用于多模组控制同一项参数
 		/// 例如：VitalStatsForMods["Water"]表示水份值
 		/// </summary>
-		public ValuesDictionary VitalStatsForMods = new ValuesDictionary();
+		public ValuesDictionary VitalStatsForMods = new();
 		public float Food
 		{
-			get
-			{
-				return m_food;
-			}
-			set
-			{
-				m_food = MathUtils.Saturate(value);
-			}
+			get => m_food;
+			set => m_food = MathUtils.Saturate(value);
 		}
 
 		public float Stamina
 		{
-			get
-			{
-				return m_stamina;
-			}
-			set
-			{
-				m_stamina = MathUtils.Saturate(value);
-			}
+			get => m_stamina;
+			set => m_stamina = MathUtils.Saturate(value);
 		}
 
 		public float Sleep
 		{
-			get
-			{
-				return m_sleep;
-			}
-			set
-			{
-				m_sleep = MathUtils.Saturate(value);
-			}
+			get => m_sleep;
+			set => m_sleep = MathUtils.Saturate(value);
 		}
 
 		public float Temperature
 		{
-			get
-			{
-				return m_temperature;
-			}
-			set
-			{
-				m_temperature = Math.Clamp(value, 0f, 24f);
-			}
+			get => m_temperature;
+			set => m_temperature = Math.Clamp(value, 0f, 24f);
 		}
 
 		public float Wetness
 		{
-			get
-			{
-				return m_wetness;
-			}
-			set
-			{
-				m_wetness = MathUtils.Saturate(value);
-			}
+			get => m_wetness;
+			set => m_wetness = MathUtils.Saturate(value);
 		}
 		public UpdateOrder UpdateOrder => UpdateOrder.Default;
 
@@ -261,7 +231,7 @@ namespace Game
 			valuesDictionary.SetValue("Sleep", Sleep);
 			valuesDictionary.SetValue("Temperature", Temperature);
 			valuesDictionary.SetValue("Wetness", Wetness);
-			var valuesDictionary2 = new ValuesDictionary();
+			ValuesDictionary valuesDictionary2 = new();
 			valuesDictionary.SetValue("Satiation", valuesDictionary2);
 			foreach (KeyValuePair<int, float> item in m_satiation)
 			{

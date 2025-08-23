@@ -8,7 +8,7 @@ public class SubsystemFallenLeavesBlockBehavior : SubsystemPollableBlockBehavior
 
 	public SubsystemSeasons m_subsystemSeasons;
 
-	private Random m_random = new Random();
+	private Random m_random = new();
 
 	public override int[] HandledBlocks => [];
 

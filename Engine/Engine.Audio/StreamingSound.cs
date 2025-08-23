@@ -112,7 +112,9 @@ namespace Engine.Audio
                 Mixer.AL.SourceStop((uint)m_source);
                 Mixer.CheckALError();
                 StreamingSource.Position = 0L;
-                m_noMoreData = false;
+                lock (m_lock) {
+                    m_noMoreData = false;
+                }
             }
         }
 
@@ -137,7 +139,7 @@ namespace Engine.Audio
 		private unsafe void StreamingThreadFunction()
 		{
 			uint[] array = new uint[3];
-			var list = new List<uint>();
+			List<uint> list = new();
 			int millisecondsTimeout = Math.Clamp((int)(0.5f * m_bufferDuration / array.Length * 1000f), 1, 100);
 			byte[] array2 = new byte[2 * ChannelsCount * (int)(SamplingFrequency * m_bufferDuration / array.Length)];
 			for (int i = 0; i < array.Length; i++)

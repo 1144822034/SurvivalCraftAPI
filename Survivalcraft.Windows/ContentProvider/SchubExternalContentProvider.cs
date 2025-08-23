@@ -6,7 +6,7 @@ using System.Text.Json.Nodes;
 
 namespace Game
 {
-	public class SchubExternalContentProvider : IExternalContentProvider, IDisposable
+	public class SchubExternalContentProvider : IExternalContentProvider
 	{
 		public class LoginProcessData
 		{
@@ -95,10 +95,7 @@ namespace Game
 						loginProcessData.Fail(this, null);
 					}
 				};
-				m_loginProcessData = new LoginProcessData();
-				m_loginProcessData.Progress = progress;
-				m_loginProcessData.Success = success;
-				m_loginProcessData.Failure = failure;
+				m_loginProcessData = new LoginProcessData { Progress = progress,Success = success,Failure = failure };
 				LoginLaunchBrowser();
 			}
 			catch (Exception obj)
@@ -119,12 +116,12 @@ namespace Game
 			try
 			{
 				VerifyLoggedIn();
-				var dictionary = new Dictionary<string, string>
+				Dictionary<string,string> dictionary = new()
 				{
 					{ "Authorization", "Bearer " + SettingsManager.ScpboxAccessToken },
 					{ "Content-Type", "application/json" }
 				};
-				var jsonObject = new JsonObject
+				JsonObject jsonObject = new()
 				{
 					{ "path", NormalizePath(path) },
 					{ "recursive", false },
@@ -132,7 +129,7 @@ namespace Game
 					{ "include_deleted", false },
 					{ "include_has_explicit_shared_members", false }
 				};
-				var data = new MemoryStream(Encoding.UTF8.GetBytes(jsonObject.ToJsonString()));
+				MemoryStream data = new(Encoding.UTF8.GetBytes(jsonObject.ToJsonString()));
 				WebManager.Post(m_redirectUri + "/com/files/list_folder", null, dictionary, data, progress, delegate (byte[] result)
 				{
 					try
@@ -143,10 +140,7 @@ namespace Game
 					{
 						failure(obj2);
 					}
-				}, delegate (Exception error)
-				{
-					failure(error);
-				});
+				}, failure);
 			}
 			catch (Exception obj)
 			{
@@ -159,11 +153,11 @@ namespace Game
 			try
 			{
 				VerifyLoggedIn();
-				var jsonObject = new JsonObject
+				JsonObject jsonObject = new()
 				{
 					{ "path", NormalizePath(path) }
 				};
-				var dictionary = new Dictionary<string, string>
+				Dictionary<string,string> dictionary = new()
 				{
 					{ "Authorization", "Bearer " + SettingsManager.ScpboxAccessToken },
 					{ "Dropbox-API-Arg", jsonObject.ToJsonString() }
@@ -171,10 +165,7 @@ namespace Game
 				WebManager.Get(m_redirectUri + "/com/files/download", null, dictionary, progress, delegate (byte[] result)
 				{
 					success(new MemoryStream(result));
-				}, delegate (Exception error)
-				{
-					failure(error);
-				});
+				}, failure);
 			}
 			catch (Exception obj)
 			{
@@ -187,14 +178,14 @@ namespace Game
 			try
 			{
 				VerifyLoggedIn();
-				var jsonObject = new JsonObject
+				JsonObject jsonObject = new()
 				{
 					{ "path", NormalizePath(path) },
 					{ "mode", "add" },
 					{ "autorename", true },
 					{ "mute", false }
 				};
-				var dictionary = new Dictionary<string, string>
+				Dictionary<string,string> dictionary = new()
 				{
 					{ "Authorization", "Bearer " + SettingsManager.ScpboxAccessToken },
 					{ "Content-Type", "application/octet-stream" },
@@ -203,10 +194,7 @@ namespace Game
 				WebManager.Post(m_redirectUri + "/com/files/upload", null, dictionary, stream, progress, delegate
 				{
 					success(null);
-				}, delegate (Exception error)
-				{
-					failure(error);
-				});
+				}, failure);
 			}
 			catch (Exception obj)
 			{
@@ -219,17 +207,17 @@ namespace Game
 			try
 			{
 				VerifyLoggedIn();
-				var dictionary = new Dictionary<string, string>
+				Dictionary<string,string> dictionary = new()
 				{
 					{ "Authorization", "Bearer " + SettingsManager.ScpboxAccessToken },
 					{ "Content-Type", "application/json" }
 				};
-				var jsonObject = new JsonObject
+				JsonObject jsonObject = new()
 				{
 					{ "path", NormalizePath(path) },
 					{ "short_url", false }
 				};
-				var data = new MemoryStream(Encoding.UTF8.GetBytes(jsonObject.ToJsonString()));
+				MemoryStream data = new(Encoding.UTF8.GetBytes(jsonObject.ToJsonString()));
 				WebManager.Post(m_redirectUri + "/com/sharing/create_shared_link", null, dictionary, data, progress, delegate (byte[] result)
 				{
 					try
@@ -240,10 +228,7 @@ namespace Game
 					{
 						failure(obj2);
 					}
-				}, delegate (Exception error)
-				{
-					failure(error);
-				});
+				}, failure);
 			}
 			catch (Exception obj)
 			{
@@ -255,17 +240,17 @@ namespace Game
 		{
 			try
 			{
-				var login = new LoginDialog();
+				LoginDialog login = new();
 				login.succ = delegate (byte[] a)
 				{
-					var streamReader = new StreamReader(new MemoryStream(a));
+					StreamReader streamReader = new(new MemoryStream(a));
 					JsonElement json = JsonDocument.Parse(streamReader.ReadToEnd()).RootElement;
 					if (json.GetProperty("code").GetInt32() == 200)
 					{
 						JsonElement data = json.GetProperty("data");
-						SettingsManager.ScpboxAccessToken = data.GetProperty("accessToken").GetString();
+						SettingsManager.ScpboxAccessToken = data.GetProperty("accessToken").GetString() ?? string.Empty;
 						SettingsManager.ScpboxUserInfo = string.Empty;
-						string nickName = data.GetProperty("nickName").GetString();
+						string nickName = data.GetProperty("nickName").GetString() ?? string.Empty;
 						SettingsManager.ScpboxUserInfo += "昵称：" + nickName;
 						SettingsManager.ScpboxUserInfo += "\n账号：" + data.GetProperty("user").GetString();
 						SettingsManager.ScpboxUserInfo += "\n登录时间：" + TimeZoneInfo.ConvertTimeFromUtc(new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc).AddSeconds(data.GetProperty("loginTime").GetInt64()), TimeZoneInfo.Local);
@@ -367,8 +352,7 @@ namespace Game
 		{
 			if (m_loginProcessData == null)
 			{
-				m_loginProcessData = new LoginProcessData();
-				m_loginProcessData.IsTokenFlow = true;
+				m_loginProcessData = new LoginProcessData { IsTokenFlow = true };
 			}
 			LoginProcessData loginProcessData = m_loginProcessData;
 			m_loginProcessData = null;
@@ -381,15 +365,15 @@ namespace Game
 						throw new Exception("不能接收来自Schub的身份验证信息");
 					}
 					Dictionary<string, string> dictionary = WebManager.UrlParametersFromString(uri.Fragment.TrimStart('#'));
-					if (!dictionary.ContainsKey("access_token"))
+					if (!dictionary.TryGetValue("access_token", out string value))
 					{
-						if (dictionary.ContainsKey("error"))
+						if (dictionary.TryGetValue("error", out string value1))
 						{
-							throw new Exception(dictionary["error"]);
+							throw new Exception(value1);
 						}
 						throw new Exception("不能接收来自Schub的身份验证信息");
 					}
-					SettingsManager.ScpboxAccessToken = dictionary["access_token"];
+					SettingsManager.ScpboxAccessToken = value;
 					loginProcessData.Succeed(this);
 				}
 				catch (Exception error)
@@ -414,8 +398,7 @@ namespace Game
             {
                 foreach (JsonProperty item in entries.EnumerateObject())
                 {
-                    ExternalContentEntry externalContentEntry2 = new();
-                    externalContentEntry2.Path = item.Value.GetProperty("path_display").GetString();
+                    ExternalContentEntry externalContentEntry2 = new() { Path = item.Value.GetProperty("path_display").GetString() };
                     externalContentEntry2.Type = (item.Value.GetProperty(".tag").GetString() == "folder") ? ExternalContentType.Directory : ExternalContentManager.ExtensionToType(Storage.GetExtension(externalContentEntry2.Path));
                     if (externalContentEntry2.Type != ExternalContentType.Directory)
                     {
@@ -432,7 +415,7 @@ namespace Game
         {
             if (jsonElement.TryGetProperty("url", out JsonElement url))
             {
-                return url.GetString().Replace("www.dropbox.", "dl.dropbox.").Replace("?dl=0", "") + "?dl=1";
+                return url.GetString()?.Replace("www.dropbox.", "dl.dropbox.").Replace("?dl=0", "") + "?dl=1";
             }
             throw new InvalidOperationException("Share information not found.");
         }

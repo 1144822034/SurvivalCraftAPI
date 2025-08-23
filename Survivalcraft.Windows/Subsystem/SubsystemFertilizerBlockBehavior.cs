@@ -36,7 +36,7 @@ namespace Game
 					}
 				}
 				m_subsystemAudio.PlayRandomSound("Audio/Impacts/Dirt", 0.5f, 0f, new Vector3(terrainRaycastResult.Value.CellFace.X, terrainRaycastResult.Value.CellFace.Y, terrainRaycastResult.Value.CellFace.Z), 3f, autoDelay: true);
-				var position = new Vector3(terrainRaycastResult.Value.CellFace.X + 0.5f, terrainRaycastResult.Value.CellFace.Y + 1.5f, terrainRaycastResult.Value.CellFace.Z + 0.5f);
+				Vector3 position = new(terrainRaycastResult.Value.CellFace.X + 0.5f, terrainRaycastResult.Value.CellFace.Y + 1.5f, terrainRaycastResult.Value.CellFace.Z + 0.5f);
 				Block block = BlocksManager.Blocks[Terrain.ExtractContents(componentMiner.ActiveBlockValue)];
 				m_subsystemParticles.AddParticleSystem(block.CreateDebrisParticleSystem(m_subsystemTerrain, position, componentMiner.ActiveBlockValue, 1.25f));
 				componentMiner.RemoveActiveTool(1);

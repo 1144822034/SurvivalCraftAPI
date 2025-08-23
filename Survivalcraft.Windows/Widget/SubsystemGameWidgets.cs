@@ -98,7 +98,7 @@ namespace Game
 			{
 				throw new InvalidOperationException("Too many GameWidgets.");
 			}
-			var gameWidget = new GameWidget(playerData, index);
+			GameWidget gameWidget = new(playerData, index);
 			m_gameWidgets.Add(gameWidget);
 			GamesWidget.Children.Add(gameWidget);
 

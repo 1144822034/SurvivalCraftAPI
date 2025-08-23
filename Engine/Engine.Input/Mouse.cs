@@ -195,7 +195,7 @@ namespace Engine.Input
 			MouseButton mouseButton = TranslateMouseButton(button);
 			if (mouseButton != (MouseButton)(-1))
             {
-                var position = mouse.Position;
+                System.Numerics.Vector2 position = mouse.Position;
 				ProcessMouseDown(mouseButton, new Point2((int)position.X, (int)position.Y));
 			}
 		}
@@ -205,13 +205,17 @@ namespace Engine.Input
 			MouseButton mouseButton = TranslateMouseButton(button);
 			if (mouseButton != (MouseButton)(-1))
 			{
-                var position = mouse.Position;
+                System.Numerics.Vector2 position = mouse.Position;
 				ProcessMouseUp(mouseButton, new Point2((int)position.X, (int)position.Y));
 			}
 		}
 
-		private static void MouseMoveHandler(IMouse mouse, System.Numerics.Vector2 position)
-		{
+        // ReSharper disable UnusedParameter.Local
+        // ReSharper disable UnusedMember.Local
+        private static void MouseMoveHandler(IMouse mouse, System.Numerics.Vector2 position)
+        // ReSharper restore UnusedMember.Local
+        // ReSharper restore UnusedParameter.Local
+        {
 			ProcessMouseMove(new Point2((int)position.X, (int)position.Y));
 		}
 
@@ -372,9 +376,11 @@ namespace Engine.Input
             }
         }
 
+#if ANDROID
         private static Point2 Round(float x, float y)
         {
             return new Point2((int)MathF.Round(x), (int)MathF.Round(y));
         }
+#endif
 	}
 }

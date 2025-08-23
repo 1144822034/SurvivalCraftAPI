@@ -24,7 +24,7 @@ namespace Game
 		{
 			if (cellFace.Face == 4 && componentBody.Mass > 20f)
 			{
-				var key = new Point3(cellFace.X, cellFace.Y, cellFace.Z);
+				Point3 key = new(cellFace.X, cellFace.Y, cellFace.Z);
 				if (!m_trapValues.TryGetValue(key, out TrapValue value))
 				{
 					value = new TrapValue();

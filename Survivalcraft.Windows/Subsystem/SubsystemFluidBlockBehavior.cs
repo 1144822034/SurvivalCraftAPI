@@ -391,11 +391,8 @@ namespace Game
 
 		public void Set(int x, int y, int z, int value)
 		{
-			var key = new Point3(x, y, z);
-			if (!m_toSet.ContainsKey(key))
-			{
-				m_toSet[key] = value;
-			}
+			Point3 key = new(x, y, z);
+			m_toSet.TryAdd(key, value);
 		}
 
 		public void FlowTo(int x, int y, int z, int level)

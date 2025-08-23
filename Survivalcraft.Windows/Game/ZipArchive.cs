@@ -56,7 +56,7 @@ namespace Game
 
 		public static ZipArchive Open(Stream stream, bool keepStreamOpen = false)
 		{
-			var zipArchive = new ZipArchive
+			ZipArchive zipArchive = new()
 			{
 				ZipFileStream = stream,
 				ReadOnly = true,
@@ -71,7 +71,7 @@ namespace Game
 			{
 				throw new InvalidOperationException("Writing is not allowed");
 			}
-			var zipArchiveEntry = new ZipArchiveEntry
+			ZipArchiveEntry zipArchiveEntry = new()
 			{
 				Method = Compression.Deflate,
 				FilenameInZip = NormalizedFilename(filenameInZip),
@@ -163,7 +163,7 @@ namespace Game
 			{
 				throw new InvalidOperationException("Central directory currently does not exist");
 			}
-			var list = new List<ZipArchiveEntry>();
+			List<ZipArchiveEntry> list = new();
 			ushort num;
 			ushort num2;
 			ushort num3;
@@ -180,17 +180,12 @@ namespace Game
 				uint headerOffset = BitConverter.ToUInt32(CentralDirImage, i + 42);
 				uint headerSize = (uint)(46 + num + num2 + num3);
 				Encoding uTF = Encoding.UTF8;
-				var zipArchiveEntry = new ZipArchiveEntry();
-				zipArchiveEntry.Method = (Compression)method;
-				zipArchiveEntry.FilenameInZip = NormalizedFilename(uTF.GetString(CentralDirImage, i + 46, num));
-				zipArchiveEntry.IsFilenameUtf8 = IsUTF8Bytes(CentralDirImage, i + 46, num);
-				zipArchiveEntry.FileOffset = GetFileOffset(headerOffset);
-				zipArchiveEntry.FileSize = fileSize;
-				zipArchiveEntry.CompressedSize = compressedSize;
-				zipArchiveEntry.HeaderOffset = headerOffset;
-				zipArchiveEntry.HeaderSize = headerSize;
-				zipArchiveEntry.Crc32 = crc;
-				zipArchiveEntry.ModifyTime = DosTimeToDateTime(dt);
+				ZipArchiveEntry zipArchiveEntry = new() { Method = (Compression)method,FilenameInZip = NormalizedFilename(uTF.GetString(CentralDirImage,i + 46,num)),IsFilenameUtf8 = IsUTF8Bytes(CentralDirImage,i + 46,num),FileOffset = GetFileOffset(headerOffset),FileSize = fileSize,CompressedSize = compressedSize,
+					HeaderOffset = headerOffset,
+					HeaderSize = headerSize,
+					Crc32 = crc,
+					ModifyTime = DosTimeToDateTime(dt)
+				};
 				if (num3 > 0)
 				{
 					zipArchiveEntry.Comment = uTF.GetString(CentralDirImage, i + 46 + num + num2, num3);
@@ -415,7 +410,7 @@ namespace Game
 			try
 			{
 				ZipFileStream.Seek(-17L, SeekOrigin.End);
-				var binaryReader = new BinaryReader(ZipFileStream);
+				BinaryReader binaryReader = new(ZipFileStream);
 				do
 				{
 					ZipFileStream.Seek(-5L, SeekOrigin.Current);

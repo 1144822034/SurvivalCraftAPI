@@ -10,14 +10,8 @@ namespace Game
 
 		public object Tag
 		{
-			get
-			{
-				return m_tag;
-			}
-			set
-			{
-				m_tag = value;
-			}
+			get => m_tag;
+			set => m_tag = value;
 		}
 
 		public TerrainGeometrySubset()

@@ -125,7 +125,7 @@ namespace Game
             return m_usedCount / (float)(m_usedCount + m_cachedCount);
         }
 
-        private object m_lock = new object();
+        private object m_lock = new();
 
         private Bucket[] m_buckets;
 
@@ -149,7 +149,7 @@ namespace Game
         {
             public int Capacity;
 
-            public Stack<T[]> Stack = new Stack<T[]>();
+            public Stack<T[]> Stack = new();
         }
     }
 }

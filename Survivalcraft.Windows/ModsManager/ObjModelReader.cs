@@ -240,7 +240,7 @@ namespace Game
 			object iobj = Activator.CreateInstance(ctype);
 			Model Model = iobj as Model;
 			ModelBone rootBone = Model.NewBone("Object", Matrix.Identity, null);
-			foreach (var c in Meshes)
+			foreach (KeyValuePair<string,ObjMesh> c in Meshes)
 			{
 				AppendMesh(Model, rootBone, c.Key, c.Value);
 			}

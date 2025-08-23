@@ -199,7 +199,7 @@ namespace Game
 
         public virtual void Injure(float amount, ComponentCreature attacker, bool ignoreInvulnerability, string cause)
         {
-            Injury injury = new Injury(amount, attacker, ignoreInvulnerability, cause);
+            Injury injury = new(amount, attacker, ignoreInvulnerability, cause);
             Injure(injury);
         }
         public virtual void Injure(Injury injury)
@@ -429,7 +429,7 @@ namespace Game
 					DeathTime = m_subsystemGameInfo.TotalElapsedGameTime;
 					Vector3 position2 = m_componentCreature.ComponentBody.Position + new Vector3(0f,m_componentCreature.ComponentBody.StanceBoxSize.Y / 2f,0f);
 					float x = m_componentCreature.ComponentBody.StanceBoxSize.X;
-					KillParticleSystem killParticleSystem = new KillParticleSystem(m_subsystemTerrain,position2,x);
+					KillParticleSystem killParticleSystem = new(m_subsystemTerrain,position2,x);
 					bool dropAllItems = true;
 					ModsManager.HookAction("DeadBeforeDrops", loader =>
                     {

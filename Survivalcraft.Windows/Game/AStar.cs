@@ -134,7 +134,7 @@ namespace Game
 					{
 						node2 = node3;
 					}
-					var node4 = (Node)OpenStorage.Get(val);
+					Node node4 = (Node)OpenStorage.Get(val);
 					if (node4 != null)
 					{
 						if (num3 < node4.G)

@@ -141,8 +141,8 @@ namespace Game
 			float num8 = 0f - num7 + 1f;
 			float num9 = MathF.Floor((float)MathUtils.Remainder(1.75f / MathF.Sqrt(2f) * m_subsystemTime.GameTime, 1.0) * 16f) / 16f;
 			float num10 = 0f - num9 + 1f;
-			var tc = new Vector2(0f, 0f);
-			var tc2 = new Vector2(1f, 1f);
+			Vector2 tc = new(0f, 0f);
+			Vector2 tc2 = new(1f, 1f);
 			DrawBlocksTextureSlot(batch, num, num2, tc, tc2, tcOffset, color);
 			DrawBlocksTextureSlot(batch, num, num2, tc, tc2, tcOffset2, color2);
 			tc = new Vector2(num7, 0f);
@@ -208,8 +208,8 @@ namespace Game
 			float num8 = 0f - num7 + 1f;
 			float num9 = MathF.Floor((float)MathUtils.Remainder(0.4 / Math.Sqrt(2) * m_subsystemTime.GameTime, 1.0) * 16f) / 16f;
 			float num10 = 0f - num9 + 1f;
-			var tc = new Vector2(0f, 0f);
-			var tc2 = new Vector2(1f, 1f);
+			Vector2 tc = new(0f, 0f);
+			Vector2 tc2 = new(1f, 1f);
 			DrawBlocksTextureSlot(batch, num, num2, tc, tc2, tcOffset, color);
 			DrawBlocksTextureSlot(batch, num, num2, tc, tc2, tcOffset2, color2);
 			tc = new Vector2(num7, 0f);

@@ -28,10 +28,10 @@ namespace Game
 			{
 				int num = (i % 2 == 0) ? 1 : (-1);
 				int num2 = (i / 2 == 0) ? 1 : (-1);
-				var v = new Vector3(cellFace.X + 0.5f, cellFace.Y + 0.5f, cellFace.Z + 0.5f);
+				Vector3 v = new(cellFace.X + 0.5f, cellFace.Y + 0.5f, cellFace.Z + 0.5f);
 				Vector3 vector = CellFace.FaceToVector3(mountingFace);
 				Vector3 vector2 = (mountingFace < 4) ? Vector3.UnitY : Vector3.UnitX;
-				var vector3 = Vector3.Cross(vector, vector2);
+				Vector3 vector3 = Vector3.Cross(vector, vector2);
 				m_glowPoints[i] = m_subsystemGlow.AddGlowPoint();
 				m_glowPoints[i].Position = v - (0.4375f * CellFace.FaceToVector3(mountingFace)) + (0.25f * vector3 * num) + (0.25f * vector2 * num2);
 				m_glowPoints[i].Forward = vector;

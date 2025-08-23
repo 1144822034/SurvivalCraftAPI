@@ -97,7 +97,7 @@ namespace Game
 			{
 				if (m_target.HasValue)
 				{
-					var vector2 = Vector3.Normalize(Vector3.Normalize(m_componentCreature.ComponentBody.Position - m_target.Value) + m_random.Vector3(0.5f));
+					Vector3 vector2 = Vector3.Normalize(Vector3.Normalize(m_componentCreature.ComponentBody.Position - m_target.Value) + m_random.Vector3(0.5f));
 					Vector3 value2 = m_componentCreature.ComponentBody.Position + (m_random.Float(6f, 8f) * Vector3.Normalize(new Vector3(vector2.X, 0f, vector2.Z)));
 					m_componentPathfinding.SetDestination(value2, m_random.Float(0.6f, 0.8f), 1f, 0, useRandomMovements: false, ignoreHeightDifference: true, raycastDestination: false, null);
 				}
@@ -156,7 +156,7 @@ namespace Game
 			float num = 0f;
 			foreach (Point3 campfire in m_subsystemCampfireBlockBehavior.Campfires)
 			{
-				var vector = new Vector3(campfire.X, campfire.Y, campfire.Z);
+				Vector3 vector = new(campfire.X, campfire.Y, campfire.Z);
 				float num2 = ScoreTarget(vector);
 				if (num2 > num)
 				{

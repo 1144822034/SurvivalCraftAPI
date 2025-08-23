@@ -68,7 +68,7 @@ namespace Game
 				Text = "Excessive Swearing",
 				Tag = "swearing"
 			});
-			var random = new Random();
+			Random random = new();
 			m_reasonWidgetsList.RandomShuffle(max => random.Int(0, max - 1));
 			m_reasonWidgetsList.Add(new CheckboxWidget
 			{
@@ -102,7 +102,7 @@ namespace Game
 								break;
 							}
 						}
-						var busyDialog = new CancellableBusyDialog("Sending Report", autoHideOnCancel: false);
+						CancellableBusyDialog busyDialog = new("Sending Report", autoHideOnCancel: false);
 						DialogsManager.ShowDialog(ParentWidget, busyDialog);
 						CommunityContentManager.Report(m_address, m_userId, report, busyDialog.Progress, delegate
 						{

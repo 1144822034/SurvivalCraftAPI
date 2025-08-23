@@ -78,63 +78,33 @@ namespace Engine
 
 		public byte R
 		{
-			get
-			{
-				return (byte)PackedValue;
-			}
-			set
-			{
-				PackedValue = (uint)(((int)PackedValue & -256) | value);
-			}
-		}
+			get => (byte)PackedValue;
+            set => PackedValue = (uint)(((int)PackedValue & -256) | value);
+        }
 
 		public byte G
 		{
-			get
-			{
-				return (byte)(PackedValue >> 8);
-			}
-			set
-			{
-				PackedValue = (uint)(((int)PackedValue & -65281) | (value << 8));
-			}
-		}
+			get => (byte)(PackedValue >> 8);
+            set => PackedValue = (uint)(((int)PackedValue & -65281) | (value << 8));
+        }
 
 		public byte B
 		{
-			get
-			{
-				return (byte)(PackedValue >> 16);
-			}
-			set
-			{
-				PackedValue = (uint)(((int)PackedValue & -16711681) | (value << 16));
-			}
-		}
+			get => (byte)(PackedValue >> 16);
+            set => PackedValue = (uint)(((int)PackedValue & -16711681) | (value << 16));
+        }
 
 		public byte A
 		{
-			get
-			{
-				return (byte)(PackedValue >> 24);
-			}
-			set
-			{
-				PackedValue = (uint)((int)(PackedValue & 0xFFFFFF) | (value << 24));
-			}
-		}
+			get => (byte)(PackedValue >> 24);
+            set => PackedValue = (uint)((int)(PackedValue & 0xFFFFFF) | (value << 24));
+        }
 
 		public Color RGB
 		{
-			get
-			{
-				return new Color((uint)((int)PackedValue | -16777216));
-			}
-			set
-			{
-				PackedValue = (uint)(((int)PackedValue & -16777216) | (int)(value.PackedValue & 0xFFFFFF));
-			}
-		}
+			get => new((uint)((int)PackedValue | -16777216));
+            set => PackedValue = (uint)(((int)PackedValue & -16777216) | (int)(value.PackedValue & 0xFFFFFF));
+        }
 
 		public Color(uint packedValue)
 		{

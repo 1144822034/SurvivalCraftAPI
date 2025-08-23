@@ -16,10 +16,10 @@ namespace Game
 			Model model = ContentManager.Get<Model>("Models/StoneClub");
 			Matrix boneAbsoluteTransform = BlockMesh.GetBoneAbsoluteTransform(model.FindMesh("Handle").ParentBone);
 			Matrix boneAbsoluteTransform2 = BlockMesh.GetBoneAbsoluteTransform(model.FindMesh("Spikes").ParentBone);
-			var blockMesh = new BlockMesh();
+			BlockMesh blockMesh = new();
 			blockMesh.AppendModelMeshPart(model.FindMesh("Handle").MeshParts[0], boneAbsoluteTransform * Matrix.CreateTranslation(0f, -0.5f, 0f), makeEmissive: false, flipWindingOrder: false, doubleSided: false, flipNormals: false, Color.White);
 			blockMesh.TransformTextureCoordinates(Matrix.CreateTranslation(num % 16 / 16f, num / 16 / 16f, 0f));
-			var blockMesh2 = new BlockMesh();
+			BlockMesh blockMesh2 = new();
 			blockMesh2.AppendModelMeshPart(model.FindMesh("Spikes").MeshParts[0], boneAbsoluteTransform2 * Matrix.CreateTranslation(0f, -0.5f, 0f), makeEmissive: false, flipWindingOrder: false, doubleSided: false, flipNormals: false, Color.White);
 			blockMesh2.TransformTextureCoordinates(Matrix.CreateTranslation(num2 % 16 / 16f, num2 / 16 / 16f, 0f));
 			m_standaloneBlockMesh.AppendBlockMesh(blockMesh);

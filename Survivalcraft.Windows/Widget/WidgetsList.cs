@@ -166,7 +166,7 @@ namespace Game
 				{
 					return widget2;
 				}
-				var containerWidget = widget2 as ContainerWidget;
+				ContainerWidget containerWidget = widget2 as ContainerWidget;
 				if (containerWidget != null)
 				{
 					Widget widget = containerWidget.Children.Find(name, type, throwIfNotFound: false);

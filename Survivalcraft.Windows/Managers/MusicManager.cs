@@ -34,10 +34,7 @@ namespace Game
 
 		public static Mix CurrentMix
 		{
-			get
-			{
-				return m_currentMix;
-			}
+			get => m_currentMix;
 			set
 			{
 				if (value != m_currentMix)
@@ -67,10 +64,7 @@ namespace Game
 				if (m_volume.HasValue) return m_volume.Value;
 				return SettingsManager.MusicVolume * 0.6f;
 			}
-			set
-			{
-				m_volume = value;
-			}
+			set => m_volume = value;
 		}
 
 		public static void ChangeMenuMusic()

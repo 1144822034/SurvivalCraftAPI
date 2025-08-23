@@ -34,11 +34,8 @@ namespace Engine.Graphics
 
 		public bool DepthBufferTestEnable
 		{
-			get
-			{
-				return m_depthBufferTestEnable;
-			}
-			set
+			get => m_depthBufferTestEnable;
+            set
 			{
 				ThrowIfLocked();
 				m_depthBufferTestEnable = value;
@@ -47,11 +44,8 @@ namespace Engine.Graphics
 
 		public bool DepthBufferWriteEnable
 		{
-			get
-			{
-				return m_depthBufferWriteEnable;
-			}
-			set
+			get => m_depthBufferWriteEnable;
+            set
 			{
 				ThrowIfLocked();
 				m_depthBufferWriteEnable = value;
@@ -60,11 +54,8 @@ namespace Engine.Graphics
 
 		public CompareFunction DepthBufferFunction
 		{
-			get
-			{
-				return m_depthBufferFunction;
-			}
-			set
+			get => m_depthBufferFunction;
+            set
 			{
 				ThrowIfLocked();
 				m_depthBufferFunction = value;

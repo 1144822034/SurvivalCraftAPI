@@ -27,8 +27,8 @@ namespace Game
 						{
 							XElement current2 = enumerator3.Current;
 							XmlUtils.GetAttributeValue<Matrix>(current2, "Value").Decompose(out Vector3 _, out Quaternion rotation, out Vector3 translation);
-							var xElement = new XElement("Value");
-							var xElement2 = new XElement("Value");
+							XElement xElement = new("Value");
+							XElement xElement2 = new("Value");
 							XmlUtils.SetAttributeValue(xElement, "Name", "Position");
 							XmlUtils.SetAttributeValue(xElement, "Type", "Microsoft.Xna.Framework.Vector3");
 							XmlUtils.SetAttributeValue(xElement, "Value", translation);

@@ -4,7 +4,7 @@ namespace Engine.Serialization
 	{
 		public void Serialize(InputArchive archive, ref T[] value)
 		{
-			var list = new List<T>();
+			List<T> list = new();
 			archive.SerializeCollection(null, list);
             if (value == null)
             {

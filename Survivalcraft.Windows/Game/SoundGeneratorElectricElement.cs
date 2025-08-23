@@ -130,7 +130,7 @@ namespace Game
 				if (num5 != 0f && !string.IsNullOrEmpty(text2))
 				{
 					CellFace cellFace = CellFaces[0];
-					var position = new Vector3(cellFace.X, cellFace.Y, cellFace.Z);
+					Vector3 position = new(cellFace.X, cellFace.Y, cellFace.Z);
 					float volume = num2 / 15f;
 					float pitch = Math.Clamp(MathF.Log(num5) / MathF.Log(2f), -1f, 1f);
 					float minDistance = 0.5f + (5f * num2 / 15f);
@@ -142,7 +142,7 @@ namespace Game
 					{
 						m_subsystemParticles.AddParticleSystem(m_particleSystem);
 					}
-					var hsv = new Vector3((22.5f * num) + m_random.Float(0f, 22f), 0.5f + (num2 / 30f), 1f);
+					Vector3 hsv = new((22.5f * num) + m_random.Float(0f, 22f), 0.5f + (num2 / 30f), 1f);
 					m_particleSystem.AddNote(new Color(Color.HsvToRgb(hsv)));
 				}
 			}

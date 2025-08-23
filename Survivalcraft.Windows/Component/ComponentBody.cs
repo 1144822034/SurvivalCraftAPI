@@ -21,7 +21,7 @@ namespace Game
 			/// <summary>
 			/// 模组如果需要添加或使用额外信息，可以在这个ValuesDictionary读写元素
 			/// </summary>
-			public ValuesDictionary ValuesDictionaryForMods = new ValuesDictionary();
+			public ValuesDictionary ValuesDictionaryForMods = new();
 		}
 
 		public SubsystemTime m_subsystemTime;
@@ -131,25 +131,18 @@ namespace Game
 		public virtual Vector3 StandingOnVelocity { get; set; }
 
 		[Obsolete("Use IsCrouching")]
-		public virtual bool IsSneaking { get { return IsCrouching; } set { IsCrouching = value; } }
+		public virtual bool IsSneaking { get => IsCrouching;
+			set => IsCrouching = value;
+		}
 		public virtual bool IsCrouching
 		{
-			get
-			{
-				return CrouchFactor > 0;
-			}
-			set
-			{
-				TargetCrouchFactor = value ? 1 : 0;
-			}
+			get => CrouchFactor > 0;
+			set => TargetCrouchFactor = value ? 1 : 0;
 		}
 
 		public virtual Vector3 Velocity
 		{
-			get
-			{
-				return m_velocity;
-			}
+			get => m_velocity;
 			set
 			{
 				if (value.LengthSquared() > MaxSpeed * MaxSpeed)
@@ -165,10 +158,7 @@ namespace Game
 
 		public virtual float TargetCrouchFactor
 		{
-			get
-			{
-				return m_targetCrouchFactor;
-			}
+			get => m_targetCrouchFactor;
 			set
 			{
 				if (!CanCrouch)
@@ -181,10 +171,7 @@ namespace Game
 
 		public virtual float CrouchFactor
 		{
-			get
-			{
-				return m_crouchFactor;
-			}
+			get => m_crouchFactor;
 			set
 			{
 				if (!CanCrouch)
@@ -224,10 +211,7 @@ namespace Game
 
 		public virtual ComponentBody ParentBody
 		{
-			get
-			{
-				return m_parentBody;
-			}
+			get => m_parentBody;
 			set
 			{
 				if (value != m_parentBody)
@@ -672,7 +656,7 @@ namespace Game
 				{
 					continue;
 				}
-				BoundingBox boxThere = new BoundingBox(positionToDetect - new Vector3(stanceBoxSize.X / 2f,0f,stanceBoxSize.Z / 2f),positionToDetect + new Vector3(stanceBoxSize.X / 2f,stanceBoxSize.Y,stanceBoxSize.Z / 2f));
+				BoundingBox boxThere = new(positionToDetect - new Vector3(stanceBoxSize.X / 2f,0f,stanceBoxSize.Z / 2f),positionToDetect + new Vector3(stanceBoxSize.X / 2f,stanceBoxSize.Y,stanceBoxSize.Z / 2f));
 				//在检测点处玩家的碰撞箱
 				boxThere.Min += new Vector3(0.01f,MaxSmoothRiseHeight + 0.01f,0.01f);
 				boxThere.Max -= new Vector3(0.01f);
@@ -692,7 +676,7 @@ namespace Game
 					float pushBackXLength = pushBack_X * pushBack_X;
 					float pushBackYLength = pushBack_Y * pushBack_Y;
 					float pushBackZLength = pushBack_Z * pushBack_Z;
-					List<Vector3> list = new List<Vector3>();
+					List<Vector3> list = new();
 					//将pushBack后的点，加入待检查的点当中
 					if(pushBackXLength <= pushBackYLength && pushBackXLength <= pushBackZLength)
 					{
@@ -902,7 +886,7 @@ namespace Game
 					return;
 				}
 				ComponentBody componentBody = pushingCollisionBox2.ComponentBody;
-				var targetMass = componentBody.CanBePushedByOtherBodies ? componentBody.Mass : 1e9f;				
+				float targetMass = componentBody.CanBePushedByOtherBodies ? componentBody.Mass : 1e9f;				
 			    switch(axis)
 				{
 					case 0:
@@ -1312,7 +1296,7 @@ namespace Game
 				{
 					continue;
 				}
-				var box = new BoundingBox(vector2 - new Vector3(boxSize.X / 2f, 0f, boxSize.Z / 2f), vector2 + new Vector3(boxSize.X / 2f, boxSize.Y, boxSize.Z / 2f));
+				BoundingBox box = new(vector2 - new Vector3(boxSize.X / 2f, 0f, boxSize.Z / 2f), vector2 + new Vector3(boxSize.X / 2f, boxSize.Y, boxSize.Z / 2f));
 				box.Min += new Vector3(0.01f, MaxSmoothRiseHeight + 0.01f, 0.01f);
 				box.Max -= new Vector3(0.01f);
 				m_collisionBoxes.Clear();
@@ -1332,7 +1316,7 @@ namespace Game
 					float num4 = num * num;
 					float num5 = num2 * num2;
 					float num6 = num3 * num3;
-					var list = new List<Vector3>();
+					List<Vector3> list = new();
 					if (num4 <= num5 && num4 <= num6)
 					{
 						list.Add(vector2 + new Vector3(num, 0f, 0f));

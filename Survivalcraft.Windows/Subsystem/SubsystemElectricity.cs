@@ -331,7 +331,7 @@ namespace Game
 		public void GetAllConnectedNeighbors(int x, int y, int z, int mountingFace, DynamicArray<ElectricConnectionPath> list)
 		{
 			int cellValue = SubsystemTerrain.Terrain.GetCellValue(x, y, z);
-			var electricElementBlock = BlocksManager.Blocks[Terrain.ExtractContents(cellValue)] as IElectricElementBlock;
+			IElectricElementBlock electricElementBlock = BlocksManager.Blocks[Terrain.ExtractContents(cellValue)] as IElectricElementBlock;
 			if (electricElementBlock == null)
 			{
 				return;
@@ -354,7 +354,7 @@ namespace Game
 					int y2 = y + electricConnectionPath.NeighborOffsetY;
 					int z2 = z + electricConnectionPath.NeighborOffsetZ;
 					int cellValue2 = SubsystemTerrain.Terrain.GetCellValue(x2, y2, z2);
-					var electricElementBlock2 = BlocksManager.Blocks[Terrain.ExtractContents(cellValue2)] as IElectricElementBlock;
+					IElectricElementBlock electricElementBlock2 = BlocksManager.Blocks[Terrain.ExtractContents(cellValue2)] as IElectricElementBlock;
 					if (electricElementBlock2 == null)
 					{
 						continue;
@@ -533,7 +533,7 @@ namespace Game
 		public override void Save(ValuesDictionary valuesDictionary)
 		{
 			int num = 0;
-			var stringBuilder = new StringBuilder();
+			StringBuilder stringBuilder = new();
 			foreach (KeyValuePair<Point3, float> persistentElementsVoltage in m_persistentElementsVoltages)
 			{
 				if (num > 500)
@@ -558,7 +558,7 @@ namespace Game
 				{
 					maxTypeNameLength = m_debugInfos.Keys.Max(type => type.FullName?.Length ?? 0) + 1;
 				}
-				StringBuilder stringBuilder2 = new StringBuilder();
+				StringBuilder stringBuilder2 = new();
 				stringBuilder2.AppendLine("====== SubsystemElectricity Performance Analyze ======");
 				stringBuilder2.Append("TypeName".PadRight(maxTypeNameLength));
 				stringBuilder2.Append("    Counter   TotalTime AverageTime    MaxTime1    MaxTime2");
@@ -600,7 +600,7 @@ namespace Game
 				GetAllConnectedNeighbors(cellFace2.X, cellFace2.Y, cellFace2.Z, cellFace2.Face, m_tmpConnectionPaths);
 				foreach (ElectricConnectionPath tmpConnectionPath in m_tmpConnectionPaths)
 				{
-					var cellFace = new CellFace(cellFace2.X + tmpConnectionPath.NeighborOffsetX, cellFace2.Y + tmpConnectionPath.NeighborOffsetY, cellFace2.Z + tmpConnectionPath.NeighborOffsetZ, tmpConnectionPath.NeighborFace);
+					CellFace cellFace = new(cellFace2.X + tmpConnectionPath.NeighborOffsetX, cellFace2.Y + tmpConnectionPath.NeighborOffsetY, cellFace2.Z + tmpConnectionPath.NeighborOffsetZ, tmpConnectionPath.NeighborFace);
 					if (m_electricElementsByCellFace.TryGetValue(cellFace, out ElectricElement value) && value != electricElement)
 					{
 						int cellValue = SubsystemTerrain.Terrain.GetCellValue(cellFace2.X, cellFace2.Y, cellFace2.Z);
@@ -688,7 +688,7 @@ namespace Game
 				}
 				else
 				{
-					var electricElementBlock = BlocksManager.Blocks[num] as IElectricElementBlock;
+					IElectricElementBlock electricElementBlock = BlocksManager.Blocks[num] as IElectricElementBlock;
 					if (electricElementBlock != null)
 					{
 						ElectricElement electricElement2 = electricElementBlock.CreateElectricElement(this, cellValue, key.X, key.Y, key.Z);
@@ -732,7 +732,7 @@ namespace Game
 								ScanWireDomain(new CellFace(i, j, k, l), m_tmpVisited, m_tmpResult);
 								if (m_tmpResult.Count > 0)
 								{
-									var electricElement = new WireDomainElectricElement(this, m_tmpResult.Keys);
+									WireDomainElectricElement electricElement = new(this, m_tmpResult.Keys);
 									AddElectricElement(electricElement);
 								}
 							}
@@ -767,10 +767,10 @@ namespace Game
 
 		public void ScanWireDomain(CellFace startCellFace, Dictionary<CellFace, bool> visited, Dictionary<CellFace, bool> result)
 		{
-			var dynamicArray = new DynamicArray<CellFace>
-			{
+			DynamicArray<CellFace> dynamicArray =
+			[
 				startCellFace
-			};
+			];
 			while (dynamicArray.Count > 0)
 			{
 				CellFace key = dynamicArray.Array[--dynamicArray.Count];
@@ -785,7 +785,7 @@ namespace Game
 				}
 				int cellValue = SubsystemTerrain.Terrain.GetCellValue(key.X, key.Y, key.Z);
 				int num = Terrain.ExtractContents(cellValue);
-				var electricWireElementBlock = BlocksManager.Blocks[num] as IElectricWireElementBlock;
+				IElectricWireElementBlock electricWireElementBlock = BlocksManager.Blocks[num] as IElectricWireElementBlock;
 				if (electricWireElementBlock == null)
 				{
 					continue;
@@ -799,7 +799,7 @@ namespace Game
 				{
 					if ((connectedWireFacesMask & (1 << i)) != 0)
 					{
-						var key2 = new CellFace(key.X, key.Y, key.Z, i);
+						CellFace key2 = new(key.X, key.Y, key.Z, i);
 						visited.Add(key2, value: true);
 						result.Add(key2, value: true);
 						m_tmpConnectionPaths.Clear();

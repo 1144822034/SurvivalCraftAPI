@@ -25,7 +25,7 @@ namespace Game
 		}
 		public override void OnBlockAdded(int value,int oldValue,int x,int y,int z)
 		{
-			var valuesDictionary = new ValuesDictionary();
+			ValuesDictionary valuesDictionary = new();
 			valuesDictionary.PopulateFromDatabaseObject(m_databaseObject);
 			valuesDictionary.GetValue<ValuesDictionary>("BlockEntity").SetValue("Coordinates",new Point3(x,y,z));
 			Entity entity = Project.CreateEntity(valuesDictionary);

@@ -121,10 +121,10 @@ namespace Game
 
 		public static Color[] CreateFabricColors(Color[] colors)
 		{
-			var array = new Color[16];
+			Color[] array = new Color[16];
 			for (int i = 0; i < 16; i++)
 			{
-				var rgb = new Vector3(colors[i]);
+				Vector3 rgb = new(colors[i]);
 				Vector3 hsv = Color.RgbToHsv(rgb);
 				hsv.Y *= 0.85f;
 				rgb = Color.HsvToRgb(hsv);

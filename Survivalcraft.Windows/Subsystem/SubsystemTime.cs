@@ -17,26 +17,14 @@ namespace Game
 		public float? m_maxFixedGameTimeDelta;
 		public float MaxGameTimeDelta
 		{
-			get
-			{
-				return m_maxGameTimeDelta ?? (1f / SettingsManager.LowFPSToTimeDeceleration);
-			}
-			set
-			{
-				m_maxGameTimeDelta = value;
-			}
+			get => m_maxGameTimeDelta ?? (1f / SettingsManager.LowFPSToTimeDeceleration);
+			set => m_maxGameTimeDelta = value;
 		}
 		public float MaxFixedGameTimeDelta
         {
-			get
-			{
-				return m_maxFixedGameTimeDelta ?? (1f / SettingsManager.LowFPSToTimeDeceleration);
-			}
-			set
-			{
-				m_maxFixedGameTimeDelta = value;
-			}
-		}
+			get => m_maxFixedGameTimeDelta ?? (1f / SettingsManager.LowFPSToTimeDeceleration);
+			set => m_maxFixedGameTimeDelta = value;
+        }
 
         public float DefaultFixedTimeStep = 0.05f;
 		public int DefaultFixedUpdateStep = 20;
@@ -69,14 +57,8 @@ namespace Game
 
 		public float GameTimeFactor
 		{
-			get
-			{
-				return m_gameTimeFactor;
-			}
-			set
-			{
-				m_gameTimeFactor = Math.Clamp(value, 0f, 256f);
-			}
+			get => m_gameTimeFactor;
+			set => m_gameTimeFactor = Math.Clamp(value, 0f, 256f);
 		}
 
 		public float? FixedTimeStep

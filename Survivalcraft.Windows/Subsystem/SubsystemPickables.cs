@@ -90,7 +90,7 @@ namespace Game
 		{
 			try
 			{
-				var pickable = new T();
+				T pickable = new();
 				pickable.InitializeData(() => m_subsystemTerrain.Terrain, () => m_drawBlockEnvironmentData,DefaultCalcVisibilityRange, () => m_subsystemSky.CalculateFog, () => m_primitivesRenderer);
 				pickable.Initialize(value,count,position,velocity,stuckMatrix,owner);
 				pickable.CreationTime = m_subsystemGameInfo.TotalElapsedGameTime;
@@ -122,7 +122,7 @@ namespace Game
 		{
 			double totalElapsedGameTime = m_subsystemGameInfo.TotalElapsedGameTime;
 			m_drawBlockEnvironmentData.SubsystemTerrain = m_subsystemTerrain;
-			var matrix = Matrix.CreateRotationY((float)MathUtils.Remainder(totalElapsedGameTime, 6.2831854820251465));
+			Matrix matrix = Matrix.CreateRotationY((float)MathUtils.Remainder(totalElapsedGameTime, 6.2831854820251465));
 			foreach (Pickable pickable in m_pickables)
 			{
 				try
@@ -198,7 +198,7 @@ namespace Game
 				{
 					string className = item.GetValue("Class",typeof(Pickable).FullName);
 					Type type = TypeCache.FindType(className,false,true);
-					var pickable = (Pickable)Activator.CreateInstance(type);
+					Pickable pickable = (Pickable)Activator.CreateInstance(type);
 					pickable.Project = Project;
 					pickable.InitializeData(() => m_subsystemTerrain.Terrain, () => m_drawBlockEnvironmentData,DefaultCalcVisibilityRange, () => m_subsystemSky.CalculateFog, () => m_primitivesRenderer);
 					pickable.Load(item);
@@ -221,12 +221,12 @@ namespace Game
 
 		public override void Save(ValuesDictionary valuesDictionary)
 		{
-			var valuesDictionary2 = new ValuesDictionary();
+			ValuesDictionary valuesDictionary2 = new();
 			valuesDictionary.SetValue("Pickables", valuesDictionary2);
 			int num = 0;
 			foreach (Pickable pickable in m_pickables)
 			{
-				var valuesDictionary3 = new ValuesDictionary();
+				ValuesDictionary valuesDictionary3 = new();
 				pickable.Save(valuesDictionary3);
 				ModsManager.HookAction("SavePickable", loader =>
 				{

@@ -49,7 +49,7 @@ namespace Game
 			BitmapFont font = LabelWidget.BitmapFont;
 			BitmapFont font2 = LabelWidget.BitmapFont;
 			Color white = Color.White;
-			var stackPanelWidget = new StackPanelWidget
+			StackPanelWidget stackPanelWidget = new()
 			{
 				Direction = LayoutDirection.Vertical,
 				HorizontalAlignment = WidgetAlignment.Center
@@ -227,7 +227,7 @@ namespace Game
 		{
 			if (Children.Find<ButtonWidget>("More").IsClicked)
 			{
-				var list = new List<Tuple<string, Action>>();
+				List<Tuple<string,Action>> list = new();
 				if (m_adventureRestartExists && GameManager.WorldInfo.WorldSettings.GameMode == GameMode.Adventure)
 				{
 					list.Add(new Tuple<string, Action>(LanguageControl.Get(fName, 82), delegate
@@ -247,7 +247,7 @@ namespace Game
 					{
 						DialogsManager.ShowDialog(ParentWidget, new ListSelectionDialog(LanguageControl.Get(fName, 86), GetRateableItems(), 60f, o => ((ActiveExternalContentInfo)o).DisplayName, delegate (object o)
 						{
-							var activeExternalContentInfo = (ActiveExternalContentInfo)o;
+							ActiveExternalContentInfo activeExternalContentInfo = (ActiveExternalContentInfo)o;
 							DialogsManager.ShowDialog(ParentWidget, new RateCommunityContentDialog(activeExternalContentInfo.Address, activeExternalContentInfo.DisplayName, UserManager.ActiveUser.UniqueId));
 						}));
 					}));
@@ -282,7 +282,7 @@ namespace Game
 				{
 					DialogsManager.ShowDialog(ParentWidget, new RunJsDialog());
 				}));
-				var dialog = new ListSelectionDialog(LanguageControl.Get(fName, 92), list, 60f, t => ((Tuple<string, Action>)t).Item1, delegate (object t)
+				ListSelectionDialog dialog = new(LanguageControl.Get(fName, 92), list, 60f, t => ((Tuple<string, Action>)t).Item1, delegate (object t)
 				{
 					((Tuple<string, Action>)t).Item2();
 				});

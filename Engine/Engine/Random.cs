@@ -14,14 +14,8 @@ namespace Engine
         */
         public ulong State
         {
-            get
-            {
-                return m_seed;
-            }
-            set
-            {
-                m_seed = value;
-            }
+            get => m_seed;
+            set => m_seed = value;
         }
 
         public Random()

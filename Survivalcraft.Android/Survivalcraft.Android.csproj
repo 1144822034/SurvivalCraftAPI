@@ -11,6 +11,7 @@
         <Nullable>enable</Nullable>
         <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
         <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+        <Nullable>disable</Nullable>
         <AndroidUseLatestPlatformSdk>true</AndroidUseLatestPlatformSdk>
         <AndroidApplication>true</AndroidApplication>
         <ApplicationId>com.candy.SurvivalcraftAPI1_8</ApplicationId>

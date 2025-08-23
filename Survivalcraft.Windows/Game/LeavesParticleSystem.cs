@@ -28,7 +28,7 @@ public class LeavesParticleSystem : ParticleSystem<LeavesParticleSystem.Particle
 
 	public SubsystemTerrain m_subsystemTerrain;
 
-	private Random m_random = new Random();
+	private Random m_random = new();
 
 	private Point3 m_point;
 
@@ -122,7 +122,7 @@ public class LeavesParticleSystem : ParticleSystem<LeavesParticleSystem.Particle
 				else if (block.IsCollidable && !(block is LeavesBlock))
 				{
 					float num7 = 0.5f;
-					Ray3 ray = new Ray3(particle.Position - new Vector3(num2, num3, num4) + new Vector3(0f, num7, 0f), -Vector3.UnitY);
+					Ray3 ray = new(particle.Position - new Vector3(num2, num3, num4) + new Vector3(0f, num7, 0f), -Vector3.UnitY);
 					int nearestBoxIndex;
 					BoundingBox nearestBox;
 					float? num8 = block.Raycast(ray, m_subsystemTerrain, cellValue, useInteractionBoxes: false, out nearestBoxIndex, out nearestBox);

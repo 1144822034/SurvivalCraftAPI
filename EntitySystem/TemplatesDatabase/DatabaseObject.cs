@@ -67,10 +67,7 @@ namespace TemplatesDatabase
 
 		public string Name
 		{
-			get
-			{
-				return m_name;
-			}
+			get => m_name;
 			set
 			{
 				if (m_readOnly)
@@ -100,10 +97,7 @@ namespace TemplatesDatabase
 
 		public string Description
 		{
-			get
-			{
-				return m_description;
-			}
+			get => m_description;
 			set
 			{
 				if (m_readOnly)
@@ -112,7 +106,7 @@ namespace TemplatesDatabase
 				}
 				if (value == null)
 				{
-					throw new ArgumentNullException("value", "Description cannot be null.");
+					throw new ArgumentNullException(nameof(value), "Description cannot be null.");
 				}
 				m_description = value;
 			}
@@ -120,10 +114,7 @@ namespace TemplatesDatabase
 
 		public object Value
 		{
-			get
-			{
-				return m_value;
-			}
+			get => m_value;
 			set
 			{
 				if (m_readOnly)
@@ -136,7 +127,7 @@ namespace TemplatesDatabase
 				}
 				if (value == null)
 				{
-					throw new ArgumentNullException("value", "Value cannot be null.");
+					throw new ArgumentNullException(nameof(value), "Value cannot be null.");
 				}
 				m_value = value;
 			}
@@ -146,10 +137,7 @@ namespace TemplatesDatabase
 
 		public DatabaseObject NestingParent
 		{
-			get
-			{
-				return m_nestingParent;
-			}
+			get => m_nestingParent;
 			set
 			{
 				if (m_readOnly)
@@ -217,10 +205,7 @@ namespace TemplatesDatabase
 
 		public DatabaseObject ExplicitInheritanceParent
 		{
-			get
-			{
-				return m_explicitInheritanceParent;
-			}
+			get => m_explicitInheritanceParent;
 			set
 			{
 				if (m_readOnly)

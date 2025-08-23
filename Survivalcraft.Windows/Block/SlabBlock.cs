@@ -91,7 +91,7 @@ namespace Game
 			if (num2 == num && ((GetIsTop(data2) && raycastResult.CellFace.Face == 5) || (!GetIsTop(data2) && raycastResult.CellFace.Face == 4)))
 			{
 				int value2 = Terrain.MakeBlockValue(m_fullBlockIndex, 0, 0);
-				var paintableBlock = BlocksManager.Blocks[m_fullBlockIndex] as IPaintableBlock;
+				IPaintableBlock paintableBlock = BlocksManager.Blocks[m_fullBlockIndex] as IPaintableBlock;
 				if (paintableBlock != null)
 				{
 					int? color = GetColor(data);

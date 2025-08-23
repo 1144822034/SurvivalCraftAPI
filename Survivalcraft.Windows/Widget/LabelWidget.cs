@@ -8,14 +8,8 @@ namespace Game
 
 		public static BitmapFont BitmapFont
 		{
-			get
-			{
-				return m_bitmapFont ??= ContentManager.Get<BitmapFont>("Fonts/Pericles");
-			}
-			set
-			{
-				m_bitmapFont = value;
-			}
+			get => m_bitmapFont ??= ContentManager.Get<BitmapFont>("Fonts/Pericles");
+			set => m_bitmapFont = value;
 		}
 		public override string Text
 		{

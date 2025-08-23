@@ -7,7 +7,7 @@ namespace Engine.Serialization
     {
         public string ConvertToString(object value)
         {
-            var blendState = (BlendState)value;
+            BlendState blendState = (BlendState)value;
             if (blendState.BaseEquals(BlendState.Opaque))
             {
                 return "Opaque";

@@ -66,10 +66,10 @@ namespace Game
 									{
 										float num15 = MathUtils.Max(num14 * 0.01f, 0.005f);
 										float num16 = MathUtils.Saturate(1f - ((shadowPosition.Y - num13) / 2f));
-										var p = new Vector3(boundingBox.Min.X + i, num13 + num15, boundingBox.Min.Z + j);
-										var p2 = new Vector3(boundingBox.Max.X + i, num13 + num15, boundingBox.Min.Z + j);
-										var p3 = new Vector3(boundingBox.Max.X + i, num13 + num15, boundingBox.Max.Z + j);
-										var p4 = new Vector3(boundingBox.Min.X + i, num13 + num15, boundingBox.Max.Z + j);
+										Vector3 p = new(boundingBox.Min.X + i, num13 + num15, boundingBox.Min.Z + j);
+										Vector3 p2 = new(boundingBox.Max.X + i, num13 + num15, boundingBox.Min.Z + j);
+										Vector3 p3 = new(boundingBox.Max.X + i, num13 + num15, boundingBox.Max.Z + j);
+										Vector3 p4 = new(boundingBox.Min.X + i, num13 + num15, boundingBox.Max.Z + j);
 										DrawShadowOverQuad(p, p2, p3, p4, shadowPosition, shadowDiameter, 0.45f * block.GetObjectShadowStrength(cellValueFast) * alpha * num3 * num0 * num16);
 									}
 								}

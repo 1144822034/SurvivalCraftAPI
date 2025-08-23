@@ -65,9 +65,9 @@ namespace Game
 
 		public int[] Shafts;
 
-        public static ArrayCache<int> m_cellsCache = new ArrayCache<int>([Size * Size * Height], 0.66f, 60f, 0.33f, 5f);
+        public static ArrayCache<int> m_cellsCache = new([Size * Size * Height], 0.66f, 60f, 0.33f, 5f);
 
-        public static ArrayCache<int> m_shaftsCache = new ArrayCache<int>([Size * Size], 0.66f, 60f, 0.33f, 5f);
+        public static ArrayCache<int> m_shaftsCache = new([Size * Size], 0.66f, 60f, 0.33f, 5f);
 
 		public DynamicArray<BrushPaint> m_brushPaints = [];
 		
@@ -92,7 +92,7 @@ namespace Game
 
 		public virtual void DisposeVertexIndexBuffers()
 		{
-			foreach (var b in Buffers)
+			foreach (TerrainChunkGeometry.Buffer b in Buffers)
 			{
 				b.Dispose();
 			}

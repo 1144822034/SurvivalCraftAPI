@@ -23,7 +23,7 @@ namespace Game
 		/// </summary>
 		public virtual void OnTopicsListItemClicked(object item)
 		{
-			var helpTopic2 = item as HelpTopic;
+			HelpTopic helpTopic2 = item as HelpTopic;
 			if(helpTopic2 != null)
 			{
 				ShowTopic(helpTopic2);
@@ -39,14 +39,14 @@ namespace Game
 			m_bestiaryButton = Children.Find<ButtonWidget>("BestiaryButton");
 			m_topicsList.ItemWidgetFactory = delegate (object item)
 			{
-				var helpTopic3 = (HelpTopic)item;
+				HelpTopic helpTopic3 = (HelpTopic)item;
 				XElement node2 = ContentManager.Get<XElement>("Widgets/HelpTopicItem");
-				var obj = (ContainerWidget)LoadWidget(this, node2, null);
+				ContainerWidget obj = (ContainerWidget)LoadWidget(this, node2, null);
 				obj.Children.Find<LabelWidget>("HelpTopicItem.Title").Text = helpTopic3.Title;
 				return obj;
 			};
 			m_topicsList.ItemClicked += OnTopicsListItemClicked;
-            foreach (var item in LanguageControl.jsonNode["Help"].AsObject())
+            foreach (KeyValuePair<string,JsonNode> item in LanguageControl.jsonNode["Help"].AsObject())
 			{
 				JsonNode item3 = item.Value;
 				JsonNode displa = item3["DisabledPlatforms"];
@@ -72,8 +72,8 @@ namespace Game
 					text = text.Replace("\\n", "\n");
 				}
 				bool floatParseSucceed = float.TryParse(item.Key, out float index);
-                var helpTopic = new HelpTopic
-				{
+                HelpTopic helpTopic = new()
+                {
 					Index = floatParseSucceed ? index : 0f,
 					Name = attributeValue,
 					Title = attributeValue2,
@@ -88,8 +88,8 @@ namespace Game
 				}
 			}
 			m_topicsList.m_items.Sort((x, y) => {
-				var x_topic = x as HelpTopic;
-				var y_topic = y as HelpTopic;
+				HelpTopic x_topic = x as HelpTopic;
+				HelpTopic y_topic = y as HelpTopic;
 				if(x == null || y == null) return 0;
 				return x_topic.Index.CompareTo(y_topic.Index);
 			}

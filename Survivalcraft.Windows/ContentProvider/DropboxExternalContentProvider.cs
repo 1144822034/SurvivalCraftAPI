@@ -95,10 +95,7 @@ namespace Game
 						loginProcessData.Fail(this, null);
 					}
 				};
-				m_loginProcessData = new LoginProcessData();
-				m_loginProcessData.Progress = progress;
-				m_loginProcessData.Success = success;
-				m_loginProcessData.Failure = failure;
+				m_loginProcessData = new LoginProcessData { Progress = progress,Success = success,Failure = failure };
 				LoginLaunchBrowser();
 			}
 			catch (Exception obj)
@@ -117,12 +114,12 @@ namespace Game
 			try
 			{
 				VerifyLoggedIn();
-				var dictionary = new Dictionary<string, string>
+				Dictionary<string,string> dictionary = new()
 				{
 					{ "Authorization", "Bearer " + SettingsManager.DropboxAccessToken },
 					{ "Content-Type", "application/json" }
 				};
-				var jsonObject = new JsonObject
+				JsonObject jsonObject = new()
 				{
 					{ "path", NormalizePath(path) },
 					{ "recursive", false },
@@ -130,7 +127,7 @@ namespace Game
 					{ "include_deleted", false },
 					{ "include_has_explicit_shared_members", false }
 				};
-				var data = new MemoryStream(Encoding.UTF8.GetBytes(jsonObject.ToJsonString()));
+				MemoryStream data = new(Encoding.UTF8.GetBytes(jsonObject.ToJsonString()));
 				WebManager.Post("https://api.dropboxapi.com/2/files/list_folder", null, dictionary, data, progress, delegate (byte[] result)
 				{
 					try
@@ -157,11 +154,11 @@ namespace Game
 			try
 			{
 				VerifyLoggedIn();
-				var jsonObject = new JsonObject
+				JsonObject jsonObject = new()
 				{
 					{ "path", NormalizePath(path) }
 				};
-				var dictionary = new Dictionary<string, string>
+				Dictionary<string,string> dictionary = new()
 				{
 					{ "Authorization", "Bearer " + SettingsManager.DropboxAccessToken },
 					{ "Dropbox-API-Arg", jsonObject.ToJsonString() }
@@ -185,14 +182,14 @@ namespace Game
 			try
 			{
 				VerifyLoggedIn();
-				var jsonObject = new JsonObject
+				JsonObject jsonObject = new()
 				{
 					{ "path", NormalizePath(path) },
 					{ "mode", "add" },
 					{ "autorename", true },
 					{ "mute", false }
 				};
-				var dictionary = new Dictionary<string, string>
+				Dictionary<string,string> dictionary = new()
 				{
 					{ "Authorization", "Bearer " + SettingsManager.DropboxAccessToken },
 					{ "Content-Type", "application/octet-stream" },
@@ -217,17 +214,17 @@ namespace Game
 			try
 			{
 				VerifyLoggedIn();
-				var dictionary = new Dictionary<string, string>
+				Dictionary<string,string> dictionary = new()
 				{
 					{ "Authorization", "Bearer " + SettingsManager.DropboxAccessToken },
 					{ "Content-Type", "application/json" }
 				};
-				var jsonObject = new JsonObject
+				JsonObject jsonObject = new()
 				{
 					{ "path", NormalizePath(path) },
 					{ "short_url", false }
 				};
-				var data = new MemoryStream(Encoding.UTF8.GetBytes(jsonObject.ToJsonString()));
+				MemoryStream data = new(Encoding.UTF8.GetBytes(jsonObject.ToJsonString()));
 				WebManager.Post("https://api.dropboxapi.com/2/sharing/create_shared_link", null, dictionary, data, progress, delegate (byte[] result)
 				{
 					try
@@ -254,7 +251,7 @@ namespace Game
 			try
 			{
 				m_loginProcessData.IsTokenFlow = true;
-				var dictionary = new Dictionary<string, string>
+				Dictionary<string,string> dictionary = new()
 				{
 					{ "response_type", "token" },
 					{ "client_id", "1unnzwkb8igx70k" },
@@ -274,7 +271,7 @@ namespace Game
 			{
 				LoginProcessData loginProcessData = m_loginProcessData;
 				m_loginProcessData = null;
-				var dialog = new TextBoxDialog("Enter Dropbox authorization code", "", 256, delegate (string s)
+				TextBoxDialog dialog = new("Enter Dropbox authorization code", "", 256, delegate (string s)
 				{
 					if (s != null)
 					{
@@ -325,8 +322,7 @@ namespace Game
 		{
 			if (m_loginProcessData == null)
 			{
-				m_loginProcessData = new LoginProcessData();
-				m_loginProcessData.IsTokenFlow = true;
+				m_loginProcessData = new LoginProcessData { IsTokenFlow = true };
 			}
 			LoginProcessData loginProcessData = m_loginProcessData;
 			m_loginProcessData = null;
@@ -341,9 +337,9 @@ namespace Game
 					Dictionary<string, string> dictionary = WebManager.UrlParametersFromString(uri.Fragment.TrimStart('#'));
 					if (!dictionary.ContainsKey("access_token"))
 					{
-						if (dictionary.ContainsKey("error"))
+						if (dictionary.TryGetValue("error", out string value))
 						{
-							throw new Exception(dictionary["error"]);
+							throw new Exception(value);
 						}
 						goto 标签;
 					}
@@ -376,8 +372,7 @@ namespace Game
 			{
 				foreach (JsonProperty item in entries.EnumerateObject())
 				{
-                    ExternalContentEntry externalContentEntry2 = new ();
-                    externalContentEntry2.Path = item.Value.GetProperty("path_display").GetString();
+                    ExternalContentEntry externalContentEntry2 = new () { Path = item.Value.GetProperty("path_display").GetString() };
                     externalContentEntry2.Type = (item.Value.GetProperty(".tag").GetString() == "folder") ? ExternalContentType.Directory : ExternalContentManager.ExtensionToType(Storage.GetExtension(externalContentEntry2.Path));
                     if (externalContentEntry2.Type != ExternalContentType.Directory)
                     {

@@ -24,7 +24,7 @@ namespace Game
 
 		public GlowPoint AddGlowPoint()
 		{
-			var glowPoint = new GlowPoint();
+			GlowPoint glowPoint = new();
 			m_glowPoints.Add(glowPoint, value: true);
 			return glowPoint;
 		}

@@ -88,7 +88,7 @@ namespace Game
 				else if (!IsStopped && m_toGenerate >= 1f)
 				{
 					particle.IsActive = true;
-					var v = new Vector3(m_random.Float(-1f, 1f), m_random.Float(-1f, 1f), m_random.Float(-1f, 1f));
+					Vector3 v = new(m_random.Float(-1f, 1f), m_random.Float(-1f, 1f), m_random.Float(-1f, 1f));
 					particle.Position = Position + (0.025f * v);
 					particle.Color = m_color;
 					particle.Velocity = 0.2f * v;

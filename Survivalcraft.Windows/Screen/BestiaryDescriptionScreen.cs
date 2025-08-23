@@ -47,7 +47,7 @@ namespace Game
 
 		public override void Enter(object[] parameters)
 		{
-			var item = (BestiaryCreatureInfo)parameters[0];
+			BestiaryCreatureInfo item = (BestiaryCreatureInfo)parameters[0];
 			m_infoList = (IList<BestiaryCreatureInfo>)parameters[1];
 			m_index = m_infoList.IndexOf(item);
 			UpdateCreatureProperties();

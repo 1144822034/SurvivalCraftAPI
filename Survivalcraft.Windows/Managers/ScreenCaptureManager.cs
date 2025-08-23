@@ -80,10 +80,10 @@ namespace Game
 		{
 			if (GameManager.Project != null)
 			{
-				using (var renderTarget2D = new RenderTarget2D(width, height, 1, ColorFormat.Rgba8888, DepthFormat.Depth24Stencil8))
+				using (RenderTarget2D renderTarget2D = new(width, height, 1, ColorFormat.Rgba8888, DepthFormat.Depth24Stencil8))
 				{
 					RenderTarget2D renderTarget = Display.RenderTarget;
-					var dictionary = new Dictionary<ComponentGui, bool>();
+					Dictionary<ComponentGui,bool> dictionary = new();
 					ResolutionMode resolutionMode = ResolutionMode.High;
 					try
 					{
@@ -101,9 +101,9 @@ namespace Game
 						ScreensManager.Draw();
 						if (SettingsManager.ShowLogoInScreenshots)
 						{
-							var primitivesRenderer2D = new PrimitivesRenderer2D();
+							PrimitivesRenderer2D primitivesRenderer2D = new();
 							Texture2D texture2D = ContentManager.Get<Texture2D>("Textures/Gui/ScreenCaptureOverlay");
-							var vector = new Vector2((width - texture2D.Width) / 2, 0f);
+							Vector2 vector = new((width - texture2D.Width) / 2, 0f);
 							Vector2 corner = vector + new Vector2(texture2D.Width, texture2D.Height);
 							primitivesRenderer2D.TexturedBatch(texture2D, useAlphaTest: false, 0, DepthStencilState.None).QueueQuad(vector, corner, 0f, new Vector2(0f, 0f), new Vector2(1f, 1f), Color.White);
 							primitivesRenderer2D.Flush();

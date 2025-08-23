@@ -121,7 +121,7 @@ namespace Game
 			int num2 = chunk.Origin.Y >> 4;
 			try
 			{
-				if (m_chunkOffsets.TryGetValue(new Point2(num, num2), out var value))
+				if (m_chunkOffsets.TryGetValue(new Point2(num, num2), out long value))
 				{
 					_ = Time.RealTime;
 					m_stream.Seek(value, SeekOrigin.Begin);
@@ -179,7 +179,7 @@ namespace Game
 			try
 			{
 				bool flag = false;
-				if (m_chunkOffsets.TryGetValue(new Point2(num, num2), out var value))
+				if (m_chunkOffsets.TryGetValue(new Point2(num, num2), out long value))
 				{
 					m_stream.Seek(value, SeekOrigin.Begin);
 				}

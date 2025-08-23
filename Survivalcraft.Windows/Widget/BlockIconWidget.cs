@@ -41,10 +41,7 @@ namespace Game
 
 		public int Value
 		{
-			get
-			{
-				return m_value;
-			}
+			get => m_value;
 			set
 			{
 				if (m_value == 0 || value != m_value)
@@ -58,38 +55,20 @@ namespace Game
 
 		public int Contents
 		{
-			get
-			{
-				return Terrain.ExtractContents(Value);
-			}
-			set
-			{
-				Value = Terrain.ReplaceContents(Value, value);
-			}
+			get => Terrain.ExtractContents(Value);
+			set => Value = Terrain.ReplaceContents(Value, value);
 		}
 
 		public int Light
 		{
-			get
-			{
-				return Terrain.ExtractLight(Value);
-			}
-			set
-			{
-				Value = Terrain.ReplaceLight(Value, value);
-			}
+			get => Terrain.ExtractLight(Value);
+			set => Value = Terrain.ReplaceLight(Value, value);
 		}
 
 		public int Data
 		{
-			get
-			{
-				return Terrain.ExtractData(Value);
-			}
-			set
-			{
-				Value = Terrain.ReplaceData(Value, value);
-			}
+			get => Terrain.ExtractData(Value);
+			set => Value = Terrain.ReplaceData(Value, value);
 		}
 
 		public float Scale
@@ -117,7 +96,7 @@ namespace Game
 				: BlocksTexturesManager.DefaultBlocksTexture;
 			Viewport viewport = Display.Viewport;
 			float num = MathUtils.Min(ActualSize.X, ActualSize.Y) * Scale;
-			var m = Matrix.CreateOrthographic(3.6f, 3.6f, -10f - (1f * Depth), 10f - (1f * Depth));
+			Matrix m = Matrix.CreateOrthographic(3.6f, 3.6f, -10f - (1f * Depth), 10f - (1f * Depth));
 			Matrix m2 = MatrixUtils.CreateScaleTranslation(num, 0f - num, ActualSize.X / 2f, ActualSize.Y / 2f) * GlobalTransform * MatrixUtils.CreateScaleTranslation(2f / viewport.Width, -2f / viewport.Height, -1f, 1f);
 			DrawBlockEnvironmentData.DrawBlockMode = DrawBlockMode.UI;
 			DrawBlockEnvironmentData.ViewProjectionMatrix = (CustomViewMatrix ?? m_viewMatrix) * m * m2;

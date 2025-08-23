@@ -159,7 +159,7 @@ namespace Engine.Serialization
 		{
 			lock (m_serializeDataByType)
 			{
-                SerializeData serializeData = new SerializeData(useObjectInfo, autoConstruct);
+                SerializeData serializeData = new(useObjectInfo, autoConstruct);
 				if (m_serializeDataByType.TryGetValue(type, out SerializeData value))
 				{
 					value.MergeOptionsFrom(serializeData);
@@ -241,7 +241,7 @@ namespace Engine.Serialization
         {
             lock (m_serializeDataByType)
             {
-                if (!m_serializeDataByType.TryGetValue(type, out var value))
+                if (!m_serializeDataByType.TryGetValue(type, out SerializeData value))
                 {
                     ScanAssembliesForSerializers();
                     if (!m_serializeDataByType.TryGetValue(type, out value))
@@ -324,7 +324,7 @@ namespace Engine.Serialization
             if (type.GetTypeInfo().IsGenericType)
             {
                 Type genericTypeDefinition = type.GetGenericTypeDefinition();
-                if (m_genericSerializersByType.TryGetValue(genericTypeDefinition, out var value))
+                if (m_genericSerializersByType.TryGetValue(genericTypeDefinition, out TypeInfo value))
                 {
                     return CreateSerializeDataForSerializer(value.MakeGenericType(type.GenericTypeArguments).GetTypeInfo(), type);
                 }

@@ -119,7 +119,7 @@ namespace Game
 					int x = Terrain.ToCell(eyePosition.X);
 					int num5 = Terrain.ToCell(eyePosition.Y);
 					int z = Terrain.ToCell(eyePosition.Z);
-					var m = Matrix.CreateFromQuaternion(m_componentPlayer.ComponentCreatureModel.EyeRotation);
+					Matrix m = Matrix.CreateFromQuaternion(m_componentPlayer.ComponentCreatureModel.EyeRotation);
 					m.Translation = m_componentPlayer.ComponentCreatureModel.EyePosition;
 
 					//ÿ��һ��ʱ�����¼�����ա�������ԭ���ֱ��ڶ�Ӧ�Ļ���ǰ�棬Ϊ���ⱻ�ӿ����������Ƶ�ǰ����
@@ -176,7 +176,7 @@ namespace Game
 						}
 						else
 						{//����ʱ���Ƶ�һ�˳��ֱ�ģ��
-							var position4 = new Vector3(0.25f,-0.3f,-0.05f);
+							Vector3 position4 = new(0.25f,-0.3f,-0.05f);
 							Matrix matrix2 = Matrix.CreateScale(0.01f) * Matrix.CreateRotationX(0.8f) * Matrix.CreateRotationY(0.4f) * identity * Matrix.CreateTranslation(position4) * Matrix.CreateFromYawPitchRoll(m_lagAngles.X,m_lagAngles.Y,0f) * m * camera.ViewMatrix;
 							Display.DepthStencilState = DepthStencilState.Default;
 							Display.RasterizerState = RasterizerState.CullCounterClockwiseScissor;

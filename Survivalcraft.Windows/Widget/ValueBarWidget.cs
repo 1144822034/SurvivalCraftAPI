@@ -25,26 +25,14 @@ namespace Game
 
 		public float Value
 		{
-			get
-			{
-				return m_value;
-			}
-			set
-			{
-				m_value = MathUtils.Saturate(value);
-			}
+			get => m_value;
+			set => m_value = MathUtils.Saturate(value);
 		}
 
 		public int BarsCount
 		{
-			get
-			{
-				return m_barsCount;
-			}
-			set
-			{
-				m_barsCount = Math.Clamp(value, 1, 1000);
-			}
+			get => m_barsCount;
+			set => m_barsCount = Math.Clamp(value, 1, 1000);
 		}
 
 		public bool FlipDirection
@@ -67,38 +55,20 @@ namespace Game
 
 		public Color LitBarColor
 		{
-			get
-			{
-				return m_litBarColor;
-			}
-			set
-			{
-				m_litBarColor = value;
-			}
+			get => m_litBarColor;
+			set => m_litBarColor = value;
 		}
 
 		public Color LitBarColor2
 		{
-			get
-			{
-				return m_litBarColor2;
-			}
-			set
-			{
-				m_litBarColor2 = value;
-			}
+			get => m_litBarColor2;
+			set => m_litBarColor2 = value;
 		}
 
 		public Color UnlitBarColor
 		{
-			get
-			{
-				return m_unlitBarColor;
-			}
-			set
-			{
-				m_unlitBarColor = value;
-			}
+			get => m_unlitBarColor;
+			set => m_unlitBarColor = value;
 		}
 
 		public bool BarBlending
@@ -115,10 +85,7 @@ namespace Game
 
 		public Subtexture BarSubtexture
 		{
-			get
-			{
-				return m_barSubtexture;
-			}
+			get => m_barSubtexture;
 			set
 			{
 				if (value != m_barSubtexture)
@@ -130,10 +97,7 @@ namespace Game
 
 		public bool TextureLinearFilter
 		{
-			get
-			{
-				return m_textureLinearFilter;
-			}
+			get => m_textureLinearFilter;
 			set
 			{
 				if (value != m_textureLinearFilter)
@@ -145,14 +109,8 @@ namespace Game
 
 		public LayoutDirection LayoutDirection
 		{
-			get
-			{
-				return m_layoutDirection;
-			}
-			set
-			{
-				m_layoutDirection = value;
-			}
+			get => m_layoutDirection;
+			set => m_layoutDirection = value;
 		}
 
 		public ValueBarWidget()
@@ -218,7 +176,7 @@ namespace Game
 						if (baseBatch is TexturedBatch2D)
 						{
 							Vector2 topLeft = BarSubtexture.TopLeft;
-							var texCoord = new Vector2(MathUtils.Lerp(BarSubtexture.TopLeft.X, BarSubtexture.BottomRight.X, v.X), MathUtils.Lerp(BarSubtexture.TopLeft.Y, BarSubtexture.BottomRight.Y, v.Y));
+							Vector2 texCoord = new(MathUtils.Lerp(BarSubtexture.TopLeft.X, BarSubtexture.BottomRight.X, v.X), MathUtils.Lerp(BarSubtexture.TopLeft.Y, BarSubtexture.BottomRight.Y, v.Y));
 							((TexturedBatch2D)baseBatch).QueueQuad(zero + (zero2 * BarSize), zero + (v * BarSize), 0f, topLeft, texCoord, color);
 						}
 						else
@@ -232,7 +190,7 @@ namespace Game
 						Vector2 one = Vector2.One;
 						if (baseBatch is TexturedBatch2D)
 						{
-							var texCoord2 = new Vector2(MathUtils.Lerp(BarSubtexture.TopLeft.X, BarSubtexture.BottomRight.X, v2.X), MathUtils.Lerp(BarSubtexture.TopLeft.Y, BarSubtexture.BottomRight.Y, v2.Y));
+							Vector2 texCoord2 = new(MathUtils.Lerp(BarSubtexture.TopLeft.X, BarSubtexture.BottomRight.X, v2.X), MathUtils.Lerp(BarSubtexture.TopLeft.Y, BarSubtexture.BottomRight.Y, v2.Y));
 							Vector2 bottomRight = BarSubtexture.BottomRight;
 							((TexturedBatch2D)baseBatch).QueueQuad(zero + (v2 * BarSize), zero + (one * BarSize), 0f, texCoord2, bottomRight, color);
 						}

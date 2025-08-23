@@ -71,7 +71,7 @@ namespace Game
 			}
 			Matrix matrix = m_componentCreatureModel.AbsoluteBoneTransformsForCamera[modelBone.Index];
 			matrix *= camera.InvertedViewMatrix;
-			var vector = Vector3.Normalize(matrix.Up);
+			Vector3 vector = Vector3.Normalize(matrix.Up);
 			float num = Vector3.Dot(matrix.Translation - camera.ViewPosition, camera.ViewDirection);
 			if (num > 0f)
 			{
@@ -83,7 +83,7 @@ namespace Game
 				num3 *= MathUtils.Saturate((1f - num2 - 0.5f) / 0.5f);
 				if (num3 > 0.25f)
 				{
-					var vector2 = Vector3.Normalize(matrix.Right);
+					Vector3 vector2 = Vector3.Normalize(matrix.Right);
 					Vector3 vector3 = -Vector3.Normalize(matrix.Forward);
 					Color color = GlowingEyesColor * num3;
 					m_eyeGlowPoints[0].Position = translation + (vector2 * GlowingEyesOffset.X) + (vector3 * GlowingEyesOffset.Y) + (vector * GlowingEyesOffset.Z);

@@ -10,7 +10,7 @@ namespace Game
 
 		public SubsystemStairsBlockBehavior()
 		{
-			var list = new List<int>();
+			List<int> list = new();
 			list.AddRange(from b in BlocksManager.Blocks
 						  where b is StairsBlock
 						  select b.BlockIndex);

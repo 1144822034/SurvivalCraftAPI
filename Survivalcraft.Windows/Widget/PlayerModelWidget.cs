@@ -23,10 +23,7 @@ namespace Game
 
 		public CharacterSkinsCache CharacterSkinsCache
 		{
-			get
-			{
-				return m_characterSkinsCache;
-			}
+			get => m_characterSkinsCache;
 			set
 			{
 				if (value != null)

@@ -248,7 +248,9 @@ namespace Engine.Input
         {
         }
 #if !ANDROID
+        // ReSharper disable UnusedParameter.Local
         private static void ShowKeyboardInternal(string title, string description, string defaultText, bool passwordMode, Action<string> enter, Action cancel)
+        // ReSharper restore UnusedParameter.Local
         {
             cancel();
         }

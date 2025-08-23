@@ -23,23 +23,23 @@ public static class BevelledShapeRenderer
 		}
 	}
 
-	private static FlatBatch2D TmpBatch = new FlatBatch2D();
+	private static FlatBatch2D TmpBatch = new();
 
-	private static DynamicArray<Point> TmpQuadPoints = new DynamicArray<Point>();
+	private static DynamicArray<Point> TmpQuadPoints = new();
 
-	private static DynamicArray<Point> TmpPoints = new DynamicArray<Point>();
+	private static DynamicArray<Point> TmpPoints = new();
 
-	private static DynamicArray<Vector2> TmpPositions = new DynamicArray<Vector2>();
+	private static DynamicArray<Vector2> TmpPositions = new();
 
-	private static DynamicArray<Vector2> TmpPositions2 = new DynamicArray<Vector2>();
+	private static DynamicArray<Vector2> TmpPositions2 = new();
 
-	private static DynamicArray<Vector2> TmpNormals = new DynamicArray<Vector2>();
+	private static DynamicArray<Vector2> TmpNormals = new();
 
-	private static DynamicArray<int> TmpIndices = new DynamicArray<int>();
+	private static DynamicArray<int> TmpIndices = new();
 
-	private static DynamicArray<int> TmpIndicesTriangulation = new DynamicArray<int>();
+	private static DynamicArray<int> TmpIndicesTriangulation = new();
 
-	private static DynamicArray<PathRenderer.Point> TmpPathPoints = new DynamicArray<PathRenderer.Point>();
+	private static DynamicArray<PathRenderer.Point> TmpPathPoints = new();
 
 	public static void QueueShape(FlatBatch2D batch, IEnumerable<Point> points, float pixelsPerUnit, float antialiasSize, float bevelSize, bool flatShading, Color centerColor, Color bevelColor, float directional, float ambient)
 	{
@@ -147,7 +147,7 @@ public static class BevelledShapeRenderer
 		foreach (VertexPositionColor triangleVertex in TmpBatch.TriangleVertices)
 		{
 			DynamicArray<VertexPositionColorTexture> triangleVertices = batch.TriangleVertices;
-			VertexPositionColorTexture item = new VertexPositionColorTexture
+			VertexPositionColorTexture item = new()
 			{
 				Position = triangleVertex.Position,
 				Color = triangleVertex.Color
@@ -292,7 +292,7 @@ public static class BevelledShapeRenderer
 				PathRenderer.Point value = points[index];
 				Vector2 v = -Vector2.Perpendicular(Vector2.Normalize(points[index2].Position - value.Position));
 				float num = directional * Vector2.Dot(v, directionToLight);
-				Color color = new Color(new Vector3(num + ambient));
+				Color color = new(new Vector3(num + ambient));
 				value.InnerColorL *= color;
 				value.InnerColorR *= color;
 				value.OuterColorL *= color;
@@ -312,7 +312,7 @@ public static class BevelledShapeRenderer
 			Vector2 obj = ((value2.Position != point.Position) ? Vector2.Normalize(value2.Position - point.Position) : Vector2.Zero);
 			Vector2 vector = ((point2.Position != value2.Position) ? Vector2.Normalize(point2.Position - value2.Position) : Vector2.Zero);
 			Vector2 v2 = -Vector2.Perpendicular(Vector2.Normalize(obj + vector));
-			Color color2 = new Color(new Vector3(directional * Vector2.Dot(v2, directionToLight) + ambient));
+			Color color2 = new(new Vector3(directional * Vector2.Dot(v2, directionToLight) + ambient));
 			value2.InnerColorL *= color2;
 			value2.InnerColorR *= color2;
 			value2.OuterColorL *= color2;
@@ -369,8 +369,8 @@ public static class BevelledShapeRenderer
 			Vector2 vector6 = p1 + vector4 * num3;
 			Vector2 v = p1 - vector5;
 			Vector2 v2 = p1 - vector6;
-			Line2 l = new Line2(vector5, vector5 + Vector2.Perpendicular(v));
-			Line2 l2 = new Line2(vector6, vector6 + Vector2.Perpendicular(v2));
+			Line2 l = new(vector5, vector5 + Vector2.Perpendicular(v));
+			Line2 l2 = new(vector6, vector6 + Vector2.Perpendicular(v2));
 			Vector2? vector7 = Line2.Intersection(l, l2);
 			if (vector7.HasValue)
 			{

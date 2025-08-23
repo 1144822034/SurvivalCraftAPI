@@ -39,7 +39,7 @@ namespace Engine.Media
 
 		public static ModelData Load(Stream stream)
 		{
-			var peekStream = new PeekStream(stream, 256);
+			PeekStream peekStream = new(stream, 256);
 			ModelFileFormat format = DetermineFileFormat(peekStream.GetInitialBytesStream());
 			return Load(peekStream, format);
 		}

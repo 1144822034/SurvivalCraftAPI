@@ -2,7 +2,7 @@ namespace Game;
 
 public abstract class EvergreenLeavesBlock : LeavesBlock
 {
-	public Random m_random1 = new Random();
+	public Random m_random1 = new();
 
 	public override void GetDropValues(SubsystemTerrain subsystemTerrain, int oldValue, int newValue, int toolLevel, List<BlockDropValue> dropValues, out bool showDebris)
 	{

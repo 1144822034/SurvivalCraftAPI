@@ -18,11 +18,8 @@ namespace Engine
 
 		public Point3 Location
 		{
-			get
-			{
-				return new Point3(Left, Top, Near);
-			}
-			set
+			get => new(Left, Top, Near);
+            set
 			{
 				Left = value.X;
 				Top = value.Y;
@@ -32,11 +29,8 @@ namespace Engine
 
 		public Point3 Size
 		{
-			get
-			{
-				return new Point3(Width, Height, Depth);
-			}
-			set
+			get => new(Width, Height, Depth);
+            set
 			{
 				Width = value.X;
 				Height = value.Y;

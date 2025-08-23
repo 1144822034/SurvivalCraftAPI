@@ -34,10 +34,7 @@ namespace Game
 				}
 				return m_size.Value;
 			}
-			set
-			{
-				m_size = value;
-			}
+			set => m_size = value;
 		}
 
 		public string Title
@@ -54,10 +51,7 @@ namespace Game
 
 		public string Text
 		{
-			get
-			{
-				return m_text;
-			}
+			get => m_text;
 			set
 			{
 				string text = (value.Length > MaximumLength) ? value.Substring(0, MaximumLength) : value;
@@ -72,10 +66,7 @@ namespace Game
 
 		public int MaximumLength
 		{
-			get
-			{
-				return m_maximumLength;
-			}
+			get => m_maximumLength;
 			set
 			{
 				m_maximumLength = MathUtils.Max(value, 0);
@@ -129,14 +120,8 @@ namespace Game
 
 		public BitmapFont Font
 		{
-			get
-			{
-				return m_font;
-			}
-			set
-			{
-				m_font = value;
-			}
+			get => m_font;
+			set => m_font = value;
 		}
 
 		public float FontScale
@@ -165,10 +150,7 @@ namespace Game
 
 		public int CaretPosition
 		{
-			get
-			{
-				return m_caretPosition;
-			}
+			get => m_caretPosition;
 			set
 			{
 				m_caretPosition = Math.Clamp(value, 0, Text.Length);
@@ -394,7 +376,7 @@ namespace Game
 			Color color = Color * GlobalColorTransform;
 			if (!string.IsNullOrEmpty(m_text))
 			{
-				var position = new Vector2(0f - m_scroll, ActualSize.Y / 2f);
+				Vector2 position = new(0f - m_scroll, ActualSize.Y / 2f);
 				SamplerState samplerState = TextureLinearFilter ? SamplerState.LinearClamp : SamplerState.PointClamp;
 				FontBatch2D fontBatch2D = dc.PrimitivesRenderer2D.FontBatch(Font, 1, DepthStencilState.None, null, null, samplerState);
 				int count = fontBatch2D.TriangleVertices.Count;

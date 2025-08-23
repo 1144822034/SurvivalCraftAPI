@@ -133,13 +133,13 @@ namespace Game
 					}
 				}
 				int num8 = (dx == 0 || dz == 0) ? 2 : 3;
-				var vector = new Vector3(p.X, num + 0.01f, p.Z);
-				var v = new Vector3(num2 + 0.5f, num + 0.01f, num4 + 0.5f);
+				Vector3 vector = new(p.X, num + 0.01f, p.Z);
+				Vector3 v = new(num2 + 0.5f, num + 0.01f, num4 + 0.5f);
 				Vector3 v2 = 1f / num8 * (v - vector);
 				for (int i = 1; i <= num8; i++)
 				{
 					Vector3 v3 = vector + (i * v2);
-					var box = new BoundingBox(v3 - new Vector3((Request.BoxSize.X / 2f) + 0.01f, 0f, (Request.BoxSize.Z / 2f) + 0.01f), v3 + new Vector3((Request.BoxSize.X / 2f) - 0.01f, Request.BoxSize.Y, (Request.BoxSize.Z / 2f) - 0.01f));
+					BoundingBox box = new(v3 - new Vector3((Request.BoxSize.X / 2f) + 0.01f, 0f, (Request.BoxSize.Z / 2f) + 0.01f), v3 + new Vector3((Request.BoxSize.X / 2f) - 0.01f, Request.BoxSize.Y, (Request.BoxSize.Z / 2f) - 0.01f));
 					if (IsBlocked(box))
 					{
 						return;
@@ -196,7 +196,7 @@ namespace Game
 								}
 								if (block.IsCollidable_(cellValueFast))
 								{
-									var v = new Vector3(i, num8, j);
+									Vector3 v = new(i, num8, j);
 									BoundingBox[] customCollisionBoxes = block.GetCustomCollisionBoxes(SubsystemTerrain, cellValueFast);
 									for (int k = 0; k < customCollisionBoxes.Length; k++)
 									{
@@ -257,8 +257,7 @@ namespace Game
 		public override void Load(ValuesDictionary valuesDictionary)
 		{
 			m_subsystemTerrain = Project.FindSubsystem<SubsystemTerrain>(throwOnError: true);
-			var world = new World();
-			world.SubsystemTerrain = Project.FindSubsystem<SubsystemTerrain>(throwOnError: true);
+			World world = new() { SubsystemTerrain = Project.FindSubsystem<SubsystemTerrain>(throwOnError: true) };
 			m_astar.OpenStorage = new Storage();
 			m_astar.ClosedStorage = new Storage();
 			m_astar.World = world;
@@ -325,8 +324,8 @@ namespace Game
 
 		public bool IsPassable(Vector3 p1, Vector3 p2, Vector3 boxSize)
 		{
-			var vector = new Vector3(p1.X, p1.Y + 0.5f, p1.Z);
-			var vector2 = new Vector3(p2.X, p2.Y + 0.5f, p2.Z);
+			Vector3 vector = new(p1.X, p1.Y + 0.5f, p1.Z);
+			Vector3 vector2 = new(p2.X, p2.Y + 0.5f, p2.Z);
 			Vector3 v = ((0.5f * boxSize.X) + 0.1f) * Vector3.Normalize(Vector3.Cross(Vector3.UnitY, vector2 - vector));
 			if (m_subsystemTerrain.Raycast(vector, vector2, useInteractionBoxes: false, skipAirBlocks: true, SmoothingRaycastFunction_Obstacle).HasValue)
 			{

@@ -38,10 +38,7 @@ namespace Game
 
 		public float MinValue
 		{
-			get
-			{
-				return m_minValue;
-			}
+			get => m_minValue;
 			set
 			{
 				if (value != m_minValue)
@@ -55,10 +52,7 @@ namespace Game
 
 		public float MaxValue
 		{
-			get
-			{
-				return m_maxValue;
-			}
+			get => m_maxValue;
 			set
 			{
 				if (value != m_maxValue)
@@ -72,52 +66,28 @@ namespace Game
 
 		public float Value
 		{
-			get
-			{
-				return m_value;
-			}
-			set
-			{
-				m_value = m_granularity > 0f
-					? MathF.Round(Math.Clamp(value, MinValue, MaxValue) / m_granularity) * m_granularity
-					: Math.Clamp(value, MinValue, MaxValue);
-			}
+			get => m_value;
+			set => m_value = m_granularity > 0f
+			? MathF.Round(Math.Clamp(value, MinValue, MaxValue) / m_granularity) * m_granularity
+			: Math.Clamp(value, MinValue, MaxValue);
 		}
 
 		public float Granularity
 		{
-			get
-			{
-				return m_granularity;
-			}
-			set
-			{
-				m_granularity = MathUtils.Max(value, 0f);
-			}
+			get => m_granularity;
+			set => m_granularity = MathUtils.Max(value, 0f);
 		}
 
 		public string Text
 		{
-			get
-			{
-				return m_labelWidget.Text;
-			}
-			set
-			{
-				m_labelWidget.Text = value;
-			}
+			get => m_labelWidget.Text;
+			set => m_labelWidget.Text = value;
 		}
 
 		public BitmapFont Font
 		{
-			get
-			{
-				return m_labelWidget.Font;
-			}
-			set
-			{
-				m_labelWidget.Font = value;
-			}
+			get => m_labelWidget.Font;
+			set => m_labelWidget.Font = value;
 		}
 
 		public string SoundName
@@ -128,38 +98,20 @@ namespace Game
 
 		public bool IsLabelVisible
 		{
-			get
-			{
-				return m_labelCanvasWidget.IsVisible;
-			}
-			set
-			{
-				m_labelCanvasWidget.IsVisible = value;
-			}
+			get => m_labelCanvasWidget.IsVisible;
+			set => m_labelCanvasWidget.IsVisible = value;
 		}
 
 		public float LabelWidth
 		{
-			get
-			{
-				return m_labelCanvasWidget.Size.X;
-			}
-			set
-			{
-				m_labelCanvasWidget.Size = new Vector2(value, m_labelCanvasWidget.Size.Y);
-			}
+			get => m_labelCanvasWidget.Size.X;
+			set => m_labelCanvasWidget.Size = new Vector2(value, m_labelCanvasWidget.Size.Y);
 		}
 
 		public Color TextColor
 		{
-			get
-			{
-				return m_labelWidget.Color;
-			}
-			set
-			{
-				m_labelWidget.Color = value;
-			}
+			get => m_labelWidget.Color;
+			set => m_labelWidget.Color = value;
 		}
 
 		public bool SlidingCompleted { get; private set; }

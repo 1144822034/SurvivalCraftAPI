@@ -19,7 +19,7 @@ namespace Game
 
 		public int RecipesCount;
 
-		public static RecipaediaRecipesScreen Default => new RecipaediaRecipesScreen();
+		public static RecipaediaRecipesScreen Default => new();
 
 		public RecipaediaRecipesScreen()
 		{

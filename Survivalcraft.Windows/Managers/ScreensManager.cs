@@ -111,7 +111,7 @@ namespace Game
 
 		public static void InitScreens()
 		{
-			var loadingScreen = new LoadingScreen();
+			LoadingScreen loadingScreen = new();
 			AddScreen("Loading", loadingScreen);
 		}
 
@@ -222,7 +222,7 @@ namespace Game
 					m_vrQuadPosition += v * MathUtils.Min(0.75f * MathF.Pow(MathUtils.Max(num2 - (0.15f * num), 0f), 0.33f) * Time.FrameDuration, 1f);
 					m_vrQuadPosition += v2 * MathUtils.Min(1.5f * MathF.Pow(MathUtils.Max(num3 - (0.05f * num), 0f), 0.33f) * Time.FrameDuration, 1f);
 				}
-				var vector2 = new Vector2(m_uiRenderTarget.Width / (float)m_uiRenderTarget.Height, 1f);
+				Vector2 vector2 = new(m_uiRenderTarget.Width / (float)m_uiRenderTarget.Height, 1f);
 				vector2 /= MathUtils.Max(vector2.X, vector2.Y);
 				vector2 *= 7.5f;
 				m_vrQuadMatrix.Forward = Vector3.Normalize(hmdMatrix.Translation - m_vrQuadPosition);

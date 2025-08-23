@@ -260,8 +260,7 @@ namespace TemplatesDatabase
 				Type type = TypeCache.FindType(attributeValue5, skipSystemAssemblies: false, throwIfNotFound: true);
 				value = XmlUtils.GetAttributeValue(node, "Value", type);
 			}
-			DatabaseObject databaseObject = new(databaseObjectType, guid, attributeValue, value);
-			databaseObject.Description = attributeValue2;
+			DatabaseObject databaseObject = new(databaseObjectType, guid, attributeValue, value) { Description = attributeValue2 };
 			if (nestingParents != null && attributeValue3 != Guid.Empty)
 			{
 				nestingParents.Add(databaseObject, attributeValue3);

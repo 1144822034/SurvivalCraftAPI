@@ -152,8 +152,8 @@ namespace Game
 
 		public override void OnChunkDiscarding(TerrainChunk chunk)
 		{
-			var boundingBox = new BoundingBox(chunk.BoundingBox.Min - new Vector3(16f), chunk.BoundingBox.Max + new Vector3(16f));
-			var dynamicArray = new DynamicArray<IMovingBlockSet>();
+			BoundingBox boundingBox = new(chunk.BoundingBox.Min - new Vector3(16f), chunk.BoundingBox.Max + new Vector3(16f));
+			DynamicArray<IMovingBlockSet> dynamicArray = new();
 			m_subsystemMovingBlocks.FindMovingBlocks(boundingBox, extendToFillCells: false, dynamicArray);
 			foreach (IMovingBlockSet item in dynamicArray)
 			{
@@ -238,7 +238,7 @@ namespace Game
 			{
 				if (movingBlockSet.Id == "Piston")
 				{
-					var point = (Point3)movingBlockSet.Tag;
+					Point3 point = (Point3)movingBlockSet.Tag;
 					int cellValue = m_subsystemTerrain.Terrain.GetCellValue(point.X, point.Y, point.Z);
 					if (Terrain.ExtractContents(cellValue) == 237)
 					{
@@ -483,7 +483,7 @@ namespace Game
 			{
 				return;
 			}
-			var point = (Point3)movingBlockSet.Tag;
+			Point3 point = (Point3)movingBlockSet.Tag;
 			int cellValue = m_subsystemTerrain.Terrain.GetCellValue(point.X, point.Y, point.Z);
 			if (Terrain.ExtractContents(cellValue) != 237)
 			{
@@ -511,7 +511,7 @@ namespace Game
 			{
 				return;
 			}
-			var key = (Point3)movingBlockSet.Tag;
+			Point3 key = (Point3)movingBlockSet.Tag;
 			if (Terrain.ExtractContents(m_subsystemTerrain.Terrain.GetCellValue(key.X, key.Y, key.Z)) == 237)
 			{
 				if (!m_actions.TryGetValue(key, out QueuedAction value))

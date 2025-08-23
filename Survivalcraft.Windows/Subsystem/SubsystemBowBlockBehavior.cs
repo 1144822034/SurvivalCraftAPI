@@ -103,7 +103,7 @@ namespace Game
 									if (arrowType.HasValue)
 									{
 										Vector3 vector = componentMiner.ComponentCreature.ComponentCreatureModel.EyePosition + (componentMiner.ComponentCreature.ComponentBody.Matrix.Right * 0.3f) - (componentMiner.ComponentCreature.ComponentBody.Matrix.Up * 0.2f);
-										var vector2 = Vector3.Normalize(vector + (aim.Direction * 10f) - vector);
+										Vector3 vector2 = Vector3.Normalize(vector + (aim.Direction * 10f) - vector);
 										float num4 = MathUtils.Lerp(0f, 28f, MathF.Pow(draw / 15f, 0.75f));
 										if (componentMiner.ComponentPlayer != null)
 										{
@@ -119,8 +119,8 @@ namespace Game
 											vector3 = new Vector3(0.01f, 0.01f, 0.01f);
 										}
 										int value2 = Terrain.MakeBlockValue(m_arrowBlockIndex, 0, ArrowBlock.SetArrowType(0, arrowType.Value));
-										var vector4 = Vector3.Normalize(Vector3.Cross(vector2, Vector3.UnitY));
-										var v2 = Vector3.Normalize(Vector3.Cross(vector2, vector4));
+										Vector3 vector4 = Vector3.Normalize(Vector3.Cross(vector2, Vector3.UnitY));
+										Vector3 v2 = Vector3.Normalize(Vector3.Cross(vector2, vector4));
 										Vector3 v3 = (m_random.Float(0f - vector3.X, vector3.X) * vector4) + (m_random.Float(0f - vector3.Y, vector3.Y) * v2) + (m_random.Float(0f - vector3.Z, vector3.Z) * vector2);
 										Vector3 velocity = componentMiner.ComponentCreature.ComponentBody.Velocity + (vector2 + v3) * num4;
 										if (m_subsystemProjectiles.FireProjectile(value2, vector, velocity, Vector3.Zero, componentMiner.ComponentCreature) != null)

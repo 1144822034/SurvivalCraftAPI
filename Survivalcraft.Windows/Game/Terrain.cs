@@ -198,7 +198,7 @@ namespace Game
 			{
 				throw new InvalidOperationException("Chunk already allocated.");
 			}
-			var terrainChunk = new TerrainChunk(this, chunkX, chunkZ);
+			TerrainChunk terrainChunk = new(this, chunkX, chunkZ);
 			m_allocatedChunks.Add(terrainChunk);
 			m_allChunks.Add(chunkX, chunkZ, terrainChunk);
 			m_allocatedChunksArray = null;

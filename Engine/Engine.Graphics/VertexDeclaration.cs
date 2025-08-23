@@ -2,7 +2,7 @@ namespace Engine.Graphics
 {
 	public  class VertexDeclaration : IEquatable<VertexDeclaration>
 	{
-        public VertexElement[] m_elements;
+        public readonly VertexElement[] m_elements;
 
         public static List<VertexElement[]> m_allElements = [];
 
@@ -34,14 +34,13 @@ namespace Engine.Graphics
                 m_elements = elements.ToArray();
                 return;
             }
-			for (int j = 0; j < m_allElements.Count; j++)
-			{
-				if (elements.SequenceEqual(m_allElements[j]))
-				{
-					m_elements = m_allElements[j];
-					break;
-				}
-			}
+			foreach (VertexElement[] element in m_allElements) {
+                if (elements.SequenceEqual(element))
+                {
+                    m_elements = element;
+                    break;
+                }
+            }
 			if (m_elements == null)
 			{
 				m_elements = elements.ToArray();

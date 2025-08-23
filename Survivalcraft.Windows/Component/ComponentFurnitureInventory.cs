@@ -28,10 +28,7 @@ namespace Game
 
 		public int ActiveSlotIndex
 		{
-			get
-			{
-				return -1;
-			}
+			get => -1;
 			set
 			{
 			}
@@ -41,10 +38,7 @@ namespace Game
 
 		public int VisibleSlotsCount
 		{
-			get
-			{
-				return SlotsCount;
-			}
+			get => SlotsCount;
 			set
 			{
 			}

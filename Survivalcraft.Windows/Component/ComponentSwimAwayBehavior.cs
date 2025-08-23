@@ -105,7 +105,7 @@ namespace Game
 			{
 				Vector2 vector2 = m_random.Vector2(1f, 1f);
 				float y = 0.4f * m_random.Float(-1f, 1f);
-				var v = Vector3.Normalize(new Vector3(vector2.X, y, vector2.Y));
+				Vector3 v = Vector3.Normalize(new Vector3(vector2.X, y, vector2.Y));
 				Vector3 vector3 = vector + (m_random.Float(10f, 20f) * v);
 				TerrainRaycastResult? terrainRaycastResult = m_subsystemTerrain.Raycast(vector, vector3, useInteractionBoxes: false, skipAirBlocks: false, delegate (int value, float d)
 				{
@@ -125,15 +125,15 @@ namespace Game
 
 		public virtual float ScoreSafePlace(Vector3 currentPosition, Vector3 safePosition, Vector3? herdPosition)
 		{
-			var vector = new Vector2(currentPosition.X, currentPosition.Z);
-			var vector2 = new Vector2(safePosition.X, safePosition.Z);
+			Vector2 vector = new(currentPosition.X, currentPosition.Z);
+			Vector2 vector2 = new(safePosition.X, safePosition.Z);
 			Vector2? vector3 = herdPosition.HasValue ? new Vector2?(new Vector2(herdPosition.Value.X, herdPosition.Value.Z)) : null;
-			var s = new Segment2(vector, vector2);
+			Segment2 s = new(vector, vector2);
 			float num = vector3.HasValue ? Segment2.Distance(s, vector3.Value) : 0f;
 			if (m_attacker != null)
 			{
 				Vector3 position = m_attacker.Position;
-				var vector4 = new Vector2(position.X, position.Z);
+				Vector2 vector4 = new(position.X, position.Z);
 				float num2 = Vector2.Distance(vector4, vector2);
 				float num3 = Segment2.Distance(s, vector4);
 				return num2 + (1.5f * num3) - num;

@@ -7,13 +7,13 @@ namespace Game
 	{
 		public override void Save(ValuesDictionary valuesDictionary)
 		{
-			ValuesDictionary modsDict = new ValuesDictionary();
+			ValuesDictionary modsDict = new();
 			int i = 0;
 			foreach(ModEntity modEntity in ModsManager.ModList)
 			{
 				if(modEntity is SurvivalCraftModEntity || modEntity is FastDebugModEntity) continue;
 				if(modEntity.modInfo.NonPersistentMod) continue;
-				ValuesDictionary modInfoDict = new ValuesDictionary();
+				ValuesDictionary modInfoDict = new();
 				modInfoDict.SetValue("Name",modEntity.modInfo.Name);
 				modInfoDict.SetValue("Version",modEntity.modInfo.Version);
 				modInfoDict.SetValue("ApiVersion",modEntity.modInfo.ApiVersion);

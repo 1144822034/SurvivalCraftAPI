@@ -16,10 +16,7 @@ namespace Game
 
 		public Vector3 Position
 		{
-			get
-			{
-				return m_position;
-			}
+			get => m_position;
 			set
 			{
 				if (value != m_position)
@@ -33,10 +30,7 @@ namespace Game
 
 		public Quaternion Rotation
 		{
-			get
-			{
-				return m_rotation;
-			}
+			get => m_rotation;
 			set
 			{
 				value = Quaternion.Normalize(value);

@@ -99,7 +99,7 @@ namespace Game
 		{
 			try
 			{
-				var projectile = new T();
+				T projectile = new();
 				projectile.InitializeData(() => m_subsystemTerrain.Terrain, () => m_drawBlockEnvironmentData, () => m_subsystemSky.VisibilityRange, () => m_subsystemSky.CalculateFog, () => m_primitivesRenderer);
 				projectile.Initialize(value,position,velocity,angularVelocity,owner);
 				return projectile;
@@ -136,11 +136,11 @@ namespace Game
 		{
             int num = Terrain.ExtractContents(value);
             Block block = BlocksManager.Blocks[num];
-            var v = Vector3.Normalize(velocity);
+            Vector3 v = Vector3.Normalize(velocity);
             firePosition = position;
             if (owner != null)
             {
-                var ray = new Ray3(position + (v * 5f), -v);
+                Ray3 ray = new(position + (v * 5f), -v);
                 BoundingBox boundingBox = owner.ComponentBody.BoundingBox;
                 boundingBox.Min -= new Vector3(0.4f);
                 boundingBox.Max += new Vector3(0.4f);
@@ -297,7 +297,7 @@ namespace Game
 				{
 					string className = item.GetValue("Class",typeof(Projectile).FullName);
 					Type type = TypeCache.FindType(className,false,true);
-					var projectile = (Projectile)Activator.CreateInstance(type);
+					Projectile projectile = (Projectile)Activator.CreateInstance(type);
 					projectile.Project = Project;
 					projectile.InitializeData(() => m_subsystemTerrain.Terrain, () => m_drawBlockEnvironmentData, () => m_subsystemSky.VisibilityRange, () => m_subsystemSky.CalculateFog, () => m_primitivesRenderer);
 					projectile.Load(item);
@@ -317,14 +317,14 @@ namespace Game
 
 		public override void Save(ValuesDictionary valuesDictionary)
 		{
-			var valuesDictionary2 = new ValuesDictionary();
+			ValuesDictionary valuesDictionary2 = new();
 			valuesDictionary.SetValue("Projectiles", valuesDictionary2);
 			int num = 0;
 			foreach (Projectile projectile in m_projectiles)
 			{
 				try
 				{
-                    var valuesDictionary3 = new ValuesDictionary();
+                    ValuesDictionary valuesDictionary3 = new();
                     projectile.Save(this, valuesDictionary3);
                     valuesDictionary2.SetValue(num.ToString(CultureInfo.InvariantCulture), valuesDictionary3);
                     num++;

@@ -51,7 +51,7 @@ namespace Game
 			if (m_dragWidget != null)
 			{
 				UpdateDragPosition();
-				var dragTargetWidget = HitTestGlobal(m_dragPosition, w => w is IDragTargetWidget) as IDragTargetWidget;
+				IDragTargetWidget dragTargetWidget = HitTestGlobal(m_dragPosition, w => w is IDragTargetWidget) as IDragTargetWidget;
 				if (Input.Drag.HasValue)
 				{
 					dragTargetWidget?.DragOver(m_dragWidget, m_dragData);

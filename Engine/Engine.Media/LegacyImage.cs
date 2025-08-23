@@ -87,7 +87,7 @@ namespace Engine.Media
 				int num2 = mipHeight;
 				mipWidth = MathUtils.Max(num / 2, 1);
 				mipHeight = MathUtils.Max(num2 / 2, 1);
-				var mipImage = new LegacyImage(mipWidth, mipHeight);
+				LegacyImage mipImage = new(mipWidth, mipHeight);
 				int num3 = num / mipWidth;
 				int num4 = num2 / mipHeight;
 				if (num3 == 2 && num4 == 2)
@@ -177,7 +177,7 @@ namespace Engine.Media
 
         public static ImageFileFormat DetermineFileFormat(Stream stream) => Image.DetermineFileFormat(stream);
 
-        public static LegacyImage Load(Stream stream, ImageFileFormat format) => new LegacyImage(Image.Load(stream, format));
+        public static LegacyImage Load(Stream stream, ImageFileFormat format) => new(Image.Load(stream, format));
 
         public static LegacyImage Load(string fileName, ImageFileFormat format)
 		{
@@ -187,7 +187,7 @@ namespace Engine.Media
 			}
 		}
 
-		public static LegacyImage Load(Stream stream) => new LegacyImage(Image.Load(stream));
+		public static LegacyImage Load(Stream stream) => new(Image.Load(stream));
 
 		public static LegacyImage Load(string fileName)
 		{

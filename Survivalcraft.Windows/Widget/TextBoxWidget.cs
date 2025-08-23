@@ -451,7 +451,7 @@ public class TextBoxWidget : Widget
             string str;
             if (value is '\t' && IndentAsSpace)
             {
-                var distanceToNextIndent = IndentWidth - position % IndentWidth;
+                int distanceToNextIndent = IndentWidth - position % IndentWidth;
                 str = new string(' ', distanceToNextIndent);
             }
             else
@@ -483,7 +483,7 @@ public class TextBoxWidget : Widget
             string str;
             if (value is '\t' && IndentAsSpace)
             {
-                var distanceToNextIndent = IndentWidth - position % IndentWidth;
+                int distanceToNextIndent = IndentWidth - position % IndentWidth;
                 str = new string(' ', distanceToNextIndent);
             }
             else
@@ -548,7 +548,7 @@ public class TextBoxWidget : Widget
     /// </summary>
     public void EnterText(string value, int index)
     {
-        foreach (var character in value.ReplaceLineEndings("\n"))
+        foreach (char character in value.ReplaceLineEndings("\n"))
         {
             EnterCharacter(character, index++);
         }
@@ -610,7 +610,7 @@ public class TextBoxWidget : Widget
             return;
         }
 
-        var map = character.HasValue
+        string map = character.HasValue
                       ? CharacterKindsMap.FirstOrDefault(x => x.Contains(character.Value), character.ToString())
                       : null;
 
@@ -666,7 +666,7 @@ public class TextBoxWidget : Widget
             return;
         }
 
-        var map = character.HasValue
+        string map = character.HasValue
                       ? CharacterKindsMap.FirstOrDefault(x => x.Contains(character.Value), character.ToString())
                       : null;
 
@@ -763,7 +763,7 @@ public class TextBoxWidget : Widget
                         break;
                     }
 
-                    var text = ClipboardManager.ClipboardString;
+                    string text = ClipboardManager.ClipboardString;
                     if (text != null)
                     {
                         FocusedTextBox.EnterText(text);
@@ -856,7 +856,7 @@ public class TextBoxWidget : Widget
         
     public override void Update()
     {
-	    foreach (var task in TasksQueue)
+	    foreach (UpdateTask task in TasksQueue)
 	    {
 		    task.Run(this);
 	    }
@@ -907,7 +907,7 @@ public class TextBoxWidget : Widget
 					Input.MousePosition.HasValue &&
 					HitTestGlobal(Input.MousePosition.Value) == this)
 		{
-			var scroll = Input.Scroll.Value.X * Input.Scroll.Value.Z / 92;
+			float scroll = Input.Scroll.Value.X * Input.Scroll.Value.Z / 92;
 			Scroll -= scroll;
 		}
         if (Input.Drag.HasValue)
@@ -942,7 +942,7 @@ public class TextBoxWidget : Widget
             else if (Time.RealTime - DragStartTime > 0 && DragStartedInsideTextBox)
             {
                 // 拖拽正在进行时：
-                var caret2 = CalculateClickedCharacterIndex(
+                int caret2 = CalculateClickedCharacterIndex(
 	                Font,
 	                PasswordMode ? new string('*', Text.Length) : Text,
 	                ScreenToWidgetWithoutScale(Input.Drag.Value + new Vector2(Scroll, 0)),
@@ -1067,7 +1067,7 @@ public class TextBoxWidget : Widget
             }
 
             // 处理文本输入。
-            var lastChar = Keyboard.LastChar;
+            char? lastChar = Keyboard.LastChar;
             if (lastChar != null && lastChar != '\n')
             {
                 EnterCharacter(lastChar.Value);
@@ -1078,7 +1078,7 @@ public class TextBoxWidget : Widget
         if (HasFocus && SwitchTextBoxWhenTabbed && Keyboard.IsKeyDownRepeat(Key.Tab))
         {
             if (RootWidget is not ContainerWidget rootWidget) return;
-            var textBoxes = FindTextBoxWidgets(rootWidget);
+            List<TextBoxWidget> textBoxes = FindTextBoxWidgets(rootWidget);
             int thisIndex = textBoxes.IndexOf(this);
             FocusedTextBox = textBoxes[(thisIndex + 1) % textBoxes.Count];
         }
@@ -1098,7 +1098,7 @@ public class TextBoxWidget : Widget
 
             if (Keyboard.IsKeyDown(Key.Control) && Keyboard.IsKeyDownOnce(Key.V))
             {
-                var text = ClipboardManager.ClipboardString;
+                string text = ClipboardManager.ClipboardString;
                 if (text != null)
                 {
                     EnterText(ClipboardManager.ClipboardString);
@@ -1112,7 +1112,7 @@ public class TextBoxWidget : Widget
         static List<TextBoxWidget> FindTextBoxWidgets(ContainerWidget widget)
         {
             List<TextBoxWidget> textBoxes = new(capacity: 16);
-            foreach (var child in widget.Children)
+            foreach (Widget child in widget.Children)
             {
                 if (child is TextBoxWidget textBoxWidget)
                 {
@@ -1124,7 +1124,7 @@ public class TextBoxWidget : Widget
                     continue;
                 }
 
-                var result = FindTextBoxWidgets(containerWidget);
+                List<TextBoxWidget> result = FindTextBoxWidgets(containerWidget);
                 if (result.Count is not 0)
                 {
                     textBoxes.AddRange(result);
@@ -1145,8 +1145,8 @@ public class TextBoxWidget : Widget
         {
 	        clickPosition.Y /= widgetGlobalTransform.Up.Y;
 	        clickPosition.X /= widgetGlobalTransform.Right.X;
-	        var scale = fontScale * font.Scale;
-	        var spacing = fontSpacing + font.Spacing;
+	        float scale = fontScale * font.Scale;
+	        Vector2 spacing = fontSpacing + font.Spacing;
 	        float currentPosition = 0f;
 	        float currentHeight = widgetActualSize.Y / 2f - font.LineHeight * scale / 2;
 	        int i = 0;
@@ -1172,7 +1172,7 @@ public class TextBoxWidget : Widget
 
 		        if(letter == '\u200b') continue;
 
-		        var glyph = font.GetGlyph(letter is '\u00a0' ? ' ' : letter);
+		        BitmapFont.Glyph glyph = font.GetGlyph(letter is '\u00a0' ? ' ' : letter);
 		        float kerning = i + 1 < text.Length ? font.GetKerning(letter, text[i + 1]) : 0f;
 		        
 		        if (currentPosition + (glyph.Width - kerning + spacing.X) / 2> clickPosition.X)
@@ -1566,13 +1566,13 @@ public class TextBoxWidget : Widget
     private static void SetCursorPosition(TextBoxWidget widget)
     {
 #if WINDOWS
-	    var caretPosition = widget.Font.MeasureText(
+	    Vector2 caretPosition = widget.Font.MeasureText(
 			    widget.FullText,
 			    0,
 			    widget.Caret + widget.CompositionTextCaret,
 			    new Vector2(widget.FontScale),
 			    widget.FontSpacing);
-        var windowPosition = Vector2.Transform(new Vector2(caretPosition.X, 0), widget.GlobalTransform * Matrix.CreateTranslation(-widget.Scroll, 0, 0));
+        Vector2 windowPosition = Vector2.Transform(new Vector2(caretPosition.X, 0), widget.GlobalTransform * Matrix.CreateTranslation(-widget.Scroll, 0, 0));
         
         InputMethod.SetTextInputRect((int)windowPosition.X, (int)(windowPosition.Y + widget.Font.LineHeight * widget.GlobalTransform.M11), 0, 0);
 #endif
@@ -1713,18 +1713,18 @@ public class TextBoxWidget : Widget
             return;
         }
 
-        var backgroundFlatBatch = dc.PrimitivesRenderer2D.FlatBatch(layer: 0);
-        var outlineFlatBatch = dc.PrimitivesRenderer2D.FlatBatch(layer: 1);
-        var foregroundFlatBatch = dc.PrimitivesRenderer2D.FlatBatch(layer: 2);
+        FlatBatch2D backgroundFlatBatch = dc.PrimitivesRenderer2D.FlatBatch(layer: 0);
+        FlatBatch2D outlineFlatBatch = dc.PrimitivesRenderer2D.FlatBatch(layer: 1);
+        FlatBatch2D foregroundFlatBatch = dc.PrimitivesRenderer2D.FlatBatch(layer: 2);
 
-        var fontBatch = dc.PrimitivesRenderer2D.FontBatch(Font, layer: 3,
+        FontBatch2D fontBatch = dc.PrimitivesRenderer2D.FontBatch(Font, layer: 3,
             samplerState: TextureLinearFilter ? SamplerState.LinearClamp : SamplerState.PointClamp);
         
-        var caretPosition =
+        Vector2 caretPosition =
 	        Font.MeasureText(FullText, 0, Caret + CompositionTextCaret, new Vector2(FontScale),
 		        FontSpacing) *
 	        Vector2.UnitX;
-        var candidateWindowCorner1 = new Vector2(caretPosition.X, ActualSize.Y);
+        Vector2 candidateWindowCorner1 = new(caretPosition.X, ActualSize.Y);
         candidateWindowCorner1 += CandidateListOffset;
 
         // 绘制背景。
@@ -1738,7 +1738,7 @@ public class TextBoxWidget : Widget
             0, OutlineColor);
 
         // 绘制候选词文字。
-        for (var i = CandidatesSelection / CandidatesPageSize;
+        for (int i = CandidatesSelection / CandidatesPageSize;
              i < CandidatesSelection / CandidatesPageSize + CandidatesPageSize;
              i++)
         {
@@ -1812,9 +1812,9 @@ public class TextBoxWidget : Widget
     }
     public virtual void Draw_(DrawContext dc)
     {
-	    var textToDraw = Text.Replace("\t", new string(' ',IndentWidth));
-	    var caretIndex = Text[..Caret].Sum(c => c == '\t' ? IndentWidth : 1);
-	    var selectionLength = SelectionLength == 0 
+	    string textToDraw = Text.Replace("\t", new string(' ',IndentWidth));
+	    int caretIndex = Text[..Caret].Sum(c => c == '\t' ? IndentWidth : 1);
+	    int selectionLength = SelectionLength == 0 
 		                          ? 0
 		                          : SelectionString.Sum(c => c == '\t' ? IndentWidth : 1) 
 		                            * (SelectionLength / Math.Abs(SelectionLength)); 
@@ -1832,19 +1832,19 @@ public class TextBoxWidget : Widget
 		    textToDraw = new string('*',textToDraw.Length);
 	    }
 
-	    var flatBatch = dc.PrimitivesRenderer2D.FlatBatch(blendState: BlendState.NonPremultiplied);
-	    var outlineFlatBatch = dc.PrimitivesRenderer2D.FlatBatch(layer: 1);
+	    FlatBatch2D flatBatch = dc.PrimitivesRenderer2D.FlatBatch(blendState: BlendState.NonPremultiplied);
+	    FlatBatch2D outlineFlatBatch = dc.PrimitivesRenderer2D.FlatBatch(layer: 1);
 
 	    Vector2 currentDrawPosition = (0,ActualSize.Y / 2);
 
 	    List<TextDrawItem> drawItems = new(capacity: 3);
 
-	    var fontBatch = dc.PrimitivesRenderer2D.FontBatch(Font);
-	    var underlineFlatBatch = dc.PrimitivesRenderer2D.FlatBatch(layer: 1);
+	    FontBatch2D fontBatch = dc.PrimitivesRenderer2D.FontBatch(Font);
+	    FlatBatch2D underlineFlatBatch = dc.PrimitivesRenderer2D.FlatBatch(layer: 1);
 
-	    var lines = textToDraw.Split('\n');
+	    string[] lines = textToDraw.Split('\n');
 	    int charIndex = 0;
-	    foreach(var line in lines)
+	    foreach(string line in lines)
 	    {
 		    if(selectionLength != 0 && 
 		       selectionStart < charIndex + line.Length && 
@@ -1869,7 +1869,7 @@ public class TextBoxWidget : Widget
 		    }
 		    if(charIndex <= caretIndex && charIndex + line.Length >= caretIndex)
 		    {
-			    var split = SplitStringAt(line, caretIndex - charIndex);
+			    string[] split = SplitStringAt(line, caretIndex - charIndex);
 			    drawItems.Add(new NormalDrawItem(
 				    line,
 				    0,
@@ -1932,7 +1932,7 @@ public class TextBoxWidget : Widget
 	    }
 	    
 
-	    foreach(var drawItem in drawItems)
+	    foreach(TextDrawItem drawItem in drawItems)
 	    {
 		    drawItem.Draw(ref currentDrawPosition);
 	    }
@@ -1942,7 +1942,7 @@ public class TextBoxWidget : Widget
 	    flatBatch.TransformLines(GlobalTransform);
 	    outlineFlatBatch.TransformLines(GlobalTransform);
 
-	    var scrollTransform = Matrix.CreateTranslation(new Vector3(-Scroll, 0, 0));
+	    Matrix scrollTransform = Matrix.CreateTranslation(new Vector3(-Scroll, 0, 0));
 	    flatBatch.TransformTriangles(scrollTransform);
 	    fontBatch.TransformTriangles(scrollTransform);
 	    underlineFlatBatch.TransformLines(scrollTransform);
@@ -1995,9 +1995,9 @@ public class TextBoxWidget : Widget
 		        return;
 	        }
 	        
-            var font = fontBatch.Font;
+            BitmapFont font = fontBatch.Font;
 
-            var size = font.MeasureText(fullText, start, length, new Vector2(fontScale), fontSpacing);
+            Vector2 size = font.MeasureText(fullText, start, length, new Vector2(fontScale), fontSpacing);
             fontBatch.QueueText(fullText.Substring(start, length), position, 0, color, TextAnchor.VerticalCenter,
                 new Vector2(fontScale),
                 fontSpacing);
@@ -2016,8 +2016,8 @@ public class TextBoxWidget : Widget
     {
         public override void Draw(ref Vector2 position)
         {
-            var font = fontBatch.Font;
-            var size = font.MeasureText(compositionText, 0, compositionText.Length,
+            BitmapFont font = fontBatch.Font;
+            Vector2 size = font.MeasureText(compositionText, 0, compositionText.Length,
                 new Vector2(fontScale),
                 Vector2.Zero);
             
@@ -2043,7 +2043,7 @@ public class TextBoxWidget : Widget
     {
 	    public override void Draw(ref Vector2 position)
 	    {
-		    var offset = font.MeasureText(
+		    Vector2 offset = font.MeasureText(
 			    compositionText,
 			    0,
 			    compositionTextCaret,
@@ -2084,13 +2084,13 @@ public class TextBoxWidget : Widget
 			    m_selectionLength = text.Length - m_relativeCaretPosition;
 		    }
 		    
-		    var length = font.MeasureText(
+		    float length = font.MeasureText(
 			                 text,
 			                 m_relativeCaretPosition,
 			                 m_selectionLength,
 			                 fontScale,
 			                 fontSpacing).X;
-		    var offset = font.MeasureText(
+		    float offset = font.MeasureText(
 			                 text,
 			                 0,
 			                 m_relativeCaretPosition,

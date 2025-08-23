@@ -21,7 +21,7 @@ namespace Game
 
 		public override void Enter(object[] parameters)
 		{
-			var helpTopic = (HelpTopic)parameters[0];
+			HelpTopic helpTopic = (HelpTopic)parameters[0];
 			m_titleLabel.Text = helpTopic.Title;
 			m_textLabel.Text = helpTopic.Text;
 			m_scrollPanel.ScrollPosition = 0f;

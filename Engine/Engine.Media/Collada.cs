@@ -112,7 +112,7 @@ namespace Engine.Media
                     }
                 }
                 LibraryVisualScenes.Add(new ColladaLibraryVisualScenes());
-                ColladaVisualScene colladaVisualScene = new ColladaVisualScene(this)
+                ColladaVisualScene colladaVisualScene = new(this)
                 {
                     ChildNodes =
                     {
@@ -143,7 +143,7 @@ namespace Engine.Media
             {
                 if (Scene.VisualScene.ChildNodes.Count > 1)
                 {
-                    ModelBoneData modelBoneData = new ModelBoneData();
+                    ModelBoneData modelBoneData = new();
                     modelData.Bones.Add(modelBoneData);
                     modelBoneData.ParentBoneIndex = -1;
                     modelBoneData.Name = "EngineRoot";
@@ -474,12 +474,12 @@ namespace Engine.Media
                 {
                     fixed (byte* ptr2 = &modelBuffersData.Vertices[0])
                     {
-                        Dictionary<ushort, ushort> dictionary = new Dictionary<ushort, ushort>();
+                        Dictionary<ushort, ushort> dictionary = new();
                         for (int i = 0; i < modelMeshPartData.IndicesCount; i++)
                         {
                             int num = ((i % 3 == 0) ? i : ((i % 3 != 1) ? (i - 1) : (i + 1)));
                             ushort key = *(ushort*)(ptr + (num + modelMeshPartData.StartIndex) * (nint)2);
-                            if (!dictionary.TryGetValue(key, out var value))
+                            if (!dictionary.TryGetValue(key, out ushort value))
                             {
                                 value = (ushort)dictionary.Count;
                                 dictionary.Add(key, value);
@@ -491,9 +491,9 @@ namespace Engine.Media
                         }
                         foreach (VertexElement item in vertexElements)
                         {
-                            ColladaSource colladaSource = new ColladaSource(colladaRoot, colladaGeometry.Id + "-" + item.Semantic);
-                            ColladaFloatArray colladaFloatArray = new ColladaFloatArray(colladaRoot, colladaSource.Id + "-array");
-                            ColladaAccessor colladaAccessor = new ColladaAccessor { Source = colladaFloatArray };
+                            ColladaSource colladaSource = new(colladaRoot, colladaGeometry.Id + "-" + item.Semantic);
+                            ColladaFloatArray colladaFloatArray = new(colladaRoot, colladaSource.Id + "-array");
+                            ColladaAccessor colladaAccessor = new() { Source = colladaFloatArray };
                             Sources.Add(colladaSource);
                             colladaSource.FloatArray = colladaFloatArray;
                             colladaSource.Accessor = colladaAccessor;
@@ -771,7 +771,7 @@ namespace Engine.Media
             public void Save(ModelData modelData, ModelMeshData modelMeshData, ModelMeshPartData modelMeshPartData)
             {
                 int num = 0;
-                Dictionary<VertexElement, ColladaInput> dictionary = new Dictionary<VertexElement, ColladaInput>();
+                Dictionary<VertexElement, ColladaInput> dictionary = new();
                 foreach (ColladaInput input in Inputs)
                 {
                     string text = ((input.Set == 0) ? string.Empty : input.Set.ToString(CultureInfo.InvariantCulture));
@@ -796,7 +796,7 @@ namespace Engine.Media
                         num += 4;
                     }
                 }
-                VertexDeclaration vertexDeclaration = new VertexDeclaration(dictionary.Keys.ToArray());
+                VertexDeclaration vertexDeclaration = new(dictionary.Keys.ToArray());
                 ModelBuffersData modelBuffersData = modelData.Buffers.FirstOrDefault(vd => vd.VertexDeclaration == vertexDeclaration);
                 if (modelBuffersData == null)
                 {
@@ -806,7 +806,7 @@ namespace Engine.Media
                 }
                 modelMeshPartData.BuffersDataIndex = modelData.Buffers.IndexOf(modelBuffersData);
                 int num2 = P.Count / Inputs.Count;
-                List<int> list = new List<int>();
+                List<int> list = new();
                 if (VCount.Count == 0)
                 {
                     int num3 = 0;
@@ -848,7 +848,7 @@ namespace Engine.Media
                 int vertexStride = modelBuffersData.VertexDeclaration.VertexStride;
                 int num5 = modelBuffersData.Vertices.Length;
                 modelBuffersData.Vertices = ExtendArray(modelBuffersData.Vertices, list.Count * vertexStride);
-                using (BinaryWriter binaryWriter = new BinaryWriter(new MemoryStream(modelBuffersData.Vertices, num5, list.Count * vertexStride)))
+                using (BinaryWriter binaryWriter = new(new MemoryStream(modelBuffersData.Vertices, num5, list.Count * vertexStride)))
                 {
                     bool flag = false;
                     foreach (KeyValuePair<VertexElement, ColladaInput> item in dictionary)
@@ -975,7 +975,7 @@ namespace Engine.Media
 				ColladaNameId colladaNameId = collada.ObjectsById[node.Attribute("source").Value.Substring(1)];
 				if (colladaNameId is ColladaVertices)
 				{
-					var colladaVertices = (ColladaVertices)colladaNameId;
+					ColladaVertices colladaVertices = (ColladaVertices)colladaNameId;
 					Source = colladaVertices.Source;
 					Semantic = colladaVertices.Semantic;
 				}
@@ -1011,7 +1011,7 @@ namespace Engine.Media
 			long position = stream.Position;
 			try
 			{
-				var xmlReader = XmlReader.Create(stream, new XmlReaderSettings
+				XmlReader xmlReader = XmlReader.Create(stream, new XmlReaderSettings
 				{
 					IgnoreComments = true,
 					IgnoreWhitespace = true
@@ -1037,18 +1037,18 @@ namespace Engine.Media
 
 		public static ModelData Load(Stream stream)
 		{
-            ColladaRoot colladaRoot = new ColladaRoot(XElement.Load(stream));
-            ModelData modelData = new ModelData();
+            ColladaRoot colladaRoot = new(XElement.Load(stream));
+            ModelData modelData = new();
             colladaRoot.Save(modelData);
 			return modelData;
 		}
 
         public static void Save(ModelData modelData, Stream stream)
         {
-            ColladaRoot colladaRoot = new ColladaRoot(modelData);
+            ColladaRoot colladaRoot = new(modelData);
             XElement xElement = CreateElement(null, ColladaRoot.Namespace + "COLLADA");
             colladaRoot.Save(xElement);
-            XmlWriterSettings settings = new XmlWriterSettings
+            XmlWriterSettings settings = new()
             {
                 Indent = true,
                 Encoding = new UTF8Encoding(encoderShouldEmitUTF8Identifier: false)
@@ -1059,14 +1059,14 @@ namespace Engine.Media
 
         public static XElement CreateElement(XElement parent, XName name)
         {
-            XElement xElement = new XElement(name);
+            XElement xElement = new(name);
             parent?.Add(xElement);
             return xElement;
         }
 
         public static T[] ExtendArray<T>(T[] array, int extensionLength)
 		{
-			var array2 = new T[array.Length + extensionLength];
+			T[] array2 = new T[array.Length + extensionLength];
 			Array.Copy(array, array2, array.Length);
 			return array2;
 		}
@@ -1074,11 +1074,11 @@ namespace Engine.Media
         public static void IndexVertices(int vertexStride, byte[] vertices, out byte[] resultVertices, out byte[] resultIndices)
 		{
 			int num = vertices.Length / vertexStride;
-			var dictionary = new Dictionary<Vertex, int>();
+			Dictionary<Vertex, int> dictionary = new();
 			resultIndices = new byte[4 * num];
 			for (int i = 0; i < num; i++)
 			{
-				var key = new Vertex(vertices, i * vertexStride, vertexStride);
+				Vertex key = new(vertices, i * vertexStride, vertexStride);
 				if (!dictionary.TryGetValue(key, out int value))
 				{
 					value = dictionary.Count;

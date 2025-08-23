@@ -191,9 +191,9 @@ namespace Game
 			m_dragDistanceSlider.Value = SettingsManager.MinimumDragDistance;
 			m_dragDistanceSlider.Text = $"{MathF.Round(SettingsManager.MinimumDragDistance)} " + LanguageControl.Get(GetType().Name, 1);
 			m_moveWidgetMarginXSlider.Value = SettingsManager.MoveWidgetMarginX;
-			m_moveWidgetMarginXSlider.Text = String.Format("{0:F0}%",SettingsManager.MoveWidgetMarginX * 100f);
+			m_moveWidgetMarginXSlider.Text = $"{SettingsManager.MoveWidgetMarginX * 100f:F0}%";
 			m_moveWidgetMarginYSlider.Value = SettingsManager.MoveWidgetMarginY;
-			m_moveWidgetMarginYSlider.Text = String.Format("{0:F0}%", SettingsManager.MoveWidgetMarginY * 100f);
+			m_moveWidgetMarginYSlider.Text = $"{SettingsManager.MoveWidgetMarginY * 100f:F0}%";
 			if (Input.Back || Input.Cancel || Children.Find<ButtonWidget>("TopBar.Back").IsClicked)
 			{
 				ScreensManager.SwitchScreen("Settings");

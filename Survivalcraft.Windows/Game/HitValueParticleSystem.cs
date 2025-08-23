@@ -21,7 +21,7 @@ namespace Game
 		public HitValueParticleSystem(Vector3 position, Vector3 velocity, Color color, string text)
 			: base(1)
 		{
-			var random = new Random();
+			Random random = new();
 			Particle obj = Particles[0];
 			obj.IsActive = true;
 			obj.Position = position;
@@ -66,7 +66,7 @@ namespace Game
 				m_batch = SubsystemParticles.PrimitivesRenderer.FontBatch(LabelWidget.BitmapFont, 0, DepthStencilState.None);
 			}
 			Vector3 viewDirection = camera.ViewDirection;
-			var vector = Vector3.Normalize(Vector3.Cross(viewDirection, Vector3.UnitY));
+			Vector3 vector = Vector3.Normalize(Vector3.Cross(viewDirection, Vector3.UnitY));
 			Vector3 v = -Vector3.Normalize(Vector3.Cross(vector, viewDirection));
 			for (int i = 0; i < Particles.Length; i++)
 			{

@@ -120,7 +120,7 @@ namespace Game
 
 			public virtual int Load(Point2 p, byte[] buffer)
 			{
-				if (!ChunkDescriptors.TryGetValue(p, out var value))
+				if (!ChunkDescriptors.TryGetValue(p, out ChunkDescriptor value))
 				{
 					return -1;
 				}
@@ -137,7 +137,7 @@ namespace Game
 			{
 				int count = Math.Max((size + NodeDataSize - 1) / NodeDataSize, 1);
 				List<int> freeNodes = GetFreeNodes(count);
-				ReadNode(freeNodes.Last(), null, 0, out var nextNode);
+				ReadNode(freeNodes.Last(), null, 0, out int nextNode);
 				int num = 0;
 				for (int i = 0; i < freeNodes.Count; i++)
 				{
@@ -145,7 +145,7 @@ namespace Game
 					WriteNode(freeNodes[i], buffer, num, num2, (i < freeNodes.Count - 1) ? freeNodes[i + 1] : (-1));
 					num += num2;
 				}
-				if (!ChunkDescriptors.TryGetValue(p, out var value))
+				if (!ChunkDescriptors.TryGetValue(p, out ChunkDescriptor value))
 				{
 					ChunkDescriptor chunkDescriptor = default(ChunkDescriptor);
 					chunkDescriptor.Index = ChunkDescriptors.Count % FileHeaderChunkDescriptorsCount;
@@ -202,7 +202,7 @@ namespace Game
 				int num = startNode;
 				while (true)
 				{
-					ReadNode(num, null, 0, out var nextNode);
+					ReadNode(num, null, 0, out int nextNode);
 					if (nextNode < 0)
 					{
 						break;
@@ -250,7 +250,7 @@ namespace Game
 					throw new InvalidOperationException("Invalid node magic.");
 				}
 				int nodeHeader = Reader.ReadInt32();
-				ParseNodeHeader(node, nodeHeader, out var dataSize, out nextNode);
+				ParseNodeHeader(node, nodeHeader, out int dataSize, out nextNode);
 				if (data != null && Stream.Read(data, offset, dataSize) != dataSize)
 				{
 					throw new InvalidOperationException("Truncated ChunksFile.");
@@ -536,7 +536,7 @@ namespace Game
 
             public virtual Stream GetRegionStream(Point2 region, bool createNew)
 			{
-				if (!StreamsByRegion.TryGetValue(region, out var value) || value == null || !value.CanRead)
+				if (!StreamsByRegion.TryGetValue(region, out Stream value) || value == null || !value.CanRead)
 				{
 					string regionPath = GetRegionPath(region);
 					if (Storage.FileExists(regionPath))
@@ -858,7 +858,7 @@ namespace Game
 			int num4 = 0;
 			while (num < size)
 			{
-				num = ReadRleValueFromBuffer(m_compressBuffer, num, out var value2, out var count);
+				num = ReadRleValueFromBuffer(m_compressBuffer, num, out int value2, out int count);
 				for (int k = 0; k < count; k++)
 				{
 					chunk.SetCellValueFast(num2, num3, num4, value2);
@@ -933,9 +933,9 @@ namespace Game
 
 		public static int Deflate(byte[] input, int offset, int length, byte[] output)
 		{
-			MemoryStream memoryStream = new MemoryStream(input, offset, length);
-			MemoryStream memoryStream2 = new MemoryStream(output);
-			using (DeflateStream destination = new DeflateStream(memoryStream2, CompressionLevel.Fastest, leaveOpen: true))
+			MemoryStream memoryStream = new(input, offset, length);
+			MemoryStream memoryStream2 = new(output);
+			using (DeflateStream destination = new(memoryStream2, CompressionLevel.Fastest, leaveOpen: true))
 			{
 				memoryStream.CopyTo(destination);
 			}
@@ -944,9 +944,9 @@ namespace Game
 
 		public static int UnDeflate(byte[] input, int offset, int length, byte[] output)
 		{
-			MemoryStream stream = new MemoryStream(input, offset, length);
-			MemoryStream memoryStream = new MemoryStream(output);
-			using (DeflateStream deflateStream = new DeflateStream(stream, CompressionMode.Decompress))
+			MemoryStream stream = new(input, offset, length);
+			MemoryStream memoryStream = new(output);
+			using (DeflateStream deflateStream = new(stream, CompressionMode.Decompress))
 			{
 				deflateStream.CopyTo(memoryStream);
 			}

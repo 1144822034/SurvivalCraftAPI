@@ -53,7 +53,7 @@ namespace Game
 			float num = MathUtils.Lerp(150f, 20f, MathUtils.Saturate(2f * m_time / 0.5f));
 			float num2 = MathF.Pow(0.01f, dt);
 			float s = MathUtils.Lerp(20f, 0f, MathUtils.Saturate(2f * m_time / 0.5f));
-			var v = new Vector3(2f, 2f, 1f);
+			Vector3 v = new(2f, 2f, 1f);
 			if (m_time < 0.5f)
 			{
 				m_toGenerate += num * dt;

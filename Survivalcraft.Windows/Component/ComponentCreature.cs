@@ -51,7 +51,7 @@ namespace Game
 		{
 			get
 			{
-				var componentPlayer = this as ComponentPlayer;
+				ComponentPlayer componentPlayer = this as ComponentPlayer;
 				if (componentPlayer != null)
 				{
 					return m_subsystemPlayerStats.GetPlayerStats(componentPlayer.PlayerData.PlayerIndex);

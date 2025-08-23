@@ -69,7 +69,7 @@ namespace Game
 			}
 			else if (m_publishButtonWidget.IsClicked)
 			{
-				var busyDialog = new CancellableBusyDialog("Publishing", autoHideOnCancel: false);
+				CancellableBusyDialog busyDialog = new("Publishing", autoHideOnCancel: false);
 				DialogsManager.ShowDialog(ParentWidget, busyDialog);
 				CommunityContentManager.Publish(text, text2, m_type, m_user, busyDialog.Progress, delegate
 				{

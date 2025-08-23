@@ -43,24 +43,15 @@ namespace Game
 
 		public int ActiveSlotIndex
 		{
-			get
-			{
-				return m_activeSlotIndex;
-			}
-			set
-			{
-				m_activeSlotIndex = Math.Clamp(value, 0, VisibleSlotsCount - 1);
-			}
+			get => m_activeSlotIndex;
+			set => m_activeSlotIndex = Math.Clamp(value, 0, VisibleSlotsCount - 1);
 		}
 
 		public int SlotsCount => m_slots.Count;
 
 		public int VisibleSlotsCount
 		{
-			get
-			{
-				return m_visibleSlotsCount;
-			}
+			get => m_visibleSlotsCount;
 			set
 			{
 				value = Math.Clamp(value, 0, 10);
@@ -101,8 +92,8 @@ namespace Game
 					orders.Add(new Order(item, item.GetDisplayOrder(creativeValue), creativeValue));
 				}
 			}
-			var orderList = orders.OrderBy(o => o.order);
-			foreach (var c in orderList)
+			IOrderedEnumerable<Order> orderList = orders.OrderBy(o => o.order);
+			foreach (Order c in orderList)
 			{
 				m_slots.Add(c.value);
 			}
@@ -126,13 +117,13 @@ namespace Game
 			valuesDictionary.SetValue("ActiveSlotIndex", m_activeSlotIndex);
 			valuesDictionary.SetValue("CategoryIndex", CategoryIndex);
 			valuesDictionary.SetValue("PageIndex", PageIndex);
-			var valuesDictionary2 = new ValuesDictionary();
+			ValuesDictionary valuesDictionary2 = new();
 			valuesDictionary.SetValue("Slots", valuesDictionary2);
 			for (int i = 0; i < OpenSlotsCount; i++)
 			{
 				if (m_slots[i] != 0)
 				{
-					var valuesDictionary3 = new ValuesDictionary();
+					ValuesDictionary valuesDictionary3 = new();
 					valuesDictionary2.SetValue("Slot" + i.ToString(CultureInfo.InvariantCulture), valuesDictionary3);
 					valuesDictionary3.SetValue("Contents", m_slots[i]);
 				}

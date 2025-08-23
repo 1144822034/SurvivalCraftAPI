@@ -24,38 +24,20 @@ namespace Game
 
 		public string LargeMessage
 		{
-			get
-			{
-				return m_largeLabelWidget.Text;
-			}
-			set
-			{
-				m_largeLabelWidget.Text = value;
-			}
+			get => m_largeLabelWidget.Text;
+			set => m_largeLabelWidget.Text = value;
 		}
 
 		public string SmallMessage
 		{
-			get
-			{
-				return m_smallLabelWidget.Text;
-			}
-			set
-			{
-				m_smallLabelWidget.Text = value;
-			}
+			get => m_smallLabelWidget.Text;
+			set => m_smallLabelWidget.Text = value;
 		}
 
 		public float Progress
 		{
-			get
-			{
-				return m_progressWidget.Value;
-			}
-			set
-			{
-				m_progressWidget.Value = value;
-			}
+			get => m_progressWidget.Value;
+			set => m_progressWidget.Value = value;
 		}
 
 		public SpawnDialog()

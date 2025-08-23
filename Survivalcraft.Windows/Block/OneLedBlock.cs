@@ -34,20 +34,16 @@ namespace Game
 
 		public override IEnumerable<CraftingRecipe> GetProceduralCraftingRecipes()
 		{
-			var craftingRecipe = new CraftingRecipe
+			CraftingRecipe craftingRecipe = new()
 			{
 				ResultCount = 4,
 				ResultValue = Terrain.MakeBlockValue(253, 0, 0),
 				RequiredHeatLevel = 0f,
-				Description = LanguageControl.Get(GetType().Name, 1)
+				Description = LanguageControl.Get(GetType().Name, 1),
+				Ingredients = { [0] = "glass",[1] = "glass",[2] = "glass",[4] = "wire",[6] = "copperingot",[7] = "copperingot",
+					[8] = "copperingot"
+				}
 			};
-			craftingRecipe.Ingredients[0] = "glass";
-			craftingRecipe.Ingredients[1] = "glass";
-			craftingRecipe.Ingredients[2] = "glass";
-			craftingRecipe.Ingredients[4] = "wire";
-			craftingRecipe.Ingredients[6] = "copperingot";
-			craftingRecipe.Ingredients[7] = "copperingot";
-			craftingRecipe.Ingredients[8] = "copperingot";
 			yield return craftingRecipe;
 		}
 

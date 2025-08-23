@@ -7,11 +7,7 @@ namespace Game {
 
         //在游戏进入主菜单之前，如果openFilePath为一个文件（存档、模组）路径，那么在进入游戏后，会进行对文件的安装操作
         public static string openFilePath = string.Empty;
-        public static IExternalContentProvider DefaultProvider {
-            get {
-				return Providers.Count <= 0 ? null : Providers[0];
-			}
-		}
+        public static IExternalContentProvider DefaultProvider => Providers.Count <= 0 ? null : Providers[0];
 
         public static ReadOnlyList<IExternalContentProvider> Providers => new(m_providers);
 
@@ -177,7 +173,7 @@ namespace Game {
         public static void ShowLoginUiIfNeeded(IExternalContentProvider provider, bool showWarningDialog, Action handler) {
             if (provider.RequiresLogin && !provider.IsLoggedIn) {
                 Action loginAction = delegate {
-                    var busyDialog = new CancellableBusyDialog(LanguageControl.Get(fName, 5), autoHideOnCancel: true);
+                    CancellableBusyDialog busyDialog = new(LanguageControl.Get(fName, 5), autoHideOnCancel: true);
                     DialogsManager.ShowDialog(null, busyDialog);
                     provider.Login(busyDialog.Progress, delegate {
                         DialogsManager.HideDialog(busyDialog);
@@ -210,7 +206,7 @@ namespace Game {
                 try {
                     if (provider != null) {
                         ShowLoginUiIfNeeded(provider, showWarningDialog: true, delegate {
-                            var busyDialog = new CancellableBusyDialog(LanguageControl.Get(fName, 10), autoHideOnCancel: false);
+                            CancellableBusyDialog busyDialog = new(LanguageControl.Get(fName, 10), autoHideOnCancel: false);
                             DialogsManager.ShowDialog(null, busyDialog);
                             Task.Run(delegate {
                                 bool needsDelete = false;

@@ -97,7 +97,7 @@ namespace Game
 
 			public Dictionary<Point3, T> ToDictionary()
 			{
-				var dictionary = new Dictionary<Point3, T>();
+				Dictionary<Point3,T> dictionary = new();
 				for (int i = 0; i < m_data.Length; i++)
 				{
 					T[] array = m_data[i];
@@ -142,7 +142,7 @@ namespace Game
 			/// <summary>
 			/// 模组如果需要添加或使用额外信息，可以在这个ValuesDictionary读写元素
 			/// </summary>
-			public ValuesDictionary ValuesDictionaryForMods = new ValuesDictionary();
+			public ValuesDictionary ValuesDictionaryForMods = new();
 		}
 
 		public struct ProcessPoint
@@ -337,10 +337,10 @@ namespace Game
 			int explosionPointValue = m_subsystemTerrain.Terrain.GetCellValue(x, y, z);
 			float num = MathUtils.Max(0.13f * MathF.Pow(pressure, 0.5f), 1f);
 			m_subsystemTerrain.ChangeCell(x, y, z, Terrain.MakeBlockValue(0));
-			var processed = new SparseSpatialArray<bool>(x, y, z, outside: true);
-			var list = new List<ProcessPoint>();
-			var list2 = new List<ProcessPoint>();
-			var list3 = new List<ProcessPoint>();
+			SparseSpatialArray<bool> processed = new(x, y, z, outside: true);
+			List<ProcessPoint> list = new();
+			List<ProcessPoint> list2 = new();
+			List<ProcessPoint> list3 = new();
 			TryAddPoint(x, y, z, -1, pressure, isIncendiary, list, processed);
 			int explosionPower = 0;
 			int num3 = 0;
@@ -441,7 +441,7 @@ namespace Game
 					{
 						CalculateImpulseAndDamage(new Vector3(x + 0.5f, y + 0.5f, z + 0.5f), 60f, 2f * num4, out Vector3 impulse, out float _);
 						bool flag2 = false;
-						var list = new List<BlockDropValue>();
+						List<BlockDropValue> list = new();
 						block.GetDropValues(m_subsystemTerrain, cellValue, newValue, 0, list, out bool _);
 						ModsManager.HookAction("OnBlockExploded", loader => { loader.OnBlockExploded(m_subsystemTerrain, x, y, z, cellValue); return false; });
 						if (list.Count == 0)
@@ -587,7 +587,7 @@ namespace Game
 					projectile2.UnderExplosion(impulse3, damage3);
 				}
 			}
-			var position = new Vector3(point.X, point.Y, point.Z);
+			Vector3 position = new(point.X, point.Y, point.Z);
 			float delay = m_subsystemAudio.CalculateDelay(num);
 			if (pressure > 2000000f)
 			{

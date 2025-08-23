@@ -40,8 +40,8 @@ namespace Game
 					m_blockMeshesByData[num2].AppendModelMeshPart(model.FindMesh("PressurePlate").MeshParts[0], boneAbsoluteTransform * matrix, makeEmissive: false, flipWindingOrder: false, doubleSided: false, flipNormals: false, Color.White);
 					m_blockMeshesByData[num2].TransformTextureCoordinates(Matrix.CreateTranslation(num % 16 / 16f, num / 16 / 16f, 0f));
 					m_blockMeshesByData[num2].GenerateSidesData();
-					var vector = Vector3.Transform(new Vector3(-0.5f, 0f, -0.5f), matrix);
-					var vector2 = Vector3.Transform(new Vector3(0.5f, 0.0625f, 0.5f), matrix);
+					Vector3 vector = Vector3.Transform(new Vector3(-0.5f, 0f, -0.5f), matrix);
+					Vector3 vector2 = Vector3.Transform(new Vector3(0.5f, 0.0625f, 0.5f), matrix);
 					vector.X = MathF.Round(vector.X * 100f) / 100f;
 					vector.Y = MathF.Round(vector.Y * 100f) / 100f;
 					vector.Z = MathF.Round(vector.Z * 100f) / 100f;

@@ -20,11 +20,8 @@ namespace Engine
 
 		public Vector2 XY
 		{
-			get
-			{
-				return new Vector2(X, Y);
-			}
-			set
+			get => new(X, Y);
+            set
 			{
 				X = value.X;
 				Y = value.Y;
@@ -33,11 +30,8 @@ namespace Engine
 
 		public Vector2 YX
 		{
-			get
-			{
-				return new Vector2(Y, X);
-			}
-			set
+			get => new(Y, X);
+            set
 			{
 				Y = value.X;
 				X = value.Y;
@@ -46,11 +40,8 @@ namespace Engine
 
 		public Vector2 XZ
 		{
-			get
-			{
-				return new Vector2(X, Z);
-			}
-			set
+			get => new(X, Z);
+            set
 			{
 				X = value.X;
 				Z = value.Y;
@@ -59,11 +50,8 @@ namespace Engine
 
 		public Vector2 ZX
 		{
-			get
-			{
-				return new Vector2(Z, X);
-			}
-			set
+			get => new(Z, X);
+            set
 			{
 				Z = value.X;
 				X = value.Y;
@@ -72,11 +60,8 @@ namespace Engine
 
 		public Vector2 YZ
 		{
-			get
-			{
-				return new Vector2(Y, Z);
-			}
-			set
+			get => new(Y, Z);
+            set
 			{
 				Y = value.X;
 				Z = value.Y;
@@ -85,11 +70,8 @@ namespace Engine
 
 		public Vector2 ZY
 		{
-			get
-			{
-				return new Vector2(Z, Y);
-			}
-			set
+			get => new(Z, Y);
+            set
 			{
 				Z = value.X;
 				Y = value.Y;

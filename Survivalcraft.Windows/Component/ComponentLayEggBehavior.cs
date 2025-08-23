@@ -65,7 +65,7 @@ namespace Game
 			m_subsystemAudio = Project.FindSubsystem<SubsystemAudio>(throwOnError: true);
 			m_componentCreature = Entity.FindComponent<ComponentCreature>(throwOnError: true);
 			m_componentPathfinding = Entity.FindComponent<ComponentPathfinding>(throwOnError: true);
-			var eggBlock = (EggBlock)BlocksManager.Blocks[118];
+			EggBlock eggBlock = (EggBlock)BlocksManager.Blocks[118];
 			m_layFrequency = valuesDictionary.GetValue<float>("LayFrequency");
 			m_eggType = eggBlock.GetEggTypeByCreatureTemplateName(Entity.ValuesDictionary.DatabaseObject.Name);
 			m_stateMachine.AddState("Inactive", null, delegate

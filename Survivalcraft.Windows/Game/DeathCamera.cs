@@ -25,7 +25,7 @@ namespace Game
 			Vector3 vector = GameWidget.Target?.ComponentBody.BoundingBox.Center() ?? m_position;
 			m_bestPosition = FindBestCameraPosition(vector, 6f);
 			SetupPerspectiveCamera(m_position, vector - m_position, Vector3.UnitY);
-			var componentPlayer = GameWidget.Target as ComponentPlayer;
+			ComponentPlayer componentPlayer = GameWidget.Target as ComponentPlayer;
 			if (componentPlayer != null && m_bestPosition.HasValue)
 			{
 				Vector3 vector2 = Matrix.CreateWorld(Vector3.Zero, vector - m_bestPosition.Value, Vector3.UnitY).ToYawPitchRoll();
@@ -53,7 +53,7 @@ namespace Game
 			for (int i = 0; i < 36; i++)
 			{
 				float x = 1f + ((float)Math.PI * 2f * i / 36f);
-				var v2 = Vector3.Normalize(new Vector3(MathF.Sin(x), 0.5f, MathF.Cos(x)));
+				Vector3 v2 = Vector3.Normalize(new Vector3(MathF.Sin(x), 0.5f, MathF.Cos(x)));
 				Vector3 vector2 = targetPosition + (v2 * distance);
 				TerrainRaycastResult? terrainRaycastResult = GameWidget.SubsystemGameWidgets.SubsystemTerrain.Raycast(targetPosition, vector2, useInteractionBoxes: false, skipAirBlocks: true, (v,d) => !BlocksManager.Blocks[Terrain.ExtractContents(v)].IsTransparent_(v));
 				Vector3 zero = Vector3.Zero;

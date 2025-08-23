@@ -22,51 +22,33 @@ namespace Engine.Graphics
 
 		public Texture2D Texture
 		{
-			set
-			{
-				m_textureParameter.SetValue(value);
-			}
-		}
+			set => m_textureParameter.SetValue(value);
+        }
 
 		public SamplerState SamplerState
 		{
-			set
-			{
-				m_samplerStateParameter.SetValue(value);
-			}
-		}
+			set => m_samplerStateParameter.SetValue(value);
+        }
 
 		public Vector4 Color
 		{
-			set
-			{
-				m_colorParameter.SetValue(value);
-			}
-		}
+			set => m_colorParameter.SetValue(value);
+        }
 
         public Vector4 AdditiveColor
         {
-            set
-            {
-                m_additiveColorParameter.SetValue(value);
-            }
+            set => m_additiveColorParameter.SetValue(value);
         }
 
 		public float AlphaThreshold
 		{
-			set
-			{
-				m_alphaThresholdParameter.SetValue(value);
-			}
-		}
+			set => m_alphaThresholdParameter.SetValue(value);
+        }
 
 		public float Time
 		{
-			set
-			{
-				m_time.SetValue(value);
-			}
-		}
+			set => m_time.SetValue(value);
+        }
 
 		public UnlitShader(string vsc, string psc, bool useVertexColor, bool useTexture, bool useAdditiveColor, bool useAlphaThreshold)
 			: base(vsc, psc, 1, PrepareShaderMacros(useVertexColor, useTexture, useAdditiveColor, useAlphaThreshold))
@@ -82,11 +64,7 @@ namespace Engine.Graphics
 		}
 
 		public UnlitShader(bool useVertexColor, bool useTexture, bool useAdditiveColor, bool useAlphaThreshold)
-#if ANDROID
-			: base(new StreamReader(Storage.OpenFile("app:Unlit.vsh", OpenFileMode.Read)).ReadToEnd(), new StreamReader(Storage.OpenFile("app:Unlit.psh", OpenFileMode.Read)).ReadToEnd(), 1, PrepareShaderMacros(useVertexColor, useTexture, useAdditiveColor, useAlphaThreshold))
-#else
-			: base(new StreamReader(typeof(Shader).GetTypeInfo().Assembly.GetManifestResourceStream("Engine.Resources.Unlit.vsh")).ReadToEnd(), new StreamReader(typeof(Shader).GetTypeInfo().Assembly.GetManifestResourceStream("Engine.Resources.Unlit.psh")).ReadToEnd(), 1, PrepareShaderMacros(useVertexColor, useTexture, useAdditiveColor, useAlphaThreshold))
-#endif
+			: base(GetUnlitVshString(), GetUnlitPshString(), 1, PrepareShaderMacros(useVertexColor, useTexture, useAdditiveColor, useAlphaThreshold))
 		{
 			m_worldViewProjectionMatrixParameter = GetParameter("u_worldViewProjectionMatrix", allowNull: true);
 			m_textureParameter = GetParameter("u_texture", allowNull: true);
@@ -96,6 +74,28 @@ namespace Engine.Graphics
 			m_alphaThresholdParameter = GetParameter("u_alphaThreshold", allowNull: true);
 			Color = Vector4.One;
 		}
+
+        public static string GetUnlitVshString()
+        {
+#if ANDROID
+            Stream stream = Storage.OpenFile("app:Unlit.vsh", OpenFileMode.Read);
+#else
+            Stream stream = typeof(Shader).GetTypeInfo().Assembly.GetManifestResourceStream("Engine.Resources.Unlit.vsh");
+#endif
+            ArgumentNullException.ThrowIfNull(stream);
+            return new StreamReader(stream).ReadToEnd();
+        }
+
+        public static string GetUnlitPshString()
+        {
+#if ANDROID
+            Stream stream = Storage.OpenFile("app:Unlit.psh", OpenFileMode.Read);
+#else
+            Stream stream = typeof(Shader).GetTypeInfo().Assembly.GetManifestResourceStream("Engine.Resources.Unlit.psh");
+#endif
+            ArgumentNullException.ThrowIfNull(stream);
+            return new StreamReader(stream).ReadToEnd();
+        }
 
         public override void PrepareForDrawingOverride()
 		{

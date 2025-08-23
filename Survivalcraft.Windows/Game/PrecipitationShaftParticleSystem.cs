@@ -110,8 +110,8 @@ namespace Game
 			Camera activeCamera = m_gameWidget.ActiveCamera;
 			if (!m_isEmpty || (m_intensity > 0f && m_yLimit < activeCamera.ViewPosition.Y + 5f))
 			{
-				var v = Vector2.Normalize(new Vector2(activeCamera.ViewDirection.X, activeCamera.ViewDirection.Z));
-				var v2 = Vector2.Normalize(new Vector2(Point.X + 0.5f - activeCamera.ViewPosition.X + (0.7f * v.X), Point.Y + 0.5f - activeCamera.ViewPosition.Z + (0.7f * v.Y)));
+				Vector2 v = Vector2.Normalize(new Vector2(activeCamera.ViewDirection.X, activeCamera.ViewDirection.Z));
+				Vector2 v2 = Vector2.Normalize(new Vector2(Point.X + 0.5f - activeCamera.ViewPosition.X + (0.7f * v.X), Point.Y + 0.5f - activeCamera.ViewPosition.Z + (0.7f * v.Y)));
 				float num = Vector2.Dot(v, v2);
 				m_isVisible = num > 0.5f;
 				if (m_isVisible)
@@ -220,7 +220,7 @@ namespace Game
 			}
 			float num = camera.ViewPosition.Y + 5f;
 			Vector3 viewDirection = camera.ViewDirection;
-			var vector = Vector3.Normalize(Vector3.Cross(viewDirection, Vector3.UnitY));
+			Vector3 vector = Vector3.Normalize(Vector3.Cross(viewDirection, Vector3.UnitY));
 			Vector3 v = (m_precipitationType == PrecipitationType.Rain) ? Vector3.UnitY : Vector3.Normalize(Vector3.Cross(viewDirection, vector));
 			Vector3 vector2 = vector * m_size.X;
 			Vector3 vector3 = v * m_size.Y;
@@ -271,7 +271,7 @@ namespace Game
 			{
 				return;
 			}
-			var ray = new Ray3(new Vector3(particle.Position.X - Point.X, 1f, particle.Position.Z - Point.Y), -Vector3.UnitY);
+			Ray3 ray = new(new Vector3(particle.Position.X - Point.X, 1f, particle.Position.Z - Point.Y), -Vector3.UnitY);
 			float? num = block.Raycast(ray, m_subsystemWeather.SubsystemTerrain, m_topmostValue, useInteractionBoxes: false, out int nearestBoxIndex, out BoundingBox nearestBox);
 			if (num.HasValue)
 			{

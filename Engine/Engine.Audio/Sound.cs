@@ -45,7 +45,8 @@ namespace Engine.Audio
 			Mixer.m_soundsToStopPoll.Add(this);
 		}
 
-		public Sound(StreamingSource streamingSource, SoundBuffer soundBuffer, float volume = 1f, float pitch = 1f, float pan = 0f, bool isLooped = false, bool disposeOnStop = false)
+        // ReSharper disable once UnusedParameter.Local
+        public Sound(StreamingSource streamingSource, SoundBuffer soundBuffer, float volume = 1f, float pitch = 1f, float pan = 0f, bool isLooped = false, bool disposeOnStop = false)
 		{
 			ArgumentNullException.ThrowIfNull(soundBuffer);
             Mixer.AL.SetSourceProperty((uint)m_source, SourceInteger.Buffer, soundBuffer.m_buffer);

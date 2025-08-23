@@ -33,7 +33,7 @@ namespace Game
 
 		public Dictionary<ComponentSpawn, bool> m_spawns = [];
 
-		public Dictionary<int, SpawnEntityData> m_spawnEntityDatas = new Dictionary<int, SpawnEntityData>();
+		public Dictionary<int, SpawnEntityData> m_spawnEntityDatas = new();
 
 		public float MaxChunkAge = 76800f;
 
@@ -88,11 +88,8 @@ namespace Game
 			m_subsystemTime = Project.FindSubsystem<SubsystemTime>(throwOnError: true);
 			foreach (KeyValuePair<string, object> item in valuesDictionary.GetValue<ValuesDictionary>("Chunks"))
 			{
-				var valuesDictionary2 = (ValuesDictionary)item.Value;
-				var spawnChunk = new SpawnChunk();
-				spawnChunk.Point = HumanReadableConverter.ConvertFromString<Point2>(item.Key);
-				spawnChunk.IsSpawned = valuesDictionary2.GetValue<bool>("IsSpawned");
-				spawnChunk.LastVisitedTime = valuesDictionary2.GetValue<double>("LastVisitedTime");
+				ValuesDictionary valuesDictionary2 = (ValuesDictionary)item.Value;
+				SpawnChunk spawnChunk = new() { Point = HumanReadableConverter.ConvertFromString<Point2>(item.Key),IsSpawned = valuesDictionary2.GetValue<bool>("IsSpawned"),LastVisitedTime = valuesDictionary2.GetValue<double>("LastVisitedTime") };
 				object obj = valuesDictionary2.GetValue("SpawnsData", new object());
 				if (obj is string str)
 				{
@@ -109,13 +106,13 @@ namespace Game
 
 		public override void Save(ValuesDictionary valuesDictionary)
 		{
-			var valuesDictionary2 = new ValuesDictionary();
+			ValuesDictionary valuesDictionary2 = new();
 			valuesDictionary.SetValue("Chunks", valuesDictionary2);
 			foreach (SpawnChunk value2 in m_chunks.Values)
 			{
 				if (value2.LastVisitedTime.HasValue)
 				{
-					var valuesDictionary3 = new ValuesDictionary();
+					ValuesDictionary valuesDictionary3 = new();
 					valuesDictionary2.SetValue(HumanReadableConverter.ConvertToString(value2.Point), valuesDictionary3);
 					valuesDictionary3.SetValue("IsSpawned", value2.IsSpawned);
 					valuesDictionary3.SetValue("LastVisitedTime", value2.LastVisitedTime.Value);
@@ -163,7 +160,7 @@ namespace Game
 
 		public virtual void DiscardOldChunks()
 		{
-			var list = new List<Point2>();
+			List<Point2> list = new();
 			foreach (SpawnChunk value in m_chunks.Values)
 			{
 				if (!value.LastVisitedTime.HasValue || m_subsystemGameInfo.TotalElapsedGameTime - value.LastVisitedTime.Value > MaxChunkAge)
@@ -181,7 +178,7 @@ namespace Game
 		{
 			foreach (ComponentPlayer componentPlayer in m_subsystemPlayers.ComponentPlayers)
 			{
-				var v = new Vector2(componentPlayer.ComponentBody.Position.X, componentPlayer.ComponentBody.Position.Z);
+				Vector2 v = new(componentPlayer.ComponentBody.Position.X, componentPlayer.ComponentBody.Position.Z);
 				Vector2 p = v - new Vector2(VisitedRadius);
 				Vector2 p2 = v + new Vector2(VisitedRadius);
 				Point2 point = Terrain.ToChunk(p);
@@ -202,10 +199,10 @@ namespace Game
 
 		public virtual void SpawnChunks()
 		{
-			var list = new List<SpawnChunk>();
+			List<SpawnChunk> list = new();
 			foreach (GameWidget gameWidget in m_subsystemViews.GameWidgets)
 			{
-				var v = new Vector2(gameWidget.ActiveCamera.ViewPosition.X, gameWidget.ActiveCamera.ViewPosition.Z);
+				Vector2 v = new(gameWidget.ActiveCamera.ViewPosition.X, gameWidget.ActiveCamera.ViewPosition.Z);
 				Vector2 p = v - new Vector2(SpawnRadius);
 				Vector2 p2 = v + new Vector2(SpawnRadius);
 				Point2 point = Terrain.ToChunk(p);
@@ -214,13 +211,13 @@ namespace Game
 				{
 					for (int j = point.Y; j <= point2.Y; j++)
 					{
-						var v2 = new Vector2((i + 0.5f) * 16f, (j + 0.5f) * 16f);
+						Vector2 v2 = new((i + 0.5f) * 16f, (j + 0.5f) * 16f);
 						if (Vector2.DistanceSquared(v, v2) < SpawnRadius * SpawnRadius)
 						{
 							TerrainChunk chunkAtCell = m_subsystemTerrain.Terrain.GetChunkAtCell(Terrain.ToCell(v2.X), Terrain.ToCell(v2.Y));
 							if (chunkAtCell != null && chunkAtCell.State > TerrainChunkState.InvalidPropagatedLight)
 							{
-								var point3 = new Point2(i, j);
+								Point2 point3 = new(i, j);
 								SpawnChunk orCreateSpawnChunk = GetOrCreateSpawnChunk(point3);
 								foreach (SpawnEntityData spawnsDatum in orCreateSpawnChunk.SpawnsData)
 								{
@@ -246,18 +243,18 @@ namespace Game
 
 		public virtual void DespawnChunks()
 		{
-			var list = new List<ComponentSpawn>(0);
+			List<ComponentSpawn> list = new(0);
 			foreach (ComponentSpawn key in m_spawns.Keys)
 			{
 				if (key.AutoDespawn && !key.IsDespawning)
 				{
 					bool flag = true;
 					Vector3 position = key.ComponentFrame.Position;
-					var v = new Vector2(position.X, position.Z);
+					Vector2 v = new(position.X, position.Z);
 					foreach (GameWidget gameWidget in m_subsystemViews.GameWidgets)
 					{
 						Vector3 viewPosition = gameWidget.ActiveCamera.ViewPosition;
-						var v2 = new Vector2(viewPosition.X, viewPosition.Z);
+						Vector2 v2 = new(viewPosition.X, viewPosition.Z);
 						if (Vector2.DistanceSquared(v, v2) <= DespawnRadius * DespawnRadius)
 						{
 							flag = false;
@@ -273,7 +270,7 @@ namespace Game
 			foreach (ComponentSpawn item in list)
 			{
 				Point2 point = Terrain.ToChunk(item.ComponentFrame.Position.XZ);
-				var data = new SpawnEntityData
+				SpawnEntityData data = new()
 				{
 					TemplateName = item.Entity.ValuesDictionary.DatabaseObject.Name,
 					Position = item.ComponentFrame.Position,
@@ -314,7 +311,7 @@ namespace Game
         [Obsolete]
         public virtual void LoadSpawnsData(ValuesDictionary loadData, List<SpawnEntityData> creaturesData)
 		{
-			foreach(var (item, data) in from ValuesDictionary item in loadData.Values
+			foreach((ValuesDictionary item, SpawnEntityData data) in from ValuesDictionary item in loadData.Values
 										let data = new SpawnEntityData()
 										select (item, data))
 			{
@@ -336,7 +333,7 @@ namespace Game
                 {
                     throw new InvalidOperationException("Invalid spawn data string.");
                 }
-                SpawnEntityData spawnEntityData = new SpawnEntityData
+                SpawnEntityData spawnEntityData = new()
                 {
                     TemplateName = array2[0],
                     Position = new Vector3
@@ -370,7 +367,7 @@ namespace Game
 		public virtual void SaveSpawnsData(ValuesDictionary saveData, List<SpawnEntityData> spawnsData)
 		{
 			int i = 0;
-			foreach (var d in spawnsData)
+			foreach (SpawnEntityData d in spawnsData)
 			{
 				ValuesDictionary v2 = [];
 				v2.SetValue("c", d.ConstantSpawn);
@@ -382,7 +379,7 @@ namespace Game
 		}
         public virtual string SaveSpawnsData(List<SpawnEntityData> spawnsData)
         {
-            StringBuilder stringBuilder = new StringBuilder();
+            StringBuilder stringBuilder = new();
             foreach (SpawnEntityData spawnEntityData in spawnsData)
             {
                 stringBuilder.Append(spawnEntityData.TemplateName);

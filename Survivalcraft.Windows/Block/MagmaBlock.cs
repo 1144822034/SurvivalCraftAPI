@@ -4,7 +4,7 @@ namespace Game
 	{
 		public static int Index = 92;
 
-		public new static int MaxLevel = 4;
+		public static new int MaxLevel = 4;
 
 		public MagmaBlock()
 			: base(MaxLevel)

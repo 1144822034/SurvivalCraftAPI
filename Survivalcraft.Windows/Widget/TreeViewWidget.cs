@@ -65,7 +65,7 @@ namespace Game
 		{
 			Children.Clear();
 
-			foreach(var viewNode in Nodes)
+			foreach(TreeViewNode viewNode in Nodes)
 			{
 				AddNodeToWidget(viewNode, 0);
 			}
@@ -91,7 +91,7 @@ namespace Game
 
 			if(node.Nodes.Count > 0 && node.Expanded)
 			{
-				foreach(var child in node.Nodes)
+				foreach(TreeViewNode child in node.Nodes)
 				{
 					AddNodeToWidget(child, xOffset + 20);
 				}
@@ -108,7 +108,7 @@ namespace Game
 			int num = 0;
 			foreach(Widget child in Children)
 			{
-				var vector2 = new Vector2(0f,(num * ItemSize) - ScrollPosition);
+				Vector2 vector2 = new(0f,(num * ItemSize) - ScrollPosition);
 				ArrangeChildWidgetInCell(vector2,vector2 + new Vector2(ActualSize.X,ItemSize),child);
 				num++;
 			}
@@ -331,7 +331,7 @@ namespace Game
 		}
 
 		public void EnsureVisible() {
-			var parent = ParentNode;
+			TreeViewNode parent = ParentNode;
 
 			while (parent != null) {
 				parent.Expanded = true;

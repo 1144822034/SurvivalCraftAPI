@@ -187,16 +187,16 @@ namespace Game
 				{
 					float scrollPosition = ScrollPosition;
 					float x = ActualSize.X;
-					var corner = new Vector2(scrollPosition / m_scrollAreaLength * x, ActualSize.Y - 5f);
-					var corner2 = new Vector2((scrollPosition + x) / m_scrollAreaLength * x, ActualSize.Y - 1f);
+					Vector2 corner = new(scrollPosition / m_scrollAreaLength * x, ActualSize.Y - 5f);
+					Vector2 corner2 = new((scrollPosition + x) / m_scrollAreaLength * x, ActualSize.Y - 1f);
 					flatBatch2D.QueueQuad(corner, corner2, 0f, color);
 				}
 				else
 				{
 					float scrollPosition2 = ScrollPosition;
 					float y = ActualSize.Y;
-					var corner3 = new Vector2(ActualSize.X - 5f, scrollPosition2 / m_scrollAreaLength * y);
-					var corner4 = new Vector2(ActualSize.X - 1f, (scrollPosition2 + y) / m_scrollAreaLength * y);
+					Vector2 corner3 = new(ActualSize.X - 5f, scrollPosition2 / m_scrollAreaLength * y);
+					Vector2 corner4 = new(ActualSize.X - 1f, (scrollPosition2 + y) / m_scrollAreaLength * y);
 					flatBatch2D.QueueQuad(corner3, corner4, 0f, color);
 				}
 				flatBatch2D.TransformTriangles(GlobalTransform, count);

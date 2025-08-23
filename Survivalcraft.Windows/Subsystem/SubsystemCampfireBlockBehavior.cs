@@ -93,7 +93,7 @@ namespace Game
 
 		public override void OnChunkDiscarding(TerrainChunk chunk)
 		{
-			var list = new List<Point3>();
+			List<Point3> list = new();
 			foreach (Point3 key in m_particleSystemsByCell.Keys)
 			{
 				if (key.X >= chunk.Origin.X && key.X < chunk.Origin.X + 16 && key.Z >= chunk.Origin.Y && key.Z < chunk.Origin.Y + 16)
@@ -139,9 +139,9 @@ namespace Game
 			int num = Terrain.ExtractData(value);
 			if (num > 0)
 			{
-				var v = new Vector3(0.5f, 0.15f, 0.5f);
+				Vector3 v = new(0.5f, 0.15f, 0.5f);
 				float size = MathUtils.Lerp(0.2f, 0.5f, num / 15f);
-				var fireParticleSystem = new FireParticleSystem(new Vector3(x, y, z) + v, size, 256f);
+				FireParticleSystem fireParticleSystem = new(new Vector3(x, y, z) + v, size, 256f);
 				m_subsystemParticles.AddParticleSystem(fireParticleSystem);
 				m_particleSystemsByCell[new Point3(x, y, z)] = fireParticleSystem;
 			}
@@ -149,7 +149,7 @@ namespace Game
 
 		public void RemoveCampfireParticleSystem(int x, int y, int z)
 		{
-			var key = new Point3(x, y, z);
+			Point3 key = new(x, y, z);
 			if (m_particleSystemsByCell.TryGetValue(key, out FireParticleSystem value))
 			{
 				value.IsStopped = true;

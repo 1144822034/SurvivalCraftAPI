@@ -20,10 +20,7 @@ namespace Engine.Media
 
 		public override long Position
 		{
-			get
-			{
-                return CanSeek ? m_position : throw new NotSupportedException();
-            }
+			get => CanSeek ? m_position : throw new NotSupportedException();
             set
 			{
 				if (CanSeek)

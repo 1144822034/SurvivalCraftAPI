@@ -48,9 +48,9 @@ namespace Game
 				bool flag = (i & 2) != 0;
 				bool flag2 = (i & 4) != 0;
 				bool flag3 = (i & 8) != 0;
-				var list = new List<BoundingBox>();
-				var m = Matrix.CreateTranslation(0.5f, 0f, 0.5f);
-				var blockMesh = new BlockMesh();
+				List<BoundingBox> list = new();
+				Matrix m = Matrix.CreateTranslation(0.5f, 0f, 0.5f);
+				BlockMesh blockMesh = new();
 				blockMesh.AppendModelMeshPart(model.FindMesh("Post").MeshParts[0], boneAbsoluteTransform * m, makeEmissive: false, flipWindingOrder: false, doubleSided: false, flipNormals: false, Color.White);
 				BoundingBox item = blockMesh.CalculateBoundingBox();
 				item.Min.X -= 0.1f;
@@ -58,10 +58,10 @@ namespace Game
 				item.Max.X += 0.1f;
 				item.Max.Z += 0.1f;
 				list.Add(item);
-				var blockMesh2 = new BlockMesh();
+				BlockMesh blockMesh2 = new();
 				if (num)
 				{
-					var blockMesh3 = new BlockMesh();
+					BlockMesh blockMesh3 = new();
 					Matrix m2 = Matrix.CreateRotationY(0f) * Matrix.CreateTranslation(0.5f, 0f, 0.5f);
 					blockMesh3.AppendModelMeshPart(model.FindMesh("Planks").MeshParts[0], boneAbsoluteTransform2 * m2, makeEmissive: false, flipWindingOrder: false, doubleSided: false, flipNormals: false, Color.White);
 					if (m_doubleSidedPlanks)
@@ -74,7 +74,7 @@ namespace Game
 				}
 				if (flag)
 				{
-					var blockMesh4 = new BlockMesh();
+					BlockMesh blockMesh4 = new();
 					Matrix m3 = Matrix.CreateRotationY((float)Math.PI) * Matrix.CreateTranslation(0.5f, 0f, 0.5f);
 					blockMesh4.AppendModelMeshPart(model.FindMesh("Planks").MeshParts[0], boneAbsoluteTransform2 * m3, makeEmissive: false, flipWindingOrder: false, doubleSided: false, flipNormals: false, Color.White);
 					if (m_doubleSidedPlanks)
@@ -87,7 +87,7 @@ namespace Game
 				}
 				if (flag2)
 				{
-					var blockMesh5 = new BlockMesh();
+					BlockMesh blockMesh5 = new();
 					Matrix m4 = Matrix.CreateRotationY(4.712389f) * Matrix.CreateTranslation(0.5f, 0f, 0.5f);
 					blockMesh5.AppendModelMeshPart(model.FindMesh("Planks").MeshParts[0], boneAbsoluteTransform2 * m4, makeEmissive: false, flipWindingOrder: false, doubleSided: false, flipNormals: false, Color.White);
 					if (m_doubleSidedPlanks)
@@ -100,7 +100,7 @@ namespace Game
 				}
 				if (flag3)
 				{
-					var blockMesh6 = new BlockMesh();
+					BlockMesh blockMesh6 = new();
 					Matrix m5 = Matrix.CreateRotationY((float)Math.PI / 2f) * Matrix.CreateTranslation(0.5f, 0f, 0.5f);
 					blockMesh6.AppendModelMeshPart(model.FindMesh("Planks").MeshParts[0], boneAbsoluteTransform2 * m5, makeEmissive: false, flipWindingOrder: false, doubleSided: false, flipNormals: false, Color.White);
 					if (m_doubleSidedPlanks)

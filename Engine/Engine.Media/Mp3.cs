@@ -19,10 +19,7 @@ namespace Engine.Media
 
             public override long Position
             {
-                get
-                {
-                    return m_position;
-                }
+                get => m_position;
                 set
                 {
                     if (m_reader.CanSeek)
@@ -116,7 +113,7 @@ namespace Engine.Media
 				}
 				byte[] array = new byte[(int)streamingSource.BytesCount];
 				streamingSource.Read(array, 0, array.Length);
-				var soundData = new SoundData(streamingSource.ChannelsCount, streamingSource.SamplingFrequency, array.Length);
+				SoundData soundData = new(streamingSource.ChannelsCount, streamingSource.SamplingFrequency, array.Length);
 				Buffer.BlockCopy(array, 0, soundData.Data, 0, array.Length);
 				return soundData;
 			}

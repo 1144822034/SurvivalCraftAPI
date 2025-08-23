@@ -23,7 +23,7 @@ namespace Engine.Serialization
         {
             if (node == null)
             {
-                throw new ArgumentNullException("node");
+                throw new ArgumentNullException(nameof(node));
             }
             Node = node;
             Reset(version, context);

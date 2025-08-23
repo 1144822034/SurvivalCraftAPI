@@ -92,7 +92,7 @@ namespace Game
 				{
 					float num = ScoreTarget(m_target);
 					SetImportanceLevel(num);
-					var vector = Vector3.Normalize(m_componentCreature.ComponentBody.Position - m_target.ComponentBody.Position);
+					Vector3 vector = Vector3.Normalize(m_componentCreature.ComponentBody.Position - m_target.ComponentBody.Position);
 					Vector3 value = m_componentCreature.ComponentBody.Position + (10f * Vector3.Normalize(new Vector3(vector.X, 0f, vector.Z)));
 					m_componentPathfinding.SetDestination(value, MathUtils.Lerp(0.6f, 1f, num), 1f, 0, useRandomMovements: false, ignoreHeightDifference: true, raycastDestination: false, null);
 					m_componentCreature.ComponentCreatureModel.LookRandomOrder = true;

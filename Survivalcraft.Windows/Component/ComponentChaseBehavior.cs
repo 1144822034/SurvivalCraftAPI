@@ -531,7 +531,7 @@ namespace Game
 		{
 			Vector3 vector = m_componentCreature.ComponentBody.BoundingBox.Center();
 			Vector3 v = target.BoundingBox.Center();
-			var ray = new Ray3(vector, Vector3.Normalize(v - vector));
+			Ray3 ray = new(vector, Vector3.Normalize(v - vector));
 			BodyRaycastResult? bodyRaycastResult = m_componentMiner.Raycast<BodyRaycastResult>(ray, RaycastMode.Interaction);
 			if (bodyRaycastResult.HasValue && 
 				bodyRaycastResult.Value.Distance < MaxAttackRange && 

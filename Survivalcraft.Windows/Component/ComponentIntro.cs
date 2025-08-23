@@ -28,7 +28,7 @@ namespace Game
 			Vector2 result = Vector2.Zero;
 			for (int i = 0; i < 36; i++)
 			{
-				var vector = Vector2.CreateFromAngle(i / 36f * 2f * (float)Math.PI);
+				Vector2 vector = Vector2.CreateFromAngle(i / 36f * 2f * (float)Math.PI);
 				Vector2 vector2 = position + (50f * vector);
 				float num2 = generator.CalculateOceanShoreDistance(vector2.X, vector2.Y);
 				if (num2 < num)
@@ -86,10 +86,10 @@ namespace Game
 				}
 			}
 			DatabaseObject databaseObject = Project.GameDatabase.Database.FindDatabaseObject("IntroShip", Project.GameDatabase.EntityTemplateType, throwIfNotFound: true);
-			var valuesDictionary = new ValuesDictionary();
+			ValuesDictionary valuesDictionary = new();
 			valuesDictionary.PopulateFromDatabaseObject(databaseObject);
 			Entity entity = Project.CreateEntity(valuesDictionary);
-			var vector4 = new Vector3(vector3.X, m_subsystemTerrain.TerrainContentsGenerator.OceanLevel + 0.5f, vector3.Y);
+			Vector3 vector4 = new(vector3.X, m_subsystemTerrain.TerrainContentsGenerator.OceanLevel + 0.5f, vector3.Y);
 			entity.FindComponent<ComponentFrame>(throwOnError: true).Position = vector4;
 			entity.FindComponent<ComponentIntroShip>(throwOnError: true).Heading = Vector2.Angle(vector, -Vector2.UnitY);
 			Project.AddEntity(entity);

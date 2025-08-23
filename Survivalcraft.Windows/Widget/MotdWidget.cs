@@ -142,8 +142,7 @@ namespace Game
 
 		public LineData ParseLine(MotdManager.Line line)
 		{
-			var lineData = new LineData();
-			lineData.Time = line.Time;
+			LineData lineData = new() { Time = line.Time };
 			if (line.Node != null)
 			{
 				lineData.Widget = LoadWidget(null, line.Node, null);
@@ -154,7 +153,7 @@ namespace Game
 				{
 					throw new InvalidOperationException("Invalid MOTD line.");
 				}
-				var stackPanelWidget = new StackPanelWidget
+				StackPanelWidget stackPanelWidget = new()
 				{
 					Direction = LayoutDirection.Vertical,
 					HorizontalAlignment = WidgetAlignment.Center,
@@ -166,7 +165,7 @@ namespace Game
 					string text = array[i].Trim();
 					if (!string.IsNullOrEmpty(text))
 					{
-						var widget = new LabelWidget
+						LabelWidget widget = new()
 						{
 							Text = text,
 							HorizontalAlignment = WidgetAlignment.Center,

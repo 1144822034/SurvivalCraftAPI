@@ -10,14 +10,8 @@ namespace Game
 
 		public LayoutDirection Direction
 		{
-			get
-			{
-				return m_direction;
-			}
-			set
-			{
-				m_direction = value;
-			}
+			get => m_direction;
+			set => m_direction = value;
 		}
 
 		public override void ArrangeOverride()

@@ -23,10 +23,7 @@ namespace Game
 
 		public string NameSuffix
 		{
-			get
-			{
-				return m_nameSuffix;
-			}
+			get => m_nameSuffix;
 			set
 			{
 				if (value != m_nameSuffix)
@@ -39,10 +36,7 @@ namespace Game
 
 		public CraftingRecipe Recipe
 		{
-			get
-			{
-				return m_recipe;
-			}
+			get => m_recipe;
 			set
 			{
 				if (value != m_recipe)
@@ -66,7 +60,7 @@ namespace Game
 			{
 				for (int j = 0; j < m_gridWidget.ColumnsCount; j++)
 				{
-					var widget = new CraftingRecipeSlotWidget();
+					CraftingRecipeSlotWidget widget = new();
 					m_gridWidget.Children.Add(widget);
 					m_gridWidget.SetWidgetCell(widget, new Point2(j, i));
 				}

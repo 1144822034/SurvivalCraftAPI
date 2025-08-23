@@ -13,7 +13,7 @@ namespace Game
 		public Dictionary<int, T> m_itemsData = [];
 
 		public Dictionary<Point3, T> m_blocksData = [];
-		public Dictionary<MovingBlock, T> m_movingBlocksData = new Dictionary<MovingBlock, T>();
+		public Dictionary<MovingBlock, T> m_movingBlocksData = new();
 
 		public SubsystemEditableItemBehavior(int contents)
 		{
@@ -95,7 +95,7 @@ namespace Game
 
 		public override void OnBlockStartMoving(int value,int newValue,int x,int y,int z,MovingBlock movingBlock)
 		{
-			Point3 point = new Point3(x,y,z);
+			Point3 point = new(x,y,z);
 			T blockData = m_blocksData[point];
 			m_blocksData.Remove(point);
 			m_movingBlocksData[movingBlock] = blockData;
@@ -103,7 +103,7 @@ namespace Game
 
 		public override void OnBlockStopMoving(int value,int oldValue,int x,int y,int z,MovingBlock movingBlock)
 		{
-			Point3 point = new Point3(x,y,z);
+			Point3 point = new(x,y,z);
 			T blockData = m_movingBlocksData[movingBlock];
 			m_movingBlocksData.Remove(movingBlock);
 			m_blocksData[point] = blockData;
@@ -115,7 +115,7 @@ namespace Game
 			m_subsystemItemsScanner = Project.FindSubsystem<SubsystemItemsScanner>(throwOnError: true);
 			foreach (KeyValuePair<string, object> item in valuesDictionary.GetValue<ValuesDictionary>("Blocks"))
 			{
-				var value = new T();
+				T value = new();
 				value.LoadString((string)item.Value);
 				MovingBlock movingBlock = MovingBlock.LoadFromString(Project,item.Key, out Exception exception);
 				if(exception == null)
@@ -131,7 +131,7 @@ namespace Game
 			foreach (KeyValuePair<string, object> item2 in valuesDictionary.GetValue<ValuesDictionary>("Items"))
 			{
 				int key2 = HumanReadableConverter.ConvertFromString<int>(item2.Key);
-				var value2 = new T();
+				T value2 = new();
 				value2.LoadString((string)item2.Value);
 				m_itemsData[key2] = value2;
 			}
@@ -141,7 +141,7 @@ namespace Game
 		public override void Save(ValuesDictionary valuesDictionary)
 		{
 			base.Save(valuesDictionary);
-			var valuesDictionary2 = new ValuesDictionary();
+			ValuesDictionary valuesDictionary2 = new();
 			valuesDictionary.SetValue("Blocks", valuesDictionary2);
 			foreach (KeyValuePair<Point3, T> blocksDatum in m_blocksData)
 			{
@@ -151,7 +151,7 @@ namespace Game
 			{
 				valuesDictionary2.SetValue(movingBlocksDatum.Key.ToString(), movingBlocksDatum.Value.SaveString());
 			}
-			var valuesDictionary3 = new ValuesDictionary();
+			ValuesDictionary valuesDictionary3 = new();
 			valuesDictionary.SetValue("Items", valuesDictionary3);
 			foreach (KeyValuePair<int, T> itemsDatum in m_itemsData)
 			{
@@ -173,7 +173,7 @@ namespace Game
 
 		public void GarbageCollectItems(ReadOnlyList<ScannedItemData> allExistingItems)
 		{
-			var hashSet = new HashSet<int>();
+			HashSet<int> hashSet = new();
 			foreach (ScannedItemData item in allExistingItems)
 			{
 				if (Terrain.ExtractContents(item.Value) == m_contents)
@@ -181,7 +181,7 @@ namespace Game
 					hashSet.Add(Terrain.ExtractData(item.Value));
 				}
 			}
-			var list = new List<int>();
+			List<int> list = new();
 			foreach (KeyValuePair<int, T> itemsDatum in m_itemsData)
 			{
 				if (!hashSet.Contains(itemsDatum.Key))

@@ -11,6 +11,7 @@ using Debug = System.Diagnostics.Debug;
 using Environment = System.Environment;
 using Stream = Android.Media.Stream;
 using Uri = Android.Net.Uri;
+// ReSharper disable BitwiseOperatorOnEnumWithoutFlags
 
 namespace Engine
 {
@@ -103,10 +104,10 @@ namespace Engine
         {
             Debug.WriteLine($"[DispatchKeyEvent]action:{e.Action} keyCode:{e.KeyCode} unicodeChar:{e.UnicodeChar} flags:{e.Flags} metaState:{e.MetaState} source:{e.Source} deviceId:{e.DeviceId}");
             bool handled = false;
-            var invocationList = OnDispatchKeyEvent?.GetInvocationList();
+            Delegate[] invocationList = OnDispatchKeyEvent?.GetInvocationList();
             if (invocationList != null)
             {
-                foreach (var invocation in invocationList)
+                foreach (Delegate invocation in invocationList)
                 {
                     handled |= (bool)invocation.DynamicInvoke(e)!;
                 }

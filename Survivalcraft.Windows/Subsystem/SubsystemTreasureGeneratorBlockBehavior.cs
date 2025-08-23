@@ -16,7 +16,7 @@ namespace Game
 			/// <summary>
 			/// 模组如果需要添加或使用额外信息，可以在这个ValuesDictionary读写元素
 			/// </summary>
-			public ValuesDictionary ValuesDictionaryForMods = new ValuesDictionary();
+			public ValuesDictionary ValuesDictionaryForMods = new();
 		}
 
 		public SubsystemPickables m_subsystemPickables;
@@ -83,8 +83,8 @@ namespace Game
 
 		static SubsystemTreasureGeneratorBlockBehavior()
 		{
-			var array = new TreasureData[61];
-			var treasureData = new TreasureData
+			TreasureData[] array = new TreasureData[61];
+			TreasureData treasureData = new()
 			{
 				Value = 79,
 				Probability = 4f,

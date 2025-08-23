@@ -120,7 +120,7 @@ namespace Game
 			GlobalSpawnPosition = valuesDictionary.GetValue<Vector3>("GlobalSpawnPosition");
 			foreach (KeyValuePair<string, object> item in valuesDictionary.GetValue<ValuesDictionary>("Players"))
 			{
-				var playerData = new PlayerData(Project);
+				PlayerData playerData = new(Project);
 				playerData.Load((ValuesDictionary)item.Value);
 				playerData.PlayerIndex = int.Parse(item.Key, CultureInfo.InvariantCulture);
 				m_playersData.Add(playerData);
@@ -131,11 +131,11 @@ namespace Game
 		{
 			valuesDictionary.SetValue("NextPlayerIndex", m_nextPlayerIndex);
 			valuesDictionary.SetValue("GlobalSpawnPosition", GlobalSpawnPosition);
-			var valuesDictionary2 = new ValuesDictionary();
+			ValuesDictionary valuesDictionary2 = new();
 			valuesDictionary.SetValue("Players", valuesDictionary2);
 			foreach (PlayerData playersDatum in m_playersData)
 			{
-				var valuesDictionary3 = new ValuesDictionary();
+				ValuesDictionary valuesDictionary3 = new();
 				valuesDictionary2.SetValue(playersDatum.PlayerIndex.ToString(CultureInfo.InvariantCulture), valuesDictionary3);
 				playersDatum.Save(valuesDictionary3);
 			}

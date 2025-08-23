@@ -26,10 +26,7 @@ namespace Game
 
 		public int ColumnsCount
 		{
-			get
-			{
-				return m_columns.Count;
-			}
+			get => m_columns.Count;
 			set
 			{
 				m_columns = new List<Column>(m_columns.GetRange(0, MathUtils.Min(m_columns.Count, value)));
@@ -42,10 +39,7 @@ namespace Game
 
 		public int RowsCount
 		{
-			get
-			{
-				return m_rows.Count;
-			}
+			get => m_rows.Count;
 			set
 			{
 				m_rows = new List<Row>(m_rows.GetRange(0, MathUtils.Min(m_rows.Count, value)));

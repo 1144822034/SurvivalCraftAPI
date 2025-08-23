@@ -33,11 +33,11 @@ namespace Game
 
 		private BevelledShapeRenderer.Point[] m_points = new BevelledShapeRenderer.Point[4];
 
-		private FlatBatch2D m_cachedShadowBatch = new FlatBatch2D();
+		private FlatBatch2D m_cachedShadowBatch = new();
 
-		private FlatBatch2D m_cachedFlatBatch = new FlatBatch2D();
+		private FlatBatch2D m_cachedFlatBatch = new();
 
-		private TexturedBatch2D m_cachedTexturedBatch = new TexturedBatch2D();
+		private TexturedBatch2D m_cachedTexturedBatch = new();
 
 		private bool m_cachedBatchesValid;
 
@@ -53,10 +53,7 @@ namespace Game
 
 		public float RoundingRadius
 		{
-			get
-			{
-				return m_roundingRadius;
-			}
+			get => m_roundingRadius;
 			set
 			{
 				if (value != m_roundingRadius)
@@ -69,10 +66,7 @@ namespace Game
 
 		public int RoundingCount
 		{
-			get
-			{
-				return m_roundingCount;
-			}
+			get => m_roundingCount;
 			set
 			{
 				if (value != m_roundingCount)
@@ -85,10 +79,7 @@ namespace Game
 
 		public float BevelSize
 		{
-			get
-			{
-				return m_bevelSize;
-			}
+			get => m_bevelSize;
 			set
 			{
 				if (value != m_bevelSize)
@@ -101,10 +92,7 @@ namespace Game
 
 		public float DirectionalLight
 		{
-			get
-			{
-				return m_directionalLight;
-			}
+			get => m_directionalLight;
 			set
 			{
 				if (value != m_directionalLight)
@@ -117,10 +105,7 @@ namespace Game
 
 		public float AmbientLight
 		{
-			get
-			{
-				return m_ambientLight;
-			}
+			get => m_ambientLight;
 			set
 			{
 				if (value != m_ambientLight)
@@ -133,10 +118,7 @@ namespace Game
 
 		public Texture2D Texture
 		{
-			get
-			{
-				return m_texture;
-			}
+			get => m_texture;
 			set
 			{
 				if (value != m_texture)
@@ -155,10 +137,7 @@ namespace Game
 
 		public bool TextureLinearFilter
 		{
-			get
-			{
-				return m_textureLinearFilter;
-			}
+			get => m_textureLinearFilter;
 			set
 			{
 				if (value != m_textureLinearFilter)
@@ -171,10 +150,7 @@ namespace Game
 
 		public Color CenterColor
 		{
-			get
-			{
-				return m_centerColor;
-			}
+			get => m_centerColor;
 			set
 			{
 				if (value != m_centerColor)
@@ -187,10 +163,7 @@ namespace Game
 
 		public Color BevelColor
 		{
-			get
-			{
-				return m_bevelColor;
-			}
+			get => m_bevelColor;
 			set
 			{
 				if (value != m_bevelColor)
@@ -203,10 +176,7 @@ namespace Game
 
 		public Color ShadowColor
 		{
-			get
-			{
-				return m_shadowColor;
-			}
+			get => m_shadowColor;
 			set
 			{
 				if (value != m_shadowColor)
@@ -219,10 +189,7 @@ namespace Game
 
 		public float ShadowSize
 		{
-			get
-			{
-				return m_shadowSize;
-			}
+			get => m_shadowSize;
 			set
 			{
 				if (value != m_shadowSize)
@@ -376,10 +343,10 @@ namespace Game
 
 		public override void ArrangeOverride()
 		{
-			Vector2 vector = new Vector2(0f, 0f);
-			Vector2 vector2 = new Vector2(ActualSize.X, 0f);
-			Vector2 vector3 = new Vector2(ActualSize.X, ActualSize.Y);
-			Vector2 vector4 = new Vector2(0f, ActualSize.Y);
+			Vector2 vector = new(0f, 0f);
+			Vector2 vector2 = new(ActualSize.X, 0f);
+			Vector2 vector3 = new(ActualSize.X, ActualSize.Y);
+			Vector2 vector4 = new(0f, ActualSize.Y);
 			if (vector != m_points[0].Position || vector2 != m_points[1].Position || vector3 != m_points[2].Position || vector4 != m_points[3].Position)
 			{
 				m_points[0] = new BevelledShapeRenderer.Point
@@ -433,11 +400,11 @@ namespace Game
 			float num4 = MathUtils.Saturate((((bevelSize > 0f) ? (-0.375f) : 0.5f) * directionalLight) + ambientLight);
 			float num5 = MathUtils.Saturate((((bevelSize > 0f) ? 0.5f : (-0.375f)) * directionalLight) + ambientLight);
 			float num6 = MathUtils.Saturate((0f * directionalLight) + ambientLight);
-			var color2 = new Color((byte)(num4 * bevelColor.R), (byte)(num4 * bevelColor.G), (byte)(num4 * bevelColor.B), bevelColor.A);
-			var color3 = new Color((byte)(num5 * bevelColor.R), (byte)(num5 * bevelColor.G), (byte)(num5 * bevelColor.B), bevelColor.A);
-			var color4 = new Color((byte)(num2 * bevelColor.R), (byte)(num2 * bevelColor.G), (byte)(num2 * bevelColor.B), bevelColor.A);
-			var color5 = new Color((byte)(num3 * bevelColor.R), (byte)(num3 * bevelColor.G), (byte)(num3 * bevelColor.B), bevelColor.A);
-			var color6 = new Color((byte)(num6 * color.R), (byte)(num6 * color.G), (byte)(num6 * color.B), color.A);
+			Color color2 = new((byte)(num4 * bevelColor.R), (byte)(num4 * bevelColor.G), (byte)(num4 * bevelColor.B), bevelColor.A);
+			Color color3 = new((byte)(num5 * bevelColor.R), (byte)(num5 * bevelColor.G), (byte)(num5 * bevelColor.B), bevelColor.A);
+			Color color4 = new((byte)(num2 * bevelColor.R), (byte)(num2 * bevelColor.G), (byte)(num2 * bevelColor.B), bevelColor.A);
+			Color color5 = new((byte)(num3 * bevelColor.R), (byte)(num3 * bevelColor.G), (byte)(num3 * bevelColor.B), bevelColor.A);
+			Color color6 = new((byte)(num6 * color.R), (byte)(num6 * color.G), (byte)(num6 * color.B), color.A);
 			if (texturedBatch != null)
 			{
 				float num7 = textureScale / texturedBatch.Texture.Width;
@@ -481,7 +448,7 @@ namespace Game
 			if (bevelSize > 0f && flatBatch != null && shadowColor.A > 0)
 			{
 				Color color7 = shadowColor;
-				var color8 = new Color(0, 0, 0, 0);
+				Color color8 = new(0, 0, 0, 0);
 				flatBatch.QueueTriangle(new Vector2(x, y4), new Vector2(x2, y5), new Vector2(x2, y4), depth, color8, color8, color7);
 				flatBatch.QueueTriangle(new Vector2(x4, y), new Vector2(x4, y2), new Vector2(x5, y2), depth, color8, color7, color8);
 				flatBatch.QueueTriangle(new Vector2(x4, y4), new Vector2(x4, y5), new Vector2(x5, y4), depth, color7, color8, color8);

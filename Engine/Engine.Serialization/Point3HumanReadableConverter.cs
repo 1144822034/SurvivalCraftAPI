@@ -5,7 +5,7 @@ namespace Engine.Serialization
 	{
 		public string ConvertToString(object value)
 		{
-			var point = (Point3)value;
+			Point3 point = (Point3)value;
 			return HumanReadableConverter.ValuesListToString(',', point.X, point.Y, point.Z);
 		}
 

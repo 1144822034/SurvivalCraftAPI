@@ -22,10 +22,10 @@ namespace Game
 		{
 			m_subsystemAudio.PlayRandomSound("Audio/Whistle", 1f, m_random.Float(-0.2f, 0f), ray.Position, 4f, autoDelay: true);
 			m_subsystemNoise.MakeNoise(componentMiner.ComponentCreature.ComponentBody, 0.5f, 30f);
-			var dynamicArray = new DynamicArray<ComponentBody>();
+			DynamicArray<ComponentBody> dynamicArray = new();
 			m_subsystemBodies.FindBodiesAroundPoint(new Vector2(componentMiner.ComponentCreature.ComponentBody.Position.X, componentMiner.ComponentCreature.ComponentBody.Position.Z), 64f, dynamicArray);
 			float num = float.PositiveInfinity;
-			var list = new List<ComponentBody>();
+			List<ComponentBody> list = new();
 			foreach (ComponentBody item in dynamicArray)
 			{
 				ComponentSummonBehavior componentSummonBehavior = item.Entity.FindComponent<ComponentSummonBehavior>();

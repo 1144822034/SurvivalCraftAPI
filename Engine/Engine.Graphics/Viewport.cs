@@ -51,7 +51,7 @@ namespace Engine.Graphics
 
 		public Vector3 Project(Vector3 source, Matrix worldViewProjection)
 		{
-			var result = Vector3.Transform(source, worldViewProjection);
+			Vector3 result = Vector3.Transform(source, worldViewProjection);
 			result /= (source.X * worldViewProjection.M14) + (source.Y * worldViewProjection.M24) + (source.Z * worldViewProjection.M34) + worldViewProjection.M44;
 			result.X = ((result.X + 1f) * 0.5f * Width) + X;
 			result.Y = ((0f - result.Y + 1f) * 0.5f * Height) + Y;
@@ -66,7 +66,7 @@ namespace Engine.Graphics
 
 		public Vector3 Unproject(Vector3 source, Matrix worldViewProjection)
 		{
-			var m = Matrix.Invert(worldViewProjection);
+			Matrix m = Matrix.Invert(worldViewProjection);
 			source.X = ((source.X - X) / Width * 2f) - 1f;
 			source.Y = 0f - (((source.Y - Y) / Height * 2f) - 1f);
 			source.Z = (source.Z - MinDepth) / (MaxDepth - MinDepth);

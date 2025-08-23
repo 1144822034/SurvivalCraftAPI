@@ -262,7 +262,7 @@ namespace Game
 				DialogsManager.ShowDialog(null, new ListSelectionDialog(LanguageControl.Get(fName, 2), items, 72f, delegate (object index)
 				{
 					XElement node2 = ContentManager.Get<XElement>("Widgets/SelectBlockItem");
-					var obj2 = (ContainerWidget)LoadWidget(null, node2, null);
+					ContainerWidget obj2 = (ContainerWidget)LoadWidget(null, node2, null);
 					obj2.Children.Find<BlockIconWidget>("SelectBlockItem.Block").Contents = (int)index;
 					obj2.Children.Find<LabelWidget>("SelectBlockItem.Text").Text = BlocksManager.Blocks[(int)index].GetDisplayName(null, Terrain.MakeBlockValue((int)index));
 					return obj2;
@@ -299,10 +299,10 @@ namespace Game
 			if (m_blocksTextureButton.IsClicked)
 			{
 				BlocksTexturesManager.UpdateBlocksTexturesList();
-				var dialog = new ListSelectionDialog(LanguageControl.Get(fName, 3), BlocksTexturesManager.BlockTexturesNames, 64f, delegate (object item)
+				ListSelectionDialog dialog = new(LanguageControl.Get(fName, 3), BlocksTexturesManager.BlockTexturesNames, 64f, delegate (object item)
 				{
 					XElement node = ContentManager.Get<XElement>("Widgets/BlocksTextureItem");
-					var obj = (ContainerWidget)LoadWidget(this, node, null);
+					ContainerWidget obj = (ContainerWidget)LoadWidget(this, node, null);
 					Texture2D texture2 = m_blockTexturesCache.GetTexture((string)item);
 					obj.Children.Find<LabelWidget>("BlocksTextureItem.Text").Text = BlocksTexturesManager.GetDisplayName((string)item);
 					obj.Children.Find<LabelWidget>("BlocksTextureItem.Details").Text = $"{texture2.Width}x{texture2.Height}";

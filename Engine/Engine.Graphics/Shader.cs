@@ -61,10 +61,16 @@ namespace Engine.Graphics
 		{
 			get
 			{
+#if DIRECT3D11
+                return m_vertexShader.DebugName;
+#else
 				return string.Empty;
+#endif
 			}
-			set
-			{
+            // ReSharper disable ValueParameterNotUsed
+            set
+            // ReSharper restore ValueParameterNotUsed
+            {
 #if DIRECT3D11
                 m_vertexShader.DebugName = value;
                 m_pixelShader.DebugName = value;
@@ -185,18 +191,20 @@ namespace Engine.Graphics
 						text = text.Substring(2).TrimStart();
 						if (text.StartsWith('<') && text.EndsWith("/>"))
 						{
-							var xElement = XElement.Parse(text);
+							XElement xElement = XElement.Parse(text);
 							if (xElement.Name == "Semantic")
 							{
-								if (xElement.Attribute("Attribute") == null)
+                                XAttribute attribute = xElement.Attribute("Attribute");
+								if (attribute == null)
 								{
 									throw new InvalidOperationException("Missing \"Attribute\" attribute in shader metadata.");
 								}
-								if (xElement.Attribute("Name") == null)
+                                XAttribute name = xElement.Attribute("Name");
+								if (name == null)
 								{
 									throw new InvalidOperationException("Missing \"Name\" attribute in shader metadata.");
 								}
-								semanticsByAttribute.Add(xElement.Attribute("Attribute").Value, xElement.Attribute("Name").Value);
+								semanticsByAttribute.Add(attribute.Value, name.Value);
 							}
 							else
 							{
@@ -204,15 +212,17 @@ namespace Engine.Graphics
 								{
 									throw new InvalidOperationException("Unrecognized shader metadata node.");
 								}
-								if (xElement.Attribute("Texture") == null)
+                                XAttribute texture = xElement.Attribute("Texture");
+								if (texture == null)
 								{
 									throw new InvalidOperationException("Missing \"Texture\" attribute in shader metadata.");
 								}
-								if (xElement.Attribute("Name") == null)
+                                XAttribute name = xElement.Attribute("Name");
+								if (name == null)
 								{
 									throw new InvalidOperationException("Missing \"Name\" attribute in shader metadata.");
 								}
-								samplersByTexture.Add(xElement.Attribute("Texture").Value, xElement.Attribute("Name").Value);
+								samplersByTexture.Add(texture.Value, name.Value);
 							}
 						}
 					}
@@ -236,8 +246,7 @@ namespace Engine.Graphics
                 if (int.Parse(versionnum) >= 300 || versioncode.EndsWith("es"))
                     str += $"#version {versionnum} es" + Environment.NewLine;
                 else
-
-				str += $"#version {versionnum}" + Environment.NewLine;
+                    str += $"#version {versionnum}" + Environment.NewLine;
 				shaderCode = "//" + shaderCode;
 			}
             else
@@ -369,9 +378,8 @@ namespace Engine.Graphics
 					stringBuilder2 = stringBuilder2.Remove(num, stringBuilder2.Length - num);
 				}
 
-				ShaderParameter shaderParameter = new(this, stringBuilder2, shaderParameterType, size2);
-				shaderParameter.Location = uniformLocation;
-				dictionary3.Add(shaderParameter.Name, shaderParameter);
+				ShaderParameter shaderParameter = new(this, stringBuilder2, shaderParameterType, size2) { Location = uniformLocation };
+                dictionary3.Add(shaderParameter.Name, shaderParameter);
 				list.Add(shaderParameter);
 				if (shaderParameterType == ShaderParameterType.Texture2D)
 				{
@@ -379,9 +387,8 @@ namespace Engine.Graphics
 					{
 						throw new InvalidOperationException($"Texture \"{shaderParameter.Name}\" has no sampler defined in shader metadata.");
 					}
-					ShaderParameter shaderParameter2 = new(this, value2, ShaderParameterType.Sampler2D, 1);
-					shaderParameter2.Location = int.MaxValue;
-					dictionary3.Add(value2, shaderParameter2);
+					ShaderParameter shaderParameter2 = new(this, value2, ShaderParameterType.Sampler2D, 1) { Location = int.MaxValue };
+                    dictionary3.Add(value2, shaderParameter2);
 					list.Add(shaderParameter2);
 				}
 			}

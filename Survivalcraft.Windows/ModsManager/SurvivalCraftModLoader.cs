@@ -41,7 +41,7 @@ namespace Game
 		}
 		public override void ManageCameras(GameWidget gameWidget)
 		{//示例：向GameWidget中添加调试视角
-			DebugCamera debugCamera = new DebugCamera(gameWidget);
+			DebugCamera debugCamera = new(gameWidget);
 			//第一个参数声明一个新的摄像机
 			//第二个参数为一个Func委托，输入gameWidget可对当前条件进行判断(例如判断是否为创造模式、是否乘坐载具等)，若不符合条件则在玩家切换视角时会跳过当前摄像机
 			//如果不用判断条件(任何条件都不跳过该摄像机)，第二个参数可传入null或不填
@@ -55,7 +55,7 @@ namespace Game
             GameWidget gameWidget = m_componentPlayer.GameWidget;
 			int currentIndex = -1;
 			Dictionary<string,int> dictionary = ModSettingsManager.CombinedCameraManageSettings;
-			foreach(var item in dictionary)
+			foreach(KeyValuePair<string,int> item in dictionary)
 			{
 				Type type = TypeCache.FindType(item.Key,skipSystemAssemblies: true,throwIfNotFound: true);
 				if(type == gameWidget.ActiveCamera.GetType())
@@ -128,20 +128,20 @@ namespace Game
                 if (m_componentPlayer != null && camera.GameWidget.PlayerData != m_componentPlayer.PlayerData)
                 {
                     ComponentCreature m_componentCreature = m_componentPlayer.ComponentMiner.ComponentCreature;
-                    var position =
+                    Vector3 position =
                         Vector3.Transform(
                             m_componentCreature.ComponentBody.Position +
                             (1.02f * Vector3.UnitY * m_componentCreature.ComponentBody.BoxSize.Y), camera.ViewMatrix);
                     if (position.Z < 0f)
                     {
-                        var color = Color.Lerp(Color.White, Color.Transparent,
+                        Color color = Color.Lerp(Color.White, Color.Transparent,
                             MathUtils.Saturate((position.Length() - 4f) / 3f));
                         if (color.A > 8)
                         {
-                            var right = Vector3.TransformNormal(
+                            Vector3 right = Vector3.TransformNormal(
                                 0.005f * Vector3.Normalize(Vector3.Cross(camera.ViewDirection, Vector3.UnitY)),
                                 camera.ViewMatrix);
-                            var down = Vector3.TransformNormal(-0.005f * Vector3.UnitY, camera.ViewMatrix);
+                            Vector3 down = Vector3.TransformNormal(-0.005f * Vector3.UnitY, camera.ViewMatrix);
                             BitmapFont font = LabelWidget.BitmapFont;
                             modelsRenderer.PrimitivesRenderer
                                 .FontBatch(font, 1, DepthStencilState.DepthRead, RasterizerState.CullNoneScissor,
@@ -166,7 +166,7 @@ namespace Game
             if (drawItem.Widget is TextBoxWidget apiTextBoxWidget && drawItem.IsOverdraw)
             {
                 // 如果绘制的 Widget 是文本框控件，则提前取消 ScissorRectangle 并 Flush ，最后还原 ScissorRectangle 以达到显示候选窗内容的效果。
-                var rect = scissorRectangle;
+                Rectangle rect = scissorRectangle;
                 Display.ScissorRectangle = Display.Viewport.Rectangle;
                 afterWidgetDraw = () =>
                 {
@@ -184,7 +184,7 @@ namespace Game
             int layer = drawContext.m_drawItems.LastOrDefault()?.Layer ?? 0;
             layer++;
 
-            for (var i = 0; i < drawContext.m_drawItems.Count; i++)
+            for (int i = 0; i < drawContext.m_drawItems.Count; i++)
             {
                 Widget.DrawItem drawItem = drawContext.m_drawItems[i];
 

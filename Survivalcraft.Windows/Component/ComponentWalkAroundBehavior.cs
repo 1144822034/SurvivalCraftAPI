@@ -88,7 +88,7 @@ namespace Game
 			for (int i = 0; i < 16; i++)
 			{
 				Vector2 vector = Vector2.Normalize(m_random.Vector2(1f)) * m_random.Float(6f, 12f);
-				var vector2 = new Vector3(position.X + vector.X, 0f, position.Z + vector.Y);
+				Vector3 vector2 = new(position.X + vector.X, 0f, position.Z + vector.Y);
 				vector2.Y = m_subsystemTerrain.Terrain.GetTopHeight(Terrain.ToCell(vector2.X), Terrain.ToCell(vector2.Z)) + 1;
 				float num2 = ScoreDestination(vector2);
 				if (num2 > num)

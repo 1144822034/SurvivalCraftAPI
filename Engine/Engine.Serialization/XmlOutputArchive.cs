@@ -26,11 +26,7 @@ namespace Engine.Serialization
 
         public void Reset(XElement node, int version = 0, object context = null)
         {
-            if (node == null)
-            {
-                throw new ArgumentNullException("node");
-            }
-            Node = node;
+            Node = node ?? throw new ArgumentNullException(nameof(node));
             Reset(version, context);
         }
 
@@ -124,11 +120,12 @@ namespace Engine.Serialization
 		{
 			EnterNode(name, false);
 			SerializeData serializeData = GetSerializeData(typeof(T), allowEmptySerializer: true);
-            IEnumerator<XElement> enumerator = Node.Elements().GetEnumerator();
-			foreach (T item in collection)
-			{
+            bool flag = true;
+            using IEnumerator<XElement> enumerator = Node.Elements().GetEnumerator();
+            foreach (T item in collection)
+            {
                 string name2 = ((itemNameFunc != null) ? itemNameFunc(item) : "Item");
-                if (enumerator != null && enumerator.MoveNext())
+                if (flag && enumerator.MoveNext())
                 {
                     EnterNode(enumerator.Current);
                     WriteObject(null, serializeData, item);
@@ -139,10 +136,10 @@ namespace Engine.Serialization
                     EnterNode(name2, true);
                     WriteObject(null, serializeData, item);
                     LeaveNode(name2);
-                    enumerator = null;
+                    flag = false;
                 }
-			}
-			LeaveNode(name);
+            }
+            LeaveNode(name);
 		}
 
 		public override void SerializeDictionary<K, V>(string name, IDictionary<K, V> dictionary)
@@ -177,10 +174,10 @@ namespace Engine.Serialization
 		{
 			if (isReference)
 			{
-				Node.SetAttributeValue("_ref", objectId.Value.ToString(CultureInfo.InvariantCulture));
+				Node.SetAttributeValue("_ref", objectId.HasValue ? objectId.Value.ToString(CultureInfo.InvariantCulture) : string.Empty);
 				return;
 			}
-			Node.SetAttributeValue("_def", objectId.Value.ToString(CultureInfo.InvariantCulture));
+			Node.SetAttributeValue("_def", objectId.HasValue ? objectId.Value.ToString(CultureInfo.InvariantCulture) : string.Empty);
 			if (runtimeType != null)
 			{
 				Node.SetAttributeValue("_type", TypeCache.GetShortTypeName(runtimeType.FullName));
@@ -210,7 +207,7 @@ namespace Engine.Serialization
 			{
                 if (createNewNode)
                 {
-                    var xElement = new XElement(name);
+                    XElement xElement = new(name);
                     Node.Add(xElement);
                     Node = xElement;
                     return;
@@ -240,7 +237,7 @@ namespace Engine.Serialization
 
         public static void RemoveUnusedDefs(XElement node)
         {
-            HashSet<int> set = new HashSet<int>();
+            HashSet<int> set = new();
             FindUsedDefs(node, set);
             RemoveUnusedDefs(node, set);
         }

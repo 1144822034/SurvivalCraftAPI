@@ -329,7 +329,7 @@ namespace Game
 
 		public override void OnChunkDiscarding(TerrainChunk chunk)
 		{
-			var list = new List<Point3>();
+			List<Point3> list = new();
 			foreach (Point3 key in m_fireData.Keys)
 			{
 				if (key.X >= chunk.Origin.X && key.X < chunk.Origin.X + 16 && key.Z >= chunk.Origin.Y && key.Z < chunk.Origin.Y + 16)
@@ -374,12 +374,10 @@ namespace Game
 
 		public void AddFire(int x, int y, int z, float expandability)
 		{
-			var point = new Point3(x, y, z);
+			Point3 point = new(x, y, z);
 			if (!m_fireData.ContainsKey(point))
 			{
-				var fireData = new FireData();
-				fireData.Point = point;
-				fireData.FireExpandability = expandability;
+				FireData fireData = new() { Point = point,FireExpandability = expandability };
 				InitializeFireDataTimes(fireData);
 				m_fireData[point] = fireData;
 			}
@@ -387,7 +385,7 @@ namespace Game
 
 		public void RemoveFire(int x, int y, int z)
 		{
-			var key = new Point3(x, y, z);
+			Point3 key = new(x, y, z);
 			m_fireData.Remove(key);
 		}
 
@@ -432,11 +430,8 @@ namespace Game
 
 		public void QueueBurnAway(int x, int y, int z, float expandability)
 		{
-			var key = new Point3(x, y, z);
-			if (!m_toBurnAway.ContainsKey(key))
-			{
-				m_toBurnAway.Add(key, expandability);
-			}
+			Point3 key = new(x, y, z);
+			m_toBurnAway.TryAdd(key, expandability);
 		}
 	}
 }

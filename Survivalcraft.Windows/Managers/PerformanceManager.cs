@@ -147,7 +147,7 @@ namespace Game
 
 		public static void Draw()
 		{
-			var scale = new Vector2(MathF.Round(Math.Clamp(ScreensManager.RootWidget.GlobalScale, 1.0f, 2.0f)));
+			Vector2 scale = new(MathF.Round(Math.Clamp(ScreensManager.RootWidget.GlobalScale, 1.0f, 2.0f)));
 			Viewport viewport = Display.Viewport;
 			if (SettingsManager.DisplayFpsCounter)
 			{
@@ -159,7 +159,7 @@ namespace Game
 					m_statsString += "\nScreen:[" + ScreensManager.CurrentScreen.GetType().Name + "]  [" + wname + "]";
 #endif
 				}
-				StringBuilder stringBuilder = new StringBuilder();
+				StringBuilder stringBuilder = new();
 				stringBuilder.AppendLine(m_statsString);
 				if(m_extraStats.Count > 0)
 				{

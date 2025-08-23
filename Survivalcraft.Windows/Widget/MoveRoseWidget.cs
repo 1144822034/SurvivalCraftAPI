@@ -100,10 +100,10 @@ namespace Game
 			int count = texturedBatch2D.TriangleVertices.Count;
 			int count2 = texturedBatch2D2.TriangleVertices.Count;
 			Vector2 p = ActualSize / 2f;
-			var vector = new Vector2(0f, 0f);
-			var vector2 = new Vector2(ActualSize.X, 0f);
-			var vector3 = new Vector2(ActualSize.X, ActualSize.Y);
-			var vector4 = new Vector2(0f, ActualSize.Y);
+			Vector2 vector = new(0f, 0f);
+			Vector2 vector2 = new(ActualSize.X, 0f);
+			Vector2 vector3 = new(ActualSize.X, ActualSize.Y);
+			Vector2 vector4 = new(0f, ActualSize.Y);
 			if (m_direction.Z > 0f)
 			{
 				Vector2 subtextureCoords = GetSubtextureCoords(subtexture2, new Vector2(0f, 0f));

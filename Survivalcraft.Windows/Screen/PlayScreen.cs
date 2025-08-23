@@ -33,9 +33,9 @@ namespace Game
 
 		public Widget WorldInfoWidget(Object item)
 		{
-            var worldInfo = (WorldInfo)item;
+            WorldInfo worldInfo = (WorldInfo)item;
             XElement node2 = ContentManager.Get<XElement>("Widgets/SavedWorldItem");
-            var containerWidget = (ContainerWidget)LoadWidget(this, node2, null);
+            ContainerWidget containerWidget = (ContainerWidget)LoadWidget(this, node2, null);
             LabelWidget labelWidget = containerWidget.Children.Find<LabelWidget>("WorldItem.Name");
             LabelWidget labelWidget2 = containerWidget.Children.Find<LabelWidget>("WorldItem.Details");
             containerWidget.Tag = worldInfo;
@@ -74,13 +74,13 @@ namespace Game
 
 		public override void Enter(object[] parameters)
 		{
-			var dialog = new BusyDialog(LanguageControl.GetContentWidgets(fName, 5), null);
+			BusyDialog dialog = new(LanguageControl.GetContentWidgets(fName, 5), null);
 			DialogsManager.ShowDialog(null, dialog);
 			Task.Run(delegate
 			{
-				var selectedItem = (WorldInfo)m_worldsListWidget.SelectedItem;
+				WorldInfo selectedItem = (WorldInfo)m_worldsListWidget.SelectedItem;
 				WorldsManager.UpdateWorldsList();
-				var worldInfos = new List<WorldInfo>(WorldsManager.WorldInfos);
+				List<WorldInfo> worldInfos = new(WorldsManager.WorldInfos);
 				worldInfos.Sort((w1,w2) => DateTime.Compare(w2.LastSaveTime, w1.LastSaveTime));
 				Dispatcher.Dispatch(delegate
 				{
@@ -137,7 +137,7 @@ namespace Game
 			}
 			if (m_propertiesButton.IsClicked && m_worldsListWidget.SelectedItem != null)
 			{
-				var worldInfo = (WorldInfo)m_worldsListWidget.SelectedItem;
+				WorldInfo worldInfo = (WorldInfo)m_worldsListWidget.SelectedItem;
 				ScreensManager.SwitchScreen("ModifyWorld", worldInfo.DirectoryName, worldInfo.WorldSettings);
 			}
 			if (Input.Back || Input.Cancel || Children.Find<ButtonWidget>("TopBar.Back").IsClicked)
@@ -155,7 +155,7 @@ namespace Game
 		{
 			bool flag = false;
 			WorldInfo worldInfo = item as WorldInfo;
-			string languageType = (!ModsManager.Configs.ContainsKey("Language")) ? "zh-CN" : ModsManager.Configs["Language"];
+			string languageType = (!ModsManager.Configs.TryGetValue("Language", out string config)) ? "zh-CN" : config;
 			if (languageType == "zh-CN" && Time.RealTime - m_modTipsTime > 3600f)
 			{
 				m_modTipsTime = Time.RealTime;
@@ -171,7 +171,7 @@ namespace Game
 					XElement subsystemUsedModsNode = WorldsManager.GetSubsystemNode(projectNode, "UsedMods", false);
 					if(subsystemUsedModsNode != null)
 					{
-						ValuesDictionary subsystemValuesDictionary = new ValuesDictionary();
+						ValuesDictionary subsystemValuesDictionary = new();
 						subsystemValuesDictionary.ApplyOverrides(subsystemUsedModsNode);
 						int modsCount = subsystemValuesDictionary.GetValue("ModsCount",0);
 						ValuesDictionary valuesDictionary = subsystemValuesDictionary.GetValue<ValuesDictionary>("Mods",null);
@@ -246,11 +246,11 @@ namespace Game
 			{
 				foreach (ModEntity modEntity in ModsManager.ModListAll)
 				{
-					foreach (var value in MotdManager.FilterModAll)
+					foreach (MotdManager.FilterMod value in MotdManager.FilterModAll)
 					{
 						if (value.FilterAPIVersion == ModsManager.APIVersionString && value.PackageName == modEntity.modInfo.PackageName && CompareVersion(value.Version, modEntity.modInfo.Version))
 						{
-							tips += string.Format("{0}.{1}(v{2})  {3}\n", num, modEntity.modInfo.Name, modEntity.modInfo.Version, value.Explanation);
+							tips += $"{num}.{modEntity.modInfo.Name}(v{modEntity.modInfo.Version})  {value.Explanation}\n";
 							num++;
 						}
 					}

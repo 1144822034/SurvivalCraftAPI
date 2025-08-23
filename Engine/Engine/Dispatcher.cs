@@ -15,13 +15,7 @@ namespace Engine
 
 		private static List<ActionInfo> m_currentActionInfos = [];
 
-		public static int MainThreadId
-		{
-			get
-			{
-                return m_mainThreadId ?? throw new InvalidOperationException("Dispatcher is not initialized.") ;
-            }
-        }
+		public static int MainThreadId => m_mainThreadId ?? throw new InvalidOperationException("Dispatcher is not initialized.");
 
         public static void ExecuteActionsOnCurrentThread()
         {

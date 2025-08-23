@@ -8,8 +8,8 @@ namespace Engine.Input
 		public static bool DeletePressed
 		{
 			get { bool D = _DeletePressed; if (D) _DeletePressed = false; return D; }
-			set { _DeletePressed = value; }
-		}
+			set => _DeletePressed = value;
+        }
 
 		public static string GetInput()
 		{

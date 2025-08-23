@@ -224,14 +224,14 @@ namespace Game
 			{
 				if (SettingsManager.ScreenLayout2 == ScreenLayout.DoubleVertical || SettingsManager.ScreenLayout2 == ScreenLayout.DoubleOpposite)
 				{
-					var c = new Vector2((ActualSize.X / 2f) - (m_spacing / 2f), -100f);
-					var c2 = new Vector2((ActualSize.X / 2f) + (m_spacing / 2f), ActualSize.Y + 100f);
+					Vector2 c = new((ActualSize.X / 2f) - (m_spacing / 2f), -100f);
+					Vector2 c2 = new((ActualSize.X / 2f) + (m_spacing / 2f), ActualSize.Y + 100f);
 					BevelledRectangleWidget.QueueBevelledRectangle(null, flatBatch2D, c, c2, 0f, m_bevel, color, color, Color.Transparent, num, directionalLight, 0f);
 				}
 				if (SettingsManager.ScreenLayout2 == ScreenLayout.DoubleHorizontal)
 				{
-					var c3 = new Vector2(-100f, (ActualSize.Y / 2f) - (m_spacing / 2f));
-					var c4 = new Vector2(ActualSize.X + 100f, (ActualSize.Y / 2f) + (m_spacing / 2f));
+					Vector2 c3 = new(-100f, (ActualSize.Y / 2f) - (m_spacing / 2f));
+					Vector2 c4 = new(ActualSize.X + 100f, (ActualSize.Y / 2f) + (m_spacing / 2f));
 					BevelledRectangleWidget.QueueBevelledRectangle(null, flatBatch2D, c3, c4, 0f, m_bevel, color, color, Color.Transparent, num, directionalLight, 0f);
 				}
 			}

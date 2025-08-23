@@ -5,7 +5,7 @@ namespace Engine.Serialization
 	{
 		public string ConvertToString(object value)
 		{
-			var boundingCircle = (BoundingCircle)value;
+			BoundingCircle boundingCircle = (BoundingCircle)value;
 			return HumanReadableConverter.ValuesListToString(',', boundingCircle.Center.X, boundingCircle.Center.Y, boundingCircle.Radius);
 		}
 

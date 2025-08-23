@@ -133,7 +133,7 @@ public static class ModsManager
 	{
 		SettingsManager.SaveSettings();
 		SettingsManager.LoadSettings();
-		foreach (var mod in ModList)
+		foreach (ModEntity mod in ModList)
 		{
 			mod.Dispose();
 		}
@@ -176,7 +176,7 @@ public static class ModsManager
 		}
 		catch(Exception ex)
 		{
-			var keyValuePair = new KeyValuePair<ModHook,ModLoader>(modHook,modLoader);
+			KeyValuePair<ModHook,ModLoader> keyValuePair = new(modHook,modLoader);
 			if(!m_hookBugLogged.GetValueOrDefault(keyValuePair, false))
 			{
 				Log.Error(ex);
@@ -282,7 +282,7 @@ public static class ModsManager
 	public static void SaveConfigs()
 	{
 		XElement element = new("Configs");
-		foreach (var c in Configs)
+		foreach (KeyValuePair<string,string> c in Configs)
 		{
 			element.SetAttributeValue(c.Key, c.Value);
 		}
@@ -317,7 +317,7 @@ public static class ModsManager
 		try
 		{
 			if (xElement.Name != "Configs") return;
-			foreach (var c in xElement.Attributes())
+			foreach (XAttribute c in xElement.Attributes())
 			{
 				if (!Configs.ContainsKey(c.Name.LocalName)) SetConfig(c.Name.LocalName, c.Value);
 			}
@@ -363,7 +363,7 @@ public static class ModsManager
 		{
 			stream.CopyTo(fileStream);
 		}
-		var importModList = ScreensManager.FindScreen<ModsManageContentScreen>("ModsManageContent").m_latestScanModList;
+		List<string> importModList = ScreensManager.FindScreen<ModsManageContentScreen>("ModsManageContent").m_latestScanModList;
 		if (!importModList.Contains(realName)) importModList.Add(realName);
 		DialogsManager.ShowDialog(null, new MessageDialog(LanguageControl.Get(fName, "5"), LanguageControl.Get(fName, "6"), LanguageControl.Yes, LanguageControl.Back, delegate (MessageDialogButton result)
 		{
@@ -457,7 +457,7 @@ public static class ModsManager
 				if(ms == ModSuffix || ms == ".SCNEXT")
 				{
 					Stream keepOpenStream = ModsManageContentScreen.GetDecipherStream(stream);
-					var modEntity = new ModEntity(ks,ZipArchive.Open(keepOpenStream,true));
+					ModEntity modEntity = new(ks,ZipArchive.Open(keepOpenStream,true));
 					if(modEntity.modInfo == null)
 					{
 						LoadingScreen.Warning($"[{modEntity.ModFilePath}]缺少ModInfo文件，忽略加载");
@@ -503,7 +503,7 @@ public static class ModsManager
 	public static string GetMd5(string input)
 	{
 		byte[] data = MD5.HashData(Encoding.Default.GetBytes(input));
-		var sBuilder = new StringBuilder();
+		StringBuilder sBuilder = new();
 		for (int i = 0; i < data.Length; i++)
 		{
 			sBuilder.Append(data[i].ToString("x2"));
@@ -585,7 +585,7 @@ public static class ModsManager
 					}
 				}
 			}
-			else if (HasAttribute(element, name => { return name.StartsWith("r-"); }, out var attribute1))
+			else if (HasAttribute(element, name => { return name.StartsWith("r-"); }, out XAttribute attribute1))
 			{
 				if (HasAttribute(element, name => { return name == "Index"; }, out XAttribute xAttribute))
 				{
@@ -676,7 +676,7 @@ public static class ModsManager
 		}
 	}
 
-	public static Dictionary<string, string> ModifiedElement = new Dictionary<string, string>();
+	public static Dictionary<string, string> ModifiedElement = new();
 
 	private static int collisionsToHandle;
 	//对于关键（绑定了API1.7新的ModLoader接口的）组件，对修改行为进行检查报错
@@ -795,8 +795,8 @@ public static class ModsManager
 		stream.ReadExactly(bytes);
 		// 设置当前流的位置为流的开始
 		// 把 byte[] 写入文件
-		var fs = new FileStream(fileName,FileMode.Create);
-		var bw = new BinaryWriter(fs);
+		FileStream fs = new(fileName,FileMode.Create);
+		BinaryWriter bw = new(fs);
 		bw.Write(bytes);
 		bw.Close();
 		fs.Close();
@@ -807,7 +807,7 @@ public static class ModsManager
 	public static Stream FileToStream(string fileName)
 	{
 		// 打开文件
-		var fileStream = new FileStream(fileName,FileMode.Open,FileAccess.Read,FileShare.Read);
+		FileStream fileStream = new(fileName,FileMode.Open,FileAccess.Read,FileShare.Read);
 		// 读取文件的 byte[]
 		byte[] bytes = new byte[fileStream.Length];
 		fileStream.ReadExactly(bytes);
@@ -819,14 +819,14 @@ public static class ModsManager
 	public static void StreamCompress(Stream input,MemoryStream data)
 	{
 		byte[] dat = data.ToArray();
-		using var stream = new GZipStream(input,CompressionMode.Compress);
+		using GZipStream stream = new(input,CompressionMode.Compress);
 		stream.Write(dat,0,dat.Length);
 	}
 
 	public static Stream StreamDecompress(Stream input)
 	{
-		var outStream = new MemoryStream();
-		using var zipStream = new GZipStream(input,CompressionMode.Decompress);
+		MemoryStream outStream = new();
+		using GZipStream zipStream = new(input,CompressionMode.Decompress);
 		zipStream.CopyTo(outStream);
 		zipStream.Close();
 		outStream.Seek(0,SeekOrigin.Begin);
@@ -843,7 +843,7 @@ public static class ModsManager
     }
     public static string ObjectsToStr<T>(T[] arr) {
         if (arr == null) return string.Empty;
-        var stringBuilder = new StringBuilder();
+        StringBuilder stringBuilder = new();
         for (int i=0;i<arr.Length;i++) 
             stringBuilder.Append(arr[i]+" ");
         string res = stringBuilder.ToString();

@@ -2,7 +2,7 @@ namespace Engine.Graphics
 {
 	public class VertexElement : IEquatable<VertexElement>
 	{
-		private int m_hashCode;
+		private readonly int m_hashCode;
 
 		public int Offset
 		{

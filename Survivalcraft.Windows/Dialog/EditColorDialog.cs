@@ -27,7 +27,7 @@ namespace Game
 		public EditColorDialog(Color color, Action<Color?> handler)
 		{
 			WidgetsList children = Children;
-			var obj = new CanvasWidget
+			CanvasWidget obj = new()
 			{
 				Size = new Vector2(660f, 420f),
 				HorizontalAlignment = WidgetAlignment.Center,
@@ -41,7 +41,7 @@ namespace Game
 				}
 			};
 			WidgetsList children2 = obj.Children;
-			var obj2 = new StackPanelWidget
+			StackPanelWidget obj2 = new()
 			{
 				Direction = LayoutDirection.Vertical,
 				Margin = new Vector2(15f),
@@ -60,18 +60,18 @@ namespace Game
 				}
 			};
 			WidgetsList children3 = obj2.Children;
-			var obj3 = new StackPanelWidget
+			StackPanelWidget obj3 = new()
 			{
 				Direction = LayoutDirection.Horizontal
 			};
 			WidgetsList children4 = obj3.Children;
-			var obj4 = new StackPanelWidget
+			StackPanelWidget obj4 = new()
 			{
 				Direction = LayoutDirection.Vertical,
 				VerticalAlignment = WidgetAlignment.Center
 			};
 			WidgetsList children5 = obj4.Children;
-			var obj5 = new StackPanelWidget
+			StackPanelWidget obj5 = new()
 			{
 				Direction = LayoutDirection.Horizontal,
 				HorizontalAlignment = WidgetAlignment.Far,
@@ -91,7 +91,7 @@ namespace Game
 				}
 			};
 			WidgetsList children6 = obj5.Children;
-			var obj6 = new SliderWidget
+			SliderWidget obj6 = new()
 			{
 				Size = new Vector2(300f, 50f),
 				IsLabelVisible = false,
@@ -105,7 +105,7 @@ namespace Game
 			children6.Add(widget);
 			children5.Add(obj5);
 			WidgetsList children7 = obj4.Children;
-			var obj7 = new StackPanelWidget
+			StackPanelWidget obj7 = new()
 			{
 				Direction = LayoutDirection.Horizontal,
 				HorizontalAlignment = WidgetAlignment.Far,
@@ -125,7 +125,7 @@ namespace Game
 				}
 			};
 			WidgetsList children8 = obj7.Children;
-			var obj8 = new SliderWidget
+			SliderWidget obj8 = new()
 			{
 				Size = new Vector2(300f, 50f),
 				IsLabelVisible = false,
@@ -139,7 +139,7 @@ namespace Game
 			children8.Add(widget);
 			children7.Add(obj7);
 			WidgetsList children9 = obj4.Children;
-			var obj9 = new StackPanelWidget
+			StackPanelWidget obj9 = new()
 			{
 				Direction = LayoutDirection.Horizontal,
 				HorizontalAlignment = WidgetAlignment.Far,
@@ -159,7 +159,7 @@ namespace Game
 				}
 			};
 			WidgetsList children10 = obj9.Children;
-			var obj10 = new SliderWidget
+			SliderWidget obj10 = new()
 			{
 				Size = new Vector2(300f, 50f),
 				IsLabelVisible = false,
@@ -178,9 +178,9 @@ namespace Game
 				Size = new Vector2(20f, 0f)
 			});
 			WidgetsList children11 = obj3.Children;
-			var canvasWidget = new CanvasWidget();
+			CanvasWidget canvasWidget = new();
 			WidgetsList children12 = canvasWidget.Children;
-			var obj11 = new BevelledButtonWidget
+			BevelledButtonWidget obj11 = new()
 			{
 				Size = new Vector2(200f, 240f),
 				AmbientLight = 1f,
@@ -191,7 +191,7 @@ namespace Game
 			m_rectangle = obj11;
 			children12.Add(widget2);
 			WidgetsList children13 = canvasWidget.Children;
-			var obj12 = new LabelWidget
+			LabelWidget obj12 = new()
 			{
 				HorizontalAlignment = WidgetAlignment.Center,
 				VerticalAlignment = WidgetAlignment.Center,
@@ -206,13 +206,13 @@ namespace Game
 				Size = new Vector2(0f, 1f / 0f)
 			});
 			WidgetsList children14 = obj2.Children;
-			var obj13 = new StackPanelWidget
+			StackPanelWidget obj13 = new()
 			{
 				Direction = LayoutDirection.Horizontal,
 				HorizontalAlignment = WidgetAlignment.Center
 			};
 			WidgetsList children15 = obj13.Children;
-			var obj14 = new BevelledButtonWidget
+			BevelledButtonWidget obj14 = new()
 			{
 				Size = new Vector2(160f, 60f),
 				Text = LanguageControl.Ok
@@ -225,7 +225,7 @@ namespace Game
 				Size = new Vector2(50f, 0f)
 			});
 			WidgetsList children16 = obj13.Children;
-			var obj15 = new BevelledButtonWidget
+			BevelledButtonWidget obj15 = new()
 			{
 				Size = new Vector2(160f, 60f),
 				Text = LanguageControl.Cancel

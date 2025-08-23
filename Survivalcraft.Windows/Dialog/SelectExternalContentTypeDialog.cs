@@ -9,9 +9,9 @@ namespace Game
 						  where ExternalContentManager.IsEntryTypeDownloadSupported((ExternalContentType)v)
 						  select v, 64f, delegate (object item)
 					  {
-						  var type = (ExternalContentType)item;
+						  ExternalContentType type = (ExternalContentType)item;
 						  XElement node = ContentManager.Get<XElement>("Widgets/SelectExternalContentTypeItem");
-						  var obj = (ContainerWidget)LoadWidget(null, node, null);
+						  ContainerWidget obj = (ContainerWidget)LoadWidget(null, node, null);
 						  obj.Children.Find<RectangleWidget>("SelectExternalContentType.Icon").Subtexture = ExternalContentManager.GetEntryTypeIcon(type);
 						  obj.Children.Find<LabelWidget>("SelectExternalContentType.Text").Text = ExternalContentManager.GetEntryTypeDescription(type);
 						  return obj;

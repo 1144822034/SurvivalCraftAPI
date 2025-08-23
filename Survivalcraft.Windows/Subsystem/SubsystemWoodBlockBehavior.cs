@@ -60,7 +60,7 @@ namespace Game
 			int num2 = chunk.Origin.Y - 16;
 			int num3 = chunk.Origin.X + 32;
 			int num4 = chunk.Origin.Y + 32;
-			var list = new List<Point3>();
+			List<Point3> list = new();
 			foreach (Point3 item in m_leavesToCheck)
 			{
 				if (item.X >= num && item.X < num3 && item.Z >= num2 && item.Z < num4)

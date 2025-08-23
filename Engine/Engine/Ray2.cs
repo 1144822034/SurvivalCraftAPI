@@ -116,7 +116,7 @@ namespace Engine
 
         public static Ray2 Transform(Ray2 r, Matrix m)
         {
-            Transform(ref r, ref m, out var result);
+            Transform(ref r, ref m, out Ray2 result);
             return result;
         }
 

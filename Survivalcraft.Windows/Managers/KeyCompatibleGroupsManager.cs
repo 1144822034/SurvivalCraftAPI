@@ -10,7 +10,7 @@ namespace Game
 			public void AddKey(string key) => keys.Add(key);
 			public void AddKeys(params string[] keys)
 			{
-				foreach(var key in keys)
+				foreach(string key in keys)
 					AddKey(key);
 			}
 			public bool ContainsKey(string key) => keys.Contains(key);
@@ -36,7 +36,7 @@ namespace Game
 		/// <returns></returns>
 		public static void AddKeyToCompatibleGroup(string groupId,params string[] keys)
 		{
-			if(!m_compatibleGroups.TryGetValue(groupId,out var group))
+			if(!m_compatibleGroups.TryGetValue(groupId,out KeyCompatibleGroup group))
 				group = new KeyCompatibleGroup(groupId);
 			group.AddKeys(keys);
 			m_compatibleGroups[groupId] = group;
@@ -46,7 +46,7 @@ namespace Game
 		/// </summary>
 		/// <param name="groupId"></param>
 		/// <returns></returns>
-		public static KeyCompatibleGroup GetCompatibleGroup(string groupId) => m_compatibleGroups.TryGetValue(groupId,out var group) ? group : null;
+		public static KeyCompatibleGroup GetCompatibleGroup(string groupId) => m_compatibleGroups.TryGetValue(groupId,out KeyCompatibleGroup group) ? group : null;
 
 		/// <summary>
 		/// 输入按键名称列表，检查是否存在冲突
@@ -56,7 +56,7 @@ namespace Game
 		public static bool HasConflict(List<string> list)
 		{
 			if(list.Count <= 1) return false;
-			foreach(var group in m_compatibleGroups.Values)
+			foreach(KeyCompatibleGroup group in m_compatibleGroups.Values)
 			{// 检查是否存在包含所有键的兼容组
 				if(group.ContainsAll(list))
 					return false;
@@ -73,10 +73,10 @@ namespace Game
 		{
 			conflictKeys = [];
 			if(list.Count <= 1) return false;
-			foreach(var key in list)
+			foreach(string key in list)
 			{
 				bool hasCompatibleGroup = false;
-				foreach(var group in m_compatibleGroups.Values)
+				foreach(KeyCompatibleGroup group in m_compatibleGroups.Values)
 				{
 					if(group.ContainsAll(list))
 					{

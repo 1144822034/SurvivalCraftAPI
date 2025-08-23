@@ -30,7 +30,7 @@ namespace Game
 			{
 				for (int j = 0; j < m_inventoryGrid.ColumnsCount; j++)
 				{
-					var widget = new InventorySlotWidget
+					InventorySlotWidget widget = new()
 					{
 						HideEditOverlay = true,
 						HideInteractiveOverlay = true,
@@ -95,7 +95,7 @@ namespace Game
 				int num5 = m_componentCreativeInventory.PageIndex * num4;
 				foreach (Widget child in m_inventoryGrid.Children)
 				{
-					var inventorySlotWidget = child as InventorySlotWidget;
+					InventorySlotWidget inventorySlotWidget = child as InventorySlotWidget;
 					if (inventorySlotWidget != null)
 					{
 						if (num5 < m_slotIndices.Count)

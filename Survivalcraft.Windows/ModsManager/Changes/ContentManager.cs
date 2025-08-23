@@ -1,8 +1,8 @@
-#nullable enable
 using Engine;
 using Engine.Graphics;
 using Engine.Media;
 using System.Collections.Concurrent;
+// ReSharper disable MethodOverloadWithOptionalParameter
 
 namespace Game
 {
@@ -11,9 +11,9 @@ namespace Game
 		public MemoryStream ContentStream;
 		public string AbsolutePath;
 		public string ContentPath;
-		public string? ContentSuffix;
+		public string ContentSuffix;
 		public string Filename;
-		public Lock InUse = new Lock();
+		public Lock InUse = new();
 		public ContentInfo(string AbsolutePath_)
 		{
 			AbsolutePath = AbsolutePath_;
@@ -82,24 +82,25 @@ namespace Game
 
 		public static object Get(Type type,string name,string suffix = null,bool throwOnNotFound = true)
 		{
+			ArgumentNullException.ThrowIfNull(type);
 			object obj = null;
 			string key = suffix == null ? name : name + (suffix.StartsWith('.') ? suffix : ('.' + suffix));
 			if(type == typeof(Subtexture))
 			{
 				return TextureAtlasManager.GetSubtexture(name,throwOnNotFound);
 			}
-			if(Caches.TryGetValue(key,out var cacheList)) obj = cacheList.Find(f => f.GetType() == type);
+			if(Caches.TryGetValue(key,out List<object> cacheList)) obj = cacheList.Find(f => f.GetType() == type);
 			if(obj != null) return obj;
-			if(ReaderList.TryGetValue(type.FullName,out IContentReader.IContentReader reader))
+			if(ReaderList.TryGetValue(type.FullName??type.Name,out IContentReader.IContentReader reader))
 			{
 				List<ContentInfo> contents = [];
-				string p = string.Empty;
+				string p;
 				if(suffix == null)
 				{
 					for(int i = 0; i < reader.DefaultSuffix.Length; i++)
 					{
 						p = name + "." + reader.DefaultSuffix[i];
-						if(Caches.TryGetValue(p,out var cacheList2)) obj = cacheList2.Find(f => f.GetType() == type);
+						if(Caches.TryGetValue(p,out List<object> cacheList2)) obj = cacheList2.Find(f => f.GetType() == type);
 						if(obj != null)
 						{
 							if(cacheList == null)
@@ -152,10 +153,10 @@ namespace Game
 		{
 			lock (syncObj)
 			{
-				if (Caches.TryGetValue(name, out var list))
+				if (Caches.TryGetValue(name, out List<object> list))
 				{
-					var toRemove = new List<object>();
-					foreach (var t in list)
+					List<object> toRemove = new();
+					foreach (object t in list)
 					{
 						if (t is IDisposable d)
 						{
@@ -163,7 +164,7 @@ namespace Game
 						}
 						toRemove.Add(t);
 					}
-					foreach (var t in toRemove) list.Remove(t);
+					foreach (object t in toRemove) list.Remove(t);
 				}
 			}
 		}
@@ -176,21 +177,21 @@ namespace Game
 
 		public static bool IsContent(object content)
 		{
-			foreach (var l in Caches.Values)
+			foreach (List<object> l in Caches.Values)
 			{
-				foreach (var d in l) if (d == content) return true;
+				foreach (object d in l) if (d == content) return true;
 			}
 			return false;
 		}
 
 		public static void Display_DeviceReset()
 		{
-			foreach (var i in Caches)
+			foreach (KeyValuePair<string,List<object>> i in Caches)
 			{
-				var k = i.Key;
-				for (var j = 0; j < i.Value.Count; j++)
+				string k = i.Key;
+				for (int j = 0; j < i.Value.Count; j++)
 				{
-					var t = i.Value[j];
+					object t = i.Value[j];
 					if (t is Texture2D || t is Model || t is BitmapFont)
 					{
 						i.Value[j] = Get(t.GetType(), k);
@@ -208,7 +209,7 @@ namespace Game
 		{
 			List<ContentInfo> contents = [];
 			if (!directory.EndsWith('/')) directory += "/";
-			foreach (var content in Resources.Values)
+			foreach (ContentInfo content in Resources.Values)
 			{
 				if (content.ContentPath.StartsWith(directory)) contents.Add(content);
 			}

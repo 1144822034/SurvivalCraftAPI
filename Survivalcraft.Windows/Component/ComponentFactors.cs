@@ -17,8 +17,8 @@ namespace Game
 		/// <summary>
 		/// 模组如果有自定义的Factors，可以使用这个OtherFactors。例如使用OtherFactors["AttackRate"]来定义攻击频率。
 		/// </summary>
-		public Dictionary<string,List<Factor>> OtherFactors = new Dictionary<string,List<Factor>>();
-		public Dictionary<string,float> OtherFactorsResults = new Dictionary<string,float>();
+		public Dictionary<string,List<Factor>> OtherFactors = new();
+		public Dictionary<string,float> OtherFactorsResults = new();
 		/// <summary>
 		/// 这四个Factors是可以调整的影响因素
 		/// </summary>
@@ -36,11 +36,11 @@ namespace Game
 				return result;
 			}
 			if(!recalculate && throwIfNotFound)
-				throw new KeyNotFoundException(string.Format("Required factor result with name {0} is not found.", factorName));
-			bool factorsGotten = OtherFactors.TryGetValue(factorName,out var factors);
+				throw new KeyNotFoundException($"Required factor result with name {factorName} is not found.");
+			bool factorsGotten = OtherFactors.TryGetValue(factorName,out List<Factor> factors);
 			if(!factorsGotten)
 			{
-				if(throwIfNotFound) throw new KeyNotFoundException(string.Format("Required factor key with name {0} is not found.",factorName));
+				if(throwIfNotFound) throw new KeyNotFoundException($"Required factor key with name {factorName} is not found.");
 				return 1f;
 			}
 			return CalculateFactorsResult(factors);
@@ -94,7 +94,7 @@ namespace Game
 		public static float CalculateFactorsResult(ICollection<Factor> factors)
 		{
 			float ans = 1f;
-			foreach(var factor in factors)
+			foreach(Factor factor in factors)
 			{
 				switch(factor.FactorAdditionType)
 				{
@@ -138,7 +138,7 @@ namespace Game
 		}
 		public virtual void GenerateOtherFactors()
 		{
-			foreach(var key in OtherFactors.Keys)
+			foreach(string key in OtherFactors.Keys)
 			{
 				OtherFactors[key].Clear();
 			}

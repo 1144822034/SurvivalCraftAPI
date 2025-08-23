@@ -31,7 +31,7 @@ namespace Game
 				Terrain.MakeBlockValue(256, 0, DeciduousLeavesBlock.SetSeason(0, Season.Spring)),
 				Terrain.MakeBlockValue(263, 0, DeciduousLeavesBlock.SetSeason(0, Season.Spring))
 			];
-			var random = new Random(33);
+			Random random = new(33);
 			m_treeBrushesByType[0] = [];
 			for (int i = 0; i < 16; i++)
 			{
@@ -390,7 +390,7 @@ namespace Game
 
 		public static TerrainBrush CreateTreeBrush(Random random, int woodIndex, int leavesIndex, int height, int branchesCount, int leavesRounds, Func<int, int, float> leavesProbability, Func<int, float> branchesLength)
 		{
-			var terrainBrush = new TerrainBrush();
+			TerrainBrush terrainBrush = new();
 			terrainBrush.AddRay(0, -1, 0, 0, height, 0, 1, 1, 1, woodIndex);
 			for (int i = 0; i < branchesCount; i++)
 			{
@@ -439,19 +439,19 @@ namespace Game
 
 		public static TerrainBrush CreateMimosaBrush(Random random, float size)
 		{
-			var terrainBrush = new TerrainBrush();
+			TerrainBrush terrainBrush = new();
 			int value = m_treeTrunksByType[4];
 			int value2 = m_treeLeavesByType[4];
 			terrainBrush.AddRay(0, -1, 0, 0, 0, 0, 1, 1, 1, value);
-			var list = new List<Point3>();
+			List<Point3> list = new();
 			float num = random.Float(0f, (float)Math.PI * 2f);
 			for (int i = 0; i < 3; i++)
 			{
 				float radians = num + (i * MathUtils.DegToRad(120f));
-				var v = Vector3.Transform(Vector3.Normalize(new Vector3(1f, random.Float(1f, 1.5f), 0f)), Matrix.CreateRotationY(radians));
+				Vector3 v = Vector3.Transform(Vector3.Normalize(new Vector3(1f, random.Float(1f, 1.5f), 0f)), Matrix.CreateRotationY(radians));
 				int num2 = random.Int((int)(0.7f * size), (int)size);
-				var p = new Point3(0, 0, 0);
-				var item = new Point3(Vector3.Round(new Vector3(p) + (v * num2)));
+				Point3 p = new(0, 0, 0);
+				Point3 item = new(Vector3.Round(new Vector3(p) + (v * num2)));
 				terrainBrush.AddRay(p.X, p.Y, p.Z, item.X, item.Y, item.Z, 1, 1, 1, value);
 				list.Add(item);
 			}

@@ -4,7 +4,7 @@ namespace Game
 	{
 		public static int Index = 18;
 
-		public new static int MaxLevel = 7;
+		public static new int MaxLevel = 7;
 
 		public WaterBlock()
 			: base(MaxLevel)

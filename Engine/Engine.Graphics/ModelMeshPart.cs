@@ -33,26 +33,14 @@ namespace Engine.Graphics
 
 		public BoundingBox BoundingBox
 		{
-			get
-			{
-				return m_boundingBox;
-			}
-			set
-			{
-				m_boundingBox = value;
-			}
-		}
+			get => m_boundingBox;
+            set => m_boundingBox = value;
+        }
 
         public object Tag
         {
-            get
-            {
-                return m_tag;
-            }
-            set
-            {
-                m_tag = value;
-            }
+            get => m_tag;
+            set => m_tag = value;
         }
 
         public void Dispose()

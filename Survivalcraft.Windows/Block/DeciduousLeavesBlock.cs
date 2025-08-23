@@ -4,7 +4,7 @@ namespace Game;
 
 public abstract class DeciduousLeavesBlock : LeavesBlock
 {
-	public Random m_random1 = new Random();
+	public Random m_random1 = new();
 
 	public readonly float SummerStart;
 

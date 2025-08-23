@@ -36,7 +36,7 @@ namespace Game
 			m_valuesWidget.Text = string.Empty;
 			foreach (ComponentLevel.Factor factor in factors)
 			{
-				m_namesWidget.Text += string.Format("{0,24}\n", factor.Description);
+				m_namesWidget.Text += $"{factor.Description,24}\n";
 				switch(factor.FactorAdditionType)
 				{
 					case FactorAdditionType.Multiply:
@@ -54,7 +54,7 @@ namespace Game
 			}
 			m_namesWidget.Text = m_namesWidget.Text.TrimEnd();
 			m_valuesWidget.Text = m_valuesWidget.Text.TrimEnd();
-			m_totalNameWidget.Text = string.Format("{0,24}", "TOTAL");
+			m_totalNameWidget.Text = $"{"TOTAL",24}";
 			m_totalValueWidget.Text = string.Format(CultureInfo.InvariantCulture, "x {0:0.00}", total);
 		}
 

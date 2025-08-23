@@ -20,7 +20,7 @@ namespace Game
 			/// <summary>
 			/// 模组如果需要添加或使用额外信息，可以在这个ValuesDictionary读写元素
 			/// </summary>
-			public ValuesDictionary ValuesDictionaryForMods = new ValuesDictionary();
+			public ValuesDictionary ValuesDictionaryForMods = new();
 		}
 
 		public SubsystemGameInfo m_subsystemGameInfo;
@@ -41,7 +41,7 @@ namespace Game
 
 		public static List<Loot> ParseLootList(ValuesDictionary lootVd)
 		{
-			var list = new List<Loot>();
+			List<Loot> list = new();
 			foreach (string value in lootVd.Values)
 			{
 				list.Add(ParseLoot(value));

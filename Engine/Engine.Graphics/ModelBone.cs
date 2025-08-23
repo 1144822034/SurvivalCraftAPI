@@ -26,15 +26,9 @@ namespace Engine.Graphics
 
 		public Matrix Transform
 		{
-			get
-			{
-				return m_transform;
-			}
-			set
-			{
-				m_transform = value;
-			}
-		}
+			get => m_transform;
+            set => m_transform = value;
+        }
 
 		public ModelBone ParentBone
 		{

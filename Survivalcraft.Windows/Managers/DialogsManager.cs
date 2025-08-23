@@ -58,7 +58,7 @@ namespace Game
 					}
 					dialog.WidgetsHierarchyInput = null;
 					m_dialogs.Add(dialog);
-					var animationData = new AnimationData
+					AnimationData animationData = new()
 					{
 						Direction = 1
 					};

@@ -5,6 +5,7 @@ namespace Game
 {
 	public class BulletBlock : FlatBlock
 	{
+		[Flags]
 		public enum BulletType
 		{
 			MusketBall,

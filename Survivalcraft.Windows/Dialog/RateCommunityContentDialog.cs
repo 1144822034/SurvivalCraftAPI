@@ -42,7 +42,7 @@ namespace Game
 			if (m_rateButton.IsClicked)
 			{
 				DialogsManager.HideDialog(this);
-				var busyDialog = new CancellableBusyDialog("Sending Rating", autoHideOnCancel: false);
+				CancellableBusyDialog busyDialog = new("Sending Rating", autoHideOnCancel: false);
 				DialogsManager.ShowDialog(ParentWidget, busyDialog);
 				CommunityContentManager.Rate(m_address, m_userId, (int)m_starRating.Rating, busyDialog.Progress, delegate
 				{

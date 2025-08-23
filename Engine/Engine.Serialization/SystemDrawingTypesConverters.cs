@@ -9,7 +9,7 @@ namespace Engine.Serialization
 		{
 			public string ConvertToString(object value)
 			{
-				var color = (System.Drawing.Color)value;
+				System.Drawing.Color color = (System.Drawing.Color)value;
                 return color.A != byte.MaxValue
                     ? HumanReadableConverter.ValuesListToString(',', color.A, color.R, color.G, color.B)
                     : HumanReadableConverter.ValuesListToString(',', color.R, color.G, color.B);
@@ -43,7 +43,7 @@ namespace Engine.Serialization
 		{
 			public string ConvertToString(object value)
 			{
-				var point = (Point)value;
+				Point point = (Point)value;
 				return HumanReadableConverter.ValuesListToString(',', point.X, point.Y);
 			}
 
@@ -61,7 +61,7 @@ namespace Engine.Serialization
 		{
 			public string ConvertToString(object value)
 			{
-				var pointF = (PointF)value;
+				PointF pointF = (PointF)value;
 				return HumanReadableConverter.ValuesListToString(',', pointF.X, pointF.Y);
 			}
 
@@ -79,7 +79,7 @@ namespace Engine.Serialization
 		{
 			public string ConvertToString(object value)
 			{
-				var size = (Size)value;
+				Size size = (Size)value;
 				return HumanReadableConverter.ValuesListToString(',', size.Width, size.Height);
 			}
 
@@ -97,7 +97,7 @@ namespace Engine.Serialization
 		{
 			public string ConvertToString(object value)
 			{
-				var sizeF = (SizeF)value;
+				SizeF sizeF = (SizeF)value;
 				return HumanReadableConverter.ValuesListToString(',', sizeF.Width, sizeF.Height);
 			}
 
@@ -115,7 +115,7 @@ namespace Engine.Serialization
 		{
 			public string ConvertToString(object value)
 			{
-				var rectangle = (System.Drawing.Rectangle)value;
+				System.Drawing.Rectangle rectangle = (System.Drawing.Rectangle)value;
 				return HumanReadableConverter.ValuesListToString(',', rectangle.X, rectangle.Y, rectangle.Width, rectangle.Height);
 			}
 
@@ -133,7 +133,7 @@ namespace Engine.Serialization
 		{
 			public string ConvertToString(object value)
 			{
-				var rectangleF = (RectangleF)value;
+				RectangleF rectangleF = (RectangleF)value;
 				return HumanReadableConverter.ValuesListToString(',', rectangleF.X, rectangleF.Y, rectangleF.Width, rectangleF.Height);
 			}
 

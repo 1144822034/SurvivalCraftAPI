@@ -424,7 +424,7 @@ public class ModsManageContentScreen : Screen
 					ModInfo samePackmModInfo = null;
 					foreach (ModInfo modInfo in m_installModInfo)
 					{
-						if (modInfo.PackageName == modItem.ModInfo.PackageName)
+						if (modInfo.PackageName == modItem.ModInfo?.PackageName)
 						{
 							samePackmModInfo = modInfo;
 						}
@@ -438,13 +438,13 @@ public class ModsManageContentScreen : Screen
 					}
 					else if (samePackmModInfo != null)
 					{
-						if (samePackmModInfo.Version == modItem.ModInfo.Version)
+						if (samePackmModInfo.Version == modItem.ModInfo?.Version)
 						{
 							DialogsManager.ShowDialog(null, new MessageDialog(LanguageControl.Get(fName, 52), LanguageControl.Get(fName, 53), LanguageControl.Get("Usual", "ok"), null, null));
 						}
 						else
 						{
-							string tips = string.Format(LanguageControl.Get(fName, 54), modItem.ModInfo.Version, samePackmModInfo.Version);
+							string tips = string.Format(LanguageControl.Get(fName, 54), modItem.ModInfo?.Version, samePackmModInfo.Version);
 							DialogsManager.ShowDialog(null, new MessageDialog(LanguageControl.Get(fName, 55), tips, LanguageControl.Ok, LanguageControl.Cancel, delegate (MessageDialogButton result)
 							{
 								if (result == MessageDialogButton.Button1)
@@ -833,6 +833,7 @@ public class ModsManageContentScreen : Screen
 						}
 						catch
 						{
+							// ignored
 						}
 						if (stream == null) continue;
 						if (modInfo != null && string.IsNullOrEmpty(modInfo.PackageName)) continue;
@@ -851,7 +852,7 @@ public class ModsManageContentScreen : Screen
 								m_count++;
 							}
 						}
-						if (stream != null) stream.Close();
+						stream.Close();
 					}
 				}
 			}
@@ -954,6 +955,7 @@ public class ModsManageContentScreen : Screen
 					{
 						modItem = null;
 						Log.Error(string.Format(LanguageControl.Get(fName,"75"),fileName,e));
+						break;
 					}
 					finally
 					{
@@ -1138,7 +1140,7 @@ public class ModsManageContentScreen : Screen
 				k++;
 			}
 		}
-		string newPath = string.Format("{0}({1}).scmod",path.Substring(0,path.LastIndexOf('.')),LanguageControl.Get(fName,63));
+		string newPath = $"{path.Substring(0,path.LastIndexOf('.'))}({LanguageControl.Get(fName,63)}).scmod";
 		FileStream fileStream = new(Storage.GetSystemPath(newPath),FileMode.Create,FileAccess.ReadWrite,FileShare.ReadWrite);
 		fileStream.Write(buff2,0,buff2.Length);
 		fileStream.Flush();

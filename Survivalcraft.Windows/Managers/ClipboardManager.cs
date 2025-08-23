@@ -25,14 +25,8 @@ namespace Game
 #elif WINDOWS || LINUX
 		public static string ClipboardString
 		{
-			get
-			{
-				return ClipboardService.GetText()??"";
-			}
-			set
-			{
-				ClipboardService.SetText(value??"");
-			}
+			get => ClipboardService.GetText()??"";
+			set => ClipboardService.SetText(value??"");
 		}
 #else
 		public static string ClipboardString

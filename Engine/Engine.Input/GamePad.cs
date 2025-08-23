@@ -12,7 +12,9 @@ namespace Engine.Input
     {
         private class State
         {
+            // ReSharper disable MemberHidesStaticFromOuterClass
             public bool IsConnected;
+            // ReSharper restore MemberHidesStaticFromOuterClass
 
             public Vector2[] Sticks = new Vector2[2];
 
@@ -284,7 +286,7 @@ namespace Engine.Input
         public static bool IsConnected(int gamePadIndex)
         {
             return gamePadIndex < 0 || gamePadIndex >= m_states.Length
-                ? throw new ArgumentOutOfRangeException("gamePadIndex")
+                ? throw new ArgumentOutOfRangeException(nameof(gamePadIndex))
                 : m_states[gamePadIndex].IsConnected;
         }
 
@@ -292,7 +294,7 @@ namespace Engine.Input
         {
             if (deadZone < 0f || deadZone >= 1f)
             {
-                throw new ArgumentOutOfRangeException("deadZone");
+                throw new ArgumentOutOfRangeException(nameof(deadZone));
             }
             if (IsConnected(gamePadIndex))
             {
@@ -314,7 +316,7 @@ namespace Engine.Input
         public static float GetTriggerPosition(int gamePadIndex, GamePadTrigger trigger, float deadZone = 0f)
         {
             return deadZone < 0f || deadZone >= 1f
-                ? throw new ArgumentOutOfRangeException("deadZone")
+                ? throw new ArgumentOutOfRangeException(nameof(deadZone))
                 : IsConnected(gamePadIndex) ? ApplyDeadZone(m_states[gamePadIndex].Triggers[(int)trigger], deadZone) : 0f;
         }
 

@@ -5,7 +5,7 @@ namespace Engine.Serialization
 	{
 		public string ConvertToString(object value)
 		{
-			var vector = (Vector4)value;
+			Vector4 vector = (Vector4)value;
 			return HumanReadableConverter.ValuesListToString(',', vector.X, vector.Y, vector.Z, vector.W);
 		}
 

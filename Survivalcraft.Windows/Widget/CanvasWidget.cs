@@ -6,11 +6,7 @@ namespace Game
 	{
 		public Dictionary<Widget, Vector2> m_positions = [];
 
-		public Vector2 Size
-		{
-			get;
-			set;
-		} = new Vector2(-1f);
+		public Vector2 Size { get; set; } = new(-1f);
 
 
 		public static void SetPosition(Widget widget, Vector2 position)

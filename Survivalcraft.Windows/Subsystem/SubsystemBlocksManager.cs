@@ -18,7 +18,7 @@ namespace Game
          */
 
         //BlocksManager存储的是类名Name，SubsystemBlockManager存储的也是类名
-        public Dictionary<string, int> DynamicBlockNameToIndex = new Dictionary<string, int>();
+        public Dictionary<string, int> DynamicBlockNameToIndex = new();
 
         public ValuesDictionary m_savedValuesDictionary;
         public override void Initialize(Project project, ValuesDictionary valuesDictionary)
@@ -58,7 +58,7 @@ namespace Game
 
         public override void Save(ValuesDictionary valuesDictionary)
         {
-            foreach (var item in DynamicBlockNameToIndex)
+            foreach (KeyValuePair<string,int> item in DynamicBlockNameToIndex)
             {
                 valuesDictionary.SetValue(item.Value.ToString(), item.Key);
             }

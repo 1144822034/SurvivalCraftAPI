@@ -48,14 +48,14 @@ namespace SC4Android
 			{
 				//当版本大于安卓6
 				List<string> permissionList = [];
-				var readPermissionStatus = CheckSelfPermission(Manifest.Permission.ReadExternalStorage);
+				Permission readPermissionStatus = CheckSelfPermission(Manifest.Permission.ReadExternalStorage);
 				if(readPermissionStatus != Permission.Granted)
 				{
 					arePermissionsGranted = false;
 					permissionList.Add(Manifest.Permission.ReadExternalStorage);
 				}
 				
-				var writePermissionStatus = CheckSelfPermission(Manifest.Permission.WriteExternalStorage);
+				Permission writePermissionStatus = CheckSelfPermission(Manifest.Permission.WriteExternalStorage);
 				if(writePermissionStatus != Permission.Granted)
 				{
 					arePermissionsGranted = false;

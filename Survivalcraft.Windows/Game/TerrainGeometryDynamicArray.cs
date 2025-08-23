@@ -20,6 +20,6 @@ namespace Game
             m_cache.Return(array);
         }
 
-        private static ArrayCache<T> m_cache = new ArrayCache<T>(Enumerable.Range(4, 30).Select(n => 1 << n), 0.66f, 60f, 0.33f, 5f);
+        private static ArrayCache<T> m_cache = new(Enumerable.Range(4, 30).Select(n => 1 << n), 0.66f, 60f, 0.33f, 5f);
     }
 }

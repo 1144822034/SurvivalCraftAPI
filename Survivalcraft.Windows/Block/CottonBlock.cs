@@ -28,7 +28,7 @@ namespace Game
 			int data = Terrain.ExtractData(oldValue);
 			if (GetSize(data) == 2)
 			{
-				var item = new BlockDropValue
+				BlockDropValue item = new()
 				{
 					Value = Terrain.MakeBlockValue(173, 0, 6),
 					Count = Random.Int(1, 2)

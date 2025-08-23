@@ -11,12 +11,12 @@ public class FallenLeavesBlock : CubeBlock
 
 	public BoundingBox[] m_collisionBoxes =
 	[
-		new BoundingBox(new Vector3(0f, 0f, 0f), new Vector3(1f, m_height, 1f))
+		new(new Vector3(0f, 0f, 0f), new Vector3(1f, m_height, 1f))
 	];
 
 	public override void GenerateTerrainVertices(BlockGeometryGenerator generator, TerrainGeometry geometry, int value, int x, int y, int z)
 	{
-		Color sideColor = new Color(180, 170, 160);
+		Color sideColor = new(180, 170, 160);
 		Color color = GetColor(x, y, z);
 		Color color2 = GetColor(x, y, z + 1);
 		Color color3 = GetColor(x + 1, y, z);

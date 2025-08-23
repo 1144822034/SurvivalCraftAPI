@@ -25,14 +25,8 @@ namespace Game
 
 		public float Radius
 		{
-			get
-			{
-				return m_radius;
-			}
-			set
-			{
-				m_radius = MathUtils.Max(value, 1f);
-			}
+			get => m_radius;
+			set => m_radius = MathUtils.Max(value, 1f);
 		}
 
 		public TouchInput? TouchInput

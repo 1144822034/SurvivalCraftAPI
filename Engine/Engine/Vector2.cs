@@ -16,11 +16,8 @@ namespace Engine
 
 		public Vector2 YX
 		{
-			get
-			{
-				return new Vector2(Y, X);
-			}
-			set
+			get => new(Y, X);
+            set
 			{
 				Y = value.X;
 				X = value.Y;

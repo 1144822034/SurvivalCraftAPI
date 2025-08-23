@@ -8,7 +8,7 @@ namespace Engine.Serialization
 			archive.Serialize("HasValue", ref value2);
 			if (value2)
 			{
-				var value3 = default(T);
+				T value3 = default(T);
 				archive.Serialize("Value", ref value3);
 				value = value3;
 			}

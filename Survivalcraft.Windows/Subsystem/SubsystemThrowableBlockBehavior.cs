@@ -41,7 +41,7 @@ namespace Game
 				case AimState.Completed:
 					{
 						Vector3 vector = componentMiner.ComponentCreature.ComponentCreatureModel.EyePosition + (componentMiner.ComponentCreature.ComponentBody.Matrix.Right * 0.4f);
-						var v = Vector3.Normalize(vector + (aim.Direction * 10f) - vector);
+						Vector3 v = Vector3.Normalize(vector + (aim.Direction * 10f) - vector);
 						if (componentMiner.Inventory == null)
 						{
 							break;

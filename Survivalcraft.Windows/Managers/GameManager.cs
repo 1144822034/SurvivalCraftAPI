@@ -40,11 +40,11 @@ namespace Game
             BlocksManager.LoadBlocksStaticly = string.IsNullOrEmpty(worldInfo.APIVersion);
             using (Stream stream = Storage.OpenFile(Storage.CombinePaths(worldInfo.DirectoryName, "Project.xml"), OpenFileMode.Read))
 			{
-				var valuesDictionary = new ValuesDictionary();
-				var valuesDictionary2 = new ValuesDictionary();
+				ValuesDictionary valuesDictionary = new();
+				ValuesDictionary valuesDictionary2 = new();
 				valuesDictionary.SetValue("GameInfo", valuesDictionary2);
 				valuesDictionary2.SetValue("WorldDirectoryName", worldInfo.DirectoryName);
-				var valuesDictionary3 = new ValuesDictionary();
+				ValuesDictionary valuesDictionary3 = new();
 				valuesDictionary.SetValue("Views", valuesDictionary3);
 				valuesDictionary3.SetValue("GamesWidget", gamesWidget);
 				XElement projectNode = XmlUtils.LoadXmlFromStream(stream, null, throwOnError: true);
@@ -86,7 +86,7 @@ namespace Game
 						return false;
 					});
 				};
-				var projectData = new ProjectData(DatabaseManager.GameDatabase, projectNode, valuesDictionary, ignoreInvalidEntities: true);
+				ProjectData projectData = new(DatabaseManager.GameDatabase, projectNode, valuesDictionary, ignoreInvalidEntities: true);
 				m_project = new Project(DatabaseManager.GameDatabase, projectData);
 				m_subsystemUpdate = m_project.FindSubsystem<SubsystemUpdate>(throwOnError: true);
 			}
@@ -110,7 +110,7 @@ namespace Game
 					try
 					{
 						WorldsManager.MakeQuickWorldBackup(subsystemGameInfo.DirectoryName);
-						var xElement = new XElement("Project");
+						XElement xElement = new("Project");
 						ModsManager.HookAction("ProjectXmlSave", loader =>
 						{
 							loader.ProjectXmlSave(xElement);

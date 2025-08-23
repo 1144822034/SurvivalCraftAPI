@@ -67,7 +67,7 @@ namespace Game
 
 		public virtual void DragDrop(Widget dragWidget, object data)
 		{
-			var inventoryDragData = data as InventoryDragData;
+			InventoryDragData inventoryDragData = data as InventoryDragData;
 			if (inventoryDragData != null && GameManager.Project != null)
 			{
 				SubsystemPickables subsystemPickables = GameManager.Project.FindSubsystem<SubsystemPickables>(throwOnError: true);
@@ -89,7 +89,7 @@ namespace Game
 			float num = (SettingsManager.ResolutionMode == ResolutionMode.Low) ? 0.5f : ((SettingsManager.ResolutionMode != ResolutionMode.Medium) ? 1f : 0.75f);
 			float num2 = GlobalTransform.Right.Length();
 			float num3 = GlobalTransform.Up.Length();
-			var vector = new Vector2(ActualSize.X * num2, ActualSize.Y * num3);
+			Vector2 vector = new(ActualSize.X * num2, ActualSize.Y * num3);
 			Point2 point = default;
 			point.X = (int)MathF.Round(vector.X * num);
 			point.Y = (int)MathF.Round(vector.Y * num);

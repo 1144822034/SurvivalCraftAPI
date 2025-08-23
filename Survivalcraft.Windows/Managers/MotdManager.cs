@@ -63,10 +63,7 @@ namespace Game
 
 		public static Message MessageOfTheDay
 		{
-			get
-			{
-				return m_message;
-			}
+			get => m_message;
 			set
 			{
 				m_message = value;
@@ -173,7 +170,7 @@ namespace Game
 
 		public static string UnpackMotd(byte[] data)
 		{
-			using (var stream = new MemoryStream(data))
+			using (MemoryStream stream = new(data))
 				return new StreamReader(stream).ReadToEnd();
 			throw new InvalidOperationException("\"motd.xml\" file not found in Motd zip archive.");
 		}
@@ -195,12 +192,12 @@ namespace Game
 				XElement xElement = XmlUtils.LoadXmlFromString(dataString.Substring(num, num2 - num), throwOnError: true);
 				SettingsManager.MotdUpdatePeriodHours = XmlUtils.GetAttributeValue(xElement, "UpdatePeriodHours", 24);
 				SettingsManager.MotdUpdateUrl = XmlUtils.GetAttributeValue(xElement, "UpdateUrl", SettingsManager.MotdUpdateUrl);
-				var message = new Message();
+				Message message = new();
 				foreach (XElement item2 in xElement.Elements())
 				{
 					if (Widget.IsNodeIncludedOnCurrentPlatform(item2))
 					{
-						var item = new Line
+						Line item = new()
 						{
 							Time = XmlUtils.GetAttributeValue<float>(item2, "Time"),
 							Node = item2.Elements().FirstOrDefault(),
@@ -233,17 +230,12 @@ namespace Game
 				num2 += 8;
 			}
 			XElement xElement = XmlUtils.LoadXmlFromString(dataString.Substring(num, num2 - num), throwOnError: true);
-			string languageType = (!ModsManager.Configs.ContainsKey("Language")) ? "zh-CN" : ModsManager.Configs["Language"];
+			string languageType = (!ModsManager.Configs.TryGetValue("Language", out string config)) ? "zh-CN" : config;
 			foreach (XElement item in xElement.Elements())
 			{
 				if (item.Name.LocalName == "Bulletin")
 				{
-					m_bulletin = new Bulletin();
-					m_bulletin.Title = item.Attribute("Title").Value;
-					m_bulletin.EnTitle = item.Attribute("EnTitle").Value;
-					m_bulletin.Time = languageType + "$" + item.Attribute("Time").Value;
-					m_bulletin.Content = item.Element("Content").Value;
-					m_bulletin.EnContent = item.Element("EnContent").Value;
+					m_bulletin = new Bulletin { Title = item.Attribute("Title").Value,EnTitle = item.Attribute("EnTitle").Value,Time = languageType + "$" + item.Attribute("Time").Value,Content = item.Element("Content").Value,EnContent = item.Element("EnContent").Value };
 					break;
 				}
 			}
@@ -257,11 +249,11 @@ namespace Game
 				failure(new InvalidOperationException("Internet connection is unavailable."));
 				return;
 			}
-			var header = new Dictionary<string, string>
+			Dictionary<string,string> header = new()
 			{
 				{ "Content-Type", "application/x-www-form-urlencoded" }
 			};
-			var dictionary = new Dictionary<string, string>
+			Dictionary<string,string> dictionary = new()
 			{
 				{ "Operater", SettingsManager.ScpboxAccessToken },
 				{ "Content", dataString }
@@ -293,12 +285,7 @@ namespace Game
 			{
 				if (item.Name.LocalName == "FilterMod")
 				{
-					FilterMod filterMod = new();
-					filterMod.Name = item.Attribute("Name").Value;
-					filterMod.PackageName = item.Attribute("PackageName").Value;
-					filterMod.Version = item.Attribute("Version").Value;
-					filterMod.FilterAPIVersion = item.Attribute("FilterAPIVersion").Value;
-					filterMod.Explanation = item.Value;
+					FilterMod filterMod = new() { Name = item.Attribute("Name").Value,PackageName = item.Attribute("PackageName").Value,Version = item.Attribute("Version").Value,FilterAPIVersion = item.Attribute("FilterAPIVersion").Value,Explanation = item.Value };
 					FilterModAll.Add(filterMod);
 				}
 			}
@@ -348,7 +335,7 @@ namespace Game
 					int num = SettingsManager.MotdLastDownloadedData.IndexOf("<Motd2");
 					int num2 = SettingsManager.MotdLastDownloadedData.IndexOf("</Motd2>") + 8;
 					XElement xElement = XmlUtils.LoadXmlFromString(SettingsManager.MotdLastDownloadedData.Substring(num, num2 - num), throwOnError: true);
-					string languageType = (!ModsManager.Configs.ContainsKey("Language")) ? "zh-CN" : ModsManager.Configs["Language"];
+					string languageType = (!ModsManager.Configs.TryGetValue("Language", out string config)) ? "zh-CN" : config;
 					foreach (XElement item in xElement.Elements())
 					{
 						if (item.Name.LocalName == "Bulletin")
@@ -370,7 +357,7 @@ namespace Game
 					string newDownloadedData = SettingsManager.MotdLastDownloadedData.Substring(0, num);
 					newDownloadedData += xElement.ToString();
 					newDownloadedData += SettingsManager.MotdLastDownloadedData.Substring(num2);
-					var busyDialog = new CancellableBusyDialog("操作等待中", autoHideOnCancel: false);
+					CancellableBusyDialog busyDialog = new("操作等待中", autoHideOnCancel: false);
 					DialogsManager.ShowDialog(null, busyDialog);
 					SaveBulletin(newDownloadedData, busyDialog.Progress, delegate (byte[] data)
 					{

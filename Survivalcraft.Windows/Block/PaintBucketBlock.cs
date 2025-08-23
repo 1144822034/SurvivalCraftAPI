@@ -61,15 +61,14 @@ namespace Game
 					int num = CombineColors(color, 1 << additive);
 					if (num != color)
 					{
-						var craftingRecipe = new CraftingRecipe
+						CraftingRecipe craftingRecipe = new()
 						{
 							Description = string.Format(LanguageControl.Get(fName, "1"),SubsystemPalette.GetName(null, num, null)),
 							ResultValue = Terrain.MakeBlockValue(129, 0, num),
 							ResultCount = 1,
-							RequiredHeatLevel = 1f
+							RequiredHeatLevel = 1f,
+							Ingredients = { [0] = BlocksManager.Blocks[129].CraftingId + ":" + color.ToString(CultureInfo.InvariantCulture),[1] = additives[additive] }
 						};
-						craftingRecipe.Ingredients[0] = BlocksManager.Blocks[129].CraftingId + ":" + color.ToString(CultureInfo.InvariantCulture);
-						craftingRecipe.Ingredients[1] = additives[additive];
 						yield return craftingRecipe;
 					}
 					num2 = additive + 1;

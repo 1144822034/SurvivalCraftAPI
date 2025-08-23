@@ -5,7 +5,7 @@ namespace Engine.Serialization
 	{
 		public string ConvertToString(object value)
 		{
-			var boundingBox = (BoundingBox)value;
+			BoundingBox boundingBox = (BoundingBox)value;
 			return HumanReadableConverter.ValuesListToString(',', boundingBox.Min.X, boundingBox.Min.Y, boundingBox.Min.Z, boundingBox.Max.X, boundingBox.Max.Y, boundingBox.Max.Z);
 		}
 

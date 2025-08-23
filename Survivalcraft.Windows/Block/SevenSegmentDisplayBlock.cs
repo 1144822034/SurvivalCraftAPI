@@ -38,21 +38,16 @@ namespace Game
 			int color = 0;
 			while (color < 8)
 			{
-				var craftingRecipe = new CraftingRecipe
+				CraftingRecipe craftingRecipe = new()
 				{
 					ResultCount = 4,
 					ResultValue = Terrain.MakeBlockValue(185, 0, SetColor(0, color)),
 					RemainsCount = 1,
 					RemainsValue = Terrain.MakeBlockValue(90),
 					RequiredHeatLevel = 0f,
-					Description = LanguageControl.Get(GetType().Name, 1)
-                };
-				craftingRecipe.Ingredients[0] = "glass";
-				craftingRecipe.Ingredients[2] = "glass";
-				craftingRecipe.Ingredients[4] = "paintbucket:" + color.ToString(CultureInfo.InvariantCulture);
-				craftingRecipe.Ingredients[6] = "copperingot";
-				craftingRecipe.Ingredients[7] = "copperingot";
-				craftingRecipe.Ingredients[8] = "copperingot";
+					Description = LanguageControl.Get(GetType().Name, 1),
+					Ingredients = { [0] = "glass",[2] = "glass",[4] = "paintbucket:" + color.ToString(CultureInfo.InvariantCulture),[6] = "copperingot",[7] = "copperingot",[8] = "copperingot" }
+				};
 				yield return craftingRecipe;
 				int num = color + 1;
 				color = num;
@@ -74,7 +69,7 @@ namespace Game
 		{
 			int data = Terrain.ExtractData(value);
 			int color = GetColor(data);
-            return string.Format(LanguageControl.Get("LedBlock", "Format"), LanguageControl.Get("LedBlock", color), LanguageControl.GetBlock(string.Format("{0}:{1}", GetType().Name, data.ToString()), "DisplayName"));
+            return string.Format(LanguageControl.Get("LedBlock", "Format"), LanguageControl.Get("LedBlock", color), LanguageControl.GetBlock($"{GetType().Name}:{data.ToString()}", "DisplayName"));
         }
 
 		public override IEnumerable<int> GetCreativeValues()
