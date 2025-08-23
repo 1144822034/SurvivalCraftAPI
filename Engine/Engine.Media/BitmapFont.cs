@@ -1,7 +1,3 @@
-using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
 using System.Reflection;
 using Engine.Graphics;
 using SixLabors.ImageSharp.PixelFormats;
@@ -365,7 +361,7 @@ namespace Engine.Media
 		internal static BitmapFont InternalLoad(Image image, char firstCode, char fallbackCode, Vector2 spacing, float scale, Vector2 offset, KerningSettings kerningSettings, int mipLevelsCount, bool premultiplyAlpha, bool createTexture)
 		{
 			List<Rectangle> list = new(FindGlyphs(image));
-			List<Rectangle> list2 = new(list.Select((Rectangle r) => CropGlyph(image, r)));
+			List<Rectangle> list2 = new(list.Select(r => CropGlyph(image, r)));
 			if (list.Count == 0)
 			{
 				throw new InvalidOperationException("No glyphs found in BitmapFont image.");
@@ -551,7 +547,7 @@ namespace Engine.Media
                     for (int j = num; j <= num2; j++)
                     {
                         int num3 = Math.Abs(j - i);
-                        int x = depths[j] + (int)Math.Round(gradient * (float)num3);
+                        int x = depths[j] + (int)Math.Round(gradient * num3);
                         array[i] = MathUtils.Min(array[i], x);
                     }
                 }

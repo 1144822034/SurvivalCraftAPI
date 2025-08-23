@@ -1,5 +1,4 @@
 using Engine.Graphics;
-using System.Collections.Generic;
 
 namespace Game
 {
@@ -19,7 +18,7 @@ namespace Game
 
         public TerrainGeometrySubset[] Subsets;
 
-        public Dictionary<Texture2D, TerrainGeometry> Draws = null;
+        public Dictionary<Texture2D, TerrainGeometry> Draws;
 
         public Texture2D DefaultTexture;
         
@@ -47,45 +46,42 @@ namespace Game
             SubsetOpaque = Subsets[4];
             SubsetAlphaTest = Subsets[5];
             SubsetTransparent = Subsets[6];
-            OpaqueSubsetsByFace = new TerrainGeometrySubset[6]
-            {
-                Subsets[0],
+            OpaqueSubsetsByFace =
+            [
+	            Subsets[0],
                 Subsets[1],
                 Subsets[2],
                 Subsets[3],
                 Subsets[4],
                 Subsets[4]
-            };
-            AlphaTestSubsetsByFace = new TerrainGeometrySubset[6]
-            {
-                Subsets[5],
+            ];
+            AlphaTestSubsetsByFace =
+            [
+	            Subsets[5],
                 Subsets[5],
                 Subsets[5],
                 Subsets[5],
                 Subsets[5],
                 Subsets[5]
-            };
-            TransparentSubsetsByFace = new TerrainGeometrySubset[6]
-            {
-                Subsets[6],
+            ];
+            TransparentSubsetsByFace =
+            [
+	            Subsets[6],
                 Subsets[6],
                 Subsets[6],
                 Subsets[6],
                 Subsets[6],
                 Subsets[6]
-            };
+            ];
         }
 
         public virtual TerrainGeometry GetGeometry(Texture2D texture)
         {
             Draws ??= [];
             if (Draws.TryGetValue(texture, out var geometries)) return geometries;
-            else
-            {
-                var geometry = new TerrainGeometry();
-                Draws.Add(texture, geometry);
-                return geometry;
-            }
+            var geometry = new TerrainGeometry();
+            Draws.Add(texture, geometry);
+            return geometry;
         }
 
         public virtual void ClearGeometry()

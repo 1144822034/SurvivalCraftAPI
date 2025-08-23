@@ -1,6 +1,4 @@
-using Engine;
 using GameEntitySystem;
-using System.Collections.Generic;
 using System.Xml.Linq;
 
 namespace Game
@@ -124,7 +122,7 @@ namespace Game
 				ComponentPlayer componentPlayer = Entity.FindComponent<ComponentPlayer>();
 				if (componentPlayer != null)
 				{
-					DialogsManager.ShowDialog(componentPlayer.GuiWidget, new ListSelectionDialog(string.Empty, m_categories, 56f, (object c) => new LabelWidget
+					DialogsManager.ShowDialog(componentPlayer.GuiWidget, new ListSelectionDialog(string.Empty, m_categories, 56f, c => new LabelWidget
 					{
 						Text = LanguageControl.Get("BlocksManager", ((Category)c).Name),
 						Color = ((Category)c).Color,

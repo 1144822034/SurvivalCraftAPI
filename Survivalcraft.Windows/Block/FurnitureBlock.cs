@@ -1,8 +1,5 @@
 using Engine;
 using Engine.Graphics;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 
 namespace Game
 {
@@ -14,82 +11,74 @@ namespace Game
 
 		public int[][] m_facesMaps = new int[4][]
 		{
-			new int[6]
-			{
+			[
 				0,
 				1,
 				2,
 				3,
 				4,
 				5
-			},
-			new int[6]
-			{
+			],
+			[
 				1,
 				2,
 				3,
 				0,
 				4,
 				5
-			},
-			new int[6]
-			{
+			],
+			[
 				2,
 				3,
 				0,
 				1,
 				4,
 				5
-			},
-			new int[6]
-			{
+			],
+			[
 				3,
 				0,
 				1,
 				2,
 				4,
 				5
-			}
+			]
 		};
 
 		public int[][] m_reverseFacesMaps = new int[4][]
 		{
-			new int[6]
-			{
+			[
 				0,
 				1,
 				2,
 				3,
 				4,
 				5
-			},
-			new int[6]
-			{
+			],
+			[
 				3,
 				0,
 				1,
 				2,
 				4,
 				5
-			},
-			new int[6]
-			{
+			],
+			[
 				2,
 				3,
 				0,
 				1,
 				4,
 				5
-			},
-			new int[6]
-			{
+			],
+			[
 				1,
 				2,
 				3,
 				0,
 				4,
 				5
-			}
+			]
 		};
 
 		public override void Initialize()
@@ -460,7 +449,7 @@ namespace Game
 			}
 			if (list.Count == 2 && num == 0 && num2 == 1 && num3 == 0)
 			{
-				var list2 = list.Select((FurnitureDesign d) => d.Clone()).ToList();
+				var list2 = list.Select(d => d.Clone()).ToList();
 				for (int j = 0; j < list2.Count; j++)
 				{
 					list2[j].InteractionMode = FurnitureInteractionMode.ElectricSwitch;
@@ -482,7 +471,7 @@ namespace Game
 			}
 			if (list.Count >= 2 && num == 0 && num2 == 0 && num3 <= 1)
 			{
-				var list3 = list.Select((FurnitureDesign d) => d.Clone()).ToList();
+				var list3 = list.Select(d => d.Clone()).ToList();
 				for (int k = 0; k < list3.Count; k++)
 				{
 					list3[k].InteractionMode = (num3 == 0) ? FurnitureInteractionMode.Multistate : FurnitureInteractionMode.ConnectedMultistate;

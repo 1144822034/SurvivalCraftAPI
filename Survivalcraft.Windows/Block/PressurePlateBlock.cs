@@ -1,7 +1,5 @@
 using Engine;
 using Engine.Graphics;
-using System;
-using System.Collections.Generic;
 
 namespace Game
 {
@@ -15,17 +13,17 @@ namespace Game
 
 		public BoundingBox[][] m_collisionBoxesByData = new BoundingBox[16][];
 
-		public int[] m_creativeValuesByMaterial = new int[2]
-		{
+		public int[] m_creativeValuesByMaterial =
+		[
 			Terrain.MakeBlockValue(144, 0, 0),
 			Terrain.MakeBlockValue(144, 0, 1)
-		};
+		];
 
-		public int[] m_textureSlotsByMaterial = new int[2]
-		{
+		public int[] m_textureSlotsByMaterial =
+		[
 			4,
 			1
-		};
+		];
 
 		public override void Initialize()
 		{
@@ -50,10 +48,10 @@ namespace Game
 					vector2.X = MathF.Round(vector2.X * 100f) / 100f;
 					vector2.Y = MathF.Round(vector2.Y * 100f) / 100f;
 					vector2.Z = MathF.Round(vector2.Z * 100f) / 100f;
-					m_collisionBoxesByData[num2] = new BoundingBox[1]
-					{
+					m_collisionBoxesByData[num2] =
+					[
 						new(new Vector3(MathF.Min(vector.X, vector2.X), MathF.Min(vector.Y, vector2.Y), MathF.Min(vector.Z, vector2.Z)), new Vector3(MathF.Max(vector.X, vector2.X), MathF.Max(vector.Y, vector2.Y), MathF.Max(vector.Z, vector2.Z)))
-					};
+					];
 				}
 				Matrix identity = Matrix.Identity;
 				m_standaloneBlockMeshesByMaterial[i] = new BlockMesh();

@@ -1,7 +1,6 @@
 using Engine;
 using Engine.Graphics;
 using GameEntitySystem;
-using System;
 using TemplatesDatabase;
 
 namespace Game
@@ -120,8 +119,8 @@ namespace Game
 			if (m_componentCreature.ComponentHealth.Health == 0f)
 			{
 				float num = m_componentCreature.ComponentBody.BoundingBox.Max.Y - m_componentCreature.ComponentBody.BoundingBox.Min.Y;
-				Vector3 position = m_componentCreature.ComponentBody.Position + 1f * num * base.DeathPhase * Vector3.UnitY;
-				SetBoneTransform(m_bodyBone.Index, Matrix.CreateFromYawPitchRoll(vector.X, 0f, MathF.PI * base.DeathPhase) * Matrix.CreateTranslation(position));
+				Vector3 position = m_componentCreature.ComponentBody.Position + 1f * num * DeathPhase * Vector3.UnitY;
+				SetBoneTransform(m_bodyBone.Index, Matrix.CreateFromYawPitchRoll(vector.X, 0f, MathF.PI * DeathPhase) * Matrix.CreateTranslation(position));
 				SetBoneTransform(m_tail1Bone.Index, Matrix.Identity);
 				SetBoneTransform(m_tail2Bone.Index, Matrix.Identity);
 				if (m_jawBone != null)

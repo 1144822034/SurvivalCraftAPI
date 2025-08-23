@@ -52,7 +52,7 @@ namespace Game
 				JsonNode displa = item3["DisabledPlatforms"];
                 if (displa != null && displa.GetValueKind() == JsonValueKind.String)
 				{
-					if ((displa.GetValue<string>()).Split(new string[] { "," }, StringSplitOptions.None).FirstOrDefault((string s) => s.Trim().Equals(VersionsManager.PlatformString,StringComparison.CurrentCultureIgnoreCase)) == null) continue;
+					if ((displa.GetValue<string>()).Split([","], StringSplitOptions.None).FirstOrDefault(s => s.Trim().Equals(VersionsManager.PlatformString,StringComparison.CurrentCultureIgnoreCase)) == null) continue;
 				}
 				JsonNode Title = item3["Title"];
                 JsonNode Name = item3["Name"];
@@ -62,7 +62,7 @@ namespace Game
 				string text = string.Empty;
 				if (value != null)
 				{
-					string[] array = value.GetValue<string>().Split(new string[] { "\n" }, StringSplitOptions.None);
+					string[] array = value.GetValue<string>().Split(["\n"], StringSplitOptions.None);
 					foreach (string text2 in array)
 					{
 						text = text + text2.Trim() + " ";

@@ -1,8 +1,5 @@
 using Engine;
 using GameEntitySystem;
-using System.Collections.Generic;
-using System.ComponentModel.Design;
-using System.Linq;
 using TemplatesDatabase;
 
 namespace Game
@@ -596,7 +593,7 @@ namespace Game
 			ComponentClothing = Entity.FindComponent<ComponentClothing>(throwOnError: true);
 			ComponentOuterClothingModel = Entity.FindComponent<ComponentOuterClothingModel>(throwOnError: true);
 			int playerIndex = valuesDictionary.GetValue<int>("PlayerIndex");
-			PlayerData = Project.FindSubsystem<SubsystemPlayers>(throwOnError: true).PlayersData.First((PlayerData d) => d.PlayerIndex == playerIndex);
+			PlayerData = Project.FindSubsystem<SubsystemPlayers>(throwOnError: true).PlayersData.First(d => d.PlayerIndex == playerIndex);
 		}
 
 		public override void Save(ValuesDictionary valuesDictionary,EntityToIdMap entityToIdMap)

@@ -1,6 +1,4 @@
 using Engine;
-using System.Collections.Generic;
-using System.Linq;
 using System.Xml.Linq;
 
 namespace Game
@@ -37,7 +35,7 @@ namespace Game
 		{
 			int value = (int)parameters[0];
 			m_craftingRecipes.Clear();
-			m_craftingRecipes.AddRange(CraftingRecipesManager.Recipes.Where((CraftingRecipe r) => r.ResultValue == value && r.ResultValue != 0));
+			m_craftingRecipes.AddRange(CraftingRecipesManager.Recipes.Where(r => r.ResultValue == value && r.ResultValue != 0));
 			RecipesCount = m_craftingRecipes.Count;
 			m_recipeIndex = 0;
 		}

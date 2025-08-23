@@ -1,7 +1,4 @@
 using Engine;
-using System;
-using System.IO;
-using System.Linq;
 using System.Xml.Linq;
 using XmlUtilities;
 
@@ -53,7 +50,7 @@ namespace Game
 					Storage.DeleteDirectoryRecursive(Storage.CombinePaths(directoryName, item4));
 				}
 			}
-			catch (Exception ex)
+			catch (Exception)
 			{
 				foreach (string item5 in from f in Storage.ListFileNames(directoryName)
 										 where Storage.GetExtension(f) == ".old"
@@ -83,7 +80,7 @@ namespace Game
 				{
 					Storage.DeleteDirectoryRecursive(Storage.CombinePaths(directoryName, item8));
 				}
-				throw ex;
+				throw;
 			}
 		}
 

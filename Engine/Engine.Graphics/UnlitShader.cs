@@ -1,6 +1,6 @@
-using System.Collections.Generic;
-using System.IO;
+#if !ANDROID
 using System.Reflection;
+#endif
 
 namespace Engine.Graphics
 {

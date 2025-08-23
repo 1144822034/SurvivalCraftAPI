@@ -1,5 +1,4 @@
 using Engine;
-using System.Collections.Generic;
 using TemplatesDatabase;
 
 namespace Game
@@ -14,10 +13,10 @@ namespace Game
 
 		public Dictionary<Point3, bool> m_toHydrate = [];
 
-		public override int[] HandledBlocks => new int[1]
-		{
+		public override int[] HandledBlocks =>
+		[
 			168
-		};
+		];
 
 		public UpdateOrder UpdateOrder => UpdateOrder.Default;
 

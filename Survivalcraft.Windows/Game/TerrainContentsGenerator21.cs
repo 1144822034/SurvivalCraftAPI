@@ -1,6 +1,4 @@
 using Engine;
-using System;
-using System.Collections.Generic;
 using System.Diagnostics;
 
 namespace Game
@@ -2654,12 +2652,12 @@ namespace Game
 				terrainBrush14.Compile();
 				m_granitePocketBrushes.Add(terrainBrush14);
 			}
-			int[] array = new int[3]
-			{
+			int[] array =
+			[
 				4,
 				6,
 				8
-			};
+			];
 			for (int num65 = 0; num65 < 4 * array.Length; num65++)
 			{
 				var terrainBrush15 = new TerrainBrush();
@@ -2680,13 +2678,13 @@ namespace Game
 				terrainBrush15.Compile();
 				m_waterPocketBrushes.Add(terrainBrush15);
 			}
-			int[] array2 = new int[4]
-			{
+			int[] array2 =
+			[
 				8,
 				12,
 				14,
 				16
-			};
+			];
 			for (int num73 = 0; num73 < 4 * array2.Length; num73++)
 			{
 				var terrainBrush16 = new TerrainBrush();

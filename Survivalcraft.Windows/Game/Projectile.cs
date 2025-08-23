@@ -1,11 +1,8 @@
+#nullable enable
 using Engine;
-using System;
+using Engine.Graphics;
 using GameEntitySystem;
 using TemplatesDatabase;
-using System.Globalization;
-using Acornima;
-using Engine.Graphics;
-using Jint.Native;
 
 namespace Game
 {
@@ -65,7 +62,7 @@ namespace Game
 
         public bool BodyCollidable = true;
 
-        public float? m_attackPower = null;
+        public float? m_attackPower;
 		public virtual float MinVelocityToAttack { get; set; } = 10f;
         private Random m_random = new();
         public delegate float CalcVisibilityRangeDelegate();
@@ -199,12 +196,12 @@ namespace Game
             Vector3 positionAtdt = position + (Velocity * dt);
             Vector3 v = block.ProjectileTipOffset * Vector3.Normalize(Velocity);
             if (TerrainCollidable)
-                terrainRaycastResult = SubsystemTerrain == null ? SubsystemTerrain.Raycast(CurrnetTerrain(), position + v, positionAtdt + v, useInteractionBoxes: false, skipAirBlocks: true, (int value, float distance) => BlocksManager.Blocks[Terrain.ExtractContents(value)].IsCollidable_(value)) : SubsystemTerrain.Raycast(position + v, positionAtdt + v, useInteractionBoxes: false, skipAirBlocks: true, (int value, float distance) => BlocksManager.Blocks[Terrain.ExtractContents(value)].IsCollidable_(value));
+                terrainRaycastResult = SubsystemTerrain == null ? SubsystemTerrain.Raycast(CurrnetTerrain(), position + v, positionAtdt + v, useInteractionBoxes: false, skipAirBlocks: true, (value,distance) => BlocksManager.Blocks[Terrain.ExtractContents(value)].IsCollidable_(value)) : SubsystemTerrain.Raycast(position + v, positionAtdt + v, useInteractionBoxes: false, skipAirBlocks: true, (value,distance) => BlocksManager.Blocks[Terrain.ExtractContents(value)].IsCollidable_(value));
             else
                 terrainRaycastResult = null;
             if(BodyCollidable && Project != null)
             {
-	            bodyRaycastResult = SubsystemProjectiles?.m_subsystemBodies.Raycast(position + v, positionAtdt + v, 0.2f, (ComponentBody body, float distance) =>
+	            bodyRaycastResult = SubsystemProjectiles?.m_subsystemBodies.Raycast(position + v, positionAtdt + v, 0.2f, (body,distance) =>
 	            {
 					bool ignore = false;
 					ModsManager.HookAction("OnProjectileRaycastBody",loader => {
@@ -354,7 +351,7 @@ namespace Game
                 for (int k = 0; k < 8; k++)
                 {
                     Vector3 v2 = (k == 0) ? Vector3.Normalize(Velocity) : m_random.Vector3(1.5f);
-                    TerrainRaycastResult? terrainRaycastResult2 = SubsystemTerrain.Raycast(vector3, vector3 + v2, useInteractionBoxes: false, skipAirBlocks: true, (int value, float distance) => true);
+                    TerrainRaycastResult? terrainRaycastResult2 = SubsystemTerrain.Raycast(vector3, vector3 + v2, useInteractionBoxes: false, skipAirBlocks: true, (value,distance) => true);
                     if (terrainRaycastResult2.HasValue)
                     {
                         SubsystemProjectiles.m_subsystemFireBlockBehavior.SetCellOnFire(terrainRaycastResult2.Value.CellFace.X, terrainRaycastResult2.Value.CellFace.Y, terrainRaycastResult2.Value.CellFace.Z, 1f);

@@ -1,5 +1,3 @@
-using System;
-
 namespace Engine
 {
 	public struct Rectangle : IEquatable<Rectangle>

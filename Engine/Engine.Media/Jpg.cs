@@ -1,5 +1,3 @@
-using System;
-using System.IO;
 using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.Formats.Jpeg;
 
@@ -28,7 +26,7 @@ namespace Engine.Media
 			{
 				throw new ArgumentOutOfRangeException(nameof(quality));
             }
-            JpegEncoder encoder = new JpegEncoder() {
+            JpegEncoder encoder = new JpegEncoder {
                 Quality = quality,
                 ColorType = JpegEncodingColor.YCbCrRatio420
             };

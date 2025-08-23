@@ -59,7 +59,7 @@ namespace Engine.Graphics
 #endif
 		}
 
-		public unsafe void SetValue(float value)
+		public void SetValue(float value)
 		{
 #if DIRECT3D11
             if (Type != ShaderParameterType.Float || Count != 1)
@@ -90,7 +90,7 @@ namespace Engine.Graphics
 #endif
 		}
 
-		public unsafe void SetValue(float[] value, int count)
+		public void SetValue(float[] value, int count)
 		{
 #if DIRECT3D11
             if (Type != ShaderParameterType.Float)
@@ -154,7 +154,7 @@ namespace Engine.Graphics
 #endif
 		}
 
-		public unsafe void SetValue(Vector2 value)
+		public void SetValue(Vector2 value)
 		{
 #if DIRECT3D11
             if (Type != ShaderParameterType.Vector2 || Count != 1)
@@ -186,7 +186,7 @@ namespace Engine.Graphics
 #endif
 		}
 
-		public unsafe void SetValue(Vector2[] value, int count)
+		public void SetValue(Vector2[] value, int count)
 		{
 #if DIRECT3D11
             if (Type != ShaderParameterType.Vector2)
@@ -258,7 +258,7 @@ namespace Engine.Graphics
 #endif
 		}
 
-		public unsafe void SetValue(Vector3 value)
+		public void SetValue(Vector3 value)
 		{
 #if DIRECT3D11
             if (Type != ShaderParameterType.Vector3 || Count != 1)
@@ -291,7 +291,7 @@ namespace Engine.Graphics
 #endif
 		}
 
-		public unsafe void SetValue(Vector3[] value, int count)
+		public void SetValue(Vector3[] value, int count)
 		{
 #if DIRECT3D11
             if (Type != ShaderParameterType.Vector3)
@@ -364,7 +364,7 @@ namespace Engine.Graphics
 #endif
 		}
 
-		public unsafe void SetValue(Vector4 value)
+		public void SetValue(Vector4 value)
 		{
 #if DIRECT3D11
             if (Type != ShaderParameterType.Vector4 || Count != 1)
@@ -398,7 +398,7 @@ namespace Engine.Graphics
 #endif
 		}
 
-		public unsafe void SetValue(Vector4[] value, int count)
+		public void SetValue(Vector4[] value, int count)
 		{
 #if DIRECT3D11
             if (Type != ShaderParameterType.Vector4)
@@ -472,7 +472,7 @@ namespace Engine.Graphics
 #endif
 		}
 
-		public unsafe void SetValue(Matrix value)
+		public void SetValue(Matrix value)
 		{
 #if DIRECT3D11
             if (Type != ShaderParameterType.Matrix || Count != 1)
@@ -518,7 +518,7 @@ namespace Engine.Graphics
 #endif
 		}
 
-		public unsafe void SetValue(Matrix[] value, int count)
+		public void SetValue(Matrix[] value, int count)
 		{
 #if DIRECT3D11
             if (Type != ShaderParameterType.Matrix)

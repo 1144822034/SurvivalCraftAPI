@@ -1,6 +1,5 @@
 using Engine;
 using Engine.Graphics;
-using System;
 
 namespace Game
 {
@@ -14,21 +13,21 @@ namespace Game
 
 		public BoundingBox[][] m_collisionBoxes = new BoundingBox[24][];
 
-		public static Color[] m_colors = new Color[4]
-		{
+		public static Color[] m_colors =
+		[
 			new(20, 20, 20),
 			new(50, 20, 20),
 			new(80, 30, 30),
 			new(20, 20, 40)
-		};
+		];
 
-		public static Vector2[] m_offsets = new Vector2[4]
-		{
+		public static Vector2[] m_offsets =
+		[
 			0.15f * new Vector2(-0.8f, -1f),
 			0.15f * new Vector2(1f, -0.75f),
 			0.15f * new Vector2(-0.65f, 1f),
 			0.15f * new Vector2(0.9f, 0.7f)
-		};
+		];
 
 		public override void Initialize()
 		{
@@ -52,10 +51,10 @@ namespace Game
 					int num = (4 * i) + j;
 					m_blockMeshes[num] = new BlockMesh();
 					m_blockMeshes[num].AppendModelMeshPart(model.FindMesh("Urchin").MeshParts[0], boneAbsoluteTransform * m, makeEmissive: false, flipWindingOrder: false, doubleSided: false, flipNormals: false, Color.White);
-					m_collisionBoxes[num] = new BoundingBox[1]
-					{
+					m_collisionBoxes[num] =
+					[
 						m_blockMeshes[num].CalculateBoundingBox()
-					};
+					];
 				}
 			}
 			m_standaloneBlockMesh = new BlockMesh();

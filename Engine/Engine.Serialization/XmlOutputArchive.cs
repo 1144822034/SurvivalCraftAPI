@@ -1,5 +1,3 @@
-using System;
-using System.Collections.Generic;
 using System.Globalization;
 using System.Xml;
 using System.Xml.Linq;
@@ -125,7 +123,7 @@ namespace Engine.Serialization
 		public override void SerializeCollection<T>(string name, Func<T, string> itemNameFunc, IEnumerable<T> collection)
 		{
 			EnterNode(name, false);
-			SerializeData serializeData = Archive.GetSerializeData(typeof(T), allowEmptySerializer: true);
+			SerializeData serializeData = GetSerializeData(typeof(T), allowEmptySerializer: true);
             IEnumerator<XElement> enumerator = Node.Elements().GetEnumerator();
 			foreach (T item in collection)
 			{
@@ -150,8 +148,8 @@ namespace Engine.Serialization
 		public override void SerializeDictionary<K, V>(string name, IDictionary<K, V> dictionary)
 		{
 			EnterNode(name, false);
-            SerializeData serializeData = Archive.GetSerializeData(typeof(K), true);
-            SerializeData serializeData2 = Archive.GetSerializeData(typeof(V), true);
+            SerializeData serializeData = GetSerializeData(typeof(K), true);
+            SerializeData serializeData2 = GetSerializeData(typeof(V), true);
             if (serializeData.IsHumanReadableSupported)
             {
                 foreach (KeyValuePair<K, V> item in dictionary)

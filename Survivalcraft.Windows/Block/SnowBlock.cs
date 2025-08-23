@@ -1,6 +1,5 @@
 using Engine;
 using Engine.Graphics;
-using System.Collections.Generic;
 
 namespace Game
 {
@@ -10,10 +9,10 @@ namespace Game
 
 		private const float m_height = 0.125f;
 
-		public BoundingBox[] m_collisionBoxes = new BoundingBox[1]
-		{
+		public BoundingBox[] m_collisionBoxes =
+		[
 			new(new Vector3(0f, 0f, 0f), new Vector3(1f, m_height, 1f))
-		};
+		];
 
 		public override bool IsFaceTransparent(SubsystemTerrain subsystemTerrain, int face, int value)
 		{

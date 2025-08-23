@@ -1,6 +1,5 @@
-using System.Collections.Generic;
-using System.Xml.Linq;
 using Engine;
+using System.Xml.Linq;
 
 namespace Game
 {
@@ -122,7 +121,7 @@ namespace Game
 		/// <param name="onClicked"></param>
 		public void AddSettingButton(string text,Action onClicked)
 		{
-			ButtonWidget button = new BevelledButtonWidget()
+			ButtonWidget button = new BevelledButtonWidget
 			{
 				Name = text,
 				Text = text,

@@ -1,11 +1,9 @@
 using Engine;
 using Engine.Graphics;
-using GameEntitySystem;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using TemplatesDatabase;
 using Engine.Serialization;
+using GameEntitySystem;
+using TemplatesDatabase;
+
 namespace Game
 {
 	public class SubsystemPickables : Subsystem, IDrawable, IUpdateable
@@ -45,10 +43,10 @@ namespace Game
 
 		public DrawBlockEnvironmentData m_drawBlockEnvironmentData = new();
 
-		public static int[] m_drawOrders = new int[]
-		{
+		public static int[] m_drawOrders =
+		[
 			10
-		};
+		];
 
 		public ReadOnlyList<Pickable> Pickables => new(m_pickables);
 
@@ -194,7 +192,7 @@ namespace Game
 			m_subsystemBlockBehaviors = Project.FindSubsystem<SubsystemBlockBehaviors>(throwOnError: true);
 			m_subsystemFireBlockBehavior = Project.FindSubsystem<SubsystemFireBlockBehavior>(throwOnError: true);
 			m_subsystemFluidBlockBehavior = Project.FindSubsystem<SubsystemFluidBlockBehavior>(throwOnError: true);
-			foreach (ValuesDictionary item in valuesDictionary.GetValue<ValuesDictionary>("Pickables").Values.Where((object v) => v is ValuesDictionary))
+			foreach (ValuesDictionary item in valuesDictionary.GetValue<ValuesDictionary>("Pickables").Values.Where(v => v is ValuesDictionary))
 			{
 				try
 				{

@@ -1,10 +1,7 @@
-using System.Diagnostics;
 using Engine;
 using Engine.Graphics;
 using Engine.Input;
 using Engine.Media;
-using Window = Engine.Window;
-
 #if WINDOWS
 using ImeSharp;
 #endif
@@ -1558,7 +1555,7 @@ public class TextBoxWidget : Widget
 
     public TextBoxWidget()
     {
-	    TextChanged += (_) =>
+	    TextChanged += _ =>
 	    {
 		    if(!TasksQueue.OfType<SetCursorPositionTask>().Any())
 		    {

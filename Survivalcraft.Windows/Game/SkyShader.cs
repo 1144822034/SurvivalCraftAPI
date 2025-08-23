@@ -1,5 +1,3 @@
-using System.Collections.Generic;
-
 namespace Engine.Graphics
 {
 	public class SkyShader : TransformedShader
@@ -72,7 +70,7 @@ namespace Engine.Graphics
         public override void PrepareForDrawingOverride()
 		{
 			Transforms.UpdateMatrices(1, false, false, true);
-			m_worldViewProjectionMatrixParameter.SetValue(this.Transforms.WorldViewProjection, 1);
+			m_worldViewProjectionMatrixParameter.SetValue(Transforms.WorldViewProjection, 1);
 
 		}
 

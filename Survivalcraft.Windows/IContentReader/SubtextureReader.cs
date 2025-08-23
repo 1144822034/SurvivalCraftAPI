@@ -5,7 +5,7 @@ namespace Game.IContentReader
 {
 	public class SubtextureReader : IContentReader
 	{
-		public override string[] DefaultSuffix => new string[] { "webp", "txt", "png" };
+		public override string[] DefaultSuffix => ["webp", "txt", "png"];
 		public override string Type => "Game.Subtexture";
 		public override object Get(ContentInfo[] contents)
 		{
@@ -13,7 +13,7 @@ namespace Game.IContentReader
 			{
 				return TextureAtlasManager.GetSubtexture(contents[0].ContentPath);
 			}
-			else return new Subtexture(ContentManager.Get<Texture2D>(contents[0].ContentPath), Vector2.Zero, Vector2.One);
+			return new Subtexture(ContentManager.Get<Texture2D>(contents[0].ContentPath), Vector2.Zero, Vector2.One);
 		}
 	}
 }

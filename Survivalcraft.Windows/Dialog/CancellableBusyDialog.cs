@@ -1,3 +1,4 @@
+using Engine;
 using System.Xml.Linq;
 
 namespace Game
@@ -88,8 +89,8 @@ namespace Game
 			m_hideButtonWidget = Children.Find<ButtonWidget>("CancellableBusyDialog.HideButton");
 			m_hideButtonWidget.IsVisible = true;
 			m_hideButtonWidget.Text = hideButtonName;
-			m_cancelButtonWidget.Size = new Engine.Vector2(160, 60);
-			m_hideButtonWidget.Size = new Engine.Vector2(160, 60);
+			m_cancelButtonWidget.Size = new Vector2(160, 60);
+			m_hideButtonWidget.Size = new Vector2(160, 60);
 			Progress = new CancellableProgress();
 			m_autoHideOnCancel = autoHideOnCancel;
 			LargeMessage = largeMessage;

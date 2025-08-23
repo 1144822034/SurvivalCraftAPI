@@ -1,6 +1,5 @@
 using Engine;
 using Engine.Graphics;
-using System;
 
 namespace Game
 {
@@ -45,10 +44,10 @@ namespace Game
 			m_standaloneBlockMesh.AppendModelMeshPart(model.FindMesh("Torch").MeshParts[0], boneAbsoluteTransform * Matrix.CreateTranslation(0f, -0.25f, 0f), makeEmissive: false, flipWindingOrder: false, doubleSided: false, flipNormals: false, Color.White);
 			for (int j = 0; j < 5; j++)
 			{
-				m_collisionBoxes[j] = new BoundingBox[1]
-				{
+				m_collisionBoxes[j] =
+				[
 					m_blockMeshesByVariant[j].CalculateBoundingBox()
-				};
+				];
 			}
 			base.Initialize();
 		}

@@ -1,5 +1,4 @@
 using Engine;
-using System.Collections.Generic;
 
 namespace Game
 {
@@ -261,10 +260,10 @@ namespace Game
 		public int MaxBedrockHeight = 4;
 
 		public int OceanLevel => 64 + m_worldSettings.SeaLevelOffset;
-        public List<ChunkGenerationStep> ChunkGenerationStep1 = new List<ChunkGenerationStep>();
-        public List<ChunkGenerationStep> ChunkGenerationStep2 = new List<ChunkGenerationStep>();
-        public List<ChunkGenerationStep> ChunkGenerationStep3 = new List<ChunkGenerationStep>();
-		public List<ChunkGenerationStep> ChunkGenerationStep4 = new List<ChunkGenerationStep>();
+        public List<ChunkGenerationStep> ChunkGenerationStep1 = [];
+        public List<ChunkGenerationStep> ChunkGenerationStep2 = [];
+        public List<ChunkGenerationStep> ChunkGenerationStep3 = [];
+		public List<ChunkGenerationStep> ChunkGenerationStep4 = [];
 		static TerrainContentsGenerator23()
 		{
 			m_coalBrushes = [];
@@ -333,11 +332,11 @@ namespace Game
 			TGExtras = true;
 			TGCavesAndPockets = true;
 			//Step 1
-			ChunkGenerationStep1.Add(new ChunkGenerationStep(1000, (chunk) => GenerateSurfaceParameters(chunk, 0, 0, 16, 8)));
-			ChunkGenerationStep1.Add(new ChunkGenerationStep(2000, (chunk) => GenerateTerrain(chunk, 0, 0, 16, 8)));
+			ChunkGenerationStep1.Add(new ChunkGenerationStep(1000, chunk => GenerateSurfaceParameters(chunk, 0, 0, 16, 8)));
+			ChunkGenerationStep1.Add(new ChunkGenerationStep(2000, chunk => GenerateTerrain(chunk, 0, 0, 16, 8)));
             //Step 2
-            ChunkGenerationStep2.Add(new ChunkGenerationStep(1000, (chunk) => GenerateSurfaceParameters(chunk, 0, 8, 16, 16)));
-            ChunkGenerationStep2.Add(new ChunkGenerationStep(2000, (chunk) => GenerateTerrain(chunk, 0, 8, 16, 16)));
+            ChunkGenerationStep2.Add(new ChunkGenerationStep(1000, chunk => GenerateSurfaceParameters(chunk, 0, 8, 16, 16)));
+            ChunkGenerationStep2.Add(new ChunkGenerationStep(2000, chunk => GenerateTerrain(chunk, 0, 8, 16, 16)));
             //Step 3
             ChunkGenerationStep3.Add(new ChunkGenerationStep(100, GenerateCaves));
             ChunkGenerationStep3.Add(new ChunkGenerationStep(200, GeneratePockets));
@@ -385,13 +384,13 @@ namespace Game
 						float x;
 						if (k == 0)
 						{
-							num2 = m_oceanCorner.Y + (float)i;
-							x = CalculateOceanShoreX(num2) + (float)j;
+							num2 = m_oceanCorner.Y + i;
+							x = CalculateOceanShoreX(num2) + j;
 						}
 						else
 						{
-							x = m_oceanCorner.X + (float)i;
-							num2 = CalculateOceanShoreZ(x) + (float)j;
+							x = m_oceanCorner.X + i;
+							num2 = CalculateOceanShoreZ(x) + j;
 						}
 						float num3 = ScoreSpawnPosition(Terrain.ToCell(x), Terrain.ToCell(num2));
 						if (num3 > num)
@@ -687,10 +686,10 @@ namespace Game
 					for (int m = 0; m < grid3d.SizeY; m++)
 					{
 						int num9 = m * 8;
-						float num10 = TGTurbulenceStrength * num8 * MathUtils.Saturate(num7 - (float)num9) * ((2f * SimplexNoise.OctavedNoise(num5, num9, num6, TGTurbulenceFreq, TGTurbulenceOctaves, 4f, TGTurbulencePersistence)) - 1f);
-						float num11 = (float)num9 + num10;
+						float num10 = TGTurbulenceStrength * num8 * MathUtils.Saturate(num7 - num9) * ((2f * SimplexNoise.OctavedNoise(num5, num9, num6, TGTurbulenceFreq, TGTurbulenceOctaves, 4f, TGTurbulencePersistence)) - 1f);
+						float num11 = num9 + num10;
 						float num12 = num7 - num11;
-						num12 += MathUtils.Max(4f * (TGDensityBias - (float)num9), 0f);
+						num12 += MathUtils.Max(4f * (TGDensityBias - num9), 0f);
 						grid3d.Set(k, m, l, num12);
 					}
 				}
@@ -729,7 +728,7 @@ namespace Game
 								float num33 = grid2d2.Get(num31, num32);
 								int temperatureFast = chunk.GetTemperatureFast(x3, z3);
 								int humidityFast = chunk.GetHumidityFast(x3, z3);
-								float f = num33 - (0.01f * (float)humidityFast);
+								float f = num33 - (0.01f * humidityFast);
 								float num34 = MathUtils.Lerp(100f, 0f, f);
 								float num35 = MathUtils.Lerp(300f, 30f, f);
 								bool flag = (temperatureFast > 8 && humidityFast < 8 && num33 < 0.97f) || (MathF.Abs(x4) < 16f && num33 < 0.97f);
@@ -800,12 +799,12 @@ namespace Game
 							int num10;
 							if (num7 == 62)
 							{
-								num10 = (int)Math.Clamp(1f * (float)-temperature, 1f, 7f);
+								num10 = (int)Math.Clamp(1f * -temperature, 1f, 7f);
 							}
 							else
 							{
-								float num11 = MathUtils.Saturate(((float)num4 - 100f) * 0.05f);
-								float f = MathUtils.Saturate(MathUtils.Saturate((num6 - 0.9f) / 0.1f) - MathUtils.Saturate(((float)humidity - 3f) / 12f) + (TGSurfaceMultiplier * num11));
+								float num11 = MathUtils.Saturate((num4 - 100f) * 0.05f);
+								float f = MathUtils.Saturate(MathUtils.Saturate((num6 - 0.9f) / 0.1f) - MathUtils.Saturate((humidity - 3f) / 12f) + (TGSurfaceMultiplier * num11));
 								int min = (int)MathUtils.Lerp(4f, 0f, f);
 								int max = (int)MathUtils.Lerp(7f, 0f, f);
 								num10 = MathUtils.Min(random.Int(min, max), num4);
@@ -1065,8 +1064,8 @@ namespace Game
 						list2[random.Int(0, list2.Count - 1)].PaintFastAvoidWater(chunk, Terrain.ToCell(cavePoint.Position.X), Terrain.ToCell(cavePoint.Position.Y), Terrain.ToCell(cavePoint.Position.Z));
 						cavePoint.Position += 2f * cavePoint.Direction;
 						cavePoint.StepsTaken += 2;
-						float num9 = cavePoint.Position.X - (float)num6;
-						float num10 = cavePoint.Position.Z - (float)num7;
+						float num9 = cavePoint.Position.X - num6;
+						float num10 = cavePoint.Position.Z - num7;
 						if (random.Bool(0.5f))
 						{
 							Vector3 vector = Vector3.Normalize(random.Vector3(1f));
@@ -1107,7 +1106,7 @@ namespace Game
 						}
 						if (random.Bool(0.33f))
 						{
-							cavePoint.BrushType = (int)(MathF.Pow(random.Float(0f, 0.999f), 7f) * (float)m_caveBrushesByType.Count);
+							cavePoint.BrushType = (int)(MathF.Pow(random.Float(0f, 0.999f), 7f) * m_caveBrushesByType.Count);
 						}
 						if (random.Bool(0.06f) && list.Count < 12 && cavePoint.StepsTaken > 20 && cavePoint.Position.Y < 58f)
 						{
@@ -1115,7 +1114,7 @@ namespace Game
 							{
 								Position = cavePoint.Position,
 								Direction = Vector3.Normalize(random.Vector3(1f, 1f) * new Vector3(1f, 0.33f, 1f)),
-								BrushType = (int)(MathF.Pow(random.Float(0f, 0.999f), 7f) * (float)m_caveBrushesByType.Count),
+								BrushType = (int)(MathF.Pow(random.Float(0f, 0.999f), 7f) * m_caveBrushesByType.Count),
 								Length = random.Int(40, 180)
 							});
 						}
@@ -1346,8 +1345,8 @@ namespace Game
 				{
 					int num = i + chunk.Origin.X;
 					int num2 = j + chunk.Origin.Y;
-					float num3 = 2 + (int)((float)MaxBedrockHeight * SimplexNoise.OctavedNoise(num, num2, 0.1f, 1, 1f, 1f));
-					for (int k = 0; (float)k < num3; k++)
+					float num3 = 2 + (int)(MaxBedrockHeight * SimplexNoise.OctavedNoise(num, num2, 0.1f, 1, 1f, 1f));
+					for (int k = 0; k < num3; k++)
 					{
 						chunk.SetCellValueFast(i, k, j, value);
 					}
@@ -2109,7 +2108,7 @@ namespace Game
 								if (CalculateOceanShoreDistance(num, num2) > -20f)
 								{
 									float num5 = 1 + (int)(2f * MathUtils.Sqr(SimplexNoise.OctavedNoise(num, num2, 0.2f, 1, 2f, 1f)));
-									for (int k = 0; (float)k < num5; k++)
+									for (int k = 0; k < num5; k++)
 									{
 										if (num3 - k > 0)
 										{
@@ -2451,7 +2450,7 @@ namespace Game
 				terrainBrush14.Compile();
 				m_granitePocketBrushes.Add(terrainBrush14);
 			}
-			int[] array = new int[3] { 4, 6, 8 };
+			int[] array = [4, 6, 8];
 			for (int num65 = 0; num65 < 4 * array.Length; num65++)
 			{
 				TerrainBrush terrainBrush15 = new();
@@ -2464,14 +2463,14 @@ namespace Game
 					Vector2 vector15 = random.Vector2(0f, num66);
 					float num71 = vector15.Length();
 					int num72 = random.Int(3, 4);
-					int sizeY = 1 + (int)MathUtils.Lerp(MathUtils.Max(num66 / 3, 2.5f) * num68, 0f, num71 / (float)num66) + random.Int(0, 1);
+					int sizeY = 1 + (int)MathUtils.Lerp(MathUtils.Max(num66 / 3, 2.5f) * num68, 0f, num71 / num66) + random.Int(0, 1);
 					terrainBrush15.AddBox((int)MathF.Floor(vector15.X), 0, (int)MathF.Floor(vector15.Y), num72, sizeY, num72, 0);
 					terrainBrush15.AddBox((int)MathF.Floor(vector15.X), -num67, (int)MathF.Floor(vector15.Y), num72, num67, num72, 18);
 				}
 				terrainBrush15.Compile();
 				m_waterPocketBrushes.Add(terrainBrush15);
 			}
-			int[] array2 = new int[4] { 8, 12, 14, 16 };
+			int[] array2 = [8, 12, 14, 16];
 			for (int num73 = 0; num73 < 4 * array2.Length; num73++)
 			{
 				TerrainBrush terrainBrush16 = new();
@@ -2484,8 +2483,8 @@ namespace Game
 					Vector2 vector16 = random.Vector2(0f, num74);
 					float num79 = vector16.Length();
 					int num80 = random.Int(3, 4);
-					int sizeY2 = 1 + (int)MathUtils.Lerp(MathUtils.Max(num74 / 3, 2.5f) * num76, 0f, num79 / (float)num74) + random.Int(0, 1);
-					int num81 = 1 + (int)MathUtils.Lerp(num75, 0f, num79 / (float)num74) + random.Int(0, 1);
+					int sizeY2 = 1 + (int)MathUtils.Lerp(MathUtils.Max(num74 / 3, 2.5f) * num76, 0f, num79 / num74) + random.Int(0, 1);
+					int num81 = 1 + (int)MathUtils.Lerp(num75, 0f, num79 / num74) + random.Int(0, 1);
 					terrainBrush16.AddBox((int)MathF.Floor(vector16.X), 0, (int)MathF.Floor(vector16.Y), num80, sizeY2, num80, 0);
 					terrainBrush16.AddBox((int)MathF.Floor(vector16.X), -num81, (int)MathF.Floor(vector16.Y), num80, num81, num80, 92);
 				}

@@ -1,9 +1,5 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using System.Xml.Linq;
 using Engine;
+using System.Xml.Linq;
 
 namespace Game;
 
@@ -80,7 +76,7 @@ public class OriginalCommunityContentScreen : Screen
 			if (item is OriginalCommunityContentEntry communityContentEntry)
 			{
 				XElement node2 = ContentManager.Get<XElement>("Widgets/CommunityContentItem");
-				ContainerWidget containerWidget = (ContainerWidget)Widget.LoadWidget(this, node2, null);
+				ContainerWidget containerWidget = (ContainerWidget)LoadWidget(this, node2, null);
 				containerWidget.Children.Find<RectangleWidget>("CommunityContentItem.Icon").Subtexture = ExternalContentManager.GetEntryTypeIcon(communityContentEntry.Type);
 				containerWidget.Children.Find<LabelWidget>("CommunityContentItem.Text").Text = communityContentEntry.Name;
 				containerWidget.Children.Find<LabelWidget>("CommunityContentItem.Details").Text = string.Format("{0} {1}", new object[2]
@@ -94,7 +90,7 @@ public class OriginalCommunityContentScreen : Screen
 				return containerWidget;
 			}
 			XElement node3 = ContentManager.Get<XElement>("Widgets/CommunityContentItemMore");
-			ContainerWidget containerWidget2 = (ContainerWidget)Widget.LoadWidget(this, node3, null);
+			ContainerWidget containerWidget2 = (ContainerWidget)LoadWidget(this, node3, null);
 			m_moreLink = containerWidget2.Children.Find<LinkWidget>("CommunityContentItemMore.Link");
 			m_moreLink.Tag = item as string;
 			return containerWidget2;
@@ -145,7 +141,7 @@ public class OriginalCommunityContentScreen : Screen
 		if (m_changeOrderButton.IsClicked)
 		{
 			List<Order> items = EnumUtils.GetEnumValues(typeof(Order)).Cast<Order>().ToList();
-			DialogsManager.ShowDialog(null, new ListSelectionDialog(LanguageControl.Get(fName, "1"), items, 60f, (object item) => GetOrderDisplayName((Order)item), delegate(object item)
+			DialogsManager.ShowDialog(null, new ListSelectionDialog(LanguageControl.Get(fName, "1"), items, 60f, item => GetOrderDisplayName((Order)item), delegate(object item)
 			{
 				m_order = (Order)item;
 				PopulateList(null);
@@ -153,8 +149,11 @@ public class OriginalCommunityContentScreen : Screen
 		}
 		if (m_changeFilterButton.IsClicked)
 		{
-			List<object> list = new List<object>();
-			list.Add(string.Empty);
+			List<object> list =
+			[
+				string.Empty
+
+			];
 			foreach (OriginalExternalContentType item in from OriginalExternalContentType t in EnumUtils.GetEnumValues(typeof(OriginalExternalContentType))
 				where IsEntryTypeDownloadSupported(t)
 				select t)
@@ -169,7 +168,7 @@ public class OriginalCommunityContentScreen : Screen
 			{
 				list.Add(communityContentEntry2.Url);
 			}
-			DialogsManager.ShowDialog(null, new ListSelectionDialog(LanguageControl.Get(fName, "2"), list, 60f, (object item) => GetFilterDisplayName(item), delegate(object item)
+			DialogsManager.ShowDialog(null, new ListSelectionDialog(LanguageControl.Get(fName, "2"), list, 60f, item => GetFilterDisplayName(item), delegate(object item)
 			{
 				m_filter = item;
 				PopulateList(null);
@@ -196,11 +195,11 @@ public class OriginalCommunityContentScreen : Screen
 		{
 			PopulateList((string)m_moreLink.Tag);
 		}
-		if (base.Input.Back || Children.Find<BevelledButtonWidget>("TopBar.Back").IsClicked)
+		if (Input.Back || Children.Find<BevelledButtonWidget>("TopBar.Back").IsClicked)
 		{
 			ScreensManager.SwitchScreen("Content");
 		}
-		if (base.Input.Hold.HasValue && base.Input.HoldTime > 2f && base.Input.Hold.Value.Y < 20f)
+		if (Input.Hold.HasValue && Input.HoldTime > 2f && Input.Hold.Value.Y < 20f)
 		{
 			m_itemsCacheExpiryTime = 0.0;
 			Task.Delay(250).Wait();
@@ -243,7 +242,7 @@ public class OriginalCommunityContentScreen : Screen
 			m_listPanel.ScrollPosition = 0f;
 			return;
 		}
-		object[] prefixItems = ((!string.IsNullOrEmpty(cursor)) ? m_listPanel.Items.Where((object i) => i is OriginalCommunityContentEntry).ToArray() : new object[0]);
+		object[] prefixItems = ((!string.IsNullOrEmpty(cursor)) ? m_listPanel.Items.Where(i => i is OriginalCommunityContentEntry).ToArray() : []);
 		m_populatingListCount++;
 		OriginalCommunityContentManager.List(cursor, text, text2, text4, text5, m_search, text6, m_busyDialog.Progress, delegate(List<OriginalCommunityContentEntry> list, string nextCursor)
 		{

@@ -1,5 +1,3 @@
-using System;
-
 namespace Engine.Serialization
 {
 	[HumanReadableConverter(typeof(BoundingRectangle))]
@@ -8,7 +6,7 @@ namespace Engine.Serialization
 		public string ConvertToString(object value)
 		{
 			var boundingRectangle = (BoundingRectangle)value;
-			return HumanReadableConverter.ValuesListToString<float>(',', boundingRectangle.Min.X, boundingRectangle.Min.Y, boundingRectangle.Max.X, boundingRectangle.Max.Y);
+			return HumanReadableConverter.ValuesListToString(',', boundingRectangle.Min.X, boundingRectangle.Min.Y, boundingRectangle.Max.X, boundingRectangle.Max.Y);
 		}
 
 		public object ConvertFromString(Type type, string data)

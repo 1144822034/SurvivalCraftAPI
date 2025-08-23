@@ -1,7 +1,4 @@
 using Engine;
-using System;
-using System.Collections.Generic;
-using System.IO;
 
 namespace Game
 {
@@ -130,49 +127,37 @@ namespace Game
 				m_stream.Seek(value, SeekOrigin.Begin);
 				ReadChunkHeader(m_stream);
 				m_stream.ReadExactly(m_buffer, 0, 131072);
-				try
+				fixed (byte* ptr = &m_buffer[0])
 				{
-					fixed (byte* ptr = &m_buffer[0])
+					int* ptr2 = (int*)ptr;
+					for (int i = 0; i < 16; i++)
 					{
-						int* ptr2 = (int*)ptr;
-						for (int i = 0; i < 16; i++)
+						for (int j = 0; j < 16; j++)
 						{
-							for (int j = 0; j < 16; j++)
+							int num3 = TerrainChunk.CalculateCellIndex(i, 0, j);
+							int num4 = 0;
+							while (num4 < 128)
 							{
-								int num3 = TerrainChunk.CalculateCellIndex(i, 0, j);
-								int num4 = 0;
-								while (num4 < 128)
-								{
-									chunk.SetCellValueFast(num3, *ptr2);
-									num4++;
-									num3++;
-									ptr2++;
-								}
+								chunk.SetCellValueFast(num3, *ptr2);
+								num4++;
+								num3++;
+								ptr2++;
 							}
 						}
 					}
-				}
-				finally
-				{
 				}
 				m_stream.ReadExactly(m_buffer, 0, 1024);
-				try
+				fixed (byte* ptr = &m_buffer[0])
 				{
-					fixed (byte* ptr = &m_buffer[0])
+					int* ptr3 = (int*)ptr;
+					for (int k = 0; k < 16; k++)
 					{
-						int* ptr3 = (int*)ptr;
-						for (int k = 0; k < 16; k++)
+						for (int l = 0; l < 16; l++)
 						{
-							for (int l = 0; l < 16; l++)
-							{
-								m_terrain.SetShaftValue(k + chunk.Origin.X, l + chunk.Origin.Y, *ptr3);
-								ptr3++;
-							}
+							m_terrain.SetShaftValue(k + chunk.Origin.X, l + chunk.Origin.Y, *ptr3);
+							ptr3++;
 						}
 					}
-				}
-				finally
-				{
 				}
 				result = true;
 				_ = Time.RealTime;
@@ -204,49 +189,37 @@ namespace Game
 					m_stream.Seek(value, SeekOrigin.Begin);
 				}
 				WriteChunkHeader(m_stream, num, num2);
-				try
+				fixed (byte* ptr = &m_buffer[0])
 				{
-					fixed (byte* ptr = &m_buffer[0])
+					int* ptr2 = (int*)ptr;
+					for (int i = 0; i < 16; i++)
 					{
-						int* ptr2 = (int*)ptr;
-						for (int i = 0; i < 16; i++)
+						for (int j = 0; j < 16; j++)
 						{
-							for (int j = 0; j < 16; j++)
+							int num3 = TerrainChunk.CalculateCellIndex(i, 0, j);
+							int num4 = 0;
+							while (num4 < 128)
 							{
-								int num3 = TerrainChunk.CalculateCellIndex(i, 0, j);
-								int num4 = 0;
-								while (num4 < 128)
-								{
-									*ptr2 = chunk.GetCellValueFast(num3);
-									num4++;
-									num3++;
-									ptr2++;
-								}
+								*ptr2 = chunk.GetCellValueFast(num3);
+								num4++;
+								num3++;
+								ptr2++;
 							}
 						}
 					}
-				}
-				finally
-				{
 				}
 				m_stream.Write(m_buffer, 0, 131072);
-				try
+				fixed (byte* ptr = &m_buffer[0])
 				{
-					fixed (byte* ptr = &m_buffer[0])
+					int* ptr3 = (int*)ptr;
+					for (int k = 0; k < 16; k++)
 					{
-						int* ptr3 = (int*)ptr;
-						for (int k = 0; k < 16; k++)
+						for (int l = 0; l < 16; l++)
 						{
-							for (int l = 0; l < 16; l++)
-							{
-								*ptr3 = m_terrain.GetShaftValue(k + chunk.Origin.X, l + chunk.Origin.Y);
-								ptr3++;
-							}
+							*ptr3 = m_terrain.GetShaftValue(k + chunk.Origin.X, l + chunk.Origin.Y);
+							ptr3++;
 						}
 					}
-				}
-				finally
-				{
 				}
 				m_stream.Write(m_buffer, 0, 1024);
 				if (flag)

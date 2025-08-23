@@ -1,7 +1,5 @@
 using Engine;
 using GameEntitySystem;
-using System;
-using System.Collections.Generic;
 using TemplatesDatabase;
 
 namespace Game
@@ -29,11 +27,11 @@ namespace Game
 				string[] array = BlocksManager.Blocks[i].Behaviors.Split(',', StringSplitOptions.RemoveEmptyEntries);
 				foreach (string text in array)
 				{
-					SubsystemBlockBehavior item = base.Project.FindSubsystem<SubsystemBlockBehavior>(text.Trim(), throwOnError: true);
+					SubsystemBlockBehavior item = Project.FindSubsystem<SubsystemBlockBehavior>(text.Trim(), throwOnError: true);
 					dictionary[i].Add(item);
 				}
 			}
-			foreach (SubsystemBlockBehavior item2 in base.Project.FindSubsystems<SubsystemBlockBehavior>())
+			foreach (SubsystemBlockBehavior item2 in Project.FindSubsystems<SubsystemBlockBehavior>())
 			{
 				m_blockBehaviors.Add(item2);
 				int[] handledBlocks = item2.HandledBlocks;

@@ -1,15 +1,12 @@
-using System;
-using System.Collections.Generic;
-
 namespace Engine.Graphics
 {
 	public  class FlatBatch2D : BaseFlatBatch
 	{
         public FlatBatch2D()
         {
-            base.DepthStencilState = DepthStencilState.None;
-            base.RasterizerState = RasterizerState.CullNoneScissor;
-            base.BlendState = BlendState.AlphaBlend;
+            DepthStencilState = DepthStencilState.None;
+            RasterizerState = RasterizerState.CullNoneScissor;
+            BlendState = BlendState.AlphaBlend;
         }
         public void QueueBatchTriangles(FlatBatch2D batch, Matrix? matrix = null, Color? color = null)
         {

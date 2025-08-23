@@ -1,7 +1,3 @@
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Runtime.CompilerServices;
-
 namespace Engine
 {
 	public static class Log
@@ -43,7 +39,7 @@ namespace Engine
 				}
 			}
 #if ANDROID
-            System.Console.WriteLine("SCAPI["+ type.ToString() +"]" + message);
+            Console.WriteLine("SCAPI["+ type +"]" + message);
 #endif
 		}
 

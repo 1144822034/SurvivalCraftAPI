@@ -1,7 +1,5 @@
 using Engine;
 using Engine.Serialization;
-using System;
-using System.Collections.Generic;
 using System.Globalization;
 using System.Text;
 using TemplatesDatabase;
@@ -31,10 +29,10 @@ namespace Game
 
 		public StringBuilder m_stringBuilder = new();
 
-		public override int[] HandledBlocks => new int[1]
-		{
+		public override int[] HandledBlocks =>
+		[
 			119
-		};
+		];
 
 		public UpdateOrder UpdateOrder => UpdateOrder.Default;
 
@@ -108,7 +106,7 @@ namespace Game
 
 		public SaplingData LoadSaplingData(string data)
 		{
-			string[] array = data.Split(new string[] { ";" }, StringSplitOptions.None);
+			string[] array = data.Split([";"], StringSplitOptions.None);
 			if (array.Length != 3)
 			{
 				throw new InvalidOperationException("Invalid sapling data string.");

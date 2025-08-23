@@ -14,7 +14,7 @@ namespace Game
 
 		public static readonly float[] LightIntensityByLightValueAndFace = new float[96];
 
-		public static bool Loaded = false;
+		public static bool Loaded;
 		public static void Initialize()
 		{
 			if (Loaded) return;
@@ -44,7 +44,7 @@ namespace Game
 			int num4 = (int)MathF.Ceiling(p.Y);
 			int z = (int)MathF.Ceiling(p.Z);
 			Terrain terrain = subsystemTerrain.Terrain;
-			if (num2 >= 0 && num4 <= 255)
+			if (num2 >= 0 && num4 <= TerrainChunk.HeightMinusOne)
 			{
 				TerrainChunk chunkAtCell = terrain.GetChunkAtCell(num, num3);
 				TerrainChunk chunkAtCell2 = terrain.GetChunkAtCell(x, num3);

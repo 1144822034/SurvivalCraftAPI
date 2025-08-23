@@ -1,13 +1,10 @@
-using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-
 namespace Engine.Serialization
 {
 	public class BinaryOutputArchive : OutputArchive, IDisposable
 	{
-		private int m_nextTypeId;
+#pragma warning disable CS0169 // 字段从未被使用
+        private int m_nextTypeId;
+#pragma warning restore CS0169 // 字段从未被使用
 
         private Dictionary<string, int> m_stringIds = new Dictionary<string, int>();
 
@@ -139,7 +136,7 @@ namespace Engine.Serialization
 
 		public override void SerializeCollection<T>(string name, Func<T, string> itemNameFunc, IEnumerable<T> collection)
 		{
-			SerializeData serializeData = Archive.GetSerializeData(typeof(T), allowEmptySerializer: true);
+			SerializeData serializeData = GetSerializeData(typeof(T), allowEmptySerializer: true);
             if (collection is IList<T> { Count: var count } list)
             {
                 Serialize(null, count);
@@ -158,8 +155,8 @@ namespace Engine.Serialization
 
 		public override void SerializeDictionary<K, V>(string name, IDictionary<K, V> dictionary)
 		{
-			SerializeData serializeData = Archive.GetSerializeData(typeof(K), allowEmptySerializer: true);
-			SerializeData serializeData2 = Archive.GetSerializeData(typeof(V), allowEmptySerializer: true);
+			SerializeData serializeData = GetSerializeData(typeof(K), allowEmptySerializer: true);
+			SerializeData serializeData2 = GetSerializeData(typeof(V), allowEmptySerializer: true);
 			Serialize(null, dictionary.Count());
 			foreach (KeyValuePair<K, V> item in dictionary)
 			{

@@ -1,7 +1,5 @@
 using Engine;
 using GameEntitySystem;
-using System;
-using System.Linq;
 using TemplatesDatabase;
 
 namespace Game
@@ -18,10 +16,10 @@ namespace Game
 
 		public static string fName = "SubsystemBoatBlockBehavior";
 
-		public override int[] HandledBlocks => new int[1]
-		{
+		public override int[] HandledBlocks =>
+		[
 			178
-		};
+		];
 
 		public override bool OnUse(Ray3 ray, ComponentMiner componentMiner)
 		{
@@ -34,7 +32,7 @@ namespace Game
 					Vector3 position = terrainRaycastResult.Value.HitPoint();
 					var dynamicArray = new DynamicArray<ComponentBody>();
 					m_subsystemBodies.FindBodiesInArea(new Vector2(position.X, position.Z) - new Vector2(8f), new Vector2(position.X, position.Z) + new Vector2(8f), dynamicArray);
-					if ((dynamicArray.Count((ComponentBody b) => b.Entity.ValuesDictionary.DatabaseObject.Name == "Boat") < 6) || m_subsystemGameInfo.WorldSettings.GameMode == GameMode.Creative)
+					if ((dynamicArray.Count(b => b.Entity.ValuesDictionary.DatabaseObject.Name == "Boat") < 6) || m_subsystemGameInfo.WorldSettings.GameMode == GameMode.Creative)
 					{
 						Entity entity = DatabaseManager.CreateEntity(Project, "Boat", throwIfNotFound: true);
 						entity.FindComponent<ComponentFrame>(throwOnError: true).Position = position;

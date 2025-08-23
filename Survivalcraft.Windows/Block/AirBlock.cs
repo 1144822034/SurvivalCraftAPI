@@ -5,7 +5,7 @@ namespace Game
 {
 	public class AirBlock : Block
 	{
-		public const string fName = "AirBlock";
+		public new const string fName = "AirBlock";
 
 		public static int Index = 0;
 

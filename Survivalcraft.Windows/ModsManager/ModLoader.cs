@@ -1,11 +1,8 @@
 using Engine;
 using Engine.Graphics;
 using GameEntitySystem;
-using Jint.Native;
-using System.Collections.Generic;
 using System.Xml.Linq;
 using TemplatesDatabase;
-using static Game.ComponentLevel;
 
 namespace Game
 {
@@ -711,7 +708,7 @@ namespace Game
         /// 加载任务开始时执行
         /// 在BlocksManager初始化之前
         /// </summary>
-        public virtual void OnLoadingStart(List<System.Action> actions)
+        public virtual void OnLoadingStart(List<Action> actions)
         {
 
         }
@@ -721,7 +718,7 @@ namespace Game
         /// 在BlocksManager初始化之后
         /// </summary>
         /// <param name="actions"></param>
-        public virtual void OnLoadingFinished(List<System.Action> actions)
+        public virtual void OnLoadingFinished(List<Action> actions)
         {
         }
 
@@ -1096,7 +1093,6 @@ namespace Game
         public virtual void UpdateComponentBody(ComponentBody componentBody, float dt, bool skippedByOtherMods, out bool skipVanilla)
         {
             skipVanilla = false;
-            return;
         }
 
         /// <summary>

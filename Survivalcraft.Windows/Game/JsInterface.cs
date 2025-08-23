@@ -1,17 +1,14 @@
-using System.Diagnostics;
-using System.Net;
 using Acornima.Ast;
 using Engine;
 using Engine.Input;
 using Jint;
 using Jint.Native;
 using Jint.Native.Function;
-using System.Reflection;
+using System.Diagnostics;
+using System.Net;
 using System.Text;
 using System.Text.Json;
 using JsEngine = Jint.Engine;
-using System;
-using System.IO;
 
 namespace Game
 {
@@ -114,7 +111,7 @@ namespace Game
 				};
 			}
 			handlersDictionary = [];
-			loader = (JsModLoader)ModsManager.ModLoaders.Find((item) => item is JsModLoader);
+			loader = (JsModLoader)ModsManager.ModLoaders.Find(item => item is JsModLoader);
 			GetAndRegisterHandlers("OnMinerDig");
 			GetAndRegisterHandlers("OnMinerPlace");
 			GetAndRegisterHandlers("OnPlayerSpawned");
@@ -258,7 +255,7 @@ namespace Game
 			}
 			while (httpListener.IsListening) {
 				var context = await httpListener.GetContextAsync();
-				Task.Run(() => HandleHttpRequest(context));
+				_ = Task.Run(() => HandleHttpRequest(context));
 			}
 		}
 		public static void StopHttpListener() {
@@ -274,7 +271,7 @@ namespace Game
 				Stopwatch stopwatch = Stopwatch.StartNew();
 				string result = Evaluate(httpScript);
 				stopwatch.Stop();
-				httpResponse.SetResult(new HttpResponse() {
+				httpResponse.SetResult(new HttpResponse {
 					success = !result.StartsWith("Jint.Runtime.JavaScriptException"),
 					result = result,
 					timeCosted = stopwatch.Elapsed
@@ -345,7 +342,7 @@ namespace Game
 		}
 
 		public static string ErrorJsonResponse(string error) {
-			return JsonSerializer.Serialize(new HttpResponse() {
+			return JsonSerializer.Serialize(new HttpResponse {
 				success = false,
 				result = error,
 				timeCosted = TimeSpan.Zero

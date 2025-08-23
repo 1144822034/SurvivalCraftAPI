@@ -85,9 +85,9 @@ namespace Game
 			m_subsystemNoise = Project.FindSubsystem<SubsystemNoise>(throwOnError: true);
 			m_componentCreature = Entity.FindComponent<ComponentCreature>(throwOnError: true);
 			m_componentPathfinding = Entity.FindComponent<ComponentPathfinding>(throwOnError: true);
-			LowHealthToEscape = valuesDictionary.GetValue<float>("LowHealthToEscape",0.33f);
-			AffectedByNoise = valuesDictionary.GetValue<bool>("AffectedByNoise",true);
-			FanSound = valuesDictionary.GetValue<bool>("FanSound",true);
+			LowHealthToEscape = valuesDictionary.GetValue("LowHealthToEscape",0.33f);
+			AffectedByNoise = valuesDictionary.GetValue("AffectedByNoise",true);
+			FanSound = valuesDictionary.GetValue("FanSound",true);
 			m_componentCreature.ComponentBody.CollidedWithBody += delegate
 			{
 				if (m_stateMachine.CurrentState != "RunningAway")
@@ -217,7 +217,7 @@ namespace Game
 			{
 				var isPredator = false;
 				var skipVanilla = false;
-				ModsManager.HookAction("IsPredator",(modLoader) => {
+				ModsManager.HookAction("IsPredator",modLoader => {
 					modLoader.IsPredator(this,entity,out isPredator,out skipVanilla);
 					return false;
 				});

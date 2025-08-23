@@ -1,12 +1,8 @@
 using Engine;
 using Engine.Graphics;
-using System;
-using System.Linq;
-using System.Collections.Generic;
 using System.Diagnostics;
 using System.Globalization;
 using System.Reflection;
-using System.Xml.Linq;
 #if ANDROID
 using Android.App;
 #elif WINDOWS
@@ -24,7 +20,7 @@ namespace Game
 			Error,
 			Advice
 		}
-		private class LogItem(LoadingScreen.LogType type,string log)
+		private class LogItem(LogType type,string log)
 		{
 			public LogType LogType = type;
 			public string Message = log;
@@ -34,14 +30,14 @@ namespace Game
 		private CanvasWidget Canvas = new(){ Size = new Vector2(float.PositiveInfinity) };
 		private RectangleWidget Background = new() { FillColor = SettingsManager.DisplayLog ? Color.Black : Color.White, OutlineThickness = 0f, DepthWriteEnabled = true };
 		private static ListPanelWidget LogList;
-		public static bool m_isContentLoaded = false;
+		public static bool m_isContentLoaded;
 		public const string fName = "LoadingScreen";
 		static LoadingScreen()
 		{
 			if (SettingsManager.DisplayLog)
 			{
 				LogList = new() { Direction = LayoutDirection.Vertical, PlayClickSound = false };
-				LogList.ItemWidgetFactory = (obj) => {
+				LogList.ItemWidgetFactory = obj => {
 					if(obj is LogItem logItem)
 					{
 						CanvasWidget canvasWidget = new() { Size = new Vector2(Display.Viewport.Width,40),Margin = new Vector2(0,2),HorizontalAlignment = WidgetAlignment.Near };
@@ -170,7 +166,7 @@ namespace Game
 			AddLoadAction(() =>
 			{
 			    Dictionary<string, Assembly[]> assemblies = [];
-				ModsManager.ModListAllDo((modEntity) => {
+				ModsManager.ModListAllDo(modEntity => {
 					bool flag = true;
 				    assemblies[modEntity.modInfo.PackageName] = modEntity.GetAssemblies();
 				    foreach (var assembly in assemblies[modEntity.modInfo.PackageName])
@@ -197,7 +193,7 @@ namespace Game
 				});
 				//加载 mod 程序集(.dll)文件
 				//但不进行处理操作(如添加block等)
-				ModsManager.ModListAllDo((modEntity) =>
+				ModsManager.ModListAllDo(modEntity =>
 				{
 					if (!isLoadSucceed) return;
 				    foreach(var asm in assemblies[modEntity.modInfo.PackageName])
@@ -269,7 +265,7 @@ namespace Game
 						//如果不支持系统语言，英语是最佳选择
 						LanguageControl.Initialize("en-US");
 						languageNotLoaded = false;
-						Log.Information($"Language is not specified, and system language is not detected, en-US is loaded instead.");
+						Log.Information("Language is not specified, and system language is not detected, en-US is loaded instead.");
 					}
 					else if(LanguageControl.LanguageTypes.ContainsKey(systemLanguage))
 					{
@@ -314,7 +310,7 @@ namespace Game
 						}
 					}
 				}
-				ModsManager.ModListAllDo((modEntity) => { modEntity.LoadLauguage(); });
+				ModsManager.ModListAllDo(modEntity => { modEntity.LoadLauguage(); });
 				LanguageControl.SetUsual();
 #if !ANDROID
 				string title = $"{LanguageControl.Get("Usual", "gameName")} {ModsManager.ShortGameVersion} - {LanguageControl.Get("Usual", "api")} {ModsManager.APIVersionString}";
@@ -327,14 +323,14 @@ namespace Game
 			AddLoadAction(delegate
 			{ //读取所有的ModEntity的JavaScript
 				JsInterface.Initiate();
-				ModsManager.ModListAllDo((modEntity) => { modEntity.LoadJs(); });
+				ModsManager.ModListAllDo(modEntity => { modEntity.LoadJs(); });
 				JsInterface.RegisterEvent();
 			});
 			AddLoadAction(delegate
 			{
 				Info(LanguageControl.Get(fName, "1"));
 				List<Action> actions = [];
-				ModsManager.HookAction("OnLoadingStart", (loader) =>
+				ModsManager.HookAction("OnLoadingStart", loader =>
 				{
 					loader.OnLoadingStart(actions);
 					return false;
@@ -359,7 +355,7 @@ namespace Game
                 {
                     ModsManager.InitModifiedElement();
                     DatabaseManager.Initialize();
-					ModsManager.ModListAllDo((modEntity) => { modEntity.LoadXdb(ref DatabaseManager.DatabaseNode); });
+					ModsManager.ModListAllDo(modEntity => { modEntity.LoadXdb(ref DatabaseManager.DatabaseNode); });
 				}
 				catch (Exception e)
 				{
@@ -408,7 +404,7 @@ namespace Game
 			AddLoadAction(delegate
 			{
 				ModsManager.ModListAllDo(
-					(modEntity) => {
+					modEntity => {
 						if(modEntity.Loader != null)
 						{
 							Info($"[{modEntity.modInfo?.Name}] {LanguageControl.Get(fName, "6")}");
@@ -590,7 +586,7 @@ namespace Game
 			foreach (var screen in ScreensManager.m_screens)
 			{
 				if (screen.Value == this) continue;
-				else remove.Add(screen.Key);
+				remove.Add(screen.Key);
 			}
 			foreach (var screen in remove)
 			{
@@ -606,7 +602,7 @@ namespace Game
 			{
 				ConfirmQuit();
 			}
-			if (ModsManager.GetAllowContinue() == false) return;
+			if (!ModsManager.GetAllowContinue()) return;
 			Stopwatch sw = Stopwatch.StartNew();
 			while(!m_isContentLoaded || sw.ElapsedMilliseconds < 100)
 			{

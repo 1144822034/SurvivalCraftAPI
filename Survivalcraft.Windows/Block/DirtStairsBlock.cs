@@ -1,5 +1,3 @@
-using System.Collections.Generic;
-
 namespace Game;
 
 public class DirtStairsBlock : StairsBlock
@@ -23,6 +21,6 @@ public class DirtStairsBlock : StairsBlock
 
 	public override IEnumerable<int> GetCreativeValues()
 	{
-		yield return Terrain.MakeBlockValue(BlockIndex, 0, StairsBlock.SetColor(0, null));
+		yield return Terrain.MakeBlockValue(BlockIndex, 0, SetColor(0, null));
 	}
 }

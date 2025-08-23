@@ -4,7 +4,8 @@ namespace Game
 	{
 		public static int Index = 46;
 
-		public IronBlock() : base() {
+		public IronBlock()
+		{
 			CanBeBuiltIntoFurniture = true;
 		}
 	}

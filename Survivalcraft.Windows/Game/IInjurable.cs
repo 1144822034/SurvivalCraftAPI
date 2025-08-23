@@ -1,6 +1,3 @@
-using Engine;
-using GameEntitySystem;
-
 namespace Game
 {
     public interface IInjurable

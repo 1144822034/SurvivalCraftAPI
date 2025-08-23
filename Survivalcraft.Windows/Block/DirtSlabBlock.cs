@@ -1,5 +1,3 @@
-using System.Collections.Generic;
-
 namespace Game;
 
 public class DirtSlabBlock : SlabBlock
@@ -23,6 +21,6 @@ public class DirtSlabBlock : SlabBlock
 
 	public override IEnumerable<int> GetCreativeValues()
 	{
-		yield return Terrain.MakeBlockValue(BlockIndex, 0, SlabBlock.SetColor(0, null));
+		yield return Terrain.MakeBlockValue(BlockIndex, 0, SetColor(0, null));
 	}
 }

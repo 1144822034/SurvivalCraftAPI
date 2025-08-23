@@ -1,9 +1,7 @@
 using Engine;
 using Engine.Graphics;
 using Engine.Media;
-using System;
-using System.Collections.Generic;
-using System.Linq;
+
 namespace Game
 {
 	public class FontTextWidget : Widget
@@ -297,7 +295,7 @@ namespace Game
 			}
 			availableWidth += 0.1f;
 			m_lines.Clear();
-			string[] array = (Text ?? string.Empty).Split(new string[] { "\n" }, StringSplitOptions.None);
+			string[] array = (Text ?? string.Empty).Split(["\n"], StringSplitOptions.None);
 			string text = "...";
 			float x = Font.MeasureText(text, new Vector2(FontScale), FontSpacing).X;
 			if (WordWrap)

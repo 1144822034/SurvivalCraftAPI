@@ -1,9 +1,9 @@
 using Engine;
 using Engine.Graphics;
+using Engine.Serialization;
 using GameEntitySystem;
-using System;
-using System.Linq;
 using TemplatesDatabase;
+
 namespace Game
 {
 	public class ComponentModel : Component
@@ -217,23 +217,23 @@ namespace Game
 		{
 			m_subsystemSky = Project.FindSubsystem<SubsystemSky>(throwOnError: true);
 			m_componentFrame = Entity.FindComponent<ComponentFrame>(throwOnError: true);
-			ModelRoute = valuesDictionary.GetValue<string>("ModelName","");
-			string modeltype = valuesDictionary.GetValue<string>("ModelType", "Engine.Graphics.Model");
-			Type type = Engine.Serialization.TypeCache.FindType(modeltype, true, true);
+			ModelRoute = valuesDictionary.GetValue("ModelName","");
+			string modeltype = valuesDictionary.GetValue("ModelType", "Engine.Graphics.Model");
+			Type type = TypeCache.FindType(modeltype, true, true);
 			Model = (Model)ContentManager.Get(type,ModelRoute);
 			CastsShadow = valuesDictionary.GetValue<bool>("CastsShadow");
-			TextureRoute = valuesDictionary.GetValue<string>("TextureOverride","");
+			TextureRoute = valuesDictionary.GetValue("TextureOverride","");
 			TextureOverride = string.IsNullOrEmpty(TextureRoute) ? null : ContentManager.Get<Texture2D>(TextureRoute);
 			PrepareOrder = valuesDictionary.GetValue<int>("PrepareOrder");
-			Transparent = valuesDictionary.GetValue<float>("Transparent",1f);
-			ModelScale = valuesDictionary.GetValue<float>("ModelScale",1f);
+			Transparent = valuesDictionary.GetValue("Transparent",1f);
+			ModelScale = valuesDictionary.GetValue("ModelScale",1f);
 			m_boundingSphereRadius = valuesDictionary.GetValue<float>("BoundingSphereRadius");
 		}
 
 		public virtual void SetModel(Model model)
 		{
 			IsSet = false;
-			ModsManager.HookAction("OnSetModel", (modLoader) =>
+			ModsManager.HookAction("OnSetModel", modLoader =>
 			{
 				modLoader.OnSetModel(this, model, out IsSet);
 				return false;

@@ -1,7 +1,5 @@
 using Engine;
 using Engine.Graphics;
-using System;
-using System.Collections.Generic;
 using System.Globalization;
 
 namespace Game
@@ -25,10 +23,10 @@ namespace Game
 				Matrix m = (i >= 4) ? ((i != 4) ? (Matrix.CreateRotationX((float)Math.PI) * Matrix.CreateTranslation(0.5f, 1f, 0.5f)) : Matrix.CreateTranslation(0.5f, 0f, 0.5f)) : (Matrix.CreateRotationX((float)Math.PI / 2f) * Matrix.CreateTranslation(0f, 0f, -0.5f) * Matrix.CreateRotationY(i * (float)Math.PI / 2f) * Matrix.CreateTranslation(0.5f, 0.5f, 0.5f));
 				m_blockMeshesByFace[i] = new BlockMesh();
 				m_blockMeshesByFace[i].AppendModelMeshPart(modelMesh.MeshParts[0], boneAbsoluteTransform * m, makeEmissive: false, flipWindingOrder: false, doubleSided: false, flipNormals: false, Color.White);
-				m_collisionBoxesByFace[i] = new BoundingBox[1]
-				{
+				m_collisionBoxesByFace[i] =
+				[
 					m_blockMeshesByFace[i].CalculateBoundingBox()
-				};
+				];
 			}
 			Matrix m2 = Matrix.CreateRotationY(-(float)Math.PI / 2f) * Matrix.CreateRotationZ((float)Math.PI / 2f);
 			m_standaloneBlockMesh = new BlockMesh();

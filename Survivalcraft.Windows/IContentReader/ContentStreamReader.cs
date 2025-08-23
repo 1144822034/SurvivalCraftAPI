@@ -1,4 +1,3 @@
-using Engine.Media;
 namespace Game.IContentReader
 {
 	public class ContentStreamReader : IContentReader

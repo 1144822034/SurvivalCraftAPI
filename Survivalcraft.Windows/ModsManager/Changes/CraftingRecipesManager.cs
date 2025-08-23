@@ -1,9 +1,5 @@
 using Engine;
-using System;
-using System.Collections.Generic;
 using System.Globalization;
-using System.Linq;
-using System.Reflection.Emit;
 using System.Xml.Linq;
 using XmlUtilities;
 
@@ -43,8 +39,8 @@ namespace Game
 			{
 				if(r1.DisplayOrder == r2.DisplayOrder)
 				{
-					int y = r1.Ingredients.Count((string s) => !string.IsNullOrEmpty(s));
-					int x = r2.Ingredients.Count((string s) => !string.IsNullOrEmpty(s));
+					int y = r1.Ingredients.Count(s => !string.IsNullOrEmpty(s));
+					int x = r2.Ingredients.Count(s => !string.IsNullOrEmpty(s));
 					return Comparer<int>.Default.Compare(x,y);
 				}
 				return Comparer<int>.Default.Compare(r1.DisplayOrder, r2.DisplayOrder);
@@ -59,7 +55,7 @@ namespace Game
 		{
             try
             {
-                if (ModsManager.HasAttribute(item, (name) => { return name == "Result"; }, out XAttribute xAttribute) == false)
+                if (!ModsManager.HasAttribute(item, name => { return name == "Result"; }, out XAttribute xAttribute))
 				{
 					foreach (XElement xElement in item.Elements())
 					{
@@ -74,7 +70,7 @@ namespace Game
 					modLoader.OnCraftingRecipeDecode(m_recipes, item, out flag);
 					return flag;
 				});
-				if (flag == false)
+				if (!flag)
 				{
 					CraftingRecipe craftingRecipe = DecodeElementToCraftingRecipe(item);
 					m_recipes.Add(craftingRecipe);
@@ -104,7 +100,7 @@ namespace Game
 			craftingRecipe.RequiredPlayerLevel = XmlUtils.GetAttributeValue(item, "RequiredPlayerLevel", 1f);
 			craftingRecipe.Description = desc;
 			craftingRecipe.Message = XmlUtils.GetAttributeValue<string>(item, "Message", null);
-			craftingRecipe.DisplayOrder = XmlUtils.GetAttributeValue<int>(item,"DisplayOrder", 0);
+			craftingRecipe.DisplayOrder = XmlUtils.GetAttributeValue(item,"DisplayOrder", 0);
 			var dictionary = new Dictionary<char, string>();
 			foreach (XAttribute item2 in from a in item.Attributes()
 										 where a.Name.LocalName.Length == 1 && char.IsLower(a.Name.LocalName[0])
@@ -121,7 +117,7 @@ namespace Game
 				}
 				dictionary.Add(item2.Name.LocalName[0], item2.Value);
 			}
-			string[] array = item.Value.Trim().Split(new string[] { "\n" }, StringSplitOptions.None);
+			string[] array = item.Value.Trim().Split(["\n"], StringSplitOptions.None);
 			for (int i = 0; i < array.Length; i++)
 			{
 				int num = array[i].IndexOf('"');
@@ -147,7 +143,7 @@ namespace Game
 
 		public static CraftingRecipe FindMatchingRecipe(SubsystemTerrain terrain, string[] ingredients, float heatLevel, float playerLevel)
 		{
-			if (ingredients.All((string s) => string.IsNullOrEmpty(s)))
+			if (ingredients.All(s => string.IsNullOrEmpty(s)))
 			{
 				return null;
 			}
@@ -211,7 +207,7 @@ namespace Game
 			if (flag2) return result2;
 			if (!string.IsNullOrEmpty(result))
 			{
-				string[] array = result.Split(new char[] { ':' }, StringSplitOptions.None);
+				string[] array = result.Split([':'], StringSplitOptions.None);
 				int blockIndex = BlocksManager.GetBlockIndex(array[0], throwIfNotFound: true);
 				return Terrain.MakeBlockValue(blockIndex, 0, data: (array.Length == 2) ? int.Parse(array[1], CultureInfo.InvariantCulture) : 0);
 			}
@@ -229,7 +225,7 @@ namespace Game
 				return flag2;
 			});
 			if (flag2) { craftingId = craftingId_R; data = data_R; return; }
-			string[] array = ingredient.Split(new char[] { ':' }, StringSplitOptions.None);
+			string[] array = ingredient.Split([':'], StringSplitOptions.None);
 			craftingId = array[0];
 			data = (array.Length >= 2) ? new int?(int.Parse(array[1], CultureInfo.InvariantCulture)) : null;
 		}

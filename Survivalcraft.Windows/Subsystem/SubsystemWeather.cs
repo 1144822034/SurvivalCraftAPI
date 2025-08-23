@@ -1,7 +1,6 @@
 using Engine;
 using Engine.Audio;
 using GameEntitySystem;
-using System.Collections.Generic;
 using TemplatesDatabase;
 
 namespace Game
@@ -50,10 +49,10 @@ namespace Game
 
 		public int[] m_shuffledOrder;
 
-		public static int[] m_drawOrders = new int[1]
-		{
+		public static int[] m_drawOrders =
+		[
 			50
-		};
+		];
 
 		public SubsystemTerrain SubsystemTerrain
 		{
@@ -115,7 +114,7 @@ namespace Game
 			{
 				if (m_subsystemGameInfo.TotalElapsedGameTime >= m_precipitationStartTime)
 				{
-					return m_subsystemGameInfo.TotalElapsedGameTime < m_precipitationEndTime - (double)m_precipitationRampTime;
+					return m_subsystemGameInfo.TotalElapsedGameTime < m_precipitationEndTime - m_precipitationRampTime;
 				}
 				return false;
 			}
@@ -127,7 +126,7 @@ namespace Game
 			{
 				if (m_subsystemGameInfo.TotalElapsedGameTime >= m_fogStartTime)
 				{
-					return m_subsystemGameInfo.TotalElapsedGameTime < m_fogEndTime - (double)m_fogRampTime;
+					return m_subsystemGameInfo.TotalElapsedGameTime < m_fogEndTime - m_fogRampTime;
 				}
 				return false;
 			}
@@ -137,9 +136,9 @@ namespace Game
 
 		public UpdateOrder UpdateOrder => UpdateOrder.Default;
 
-		public static Func<int, int> GetTemperatureAdjustmentAtHeight = (int y) => (int)MathF.Round((y > 64) ? (-0.0008f * MathUtils.Sqr(y - 64)) : (0.1f * (64 - y)));
-		public static Func<int, int, bool> IsPlaceFrozen = (int temperature, int y) => temperature + GetTemperatureAdjustmentAtHeight(y) <= 0;
-		public static Func<int, int, bool> ShaftHasSnowOnIce = (int x, int z) => MathUtils.Hash((uint)((x & 0xFFFF) | (z << 16))) > 429496729;
+		public static Func<int, int> GetTemperatureAdjustmentAtHeight = y => (int)MathF.Round((y > 64) ? (-0.0008f * MathUtils.Sqr(y - 64)) : (0.1f * (64 - y)));
+		public static Func<int, int, bool> IsPlaceFrozen = (temperature,y) => temperature + GetTemperatureAdjustmentAtHeight(y) <= 0;
+		public static Func<int, int, bool> ShaftHasSnowOnIce = (x,z) => MathUtils.Hash((uint)((x & 0xFFFF) | (z << 16))) > 429496729;
 
 		public virtual PrecipitationShaftInfo GetPrecipitationShaftInfo(int x, int z)
 		{
@@ -204,7 +203,7 @@ namespace Game
 		public virtual void ManualPrecipitationEnd()
 		{
 			m_precipitationRampTime = 1f;
-			m_precipitationEndTime = m_subsystemGameInfo.TotalElapsedGameTime + (double)m_precipitationRampTime;
+			m_precipitationEndTime = m_subsystemGameInfo.TotalElapsedGameTime + m_precipitationRampTime;
 		}
 
 		public virtual void ManualFogStart()
@@ -217,7 +216,7 @@ namespace Game
 		public virtual void ManualFogEnd()
 		{
 			m_fogRampTime = 3f;
-			m_fogEndTime = m_subsystemGameInfo.TotalElapsedGameTime + (double)m_fogRampTime;
+			m_fogEndTime = m_subsystemGameInfo.TotalElapsedGameTime + m_fogRampTime;
 		}
 
 		public virtual void Draw(Camera camera, int drawOrder)
@@ -283,14 +282,14 @@ namespace Game
 
 		public override void Load(ValuesDictionary valuesDictionary)
 		{
-		m_subsystemGameInfo = base.Project.FindSubsystem<SubsystemGameInfo>(throwOnError: true);
-		SubsystemTerrain = base.Project.FindSubsystem<SubsystemTerrain>(throwOnError: true);
-		m_subsystemBlocksScanner = base.Project.FindSubsystem<SubsystemBlocksScanner>(throwOnError: true);
-		SubsystemSky = base.Project.FindSubsystem<SubsystemSky>(throwOnError: true);
-		m_subsystemParticles = base.Project.FindSubsystem<SubsystemParticles>(throwOnError: true);
-		SubsystemTime = base.Project.FindSubsystem<SubsystemTime>(throwOnError: true);
-		m_subsystemAudio = base.Project.FindSubsystem<SubsystemAudio>(throwOnError: true);
-		m_subsystemSeasons = base.Project.FindSubsystem<SubsystemSeasons>(throwOnError: true);
+		m_subsystemGameInfo = Project.FindSubsystem<SubsystemGameInfo>(throwOnError: true);
+		SubsystemTerrain = Project.FindSubsystem<SubsystemTerrain>(throwOnError: true);
+		m_subsystemBlocksScanner = Project.FindSubsystem<SubsystemBlocksScanner>(throwOnError: true);
+		SubsystemSky = Project.FindSubsystem<SubsystemSky>(throwOnError: true);
+		m_subsystemParticles = Project.FindSubsystem<SubsystemParticles>(throwOnError: true);
+		SubsystemTime = Project.FindSubsystem<SubsystemTime>(throwOnError: true);
+		m_subsystemAudio = Project.FindSubsystem<SubsystemAudio>(throwOnError: true);
+		m_subsystemSeasons = Project.FindSubsystem<SubsystemSeasons>(throwOnError: true);
 		m_precipitationStartTime = valuesDictionary.GetValue<double>("WeatherStartTime");
 		m_precipitationEndTime = valuesDictionary.GetValue<double>("WeatherEndTime");
 		m_precipitationRampTime = valuesDictionary.GetValue("WeatherRampTime", 25f);
@@ -382,21 +381,21 @@ namespace Game
 				{
 					if (m_subsystemGameInfo.WorldSettings.StartingPositionMode == StartingPositionMode.Hard)
 					{
-						m_precipitationStartTime = m_subsystemGameInfo.TotalElapsedGameTime + (double)(60f * m_random.Float(0f, 2f));
+						m_precipitationStartTime = m_subsystemGameInfo.TotalElapsedGameTime + 60f * m_random.Float(0f, 2f);
 						m_lightningIntensity = m_random.Float(0.66f, 1f) * num2;
 					}
 					else
 					{
-						m_precipitationStartTime = m_subsystemGameInfo.TotalElapsedGameTime + (double)(60f * m_random.Float(3f, 6f));
+						m_precipitationStartTime = m_subsystemGameInfo.TotalElapsedGameTime + 60f * m_random.Float(3f, 6f);
 						m_lightningIntensity = m_random.Float(0.33f, 0.66f) * num2;
 					}
 				}
 				else
 				{
-					m_precipitationStartTime = m_subsystemGameInfo.TotalElapsedGameTime + (double)(60f * m_random.Float(5f, 45f) / num);
+					m_precipitationStartTime = m_subsystemGameInfo.TotalElapsedGameTime + 60f * m_random.Float(5f, 45f) / num;
 					m_lightningIntensity = (m_random.Bool(probability) ? MathUtils.Saturate(m_random.Float(0.33f, 1f) * num2) : 0f);
 				}
-				m_precipitationEndTime = m_precipitationStartTime + (double)(60f * m_random.Float(3f, 6f));
+				m_precipitationEndTime = m_precipitationStartTime + 60f * m_random.Float(3f, 6f);
 				m_precipitationRampTime = m_random.Float(10f, 30f);
 			}
 			if (m_subsystemGameInfo.WorldSettings.AreWeatherEffectsEnabled)
@@ -434,9 +433,9 @@ namespace Game
 								PrecipitationShaftInfo precipitationShaftInfo = GetPrecipitationShaftInfo(i, j);
 								if (precipitationShaftInfo.Type == PrecipitationType.Rain && precipitationShaftInfo.Intensity > 0f)
 								{
-									vector.X = (float)i + 0.5f;
+									vector.X = i + 0.5f;
 									vector.Y = MathUtils.Max(precipitationShaftInfo.YLimit, listenerPosition.Y);
-									vector.Z = (float)j + 0.5f;
+									vector.Z = j + 0.5f;
 									float num9 = vector.X - listenerPosition.X;
 									float num10 = 8f * (vector.Y - listenerPosition.Y);
 									float num11 = vector.Z - listenerPosition.Z;
@@ -483,7 +482,7 @@ namespace Game
 					for (int k = num2 - 8; k < num2 + 8; k++)
 					{
 						int topHeight = SubsystemTerrain.Terrain.GetTopHeight(j, k);
-						if (!vector.HasValue || (float)topHeight > vector.Value.Y)
+						if (!vector.HasValue || topHeight > vector.Value.Y)
 						{
 							vector = new Vector3(j, topHeight, k);
 						}
@@ -504,13 +503,13 @@ namespace Game
 				float num = ((m_subsystemSeasons.Season == Season.Autumn || m_subsystemSeasons.Season == Season.Winter) ? 1.75f : 1f);
 				if (m_fogEndTime == 0.0 && m_subsystemGameInfo.WorldSettings.StartingPositionMode == StartingPositionMode.Hard)
 				{
-					m_fogStartTime = m_subsystemGameInfo.TotalElapsedGameTime + (double)(60f * m_random.Float(1f, 10f) / num);
+					m_fogStartTime = m_subsystemGameInfo.TotalElapsedGameTime + 60f * m_random.Float(1f, 10f) / num;
 				}
 				else
 				{
-					m_fogStartTime = m_subsystemGameInfo.TotalElapsedGameTime + (double)(60f * m_random.Float(10f, 40f) / num);
+					m_fogStartTime = m_subsystemGameInfo.TotalElapsedGameTime + 60f * m_random.Float(10f, 40f) / num;
 				}
-				m_fogEndTime = m_fogStartTime + (double)(60f * m_random.Float(4f, 7f) * num);
+				m_fogEndTime = m_fogStartTime + 60f * m_random.Float(4f, 7f) * num;
 				m_fogRampTime = m_random.Float(20f, 40f);
 				FogProgress = 0f;
 			}
@@ -549,7 +548,7 @@ namespace Game
 			{
 				m_shuffledOrder = Enumerable.Range(0, 256).ToArray();
 			}
-			m_shuffledOrder.RandomShuffle((int i) => m_random.Int(i));
+			m_shuffledOrder.RandomShuffle(i => m_random.Int(i));
 			Terrain terrain = SubsystemTerrain.Terrain;
 			for (int j = 0; j < m_shuffledOrder.Length; j++)
 			{

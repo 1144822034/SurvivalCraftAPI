@@ -1,5 +1,3 @@
-using System;
-using Engine;
 using GameEntitySystem;
 using TemplatesDatabase;
 using static Game.BlocksManager;
@@ -38,7 +36,7 @@ namespace Game
             //int tick1 = Environment.TickCount;
             for (int i = SurvivalCraftBlockCount + 1; i < 1024; i++)
             {
-                string blockName = m_savedValuesDictionary.GetValue<string>(i.ToString(), String.Empty);
+                string blockName = m_savedValuesDictionary.GetValue(i.ToString(), String.Empty);
                 if(!String.IsNullOrEmpty(blockName)) DynamicBlockNameToIndex[blockName] = i;
                 /*
                 if (!String.IsNullOrEmpty(fullName))

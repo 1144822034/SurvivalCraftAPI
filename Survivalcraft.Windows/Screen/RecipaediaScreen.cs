@@ -1,7 +1,4 @@
 using Engine;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Xml.Linq;
 
 namespace Game
@@ -102,7 +99,7 @@ namespace Game
 			if (m_blocksList.SelectedItem is int)
 			{
 				value = (int)m_blocksList.SelectedItem;
-				num = CraftingRecipesManager.Recipes.Count((CraftingRecipe r) => r.ResultValue == value);
+				num = CraftingRecipesManager.Recipes.Count(r => r.ResultValue == value);
 			}
 			if (num > 0)
 			{

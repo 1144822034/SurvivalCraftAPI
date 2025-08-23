@@ -1,3 +1,4 @@
+using Engine;
 using TemplatesDatabase;
 
 namespace Game
@@ -6,8 +7,8 @@ namespace Game
 	{
 		public SubsystemElectricity m_subsystemElectricity;
 
-		public override int[] HandledBlocks => new int[61]
-		{
+		public override int[] HandledBlocks =>
+		[
 			133,
 			140,
 			137,
@@ -69,7 +70,7 @@ namespace Game
 			216,
 			227,
 			237
-		};
+		];
 
 		public override void OnBlockGenerated(int value, int x, int y, int z, bool isLoaded)
 		{
@@ -93,12 +94,12 @@ namespace Game
 
 		public override void OnBlockStartMoving(int value,int newValue,int x,int y,int z,MovingBlock movingBlock)
 		{
-			m_subsystemElectricity.m_pointsToUpdate[new Engine.Point3(x,y,z)] = true;
+			m_subsystemElectricity.m_pointsToUpdate[new Point3(x,y,z)] = true;
 		}
 
 		public override void OnBlockStopMoving(int value,int oldValue,int x,int y,int z,MovingBlock movingBlock)
 		{
-			m_subsystemElectricity.m_pointsToUpdate[new Engine.Point3(x,y,z)] = true;
+			m_subsystemElectricity.m_pointsToUpdate[new Point3(x,y,z)] = true;
 		}
 
 		public override void OnChunkDiscarding(TerrainChunk chunk)

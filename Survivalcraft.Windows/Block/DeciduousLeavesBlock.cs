@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using Engine;
 
 namespace Game;
@@ -43,7 +42,7 @@ public abstract class DeciduousLeavesBlock : LeavesBlock
 
 	public readonly Color SpringColor;
 
-	public const string fName = "DeciduousLeavesBlock";
+	public new const string fName = "DeciduousLeavesBlock";
 
 	public DeciduousLeavesBlock(float summerStart, float autumnStart, float winterStart, float springStart, BlockColorsMap blockColorsMap, Color autumnColor1, Color autumnColor2, float autumnTransitionLightening)
 	{
@@ -82,7 +81,7 @@ public abstract class DeciduousLeavesBlock : LeavesBlock
 		case Season.Autumn:
 		{
 			Color c = BlockColorsMap.Lookup(terrain, x, y, z);
-			Color c2 = Color.LerpNotSaturated(f: (float)MathUtils.Hash((uint)(x + 59 * y + 2497 * z)) / 4.2949673E+09f, c1: AutumnColor1, c2: AutumnColor2);
+			Color c2 = Color.LerpNotSaturated(f: MathUtils.Hash((uint)(x + 59 * y + 2497 * z)) / 4.2949673E+09f, c1: AutumnColor1, c2: AutumnColor2);
 			float f2 = MathUtils.Min(GetTimeOfSeason(data) * AutumnSpeedupFactor, 1f);
 			return Color.MultiplyColorOnly(s: MathUtils.Lerp(1f, AutumnTransitionLightening, Hat(f2)), c: Color.LerpNotSaturated(c, c2, f2));
 		}
@@ -272,7 +271,7 @@ public abstract class DeciduousLeavesBlock : LeavesBlock
 
 	public static float GetTimeOfSeason(int data)
 	{
-		return (float)(data & 7) / 7f;
+		return (data & 7) / 7f;
 	}
 
 	public static int SetTimeOfSeason(int data, float timeOfSeason)

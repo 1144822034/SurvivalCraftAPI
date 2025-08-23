@@ -4,13 +4,13 @@ using Android.Content;
 using Android.Content.PM;
 using Android.Media;
 using Android.OS;
-using Android.Runtime;
 using Android.Views;
 using Engine.Input;
-using Org.Libsdl.App;
-using Silk.NET.Windowing;
 using Silk.NET.Windowing.Sdl.Android;
 using Debug = System.Diagnostics.Debug;
+using Environment = System.Environment;
+using Stream = Android.Media.Stream;
+using Uri = Android.Net.Uri;
 
 namespace Engine
 {
@@ -42,7 +42,7 @@ namespace Engine
             base.OnCreate(savedInstanceState);
             Window.AddFlags(WindowManagerFlags.Fullscreen | WindowManagerFlags.TranslucentStatus | WindowManagerFlags.TranslucentNavigation);
             EnableImmersiveMode();
-            VolumeControlStream = Android.Media.Stream.Music;
+            VolumeControlStream = Stream.Music;
             RequestedOrientation = ScreenOrientation.SensorLandscape;
         }
 
@@ -53,7 +53,7 @@ namespace Engine
         }
         public void OpenLink(string link)
         {
-            StartActivity(new Intent(Intent.ActionView, Android.Net.Uri.Parse(link)));
+            StartActivity(new Intent(Intent.ActionView, Uri.Parse(link)));
         }
 
 
@@ -89,7 +89,7 @@ namespace Engine
             finally
             {
                 Thread.Sleep(250);
-                System.Environment.Exit(0);
+                Environment.Exit(0);
             }
         }
 
@@ -101,14 +101,14 @@ namespace Engine
 
         public override bool DispatchKeyEvent(KeyEvent e)
         {
-            System.Diagnostics.Debug.WriteLine($"[DispatchKeyEvent]action:{e.Action} keyCode:{e.KeyCode} unicodeChar:{e.UnicodeChar} flags:{e.Flags} metaState:{e.MetaState} source:{e.Source} deviceId:{e.DeviceId}");
+            Debug.WriteLine($"[DispatchKeyEvent]action:{e.Action} keyCode:{e.KeyCode} unicodeChar:{e.UnicodeChar} flags:{e.Flags} metaState:{e.MetaState} source:{e.Source} deviceId:{e.DeviceId}");
             bool handled = false;
             var invocationList = OnDispatchKeyEvent?.GetInvocationList();
             if (invocationList != null)
             {
                 foreach (var invocation in invocationList)
                 {
-                    handled |= (bool)invocation.DynamicInvoke([e])!;
+                    handled |= (bool)invocation.DynamicInvoke(e)!;
                 }
             }
             if (!handled)
@@ -129,11 +129,11 @@ namespace Engine
             switch (keyCode)
             {
                 case Keycode.VolumeUp:
-                    ((AudioManager)Context?.GetSystemService("audio"))?.AdjustStreamVolume(Android.Media.Stream.Music, Adjust.Raise, VolumeNotificationFlags.ShowUi);
+                    ((AudioManager)Context?.GetSystemService("audio"))?.AdjustStreamVolume(Stream.Music, Adjust.Raise, VolumeNotificationFlags.ShowUi);
                     EnableImmersiveMode();
                     break;
                 case Keycode.VolumeDown:
-                    ((AudioManager)Context?.GetSystemService("audio"))?.AdjustStreamVolume(Android.Media.Stream.Music, Adjust.Lower, VolumeNotificationFlags.ShowUi);
+                    ((AudioManager)Context?.GetSystemService("audio"))?.AdjustStreamVolume(Stream.Music, Adjust.Lower, VolumeNotificationFlags.ShowUi);
                     EnableImmersiveMode();
                     break;
             }
@@ -163,7 +163,7 @@ namespace Engine
 
         public override bool DispatchGenericMotionEvent(MotionEvent e)
         {
-            System.Diagnostics.Debug.WriteLine($"[OnGenericMotionEvent]source:{e.Source} action:{e.Action}");
+            Debug.WriteLine($"[OnGenericMotionEvent]source:{e.Source} action:{e.Action}");
             if (((e.Source & InputSourceType.Gamepad) == InputSourceType.Gamepad || (e.Source & InputSourceType.Joystick) == InputSourceType.Joystick) && e.Action == MotionEventActions.Move)
             {
                 GamePad.HandleMotionEvent(e);
@@ -171,17 +171,31 @@ namespace Engine
             if ((e.Source & InputSourceType.Mouse) == InputSourceType.Mouse || (e.Source & InputSourceType.ClassPointer) == InputSourceType.ClassPointer || (e.Source & InputSourceType.MouseRelative) == InputSourceType.MouseRelative)
             {
                 Mouse.HandleMotionEvent(e);
-                return true;
             }
             return true;
         }
 
         public void EnableImmersiveMode()
         {
-            if (Build.VERSION.SdkInt >= (BuildVersionCodes)19)
+            if (Window != null)
             {
-                Window.DecorView.SystemUiVisibility = (StatusBarVisibility)6150;
-                Window.DecorView.SystemUiFlags = SystemUiFlags.Fullscreen | SystemUiFlags.HideNavigation | SystemUiFlags.Immersive | SystemUiFlags.ImmersiveSticky;
+                switch (Build.VERSION.SdkInt)
+                {
+                    case >= (BuildVersionCodes)30:
+                        IWindowInsetsController insetsController = Window.InsetsController;
+                        if (insetsController != null)
+                        {
+                            insetsController.Hide(WindowInsets.Type.SystemBars());
+                            insetsController.SystemBarsBehavior = (int)WindowInsetsControllerBehavior.ShowTransientBarsBySwipe;
+                        }
+                        break;
+                    case > (BuildVersionCodes)19:
+                        Window.DecorView.SystemUiFlags = SystemUiFlags.Fullscreen | SystemUiFlags.HideNavigation | SystemUiFlags.Immersive | SystemUiFlags.ImmersiveSticky;
+                        break;
+                    case >= (BuildVersionCodes)11:
+                        Window.DecorView.SystemUiVisibility = (StatusBarVisibility)6150;
+                        break;
+                }
             }
         }
 
@@ -189,7 +203,7 @@ namespace Engine
         {
             try
             {
-                int reqGlEsVersion = ((ActivityManager)GetSystemService(Context.ActivityService))?.DeviceConfigurationInfo?.ReqGlEsVersion ?? 0x20000;
+                int reqGlEsVersion = ((ActivityManager)GetSystemService(ActivityService))?.DeviceConfigurationInfo?.ReqGlEsVersion ?? 0x20000;
                 major = reqGlEsVersion >> 16;
                 minor = reqGlEsVersion & 0xFFFF;
             }

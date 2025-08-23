@@ -1,7 +1,5 @@
 using Engine;
 using Engine.Graphics;
-using System;
-using System.Collections.Generic;
 
 namespace Game
 {
@@ -24,8 +22,8 @@ namespace Game
 
 		public List<BlockMesh> m_standaloneBlockMeshes = [];
 
-		public static int[] m_order = new int[9]
-		{
+		public static int[] m_order =
+		[
 			0,
 			1,
 			8,
@@ -35,10 +33,10 @@ namespace Game
 			5,
 			6,
 			7
-		};
+		];
 
-		public static string[] m_tipNames = new string[9]
-		{
+		public static string[] m_tipNames =
+		[
 			"ArrowTip",
 			"ArrowTip",
 			"ArrowTip",
@@ -48,10 +46,10 @@ namespace Game
 			"BoltTip",
 			"BoltExplosiveTip",
 			"ArrowTip"
-		};
+		];
 
-		public static int[] m_tipTextureSlots = new int[9]
-		{
+		public static int[] m_tipTextureSlots =
+		[
 			47,
 			1,
 			63,
@@ -61,10 +59,10 @@ namespace Game
 			182,
 			183,
 			79
-		};
+		];
 
-		public static string[] m_shaftNames = new string[9]
-		{
+		public static string[] m_shaftNames =
+		[
 			"ArrowShaft",
 			"ArrowShaft",
 			"ArrowShaft",
@@ -74,10 +72,10 @@ namespace Game
 			"BoltShaft",
 			"BoltShaft",
 			"ArrowShaft"
-		};
+		];
 
-		public static int[] m_shaftTextureSlots = new int[9]
-		{
+		public static int[] m_shaftTextureSlots =
+		[
 			4,
 			4,
 			4,
@@ -87,10 +85,10 @@ namespace Game
 			63,
 			63,
 			4
-		};
+		];
 
-		public static string[] m_stabilizerNames = new string[9]
-		{
+		public static string[] m_stabilizerNames =
+		[
 			"ArrowStabilizer",
 			"ArrowStabilizer",
 			"ArrowStabilizer",
@@ -100,10 +98,10 @@ namespace Game
 			"BoltStabilizer",
 			"BoltStabilizer",
 			"ArrowStabilizer"
-		};
+		];
 
-		public static int[] m_stabilizerTextureSlots = new int[9]
-		{
+		public static int[] m_stabilizerTextureSlots =
+		[
 			15,
 			15,
 			15,
@@ -113,10 +111,10 @@ namespace Game
 			63,
 			63,
 			15
-		};
+		];
 
-		public static float[] m_offsets = new float[9]
-		{
+		public static float[] m_offsets =
+		[
 			-0.5f,
 			-0.5f,
 			-0.5f,
@@ -126,10 +124,10 @@ namespace Game
 			-0.3f,
 			-0.3f,
 			-0.5f
-		};
+		];
 
-		public static float[] m_weaponPowers = new float[9]
-		{
+		public static float[] m_weaponPowers =
+		[
 			5f,
 			7f,
 			14f,
@@ -139,10 +137,10 @@ namespace Game
 			36f,
 			8f,
 			10f
-		};
+		];
 
-		public static float[] m_iconViewScales = new float[9]
-		{
+		public static float[] m_iconViewScales =
+		[
 			0.8f,
 			0.8f,
 			0.8f,
@@ -152,10 +150,10 @@ namespace Game
 			1.1f,
 			1.1f,
 			0.8f
-		};
+		];
 
-		public static float[] m_explosionPressures = new float[9]
-		{
+		public static float[] m_explosionPressures =
+		[
 			0f,
 			0f,
 			0f,
@@ -165,7 +163,7 @@ namespace Game
 			0f,
 			40f,
 			0f
-		};
+		];
 
 		public override void Initialize()
 		{

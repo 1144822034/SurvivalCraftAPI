@@ -1,12 +1,10 @@
-using System;
-using System.Runtime.InteropServices;
 #if DIRECT3D11
 using SharpDX;
 using SharpDX.Direct3D11;
 #else
 using Silk.NET.OpenGLES;
 #endif
-using Buffer = System.Buffer;
+using System.Runtime.InteropServices;
 
 namespace Engine.Graphics
 {

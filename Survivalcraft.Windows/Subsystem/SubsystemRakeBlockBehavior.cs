@@ -11,13 +11,13 @@ namespace Game
 
 		public SubsystemAudio m_subsystemAudio;
 
-		public override int[] HandledBlocks => new int[4]
-		{
+		public override int[] HandledBlocks =>
+		[
 			169,
 			219,
 			171,
 			172
-		};
+		];
 
 		public override bool OnUse(Ray3 ray, ComponentMiner componentMiner)
 		{

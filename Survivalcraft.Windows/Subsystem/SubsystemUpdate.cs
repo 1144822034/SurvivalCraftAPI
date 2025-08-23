@@ -1,7 +1,5 @@
 using Engine;
 using GameEntitySystem;
-using System;
-using System.Collections.Generic;
 using System.Diagnostics;
 using System.Text;
 using TemplatesDatabase;

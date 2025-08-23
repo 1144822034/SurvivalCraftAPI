@@ -61,13 +61,13 @@ namespace Engine.Audio
 		{
 			VerifyStreamingSource(streamingSource);
 			StreamingSource = streamingSource;
-			base.ChannelsCount = streamingSource.ChannelsCount;
-			base.SamplingFrequency = streamingSource.SamplingFrequency;
-			base.Volume = volume;
-			base.Pitch = pitch;
-			base.Pan = pan;
-			base.IsLooped = isLooped;
-			base.DisposeOnStop = disposeOnStop;
+			ChannelsCount = streamingSource.ChannelsCount;
+			SamplingFrequency = streamingSource.SamplingFrequency;
+			Volume = volume;
+			Pitch = pitch;
+			Pan = pan;
+			IsLooped = isLooped;
+			DisposeOnStop = disposeOnStop;
 			m_bufferDuration = Math.Clamp(bufferDuration, 0.01f, 10f);
             if (m_source == 0)
             {
@@ -139,7 +139,7 @@ namespace Engine.Audio
 			uint[] array = new uint[3];
 			var list = new List<uint>();
 			int millisecondsTimeout = Math.Clamp((int)(0.5f * m_bufferDuration / array.Length * 1000f), 1, 100);
-			byte[] array2 = new byte[2 * base.ChannelsCount * (int)(SamplingFrequency * m_bufferDuration / array.Length)];
+			byte[] array2 = new byte[2 * ChannelsCount * (int)(SamplingFrequency * m_bufferDuration / array.Length)];
 			for (int i = 0; i < array.Length; i++)
 			{
 				uint num = Mixer.AL.GenBuffer();
@@ -163,7 +163,7 @@ namespace Engine.Audio
 							Mixer.CheckALError();
 							list.Add(item);
 						}
-						if (list.Count > 0 && !m_noMoreData && base.State == SoundState.Playing)
+						if (list.Count > 0 && !m_noMoreData && State == SoundState.Playing)
 						{
 							int num2 = ReadStreamingSource(array2, array2.Length);
 							m_noMoreData = num2 < array2.Length;
@@ -171,7 +171,7 @@ namespace Engine.Audio
 							{
 								uint num3 = list[^1];
                                 GCHandle gCHandle = GCHandle.Alloc(array2, GCHandleType.Pinned);
-                                Mixer.AL.BufferData(num3, (base.ChannelsCount == 1) ? BufferFormat.Mono16 : BufferFormat.Stereo16, gCHandle.AddrOfPinnedObject().ToPointer(), num2, base.SamplingFrequency);
+                                Mixer.AL.BufferData(num3, (ChannelsCount == 1) ? BufferFormat.Mono16 : BufferFormat.Stereo16, gCHandle.AddrOfPinnedObject().ToPointer(), num2, SamplingFrequency);
 								Mixer.CheckALError();
                                 Mixer.AL.SourceQueueBuffers(source, 1, &num3);
 								Mixer.CheckALError();

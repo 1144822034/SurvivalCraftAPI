@@ -108,7 +108,7 @@ namespace Game
 				Vector2 vector2 = (i < 4) ? (new Vector2(forward.X, forward.Z) + m_random.Vector2(0f, 0.25f)) : m_random.Vector2(0.5f, 1f);
 				var v = Vector3.Normalize(new Vector3(vector2.X, 1f, vector2.Y));
 				Vector3 end = vector + (s * v);
-				TerrainRaycastResult? terrainRaycastResult = m_subsystemTerrain.Raycast(vector, end, useInteractionBoxes: false, skipAirBlocks: false, (int value, float d) => Terrain.ExtractContents(value) != 18);
+				TerrainRaycastResult? terrainRaycastResult = m_subsystemTerrain.Raycast(vector, end, useInteractionBoxes: false, skipAirBlocks: false, (value,d) => Terrain.ExtractContents(value) != 18);
 				if (terrainRaycastResult.HasValue && Terrain.ExtractContents(terrainRaycastResult.Value.Value) == 0)
 				{
 					return new Vector3(terrainRaycastResult.Value.CellFace.X + 0.5f, terrainRaycastResult.Value.CellFace.Y, terrainRaycastResult.Value.CellFace.Z + 0.5f);

@@ -1,4 +1,5 @@
 using Engine;
+using Engine.Graphics;
 using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.PixelFormats;
 using SixLabors.ImageSharp.Processing;
@@ -202,7 +203,7 @@ namespace Game
 				{
 					items.Remove(Order.ByHide);
 				}
-				DialogsManager.ShowDialog(null, new ListSelectionDialog(LanguageControl.Get(GetType().Name, "Order Type"), items, 60f, (object item) => GetOrderDisplayName((Order)item), delegate (object item)
+				DialogsManager.ShowDialog(null, new ListSelectionDialog(LanguageControl.Get(GetType().Name, "Order Type"), items, 60f, item => GetOrderDisplayName((Order)item), delegate (object item)
 				{
 					m_order = (Order)item;
 					PopulateList(null, true);
@@ -228,7 +229,7 @@ namespace Game
 				{
 					list.Add(SettingsManager.ScpboxAccessToken);
 				}
-				DialogsManager.ShowDialog(null, new ListSelectionDialog(LanguageControl.Get(GetType().Name, "Filter"), list, 60f, (object item) => GetFilterDisplayName(item), delegate (object item)
+				DialogsManager.ShowDialog(null, new ListSelectionDialog(LanguageControl.Get(GetType().Name, "Filter"), list, 60f, item => GetFilterDisplayName(item), delegate (object item)
 				{
 					m_filter = item;
 					m_isOwn = item is string str && !string.IsNullOrEmpty(str);
@@ -486,7 +487,7 @@ namespace Game
 											float ratio = (float)image.Width / image.Height;
 											iconMargin = new Vector2((1f - ratio) * 32f, 0f);
 										}
-										var texture = Engine.Graphics.Texture2D.Load(image);
+										var texture = Texture2D.Load(image);
 										item2.Icon = texture;
 										TreeViewNode linkedNode = item2.LinkedNode;
 										if(linkedNode != null)
@@ -509,7 +510,7 @@ namespace Game
 									}
 								}
 							});
-						}, delegate (Exception e) { });
+						}, delegate { });
 					}
 					else if(item2.LinkedNode != null)
 					{

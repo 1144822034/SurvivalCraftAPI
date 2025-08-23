@@ -8,10 +8,10 @@ namespace Game
 
 		public float m_soundVolume;
 
-		public override int[] HandledBlocks => new int[1]
-		{
+		public override int[] HandledBlocks =>
+		[
 			18
-		};
+		];
 
 		public UpdateOrder UpdateOrder => UpdateOrder.Default;
 

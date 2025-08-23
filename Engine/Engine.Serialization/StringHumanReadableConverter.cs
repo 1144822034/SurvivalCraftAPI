@@ -1,5 +1,3 @@
-using System;
-
 namespace Engine.Serialization
 {
 	[HumanReadableConverter(typeof(string))]

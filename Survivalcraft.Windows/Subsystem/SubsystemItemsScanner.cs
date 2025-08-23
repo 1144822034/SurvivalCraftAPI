@@ -1,8 +1,5 @@
 using Engine;
 using GameEntitySystem;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using TemplatesDatabase;
 
 namespace Game

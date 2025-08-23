@@ -1,5 +1,4 @@
 using Engine;
-using System.Collections.Generic;
 using TemplatesDatabase;
 
 namespace Game
@@ -17,8 +16,8 @@ namespace Game
 
 		public Random m_random = new();
 
-		public override int[] HandledBlocks => new int[11]
-		{
+		public override int[] HandledBlocks =>
+		[
 			19,
 			20,
 			24,
@@ -30,7 +29,7 @@ namespace Game
 			132,
 			174,
 			204
-		};
+		];
 
 		/// <summary>
 		/// 该方法进行封装，不再允许覆盖
@@ -131,10 +130,10 @@ namespace Game
 		public override void Load(ValuesDictionary valuesDictionary)
 		{
 			base.Load(valuesDictionary);
-			m_subsystemTime = base.Project.FindSubsystem<SubsystemTime>(throwOnError: true);
-			m_subsystemCellChangeQueue = base.Project.FindSubsystem<SubsystemCellChangeQueue>(throwOnError: true);
-			m_subsystemGameInfo = base.Project.FindSubsystem<SubsystemGameInfo>(throwOnError: true);
-			m_subsystemSeasons = base.Project.FindSubsystem<SubsystemSeasons>(throwOnError: true);
+			m_subsystemTime = Project.FindSubsystem<SubsystemTime>(throwOnError: true);
+			m_subsystemCellChangeQueue = Project.FindSubsystem<SubsystemCellChangeQueue>(throwOnError: true);
+			m_subsystemGameInfo = Project.FindSubsystem<SubsystemGameInfo>(throwOnError: true);
+			m_subsystemSeasons = Project.FindSubsystem<SubsystemSeasons>(throwOnError: true);
 		}
 
 		public void GrowTallGrass(int value, int x, int y, int z, int pollPass)

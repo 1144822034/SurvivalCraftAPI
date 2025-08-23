@@ -1,6 +1,4 @@
 using Engine;
-using System;
-using System.Collections.Generic;
 
 namespace Game
 {
@@ -29,10 +27,6 @@ namespace Game
 			public Func<int?, int?> m_handler1;
 
 			public Func<Point3, int?> m_handler2;
-
-			public Brush()
-			{
-			}
 
 			public static implicit operator Brush(int value)
 			{
@@ -79,10 +73,6 @@ namespace Game
 			public Func<int?, int> m_handler1;
 
 			public Func<Point3, int> m_handler2;
-
-			public Counter()
-			{
-			}
 
 			public static implicit operator Counter(int value)
 			{

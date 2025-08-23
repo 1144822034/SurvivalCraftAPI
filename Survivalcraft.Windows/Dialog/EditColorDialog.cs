@@ -1,6 +1,5 @@
 using Engine;
 using Engine.Serialization;
-using System;
 using System.Xml.Linq;
 
 namespace Game

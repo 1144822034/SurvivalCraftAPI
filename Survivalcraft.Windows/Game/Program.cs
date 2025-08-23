@@ -1,12 +1,11 @@
-using System.Diagnostics;
 using Engine;
 using Engine.Graphics;
+using Engine.Input;
 using System.Globalization;
 using System.Reflection;
-using Engine.Input;
-
 #if WINDOWS
 using ImeSharp;
+using System.Diagnostics;
 #endif
 
 namespace Game
@@ -53,7 +52,7 @@ namespace Game
 			Window.Created += () =>
 			{
 #if WINDOWS
-				InputMethod.Initialize(Process.GetCurrentProcess().MainWindowHandle, true);
+				InputMethod.Initialize(Process.GetCurrentProcess().MainWindowHandle);
 				InputMethod.Enabled = false;
 #endif
 			};

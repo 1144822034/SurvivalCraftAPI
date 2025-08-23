@@ -1,5 +1,3 @@
-using System;
-
 namespace Engine.Graphics
 {
 	public class ShaderMacro
@@ -48,7 +46,6 @@ namespace Engine.Graphics
                 {
                     return shaderMacro.Value == Value;
                 }
-                return false;
             }
             return false;
         }

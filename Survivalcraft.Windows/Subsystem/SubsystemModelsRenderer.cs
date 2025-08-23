@@ -1,8 +1,6 @@
 using Engine;
 using Engine.Graphics;
 using GameEntitySystem;
-using System;
-using System.Collections.Generic;
 using TemplatesDatabase;
 
 namespace Game
@@ -47,33 +45,31 @@ namespace Game
 
 		public ModelShader m_shaderAlphaTested;
 
-		private Vector3 m_sunLightDirection;
-
 		public int MaxInstancesCount;
 
 		public Dictionary<ComponentModel, ModelData> m_componentModels = [];
 
 		public List<ModelData> m_modelsToPrepare = [];
 
-		public List<ModelData>[] m_modelsToDraw = new List<ModelData>[4]
-		{
+		public List<ModelData>[] m_modelsToDraw =
+		[
 			[],
 			[],
 			[],
 			[]
-		};
+		];
 
 		public static bool DisableDrawingModels = false;
 
 		public int ModelsDrawn;
 
-		public int[] m_drawOrders = new int[4]
-		{
+		public int[] m_drawOrders =
+		[
 			-10000,
 			1,
 			99,
 			201
-		};
+		];
 
 		public PrimitivesRenderer3D PrimitivesRenderer => m_primitivesRenderer;
 
@@ -156,7 +152,7 @@ namespace Game
                         DrawModels(camera, m_modelsToDraw[3], null);
                         if (ShaderOpaque != null && ShaderAlphaTested != null)
                         {
-                            m_primitivesRenderer.Flush(camera.ProjectionMatrix, true, int.MaxValue);
+                            m_primitivesRenderer.Flush(camera.ProjectionMatrix);
                         }
                         else
                         {
@@ -173,7 +169,7 @@ namespace Game
 
 		public override void Load(ValuesDictionary valuesDictionary)
 		{
-			m_subsystemTimeOfDay = base.Project.FindSubsystem<SubsystemTimeOfDay>(throwOnError: true);
+			m_subsystemTimeOfDay = Project.FindSubsystem<SubsystemTimeOfDay>(throwOnError: true);
 			m_subsystemTerrain = Project.FindSubsystem<SubsystemTerrain>(throwOnError: true);
 			m_subsystemSky = Project.FindSubsystem<SubsystemSky>(throwOnError: true);
 			m_subsystemShadows = Project.FindSubsystem<SubsystemShadows>(throwOnError: true);
@@ -258,8 +254,8 @@ namespace Game
 			{
 				modelShader.AlphaThreshold = alphaThreshold.Value;
 			}
-			ModsManager.HookAction("ModelShaderParameter", (modLoader) => { modLoader.ModelShaderParameter(modelShader, camera, modelsData, alphaThreshold); return true; });
-			ModsManager.HookAction("SetShaderParameter", (modLoader) => { modLoader.SetShaderParameter(modelShader, camera); return true; });
+			ModsManager.HookAction("ModelShaderParameter", modLoader => { modLoader.ModelShaderParameter(modelShader, camera, modelsData, alphaThreshold); return true; });
+			ModsManager.HookAction("SetShaderParameter", modLoader => { modLoader.SetShaderParameter(modelShader, camera); return true; });
 			foreach (ModelData modelsDatum in modelsData)
 			{
 				bool skipDrawing = false;
@@ -361,7 +357,7 @@ namespace Game
 							for (int k = 0; k < customCollisionBoxes.Length; k++)
 							{
 								BoundingBox boundingBox = customCollisionBoxes[k];
-								float num13 = boundingBox.Max.Y + (float)num11;
+								float num13 = boundingBox.Max.Y + num11;
 								if (shadowPosition.Y - num13 > -0.5f)
 								{
 									float num14 = camera.ViewPosition.Y - num13;
@@ -369,10 +365,10 @@ namespace Game
 									{
 										float num15 = MathUtils.Max(num14 * 0.01f, 0.005f);
 										float num16 = MathUtils.Saturate(1f - ((shadowPosition.Y - num13) / 2f));
-										Vector3 p = new(boundingBox.Min.X + (float)i, num13 + num15, boundingBox.Min.Z + (float)j);
-										Vector3 p2 = new(boundingBox.Max.X + (float)i, num13 + num15, boundingBox.Min.Z + (float)j);
-										Vector3 p3 = new(boundingBox.Max.X + (float)i, num13 + num15, boundingBox.Max.Z + (float)j);
-										Vector3 p4 = new(boundingBox.Min.X + (float)i, num13 + num15, boundingBox.Max.Z + (float)j);
+										Vector3 p = new(boundingBox.Min.X + i, num13 + num15, boundingBox.Min.Z + j);
+										Vector3 p2 = new(boundingBox.Max.X + i, num13 + num15, boundingBox.Min.Z + j);
+										Vector3 p3 = new(boundingBox.Max.X + i, num13 + num15, boundingBox.Max.Z + j);
+										Vector3 p4 = new(boundingBox.Min.X + i, num13 + num15, boundingBox.Max.Z + j);
 										subsystemShadows.DrawShadowOverQuad(p, p2, p3, p4, shadowPosition, shadowDiameter, 0.45f * block.ObjectShadowStrength * alpha * num3 * num16);
 									}
 								}

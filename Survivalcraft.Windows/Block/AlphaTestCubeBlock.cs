@@ -1,5 +1,3 @@
-using Engine;
-
 namespace Game
 {
 	public abstract class AlphaTestCubeBlock : CubeBlock

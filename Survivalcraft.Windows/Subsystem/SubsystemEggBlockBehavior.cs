@@ -1,6 +1,5 @@
 using Engine;
 using GameEntitySystem;
-using System;
 using TemplatesDatabase;
 
 namespace Game
@@ -17,7 +16,7 @@ namespace Game
 
 		public const string fName = "SubsystemEggBlockBehavior";
 
-		public override int[] HandledBlocks => new int[0];
+		public override int[] HandledBlocks => [];
 
         public override bool OnHitAsProjectile(CellFace? cellFace, ComponentBody componentBody, WorldItem worldItem)
         {
@@ -30,15 +29,15 @@ namespace Game
                 try
                 {
                     EggBlock.EggType eggType = m_eggBlock.GetEggType(data);
-                    Entity entity = DatabaseManager.CreateEntity(base.Project, eggType.TemplateName, throwIfNotFound: true);
+                    Entity entity = DatabaseManager.CreateEntity(Project, eggType.TemplateName, throwIfNotFound: true);
                     entity.FindComponent<ComponentBody>(throwOnError: true).Position = worldItem.Position;
                     entity.FindComponent<ComponentBody>(throwOnError: true).Rotation = Quaternion.CreateFromAxisAngle(Vector3.UnitY, m_random.Float(0f, (float)Math.PI * 2f));
                     entity.FindComponent<ComponentSpawn>(throwOnError: true).SpawnDuration = 0.25f;
-                    base.Project.AddEntity(entity);
+                    Project.AddEntity(entity);
                 }
                 catch (Exception e)
                 {
-                    Engine.Log.Error($"Spawning creature from egg (index: {((data >> 4) & 0xFFF)}) error: {e}");
+                    Log.Error($"Spawning creature from egg (index: {((data >> 4) & 0xFFF)}) error: {e}");
                     Projectile projectile = worldItem as Projectile;
                     if (projectile != null)
                     {

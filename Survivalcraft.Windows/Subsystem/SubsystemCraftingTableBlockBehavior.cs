@@ -1,15 +1,13 @@
-using Engine;
-using GameEntitySystem;
 using TemplatesDatabase;
 
 namespace Game
 {
 	public class SubsystemCraftingTableBlockBehavior : SubsystemEntityBlockBehavior
 	{
-		public override int[] HandledBlocks => new int[1]
-		{
+		public override int[] HandledBlocks =>
+		[
 			27
-		};
+		];
 
 		public override void Load(ValuesDictionary valuesDictionary)
 		{

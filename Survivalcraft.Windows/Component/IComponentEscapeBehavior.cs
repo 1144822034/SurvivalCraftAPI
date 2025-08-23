@@ -1,7 +1,4 @@
-﻿using Engine;
-using GameEntitySystem;
-using TemplatesDatabase;
-namespace Game
+﻿namespace Game
 {
 	public interface IComponentEscapeBehavior
 	{

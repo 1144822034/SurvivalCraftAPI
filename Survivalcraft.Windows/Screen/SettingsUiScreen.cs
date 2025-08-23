@@ -1,7 +1,7 @@
-using System;
-using System.Collections.Generic;
+using Engine;
 using System.Globalization;
 using System.Xml.Linq;
+
 namespace Game
 {
 	public class SettingsUiScreen : Screen
@@ -65,7 +65,7 @@ namespace Game
 		{
 			if (m_windowModeButton.IsClicked)
 			{
-				SettingsManager.WindowMode = (Engine.WindowMode)((int)(SettingsManager.WindowMode + 1) % EnumUtils.GetEnumValues(typeof(Engine.WindowMode)).Count);
+				SettingsManager.WindowMode = (WindowMode)((int)(SettingsManager.WindowMode + 1) % EnumUtils.GetEnumValues(typeof(WindowMode)).Count);
 			}
 			if (m_uiScaleSlider.SlidingCompleted)
 			{
@@ -73,7 +73,7 @@ namespace Game
 			}
 			if (m_languageButton.IsClicked)
 			{
-				DialogsManager.ShowDialog(null,new ListSelectionDialog(null,LanguageControl.LanguageTypes,70f,(object item) => ((KeyValuePair<string, CultureInfo>)item).Value.NativeName,delegate (object item)
+				DialogsManager.ShowDialog(null,new ListSelectionDialog(null,LanguageControl.LanguageTypes,70f,item => ((KeyValuePair<string, CultureInfo>)item).Value.NativeName,delegate (object item)
 				{
 					LanguageControl.ChangeLanguage(((KeyValuePair<string, CultureInfo>)item).Key);
 				}));

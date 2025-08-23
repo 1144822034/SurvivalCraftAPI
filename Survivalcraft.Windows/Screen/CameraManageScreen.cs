@@ -1,8 +1,4 @@
-using Engine;
-using Engine.Serialization;
-using NAudio.Flac;
 using System.Xml.Linq;
-using Engine.Input;
 
 namespace Game
 {
@@ -39,7 +35,7 @@ namespace Game
 			m_camerasList.ItemWidgetFactory = (Func<object,Widget>)Delegate.Combine(m_camerasList.ItemWidgetFactory,KeyInfoWidget);
 			m_camerasList.ScrollPosition = 0f;
 			m_camerasList.ScrollSpeed = 0f;
-			m_camerasList.ItemClicked += (item) =>
+			m_camerasList.ItemClicked += item =>
 			{
 				if(m_camerasList.SelectedItem == item)
 				{

@@ -1,8 +1,5 @@
 using Engine;
 using GameEntitySystem;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using TemplatesDatabase;
 
 namespace Game
@@ -70,14 +67,14 @@ namespace Game
 				var foodType = (FoodType)Enum.Parse(typeof(FoodType), item.Key, ignoreCase: false);
 				m_foodFactors[(int)foodType] = (float)item.Value;
 			}
-			m_subsystemPickables.PickableAdded += (pickable) =>
+			m_subsystemPickables.PickableAdded += pickable =>
 			{
 				if (TryAddPickable(pickable) && m_pickable == null)
 				{
 					m_pickable = pickable;
 				}
 			};
-			m_subsystemPickables.PickableRemoved += (pickable) =>
+			m_subsystemPickables.PickableRemoved += pickable =>
 			{
 				m_pickables.Remove(pickable);
 				if (m_pickable == pickable)
@@ -205,7 +202,7 @@ namespace Game
 							{
 								m_importanceLevel = 0f;
 							}
-							ModsManager.HookAction("OnEatPickable", (modLoader) =>
+							ModsManager.HookAction("OnEatPickable", modLoader =>
 							{
 								modLoader.OnEatPickable(this, m_pickable, out bool Dealed);
 								return Dealed;

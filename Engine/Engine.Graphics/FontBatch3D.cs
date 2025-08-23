@@ -6,11 +6,11 @@ namespace Engine.Graphics
 	{
         public FontBatch3D()
         {
-            base.Font = BitmapFont.DebugFont;
-            base.DepthStencilState = DepthStencilState.Default;
-            base.RasterizerState = RasterizerState.CullNoneScissor;
-            base.BlendState = BlendState.AlphaBlend;
-            base.SamplerState = SamplerState.LinearClamp;
+            Font = BitmapFont.DebugFont;
+            DepthStencilState = DepthStencilState.Default;
+            RasterizerState = RasterizerState.CullNoneScissor;
+            BlendState = BlendState.AlphaBlend;
+            SamplerState = SamplerState.LinearClamp;
         }
 
 		public void QueueText(string text, Vector3 position, Vector3 right, Vector3 down, Color color, TextAnchor anchor = TextAnchor.Default)
@@ -24,8 +24,8 @@ namespace Engine.Graphics
 			Vector2 vector = CalculateTextOffset(text, 0, text.Length, anchor, scale, spacing);
 			Vector3 vector2 = position + (vector.X * Vector3.Normalize(right)) + (vector.Y * Vector3.Normalize(down));
 			Vector3 v = vector2;
-			right *= base.Font.Scale;
-			down *= base.Font.Scale;
+			right *= Font.Scale;
+			down *= Font.Scale;
 			int num = 0;
             for (int i = 0; i < text.Length; i++)
             {
@@ -38,17 +38,17 @@ namespace Engine.Graphics
                 {
                     case '\n':
                         num++;
-                        v = vector2 + (float)num * (base.Font.GlyphHeight + base.Font.Spacing.Y + spacing.Y) * down;
+                        v = vector2 + num * (Font.GlyphHeight + Font.Spacing.Y + spacing.Y) * down;
                         continue;
                     case '\r':
                     case '\u200b':
                         continue;
                 }
-				BitmapFont.Glyph glyph = base.Font.GetGlyph(c);
+				BitmapFont.Glyph glyph = Font.GetGlyph(c);
 				if (!glyph.IsBlank)
 				{
-					Vector3 v2 = right * (glyph.TexCoord2.X - glyph.TexCoord1.X) * base.Font.Texture.Width;
-					Vector3 v3 = down * (glyph.TexCoord2.Y - glyph.TexCoord1.Y) * base.Font.Texture.Height;
+					Vector3 v2 = right * (glyph.TexCoord2.X - glyph.TexCoord1.X) * Font.Texture.Width;
+					Vector3 v3 = down * (glyph.TexCoord2.Y - glyph.TexCoord1.Y) * Font.Texture.Height;
 					Vector3 v4 = (right * glyph.Offset.X) + (down * glyph.Offset.Y);
 					Vector3 v5 = v + v4;
 					Vector3 vector3 = v5 + v2;
@@ -69,8 +69,8 @@ namespace Engine.Graphics
 					TriangleIndices.Array[count2 + 4] = count + 3;
 					TriangleIndices.Array[count2 + 5] = count;
 				}
-                float num2 = ((i < text.Length - 1) ? base.Font.GetKerning(c, text[i + 1]) : 0f);
-				v += right * (glyph.Width - num2 + base.Font.Spacing.X + spacing.X);
+                float num2 = ((i < text.Length - 1) ? Font.GetKerning(c, text[i + 1]) : 0f);
+				v += right * (glyph.Width - num2 + Font.Spacing.X + spacing.X);
 			}
 		}
 	}

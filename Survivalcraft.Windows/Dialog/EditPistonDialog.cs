@@ -1,4 +1,3 @@
-using System;
 using System.Xml.Linq;
 
 namespace Game
@@ -31,21 +30,21 @@ namespace Game
 
 		public int m_speed;
 
-		public static string[] m_speedNames = new string[4]
-		{
+		public static string[] m_speedNames =
+		[
 			"Fast",
 			"Medium",
 			"Slow",
 			"Very Slow"
-		};
+		];
 
-		public static string[] m_speedCNNames = new string[4]
-		{
+		public static string[] m_speedCNNames =
+		[
 			"快",
 			"中",
 			"慢",
 			"非常慢"
-		};
+		];
 
 		public string m_languageType;
 

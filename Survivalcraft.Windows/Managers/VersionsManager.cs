@@ -1,8 +1,6 @@
 using Engine;
-using Engine.Serialization;
-using System;
-using System.Collections.Generic;
 using System.Reflection;
+using System.Runtime.InteropServices;
 using System.Xml.Linq;
 using XmlUtilities;
 
@@ -37,7 +35,7 @@ public static class VersionsManager
 	/// Unix:Linux
 	/// </summary>
 	public static PlatformID PlatformID = Environment.OSVersion.Platform;
-	public static string PlatformTag = System.Runtime.InteropServices.RuntimeInformation.OSDescription;
+	public static string PlatformTag = RuntimeInformation.OSDescription;
 	public static BuildConfiguration BuildConfiguration => BuildConfiguration.Release;
 
 #if DIRECT3D11

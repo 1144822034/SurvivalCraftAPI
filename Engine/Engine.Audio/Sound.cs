@@ -1,4 +1,3 @@
-using System;
 using Engine.Media;
 using Silk.NET.OpenAL;
 
@@ -36,13 +35,13 @@ namespace Engine.Audio
                 Mixer.CheckALError();
             }
             Initialize(soundBuffer);
-			base.ChannelsCount = soundBuffer.ChannelsCount;
-			base.SamplingFrequency = soundBuffer.SamplingFrequency;
-			base.Volume = volume;
-			base.Pitch = pitch;
-			base.Pan = pan;
-			base.IsLooped = isLooped;
-			base.DisposeOnStop = disposeOnStop;
+			ChannelsCount = soundBuffer.ChannelsCount;
+			SamplingFrequency = soundBuffer.SamplingFrequency;
+			Volume = volume;
+			Pitch = pitch;
+			Pan = pan;
+			IsLooped = isLooped;
+			DisposeOnStop = disposeOnStop;
 			Mixer.m_soundsToStopPoll.Add(this);
 		}
 
@@ -52,20 +51,20 @@ namespace Engine.Audio
             Mixer.AL.SetSourceProperty((uint)m_source, SourceInteger.Buffer, soundBuffer.m_buffer);
 			Mixer.CheckALError();
 			Initialize(soundBuffer);
-			base.ChannelsCount = soundBuffer.ChannelsCount;
-			base.SamplingFrequency = soundBuffer.SamplingFrequency;
-			base.Volume = volume;
-			base.Pitch = pitch;
-			base.Pan = pan;
-			base.IsLooped = isLooped;
-			base.DisposeOnStop = disposeOnStop;
+			ChannelsCount = soundBuffer.ChannelsCount;
+			SamplingFrequency = soundBuffer.SamplingFrequency;
+			Volume = volume;
+			Pitch = pitch;
+			Pan = pan;
+			IsLooped = isLooped;
+			DisposeOnStop = disposeOnStop;
 			Mixer.m_soundsToStopPoll.Add(this);
 		}
         /// <summary>
         /// 在指定位置播放音频
         /// </summary>
         /// <param name="direction">相对于玩家的相对位置</param>
-		internal override unsafe void InternalPlay(Vector3 direction)
+		internal override void InternalPlay(Vector3 direction)
 		{
             if (m_source != 0)
             {

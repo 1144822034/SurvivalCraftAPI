@@ -1,8 +1,5 @@
 using Engine.Serialization;
 using GameEntitySystem;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Reflection;
 using System.Xml.Linq;
 using TemplatesDatabase;
@@ -29,7 +26,7 @@ namespace Game
 
 		public static ICollection<ValuesDictionary> EntitiesValuesDictionaries => m_valueDictionaries.Values;
 
-		public static XElement DatabaseNode = null;
+		public static XElement DatabaseNode;
 
 		public static void Initialize()
 		{

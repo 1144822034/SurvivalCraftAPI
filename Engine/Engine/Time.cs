@@ -1,5 +1,3 @@
-using System;
-using System.Collections.Generic;
 using System.Diagnostics;
 
 namespace Engine
@@ -47,7 +45,7 @@ namespace Engine
 
         public static long TicksPerSecond => Stopwatch.Frequency;
 
-		public static double RealTime => (double)Ticks / (double)TicksPerSecond;
+		public static double RealTime => Ticks / (double)TicksPerSecond;
 
 		public static double PreviousFrameStartTime
 		{
@@ -94,7 +92,7 @@ namespace Engine
 		{
 			double num = FrameStartTime - offset;
 			double num2 = Math.Floor(num / period) * period;
-            return num >= num2 && num - (double)FrameDuration < num2;
+            return num >= num2 && num - FrameDuration < num2;
         }
 
         public static void QueueTimeDelayedExecution(double time, Action action)
@@ -127,8 +125,8 @@ namespace Engine
             if (FrameStartTime >= m_fpsStartTime + 1.0)
             {
                 int num = FrameIndex - m_fpsStartFrameIndex;
-                AverageFrameDuration = (float)(FrameStartTime - m_fpsStartTime) / (float)num;
-                AverageCpuFrameDuration = m_fpsCpuTime / (float)num;
+                AverageFrameDuration = (float)(FrameStartTime - m_fpsStartTime) / num;
+                AverageCpuFrameDuration = m_fpsCpuTime / num;
                 m_fpsStartTime = FrameStartTime;
                 m_fpsCpuTime = 0f;
                 m_fpsStartFrameIndex = FrameIndex;

@@ -1,5 +1,3 @@
-using Engine;
-using System.Collections.Generic;
 using TemplatesDatabase;
 
 namespace Game
@@ -17,10 +15,10 @@ namespace Game
 		public int m_sandBlockIndex;
 
 		public int m_cactusBlockIndex;
-		public override int[] HandledBlocks => new int[1]
-		{
+		public override int[] HandledBlocks =>
+		[
 			BlocksManager.GetBlockIndex<CactusBlock>()
-		};
+		];
 
 		public override void OnNeighborBlockChanged(int x, int y, int z, int neighborX, int neighborY, int neighborZ)
 		{
@@ -61,7 +59,7 @@ namespace Game
 		public override void Load(ValuesDictionary valuesDictionary)
 		{
 			m_subsystemTime = Project.FindSubsystem<SubsystemTime>(throwOnError: true);
-			m_subsystemCellChangeQueue = base.Project.FindSubsystem<SubsystemCellChangeQueue>(throwOnError: true);
+			m_subsystemCellChangeQueue = Project.FindSubsystem<SubsystemCellChangeQueue>(throwOnError: true);
 			m_subsystemGameInfo = Project.FindSubsystem<SubsystemGameInfo>(throwOnError: true);
 			m_sandBlockIndex = BlocksManager.GetBlockIndex<SandBlock>();
 			m_cactusBlockIndex = BlocksManager.GetBlockIndex<CactusBlock>();

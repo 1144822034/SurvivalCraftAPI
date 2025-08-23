@@ -2,6 +2,7 @@ using Engine;
 using Engine.Input;
 using GameEntitySystem;
 using TemplatesDatabase;
+
 namespace Game
 {
 	public class ComponentInput : Component, IUpdateable
@@ -196,14 +197,14 @@ namespace Game
 				m_playerInput.CrouchMove += vector;
 				m_playerInput.Jump |= input.IsKeyOrMouseDownOnce( "Jump");
 				m_playerInput.ScrollInventory -= num;
-				m_playerInput.Dig = input.IsKeyOrMouseDown( "Dig") ? new Ray3?(new Ray3(viewPosition, viewDirection)) : m_playerInput.Dig;
-				m_playerInput.Hit = input.IsKeyOrMouseDownOnce( "Hit") ? new Ray3?(new Ray3(viewPosition, viewDirection)) : m_playerInput.Hit;
-				m_playerInput.Aim = input.IsKeyOrMouseDown("Aim") ? new Ray3?(new Ray3(viewPosition, viewDirection)) : m_playerInput.Aim;
-				m_playerInput.Interact = input.IsKeyOrMouseDownOnce( "Interact") ? new Ray3?(new Ray3(viewPosition, viewDirection)) : m_playerInput.Interact;
+				m_playerInput.Dig = input.IsKeyOrMouseDown( "Dig") ? new Ray3(viewPosition, viewDirection) : m_playerInput.Dig;
+				m_playerInput.Hit = input.IsKeyOrMouseDownOnce( "Hit") ? new Ray3(viewPosition, viewDirection) : m_playerInput.Hit;
+				m_playerInput.Aim = input.IsKeyOrMouseDown("Aim") ? new Ray3(viewPosition, viewDirection) : m_playerInput.Aim;
+				m_playerInput.Interact = input.IsKeyOrMouseDownOnce( "Interact") ? new Ray3(viewPosition, viewDirection) : m_playerInput.Interact;
 				m_playerInput.ToggleCrouch |= input.IsKeyOrMouseDownOnce("ToggleCrouch");
 				m_playerInput.ToggleMount |= input.IsKeyOrMouseDownOnce("ToggleMount");
 				m_playerInput.ToggleCreativeFly |= input.IsKeyOrMouseDownOnce("ToggleFly");
-				m_playerInput.PickBlockType = input.IsKeyOrMouseDownOnce("PickBlockType") ? new Ray3?(new Ray3(viewPosition, viewDirection)) : m_playerInput.PickBlockType;
+				m_playerInput.PickBlockType = input.IsKeyOrMouseDownOnce("PickBlockType") ? new Ray3(viewPosition, viewDirection) : m_playerInput.PickBlockType;
 			}
 			if (!DialogsManager.HasDialogs(m_componentPlayer.GuiWidget) && AllowHandleInput)
 			{
@@ -292,10 +293,10 @@ namespace Game
 				m_playerInput.CrouchMove += zero;
 				m_playerInput.Look += 0.75f * num * padStickPosition2 * MathF.Pow(padStickPosition2.LengthSquared(), 0.25f);
 				m_playerInput.Jump |= input.IsPadButtonDownOnce(GamePadButton.A);
-				m_playerInput.Dig = (padTriggerPosition2 >= 0.5f) ? new Ray3?(new Ray3(viewPosition, viewDirection)) : m_playerInput.Dig;
-				m_playerInput.Hit = (padTriggerPosition2 >= 0.5f && m_lastRightTrigger < 0.5f) ? new Ray3?(new Ray3(viewPosition, viewDirection)) : m_playerInput.Hit;
-				m_playerInput.Aim = (padTriggerPosition >= 0.5f) ? new Ray3?(new Ray3(viewPosition, viewDirection)) : m_playerInput.Aim;
-				m_playerInput.Interact = (padTriggerPosition >= 0.5f && m_lastLeftTrigger < 0.5f) ? new Ray3?(new Ray3(viewPosition, viewDirection)) : m_playerInput.Interact;
+				m_playerInput.Dig = (padTriggerPosition2 >= 0.5f) ? new Ray3(viewPosition, viewDirection) : m_playerInput.Dig;
+				m_playerInput.Hit = (padTriggerPosition2 >= 0.5f && m_lastRightTrigger < 0.5f) ? new Ray3(viewPosition, viewDirection) : m_playerInput.Hit;
+				m_playerInput.Aim = (padTriggerPosition >= 0.5f) ? new Ray3(viewPosition, viewDirection) : m_playerInput.Aim;
+				m_playerInput.Interact = (padTriggerPosition >= 0.5f && m_lastLeftTrigger < 0.5f) ? new Ray3(viewPosition, viewDirection) : m_playerInput.Interact;
 				m_playerInput.Drop |= input.IsPadButtonDownOnce(GamePadButton.B);
 				m_playerInput.ToggleMount |= input.IsPadButtonDownOnce(GamePadButton.LeftThumb) || input.IsPadButtonDownOnce(GamePadButton.DPadUp);
 				m_playerInput.EditItem |= input.IsPadButtonDownOnce(GamePadButton.LeftShoulder);

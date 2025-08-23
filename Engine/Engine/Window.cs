@@ -3,19 +3,20 @@ using Android.Content;
 using Android.OS;
 #else
 using System.Reflection;
+using System.Runtime.CompilerServices;
+using Silk.NET.Core;
+using Silk.NET.GLFW;
 using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.PixelFormats;
 using Silk.NET.Input;
-#endif
 using Monitor = Silk.NET.Windowing.Monitor;
-using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
+#endif
 using Engine.Audio;
 using Engine.Graphics;
 using Engine.Input;
-using Silk.NET.Windowing;
-using Silk.NET.Core;
 using Silk.NET.Maths;
+using Silk.NET.Windowing;
 using Environment = System.Environment;
 
 namespace Engine
@@ -57,7 +58,7 @@ namespace Engine
         {
             get
             {
-                #if ANDROID
+#if ANDROID
                 return new Point2(m_view.Size.X, m_view.Size.Y);
 #else
                 var size = m_gameWindow?.Monitor?.Bounds.Size ?? Monitor.GetMainMonitor(null).Bounds.Size;
@@ -82,7 +83,6 @@ namespace Engine
             set
             {
 #if ANDROID
-                return;
 #else
                 VerifyWindowOpened();
                 switch (value)
@@ -132,7 +132,6 @@ namespace Engine
             set
             {
 #if ANDROID
-                return;
 #else
                 VerifyWindowOpened();
                 m_gameWindow.Position = new (value.X, value.Y);
@@ -150,7 +149,6 @@ namespace Engine
             set
             {
 #if ANDROID
-                return;
 #else
                 VerifyWindowOpened();
                 m_gameWindow.Size = new (value.X, value.Y);
@@ -308,7 +306,7 @@ namespace Engine
             Log.Information("Android.OS.Build.Model: " + Build.Model);
             Log.Information("Android.OS.Build.Product: " + Build.Product);
             Log.Information("Android.OS.Build.Brand: " + Build.Brand);
-            Log.Information("Android.OS.Build.VERSION.SdkInt: " + ((int)Build.VERSION.SdkInt).ToString());
+            Log.Information("Android.OS.Build.VERSION.SdkInt: " + ((int)Build.VERSION.SdkInt));
             ViewOptions options = ViewOptions.Default with { API = api };
             m_view = Silk.NET.Windowing.Window.GetView(options);
             Activity.Paused += PausedHandler;
@@ -338,9 +336,9 @@ namespace Engine
                 m_view.Run();//会阻塞，不要放置在前边
             }
 #if !ANDROID
-            catch (Silk.NET.GLFW.GlfwException e)
+            catch (GlfwException e)
             {
-                if (e.ErrorCode == Silk.NET.GLFW.ErrorCode.VersionUnavailable)
+                if (e.ErrorCode == ErrorCode.VersionUnavailable)
                 {
                     const string str = "Your graphics card driver does not support the graphics API used by the current program. Please try updating your graphics card driver or using the compatible patch.\n你的显卡驱动不支持当前程序使用的图形API，请尝试更新显卡驱动，或使用兼容补丁。";
                     Log.Error($"str\n{e}");

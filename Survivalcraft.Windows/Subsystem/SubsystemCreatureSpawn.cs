@@ -1,8 +1,5 @@
 using Engine;
 using GameEntitySystem;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using TemplatesDatabase;
 
 namespace Game
@@ -93,7 +90,7 @@ namespace Game
 			{
 				if (m_newSpawnChunks.Count > 0)
 				{
-					m_newSpawnChunks.RandomShuffle((int max) => m_random.Int(0, max - 1));
+					m_newSpawnChunks.RandomShuffle(max => m_random.Int(0, max - 1));
 					foreach (SpawnChunk newSpawnChunk in m_newSpawnChunks)
 					{
 						SpawnChunkCreatures(newSpawnChunk, 10, constantSpawn: false);
@@ -102,7 +99,7 @@ namespace Game
 				}
 				if (m_spawnChunks.Count > 0)
 				{
-					m_spawnChunks.RandomShuffle((int max) => m_random.Int(0, max - 1));
+					m_spawnChunks.RandomShuffle(max => m_random.Int(0, max - 1));
 					foreach (SpawnChunk spawnChunk in m_spawnChunks)
 					{
 						SpawnChunkCreatures(spawnChunk, 2, constantSpawn: true);
@@ -124,7 +121,7 @@ namespace Game
 			m_subsystemTerrain = Project.FindSubsystem<SubsystemTerrain>(throwOnError: true);
 			m_subsystemTime = Project.FindSubsystem<SubsystemTime>(throwOnError: true);
 			m_subsystemSky = Project.FindSubsystem<SubsystemSky>(throwOnError: true);
-			m_subsystemSeasons = base.Project.FindSubsystem<SubsystemSeasons>(throwOnError: true);
+			m_subsystemSeasons = Project.FindSubsystem<SubsystemSeasons>(throwOnError: true);
 			m_subsystemBodies = Project.FindSubsystem<SubsystemBodies>(throwOnError: true);
 			m_subsystemViews = Project.FindSubsystem<SubsystemGameWidgets>(throwOnError: true);
 			InitializeCreatureTypes();
@@ -168,7 +165,7 @@ namespace Game
 					int topHeight3 = m_subsystemTerrain.Terrain.GetTopHeight(point.X, point.Z);
 					return (humidity26 > 8 && temperature38 > 4 && num97 > 40f && point.Y >= topHeight3 && (BlocksManager.Blocks[num98] is LeavesBlock || num98 == 18 || num98 == 8 || num98 == 2)) ? 2.5f : 0f;
 				},
-				SpawnFunction = (CreatureType creatureType, Point3 point) => SpawnCreatures(creatureType, "Duck", point, 1).Count
+				SpawnFunction = (creatureType,point) => SpawnCreatures(creatureType, "Duck", point, 1).Count
 			});
 			m_creatureTypes.Add(new CreatureType("Raven", SpawnLocationType.Surface, randomSpawn: true, constantSpawn: false)
 			{
@@ -181,7 +178,7 @@ namespace Game
 					int topHeight2 = m_subsystemTerrain.Terrain.GetTopHeight(point.X, point.Z);
 					return ((humidity25 <= 8 || temperature37 <= 4) && num95 > 40f && point.Y >= topHeight2 && (BlocksManager.Blocks[num96] is LeavesBlock || num96 == 62 || num96 == 8 || num96 == 2 || num96 == 7)) ? 2.5f : 0f;
 				},
-				SpawnFunction = (CreatureType creatureType, Point3 point) => SpawnCreatures(creatureType, "Raven", point, 1).Count
+				SpawnFunction = (creatureType,point) => SpawnCreatures(creatureType, "Raven", point, 1).Count
 			});
 			m_creatureTypes.Add(new CreatureType("Seagull", SpawnLocationType.Surface, randomSpawn: true, constantSpawn: false)
 			{
@@ -192,7 +189,7 @@ namespace Game
 					int topHeight = m_subsystemTerrain.Terrain.GetTopHeight(point.X, point.Z);
 					return (num93 > -100f && num93 < 40f && point.Y >= topHeight && (num94 == 18 || num94 == 7 || num94 == 6 || num94 == 62)) ? 2.5f : 0f;
 				},
-				SpawnFunction = (CreatureType creatureType, Point3 point) => SpawnCreatures(creatureType, "Seagull", point, 1).Count
+				SpawnFunction = (creatureType,point) => SpawnCreatures(creatureType, "Seagull", point, 1).Count
 			});
 			m_creatureTypes.Add(new CreatureType("Wildboar", SpawnLocationType.Surface, randomSpawn: false, constantSpawn: false)
 			{
@@ -203,7 +200,7 @@ namespace Game
 					int num92 = Terrain.ExtractContents(m_subsystemTerrain.Terrain.GetCellValueFast(point.X, point.Y - 1, point.Z));
 					return (num91 > 20f && humidity24 > 8 && point.Y < 80 && (num92 == 8 || num92 == 2)) ? 0.25f : 0f;
 				},
-				SpawnFunction = (CreatureType creatureType, Point3 point) => SpawnCreatures(creatureType, "Wildboar", point, 1).Count
+				SpawnFunction = (creatureType,point) => SpawnCreatures(creatureType, "Wildboar", point, 1).Count
 			});
 			m_creatureTypes.Add(new CreatureType("Brown Cattle", SpawnLocationType.Surface, randomSpawn: false, constantSpawn: false)
 			{
@@ -251,7 +248,7 @@ namespace Game
 					int num82 = Terrain.ExtractContents(m_subsystemTerrain.Terrain.GetCellValueFast(point.X, point.Y - 1, point.Z));
 					return (num81 > 20f && humidity21 > 8 && temperature34 < 4 && point.Y < 70 && (num82 == 8 || num82 == 2)) ? 0.01f : 0f;
 				},
-				SpawnFunction = (CreatureType creatureType, Point3 point) => SpawnCreatures(creatureType, "Bull_White", point, 1).Count
+				SpawnFunction = (creatureType,point) => SpawnCreatures(creatureType, "Bull_White", point, 1).Count
 			});
 			m_creatureTypes.Add(new CreatureType("Gray Wolves", SpawnLocationType.Surface, randomSpawn: false, constantSpawn: false)
 			{
@@ -262,7 +259,7 @@ namespace Game
 					int num80 = Terrain.ExtractContents(m_subsystemTerrain.Terrain.GetCellValueFast(point.X, point.Y - 1, point.Z));
 					return (num79 > 40f && humidity20 >= 8 && point.Y < 100 && (num80 == 8 || num80 == 2)) ? 0.075f : 0f;
 				},
-				SpawnFunction = (CreatureType creatureType, Point3 point) => SpawnCreatures(creatureType, "Wolf_Gray", point, m_random.Int(1, 3)).Count
+				SpawnFunction = (creatureType,point) => SpawnCreatures(creatureType, "Wolf_Gray", point, m_random.Int(1, 3)).Count
 			});
 			m_creatureTypes.Add(new CreatureType("Coyotes", SpawnLocationType.Surface, randomSpawn: false, constantSpawn: false)
 			{
@@ -274,7 +271,7 @@ namespace Game
 					int num78 = Terrain.ExtractContents(m_subsystemTerrain.Terrain.GetCellValueFast(point.X, point.Y - 1, point.Z));
 					return (num77 > 40f && temperature33 > 8 && humidity19 < 8 && humidity19 >= 2 && point.Y < 100 && num78 == 7) ? 0.075f : 0f;
 				},
-				SpawnFunction = (CreatureType creatureType, Point3 point) => SpawnCreatures(creatureType, "Wolf_Coyote", point, m_random.Int(1, 3)).Count
+				SpawnFunction = (creatureType,point) => SpawnCreatures(creatureType, "Wolf_Coyote", point, m_random.Int(1, 3)).Count
 			});
 			m_creatureTypes.Add(new CreatureType("Brown Bears", SpawnLocationType.Surface, randomSpawn: false, constantSpawn: false)
 			{
@@ -286,7 +283,7 @@ namespace Game
 					int num76 = Terrain.ExtractContents(m_subsystemTerrain.Terrain.GetCellValueFast(point.X, point.Y - 1, point.Z));
 					return (num75 > 40f && humidity18 >= 4 && temperature32 >= 8 && point.Y < 110 && (num76 == 8 || num76 == 2 || num76 == 3)) ? 0.1f : 0f;
 				},
-				SpawnFunction = (CreatureType creatureType, Point3 point) => SpawnCreatures(creatureType, "Bear_Brown", point, 1).Count
+				SpawnFunction = (creatureType,point) => SpawnCreatures(creatureType, "Bear_Brown", point, 1).Count
 			});
 			m_creatureTypes.Add(new CreatureType("Black Bears", SpawnLocationType.Surface, randomSpawn: false, constantSpawn: false)
 			{
@@ -298,7 +295,7 @@ namespace Game
 					int num74 = Terrain.ExtractContents(m_subsystemTerrain.Terrain.GetCellValueFast(point.X, point.Y - 1, point.Z));
 					return (num73 > 40f && humidity17 >= 4 && temperature31 < 8 && point.Y < 120 && (num74 == 8 || num74 == 2 || num74 == 3)) ? 0.1f : 0f;
 				},
-				SpawnFunction = (CreatureType creatureType, Point3 point) => SpawnCreatures(creatureType, "Bear_Black", point, 1).Count
+				SpawnFunction = (creatureType,point) => SpawnCreatures(creatureType, "Bear_Black", point, 1).Count
 			});
 			m_creatureTypes.Add(new CreatureType("Polar Bears", SpawnLocationType.Surface, randomSpawn: false, constantSpawn: false)
 			{
@@ -309,7 +306,7 @@ namespace Game
 					int num72 = Terrain.ExtractContents(m_subsystemTerrain.Terrain.GetCellValueFast(point.X, point.Y - 1, point.Z));
 					return (num71 > -40f && temperature30 < 8 && point.Y < 80 && num72 == 62) ? 0.1f : 0f;
 				},
-				SpawnFunction = (CreatureType creatureType, Point3 point) => SpawnCreatures(creatureType, "Bear_Polar", point, 1).Count
+				SpawnFunction = (creatureType,point) => SpawnCreatures(creatureType, "Bear_Polar", point, 1).Count
 			});
 			m_creatureTypes.Add(new CreatureType("Horses", SpawnLocationType.Surface, randomSpawn: false, constantSpawn: false)
 			{
@@ -358,7 +355,7 @@ namespace Game
 					int num67 = Terrain.ExtractContents(m_subsystemTerrain.Terrain.GetCellValueFast(point.X, point.Y - 1, point.Z));
 					return (num66 > 20f && temperature27 > 8 && humidity15 < 8 && point.Y < 80 && num67 == 7) ? 0.05f : 0f;
 				},
-				SpawnFunction = (CreatureType creatureType, Point3 point) => SpawnCreatures(creatureType, "Camel", point, m_random.Int(1, 2)).Count
+				SpawnFunction = (creatureType,point) => SpawnCreatures(creatureType, "Camel", point, m_random.Int(1, 2)).Count
 			});
 			m_creatureTypes.Add(new CreatureType("Donkeys", SpawnLocationType.Surface, randomSpawn: false, constantSpawn: false)
 			{
@@ -369,7 +366,7 @@ namespace Game
 					int num65 = Terrain.ExtractContents(m_subsystemTerrain.Terrain.GetCellValueFast(point.X, point.Y - 1, point.Z));
 					return (num64 > 20f && temperature26 > 6 && point.Y < 120 && (num65 == 8 || num65 == 2 || num65 == 3 || num65 == 7)) ? 0.05f : 0f;
 				},
-				SpawnFunction = (CreatureType creatureType, Point3 point) => SpawnCreatures(creatureType, "Donkey", point, 1).Count
+				SpawnFunction = (creatureType,point) => SpawnCreatures(creatureType, "Donkey", point, 1).Count
 			});
 			m_creatureTypes.Add(new CreatureType("Giraffes", SpawnLocationType.Surface, randomSpawn: false, constantSpawn: false)
 			{
@@ -381,7 +378,7 @@ namespace Game
 					int num63 = Terrain.ExtractContents(m_subsystemTerrain.Terrain.GetCellValueFast(point.X, point.Y - 1, point.Z));
 					return (num62 > 20f && temperature25 > 8 && humidity14 > 7 && point.Y < 75 && (num63 == 8 || num63 == 2 || num63 == 3)) ? 0.03f : 0f;
 				},
-				SpawnFunction = (CreatureType creatureType, Point3 point) => SpawnCreatures(creatureType, "Giraffe", point, m_random.Int(1, 2)).Count
+				SpawnFunction = (creatureType,point) => SpawnCreatures(creatureType, "Giraffe", point, m_random.Int(1, 2)).Count
 			});
 			m_creatureTypes.Add(new CreatureType("Rhinos", SpawnLocationType.Surface, randomSpawn: false, constantSpawn: false)
 			{
@@ -393,7 +390,7 @@ namespace Game
 					int num61 = Terrain.ExtractContents(m_subsystemTerrain.Terrain.GetCellValueFast(point.X, point.Y - 1, point.Z));
 					return (num60 > 40f && temperature24 > 8 && humidity13 > 7 && point.Y < 75 && (num61 == 8 || num61 == 2 || num61 == 3)) ? 0.03f : 0f;
 				},
-				SpawnFunction = (CreatureType creatureType, Point3 point) => SpawnCreatures(creatureType, "Rhino", point, 1).Count
+				SpawnFunction = (creatureType,point) => SpawnCreatures(creatureType, "Rhino", point, 1).Count
 			});
 			m_creatureTypes.Add(new CreatureType("Tigers", SpawnLocationType.Surface, randomSpawn: false, constantSpawn: false)
 			{
@@ -404,7 +401,7 @@ namespace Game
 					int num59 = Terrain.ExtractContents(m_subsystemTerrain.Terrain.GetCellValueFast(point.X, point.Y - 1, point.Z));
 					return (num58 > 40f && humidity12 > 8 && point.Y < 80 && (num59 == 8 || num59 == 2 || num59 == 3 || num59 == 7)) ? 0.025f : 0f;
 				},
-				SpawnFunction = (CreatureType creatureType, Point3 point) => SpawnCreatures(creatureType, "Tiger", point, 1).Count
+				SpawnFunction = (creatureType,point) => SpawnCreatures(creatureType, "Tiger", point, 1).Count
 			});
 			m_creatureTypes.Add(new CreatureType("White Tigers", SpawnLocationType.Surface, randomSpawn: false, constantSpawn: false)
 			{
@@ -416,7 +413,7 @@ namespace Game
 					int num57 = Terrain.ExtractContents(m_subsystemTerrain.Terrain.GetCellValueFast(point.X, point.Y - 1, point.Z));
 					return (num56 > 40f && temperature23 < 2 && point.Y < 90 && (num57 == 8 || num57 == 2 || num57 == 3 || num57 == 7 || num57 == 62)) ? 0.02f : 0f;
 				},
-				SpawnFunction = (CreatureType creatureType, Point3 point) => SpawnCreatures(creatureType, "Tiger_White", point, 1).Count
+				SpawnFunction = (creatureType,point) => SpawnCreatures(creatureType, "Tiger_White", point, 1).Count
 			});
 			m_creatureTypes.Add(new CreatureType("Lions", SpawnLocationType.Surface, randomSpawn: false, constantSpawn: false)
 			{
@@ -427,7 +424,7 @@ namespace Game
 					int num55 = Terrain.ExtractContents(m_subsystemTerrain.Terrain.GetCellValueFast(point.X, point.Y - 1, point.Z));
 					return (num54 > 40f && temperature22 > 8 && point.Y < 80 && (num55 == 8 || num55 == 2 || num55 == 3 || num55 == 7)) ? 0.04f : 0f;
 				},
-				SpawnFunction = (CreatureType creatureType, Point3 point) => SpawnCreatures(creatureType, "Lion", point, 1).Count
+				SpawnFunction = (creatureType,point) => SpawnCreatures(creatureType, "Lion", point, 1).Count
 			});
 			m_creatureTypes.Add(new CreatureType("Jaguars", SpawnLocationType.Surface, randomSpawn: false, constantSpawn: false)
 			{
@@ -439,7 +436,7 @@ namespace Game
 					int num53 = Terrain.ExtractContents(m_subsystemTerrain.Terrain.GetCellValueFast(point.X, point.Y - 1, point.Z));
 					return (num52 > 40f && humidity11 > 8 && temperature21 > 8 && point.Y < 100 && (num53 == 8 || num53 == 2 || num53 == 3 || num53 == 7 || num53 == 12)) ? 0.03f : 0f;
 				},
-				SpawnFunction = (CreatureType creatureType, Point3 point) => SpawnCreatures(creatureType, "Jaguar", point, 1).Count
+				SpawnFunction = (creatureType,point) => SpawnCreatures(creatureType, "Jaguar", point, 1).Count
 			});
 			m_creatureTypes.Add(new CreatureType("Leopards", SpawnLocationType.Surface, randomSpawn: false, constantSpawn: false)
 			{
@@ -451,7 +448,7 @@ namespace Game
 					int num51 = Terrain.ExtractContents(m_subsystemTerrain.Terrain.GetCellValueFast(point.X, point.Y - 1, point.Z));
 					return (num50 > 40f && temperature20 > 8 && point.Y < 120 && (num51 == 8 || num51 == 2 || num51 == 3 || num51 == 7 || num51 == 12)) ? 0.03f : 0f;
 				},
-				SpawnFunction = (CreatureType creatureType, Point3 point) => SpawnCreatures(creatureType, "Leopard", point, 1).Count
+				SpawnFunction = (creatureType,point) => SpawnCreatures(creatureType, "Leopard", point, 1).Count
 			});
 			m_creatureTypes.Add(new CreatureType("Zebras", SpawnLocationType.Surface, randomSpawn: false, constantSpawn: false)
 			{
@@ -463,7 +460,7 @@ namespace Game
 					int num49 = Terrain.ExtractContents(m_subsystemTerrain.Terrain.GetCellValueFast(point.X, point.Y - 1, point.Z));
 					return (num48 > 20f && temperature19 > 8 && humidity10 > 7 && point.Y < 80 && (num49 == 8 || num49 == 2 || num49 == 3)) ? 0.05f : 0f;
 				},
-				SpawnFunction = (CreatureType creatureType, Point3 point) => SpawnCreatures(creatureType, "Zebra", point, m_random.Int(1, 2)).Count
+				SpawnFunction = (creatureType,point) => SpawnCreatures(creatureType, "Zebra", point, m_random.Int(1, 2)).Count
 			});
 			m_creatureTypes.Add(new CreatureType("Gnus", SpawnLocationType.Surface, randomSpawn: false, constantSpawn: false)
 			{
@@ -474,7 +471,7 @@ namespace Game
 					int num47 = Terrain.ExtractContents(m_subsystemTerrain.Terrain.GetCellValueFast(point.X, point.Y - 1, point.Z));
 					return (num46 > 20f && temperature18 > 8 && point.Y < 80 && (num47 == 8 || num47 == 2 || num47 == 3)) ? 0.05f : 0f;
 				},
-				SpawnFunction = (CreatureType creatureType, Point3 point) => SpawnCreatures(creatureType, "Gnu", point, m_random.Int(1, 2)).Count
+				SpawnFunction = (creatureType,point) => SpawnCreatures(creatureType, "Gnu", point, m_random.Int(1, 2)).Count
 			});
 			m_creatureTypes.Add(new CreatureType("Reindeers", SpawnLocationType.Surface, randomSpawn: false, constantSpawn: false)
 			{
@@ -484,7 +481,7 @@ namespace Game
 					int num45 = Terrain.ExtractContents(m_subsystemTerrain.Terrain.GetCellValueFast(point.X, point.Y - 1, point.Z));
 					return (temperature17 < 3 && point.Y < 90 && (num45 == 8 || num45 == 2 || num45 == 3 || num45 == 62)) ? 0.05f : 0f;
 				},
-				SpawnFunction = (CreatureType creatureType, Point3 point) => SpawnCreatures(creatureType, "Reindeer", point, m_random.Int(1, 3)).Count
+				SpawnFunction = (creatureType,point) => SpawnCreatures(creatureType, "Reindeer", point, m_random.Int(1, 3)).Count
 			});
 			m_creatureTypes.Add(new CreatureType("Mooses", SpawnLocationType.Surface, randomSpawn: false, constantSpawn: false)
 			{
@@ -494,7 +491,7 @@ namespace Game
 					int num44 = Terrain.ExtractContents(m_subsystemTerrain.Terrain.GetCellValueFast(point.X, point.Y - 1, point.Z));
 					return (temperature16 < 7 && point.Y < 90 && (num44 == 8 || num44 == 2 || num44 == 3 || num44 == 62)) ? 0.1f : 0f;
 				},
-				SpawnFunction = (CreatureType creatureType, Point3 point) => SpawnCreatures(creatureType, "Moose", point, m_random.Int(1, 1)).Count
+				SpawnFunction = (creatureType,point) => SpawnCreatures(creatureType, "Moose", point, m_random.Int(1, 1)).Count
 			});
 			m_creatureTypes.Add(new CreatureType("Bisons", SpawnLocationType.Surface, randomSpawn: false, constantSpawn: false)
 			{
@@ -505,7 +502,7 @@ namespace Game
 					int num43 = Terrain.ExtractContents(m_subsystemTerrain.Terrain.GetCellValueFast(point.X, point.Y - 1, point.Z));
 					return (temperature15 < 10 && humidity9 < 12 && point.Y < 80 && (num43 == 8 || num43 == 2 || num43 == 3 || num43 == 62)) ? 0.1f : 0f;
 				},
-				SpawnFunction = (CreatureType creatureType, Point3 point) => SpawnCreatures(creatureType, "Bison", point, m_random.Int(1, 4)).Count
+				SpawnFunction = (creatureType,point) => SpawnCreatures(creatureType, "Bison", point, m_random.Int(1, 4)).Count
 			});
 			m_creatureTypes.Add(new CreatureType("Ostriches", SpawnLocationType.Surface, randomSpawn: false, constantSpawn: false)
 			{
@@ -517,7 +514,7 @@ namespace Game
 					int num42 = Terrain.ExtractContents(m_subsystemTerrain.Terrain.GetCellValueFast(point.X, point.Y - 1, point.Z));
 					return (num41 > 20f && temperature14 > 8 && humidity8 < 8 && point.Y < 75 && (num42 == 8 || num42 == 2 || num42 == 7)) ? 0.05f : 0f;
 				},
-				SpawnFunction = (CreatureType creatureType, Point3 point) => SpawnCreatures(creatureType, "Ostrich", point, m_random.Int(1, 2)).Count
+				SpawnFunction = (creatureType,point) => SpawnCreatures(creatureType, "Ostrich", point, m_random.Int(1, 2)).Count
 			});
 			m_creatureTypes.Add(new CreatureType("Cassowaries", SpawnLocationType.Surface, randomSpawn: false, constantSpawn: false)
 			{
@@ -529,7 +526,7 @@ namespace Game
 					int num40 = Terrain.ExtractContents(m_subsystemTerrain.Terrain.GetCellValueFast(point.X, point.Y - 1, point.Z));
 					return (num39 > 20f && temperature13 > 8 && humidity7 < 12 && point.Y < 75 && (num40 == 8 || num40 == 2 || num40 == 7)) ? 0.05f : 0f;
 				},
-				SpawnFunction = (CreatureType creatureType, Point3 point) => SpawnCreatures(creatureType, "Cassowary", point, 1).Count
+				SpawnFunction = (creatureType,point) => SpawnCreatures(creatureType, "Cassowary", point, 1).Count
 			});
 			m_creatureTypes.Add(new CreatureType("Hyenas", SpawnLocationType.Surface, randomSpawn: false, constantSpawn: false)
 			{
@@ -540,7 +537,7 @@ namespace Game
 					int num38 = Terrain.ExtractContents(m_subsystemTerrain.Terrain.GetCellValueFast(point.X, point.Y - 1, point.Z));
 					return (num37 > 40f && temperature12 > 8 && point.Y < 80 && (num38 == 8 || num38 == 2 || num38 == 7)) ? 0.05f : 0f;
 				},
-				SpawnFunction = (CreatureType creatureType, Point3 point) => SpawnCreatures(creatureType, "Hyena", point, m_random.Int(1, 2)).Count
+				SpawnFunction = (creatureType,point) => SpawnCreatures(creatureType, "Hyena", point, m_random.Int(1, 2)).Count
 			});
 			m_creatureTypes.Add(new CreatureType("Cave Bears", SpawnLocationType.Cave, randomSpawn: false, constantSpawn: false)
 			{
@@ -562,7 +559,7 @@ namespace Game
 					int num35 = Terrain.ExtractContents(m_subsystemTerrain.Terrain.GetCellValueFast(point.X, point.Y - 1, point.Z));
 					return (num35 == 3 || num35 == 67 || num35 == 4 || num35 == 66 || num35 == 2 || num35 == 7) ? 0.25f : 0f;
 				},
-				SpawnFunction = (CreatureType creatureType, Point3 point) => SpawnCreatures(creatureType, "Tiger", point, 1).Count
+				SpawnFunction = (creatureType,point) => SpawnCreatures(creatureType, "Tiger", point, 1).Count
 			});
 			m_creatureTypes.Add(new CreatureType("Cave Lions", SpawnLocationType.Cave, randomSpawn: false, constantSpawn: false)
 			{
@@ -573,7 +570,7 @@ namespace Game
 					int num34 = Terrain.ExtractContents(m_subsystemTerrain.Terrain.GetCellValueFast(point.X, point.Y - 1, point.Z));
 					return ((num34 == 3 || num34 == 67 || num34 == 4 || num34 == 66 || num34 == 2 || num34 == 7) && temperature11 > 8 && humidity6 < 8) ? 0.25f : 0f;
 				},
-				SpawnFunction = (CreatureType creatureType, Point3 point) => SpawnCreatures(creatureType, "Lion", point, 1).Count
+				SpawnFunction = (creatureType,point) => SpawnCreatures(creatureType, "Lion", point, 1).Count
 			});
 			m_creatureTypes.Add(new CreatureType("Cave Jaguars", SpawnLocationType.Cave, randomSpawn: false, constantSpawn: false)
 			{
@@ -582,7 +579,7 @@ namespace Game
 					int num33 = Terrain.ExtractContents(m_subsystemTerrain.Terrain.GetCellValueFast(point.X, point.Y - 1, point.Z));
 					return (num33 == 3 || num33 == 67 || num33 == 4 || num33 == 66 || num33 == 2 || num33 == 7) ? 0.5f : 0f;
 				},
-				SpawnFunction = (CreatureType creatureType, Point3 point) => SpawnCreatures(creatureType, "Jaguar", point, 1).Count
+				SpawnFunction = (creatureType,point) => SpawnCreatures(creatureType, "Jaguar", point, 1).Count
 			});
 			m_creatureTypes.Add(new CreatureType("Cave Leopards", SpawnLocationType.Cave, randomSpawn: false, constantSpawn: false)
 			{
@@ -591,7 +588,7 @@ namespace Game
 					int num32 = Terrain.ExtractContents(m_subsystemTerrain.Terrain.GetCellValueFast(point.X, point.Y - 1, point.Z));
 					return (num32 == 3 || num32 == 67 || num32 == 4 || num32 == 66 || num32 == 2 || num32 == 7) ? 0.25f : 0f;
 				},
-				SpawnFunction = (CreatureType creatureType, Point3 point) => SpawnCreatures(creatureType, "Leopard", point, 1).Count
+				SpawnFunction = (creatureType,point) => SpawnCreatures(creatureType, "Leopard", point, 1).Count
 			});
 			m_creatureTypes.Add(new CreatureType("Cave Hyenas", SpawnLocationType.Cave, randomSpawn: false, constantSpawn: false)
 			{
@@ -601,11 +598,11 @@ namespace Game
 					int num31 = Terrain.ExtractContents(m_subsystemTerrain.Terrain.GetCellValueFast(point.X, point.Y - 1, point.Z));
 					return ((num31 == 3 || num31 == 67 || num31 == 4 || num31 == 66 || num31 == 2 || num31 == 7) && temperature10 > 8) ? 1f : 0f;
 				},
-				SpawnFunction = (CreatureType creatureType, Point3 point) => SpawnCreatures(creatureType, "Hyena", point, 1).Count
+				SpawnFunction = (creatureType,point) => SpawnCreatures(creatureType, "Hyena", point, 1).Count
 			});
 			m_creatureTypes.Add(new CreatureType("Bull Sharks", SpawnLocationType.Water, randomSpawn: false, constantSpawn: false)
 			{
-				SpawnSuitabilityFunction = (CreatureType creatureType, Point3 point) => (!(m_subsystemTerrain.TerrainContentsGenerator.CalculateOceanShoreDistance(point.X, point.Z) < -2f)) ? 0f : 0.4f,
+				SpawnSuitabilityFunction = (creatureType,point) => (!(m_subsystemTerrain.TerrainContentsGenerator.CalculateOceanShoreDistance(point.X, point.Z) < -2f)) ? 0f : 0.4f,
 				SpawnFunction = delegate (CreatureType creatureType, Point3 point)
 				{
 					string templateName10 = "Shark_Bull";
@@ -614,7 +611,7 @@ namespace Game
 			});
 			m_creatureTypes.Add(new CreatureType("Tiger Sharks", SpawnLocationType.Water, randomSpawn: false, constantSpawn: false)
 			{
-				SpawnSuitabilityFunction = (CreatureType creatureType, Point3 point) => (!(m_subsystemTerrain.TerrainContentsGenerator.CalculateOceanShoreDistance(point.X, point.Z) < -5f)) ? 0f : 0.3f,
+				SpawnSuitabilityFunction = (creatureType,point) => (!(m_subsystemTerrain.TerrainContentsGenerator.CalculateOceanShoreDistance(point.X, point.Z) < -5f)) ? 0f : 0.3f,
 				SpawnFunction = delegate (CreatureType creatureType, Point3 point)
 				{
 					string templateName9 = "Shark_Tiger";
@@ -623,7 +620,7 @@ namespace Game
 			});
 			m_creatureTypes.Add(new CreatureType("Great White Sharks", SpawnLocationType.Water, randomSpawn: false, constantSpawn: false)
 			{
-				SpawnSuitabilityFunction = (CreatureType creatureType, Point3 point) => (!(m_subsystemTerrain.TerrainContentsGenerator.CalculateOceanShoreDistance(point.X, point.Z) < -20f)) ? 0f : 0.2f,
+				SpawnSuitabilityFunction = (creatureType,point) => (!(m_subsystemTerrain.TerrainContentsGenerator.CalculateOceanShoreDistance(point.X, point.Z) < -20f)) ? 0f : 0.2f,
 				SpawnFunction = delegate (CreatureType creatureType, Point3 point)
 				{
 					string templateName8 = "Shark_GreatWhite";
@@ -632,7 +629,7 @@ namespace Game
 			});
 			m_creatureTypes.Add(new CreatureType("Barracudas", SpawnLocationType.Water, randomSpawn: false, constantSpawn: false)
 			{
-				SpawnSuitabilityFunction = (CreatureType creatureType, Point3 point) => (!(m_subsystemTerrain.TerrainContentsGenerator.CalculateOceanShoreDistance(point.X, point.Z) < -2f)) ? 0f : 0.5f,
+				SpawnSuitabilityFunction = (creatureType,point) => (!(m_subsystemTerrain.TerrainContentsGenerator.CalculateOceanShoreDistance(point.X, point.Z) < -2f)) ? 0f : 0.5f,
 				SpawnFunction = delegate (CreatureType creatureType, Point3 point)
 				{
 					string templateName7 = "Barracuda";
@@ -641,7 +638,7 @@ namespace Game
 			});
 			m_creatureTypes.Add(new CreatureType("Bass_Sea", SpawnLocationType.Water, randomSpawn: false, constantSpawn: false)
 			{
-				SpawnSuitabilityFunction = (CreatureType creatureType, Point3 point) => (!(m_subsystemTerrain.TerrainContentsGenerator.CalculateOceanShoreDistance(point.X, point.Z) < -2f)) ? 0f : 1f,
+				SpawnSuitabilityFunction = (creatureType,point) => (!(m_subsystemTerrain.TerrainContentsGenerator.CalculateOceanShoreDistance(point.X, point.Z) < -2f)) ? 0f : 1f,
 				SpawnFunction = delegate (CreatureType creatureType, Point3 point)
 				{
 					string templateName6 = "Bass_Sea";
@@ -664,7 +661,7 @@ namespace Game
 			});
 			m_creatureTypes.Add(new CreatureType("Rays", SpawnLocationType.Water, randomSpawn: false, constantSpawn: false)
 			{
-				SpawnSuitabilityFunction = (CreatureType creatureType, Point3 point) => (!(m_subsystemTerrain.TerrainContentsGenerator.CalculateOceanShoreDistance(point.X, point.Z) < 10f)) ? 1f : 0.5f,
+				SpawnSuitabilityFunction = (creatureType,point) => (!(m_subsystemTerrain.TerrainContentsGenerator.CalculateOceanShoreDistance(point.X, point.Z) < 10f)) ? 1f : 0.5f,
 				SpawnFunction = delegate (CreatureType creatureType, Point3 point)
 				{
 					int num27 = 0;
@@ -764,7 +761,7 @@ namespace Game
 					}
 					return 0f;
 				},
-				SpawnFunction = (CreatureType creatureType, Point3 point) => SpawnCreatures(creatureType, "Wolf_Gray", point, m_random.Int(1, 3)).Count
+				SpawnFunction = (creatureType,point) => SpawnCreatures(creatureType, "Wolf_Gray", point, m_random.Int(1, 3)).Count
 			});
 			m_creatureTypes.Add(new CreatureType("Constant Coyotes", SpawnLocationType.Surface, randomSpawn: false, constantSpawn: true)
 			{
@@ -784,7 +781,7 @@ namespace Game
 					}
 					return 0f;
 				},
-				SpawnFunction = (CreatureType creatureType, Point3 point) => SpawnCreatures(creatureType, "Wolf_Coyote", point, m_random.Int(1, 3)).Count
+				SpawnFunction = (creatureType,point) => SpawnCreatures(creatureType, "Wolf_Coyote", point, m_random.Int(1, 3)).Count
 			});
 			m_creatureTypes.Add(new CreatureType("Constant Brown Bears", SpawnLocationType.Surface, randomSpawn: false, constantSpawn: true)
 			{
@@ -804,7 +801,7 @@ namespace Game
 					}
 					return 0f;
 				},
-				SpawnFunction = (CreatureType creatureType, Point3 point) => SpawnCreatures(creatureType, "Bear_Brown", point, 1).Count
+				SpawnFunction = (creatureType,point) => SpawnCreatures(creatureType, "Bear_Brown", point, 1).Count
 			});
 			m_creatureTypes.Add(new CreatureType("Constant Black Bears", SpawnLocationType.Surface, randomSpawn: false, constantSpawn: true)
 			{
@@ -824,7 +821,7 @@ namespace Game
 					}
 					return 0f;
 				},
-				SpawnFunction = (CreatureType creatureType, Point3 point) => SpawnCreatures(creatureType, "Bear_Black", point, 1).Count
+				SpawnFunction = (creatureType,point) => SpawnCreatures(creatureType, "Bear_Black", point, 1).Count
 			});
 			m_creatureTypes.Add(new CreatureType("Constant Polar Bears", SpawnLocationType.Surface, randomSpawn: false, constantSpawn: true)
 			{
@@ -843,7 +840,7 @@ namespace Game
 					}
 					return 0f;
 				},
-				SpawnFunction = (CreatureType creatureType, Point3 point) => SpawnCreatures(creatureType, "Bear_Black", point, 1).Count
+				SpawnFunction = (creatureType,point) => SpawnCreatures(creatureType, "Bear_Black", point, 1).Count
 			});
 			m_creatureTypes.Add(new CreatureType("Constant Tigers", SpawnLocationType.Surface, randomSpawn: false, constantSpawn: true)
 			{
@@ -862,7 +859,7 @@ namespace Game
 					}
 					return 0f;
 				},
-				SpawnFunction = (CreatureType creatureType, Point3 point) => SpawnCreatures(creatureType, "Tiger", point, 1).Count
+				SpawnFunction = (creatureType,point) => SpawnCreatures(creatureType, "Tiger", point, 1).Count
 			});
 			m_creatureTypes.Add(new CreatureType("Constant Lions", SpawnLocationType.Surface, randomSpawn: false, constantSpawn: true)
 			{
@@ -881,7 +878,7 @@ namespace Game
 					}
 					return 0f;
 				},
-				SpawnFunction = (CreatureType creatureType, Point3 point) => SpawnCreatures(creatureType, "Lion", point, m_random.Int(1, 2)).Count
+				SpawnFunction = (creatureType,point) => SpawnCreatures(creatureType, "Lion", point, m_random.Int(1, 2)).Count
 			});
 			m_creatureTypes.Add(new CreatureType("Constant Jaguars", SpawnLocationType.Surface, randomSpawn: false, constantSpawn: true)
 			{
@@ -901,7 +898,7 @@ namespace Game
 					}
 					return 0f;
 				},
-				SpawnFunction = (CreatureType creatureType, Point3 point) => SpawnCreatures(creatureType, "Jaguar", point, 1).Count
+				SpawnFunction = (creatureType,point) => SpawnCreatures(creatureType, "Jaguar", point, 1).Count
 			});
 			m_creatureTypes.Add(new CreatureType("Constant Leopards", SpawnLocationType.Surface, randomSpawn: false, constantSpawn: true)
 			{
@@ -920,7 +917,7 @@ namespace Game
 					}
 					return 0f;
 				},
-				SpawnFunction = (CreatureType creatureType, Point3 point) => SpawnCreatures(creatureType, "Leopard", point, 1).Count
+				SpawnFunction = (creatureType,point) => SpawnCreatures(creatureType, "Leopard", point, 1).Count
 			});
 			m_creatureTypes.Add(new CreatureType("Constant Hyenas", SpawnLocationType.Surface, randomSpawn: false, constantSpawn: true)
 			{
@@ -939,7 +936,7 @@ namespace Game
 					}
 					return 0f;
 				},
-				SpawnFunction = (CreatureType creatureType, Point3 point) => SpawnCreatures(creatureType, "Hyena", point, m_random.Int(1, 2)).Count
+				SpawnFunction = (creatureType,point) => SpawnCreatures(creatureType, "Hyena", point, m_random.Int(1, 2)).Count
 			});
 			m_creatureTypes.Add(new CreatureType("Pigeon", SpawnLocationType.Surface, randomSpawn: true, constantSpawn: false)
 			{
@@ -952,7 +949,7 @@ namespace Game
 					int topHeight2 = m_subsystemTerrain.Terrain.GetTopHeight(point.X, point.Z);
 					return (temperature38 > 3 && num95 > 30f && point.Y >= topHeight2 && (BlocksManager.Blocks[num96] is LeavesBlock || num96 == 8 || num96 == 2 || num96 == 7)) ? 1.5f : 0f;
 				},
-				SpawnFunction = (CreatureType creatureType, Point3 point) => SpawnCreatures(creatureType, "Pigeon", point, 1).Count
+				SpawnFunction = (creatureType,point) => SpawnCreatures(creatureType, "Pigeon", point, 1).Count
 			});
 			m_creatureTypes.Add(new CreatureType("Sparrow", SpawnLocationType.Surface, randomSpawn: true, constantSpawn: false)
 			{
@@ -971,7 +968,7 @@ namespace Game
 					return SpawnCreatures(creatureType, "Sparrow", point, count3).Count;
 				}
 			});
-			ModsManager.HookAction("InitializeCreatureTypes", (modLoader) =>
+			ModsManager.HookAction("InitializeCreatureTypes", modLoader =>
 			{
 				modLoader.InitializeCreatureTypes(this, m_creatureTypes);
 				return false;
@@ -1000,8 +997,8 @@ namespace Game
 						{
 							break;
 						}
-						IEnumerable<CreatureType> source = m_creatureTypes.Where((CreatureType c) => c.SpawnLocationType == spawnLocationType && c.RandomSpawn);
-						IEnumerable<float> items = source.Select((CreatureType c) => CalculateSpawnSuitability(c, spawnPoint.Value));
+						IEnumerable<CreatureType> source = m_creatureTypes.Where(c => c.SpawnLocationType == spawnLocationType && c.RandomSpawn);
+						IEnumerable<float> items = source.Select(c => CalculateSpawnSuitability(c, spawnPoint.Value));
 						int randomWeightedItem = GetRandomWeightedItem(items);
 						if (randomWeightedItem >= 0)
 						{
@@ -1036,8 +1033,8 @@ namespace Game
 				Point3? spawnPoint = GetRandomChunkSpawnPoint(chunk, spawnLocationType);
 				if (spawnPoint.HasValue)
 				{
-					IEnumerable<CreatureType> source = m_creatureTypes.Where((CreatureType c) => c.SpawnLocationType == spawnLocationType && c.ConstantSpawn == constantSpawn);
-					IEnumerable<float> items = source.Select((CreatureType c) => CalculateSpawnSuitability(c, spawnPoint.Value));
+					IEnumerable<CreatureType> source = m_creatureTypes.Where(c => c.SpawnLocationType == spawnLocationType && c.ConstantSpawn == constantSpawn);
+					IEnumerable<float> items = source.Select(c => CalculateSpawnSuitability(c, spawnPoint.Value));
 					int randomWeightedItem = GetRandomWeightedItem(items);
 					if (randomWeightedItem >= 0)
 					{
@@ -1092,7 +1089,7 @@ namespace Game
 			}
 			catch (Exception ex)
 			{
-				Log.Error($"Unable to spawn creature with template \"{templateName}\". Reason: {ex.ToString()}");
+				Log.Error($"Unable to spawn creature with template \"{templateName}\". Reason: {ex}");
 				return null;
 			}
 		}
@@ -1159,7 +1156,7 @@ namespace Game
 			int x = spawnPoint.X;
 			int y = spawnPoint.Y;
 			int z = spawnPoint.Z;
-			if (y <= 3 || y >= 253)
+			if (y <= 3 || y >= TerrainChunk.Height - 3)
 			{
 				return false;
 			}

@@ -1,6 +1,3 @@
-using System;
-using System.Collections.Generic;
-
 namespace Engine.Graphics
 {
 	public abstract class GraphicsResource : IDisposable

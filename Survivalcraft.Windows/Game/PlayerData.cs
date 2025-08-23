@@ -1,8 +1,6 @@
 using Engine;
 using GameEntitySystem;
-using System;
 using System.Globalization;
-using System.Linq;
 using TemplatesDatabase;
 
 namespace Game
@@ -235,7 +233,7 @@ namespace Game
 				{
 					if (SubsystemPlayers.GlobalSpawnPosition == Vector3.Zero)
 					{
-						PlayerData playerData = SubsystemPlayers.PlayersData.FirstOrDefault((PlayerData pd) => pd.SpawnPosition != Vector3.Zero);
+						PlayerData playerData = SubsystemPlayers.PlayersData.FirstOrDefault(pd => pd.SpawnPosition != Vector3.Zero);
 						if (playerData != null)
 						{
 							if (playerData.ComponentPlayer != null)
@@ -424,8 +422,8 @@ namespace Game
 		{
 			var random = new Random();
 			CharacterSkinsManager.UpdateCharacterSkinsList();
-			string[] array = CharacterSkinsManager.CharacterSkinsNames.Where((string n) => CharacterSkinsManager.IsBuiltIn(n) && CharacterSkinsManager.GetPlayerClass(n) == m_playerClass).ToArray();
-			string[] second = SubsystemPlayers.PlayersData.Select((PlayerData pd) => pd.CharacterSkinName).ToArray();
+			string[] array = CharacterSkinsManager.CharacterSkinsNames.Where(n => CharacterSkinsManager.IsBuiltIn(n) && CharacterSkinsManager.GetPlayerClass(n) == m_playerClass).ToArray();
+			string[] second = SubsystemPlayers.PlayersData.Select(pd => pd.CharacterSkinName).ToArray();
 			string[] array2 = array.Except(second).ToArray();
 			CharacterSkinName = array2.Length != 0 ? array2[random.Int(0, array2.Length - 1)] : array[random.Int(0, array.Length - 1)];
 		}
@@ -579,7 +577,7 @@ namespace Game
 			for (int k = -1; k <= 1; k++)
 			{
 				Vector3 end = vector2 + new Vector3(30f * vector.X, 5f * k, 30f * vector.Y);
-				TerrainRaycastResult? terrainRaycastResult = m_subsystemTerrain.Raycast(vector2, end, useInteractionBoxes: false, skipAirBlocks: true, (int value, float distance) => Terrain.ExtractContents(value) != 0);
+				TerrainRaycastResult? terrainRaycastResult = m_subsystemTerrain.Raycast(vector2, end, useInteractionBoxes: false, skipAirBlocks: true, (value,distance) => Terrain.ExtractContents(value) != 0);
 				if (terrainRaycastResult.HasValue)
 				{
 					CellFace cellFace = terrainRaycastResult.Value.CellFace;

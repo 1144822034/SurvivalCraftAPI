@@ -1,6 +1,4 @@
 using Engine;
-using System.Collections.Generic;
-using System.Linq;
 using TemplatesDatabase;
 
 namespace Game
@@ -19,7 +17,7 @@ namespace Game
 
 		public Dictionary<Projectile, bool> m_projectiles = [];
 
-		public override int[] HandledBlocks => new int[0];
+		public override int[] HandledBlocks => [];
 
 		public UpdateOrder UpdateOrder => UpdateOrder.Default;
 
@@ -35,11 +33,11 @@ namespace Game
 			{
 				ScanProjectile(projectile);
 			}
-			m_subsystemProjectiles.ProjectileAdded += (projectile) =>
+			m_subsystemProjectiles.ProjectileAdded += projectile =>
 			{
 				ScanProjectile(projectile);
 			};
-			m_subsystemProjectiles.ProjectileRemoved += (projectile) =>
+			m_subsystemProjectiles.ProjectileRemoved += projectile =>
 			{
 				m_projectiles.Remove(projectile);
 			};

@@ -16,9 +16,9 @@ namespace Game
 
 		public UpdateOrder UpdateOrder => UpdateOrder.Default;
 
-		public bool m_recipeUpdateNeeded = false;
+		public bool m_recipeUpdateNeeded;
 
-		public bool m_recipeRefindNeeded = false;
+		public bool m_recipeRefindNeeded;
 		public int ResultSlotIndex => SlotsCount - 2;
 
 		public bool m_resetWhenSlotItemsRemoved;

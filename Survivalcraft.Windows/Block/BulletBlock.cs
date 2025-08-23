@@ -1,6 +1,5 @@
 using Engine;
 using Engine.Graphics;
-using System.Collections.Generic;
 
 namespace Game
 {
@@ -15,26 +14,26 @@ namespace Game
 
 		public static int Index = 214;
 
-		public static float[] m_sizes = new float[3]
-		{
+		public static float[] m_sizes =
+		[
 			1f,
 			1f,
 			0.33f
-		};
+		];
 
-		public static int[] m_textureSlots = new int[3]
-		{
+		public static int[] m_textureSlots =
+		[
 			229,
 			231,
 			229
-		};
+		];
 
-		public static float[] m_weaponPowers = new float[3]
-		{
+		public static float[] m_weaponPowers =
+		[
 			80f,
 			0f,
 			3.6f
-		};
+		];
 
 		public static float[] m_explosionPressures = new float[3];
 

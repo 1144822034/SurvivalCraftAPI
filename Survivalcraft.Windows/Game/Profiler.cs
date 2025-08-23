@@ -1,6 +1,4 @@
 using Engine;
-using System;
-using System.Collections.Generic;
 using System.Diagnostics;
 using System.Text;
 
@@ -45,7 +43,7 @@ namespace Game
 			{
 				if (m_sortNeeded)
 				{
-					m_sortedMetrics.Sort((Metric x, Metric y) => string.CompareOrdinal(x.Name, y.Name));
+					m_sortedMetrics.Sort((x,y) => string.CompareOrdinal(x.Name, y.Name));
 					m_sortNeeded = false;
 				}
 				return new ReadOnlyList<Metric>(m_sortedMetrics);

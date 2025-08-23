@@ -1,6 +1,5 @@
 using Engine;
 using GameEntitySystem;
-using System;
 using TemplatesDatabase;
 
 namespace Game
@@ -11,7 +10,7 @@ namespace Game
 		{
 			get
 			{
-				return new int[0];
+				return [];
 			}
 		}
 

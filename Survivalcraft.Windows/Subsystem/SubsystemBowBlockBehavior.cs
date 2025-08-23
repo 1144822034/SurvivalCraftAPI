@@ -1,6 +1,4 @@
 using Engine;
-using System.Collections.Generic;
-using System.Linq;
 using TemplatesDatabase;
 
 namespace Game
@@ -20,17 +18,17 @@ namespace Game
 		int m_bowBlockIndex;
 		int m_arrowBlockIndex;
 
-		public ArrowBlock.ArrowType[] m_supportedArrowTypes = new ArrowBlock.ArrowType[6]
-		{
+		public ArrowBlock.ArrowType[] m_supportedArrowTypes =
+		[
 			ArrowBlock.ArrowType.WoodenArrow,
 			ArrowBlock.ArrowType.StoneArrow,
 			ArrowBlock.ArrowType.CopperArrow,
 			ArrowBlock.ArrowType.IronArrow,
 			ArrowBlock.ArrowType.DiamondArrow,
 			ArrowBlock.ArrowType.FireArrow
-		};
+		];
 
-		public override int[] HandledBlocks => new int[0];
+		public override int[] HandledBlocks => [];
 
 		public override bool OnEditInventoryItem(IInventory inventory, int slotIndex, ComponentPlayer componentPlayer)
 		{
@@ -168,7 +166,6 @@ namespace Game
 				{
 					return 1;
 				}
-				return 0;
 			}
 			return 0;
 		}

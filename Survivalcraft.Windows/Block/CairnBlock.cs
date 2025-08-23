@@ -1,7 +1,5 @@
 using Engine;
 using Engine.Graphics;
-using System;
-using System.Collections.Generic;
 
 namespace Game
 {
@@ -28,10 +26,10 @@ namespace Game
 			m_mesh.AppendBlockMesh(blockMesh2);
 			m_standaloneMesh.AppendModelMeshPart(model.FindMesh("Cairn").MeshParts[0], boneAbsoluteTransform * Matrix.CreateScale(1.3f) * Matrix.CreateRotationX(-(float)Math.PI / 2f) * Matrix.CreateTranslation(0f, 0f, 0f), makeEmissive: false, flipWindingOrder: false, doubleSided: true, flipNormals: false, white);
 			m_standaloneMesh.AppendModelMeshPart(model.FindMesh("Wood").MeshParts[0], boneAbsoluteTransform * Matrix.CreateScale(1.3f) * Matrix.CreateRotationX(-(float)Math.PI / 2f) * Matrix.CreateTranslation(0f, 0f, 0f), makeEmissive: false, flipWindingOrder: false, doubleSided: true, flipNormals: false, white);
-			m_collisionBoxes = new BoundingBox[1]
-			{
-				blockMesh.CalculateBoundingBox(),
-			};
+			m_collisionBoxes =
+			[
+				blockMesh.CalculateBoundingBox()
+			];
 			base.Initialize();
 		}
 

@@ -26,11 +26,11 @@ namespace Game
 
 		public object m_highlightRaycastResult;
 
-		public static int[] m_drawOrders = new int[2]
-		{
+		public static int[] m_drawOrders =
+		[
 			1,
 			2000
-		};
+		];
 
 		public Point3? NearbyEditableCell
 		{
@@ -100,7 +100,7 @@ namespace Game
 			m_subsystemAnimatedTextures = Project.FindSubsystem<SubsystemAnimatedTextures>(throwOnError: true);
 			m_subsystemSky = Project.FindSubsystem<SubsystemSky>(throwOnError: true);
 			m_componentPlayer = Entity.FindComponent<ComponentPlayer>(throwOnError: true);
-			m_shader = new Shader(ModsManager.GetInPakOrStorageFile<string>("Shaders/Highlight", "vsh"), ModsManager.GetInPakOrStorageFile<string>("Shaders/Highlight", "psh"), new ShaderMacro[] { new("ShadowShader") });
+			m_shader = new Shader(ModsManager.GetInPakOrStorageFile<string>("Shaders/Highlight", "vsh"), ModsManager.GetInPakOrStorageFile<string>("Shaders/Highlight", "psh"),[new("ShadowShader")]);
 		}
 
 		public virtual void DrawRayHighlight(Camera camera)

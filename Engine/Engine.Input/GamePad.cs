@@ -3,8 +3,6 @@
 using System.Collections.Concurrent;
 using Axis = Android.Views.Axis;
 using Android.Views;
-using System.Collections.Generic;
-using System.Linq;
 #else
 using Silk.NET.Input;
 #endif
@@ -48,13 +46,13 @@ namespace Engine.Input
 
         public static double m_buttonNextRepeatTime = 0.04;
 
-        private static State[] m_states = new State[4]
-        {
+        private static State[] m_states =
+        [
             new(),
             new(),
             new(),
             new()
-        };
+        ];
         internal static void Initialize()
         {
 #if !ANDROID

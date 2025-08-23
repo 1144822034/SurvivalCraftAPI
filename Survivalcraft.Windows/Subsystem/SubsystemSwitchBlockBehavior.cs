@@ -2,7 +2,7 @@ namespace Game
 {
 	public class SubsystemSwitchBlockBehavior : SubsystemBlockBehavior
 	{
-		public override int[] HandledBlocks => new int[1] { 141 };
+		public override int[] HandledBlocks => [141];
 
 		public override bool OnEditInventoryItem(IInventory inventory, int slotIndex, ComponentPlayer componentPlayer)
 		{
@@ -34,7 +34,7 @@ namespace Game
 				if (num != data)
 				{
 					int value2 = Terrain.ReplaceData(value, num);
-					base.SubsystemTerrain.ChangeCell(x, y, z, value2);
+					SubsystemTerrain.ChangeCell(x, y, z, value2);
 				}
 			}));
 			return true;

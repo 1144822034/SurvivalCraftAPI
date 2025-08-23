@@ -1,7 +1,5 @@
 using Engine;
 using Engine.Graphics;
-using System.Collections.Generic;
-using System.Linq;
 
 namespace Game
 {
@@ -9,10 +7,10 @@ namespace Game
 	{
 		public static int Index = 208;
 
-		public BoundingBox[] m_collisionBoxes = new BoundingBox[1]
-		{
+		public BoundingBox[] m_collisionBoxes =
+		[
 			new(new Vector3(0f, 0f, 0f), new Vector3(1f, 0.0625f, 1f))
-		};
+		];
 
 		public CarpetBlock()
 		{
@@ -76,7 +74,7 @@ namespace Game
 			{
 				return null;
 			}
-			var list = ingredients.Where((string i) => !string.IsNullOrEmpty(i)).ToList();
+			var list = ingredients.Where(i => !string.IsNullOrEmpty(i)).ToList();
 			if (list.Count == 2)
 			{
 				int num = 0;

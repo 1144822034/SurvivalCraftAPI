@@ -1,6 +1,5 @@
 using Engine;
 using GameEntitySystem;
-using System.Linq;
 using TemplatesDatabase;
 
 namespace Game
@@ -59,7 +58,7 @@ namespace Game
 			m_componentFishModel = Entity.FindComponent<ComponentFishModel>(throwOnError: true);
 			m_componentSwimAwayBehavior = Entity.FindComponent<ComponentSwimAwayBehavior>(throwOnError: true);
 			string digInBlockName = valuesDictionary.GetValue<string>("DigInBlockName");
-			m_digInBlockIndex = (!string.IsNullOrEmpty(digInBlockName)) ? BlocksManager.Blocks.First((Block b) => b.GetType().Name == digInBlockName).BlockIndex : 0;
+			m_digInBlockIndex = (!string.IsNullOrEmpty(digInBlockName)) ? BlocksManager.Blocks.First(b => b.GetType().Name == digInBlockName).BlockIndex : 0;
 			m_maxDigInDepth = valuesDictionary.GetValue<float>("MaxDigInDepth");
 			m_componentCreature.ComponentBody.CollidedWithBody += delegate (ComponentBody b)
 			{

@@ -1,6 +1,3 @@
-using System;
-using System.Collections.Generic;
-
 namespace Engine.Serialization
 {
 	public abstract class OutputArchive : Archive
@@ -53,7 +50,7 @@ namespace Engine.Serialization
 
         public void Serialize(string name, Type type, object value)
         {
-            WriteObject(name, Archive.GetSerializeData(type, allowEmptySerializer: true), value);
+            WriteObject(name, GetSerializeData(type, allowEmptySerializer: true), value);
         }
 
 		public abstract void SerializeCollection<T>(string name, Func<T, string> itemNameFunc, IEnumerable<T> collection);
@@ -74,7 +71,7 @@ namespace Engine.Serialization
 
 		protected virtual void WriteObject(string name, SerializeData staticSerializeData, object value)
 		{
-			if (!staticSerializeData.UseObjectInfo || !base.UseObjectInfos)
+			if (!staticSerializeData.UseObjectInfo || !UseObjectInfos)
 			{
                 staticSerializeData.VerifySerializable();
 				staticSerializeData.Write(this, value);
@@ -101,7 +98,7 @@ namespace Engine.Serialization
 			}
 			else
 			{
-				SerializeData serializeData = Archive.GetSerializeData(type, allowEmptySerializer: false);
+				SerializeData serializeData = GetSerializeData(type, allowEmptySerializer: false);
                 objectId = (serializeData.UseObjectInfo ? new int?(m_nextObjectId++) : null);
 				WriteObjectInfo(value2, isReference: false, type);
                 staticSerializeData.VerifySerializable();

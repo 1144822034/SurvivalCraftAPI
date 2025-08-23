@@ -30,7 +30,6 @@ namespace Game
 				{
 					int value = m_subsystemTerrain.Terrain.GetCellValue(Coordinates.X,Coordinates.Y,Coordinates.Z);
 					if(value != 0) m_blockValue = value;
-					return m_blockValue;
 				}
 				return m_blockValue;
 			}

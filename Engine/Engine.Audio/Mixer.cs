@@ -1,4 +1,3 @@
-using System.Reflection;
 using Silk.NET.OpenAL;
 
 namespace Engine.Audio
@@ -108,7 +107,7 @@ namespace Engine.Audio
             AudioError error = AL.GetError();
 			if (error != AudioError.NoError)
 			{
-				Log.Error("OPENAL ERROR: " + error.ToString());
+				Log.Error("OPENAL ERROR: " + error);
 			}
 			return error;
         }
@@ -123,18 +122,15 @@ namespace Engine.Audio
 				AudioError error = AL.GetError();
 				if (error != AudioError.NoError)
 				{
-					Log.Error("OPENAL ERROR: " + error.ToString());
+					Log.Error("OPENAL ERROR: " + error);
 					//throw new InvalidOperationException(AL.GetErrorString(error));
 					return true;
 				}
-				else
-				{
-					return false;
-				}
-			}
+                return false;
+            }
 			catch (Exception e)
 			{
-				Log.Error("Unable to load OPENAL: " + e.ToString());
+				Log.Error("Unable to load OPENAL: " + e);
 				return true;
 			}
 		}

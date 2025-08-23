@@ -1,4 +1,3 @@
-using System;
 using System.Xml.Linq;
 
 namespace Game
@@ -83,7 +82,7 @@ namespace Game
 			{
 				m_stateMachine.Update();
 			}
-			catch (Exception e)
+			catch (Exception)
 			{
 				ScreensManager.SwitchScreen(ScreensManager.PreviousScreen);
                 ViewGameLogDialog dialog = new();

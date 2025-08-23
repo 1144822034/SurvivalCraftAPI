@@ -1,8 +1,4 @@
 using Engine;
-using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
 using System.Xml.Linq;
 
 namespace Game
@@ -187,7 +183,7 @@ namespace Game
 				try
 				{
 					ExternalContentEntry externalContentEntry1 = new ExternalContentEntry();
-					externalContentEntry1.Type = ExternalContentManager.ExtensionToType(System.IO.Path.GetExtension(ExternalContentManager.openFilePath));
+					externalContentEntry1.Type = ExternalContentManager.ExtensionToType(Path.GetExtension(ExternalContentManager.openFilePath));
 					externalContentEntry1.Path = ExternalContentManager.openFilePath;
 					externalContentEntry1.Size = new FileInfo(ExternalContentManager.openFilePath).Length;
 					externalContentEntry1.Time = new FileInfo(ExternalContentManager.openFilePath).CreationTime;
@@ -197,20 +193,18 @@ namespace Game
 					}
 					else
 					{
-                        DialogsManager.ShowDialog(null, new MessageDialog(LanguageControl.Get(GetType().Name, 13), LanguageControl.Get(GetType().Name, 14) + ExternalContentManager.openFilePath, LanguageControl.Yes, null, delegate (MessageDialogButton button)
-                        {
+                        DialogsManager.ShowDialog(null, new MessageDialog(LanguageControl.Get(GetType().Name, 13), LanguageControl.Get(GetType().Name, 14) + ExternalContentManager.openFilePath, LanguageControl.Yes, null, delegate {
 
                         }));
-                        Engine.Log.Error("Unsopported file type!");
+                        Log.Error("Unsopported file type!");
 					}
 				}
 				catch (Exception e)
 				{
-                    DialogsManager.ShowDialog(null, new MessageDialog(LanguageControl.Get(GetType().Name, 13), e.ToString(), LanguageControl.Yes, null, delegate (MessageDialogButton button)
-                    {
+                    DialogsManager.ShowDialog(null, new MessageDialog(LanguageControl.Get(GetType().Name, 13), e.ToString(), LanguageControl.Yes, null, delegate {
 
                     }));
-                    Engine.Log.Error("Open File" + ExternalContentManager.openFilePath + "Failed! " + e);
+                    Log.Error("Open File" + ExternalContentManager.openFilePath + "Failed! " + e);
 				}
 				ExternalContentManager.openFilePath = string.Empty;
             }
@@ -248,7 +242,7 @@ namespace Game
 				m_externalContentProvider.List(m_path, busyDialog.Progress, delegate (ExternalContentEntry entry)
 				{
 					DialogsManager.HideDialog(busyDialog);
-					var list = new List<ExternalContentEntry>(entry.ChildEntries.Where((ExternalContentEntry e) => EntryFilter(e)).Take(1000));
+					var list = new List<ExternalContentEntry>(entry.ChildEntries.Where(e => EntryFilter(e)).Take(1000));
 					m_directoryList.ClearItems();
 					list.Sort(delegate (ExternalContentEntry e1, ExternalContentEntry e2)
 					{

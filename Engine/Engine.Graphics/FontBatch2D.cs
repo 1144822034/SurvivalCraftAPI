@@ -6,11 +6,11 @@ namespace Engine.Graphics
 	{
         public FontBatch2D()
         {
-            base.Font = BitmapFont.DebugFont;
-            base.DepthStencilState = DepthStencilState.None;
-            base.RasterizerState = RasterizerState.CullNoneScissor;
-            base.BlendState = BlendState.AlphaBlend;
-            base.SamplerState = SamplerState.LinearClamp;
+            Font = BitmapFont.DebugFont;
+            DepthStencilState = DepthStencilState.None;
+            RasterizerState = RasterizerState.CullNoneScissor;
+            BlendState = BlendState.AlphaBlend;
+            SamplerState = SamplerState.LinearClamp;
         }
 
         public void QueueBatch(FontBatch2D batch, Matrix? matrix = null, Color? color = null)
@@ -46,17 +46,17 @@ namespace Engine.Graphics
 		{
 			vector = new Vector2(MathF.Cos(angle), MathF.Sin(angle));
 			vector2 = position + new Vector2(0f - vector.Y, vector.X) * CalculateTextOffset(text, 0, text.Length, anchor, scale, spacing).Y;
-			vector3 = vector * (scale.X * base.Font.Scale);
-			vector4 = new Vector2(0f - vector.Y, vector.X) * (scale.Y * base.Font.Scale);
+			vector3 = vector * (scale.X * Font.Scale);
+			vector4 = new Vector2(0f - vector.Y, vector.X) * (scale.Y * Font.Scale);
 		}
 		else
 		{
 			vector = new Vector2(1f, 0f);
 			vector2 = position + new Vector2(0f, 1f) * CalculateTextOffset(text, 0, text.Length, anchor, scale, spacing).Y;
-			vector3 = new Vector2(scale.X * base.Font.Scale, 0f);
-			vector4 = new Vector2(0f, scale.Y * base.Font.Scale);
+			vector3 = new Vector2(scale.X * Font.Scale, 0f);
+			vector4 = new Vector2(0f, scale.Y * Font.Scale);
 		}
-		Vector2 vector5 = spacing + base.Font.Spacing;
+		Vector2 vector5 = spacing + Font.Spacing;
 		vector2 += 0.5f * (vector3 * vector5.X + vector4 * vector5.Y);
 		int num = 0;
 		int num2 = 0;
@@ -65,7 +65,7 @@ namespace Engine.Graphics
 			if (i >= text.Length || text[i] == '\n')
 			{
 				Vector2 vector6 = vector2;
-				vector6 += (float)num * (base.Font.GlyphHeight + vector5.Y) * vector4;
+				vector6 += num * (Font.GlyphHeight + vector5.Y) * vector4;
 				vector6 += CalculateTextOffset(text, num2, i - num2, anchor, scale, spacing).X * vector;
 				if ((anchor & TextAnchor.DisableSnapToPixels) == 0)
 				{
@@ -100,11 +100,11 @@ namespace Engine.Graphics
 				{
 					c = ' ';
 				}
-				BitmapFont.Glyph glyph = base.Font.GetGlyph(c);
+				BitmapFont.Glyph glyph = Font.GetGlyph(c);
 				if (!glyph.IsBlank)
 				{
-					Vector2 vector2 = right * (glyph.TexCoord2.X - glyph.TexCoord1.X) * base.Font.Texture.Width;
-					Vector2 vector3 = down * (glyph.TexCoord2.Y - glyph.TexCoord1.Y) * base.Font.Texture.Height;
+					Vector2 vector2 = right * (glyph.TexCoord2.X - glyph.TexCoord1.X) * Font.Texture.Width;
+					Vector2 vector3 = down * (glyph.TexCoord2.Y - glyph.TexCoord1.Y) * Font.Texture.Height;
 					Vector2 vector4 = right * glyph.Offset.X + down * glyph.Offset.Y;
 					Vector2 vector5 = vector + vector4;
 					Vector2 vector6 = vector5 + vector2;
@@ -125,7 +125,7 @@ namespace Engine.Graphics
 					TriangleIndices.Array[count2 + 4] = count + 3;
 					TriangleIndices.Array[count2 + 5] =count;
 				}
-				float num = ((i < text.Length - 1) ? base.Font.GetKerning(c, text[i + 1]) : 0f);
+				float num = ((i < text.Length - 1) ? Font.GetKerning(c, text[i + 1]) : 0f);
 				vector += right * (glyph.Width - num + fullSpacing);
 			}
 		}

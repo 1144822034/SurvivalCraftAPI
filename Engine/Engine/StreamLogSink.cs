@@ -1,6 +1,3 @@
-using System;
-using System.IO;
-
 namespace Engine
 {
 	public class StreamLogSink : ILogSink

@@ -14,7 +14,7 @@ namespace Game
 			: base(subsystemElectricity, cellFace)
 		{
 			int voltageLevel = ButtonBlock.GetVoltageLevel(Terrain.ExtractData(value));
-			m_pressedVoltage = (float)voltageLevel / 15f;
+			m_pressedVoltage = voltageLevel / 15f;
 		}
 
 		public void Press()
@@ -22,9 +22,9 @@ namespace Game
 			if (!m_wasPressed && m_voltage == 0f)
 			{
 				m_wasPressed = true;
-				CellFace cellFace = base.CellFaces[0];
-				base.SubsystemElectricity.SubsystemAudio.PlaySound("Audio/Click", 1f, 0f, new Vector3(cellFace.X, cellFace.Y, cellFace.Z), 2f, autoDelay: true);
-				base.SubsystemElectricity.QueueElectricElementForSimulation(this, base.SubsystemElectricity.CircuitStep + 1);
+				CellFace cellFace = CellFaces[0];
+				SubsystemElectricity.SubsystemAudio.PlaySound("Audio/Click", 1f, 0f, new Vector3(cellFace.X, cellFace.Y, cellFace.Z), 2f, autoDelay: true);
+				SubsystemElectricity.QueueElectricElementForSimulation(this, SubsystemElectricity.CircuitStep + 1);
 			}
 		}
 
@@ -40,7 +40,7 @@ namespace Game
 			{
 				m_wasPressed = false;
 				m_voltage = m_pressedVoltage;
-				base.SubsystemElectricity.QueueElectricElementForSimulation(this, base.SubsystemElectricity.CircuitStep + 10);
+				SubsystemElectricity.QueueElectricElementForSimulation(this, SubsystemElectricity.CircuitStep + 10);
 			}
 			else
 			{

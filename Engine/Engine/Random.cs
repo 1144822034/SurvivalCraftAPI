@@ -1,4 +1,3 @@
-using System;
 using System.Diagnostics;
 
 namespace Engine
@@ -114,7 +113,7 @@ namespace Engine
         public float NormalFloat(float mean, float stddev)
         {
             float num = Float();
-            if ((double)num < 0.5)
+            if (num < 0.5)
             {
                 float num2 = MathF.Sqrt(-2f * MathF.Log(num));
                 float num3 = 0.322232425f + (num2 * (1f + (num2 * (0.3422421f + (num2 * (0.0204231218f + (num2 * 4.536422E-05f)))))));

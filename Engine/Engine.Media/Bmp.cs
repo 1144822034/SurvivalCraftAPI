@@ -1,5 +1,3 @@
-using System;
-using System.IO;
 using System.Runtime.InteropServices;
 using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.Formats.Bmp;
@@ -103,7 +101,7 @@ namespace Engine.Media
             {
                 throw new InvalidOperationException("Unsupported BMP pixel format.");
             }
-            BmpEncoder encoder = new BmpEncoder() { BitsPerPixel= bitsPerPixel };
+            BmpEncoder encoder = new BmpEncoder { BitsPerPixel= bitsPerPixel };
 			if (sync)
 			{
 				image.m_trueImage.SaveAsBmp(stream, encoder);

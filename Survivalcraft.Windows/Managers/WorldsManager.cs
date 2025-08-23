@@ -1,9 +1,5 @@
 using Engine;
 using Engine.Serialization;
-using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
 using System.Xml.Linq;
 using TemplatesDatabase;
 using XmlUtilities;
@@ -25,18 +21,18 @@ namespace Game
 		public static ReadOnlyList<WorldInfo> WorldInfos => new(m_worldInfos);
 
 		public static event Action<string> WorldDeleted;
-		public static bool Loaded = false;
+		public static bool Loaded;
 
 		public static void Initialize()
 		{
 			if (Loaded) return;
 			Storage.CreateDirectory(WorldsDirectoryName);
 			string text = ContentManager.Get<string>("NewWorldNames");
-			m_newWorldNames = new ReadOnlyList<string>(text.Split(new char[2]
-			{
+			m_newWorldNames = new ReadOnlyList<string>(text.Split(
+			[
 				'\n',
 				'\r'
-			}, StringSplitOptions.RemoveEmptyEntries));
+			], StringSplitOptions.RemoveEmptyEntries));
 			Loaded = true;
 		}
 
@@ -140,7 +136,7 @@ namespace Game
 		{
 			using (Stream targetStream = Storage.OpenFile(MakeSnapshotFilename(directoryName, snapshotName), OpenFileMode.Create))
 			{
-				PackWorld(directoryName, targetStream, (string fn) => Path.GetExtension(fn).ToLower() != ".snapshot", embedExternalContent: false);
+				PackWorld(directoryName, targetStream, fn => Path.GetExtension(fn).ToLower() != ".snapshot", embedExternalContent: false);
 			}
 		}
 
@@ -148,7 +144,7 @@ namespace Game
 		{
 			if (SnapshotExists(directoryName, snapshotName))
 			{
-				DeleteWorldContents(directoryName, (string fn) => Storage.GetExtension(fn).ToLower() != ".snapshot");
+				DeleteWorldContents(directoryName, fn => Storage.GetExtension(fn).ToLower() != ".snapshot");
 				using (Stream sourceStream = Storage.OpenFile(MakeSnapshotFilename(directoryName, snapshotName), OpenFileMode.Read))
 				{
 					UnpackWorld(directoryName, sourceStream, importEmbeddedExternalContent: false);
@@ -447,7 +443,7 @@ namespace Game
 				}
 				return null;
 			}
-			catch(Exception e3)
+			catch(Exception)
 			{
 				return null;
 			}

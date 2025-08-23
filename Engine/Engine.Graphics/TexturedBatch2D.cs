@@ -4,10 +4,10 @@ namespace Engine.Graphics
 	{
         public TexturedBatch2D()
         {
-            base.DepthStencilState = DepthStencilState.None;
-            base.RasterizerState = RasterizerState.CullNoneScissor;
-            base.BlendState = BlendState.AlphaBlend;
-            base.SamplerState = SamplerState.LinearClamp;
+            DepthStencilState = DepthStencilState.None;
+            RasterizerState = RasterizerState.CullNoneScissor;
+            BlendState = BlendState.AlphaBlend;
+            SamplerState = SamplerState.LinearClamp;
         }
 
         public void QueueBatch(TexturedBatch2D batch, Matrix? matrix = null, Color? color = null)

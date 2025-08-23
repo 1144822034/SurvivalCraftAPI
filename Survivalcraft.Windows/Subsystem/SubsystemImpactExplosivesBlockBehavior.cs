@@ -6,7 +6,7 @@ namespace Game
 	{
 		public SubsystemExplosions m_subsystemExplosions;
 
-		public override int[] HandledBlocks => new int[0];
+		public override int[] HandledBlocks => [];
 
 		public override bool OnHitAsProjectile(CellFace? cellFace, ComponentBody componentBody, WorldItem worldItem)
 		{

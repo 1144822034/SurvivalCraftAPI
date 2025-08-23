@@ -1,4 +1,5 @@
 using Engine.Media;
+
 namespace Game
 {
 	public class LabelWidget : FontTextWidget
@@ -24,7 +25,7 @@ namespace Game
 				{
 					if (value.StartsWith('[') && value.EndsWith(']'))
 					{
-						string[] xp = value.Substring(1, value.Length - 2).Split(new char[] { ':' });
+						string[] xp = value.Substring(1, value.Length - 2).Split(new[] { ':' });
 						m_text = xp.Length == 2 ? LanguageControl.GetContentWidgets(xp[0], xp[1]) : LanguageControl.Get("Usual", value);
 					}
 					else
@@ -36,7 +37,7 @@ namespace Game
 
 			}
 		}
-		public LabelWidget() : base()
+		public LabelWidget()
 		{
 			Font = BitmapFont;
 		}

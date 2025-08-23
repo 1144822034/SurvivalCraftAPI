@@ -72,30 +72,30 @@ namespace Game
 				}
 				else if (m_subsystemPlayers.PlayersData.Count == 2)
 				{
-					array = new ScreenLayout[3]
-					{
+					array =
+					[
 						ScreenLayout.DoubleVertical,
 						ScreenLayout.DoubleHorizontal,
 						ScreenLayout.DoubleOpposite
-					};
+					];
 				}
 				else if (m_subsystemPlayers.PlayersData.Count == 3)
 				{
-					array = new ScreenLayout[4]
-					{
+					array =
+					[
 						ScreenLayout.TripleVertical,
 						ScreenLayout.TripleHorizontal,
 						ScreenLayout.TripleEven,
 						ScreenLayout.TripleOpposite
-					};
+					];
 				}
 				else if (m_subsystemPlayers.PlayersData.Count == 4)
 				{
-					array = new ScreenLayout[2]
-					{
+					array =
+					[
 						ScreenLayout.Quadruple,
 						ScreenLayout.QuadrupleOpposite
-					};
+					];
 				}
 				if (array != null)
 				{

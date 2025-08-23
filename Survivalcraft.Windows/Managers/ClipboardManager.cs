@@ -1,19 +1,25 @@
+#if WINDOWS || LINUX
+using TextCopy;
+#endif
+
 namespace Game
 {
 	public static class ClipboardManager
 	{
 #if ANDROID
-		internal static Android.Content.ClipboardManager m_clipboardManager {get;} =
- (Android.Content.ClipboardManager)Engine.Window.Activity.GetSystemService("clipboard");
+		internal static Android.Content.ClipboardManager? m_clipboardManager {get;} = Engine.Window.Activity.GetSystemService("clipboard") as Android.Content.ClipboardManager;
 		public static string ClipboardString
 		{
 			get
 			{
-				return m_clipboardManager.Text;
+				return m_clipboardManager?.Text ?? string.Empty;
 			}
 			set
 			{
-				m_clipboardManager.Text = value;
+				if(m_clipboardManager != null)
+				{
+					m_clipboardManager.Text = value;
+				}
 			}
 		}
 #elif WINDOWS || LINUX
@@ -21,11 +27,11 @@ namespace Game
 		{
 			get
 			{
-				return TextCopy.ClipboardService.GetText()??"";
+				return ClipboardService.GetText()??"";
 			}
 			set
 			{
-				TextCopy.ClipboardService.SetText(value??"");
+				ClipboardService.SetText(value??"");
 			}
 		}
 #else

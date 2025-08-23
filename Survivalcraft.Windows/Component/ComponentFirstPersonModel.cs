@@ -1,7 +1,6 @@
 using Engine;
 using Engine.Graphics;
 using GameEntitySystem;
-using System;
 using TemplatesDatabase;
 
 namespace Game
@@ -44,10 +43,10 @@ namespace Game
 
 		public static LitShader LitShader = new(ShaderCodeManager.GetFast("Shaders/Lit.vsh"), ShaderCodeManager.GetFast("Shaders/Lit.psh"), 2, useEmissionColor: false, useVertexColor: false, useTexture: true, useFog: false, useAlphaThreshold: false);
 
-		public static int[] m_drawOrders = new int[1]
-		{
+		public static int[] m_drawOrders =
+		[
 			1
-		};
+		];
 
 		public Vector3 ItemOffsetOrder
 		{
@@ -123,7 +122,7 @@ namespace Game
 					var m = Matrix.CreateFromQuaternion(m_componentPlayer.ComponentCreatureModel.EyeRotation);
 					m.Translation = m_componentPlayer.ComponentCreatureModel.EyePosition;
 
-					//Ã¿¸ôÒ»¶ÎÊ±¼äÖØĞÂ¼ÆËã¹âÕÕ¡£ÕâÁ½¶ÎÔ­±¾·Ö±ğÔÚ¶ÔÓ¦µÄ»æÖÆÇ°Ãæ£¬Îª±ÜÃâ±»½Ó¿ÚÌø¹ıËùÒÔÒÆµ½Ç°ÃæÀ´
+					//Ã¿ï¿½ï¿½Ò»ï¿½ï¿½Ê±ï¿½ï¿½ï¿½ï¿½ï¿½Â¼ï¿½ï¿½ï¿½ï¿½ï¿½Õ¡ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ô­ï¿½ï¿½ï¿½Ö±ï¿½ï¿½Ú¶ï¿½Ó¦ï¿½Ä»ï¿½ï¿½ï¿½Ç°ï¿½æ£¬Îªï¿½ï¿½ï¿½â±»ï¿½Ó¿ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æµï¿½Ç°ï¿½ï¿½ï¿½ï¿½
 					if(m_value != 0)
 					{
 						if(num5 >= 0 && num5 <= 255)
@@ -157,7 +156,7 @@ namespace Game
 					if(!skipVanilla)
 					{
 						if(m_value != 0)
-						{//ÊÖ³ÖÎïÆ·Ê±»æÖÆ·½¿éÍ¼±ê
+						{//ï¿½Ö³ï¿½ï¿½ï¿½Æ·Ê±ï¿½ï¿½ï¿½Æ·ï¿½ï¿½ï¿½Í¼ï¿½ï¿½
 							int num6 = Terrain.ExtractContents(m_value);
 							Block block = BlocksManager.Blocks[num6];
 							Vector3 vector = (block.GetFirstPersonRotation(m_value) * ((float)Math.PI / 180f)) + m_itemRotation;
@@ -176,7 +175,7 @@ namespace Game
 							m_primitivesRenderer.Flush(camera.ProjectionMatrix);
 						}
 						else
-						{//¿ÕÊÖÊ±»æÖÆµÚÒ»ÈË³ÆÊÖ±ÛÄ£ĞÍ
+						{//ï¿½ï¿½ï¿½ï¿½Ê±ï¿½ï¿½ï¿½Æµï¿½Ò»ï¿½Ë³ï¿½ï¿½Ö±ï¿½Ä£ï¿½ï¿½
 							var position4 = new Vector3(0.25f,-0.3f,-0.05f);
 							Matrix matrix2 = Matrix.CreateScale(0.01f) * Matrix.CreateRotationX(0.8f) * Matrix.CreateRotationY(0.4f) * identity * Matrix.CreateTranslation(position4) * Matrix.CreateFromYawPitchRoll(m_lagAngles.X,m_lagAngles.Y,0f) * m * camera.ViewMatrix;
 							Display.DepthStencilState = DepthStencilState.Default;

@@ -1,9 +1,6 @@
 using Engine;
 using Engine.Graphics;
 using Game;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Xml.Linq;
 
 public class ManageContentScreen : Screen
@@ -156,12 +153,12 @@ public class ManageContentScreen : Screen
 			}
 			return containerWidget;
 		};
-		m_contentList.ItemClicked += (obj) =>
+		m_contentList.ItemClicked += obj =>
 		{
 			var listItem = (ListItem)obj;
 			if (listItem.Type == ExternalContentType.Mod && listItem.IsClick)
 			{
-				var messageDialog = new MessageDialog(listItem.ModEntity.modInfo.Name, listItem.ModEntity.modInfo.Description, LanguageControl.Ok, LanguageControl.Cancel, (btn) =>
+				var messageDialog = new MessageDialog(listItem.ModEntity.modInfo.Name, listItem.ModEntity.modInfo.Description, LanguageControl.Ok, LanguageControl.Cancel, btn =>
 				{
 					DialogsManager.HideAllDialogs();
 					listItem.IsClick = false;
@@ -257,7 +254,7 @@ public class ManageContentScreen : Screen
 				ExternalContentType.CharacterSkin,
 				ExternalContentType.FurniturePack
 			};
-			DialogsManager.ShowDialog(null, new ListSelectionDialog(LanguageControl.Get(fName, 7), list, 60f, (object item) => GetFilterDisplayName((ExternalContentType)item), delegate (object item)
+			DialogsManager.ShowDialog(null, new ListSelectionDialog(LanguageControl.Get(fName, 7), list, 60f, item => GetFilterDisplayName((ExternalContentType)item), delegate (object item)
 			{
 				if ((ExternalContentType)item != m_filter)
 				{
@@ -270,7 +267,7 @@ public class ManageContentScreen : Screen
 		{
 			if (changeed)
 			{
-				DialogsManager.ShowDialog(this, new MessageDialog(LanguageControl.Warning, LanguageControl.Get(GetType().Name, 11), LanguageControl.Yes, LanguageControl.No, (btn) =>
+				DialogsManager.ShowDialog(this, new MessageDialog(LanguageControl.Warning, LanguageControl.Get(GetType().Name, 11), LanguageControl.Yes, LanguageControl.No, btn =>
 				{
 					DialogsManager.HideAllDialogs();
 					if (btn == MessageDialogButton.Button1)
@@ -303,7 +300,7 @@ public class ManageContentScreen : Screen
 					Type = ExternalContentType.BlocksTexture,
 					DisplayName = BlocksTexturesManager.GetDisplayName(name2),
 					CreationTime = BlocksTexturesManager.GetCreationDate(name2),
-					UseCount = WorldsManager.WorldInfos.Count((WorldInfo wi) => wi.WorldSettings.BlocksTextureName == name2)
+					UseCount = WorldsManager.WorldInfos.Count(wi => wi.WorldSettings.BlocksTextureName == name2)
 				});
 			}
 		}
@@ -319,7 +316,7 @@ public class ManageContentScreen : Screen
 					Type = ExternalContentType.CharacterSkin,
 					DisplayName = CharacterSkinsManager.GetDisplayName(name),
 					CreationTime = CharacterSkinsManager.GetCreationDate(name),
-					UseCount = WorldsManager.WorldInfos.Count((WorldInfo wi) => wi.PlayerInfos.Any((PlayerInfo pi) => pi.CharacterSkinName == name))
+					UseCount = WorldsManager.WorldInfos.Count(wi => wi.PlayerInfos.Any(pi => pi.CharacterSkinName == name))
 				});
 			}
 		}

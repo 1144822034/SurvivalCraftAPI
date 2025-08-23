@@ -1,5 +1,3 @@
-using System;
-using System.Linq;
 using Engine;
 using Engine.Serialization;
 
@@ -7,12 +5,12 @@ namespace Game;
 
 public struct FloatCurve
 {
-	[HumanReadableConverter(new Type[] { typeof(FloatCurve) })]
+	[HumanReadableConverter(typeof(FloatCurve))]
 	public class HumanReadableConverter : IHumanReadableConverter
 	{
 		public string ConvertToString(object value)
 		{
-			return Engine.Serialization.HumanReadableConverter.ValuesListToString('|', ((FloatCurve)value).Points ?? new Vector2[0]);
+			return Engine.Serialization.HumanReadableConverter.ValuesListToString('|', ((FloatCurve)value).Points ?? []);
 		}
 
 		public object ConvertFromString(Type type, string data)

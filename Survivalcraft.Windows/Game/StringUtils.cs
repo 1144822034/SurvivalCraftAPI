@@ -1,13 +1,11 @@
-using Engine;
-using System;
 using System.Text;
 
 namespace Game
 {
 	public static class StringUtils
 	{
-		public static char[] m_digits = new char[16]
-		{
+		public static char[] m_digits =
+		[
 			'0',
 			'1',
 			'2',
@@ -24,7 +22,7 @@ namespace Game
 			'D',
 			'E',
 			'F'
-		};
+		];
 
 		public static int Compare(StringBuilder s1, string s2)
 		{

@@ -1,7 +1,5 @@
 using Engine;
 using Engine.Graphics;
-using System;
-using System.Collections.Generic;
 
 namespace Game
 {
@@ -75,10 +73,10 @@ namespace Game
 				boundingBox.Max.X = MathUtils.Saturate(boundingBox.Max.X);
 				boundingBox.Max.Y = MathUtils.Saturate(boundingBox.Max.Y);
 				boundingBox.Max.Z = MathUtils.Saturate(boundingBox.Max.Z);
-				m_collisionBoxes[i] = new BoundingBox[1]
-				{
+				m_collisionBoxes[i] =
+				[
 					boundingBox
-				};
+				];
 			}
 			m_standaloneBlockMesh.AppendModelMeshPart(model.FindMesh("Post").MeshParts[0], boneAbsoluteTransform * Matrix.CreateTranslation(0f, -0.5f, 0f), makeEmissive: false, flipWindingOrder: false, doubleSided: false, flipNormals: false, m_postColor);
 			m_standaloneBlockMesh.AppendModelMeshPart(model.FindMesh("Planks").MeshParts[0], boneAbsoluteTransform2 * Matrix.CreateTranslation(0f, -0.5f, 0f), makeEmissive: false, flipWindingOrder: false, doubleSided: false, flipNormals: false, Color.White);

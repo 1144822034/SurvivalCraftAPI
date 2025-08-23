@@ -1,7 +1,4 @@
 using Engine;
-using System;
-using System.IO;
-using System.Threading;
 
 namespace Game
 {
@@ -42,7 +39,7 @@ namespace Game
 				failure(new FileNotFoundException());
 				return;
 			}
-			else fileStream = File.OpenRead(path);
+			fileStream = File.OpenRead(path);
 			ThreadPool.QueueUserWorkItem(delegate
 			{
 				try
@@ -63,9 +60,9 @@ namespace Game
 
 		public void List(string path, CancellableProgress progress, Action<ExternalContentEntry> success, Action<Exception> failure)
 		{
-			ExternalContentEntry entry = default;
+			ExternalContentEntry entry = null;
 #pragma warning disable CS0219 // 变量已被赋值，但从未使用过它的值
-			Exception e = default;
+			Exception e = null;
 #pragma warning restore CS0219 // 变量已被赋值，但从未使用过它的值
 			ThreadPool.QueueUserWorkItem(delegate
 			{

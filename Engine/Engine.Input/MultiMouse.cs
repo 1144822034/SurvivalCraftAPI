@@ -2,7 +2,7 @@
 
 // Engine, Version=1.0.8083.41417, Culture=neutral, PublicKeyToken=null
 // Engine.Input.MultiMouse
-using System;
+
 using Engine;
 using Engine.Input;
 
@@ -10,13 +10,15 @@ public static class MultiMouse
 {
 	private class MouseData
 	{
-		public bool IsConnected;
+        // ReSharper disable MemberHidesStaticFromOuterClass
+        public bool IsConnected;
 
-		public Point2 MousePosition;
+        public Point2 MousePosition;
 
 		public Point2 MouseMovement;
 
 		public int MouseWheelMovement;
+        // ReSharper restore MemberHidesStaticFromOuterClass
 
 		public bool[] MouseButtonsDownArray = new bool[Enum.GetValues(typeof(MouseButton)).Length];
 
@@ -25,13 +27,13 @@ public static class MultiMouse
 		public bool[] MouseButtonsUpOnceArray = new bool[Enum.GetValues(typeof(MouseButton)).Length];
 	}
 
-	private static MouseData[] _MouseData = new MouseData[4]
-	{
-		new MouseData(),
+	private static MouseData[] _MouseData =
+    [
+        new MouseData(),
 		new MouseData(),
 		new MouseData(),
 		new MouseData()
-	};
+    ];
 
 	public static event Action<MultiMouseEvent> MouseMove;
 
@@ -106,9 +108,9 @@ public static class MultiMouse
 			MouseData obj = _MouseData[mouseIndex];
 			obj.MouseButtonsDownArray[(int)mouseButton] = true;
 			obj.MouseButtonsDownOnceArray[(int)mouseButton] = true;
-			if (MultiMouse.MouseDown != null)
+			if (MouseDown != null)
 			{
-				MultiMouse.MouseDown(new MultiMouseButtonEvent
+				MouseDown(new MultiMouseButtonEvent
 				{
 					MouseIndex = mouseIndex,
 					Button = mouseButton,
@@ -125,9 +127,9 @@ public static class MultiMouse
 			MouseData obj = _MouseData[mouseIndex];
 			obj.MouseButtonsDownArray[(int)mouseButton] = false;
 			obj.MouseButtonsUpOnceArray[(int)mouseButton] = true;
-			if (MultiMouse.MouseUp != null)
+			if (MouseUp != null)
 			{
-				MultiMouse.MouseUp(new MultiMouseButtonEvent
+				MouseUp(new MultiMouseButtonEvent
 				{
 					MouseIndex = mouseIndex,
 					Button = mouseButton,
@@ -147,9 +149,9 @@ public static class MultiMouse
 			mouseData.MousePosition += new Point2(x, y);
 			mouseData.MousePosition.X = Math.Clamp(mouseData.MousePosition.X, 0, Window.Size.X - 1);
 			mouseData.MousePosition.Y = Math.Clamp(mouseData.MousePosition.Y, 0, Window.Size.Y - 1);
-			if (MultiMouse.MouseMove != null)
+			if (MouseMove != null)
 			{
-				MultiMouse.MouseMove(new MultiMouseEvent
+				MouseMove(new MultiMouseEvent
 				{
 					MouseIndex = mouseIndex,
 					Position = mouseData.MousePosition

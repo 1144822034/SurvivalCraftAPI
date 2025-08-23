@@ -1,6 +1,3 @@
-using System;
-using System.Collections.Generic;
-
 namespace Engine
 {
 	public struct BoundingRectangle : IEquatable<BoundingRectangle>

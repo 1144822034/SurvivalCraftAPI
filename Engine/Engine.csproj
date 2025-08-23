@@ -1,6 +1,6 @@
 <Project Sdk="Microsoft.NET.Sdk">
     <PropertyGroup>
-        <NoWarn>$(NoWarn);CA1416;1591;1573</NoWarn>
+        <NoWarn>$(NoWarn);CA1416;1591;1573;CS0067</NoWarn>
         <RootNamespace>Engine</RootNamespace>
         <AssemblyName Condition="'$(Configuration)' != 'Direct3D11'">Engine</AssemblyName>
         <AssemblyName Condition="'$(Configuration)' == 'Direct3D11'">EngineDirect3D11</AssemblyName>

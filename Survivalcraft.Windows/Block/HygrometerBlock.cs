@@ -1,6 +1,5 @@
 using Engine;
 using Engine.Graphics;
-using System;
 
 namespace Game
 {
@@ -31,10 +30,10 @@ namespace Game
 			for (int i = 0; i < 4; i++)
 			{
 				m_matricesByData[i] = Matrix.CreateScale(5f) * Matrix.CreateTranslation(0.95f, 0.15f, 0.5f) * Matrix.CreateTranslation(-0.5f, 0f, -0.5f) * Matrix.CreateRotationY((i + 1) * (float)Math.PI / 2f) * Matrix.CreateTranslation(0.5f, 0f, 0.5f);
-				m_collisionBoxesByData[i] = new BoundingBox[1]
-				{
+				m_collisionBoxesByData[i] =
+				[
 					m_caseMesh.CalculateBoundingBox(m_matricesByData[i])
-				};
+				];
 			}
 			base.Initialize();
 		}

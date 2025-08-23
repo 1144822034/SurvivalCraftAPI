@@ -1,5 +1,4 @@
 using Engine;
-using System.Collections.Generic;
 using TemplatesDatabase;
 
 namespace Game
@@ -14,7 +13,7 @@ namespace Game
 
 		public UpdateOrder UpdateOrder => UpdateOrder.Default;
 
-		public override int[] HandledBlocks => new int[0];
+		public override int[] HandledBlocks => [];
 
 		public virtual void Update(float dt)
 		{

@@ -1,5 +1,3 @@
-using System;
-
 namespace Engine
 {
 	public struct Color : IEquatable<Color>
@@ -251,7 +249,7 @@ namespace Engine
 
         public static Color LerpNotSaturated(Color c1, Color c2, float f)
         {
-            return new Color((byte)MathUtils.Lerp((int)c1.R, (int)c2.R, f), (byte)MathUtils.Lerp((int)c1.G, (int)c2.G, f), (byte)MathUtils.Lerp((int)c1.B, (int)c2.B, f), (byte)MathUtils.Lerp((int)c1.A, (int)c2.A, f));
+            return new Color((byte)MathUtils.Lerp(c1.R, c2.R, f), (byte)MathUtils.Lerp(c1.G, c2.G, f), (byte)MathUtils.Lerp(c1.B, c2.B, f), (byte)MathUtils.Lerp(c1.A, c2.A, f));
         }
 
 		public static Color PremultiplyAlpha(Color c)
@@ -266,12 +264,12 @@ namespace Engine
 
         public static Color MultiplyAlphaOnly(Color c, float s)
         {
-            return new Color(c.R, c.G, c.B, (byte)Math.Clamp((float)(int)c.A * s, 0f, 255f));
+            return new Color(c.R, c.G, c.B, (byte)Math.Clamp(c.A * s, 0f, 255f));
         }
 
         public static Color MultiplyAlphaOnlyNotSaturated(Color c, float s)
         {
-            return new Color(c.R, c.G, c.B, (byte)((float)(int)c.A * s));
+            return new Color(c.R, c.G, c.B, (byte)(c.A * s));
         }
 
 		public static Color MultiplyColorOnly(Color c, float s)
@@ -281,22 +279,22 @@ namespace Engine
 
         public static Color MultiplyColorOnlyNotSaturated(Color c, float s)
         {
-            return new Color((byte)((float)(int)c.R * s), (byte)((float)(int)c.G * s), (byte)((float)(int)c.B * s), c.A);
+            return new Color((byte)(c.R * s), (byte)(c.G * s), (byte)(c.B * s), c.A);
         }
 
         public static Color MultiplyColorOnlyNotSaturated(Color c, Vector3 s)
         {
-            return new Color((byte)((float)(int)c.R * s.X), (byte)((float)(int)c.G * s.Y), (byte)((float)(int)c.B * s.Z), c.A);
+            return new Color((byte)(c.R * s.X), (byte)(c.G * s.Y), (byte)(c.B * s.Z), c.A);
         }
 
         public static Color MultiplyNotSaturated(Color c, float s)
         {
-            return new Color((byte)((float)(int)c.R * s), (byte)((float)(int)c.G * s), (byte)((float)(int)c.B * s), (byte)((float)(int)c.A * s));
+            return new Color((byte)(c.R * s), (byte)(c.G * s), (byte)(c.B * s), (byte)(c.A * s));
         }
 
         public static Color MultiplyNotSaturated(Color c, Vector4 s)
         {
-            return new Color((byte)((float)(int)c.R * s.X), (byte)((float)(int)c.G * s.Y), (byte)((float)(int)c.B * s.Z), (byte)((float)(int)c.A * s.W));
+            return new Color((byte)(c.R * s.X), (byte)(c.G * s.Y), (byte)(c.B * s.Z), (byte)(c.A * s.W));
         }
 
 		public static Vector3 RgbToHsv(Vector3 rgb)
@@ -402,12 +400,12 @@ namespace Engine
 
         public static Color operator *(Color c, Vector4 s)
         {
-            return new Color((byte)Math.Clamp((float)(int)c.R * s.X, 0f, 255f), (byte)Math.Clamp((float)(int)c.G * s.Y, 0f, 255f), (byte)Math.Clamp((float)(int)c.B * s.Z, 0f, 255f), (byte)Math.Clamp((float)(int)c.A * s.W, 0f, 255f));
+            return new Color((byte)Math.Clamp(c.R * s.X, 0f, 255f), (byte)Math.Clamp(c.G * s.Y, 0f, 255f), (byte)Math.Clamp(c.B * s.Z, 0f, 255f), (byte)Math.Clamp(c.A * s.W, 0f, 255f));
         }
 
         public static Color operator *(Vector4 s, Color c)
         {
-            return new Color((byte)Math.Clamp((float)(int)c.R * s.X, 0f, 255f), (byte)Math.Clamp((float)(int)c.G * s.Y, 0f, 255f), (byte)Math.Clamp((float)(int)c.B * s.Z, 0f, 255f), (byte)Math.Clamp((float)(int)c.A * s.W, 0f, 255f));
+            return new Color((byte)Math.Clamp(c.R * s.X, 0f, 255f), (byte)Math.Clamp(c.G * s.Y, 0f, 255f), (byte)Math.Clamp(c.B * s.Z, 0f, 255f), (byte)Math.Clamp(c.A * s.W, 0f, 255f));
         }
 
 		public static Color operator +(Color c1, Color c2)

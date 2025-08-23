@@ -1,4 +1,3 @@
-using System;
 using System.Drawing;
 
 namespace Engine.Serialization
@@ -12,8 +11,8 @@ namespace Engine.Serialization
 			{
 				var color = (System.Drawing.Color)value;
                 return color.A != byte.MaxValue
-                    ? HumanReadableConverter.ValuesListToString<byte>(',', color.A, color.R, color.G, color.B)
-                    : HumanReadableConverter.ValuesListToString<byte>(',', color.R, color.G, color.B);
+                    ? HumanReadableConverter.ValuesListToString(',', color.A, color.R, color.G, color.B)
+                    : HumanReadableConverter.ValuesListToString(',', color.R, color.G, color.B);
             }
 
             public object ConvertFromString(Type type, string data)
@@ -45,7 +44,7 @@ namespace Engine.Serialization
 			public string ConvertToString(object value)
 			{
 				var point = (Point)value;
-				return HumanReadableConverter.ValuesListToString<int>(',', point.X, point.Y);
+				return HumanReadableConverter.ValuesListToString(',', point.X, point.Y);
 			}
 
 			public object ConvertFromString(Type type, string data)
@@ -63,7 +62,7 @@ namespace Engine.Serialization
 			public string ConvertToString(object value)
 			{
 				var pointF = (PointF)value;
-				return HumanReadableConverter.ValuesListToString<float>(',', pointF.X, pointF.Y);
+				return HumanReadableConverter.ValuesListToString(',', pointF.X, pointF.Y);
 			}
 
 			public object ConvertFromString(Type type, string data)
@@ -81,7 +80,7 @@ namespace Engine.Serialization
 			public string ConvertToString(object value)
 			{
 				var size = (Size)value;
-				return HumanReadableConverter.ValuesListToString<int>(',', size.Width, size.Height);
+				return HumanReadableConverter.ValuesListToString(',', size.Width, size.Height);
 			}
 
 			public object ConvertFromString(Type type, string data)
@@ -99,7 +98,7 @@ namespace Engine.Serialization
 			public string ConvertToString(object value)
 			{
 				var sizeF = (SizeF)value;
-				return HumanReadableConverter.ValuesListToString<float>(',', sizeF.Width, sizeF.Height);
+				return HumanReadableConverter.ValuesListToString(',', sizeF.Width, sizeF.Height);
 			}
 
 			public object ConvertFromString(Type type, string data)
@@ -117,7 +116,7 @@ namespace Engine.Serialization
 			public string ConvertToString(object value)
 			{
 				var rectangle = (System.Drawing.Rectangle)value;
-				return HumanReadableConverter.ValuesListToString<int>(',', rectangle.X, rectangle.Y, rectangle.Width, rectangle.Height);
+				return HumanReadableConverter.ValuesListToString(',', rectangle.X, rectangle.Y, rectangle.Width, rectangle.Height);
 			}
 
 			public object ConvertFromString(Type type, string data)
@@ -135,7 +134,7 @@ namespace Engine.Serialization
 			public string ConvertToString(object value)
 			{
 				var rectangleF = (RectangleF)value;
-				return HumanReadableConverter.ValuesListToString<float>(',', rectangleF.X, rectangleF.Y, rectangleF.Width, rectangleF.Height);
+				return HumanReadableConverter.ValuesListToString(',', rectangleF.X, rectangleF.Y, rectangleF.Width, rectangleF.Height);
 			}
 
 			public object ConvertFromString(Type type, string data)

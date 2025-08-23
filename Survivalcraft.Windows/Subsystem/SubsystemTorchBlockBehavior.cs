@@ -1,5 +1,4 @@
 using Engine;
-using System.Collections.Generic;
 using TemplatesDatabase;
 
 namespace Game
@@ -10,12 +9,12 @@ namespace Game
 
 		public Dictionary<Point3, FireParticleSystem> m_particleSystemsByCell = [];
 
-		public override int[] HandledBlocks => new int[3]
-		{
+		public override int[] HandledBlocks =>
+		[
 			31,
 			17,
 			132
-		};
+		];
 
 		public override void OnNeighborBlockChanged(int x, int y, int z, int neighborX, int neighborY, int neighborZ)
 		{

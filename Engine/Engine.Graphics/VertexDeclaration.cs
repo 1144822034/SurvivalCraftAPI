@@ -1,7 +1,3 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-
 namespace Engine.Graphics
 {
 	public  class VertexDeclaration : IEquatable<VertexDeclaration>

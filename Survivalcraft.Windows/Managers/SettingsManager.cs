@@ -1,14 +1,11 @@
 using Engine;
-using Engine.Serialization;
-using System;
-using System.IO;
-using System.Linq;
+using Engine.Input;
 using System.Reflection;
 using System.Text;
 using System.Xml.Linq;
 using TemplatesDatabase;
 using XmlUtilities;
-using Engine.Input;
+
 namespace Game
 {
 	public static class SettingsManager
@@ -634,14 +631,11 @@ namespace Game
 			{//原版设置
 				return result;
 			}
-			else
-			{
-				foreach(var item in ModSettingsManager.ModKeyboardMapSettings.Values)
-				{//模组设置
-					if(item.TryGetValue(keyName,out object result2))
-					{
-						return result2;
-					}
+			foreach(var item in ModSettingsManager.ModKeyboardMapSettings.Values)
+			{//模组设置
+				if(item.TryGetValue(keyName,out object result2))
+				{
+					return result2;
 				}
 			}
 			return throwIfNotFound ? throw new ArgumentException(string.Format(LanguageControl.Get(fName,"1"),keyName)) : null;
@@ -675,14 +669,11 @@ namespace Game
 			{//原版设置
 				return Convert.ToInt32(result);
 			}
-			else
-			{
-				foreach(var item in ModSettingsManager.ModCameraManageSettings.Values)
-				{//模组设置
-					if(item.TryGetValue(keyName,out object result2))
-					{
-						return Convert.ToInt32(result2);
-					}
+			foreach(var item in ModSettingsManager.ModCameraManageSettings.Values)
+			{//模组设置
+				if(item.TryGetValue(keyName,out object result2))
+				{
+					return Convert.ToInt32(result2);
 				}
 			}
 			return throwIfNotFound ? throw new ArgumentException(string.Format(LanguageControl.Get(fName,"2"),keyName)) : -1;
@@ -771,10 +762,7 @@ namespace Game
 					Log.Information(info);
 					return true;
 				}
-				else
-				{
-					return false;
-				}
+				return false;
 			}
 			catch (Exception e)
 			{
@@ -800,7 +788,7 @@ namespace Game
 					ModsManager.SaveConfigs();
 					ModSettingsManager.SaveModSettings();
 				}
-				catch(Exception _)
+				catch(Exception)
 				{
 					//ignore
 				}

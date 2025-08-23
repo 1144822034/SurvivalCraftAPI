@@ -1,24 +1,19 @@
-using System;
-using System.IO;
-using System.Linq;
-using System.Xml.Linq;
-using System.Reflection;
-using System.Collections.Generic;
-
 using Engine;
 using Game.IContentReader;
-using System.Linq.Expressions;
+using System.Reflection;
+using System.Xml.Linq;
+using StringReader = Game.IContentReader.StringReader;
 
 namespace Game
 {
 	public class SurvivalCraftModEntity : ModEntity
 	{
-		public const string fName = "SurvivalCraftModEntity";
+		public new const string fName = "SurvivalCraftModEntity";
 		public SurvivalCraftModEntity()
 		{
 			var readers = new List<IContentReader.IContentReader>();
-			readers.AddRange(new IContentReader.IContentReader[]
-			{
+			readers.AddRange(
+			[
 				new AssemblyReader(),
 				new BitmapFontReader(),
 				new DaeModelReader(),
@@ -32,12 +27,13 @@ namespace Game
 				new ShaderReader(),
 				new SoundBufferReader(),
 				new StreamingSourceReader(),
-				new IContentReader.StringReader(),
+				new StringReader(),
 				new SubtextureReader(),
 				new Texture2DReader(),
 				new XmlReader(),
 				new ContentStreamReader()
-			});
+			]
+			);
 			for (int i = 0; i < readers.Count; i++)
 			{
 				ContentManager.ReaderList.Add(readers[i].Type, readers[i]);
@@ -58,7 +54,7 @@ namespace Game
 				throw new Exception("Unable to load Content.zip file.");
 			}
 			memoryStream.Position = 0L;
-			ModArchive = ZipArchive.Open(memoryStream, false);
+			ModArchive = ZipArchive.Open(memoryStream);
 			InitResources();
 			if(modInfo != null)
 			{

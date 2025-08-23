@@ -1,5 +1,4 @@
 using Engine;
-using System.Collections.Generic;
 using TemplatesDatabase;
 
 namespace Game
@@ -43,7 +42,7 @@ namespace Game
 
 		public UpdateOrder UpdateOrder => m_subsystemMovingBlocks.UpdateOrder + 1;
 
-		public override int[] HandledBlocks => new int[0];
+		public override int[] HandledBlocks => [];
 
 		public void AdjustPiston(Point3 position, int length)
 		{

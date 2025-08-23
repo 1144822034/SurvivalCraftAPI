@@ -1,9 +1,8 @@
-using Engine.Graphics;
-using System;
 using Engine;
+using Engine.Graphics;
 using System.Xml.Linq;
-using XmlUtilities;
 using TemplatesDatabase;
+using XmlUtilities;
 
 namespace Game
 {

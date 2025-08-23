@@ -1,14 +1,12 @@
-using System.Collections.Generic;
-
 namespace Engine.Graphics
 {
     public class FlatBatch3D : BaseFlatBatch
     {
         public FlatBatch3D()
         {
-            base.DepthStencilState = DepthStencilState.Default;
-            base.RasterizerState = RasterizerState.CullNoneScissor;
-            base.BlendState = BlendState.AlphaBlend;
+            DepthStencilState = DepthStencilState.Default;
+            RasterizerState = RasterizerState.CullNoneScissor;
+            BlendState = BlendState.AlphaBlend;
         }
         /// <summary>
         /// 绘制球

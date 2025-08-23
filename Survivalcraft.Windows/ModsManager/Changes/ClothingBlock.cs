@@ -1,10 +1,7 @@
 using Engine;
 using Engine.Graphics;
 using Engine.Serialization;
-using System.Collections.Generic;
-using System.Linq;
 using System.Xml.Linq;
-using XmlUtilities;
 
 namespace Game
 {
@@ -16,17 +13,17 @@ namespace Game
 
 		public BlockMesh m_innerMesh;
 
-		public int num = 0;
+		public int num;
 
 		public BlockMesh m_outerMesh;
 
-		public static Matrix[] m_slotTransforms = new Matrix[4]
-		{
+		public static Matrix[] m_slotTransforms =
+		[
 			Matrix.CreateTranslation(0f, -1.5f, 0f) * Matrix.CreateScale(2.7f),
 			Matrix.CreateTranslation(0f, -1.1f, 0f) * Matrix.CreateScale(2.7f),
 			Matrix.CreateTranslation(0f, -0.5f, 0f) * Matrix.CreateScale(2.7f),
 			Matrix.CreateTranslation(0f, -0.1f, 0f) * Matrix.CreateScale(2.7f)
-		};
+		];
 
 		public virtual void LoadClothingData(XElement item)
 		{
@@ -41,7 +38,7 @@ namespace Game
 					try
 					{
 						Type type = TypeCache.FindType(className,false,true);
-						clothingData = (ClothingData)Activator.CreateInstance(type: type,args: new object[] { item });
+						clothingData = (ClothingData)Activator.CreateInstance(type: type,args: [item]);
 						if(clothingData == null) throw new Exception("ClothingData is not assignable to Game.ClothingData.");
 					}
 					catch(Exception ex)
@@ -63,7 +60,7 @@ namespace Game
 		{
 			num = 0;
 			XElement xElement = null;
-			ModsManager.ModListAllDo((modEntity) => { modEntity.LoadClo(this, ref xElement); });
+			ModsManager.ModListAllDo(modEntity => { modEntity.LoadClo(this, ref xElement); });
 			LoadClothingData(xElement);
 			Model playerModel = CharacterSkinsManager.GetPlayerModel(PlayerClass.Male);
 			var array = new Matrix[playerModel.Bones.Count];
@@ -174,7 +171,7 @@ namespace Game
 		}
 		public override IEnumerable<int> GetCreativeValues()
 		{
-            foreach (ClothingData clothingData in m_clothingData.Values.ToList().OrderBy((ClothingData cd) => cd.DisplayIndex))
+            foreach (ClothingData clothingData in m_clothingData.Values.ToList().OrderBy(cd => cd.DisplayIndex))
 			{
                 if (clothingData == null) continue;
                 int colorsCount = (!clothingData.CanBeDyed) ? 1 : 16;
@@ -195,7 +192,7 @@ namespace Game
 			{
 				return null;
 			}
-			var list = ingredients.Where((string i) => !string.IsNullOrEmpty(i)).ToList();
+			var list = ingredients.Where(i => !string.IsNullOrEmpty(i)).ToList();
 			if (list.Count == 2)
 			{
 				int num = 0;

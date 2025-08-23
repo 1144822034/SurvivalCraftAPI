@@ -1,5 +1,4 @@
 using Engine;
-using System;
 
 namespace Game
 {
@@ -52,7 +51,7 @@ namespace Game
 			if (m_dragWidget != null)
 			{
 				UpdateDragPosition();
-				var dragTargetWidget = HitTestGlobal(m_dragPosition, (Widget w) => w is IDragTargetWidget) as IDragTargetWidget;
+				var dragTargetWidget = HitTestGlobal(m_dragPosition, w => w is IDragTargetWidget) as IDragTargetWidget;
 				if (Input.Drag.HasValue)
 				{
 					dragTargetWidget?.DragOver(m_dragWidget, m_dragData);

@@ -1,5 +1,3 @@
-using System;
-
 namespace Engine.Serialization
 {
 	[HumanReadableConverter(typeof(BoundingSphere))]
@@ -8,7 +6,7 @@ namespace Engine.Serialization
 		public string ConvertToString(object value)
 		{
 			var boundingSphere = (BoundingSphere)value;
-			return HumanReadableConverter.ValuesListToString<float>(',', boundingSphere.Center.X, boundingSphere.Center.Y, boundingSphere.Center.Z, boundingSphere.Radius);
+			return HumanReadableConverter.ValuesListToString(',', boundingSphere.Center.X, boundingSphere.Center.Y, boundingSphere.Center.Z, boundingSphere.Radius);
 		}
 
 		public object ConvertFromString(Type type, string data)

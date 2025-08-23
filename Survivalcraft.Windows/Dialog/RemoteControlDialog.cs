@@ -1,6 +1,3 @@
-using Engine;
-using System;
-using System.Diagnostics;
 using System.Net;
 using System.Xml.Linq;
 
@@ -53,7 +50,7 @@ namespace Game
 						LanguageControl.Get("ContentWidgets", "RemoteControlDialog", "8"),
 						JsInterface.httpPort.ToString(),
 						5,
-						(string str) => {
+						str => {
 							if (int.TryParse(str, out int port)) {
 								JsInterface.SetHttpPort(port, true);
 								m_addressLabel.Text = $"http://{IPAddress.Loopback}:{port}/";
@@ -67,9 +64,9 @@ namespace Game
 					ParentWidget,
 					new TextBoxDialog(
 						LanguageControl.Get("ContentWidgets", "RemoteControlDialog", "10"),
-						JsInterface.httpPassword.ToString(),
+						JsInterface.httpPassword,
 						18,
-						(string str) => {
+						str => {
 							JsInterface.httpPassword = str;
 							ModsManager.SetConfig("RemoteControlPassword", str);
 						}

@@ -1,3 +1,5 @@
+using Engine.Graphics;
+
 namespace Game
 {
 	public class CommunityContentEntry
@@ -24,7 +26,7 @@ namespace Game
 
 		public string IconSrc;
 
-		public Engine.Graphics.Texture2D Icon;
+		public Texture2D Icon;
 
 		public TreeViewNode LinkedNode = null;
 

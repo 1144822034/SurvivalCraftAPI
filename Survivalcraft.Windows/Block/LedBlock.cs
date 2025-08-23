@@ -1,7 +1,5 @@
 using Engine;
 using Engine.Graphics;
-using System;
-using System.Collections.Generic;
 using System.Globalization;
 
 namespace Game
@@ -10,8 +8,8 @@ namespace Game
 	{
 		public static int Index = 152;
 
-		public static readonly Color[] LedColors = new Color[8]
-		{
+		public static readonly Color[] LedColors =
+		[
 			new(255, 255, 255),
 			new(0, 255, 255),
 			new(255, 0, 0),
@@ -20,7 +18,7 @@ namespace Game
 			new(0, 255, 0),
 			new(255, 120, 0),
 			new(255, 0, 255)
-		};
+		];
 
 
 		public BlockMesh[] m_standaloneBlockMeshesByColor = new BlockMesh[8];
@@ -52,10 +50,10 @@ namespace Game
 					m_blockMeshesByData[num] = new BlockMesh();
 					m_blockMeshesByData[num].AppendModelMeshPart(modelMesh.MeshParts[0], boneAbsoluteTransform * m2, makeEmissive: false, flipWindingOrder: false, doubleSided: false, flipNormals: false, Color.White);
 					m_blockMeshesByData[num].AppendModelMeshPart(modelMesh2.MeshParts[0], boneAbsoluteTransform2 * m2, makeEmissive: false, flipWindingOrder: false, doubleSided: false, flipNormals: false, color);
-					m_collisionBoxesByData[num] = new BoundingBox[1]
-					{
+					m_collisionBoxesByData[num] =
+					[
 						m_blockMeshesByData[num].CalculateBoundingBox()
-					};
+					];
 				}
 			}
 		}

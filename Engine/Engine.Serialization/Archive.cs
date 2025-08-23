@@ -15,9 +15,11 @@ namespace Engine.Serialization
 
         protected class SerializeData<T> : SerializeData
         {
+#pragma warning disable CS0649 // 从未对字段赋值，字段将一直保持其默认值
             internal ReadDelegateGeneric<T> ReadGeneric;
 
             internal WriteDelegateGeneric<T> WriteGeneric;
+#pragma warning restore CS0649 // 从未对字段赋值，字段将一直保持其默认值
 
             internal SerializeData()
             : base(typeof(T))
@@ -101,7 +103,7 @@ namespace Engine.Serialization
 
             public ConstructorInfo FindConstructor(Type type)
             {
-                ConstructorInfo constructor = type.GetConstructor(BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic, null, Type.EmptyTypes, Array.Empty<ParameterModifier>());
+                ConstructorInfo constructor = type.GetConstructor(BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic, null, Type.EmptyTypes, []);
                 if (constructor == null && type.BaseType != null)
                 {
                     return FindConstructor(type.BaseType);
@@ -258,7 +260,7 @@ namespace Engine.Serialization
 
 		private static void ScanAssembliesForSerializers()
 		{
-			foreach (Assembly item in TypeCache.LoadedAssemblies.Where((Assembly a) => !TypeCache.IsKnownSystemAssembly(a)))
+			foreach (Assembly item in TypeCache.LoadedAssemblies.Where(a => !TypeCache.IsKnownSystemAssembly(a)))
 			{
 				if (!m_scannedAssemblies.Contains(item))
 				{
@@ -298,7 +300,7 @@ namespace Engine.Serialization
 
         private static SerializeData CreateSerializeData(Type type)
         {
-            if (type.GetTypeInfo().ImplementedInterfaces.Contains<Type>(typeof(ISerializable)))
+            if (type.GetTypeInfo().ImplementedInterfaces.Contains(typeof(ISerializable)))
             {
                 return CreateSerializeDataForSerializable(type);
             }
@@ -344,7 +346,7 @@ namespace Engine.Serialization
 		private static SerializeData CreateSerializeDataForSerializable(Type type)
 		{
             SerializeData obj = (SerializeData)typeof(Archive).GetTypeInfo().GetDeclaredMethod("CreateSerializeDataForSerializableHelper").MakeGenericMethod(type)
-				.Invoke(null, new object[0]);
+				.Invoke(null, []);
             ApplySerializationOptionsAttribute(obj, type.GetTypeInfo());
             return obj;
 		}
@@ -377,11 +379,12 @@ namespace Engine.Serialization
 				Delegate @delegate = methodInfo.CreateDelegate(type2, obj);
 				Delegate delegate2 = methodInfo2.CreateDelegate(type3, obj);
 				return (SerializeData)typeof(Archive).GetTypeInfo().GetDeclaredMethod("CreateSerializeDataForSerializerHelper").MakeGenericMethod(type)
-					.Invoke(null, new object[2]
-					{
-						@delegate,
+					.Invoke(null,
+                    [
+                        @delegate,
 						delegate2
-					});
+                    ]
+                    );
 			}
             throw new InvalidOperationException("Serialization methods not found in " + serializerType.Name);
 		}

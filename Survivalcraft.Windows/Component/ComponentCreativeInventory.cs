@@ -1,8 +1,6 @@
 using Engine;
 using GameEntitySystem;
-using System.Collections.Generic;
 using System.Globalization;
-using System.Linq;
 using TemplatesDatabase;
 
 namespace Game
@@ -260,8 +258,8 @@ namespace Game
 			}
 			if (SettingsManager.CreativeDragMaxStacking)
 				return MathUtils.Min(maxStacking, count);
-			else return 1;
-		}
+			return 1;
+        }
 
 		public virtual void DropAllItems(Vector3 position)
 		{

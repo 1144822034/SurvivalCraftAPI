@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using Engine;
 using GameEntitySystem;
 using TemplatesDatabase;
@@ -24,8 +23,8 @@ public class SubsystemCellChangeQueue : Subsystem, IUpdateable
 
 	public override void Load(ValuesDictionary valuesDictionary)
 	{
-		m_subsystemTime = base.Project.FindSubsystem<SubsystemTime>(throwOnError: true);
-		m_subsystemTerrain = base.Project.FindSubsystem<SubsystemTerrain>(throwOnError: true);
+		m_subsystemTime = Project.FindSubsystem<SubsystemTime>(throwOnError: true);
+		m_subsystemTerrain = Project.FindSubsystem<SubsystemTerrain>(throwOnError: true);
 	}
 
 	public void QueueCellChange(int x, int y, int z, int value, bool applyImmediately = false)

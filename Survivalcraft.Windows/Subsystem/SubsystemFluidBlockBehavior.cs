@@ -1,18 +1,17 @@
 using Engine;
-using System.Collections.Generic;
 using TemplatesDatabase;
 
 namespace Game
 {
 	public abstract class SubsystemFluidBlockBehavior : SubsystemBlockBehavior
 	{
-		public static Point2[] m_sideNeighbors = new Point2[4]
-		{
+		public static Point2[] m_sideNeighbors =
+		[
 			new(-1, 0),
 			new(1, 0),
 			new(0, -1),
 			new(0, 1)
-		};
+		];
 
 		public FluidBlock m_fluidBlock;
 

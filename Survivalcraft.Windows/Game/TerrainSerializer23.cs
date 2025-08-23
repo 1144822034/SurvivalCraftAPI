@@ -1,9 +1,5 @@
 using Engine;
-using System;
-using System.Collections.Generic;
-using System.IO;
 using System.IO.Compression;
-using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Text;
 
@@ -88,10 +84,10 @@ namespace Game
 						}
 					}
 				}
-				catch (Exception ex)
+				catch (Exception)
 				{
 					Storage.DeleteFile(path);
-					throw ex;
+					throw;
 				}
 				Stream.Position = 0L;
 				if (ReverseEndianness(Reader.ReadUInt32()) != FileHeaderMagic)
@@ -474,7 +470,7 @@ namespace Game
 											ResizeStream(stream, num4);
 											binaryWriter.Write(RegionMagic);
 											WriteDirectoryEntries(binaryWriter, array2);
-											byte[] buffer2 = new byte[array.Max((DirectoryEntry e) => e.Size)];
+											byte[] buffer2 = new byte[array.Max(e => e.Size)];
 											for (int j = 0; j < array.Length; j++)
 											{
 												if (j == num)
@@ -702,7 +698,7 @@ namespace Game
 
 		private byte[] m_compressBuffer = new byte[WorstCaseChunkDataSize];
 
-		private bool m_ioExceptionDealt = false;
+		private bool m_ioExceptionDealt;
 
 		public TerrainSerializer23(string directoryName, string suffix = "")
 		{
@@ -738,7 +734,7 @@ namespace Game
 					}
 					DecompressChunkData(chunk,m_storageBuffer,num);
 				}
-				catch(IOException e)
+				catch(IOException)
 				{
 					Dispatcher.Dispatch(
 						() => {

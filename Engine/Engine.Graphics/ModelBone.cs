@@ -1,5 +1,3 @@
-using System.Collections.Generic;
-
 namespace Engine.Graphics
 {
 	public class ModelBone
@@ -45,9 +43,5 @@ namespace Engine.Graphics
 		}
 
 		public ReadOnlyList<ModelBone> ChildBones => new(m_childBones);
-
-        public ModelBone()
-		{
-		}
-	}
+    }
 }

@@ -1,5 +1,3 @@
-using System;
-
 namespace Engine.Serialization
 {
 	[HumanReadableConverter(typeof(Quaternion))]
@@ -8,7 +6,7 @@ namespace Engine.Serialization
 		public string ConvertToString(object value)
 		{
 			var quaternion = (Quaternion)value;
-			return HumanReadableConverter.ValuesListToString<float>(',', quaternion.X, quaternion.Y, quaternion.Z, quaternion.W);
+			return HumanReadableConverter.ValuesListToString(',', quaternion.X, quaternion.Y, quaternion.Z, quaternion.W);
 		}
 
 		public object ConvertFromString(Type type, string data)

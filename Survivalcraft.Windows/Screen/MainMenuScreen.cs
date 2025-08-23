@@ -1,7 +1,5 @@
 using Engine;
-using Engine.Graphics;
 using Engine.Input;
-using System.Collections.Generic;
 using System.Globalization;
 using System.Xml.Linq;
 
@@ -88,7 +86,7 @@ namespace Game
 						return 1;
 					return 2;
 				});
-				DialogsManager.ShowDialog(null,new ListSelectionDialog(null,sorted,70f,(object item) => ((KeyValuePair<string, CultureInfo>)item).Value.NativeName,delegate (object item)
+				DialogsManager.ShowDialog(null,new ListSelectionDialog(null,sorted,70f,item => ((KeyValuePair<string, CultureInfo>)item).Value.NativeName,delegate (object item)
 				{
 					LanguageControl.ChangeLanguage(((KeyValuePair<string, CultureInfo>)item).Key);
 				}));

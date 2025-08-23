@@ -1,6 +1,5 @@
 using Engine;
 using Engine.Graphics;
-using Jint.Native;
 
 namespace Game
 {
@@ -104,8 +103,8 @@ namespace Game
 
 		public Action<ModelWidget,Shader,Model,ModelMesh> OnSetupShaderParameters;
 		/// <summary>
-		/// вт╤╗рЕвеи╚фВё╛хТаТ©утРй╧сцд╛ховеи╚фВ╫ЬппДжх╬║ё
-		/// хТр╙й╧сцё╛©идэпХм╗╧Щ <see cref="OnSetupShaderParameters"/> иХжц╡нйЩё╛╥ЯтР©идэнчп╖
+		/// О©╫т╤О©╫О©╫О©╫О©╫О©╫и╚О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫й╧О©╫О©╫д╛О©╫О©╫О©╫О©╫и╚О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫х╬О©╫О©╫
+		/// О©╫О©╫р╙й╧О©╫цёО©╫О©╫О©╫О©╫О©╫О©╫О©╫м╗О©╫О©╫ <see cref="OnSetupShaderParameters"/> О©╫О©╫О©╫ц╡О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫п╖
 		/// </summary>
 		public TransformedShader CustomShader { get; set; }
 

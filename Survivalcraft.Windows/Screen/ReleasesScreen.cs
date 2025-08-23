@@ -1,5 +1,4 @@
 using Engine;
-using System.Diagnostics;
 using System.Text.Json;
 using System.Xml.Linq;
 
@@ -12,7 +11,7 @@ namespace Game
 
 		public string m_releasesURL = string.Empty;//此界面发布版系列的Releases链接
 
-		public IComparer<ReleaseInfo> m_versionComparer = null;
+		public IComparer<ReleaseInfo> m_versionComparer;
 		#endregion
 
 
@@ -44,7 +43,7 @@ namespace Game
 			m_releasesListPanel = Children.Find<ListPanelWidget>("ReleasesList");
 			m_infoLabel = Children.Find<LabelWidget>("ReleaseInfo");
 			m_releaseInfoPanel = Children.Find<StackPanelWidget>("ReleaseInfoPanel");
-			m_releasesListPanel.ItemWidgetFactory = (object item) => new LabelWidget
+			m_releasesListPanel.ItemWidgetFactory = item => new LabelWidget
 			{
 				Text = (item is ReleaseInfo releaseInfo) ? releaseInfo.name + GetVersionSuffix(releaseInfo.tag_name, APIUpdateManager.CurrentVersion) : string.Empty,
 				HorizontalAlignment = WidgetAlignment.Center,

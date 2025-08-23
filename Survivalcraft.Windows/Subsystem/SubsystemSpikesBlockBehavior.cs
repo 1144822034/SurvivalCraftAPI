@@ -1,6 +1,5 @@
 using Engine;
 using GameEntitySystem;
-using System.Collections.Generic;
 using TemplatesDatabase;
 
 namespace Game
@@ -17,10 +16,10 @@ namespace Game
 
 		public Dictionary<ComponentCreature, double> m_lastInjuryTimes = [];
 
-		public override int[] HandledBlocks => new int[1]
-		{
+		public override int[] HandledBlocks =>
+		[
 			BlocksManager.GetBlockIndex<SpikedPlankBlock>()
-		};
+		];
 
 		public UpdateOrder UpdateOrder => UpdateOrder.Default;
 

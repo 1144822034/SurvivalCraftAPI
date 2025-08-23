@@ -1,9 +1,6 @@
-using Engine;
-using Engine.Serialization;
-using NAudio.Flac;
-using System.Xml.Linq;
 using Engine.Input;
-using TemplatesDatabase;
+using Engine.Serialization;
+using System.Xml.Linq;
 
 namespace Game
 {
@@ -12,7 +9,7 @@ namespace Game
 		public Widget KeyInfoWidget(Object item)
 		{
 			XElement node = ContentManager.Get<XElement>("Widgets/KeyboardMappingItem");
-			node.SetAttributeValue("Name","KeyboardMappingItem_" + item.ToString());
+			node.SetAttributeValue("Name","KeyboardMappingItem_" + item);
 			var containerWidget = (ContainerWidget)LoadWidget(this,node,null);
 			LabelWidget labelWidget = containerWidget.Children.Find<LabelWidget>("Name");
 			LabelWidget labelWidget2 = containerWidget.Children.Find<LabelWidget>("BoundKey");
@@ -29,7 +26,7 @@ namespace Game
 		public BevelledButtonWidget m_resetButton;
 		public BevelledButtonWidget m_setKeyButton;
 		public BevelledButtonWidget m_disableKeyButton;
-		public bool IsWaitingForKeyInput = false;
+		public bool IsWaitingForKeyInput;
 		public Dictionary<string, ContainerWidget> m_widgetsByString = new Dictionary<string, ContainerWidget>();
 		public Dictionary<object, List<string>> m_conflicts = new Dictionary<object,List<string>>();
 		public KeyboardMappingScreen()
@@ -40,7 +37,7 @@ namespace Game
 			m_keysList.ItemWidgetFactory = (Func<object,Widget>)Delegate.Combine(m_keysList.ItemWidgetFactory,KeyInfoWidget);
 			m_keysList.ScrollPosition = 0f;
 			m_keysList.ScrollSpeed = 0f;
-			m_keysList.ItemClicked += (item) =>
+			m_keysList.ItemClicked += item =>
 			{
 				m_keysList.SelectedItem = m_keysList.SelectedItem == item ? null : item;
 			};

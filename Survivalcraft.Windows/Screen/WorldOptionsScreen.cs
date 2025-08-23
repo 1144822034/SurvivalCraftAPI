@@ -1,6 +1,5 @@
 using Engine;
 using Engine.Graphics;
-using System.Collections.Generic;
 using System.Xml.Linq;
 
 namespace Game
@@ -86,8 +85,8 @@ namespace Game
 
 		public BlocksTexturesCache m_blockTexturesCache = new();
 
-		public static float[] m_islandSizes = new float[20]
-		{
+		public static float[] m_islandSizes =
+		[
 			30f,
 			40f,
 			50f,
@@ -108,10 +107,10 @@ namespace Game
 			1500f,
 			2000f,
 			2500f
-		};
+		];
 
-		public static float[] m_biomeSizes = new float[9]
-		{
+		public static float[] m_biomeSizes =
+		[
 			0.25f,
 			0.33f,
 			0.5f,
@@ -121,9 +120,9 @@ namespace Game
 			2f,
 			3f,
 			4f
-		};
+		];
 
-		private static float[] m_yearDays = new float[9] { 8f, 12f, 16f, 20f, 24f, 32f, 48f, 64f, 96f };
+		private static float[] m_yearDays = [8f, 12f, 16f, 20f, 24f, 32f, 48f, 64f, 96f];
 
 		public WorldOptionsScreen()
 		{
@@ -183,7 +182,7 @@ namespace Game
 		{
 			if (value != 0f)
 			{
-				return ((value >= 0f) ? "+" : "") + value.ToString();
+				return ((value >= 0f) ? "+" : "") + value;
 			}
 			return LanguageControl.Get(fName, 6);
 		}
@@ -192,7 +191,7 @@ namespace Game
 		{
 			m_worldSettings = (WorldSettings)parameters[0];
 			m_isExistingWorld = (bool)parameters[1];
-			m_descriptionLabel.Text = StringsManager.GetString("EnvironmentBehaviorMode." + m_worldSettings.EnvironmentBehaviorMode.ToString() + ".Description");
+			m_descriptionLabel.Text = StringsManager.GetString("EnvironmentBehaviorMode." + m_worldSettings.EnvironmentBehaviorMode + ".Description");
 		}
 
 		public override void Leave()
@@ -205,7 +204,7 @@ namespace Game
 			if (m_terrainGenerationButton.IsClicked && !m_isExistingWorld)
 			{
 				IList<int> enumValues = EnumUtils.GetEnumValues(typeof(TerrainGenerationMode));
-				DialogsManager.ShowDialog(null, new ListSelectionDialog(LanguageControl.Get(fName, 1), enumValues, 56f, (object e) => StringsManager.GetString("TerrainGenerationMode." + ((TerrainGenerationMode)e).ToString() + ".Name"), delegate (object e)
+				DialogsManager.ShowDialog(null, new ListSelectionDialog(LanguageControl.Get(fName, 1), enumValues, 56f, e => StringsManager.GetString("TerrainGenerationMode." + ((TerrainGenerationMode)e) + ".Name"), delegate (object e)
 				{
 					if (m_worldSettings.GameMode != 0 && ((TerrainGenerationMode)e == TerrainGenerationMode.FlatContinent || (TerrainGenerationMode)e == TerrainGenerationMode.FlatIsland))
 					{
@@ -214,7 +213,7 @@ namespace Game
 					else
 					{
 						m_worldSettings.TerrainGenerationMode = (TerrainGenerationMode)e;
-						m_descriptionLabel.Text = StringsManager.GetString("TerrainGenerationMode." + m_worldSettings.TerrainGenerationMode.ToString() + ".Description");
+						m_descriptionLabel.Text = StringsManager.GetString("TerrainGenerationMode." + m_worldSettings.TerrainGenerationMode + ".Description");
 					}
 				}));
 			}
@@ -238,8 +237,8 @@ namespace Game
 			}
 			if (m_flatTerrainBlockButton.IsClicked && !m_isExistingWorld)
 			{
-				int[] items = new int[19]
-				{
+				int[] items =
+				[
 					8,
 					2,
 					7,
@@ -259,7 +258,7 @@ namespace Game
 					126,
 					71,
 					1
-				};
+				];
 				DialogsManager.ShowDialog(null, new ListSelectionDialog(LanguageControl.Get(fName, 2), items, 72f, delegate (object index)
 				{
 					XElement node2 = ContentManager.Get<XElement>("Widgets/SelectBlockItem");
@@ -323,22 +322,22 @@ namespace Game
 			if (m_supernaturalCreaturesButton.IsClicked)
 			{
 				m_worldSettings.AreSupernaturalCreaturesEnabled = !m_worldSettings.AreSupernaturalCreaturesEnabled;
-				m_descriptionLabel.Text = StringsManager.GetString("SupernaturalCreatures." + m_worldSettings.AreSupernaturalCreaturesEnabled.ToString());
+				m_descriptionLabel.Text = StringsManager.GetString("SupernaturalCreatures." + m_worldSettings.AreSupernaturalCreaturesEnabled);
 			}
 			if (m_friendlyFireButton.IsClicked)
 			{
 				m_worldSettings.IsFriendlyFireEnabled = !m_worldSettings.IsFriendlyFireEnabled;
-				m_descriptionLabel.Text = StringsManager.GetString("FriendlyFire." + m_worldSettings.IsFriendlyFireEnabled.ToString());
+				m_descriptionLabel.Text = StringsManager.GetString("FriendlyFire." + m_worldSettings.IsFriendlyFireEnabled);
 			}
 			if (m_environmentBehaviorButton.IsClicked)
 			{
 				IList<int> enumValues2 = EnumUtils.GetEnumValues(typeof(EnvironmentBehaviorMode));
 				m_worldSettings.EnvironmentBehaviorMode = (EnvironmentBehaviorMode)((enumValues2.IndexOf((int)m_worldSettings.EnvironmentBehaviorMode) + 1) % enumValues2.Count);
-				m_descriptionLabel.Text = StringsManager.GetString("EnvironmentBehaviorMode." + m_worldSettings.EnvironmentBehaviorMode.ToString() + ".Description");
+				m_descriptionLabel.Text = StringsManager.GetString("EnvironmentBehaviorMode." + m_worldSettings.EnvironmentBehaviorMode + ".Description");
 			}
 			if (m_timeOfDayButton.IsClicked)
 			{
-				DialogsManager.ShowDialog(null, new ListSelectionDialog(LanguageControl.Get(fName, "7"), EnumUtils.GetEnumValues(typeof(TimeOfDayMode)), 56f, (object e) => LanguageControl.Get("TimeOfDayMode", ((TimeOfDayMode)e).ToString()), delegate(object e)
+				DialogsManager.ShowDialog(null, new ListSelectionDialog(LanguageControl.Get(fName, "7"), EnumUtils.GetEnumValues(typeof(TimeOfDayMode)), 56f, e => LanguageControl.Get("TimeOfDayMode", ((TimeOfDayMode)e).ToString()), delegate(object e)
 				{
 					m_worldSettings.TimeOfDayMode = (TimeOfDayMode)e;
 					m_descriptionLabel.Text = StringsManager.GetString(string.Concat("TimeOfDayMode.", (TimeOfDayMode)e, ".Description"));
@@ -362,17 +361,17 @@ namespace Game
 			if (m_weatherEffectsButton.IsClicked)
 			{
 				m_worldSettings.AreWeatherEffectsEnabled = !m_worldSettings.AreWeatherEffectsEnabled;
-				m_descriptionLabel.Text = StringsManager.GetString("WeatherMode." + m_worldSettings.AreWeatherEffectsEnabled.ToString());
+				m_descriptionLabel.Text = StringsManager.GetString("WeatherMode." + m_worldSettings.AreWeatherEffectsEnabled);
 			}
 			if (m_adventureRespawnButton.IsClicked)
 			{
 				m_worldSettings.IsAdventureRespawnAllowed = !m_worldSettings.IsAdventureRespawnAllowed;
-				m_descriptionLabel.Text = StringsManager.GetString("AdventureRespawnMode." + m_worldSettings.IsAdventureRespawnAllowed.ToString());
+				m_descriptionLabel.Text = StringsManager.GetString("AdventureRespawnMode." + m_worldSettings.IsAdventureRespawnAllowed);
 			}
 			if (m_adventureSurvivalMechanicsButton.IsClicked)
 			{
 				m_worldSettings.AreAdventureSurvivalMechanicsEnabled = !m_worldSettings.AreAdventureSurvivalMechanicsEnabled;
-				m_descriptionLabel.Text = StringsManager.GetString("AdventureSurvivalMechanics." + m_worldSettings.AreAdventureSurvivalMechanicsEnabled.ToString());
+				m_descriptionLabel.Text = StringsManager.GetString("AdventureSurvivalMechanics." + m_worldSettings.AreAdventureSurvivalMechanicsEnabled);
 			}
 			m_creativeModePanel.IsVisible = m_worldSettings.GameMode == GameMode.Creative;
 			m_newWorldOnlyPanel.IsVisible = !m_isExistingWorld;
@@ -381,7 +380,7 @@ namespace Game
 			m_islandTerrainPanel.IsVisible = m_worldSettings.TerrainGenerationMode == TerrainGenerationMode.Island || m_worldSettings.TerrainGenerationMode == TerrainGenerationMode.FlatIsland;
 			m_flatTerrainPanel.IsVisible = m_worldSettings.TerrainGenerationMode == TerrainGenerationMode.FlatContinent || m_worldSettings.TerrainGenerationMode == TerrainGenerationMode.FlatIsland;
 			m_yearDaysPanel.IsVisible = m_worldSettings.AreSeasonsChanging;
-			m_terrainGenerationButton.Text = StringsManager.GetString("TerrainGenerationMode." + m_worldSettings.TerrainGenerationMode.ToString() + ".Name");
+			m_terrainGenerationButton.Text = StringsManager.GetString("TerrainGenerationMode." + m_worldSettings.TerrainGenerationMode + ".Name");
 			m_islandSizeEW.Value = FindNearestIndex(m_islandSizes, m_worldSettings.IslandSize.X);
 			m_islandSizeEW.Text = m_worldSettings.IslandSize.X.ToString();
 			m_islandSizeNS.Value = FindNearestIndex(m_islandSizes, m_worldSettings.IslandSize.Y);
@@ -405,7 +404,7 @@ namespace Game
 			m_humidityOffsetSlider.Value = m_worldSettings.HumidityOffset;
 			m_humidityOffsetSlider.Text = FormatOffset(m_worldSettings.HumidityOffset);
 			m_biomeSizeSlider.Value = FindNearestIndex(m_biomeSizes, m_worldSettings.BiomeSize);
-			m_biomeSizeSlider.Text = m_worldSettings.BiomeSize.ToString() + "x";
+			m_biomeSizeSlider.Text = m_worldSettings.BiomeSize + "x";
 			m_environmentBehaviorButton.Text = LanguageControl.Get("EnvironmentBehaviorMode", m_worldSettings.EnvironmentBehaviorMode.ToString());
 			m_timeOfDayButton.Text = LanguageControl.Get("TimeOfDayMode", m_worldSettings.TimeOfDayMode.ToString());
 			m_areSeasonsChangingCheckBox.IsChecked = m_worldSettings.AreSeasonsChanging;

@@ -26,11 +26,7 @@ namespace Engine.Graphics
 			set;
 		}
 
-        public BaseBatch()
-		{
-		}
-
-		public abstract bool IsEmpty();
+        public abstract bool IsEmpty();
 
 		public abstract void Clear();
 

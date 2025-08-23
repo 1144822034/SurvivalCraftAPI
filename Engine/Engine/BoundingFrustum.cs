@@ -1,5 +1,3 @@
-using System;
-
 namespace Engine
 {
 	public class BoundingFrustum : IEquatable<BoundingFrustum>
@@ -170,12 +168,12 @@ namespace Engine
 
 		public static bool operator ==(BoundingFrustum f1, BoundingFrustum f2)
 		{
-			return object.Equals(f1, f2);
+			return Equals(f1, f2);
 		}
 
 		public static bool operator !=(BoundingFrustum f1, BoundingFrustum f2)
 		{
-			return !object.Equals(f1, f2);
+			return !Equals(f1, f2);
 		}
 
 		public static Vector3 ComputeIntersection(Plane plane, Ray3 ray)

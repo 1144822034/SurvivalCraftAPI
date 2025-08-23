@@ -1,8 +1,5 @@
 using Engine;
 using GameEntitySystem;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using TemplatesDatabase;
 
 namespace Game
@@ -93,7 +90,7 @@ namespace Game
 		public void AddGameWidgetForPlayer(PlayerData playerData)
 		{
 			int index = 0;
-			while (index < MaxGameWidgets && m_gameWidgets.FirstOrDefault((GameWidget v) => v.GameWidgetIndex == index) != null)
+			while (index < MaxGameWidgets && m_gameWidgets.FirstOrDefault(v => v.GameWidgetIndex == index) != null)
 			{
 				int num = index++;
 			}

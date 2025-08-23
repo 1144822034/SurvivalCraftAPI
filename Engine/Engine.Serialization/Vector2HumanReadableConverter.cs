@@ -1,5 +1,3 @@
-using System;
-
 namespace Engine.Serialization
 {
 	[HumanReadableConverter(typeof(Vector2))]
@@ -8,7 +6,7 @@ namespace Engine.Serialization
 		public string ConvertToString(object value)
 		{
 			var vector = (Vector2)value;
-			return HumanReadableConverter.ValuesListToString<float>(',', vector.X, vector.Y);
+			return HumanReadableConverter.ValuesListToString(',', vector.X, vector.Y);
 		}
 
 		public object ConvertFromString(Type type, string data)

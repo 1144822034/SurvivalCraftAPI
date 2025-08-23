@@ -1,6 +1,5 @@
 using Engine;
 using System.Globalization;
-using System.IO;
 using System.Text;
 using System.Text.Json;
 using System.Text.Json.Nodes;
@@ -269,7 +268,7 @@ namespace Game
 						string nickName = data.GetProperty("nickName").GetString();
 						SettingsManager.ScpboxUserInfo += "昵称：" + nickName;
 						SettingsManager.ScpboxUserInfo += "\n账号：" + data.GetProperty("user").GetString();
-						SettingsManager.ScpboxUserInfo += "\n登录时间：" + TimeZoneInfo.ConvertTimeFromUtc(new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc).AddSeconds(data.GetProperty("loginTime").GetInt64()), TimeZoneInfo.Local).ToString();
+						SettingsManager.ScpboxUserInfo += "\n登录时间：" + TimeZoneInfo.ConvertTimeFromUtc(new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc).AddSeconds(data.GetProperty("loginTime").GetInt64()), TimeZoneInfo.Local);
 						DialogsManager.ShowDialog(null, new MessageDialog(LanguageControl.Ok, "登录成功:" + nickName, LanguageControl.Ok, null, delegate
 						{
 							m_loginProcessData = null;

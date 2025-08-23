@@ -1,7 +1,5 @@
 using Engine;
 using Engine.Graphics;
-using System.Collections.Generic;
-using System.Linq;
 
 namespace Game
 {
@@ -196,7 +194,7 @@ namespace Game
 
 		public static string GetScreenName(Screen screen)
 		{
-			string key = m_screens.FirstOrDefault((KeyValuePair<string, Screen> kvp) => kvp.Value == screen).Key;
+			string key = m_screens.FirstOrDefault(kvp => kvp.Value == screen).Key;
 			if (key == null)
 			{
 				return string.Empty;

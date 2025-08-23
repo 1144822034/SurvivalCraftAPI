@@ -2,10 +2,10 @@ namespace Game
 {
 	public class SubsystemAdjustableDelayGateBlockBehavior : SubsystemBlockBehavior
 	{
-		public override int[] HandledBlocks => new int[1]
-		{
+		public override int[] HandledBlocks =>
+		[
 			224
-		};
+		];
 
 		public override bool OnEditInventoryItem(IInventory inventory, int slotIndex, ComponentPlayer componentPlayer)
 		{

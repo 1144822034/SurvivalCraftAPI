@@ -1,7 +1,5 @@
 using Engine;
 using Engine.Graphics;
-using System;
-using System.Collections.Generic;
 using System.Globalization;
 
 namespace Game
@@ -36,10 +34,10 @@ namespace Game
 					m_blockMeshes[i].AppendModelMeshPart(model.FindMesh("Plinth").MeshParts[0], boneAbsoluteTransform2 * Matrix.CreateRotationY(radians) * Matrix.CreateTranslation(0.5f, 0f, 0.5f), makeEmissive: false, flipWindingOrder: false, doubleSided: false, flipNormals: false, Color.White);
 					m_standaloneBlockMeshes[i].AppendModelMeshPart(model.FindMesh("Plinth").MeshParts[0], boneAbsoluteTransform2 * Matrix.CreateTranslation(0f, -0.5f, 0f), makeEmissive: false, flipWindingOrder: false, doubleSided: false, flipNormals: false, Color.White);
 				}
-				m_collisionBoxes[i] = new BoundingBox[1]
-				{
+				m_collisionBoxes[i] =
+				[
 					m_blockMeshes[i].CalculateBoundingBox()
-				};
+				];
 			}
 			base.Initialize();
 		}

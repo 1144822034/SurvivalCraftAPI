@@ -1,8 +1,5 @@
-
 using Engine;
 using Engine.Graphics;
-using System;
-using System.Collections.Generic;
 using System.Globalization;
 
 namespace Game
@@ -18,20 +15,20 @@ namespace Game
 		public TextureAtlas(Texture2D texture, string atlasDefinition, string prefix)
 		{
 			m_texture = texture;
-			string[] array = atlasDefinition.Split(new char[2]
-			{
+			string[] array = atlasDefinition.Split(
+			[
 				'\n',
 				'\r'
-			}, StringSplitOptions.RemoveEmptyEntries);
+			], StringSplitOptions.RemoveEmptyEntries);
 			int num = 0;
 			while (true)
 			{
 				if (num < array.Length)
 				{
-					string[] array2 = array[num].Split(new char[1]
-					{
+					string[] array2 = array[num].Split(
+					[
 						' '
-					}, StringSplitOptions.RemoveEmptyEntries);
+					], StringSplitOptions.RemoveEmptyEntries);
 					if (array2.Length < 5)
 					{
 						break;

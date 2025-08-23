@@ -1,5 +1,4 @@
 using Engine;
-using Engine.Graphics;
 
 namespace Game;
 
@@ -8,7 +7,7 @@ public class LoadingFailedScreen : Screen
     public LoadingFailedScreen(string title, IEnumerable<string> details, IEnumerable<string> solveMethods)
     {
         Children.Clear();
-        Children.Add(new RectangleWidget()
+        Children.Add(new RectangleWidget
         {
             Size = new Vector2(float.PositiveInfinity),
             FillColor = Color.Black,
@@ -26,7 +25,7 @@ public class LoadingFailedScreen : Screen
             widget.Children.Add(new LabelWidget
                 { Text = title, FontScale = 2, Color = Color.Red, HorizontalAlignment = WidgetAlignment.Center, WordWrap = true });
             
-            widget.Children.Add(new RectangleWidget()
+            widget.Children.Add(new RectangleWidget
             {
                 ColorTransform = Color.Transparent,
                 Size = new Vector2(float.PositiveInfinity, 80)
@@ -37,7 +36,7 @@ public class LoadingFailedScreen : Screen
                 widget.Children.Add(new LabelWidget { Text = detail, HorizontalAlignment = WidgetAlignment.Center, WordWrap = true });
             }
             
-            widget.Children.Add(new RectangleWidget()
+            widget.Children.Add(new RectangleWidget
             {
                 ColorTransform = Color.Transparent,
                 Size = new Vector2(float.PositiveInfinity, 80)

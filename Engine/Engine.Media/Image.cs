@@ -28,15 +28,15 @@ namespace Engine.Media
             new WebpConfigurationModule()
             ];
         public static Configuration DefaultImageSharpConfiguration = new Configuration(ImageSharpModules) { PreferContiguousImageBuffers = true };
-        public static DecoderOptions DefaultImageSharpDecoderOptions = new DecoderOptions() { Configuration = DefaultImageSharpConfiguration};
-        public static readonly JpegEncoder DefaultJpegEncoder = new JpegEncoder() { Quality = 95, ColorType = JpegEncodingColor.YCbCrRatio420 };
+        public static DecoderOptions DefaultImageSharpDecoderOptions = new DecoderOptions { Configuration = DefaultImageSharpConfiguration};
+        public static readonly JpegEncoder DefaultJpegEncoder = new JpegEncoder { Quality = 95, ColorType = JpegEncodingColor.YCbCrRatio420 };
         public static readonly GifEncoder DefaultGifEncoder = new() { ColorTableMode = GifColorTableMode.Local };
 
         public int Width => m_trueImage.Width;
 
         public int Height => m_trueImage.Height;
 
-        public Color[] m_pixels = null;
+        public Color[] m_pixels;
         public bool m_shouldUpdatePixelsCache = true;
 
         public Color[] Pixels
@@ -62,7 +62,7 @@ namespace Engine.Media
         }
 
         public readonly Image<Rgba32> m_trueImage;
-        public bool m_isDisposed = false;
+        public bool m_isDisposed;
 
         public Image(Image image)
         {
@@ -128,7 +128,7 @@ namespace Engine.Media
             m_shouldUpdatePixelsCache = true;
         }
 
-        public static void PremultiplyAlpha(Image image) => image.ProcessPixels(pixel => pixel.PremultiplyAlpha(), true);
+        public static void PremultiplyAlpha(Image image) => image.ProcessPixels(pixel => pixel.PremultiplyAlpha());
 
         public static ImageFileFormat DetermineFileFormat(string extension) => Name2EngineImageFormat.TryGetValue(extension.Substring(1).ToLower(), out ImageFileFormat format)
                 ? format

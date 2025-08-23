@@ -12,11 +12,7 @@ namespace Engine.Graphics
 
 		public readonly DynamicArray<int> TriangleIndices = [];
 
-		public BaseFlatBatch()
-		{
-		}
-
-		public override bool IsEmpty()
+        public override bool IsEmpty()
 		{
             return LineIndices.Count == 0 && TriangleIndices.Count == 0;
         }
@@ -36,9 +32,9 @@ namespace Engine.Graphics
 
         public override void Flush(Matrix matrix, Vector4 color, bool clearAfterFlush = true)
         {
-            Display.DepthStencilState = base.DepthStencilState;
-            Display.RasterizerState = base.RasterizerState;
-            Display.BlendState = base.BlendState;
+            Display.DepthStencilState = DepthStencilState;
+            Display.RasterizerState = RasterizerState;
+            Display.BlendState = BlendState;
             FlushWithDeviceState(matrix, color, clearAfterFlush);
         }
 

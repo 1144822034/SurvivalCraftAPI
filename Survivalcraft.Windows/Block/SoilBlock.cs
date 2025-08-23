@@ -1,6 +1,5 @@
 using Engine;
 using Engine.Graphics;
-using System.Collections.Generic;
 
 namespace Game
 {
@@ -10,10 +9,10 @@ namespace Game
 
 		public new static string fName = "SoilBlock";
 
-		public static BoundingBox[] m_collisionBoxes = new BoundingBox[1]
-		{
+		public static BoundingBox[] m_collisionBoxes =
+		[
 			new(new Vector3(0f, 0f, 0f), new Vector3(1f, 0.9375f, 1f))
-		};
+		];
 
 		public override bool IsFaceNonAttachable(SubsystemTerrain subsystemTerrain,int face,int value,int attachBlockValue)
 		{

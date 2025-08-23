@@ -1,5 +1,3 @@
-using System;
-
 namespace Engine.Serialization
 {
 	[HumanReadableConverter(typeof(Box))]
@@ -8,7 +6,7 @@ namespace Engine.Serialization
 		public string ConvertToString(object value)
 		{
 			var box = (Box)value;
-			return HumanReadableConverter.ValuesListToString<int>(',', box.Left, box.Top, box.Near, box.Width, box.Height, box.Depth);
+			return HumanReadableConverter.ValuesListToString(',', box.Left, box.Top, box.Near, box.Width, box.Height, box.Depth);
 		}
 
 		public object ConvertFromString(Type type, string data)

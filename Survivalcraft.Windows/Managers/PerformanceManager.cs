@@ -1,7 +1,6 @@
 using Engine;
 using Engine.Graphics;
 using Engine.Media;
-using System;
 using System.Text;
 
 namespace Game

@@ -1,4 +1,3 @@
-using System.IO;
 using System.Text.Json;
 using System.Text.RegularExpressions;
 
@@ -27,7 +26,7 @@ namespace Game
 		{
 			get;
 			private set;
-		} = null;
+		}
 
 		public static void Initialize()
 		{
@@ -97,10 +96,7 @@ namespace Game
 				}
 				return result;
 			}
-			else
-			{
-				throw new FormatException($"Invalid version format: {version}");
-			}
+			throw new FormatException($"Invalid version format: {version}");
 		}
 
 		/// <summary>

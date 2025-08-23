@@ -1,10 +1,6 @@
 using Engine;
 using GameEntitySystem;
-using Jint.Native;
-using System;
-using System.Collections.Generic;
 using TemplatesDatabase;
-using static Game.ComponentLevel;
 
 namespace Game
 {
@@ -34,7 +30,7 @@ namespace Game
 			public FactorAdditionType FactorAdditionType = FactorAdditionType.Multiply;
 		}
 
-		public static string fName = "ComponentLevel";
+		public static new string fName = "ComponentLevel";
 
 		public float? m_lastLevelTextValue;
 
@@ -228,7 +224,6 @@ namespace Game
 				Value = num3,
 				Description = string.Format(LanguageControl.Get(fName,2),MathF.Floor(level).ToString())
 			});
-			float clothingFactor = 1f;
 			foreach(ClothingSlot clothingSlot in ClothingSlot.ClothingSlots.Values)
 			{
 				foreach(int clothe in m_componentPlayer.ComponentClothing.GetClothes(clothingSlot))
@@ -405,7 +400,7 @@ namespace Game
 			{
 				m_speedFactors.Add(new Factor
 				{
-					Name = "Clothing " + clothingValue.ToString(),
+					Name = "Clothing " + clothingValue,
 					Value = clothingData.MovementSpeedFactor,
 					Description = clothingData.DisplayName
 				});

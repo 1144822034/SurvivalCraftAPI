@@ -112,12 +112,9 @@ namespace Game
 					m_subsystemAudio.PlaySound("Audio/DispenserShoot", 1f, 0f, new Vector3(position.X, position.Y, position.Z), 4f, autoDelay: true);
 					return removeSlotCount;
 				}
-				else
-				{
-					return 0;
-				}
+				return 0;
 			}
-			else if (canDispensePickable)
+			if (canDispensePickable)
 			{
 				return DispenseItem(point, face, value, DispenserBlock.Mode.Dispense);
 			}

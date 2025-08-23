@@ -1,6 +1,3 @@
-using System;
-using System.Collections.Generic;
-
 namespace Engine.Serialization
 {
 	public abstract class InputArchive : Archive
@@ -59,7 +56,7 @@ namespace Engine.Serialization
 
         public void Serialize(string name, Type type, ref object value)
         {
-            ReadObject(name, Archive.GetSerializeData(type, allowEmptySerializer: true), ref value, allowOverwriteOfExistingObject: true);
+            ReadObject(name, GetSerializeData(type, allowEmptySerializer: true), ref value, allowOverwriteOfExistingObject: true);
         }
 
 		public void Serialize(string name, Type type, object value)
@@ -68,30 +65,30 @@ namespace Engine.Serialization
 			{
 				throw new InvalidOperationException("Value cannot be null");
 			}
-            ReadObject(name, Archive.GetSerializeData(type, allowEmptySerializer: true), ref value, allowOverwriteOfExistingObject: false);
+            ReadObject(name, GetSerializeData(type, allowEmptySerializer: true), ref value, allowOverwriteOfExistingObject: false);
 		}
 
 		public void Serialize<T>(string name, T value) where T : class
 		{
-            ReadObject(name, Archive.GetSerializeData(typeof(T), allowEmptySerializer: true), ref value, allowOverwriteOfExistingObject: false);
+            ReadObject(name, GetSerializeData(typeof(T), allowEmptySerializer: true), ref value, allowOverwriteOfExistingObject: false);
 		}
 
 		public void Serialize<T>(string name, ref T value)
 		{
-            ReadObject(name, Archive.GetSerializeData(typeof(T), allowEmptySerializer: true), ref value, allowOverwriteOfExistingObject: true);
+            ReadObject(name, GetSerializeData(typeof(T), allowEmptySerializer: true), ref value, allowOverwriteOfExistingObject: true);
 		}
 
 		public void Serialize<T>(string name, Action<T> setter)
 		{
 			var value = default(T);
-            ReadObject(name, Archive.GetSerializeData(typeof(T), allowEmptySerializer: true), ref value, allowOverwriteOfExistingObject: true);
+            ReadObject(name, GetSerializeData(typeof(T), allowEmptySerializer: true), ref value, allowOverwriteOfExistingObject: true);
 			setter(value);
 		}
 
 		public T Serialize<T>(string name)
 		{
 			var value = default(T);
-            ReadObject(name, Archive.GetSerializeData(typeof(T), allowEmptySerializer: true), ref value, allowOverwriteOfExistingObject: true);
+            ReadObject(name, GetSerializeData(typeof(T), allowEmptySerializer: true), ref value, allowOverwriteOfExistingObject: true);
 			return value;
 		}
 
@@ -146,7 +143,7 @@ namespace Engine.Serialization
 
         protected virtual void ReadObject(string name, SerializeData staticSerializeData, ref object value, bool allowOverwriteOfExistingObject)
         {
-            if (!staticSerializeData.UseObjectInfo || !base.UseObjectInfos)
+            if (!staticSerializeData.UseObjectInfo || !UseObjectInfos)
             {
                 ReadObjectWithoutObjectInfo(staticSerializeData, ref value);
             }
@@ -174,7 +171,7 @@ namespace Engine.Serialization
 		private void ReadObjectWithoutObjectInfo(SerializeData staticSerializeData, ref object value)
 		{
 			Type type = (value != null) ? value.GetType() : null;
-			SerializeData serializeData = (!(type == null) && !(staticSerializeData.Type == type)) ? Archive.GetSerializeData(type, allowEmptySerializer: false) : staticSerializeData;
+			SerializeData serializeData = (!(type == null) && !(staticSerializeData.Type == type)) ? GetSerializeData(type, allowEmptySerializer: false) : staticSerializeData;
 			if (serializeData.AutoConstruct == AutoConstructMode.Yes && value == null)
 			{
 				value = Activator.CreateInstance(serializeData.Type, nonPublic: true);
@@ -206,7 +203,7 @@ namespace Engine.Serialization
 			SerializeData serializeData;
 			if (!(type != null))
 			{
-				serializeData = (!(runtimeType != null)) ? staticSerializeData : Archive.GetSerializeData(runtimeType, allowEmptySerializer: false);
+				serializeData = (!(runtimeType != null)) ? staticSerializeData : GetSerializeData(runtimeType, allowEmptySerializer: false);
 			}
 			else
 			{
@@ -214,7 +211,7 @@ namespace Engine.Serialization
 				{
 					throw new InvalidOperationException("Serialized object has different type than existing object.");
 				}
-				serializeData = Archive.GetSerializeData(type, allowEmptySerializer: false);
+				serializeData = GetSerializeData(type, allowEmptySerializer: false);
 			}
 			if (serializeData.AutoConstruct == AutoConstructMode.Yes && value == null)
 			{

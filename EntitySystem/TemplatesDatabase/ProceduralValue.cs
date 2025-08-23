@@ -44,10 +44,10 @@ namespace TemplatesDatabase
 			}
 			if (reference.Contains("/") || reference.Contains(".") || reference.Contains("^"))
 			{
-				string[] array = reference.Split(new char[1]
-				{
+				string[] array = reference.Split(
+				[
 					'/'
-				}, StringSplitOptions.RemoveEmptyEntries);
+				], StringSplitOptions.RemoveEmptyEntries);
 				int num = 0;
 				while (context != null && num < array.Length)
 				{

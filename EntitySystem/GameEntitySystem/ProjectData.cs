@@ -1,4 +1,3 @@
-using Engine;
 using System;
 using System.Xml.Linq;
 using TemplatesDatabase;
@@ -58,7 +57,7 @@ namespace GameEntitySystem
 			XElement xElement2 = XmlUtils.FindChildElement(projectNode, "Entities", throwIfNotFound: false);
 			if (xElement2 != null)
             {
-                NextEntityID = XmlUtils.GetAttributeValue<int>(xElement2, "NextID", 1000001);
+                NextEntityID = XmlUtils.GetAttributeValue(xElement2, "NextID", 1000001);
 				//Log.Information("Load NextEntityID: " + NextEntityID);
                 EntityDataList = new EntityDataList(gameDatabase, xElement2, ignoreInvalidEntities);
             }

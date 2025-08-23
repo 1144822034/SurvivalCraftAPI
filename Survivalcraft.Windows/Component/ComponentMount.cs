@@ -50,7 +50,7 @@ namespace Game
 			ComponentBody = Entity.FindComponent<ComponentBody>(throwOnError: true);
 			MountOffset = valuesDictionary.GetValue<Vector3>("MountOffset");
 			DismountOffset = valuesDictionary.GetValue<Vector3>("DismountOffset");
-			MountAllowToStartRange = valuesDictionary.GetValue<float>("MountAllowToStartRange",2.5f);
+			MountAllowToStartRange = valuesDictionary.GetValue("MountAllowToStartRange",2.5f);
 		}
 	}
 }

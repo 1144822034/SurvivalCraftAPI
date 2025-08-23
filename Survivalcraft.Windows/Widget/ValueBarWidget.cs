@@ -1,6 +1,5 @@
 using Engine;
 using Engine.Graphics;
-using System;
 
 namespace Game
 {
@@ -171,7 +170,7 @@ namespace Game
 
 		public override void Draw(DrawContext dc)
 		{
-			BaseBatch baseBatch = (BarSubtexture == null) ? dc.PrimitivesRenderer2D.FlatBatch(0, DepthStencilState.None) : ((BaseBatch)dc.PrimitivesRenderer2D.TexturedBatch(BarSubtexture.Texture, useAlphaTest: false, 0, DepthStencilState.None, null, null, TextureLinearFilter ? SamplerState.LinearClamp : SamplerState.PointClamp));
+			BaseBatch baseBatch = (BarSubtexture == null) ? dc.PrimitivesRenderer2D.FlatBatch(0, DepthStencilState.None) : dc.PrimitivesRenderer2D.TexturedBatch(BarSubtexture.Texture, useAlphaTest: false, 0, DepthStencilState.None, null, null, TextureLinearFilter ? SamplerState.LinearClamp : SamplerState.PointClamp);
 			int num = 0;
 			int start = 0;
 			if (baseBatch is TexturedBatch2D)

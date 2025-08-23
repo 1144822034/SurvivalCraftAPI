@@ -1,7 +1,4 @@
 using Engine;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Xml.Linq;
 
 namespace Game
@@ -69,7 +66,7 @@ namespace Game
 				}
 			}
 			ListPanelWidget furnitureSetList = m_furnitureSetList;
-			furnitureSetList.ItemWidgetFactory = (Func<object, Widget>)Delegate.Combine(furnitureSetList.ItemWidgetFactory, (Func<object, Widget>)((object item) => new FurnitureSetItemWidget(this, (FurnitureSet)item)));
+			furnitureSetList.ItemWidgetFactory = (Func<object, Widget>)Delegate.Combine(furnitureSetList.ItemWidgetFactory, (Func<object, Widget>)(item => new FurnitureSetItemWidget(this, (FurnitureSet)item)));
 			m_furnitureSetList.SelectionChanged += delegate
 			{
 				if (!m_ignoreSelectionChanged && ComponentFurnitureInventory.FurnitureSet != (m_furnitureSetList.SelectedItem as FurnitureSet))
@@ -134,7 +131,7 @@ namespace Game
 						ImportFurnitureSet(SubsystemTerrain);
 					})
 				};
-				DialogsManager.ShowDialog(m_componentPlayer.GuiWidget, new ListSelectionDialog(LanguageControl.Get(fName, 8), list, 64f, (object t) => ((Tuple<string, Action>)t).Item1, delegate (object t)
+				DialogsManager.ShowDialog(m_componentPlayer.GuiWidget, new ListSelectionDialog(LanguageControl.Get(fName, 8), list, 64f, t => ((Tuple<string, Action>)t).Item1, delegate (object t)
 				{
 					((Tuple<string, Action>)t).Item2();
 				}));
@@ -177,7 +174,7 @@ namespace Game
 						ExportFurnitureSet();
 					})
 				};
-				DialogsManager.ShowDialog(m_componentPlayer.GuiWidget, new ListSelectionDialog(LanguageControl.Get(fName, 14), list2, 64f, (object t) => ((Tuple<string, Action>)t).Item1, delegate (object t)
+				DialogsManager.ShowDialog(m_componentPlayer.GuiWidget, new ListSelectionDialog(LanguageControl.Get(fName, 14), list2, 64f, t => ((Tuple<string, Action>)t).Item1, delegate (object t)
 				{
 					((Tuple<string, Action>)t).Item2();
 				}));
@@ -235,9 +232,9 @@ namespace Game
 				}
 			}
 			var list2 = new List<InventorySlotWidget>((from w in m_inventoryGrid.Children
-													   select w as InventorySlotWidget into w
-													   where w != null
-													   select w).Cast<InventorySlotWidget>());
+				select w as InventorySlotWidget into w
+				where w != null
+				select w));
 			int num = ComponentFurnitureInventory.PageIndex * list2.Count;
 			for (int j = 0; j < list2.Count; j++)
 			{
@@ -319,7 +316,7 @@ namespace Game
 			}
 			else
 			{
-				DialogsManager.ShowDialog(m_componentPlayer.GuiWidget, new ListSelectionDialog(LanguageControl.Get(fName, 20), FurniturePacksManager.FurniturePackNames, 64f, (object s) => FurniturePacksManager.GetDisplayName((string)s), delegate (object s)
+				DialogsManager.ShowDialog(m_componentPlayer.GuiWidget, new ListSelectionDialog(LanguageControl.Get(fName, 20), FurniturePacksManager.FurniturePackNames, 64f, s => FurniturePacksManager.GetDisplayName((string)s), delegate (object s)
 				{
 					try
 					{

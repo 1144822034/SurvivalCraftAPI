@@ -1,5 +1,4 @@
 using Engine;
-using System.Collections.Generic;
 using TemplatesDatabase;
 
 namespace Game
@@ -30,11 +29,11 @@ namespace Game
 
 		public int[] m_visited = new int[8192];
 
-		public override int[] HandledBlocks => new int[2]
-		{
+		public override int[] HandledBlocks =>
+		[
 			120,
 			121
-		};
+		];
 
 		public UpdateOrder UpdateOrder => UpdateOrder.Default;
 
@@ -122,7 +121,7 @@ namespace Game
 		{
 			m_toVisit.Count = 0;
 			Array.Clear(m_visited);
-			Terrain terrain = base.SubsystemTerrain.Terrain;
+			Terrain terrain = SubsystemTerrain.Terrain;
 			float num = 0f;
 			float num2 = 0f;
 			float num3 = 0f;
@@ -171,7 +170,7 @@ namespace Game
 					float num20 = 1f / num19;
 					float num21 = terrain.SeasonTemperature;
 					float num22 = SubsystemWeather.GetTemperatureAdjustmentAtHeight(y2);
-					float num23 = ((block is WaterBlock) ? (MathUtils.Max((float)chunkAtCell.GetTemperatureFast(x2, z2) + num21 - 7f, 0f) + num22) : ((!(block is IceBlock)) ? (MathUtils.Max((float)chunkAtCell.GetTemperatureFast(x2, z2) + num21, 0f) + num22) : MathUtils.Max(0f + num21 + num22, 0f)));
+					float num23 = ((block is WaterBlock) ? (MathUtils.Max(chunkAtCell.GetTemperatureFast(x2, z2) + num21 - 7f, 0f) + num22) : ((!(block is IceBlock)) ? (MathUtils.Max(chunkAtCell.GetTemperatureFast(x2, z2) + num21, 0f) + num22) : MathUtils.Max(0f + num21 + num22, 0f)));
 					num += num20 * num23;
 					num2 += num20;
 				}
@@ -185,7 +184,7 @@ namespace Game
 					float num28 = (y >= precipitationShaftInfo.YLimit) ? MathUtils.Lerp(0f, -2f, precipitationShaftInfo.Intensity) : 0f;
 					float num29 = MathUtils.Lerp(-6f, 0f, m_subsystemSky.SkyLightIntensity);
 					float num30 = SubsystemWeather.GetTemperatureAdjustmentAtHeight(y2);
-					num3 += num26 * (MathUtils.Max((float)chunkAtCell.GetTemperatureFast(x2, z2) + num27, 0f) + num28 + num29 + num30);
+					num3 += num26 * (MathUtils.Max(chunkAtCell.GetTemperatureFast(x2, z2) + num27, 0f) + num28 + num29 + num30);
 					num4 += num26;
 				}
 				else if (m_toVisit.Count < 4090)

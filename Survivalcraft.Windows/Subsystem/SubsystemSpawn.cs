@@ -1,12 +1,9 @@
 using Engine;
 using Engine.Serialization;
 using GameEntitySystem;
-using System;
-using System.Collections.Generic;
 using System.Globalization;
 using System.Text;
 using TemplatesDatabase;
-using System.Linq;
 
 namespace Game
 {
@@ -125,10 +122,10 @@ namespace Game
 					/*ValuesDictionary v = [];
 					SaveSpawnsData(v, value2.SpawnsData);
 					valuesDictionary3.SetValue("SpawnsData", v);*/
-                    string text = this.SaveSpawnsData(value2.SpawnsData);
+                    string text = SaveSpawnsData(value2.SpawnsData);
                     if (!string.IsNullOrEmpty(text))
                     {
-                        valuesDictionary3.SetValue<string>("SpawnsData", text);
+                        valuesDictionary3.SetValue("SpawnsData", text);
                     }
                 }
 			}
@@ -284,7 +281,7 @@ namespace Game
 					Data = string.Empty,
 					EntityId = item.Entity.Id
 				};
-				ModsManager.HookAction("OnSaveSpawnData", (ModLoader loader) => { loader.OnSaveSpawnData(item, data); return true; });
+				ModsManager.HookAction("OnSaveSpawnData", loader => { loader.OnSaveSpawnData(item, data); return true; });
 				GetOrCreateSpawnChunk(point).SpawnsData.Add(data);
 				m_spawnEntityDatas[data.EntityId] = data;
 				item.Despawn();
@@ -297,7 +294,7 @@ namespace Game
 			{
 				ValuesDictionary valuesDictionary = DatabaseManager.FindEntityValuesDictionary(data.TemplateName, true);
 				Entity entity = Project.CreateEntity(valuesDictionary, data.EntityId);
-				ModsManager.HookAction("OnReadSpawnData", (ModLoader loader) => { loader.OnReadSpawnData(entity, data); return true; });
+				ModsManager.HookAction("OnReadSpawnData", loader => { loader.OnReadSpawnData(entity, data); return true; });
 				entity.FindComponent<ComponentBody>(throwOnError: true).Position = data.Position;
 				entity.FindComponent<ComponentBody>(throwOnError: true).Rotation = Quaternion.CreateFromAxisAngle(Vector3.UnitY, m_random.Float(0f, (float)Math.PI * 2f));
 				ComponentCreature componentCreature = entity.FindComponent<ComponentCreature>();
@@ -310,7 +307,7 @@ namespace Game
 			}
 			catch (Exception ex)
 			{
-				Log.Error($"Unable to spawn entity with template \"{data.TemplateName}\". Reason: {ex.ToString()}");
+				Log.Error($"Unable to spawn entity with template \"{data.TemplateName}\". Reason: {ex}");
 				return null;
 			}
 		}
@@ -331,10 +328,10 @@ namespace Game
 		}
         public virtual void LoadSpawnsData(string data, List<SpawnEntityData> creaturesData)
         {
-            string[] array = data.Split(new char[] { ';' }, StringSplitOptions.RemoveEmptyEntries);
+            string[] array = data.Split([';'], StringSplitOptions.RemoveEmptyEntries);
             for (int i = 0; i < array.Length; i++)
             {
-                string[] array2 = array[i].Split(new char[] { ',' });
+                string[] array2 = array[i].Split(new[] { ',' });
                 if (array2.Length < 4)
                 {
                     throw new InvalidOperationException("Invalid spawn data string.");

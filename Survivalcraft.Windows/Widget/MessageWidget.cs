@@ -1,8 +1,6 @@
 using Engine;
 using Engine.Graphics;
 using Engine.Media;
-using System;
-using System.Linq;
 using System.Xml.Linq;
 
 namespace Game
@@ -34,7 +32,7 @@ namespace Game
 					WordWrap = true
 				};
 				StartTime = Time.FrameStartTime;
-				Duration = (blinking ? 6f : (4f + MathUtils.Min(1f * (float)text.Count((char c) => c == '\n'), 4f)));
+				Duration = (blinking ? 6f : (4f + MathUtils.Min(1f * text.Count(c => c == '\n'), 4f)));
 				Color = color;
 				Blinking = blinking;
 			}
@@ -44,7 +42,7 @@ namespace Game
 				float num;
 				if (Blinking)
 				{
-					num = MathUtils.Saturate(1f * (float)(StartTime + (double)Duration - Time.FrameStartTime));
+					num = MathUtils.Saturate(1f * (float)(StartTime + Duration - Time.FrameStartTime));
 					if (Time.FrameStartTime - StartTime < 0.417)
 					{
 						num *= MathUtils.Lerp(0.25f, 1f, 0.5f * (1f - MathF.Cos((float)Math.PI * 12f * (float)(Time.FrameStartTime - StartTime))));
@@ -52,7 +50,7 @@ namespace Game
 				}
 				else
 				{
-					num = MathUtils.Saturate(MathUtils.Min(3f * (float)(Time.FrameStartTime - StartTime), 1f * (float)(StartTime + (double)Duration - Time.FrameStartTime)));
+					num = MathUtils.Saturate(MathUtils.Min(3f * (float)(Time.FrameStartTime - StartTime), 1f * (float)(StartTime + Duration - Time.FrameStartTime)));
 				}
 				LabelWidget.Color = Color * num;
 			}
@@ -108,7 +106,7 @@ namespace Game
 			{
 				Message message = m_messages[num];
 				int num2 = m_messages.Count - num - 1;
-				if (Time.FrameStartTime >= message.StartTime + (double)message.Duration || num2 >= 3 || (num2 > 0 && !message.Blinking))
+				if (Time.FrameStartTime >= message.StartTime + message.Duration || num2 >= 3 || (num2 > 0 && !message.Blinking))
 				{
 					RemoveMessage(message);
 				}

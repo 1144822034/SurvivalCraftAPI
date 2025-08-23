@@ -1,10 +1,9 @@
 using Engine;
 using Engine.Graphics;
 using GameEntitySystem;
-using System;
-using System.Collections.Generic;
 using System.Globalization;
 using TemplatesDatabase;
+
 namespace Game
 {
 	public class SubsystemSky : Subsystem, IDrawable, IUpdateable
@@ -134,42 +133,42 @@ namespace Game
 
 		public bool FogEnabled = true;
 
-		public int[] m_drawOrders = new int[3]
-		{
+		public int[] m_drawOrders =
+		[
 			-100,
 			5,
 			105
-		};
+		];
 
-		public float[] m_cloudsLayerRadii = new float[4]
-		{
+		public float[] m_cloudsLayerRadii =
+		[
 			0f,
 			0.8f,
 			0.95f,
 			1f
-		};
+		];
 
 		public Color[] m_cloudsLayerColors = new Color[5];
 
-		public static int[] m_lightValuesMoonless = new int[6]
-		{
+		public static int[] m_lightValuesMoonless =
+		[
 			0,
 			3,
 			6,
 			9,
 			12,
 			15
-		};
+		];
 
-		public static int[] m_lightValuesNormal = new int[6]
-		{
+		public static int[] m_lightValuesNormal =
+		[
 			3,
 			5,
 			8,
 			10,
 			13,
 			15
-		};
+		];
 
 		public float SkyLightIntensity
 		{
@@ -314,14 +313,14 @@ namespace Game
 			if (flag)
 			{
 				float pressure = (m_random.Bool(0.2f) ? 39 : 19);
-				base.Project.FindSubsystem<SubsystemExplosions>(throwOnError: true).AddExplosion(num3, num4 + 1, num5, pressure, isIncendiary: false, noExplosionSound: true);
+				Project.FindSubsystem<SubsystemExplosions>(throwOnError: true).AddExplosion(num3, num4 + 1, num5, pressure, isIncendiary: false, noExplosionSound: true);
 			}
 			int cellValue = m_subsystemTerrain.Terrain.GetCellValue(num3, num4, num5);
 			int num6 = Terrain.ExtractContents(cellValue);
 			if (num6 != 0)
 			{
 				Block block = BlocksManager.Blocks[num6];
-				m_subsystemParticles.AddParticleSystem(block.CreateDebrisParticleSystem(m_subsystemTerrain, new Vector3((float)num3 + 0.5f, (float)num4 + 1.5f, (float)num5 + 0.5f), cellValue, 2.5f));
+				m_subsystemParticles.AddParticleSystem(block.CreateDebrisParticleSystem(m_subsystemTerrain, new Vector3(num3 + 0.5f, num4 + 1.5f, num5 + 0.5f), cellValue, 2.5f));
 			}
 		}
 
@@ -365,7 +364,7 @@ namespace Game
 					int seasonalHumidity = m_subsystemTerrain.Terrain.GetSeasonalHumidity(x, z);
 					int temperature = m_subsystemTerrain.Terrain.GetSeasonalTemperature(x, z) + SubsystemWeather.GetTemperatureAdjustmentAtHeight(y);
 					Color c = BlockColorsMap.Water.Lookup(temperature, seasonalHumidity);
-					float num = MathUtils.Lerp(1f, 0.5f, (float)seasonalHumidity / 15f);
+					float num = MathUtils.Lerp(1f, 0.5f, seasonalHumidity / 15f);
 					float num2 = MathUtils.Lerp(1f, 0.2f, MathUtils.Saturate(0.075f * (ViewUnderWaterDepth - 2f)));
 					float num3 = MathUtils.Lerp(0.33f, 1f, SkyLightIntensity);
 					m_viewHazeStart = 0f;
@@ -455,13 +454,12 @@ namespace Game
 							m_primitiveRender.ShaderAlphaTest = ShaderAlphaTest;
 							m_primitiveRender.Camera = camera;
 						}
-						m_primitiveRender.Flush(m_primitivesRenderer3d, camera.ViewProjectionMatrix, true, int.MaxValue);
+						m_primitiveRender.Flush(m_primitivesRenderer3d, camera.ViewProjectionMatrix);
 					}
 					else
 					{
 						m_primitivesRenderer3d.Flush(camera.ViewProjectionMatrix);
 					}
-					return;
 				}
 			}
 			else
@@ -473,16 +471,16 @@ namespace Game
 
 		public override void Load(ValuesDictionary valuesDictionary)
 		{
-			m_subsystemTimeOfDay = base.Project.FindSubsystem<SubsystemTimeOfDay>(throwOnError: true);
-			m_subsystemSeasons = base.Project.FindSubsystem<SubsystemSeasons>(throwOnError: true);
-			m_subsystemTime = base.Project.FindSubsystem<SubsystemTime>(throwOnError: true);
-			m_subsystemGameInfo = base.Project.FindSubsystem<SubsystemGameInfo>(throwOnError: true);
-			m_subsystemTerrain = base.Project.FindSubsystem<SubsystemTerrain>(throwOnError: true);
-			m_subsystemWeather = base.Project.FindSubsystem<SubsystemWeather>(throwOnError: true);
-			m_subsystemAudio = base.Project.FindSubsystem<SubsystemAudio>(throwOnError: true);
-			m_subsystemBodies = base.Project.FindSubsystem<SubsystemBodies>(throwOnError: true);
-			m_subsystemParticles = base.Project.FindSubsystem<SubsystemParticles>(throwOnError: true);
-			m_subsystemFluidBlockBehavior = base.Project.FindSubsystem<SubsystemFluidBlockBehavior>(throwOnError: true);
+			m_subsystemTimeOfDay = Project.FindSubsystem<SubsystemTimeOfDay>(throwOnError: true);
+			m_subsystemSeasons = Project.FindSubsystem<SubsystemSeasons>(throwOnError: true);
+			m_subsystemTime = Project.FindSubsystem<SubsystemTime>(throwOnError: true);
+			m_subsystemGameInfo = Project.FindSubsystem<SubsystemGameInfo>(throwOnError: true);
+			m_subsystemTerrain = Project.FindSubsystem<SubsystemTerrain>(throwOnError: true);
+			m_subsystemWeather = Project.FindSubsystem<SubsystemWeather>(throwOnError: true);
+			m_subsystemAudio = Project.FindSubsystem<SubsystemAudio>(throwOnError: true);
+			m_subsystemBodies = Project.FindSubsystem<SubsystemBodies>(throwOnError: true);
+			m_subsystemParticles = Project.FindSubsystem<SubsystemParticles>(throwOnError: true);
+			m_subsystemFluidBlockBehavior = Project.FindSubsystem<SubsystemFluidBlockBehavior>(throwOnError: true);
 			m_sunTexture = ContentManager.Get<Texture2D>("Textures/Sun");
 			m_glowTexture = ContentManager.Get<Texture2D>("Textures/SkyGlow");
 			m_cloudsTexture = ContentManager.Get<Texture2D>("Textures/Clouds");
@@ -591,8 +589,8 @@ namespace Game
 			{
 				Utilities.Dispose(ref m_starsVertexBuffer);
 				Utilities.Dispose(ref m_starsIndexBuffer);
-				m_starsVertexBuffer = new VertexBuffer(m_starsVertexDeclaration, 1000);
-				m_starsIndexBuffer = new IndexBuffer(IndexFormat.SixteenBits, 1500);
+				m_starsVertexBuffer = new VertexBuffer(m_starsVertexDeclaration, m_starsCount * 4);
+				m_starsIndexBuffer = new IndexBuffer(IndexFormat.SixteenBits, m_starsCount * 6);
 				FillStarsBuffers();
 			}
 			Display.DepthStencilState = DepthStencilState.DepthRead;
@@ -647,7 +645,7 @@ namespace Game
 			Vector3 unitY = Vector3.UnitY;
 			Vector3 v = Vector3.Normalize(Vector3.Cross(camera.ViewDirection, unitY));
 			Viewport viewport = Display.Viewport;
-			float num = Vector4.Transform(new Vector4(value, 1f), camera.ViewProjectionMatrix).W * 2f / ((float)viewport.Width * camera.ProjectionMatrix.M11);
+			float num = Vector4.Transform(new Vector4(value, 1f), camera.ViewProjectionMatrix).W * 2f / (viewport.Width * camera.ProjectionMatrix.M11);
 			for (int i = 0; i < (int)(m_lightningStrikeBrightness * 30f); i++)
 			{
 				float s = m_random.NormalFloat(0f, 1f * num);
@@ -661,8 +659,8 @@ namespace Game
 					float s3 = ((num3 & 1) == 0) ? 1 : (-1);
 					float s4 = MathUtils.Lerp(0.05f, 0.2f, (float)(double)((num3 >> 8) & 0xFF) / 255f);
 					float num5 = num2;
-					float num6 = num5 - (num4 * MathUtils.Lerp(0.45f, 0.55f, (float)((num3 >> 16) & 0xFF) / 255f));
-					float num7 = num5 - (num4 * MathUtils.Lerp(0.45f, 0.55f, (float)((num3 >> 24) & 0xFF) / 255f));
+					float num6 = num5 - (num4 * MathUtils.Lerp(0.45f, 0.55f, ((num3 >> 16) & 0xFF) / 255f));
+					float num7 = num5 - (num4 * MathUtils.Lerp(0.45f, 0.55f, ((num3 >> 24) & 0xFF) / 255f));
 					float num8 = num5 - num4;
 					Vector3 p = new Vector3(value.X, num5, value.Z) + v2;
 					Vector3 vector = new Vector3(value.X, num6, value.Z) + v2 - (num4 * v * s3 * s4);
@@ -702,7 +700,7 @@ namespace Game
 			m_cloudsLayerColors[3] = Color.Transparent;
 			double gameTime = m_subsystemTime.GameTime;
 			Vector3 viewPosition = camera.ViewPosition;
-			Vector2 v = new((float)MathUtils.Remainder((0.0020000000949949026 * gameTime) - (double)(viewPosition.X / 1900f * 1.75f), 1.0) + (viewPosition.X / 1900f * 1.75f), (float)MathUtils.Remainder((0.0020000000949949026 * gameTime) - (double)(viewPosition.Z / 1900f * 1.75f), 1.0) + (viewPosition.Z / 1900f * 1.75f));
+			Vector2 v = new((float)MathUtils.Remainder((0.002 * gameTime) - viewPosition.X / 1900f * 1.75f, 1.0) + (viewPosition.X / 1900f * 1.75f), (float)MathUtils.Remainder((0.002 * gameTime) - viewPosition.Z / 1900f * 1.75f, 1.0) + (viewPosition.Z / 1900f * 1.75f));
 			TexturedBatch3D texturedBatch3D = m_primitivesRenderer3d.TexturedBatch(m_cloudsTexture, useAlphaTest: false, 2, DepthStencilState.DepthRead, null, BlendState.AlphaBlend, SamplerState.LinearWrap);
 			DynamicArray<VertexPositionColorTexture> triangleVertices = texturedBatch3D.TriangleVertices;
 			DynamicArray<int> triangleIndices = texturedBatch3D.TriangleIndices;
@@ -720,8 +718,8 @@ namespace Game
 					int num4 = MathUtils.Max(Math.Abs(num2), Math.Abs(num3));
 					float num5 = m_cloudsLayerRadii[num4];
 					float num6 = (num4 > 0) ? (num5 / MathF.Sqrt((num2 * num2) + (num3 * num3))) : 0f;
-					float num7 = (float)num2 * num6;
-					float num8 = (float)num3 * num6;
+					float num7 = num2 * num6;
+					float num8 = num3 * num6;
 					float y = MathUtils.Lerp(600f, 60f, num5 * num5);
 					Vector3 position = new(viewPosition.X + (num7 * 1900f), y, viewPosition.Z + (num8 * 1900f));
 					Vector2 texCoord = (new Vector2(position.X, position.Z) / 1900f * 1.75f) - v;
@@ -822,11 +820,11 @@ namespace Game
 		{
 			for (int i = 0; i < 8; i++)
 			{
-				float x = (float)Math.PI / 2f * MathUtils.Sqr((float)i / 7f);
+				float x = (float)Math.PI / 2f * MathUtils.Sqr(i / 7f);
 				for (int j = 0; j < 16; j++)
 				{
 					int num = j + (i * 16);
-					float x2 = (float)Math.PI * 2f * (float)j / 16f;
+					float x2 = (float)Math.PI * 2f * j / 16f;
 					float num2 = 1800f * MathF.Cos(x);
 					skyDome.Vertices[num].Position.X = num2 * MathF.Sin(x2);
 					skyDome.Vertices[num].Position.Z = num2 * MathF.Cos(x2);
@@ -868,8 +866,8 @@ namespace Game
 		public virtual void FillStarsBuffers()
 		{
 			Random random = new Random(10);
-			StarVertex[] array = new StarVertex[1000];
-			for (int i = 0; i < 250; i++)
+			StarVertex[] array = new StarVertex[m_starsCount * 4];
+			for (int i = 0; i < m_starsCount; i++)
 			{
 				float x;
 				Color c;
@@ -901,7 +899,7 @@ namespace Game
 						while (v.LengthSquared() > 1f);
 						break;
 				}
-				float num = 7.6500006f * MathF.Pow(x, 3f);
+				float num = 7.65f * MathF.Pow(x, 3f);
 				float s = MathF.Pow(x, 4f);
 				c = Color.MultiplyAlphaOnly(c, s);
 				v = Vector3.Normalize(v);
@@ -938,8 +936,8 @@ namespace Game
 				};
 			}
 			m_starsVertexBuffer.SetData(array, 0, array.Length);
-			ushort[] array2 = new ushort[1500];
-			for (int j = 0; j < 250; j++)
+			ushort[] array2 = new ushort[m_starsCount * 6];
+			for (int j = 0; j < m_starsCount; j++)
 			{
 				array2[j * 6] = (ushort)(j * 4);
 				array2[(j * 6) + 1] = (ushort)((j * 4) + 1);
@@ -1009,7 +1007,7 @@ namespace Game
 			direction = Vector3.Normalize(direction);
 			Vector2 vector = Vector2.Normalize(new Vector2(direction.X,direction.Z));
 			float num = CalculateLightIntensity(timeOfDay);
-			float f2 = MathUtils.Saturate((float)temperature / 15f);
+			float f2 = MathUtils.Saturate(temperature / 15f);
 			Vector3 v = new Vector3(0.65f,0.68f,0.7f);
 			Vector3 v2 = Vector3.Lerp(new Vector3(0.33f,0.39f,0.46f),new Vector3(0.15f,0.3f,0.56f),f2);
 			Vector3 v3 = Vector3.Lerp(new Vector3(0.79f,0.83f,0.88f),new Vector3(0.64f,0.77f,0.91f),f2);

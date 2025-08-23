@@ -35,11 +35,11 @@ namespace TemplatesDatabase
 				string attributeValue11 = XmlUtils.GetAttributeValue<string>(item2, "AllowedInheritanceParents");
 				string attributeValue12 = XmlUtils.GetAttributeValue<string>(item2, "NestedValueType");
 				List<DatabaseObjectType> list = [];
-				string[] array = attributeValue10.Split(new char[2]
-				{
+				string[] array = attributeValue10.Split(
+				[
 					',',
 					' '
-				}, StringSplitOptions.RemoveEmptyEntries);
+				], StringSplitOptions.RemoveEmptyEntries);
 				foreach (string text in array)
 				{
 					if (!dictionary.TryGetValue(text, out DatabaseObjectType value2))
@@ -49,11 +49,11 @@ namespace TemplatesDatabase
 					list.Add(value2);
 				}
 				List<DatabaseObjectType> list2 = [];
-				array = attributeValue11.Split(new char[2]
-				{
+				array = attributeValue11.Split(
+				[
 					',',
 					' '
-				}, StringSplitOptions.RemoveEmptyEntries);
+				], StringSplitOptions.RemoveEmptyEntries);
 				foreach (string text2 in array)
 				{
 					if (!dictionary.TryGetValue(text2, out DatabaseObjectType value3))
@@ -153,7 +153,7 @@ namespace TemplatesDatabase
 					item3.Key.ExplicitInheritanceParent = database.FindDatabaseObject(guid, null, throwIfNotFound: true);
 				}
 			}
-			return list.Where((DatabaseObject x) => x.NestingParent == null).ToList();
+			return list.Where(x => x.NestingParent == null).ToList();
 		}
 
 		public static DatabaseObject LoadDatabaseObject(XElement node, Database database)
@@ -181,8 +181,8 @@ namespace TemplatesDatabase
 				XmlUtils.SetAttributeValue(node2, "MustInherit", databaseObjectType.MustInherit);
 				XmlUtils.SetAttributeValue(node2, "NameLengthLimit", databaseObjectType.NameLengthLimit);
 				XmlUtils.SetAttributeValue(node2, "SaveStandalone", databaseObjectType.SaveStandalone);
-				XmlUtils.SetAttributeValue(node2, "AllowedNestingParents", databaseObjectType.AllowedNestingParents.Aggregate(string.Empty, (string r, DatabaseObjectType d) => (r.Length != 0) ? (r + "," + d.Name) : d.Name));
-				XmlUtils.SetAttributeValue(node2, "AllowedInheritanceParents", databaseObjectType.AllowedInheritanceParents.Aggregate(string.Empty, (string r, DatabaseObjectType d) => (r.Length != 0) ? (r + "," + d.Name) : d.Name));
+				XmlUtils.SetAttributeValue(node2, "AllowedNestingParents", databaseObjectType.AllowedNestingParents.Aggregate(string.Empty, (r,d) => (r.Length != 0) ? (r + "," + d.Name) : d.Name));
+				XmlUtils.SetAttributeValue(node2, "AllowedInheritanceParents", databaseObjectType.AllowedInheritanceParents.Aggregate(string.Empty, (r,d) => (r.Length != 0) ? (r + "," + d.Name) : d.Name));
 				XmlUtils.SetAttributeValue(node2, "NestedValueType", (databaseObjectType.NestedValueType != null) ? databaseObjectType.NestedValueType.Name : string.Empty);
 			}
 			List<Type> list = [];
@@ -195,7 +195,7 @@ namespace TemplatesDatabase
 					list2.Add(item.GetTypeInfo().Assembly);
 				}
 			}
-			list2.Sort((Assembly a1, Assembly a2) => string.CompareOrdinal(a1.FullName, a2.FullName));
+			list2.Sort((a1,a2) => string.CompareOrdinal(a1.FullName, a2.FullName));
 			XElement parentNode2 = XmlUtils.AddElement(node, "Assemblies");
 			foreach (Assembly item2 in list2)
 			{
@@ -280,7 +280,7 @@ namespace TemplatesDatabase
 		public static void InternalSaveDatabaseObjectsList(XElement node, IEnumerable<DatabaseObject> databaseObjects, bool saveNestingParents)
 		{
 			List<DatabaseObject> list = new(databaseObjects);
-			list.Sort((DatabaseObject o1, DatabaseObject o2) => (o1.Type.Order != o2.Type.Order) ? (o1.Type.Order - o2.Type.Order) : o1.Guid.CompareTo(o2.Guid));
+			list.Sort((o1,o2) => (o1.Type.Order != o2.Type.Order) ? (o1.Type.Order - o2.Type.Order) : o1.Guid.CompareTo(o2.Guid));
 			foreach (DatabaseObject item in list)
 			{
 				InternalSaveDatabaseObject(XmlUtils.AddElement(node, item.Type.Name), item, saveNestingParents);

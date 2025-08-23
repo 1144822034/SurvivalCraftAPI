@@ -1,5 +1,3 @@
-using System.Collections.Generic;
-
 namespace Engine.Serialization
 {
     public class SortedDictionarySerializer<K, V> : ISerializer<SortedDictionary<K, V>>

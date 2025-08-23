@@ -1,6 +1,5 @@
 using Engine;
 using Engine.Graphics;
-using System;
 
 namespace Game
 {
@@ -72,7 +71,7 @@ namespace Game
 			set;
 		}
 		public PlayerData PlayerData
-		{//Ä¿Ç°½ö¸³Öµ£¬ÓÎÏ·ÀïÃ»ÓĞÊ¹ÓÃ¸ÃÊôĞÔ£¬µ«ÎğÉ¾£¬Ä£×é¿ÉÄÜ»áÓÃµ½
+		{//Ä¿Ç°ï¿½ï¿½ï¿½ï¿½Öµï¿½ï¿½ï¿½ï¿½Ï·ï¿½ï¿½Ã»ï¿½ï¿½Ê¹ï¿½Ã¸ï¿½ï¿½ï¿½ï¿½Ô£ï¿½ï¿½ï¿½ï¿½ï¿½É¾ï¿½ï¿½Ä£ï¿½ï¿½ï¿½ï¿½Ü»ï¿½ï¿½Ãµï¿½
 			get;
 			set;
 		}

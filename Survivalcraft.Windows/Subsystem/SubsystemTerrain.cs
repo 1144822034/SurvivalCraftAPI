@@ -1,7 +1,5 @@
 using Engine;
 using GameEntitySystem;
-using System;
-using System.Collections.Generic;
 using TemplatesDatabase;
 
 namespace Game
@@ -14,8 +12,8 @@ namespace Game
 
 		public DynamicArray<Point3> m_modifiedList = [];
 
-		public static Point3[] m_neighborOffsets = new Point3[7]
-		{
+		public static Point3[] m_neighborOffsets =
+		[
 			new(0, 0, 0),
 			new(-1, 0, 0),
 			new(1, 0, 0),
@@ -23,7 +21,7 @@ namespace Game
 			new(0, 1, 0),
 			new(0, 0, -1),
 			new(0, 0, 1)
-		};
+		];
 
 		public SubsystemSky m_subsystemsky;
 
@@ -41,11 +39,11 @@ namespace Game
 
 		public List<BlockDropValue> m_dropValues = [];
 
-		public static int[] m_drawOrders = new int[2]
-		{
+		public static int[] m_drawOrders =
+		[
 			0,
 			100
-		};
+		];
 
 		public SubsystemGameInfo SubsystemGameInfo
 		{

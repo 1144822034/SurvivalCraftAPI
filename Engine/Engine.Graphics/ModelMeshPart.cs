@@ -1,5 +1,3 @@
-using System;
-
 namespace Engine.Graphics
 {
 	public class ModelMeshPart : IDisposable
@@ -57,11 +55,7 @@ namespace Engine.Graphics
             }
         }
 
-        public ModelMeshPart()
-		{
-		}
-
-		public void Dispose()
+        public void Dispose()
 		{
 			if (VertexBuffer != null)
 			{

@@ -1,4 +1,3 @@
-using System;
 using System.Xml.Linq;
 
 namespace Game
@@ -41,7 +40,7 @@ namespace Game
 			m_linearTextBox = Children.Find<TextBoxWidget>("EditTruthTableDialog.LinearText");
 			for (int i = 0; i < 16; i++)
 			{
-				m_lineCheckboxes[i] = Children.Find<CheckboxWidget>("EditTruthTableDialog.Line" + i.ToString());
+				m_lineCheckboxes[i] = Children.Find<CheckboxWidget>("EditTruthTableDialog.Line" + i);
 			}
 			m_handler = handler;
 			m_truthTableData = truthTableData;

@@ -10,10 +10,10 @@ namespace Game
 
 		public Random m_random = new();
 
-		public override int[] HandledBlocks => new int[1]
-		{
+		public override int[] HandledBlocks =>
+		[
 			158
-		};
+		];
 
 		public override bool OnUse(Ray3 ray, ComponentMiner componentMiner)
 		{

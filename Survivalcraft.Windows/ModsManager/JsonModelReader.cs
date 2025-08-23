@@ -1,7 +1,6 @@
 using Engine;
 using Engine.Graphics;
-using System.IO;
-using System.Text.Json;
+
 namespace Game
 {
 	/** 
@@ -49,12 +48,13 @@ namespace Game
 		{
 			if (obj is double v) return (float)v;
 			//else if (obj is int) return (float)(int)obj;
-			else if (obj is long v1) return v1;
+			if (obj is long v1) return v1;
 			throw new Exception("错误的数据转换，不能将" + obj.GetType().Name + "转换为float");
 		}
 		public static JsonModel Load(Stream stream)
 		{
 			throw new Exception("很抱歉，JsonModel功能暂时下线");
+			/*
 			Dictionary<string, ObjModelReader.ObjMesh> Meshes = [];
 			Vector3 FirstPersonOffset = Vector3.One;
 			Vector3 FirstPersonRotation = Vector3.Zero;
@@ -126,18 +126,18 @@ namespace Game
 					{
 						name = obj8.GetString();
 					}
-					if (Meshes.TryGetValue(name, out ObjModelReader.ObjMesh objMesh) == false)
+					if (!Meshes.TryGetValue(name, out ObjModelReader.ObjMesh objMesh))
 					{
 						objMesh = new ObjModelReader.ObjMesh(name);
 						objMesh.ElementIndex = l;
 						Meshes.Add(name, objMesh);
 					}
-					/*if (jobj.TryGetProperty("rotation", out JsonElement jobj8) && jobj8.ValueKind == JsonValueKind.Object)
-					{ //处理模型旋转
-						JsonElement ori = jobj8.GetProperty("origin");
-						float ang = jobj8.GetProperty("angle").GetSingle();
+					//if (jobj.TryGetProperty("rotation", out JsonElement jobj8) && jobj8.ValueKind == JsonValueKind.Object)
+					//{ //处理模型旋转
+						//JsonElement ori = jobj8.GetProperty("origin");
+						//float ang = jobj8.GetProperty("angle").GetSingle();
                       //objMesh.MeshMatrix = Matrix.CreateFromAxisAngle(new Vector3(ObjConvertFloat(ori[0]) / 16f, ObjConvertFloat(ori[1]) / 16f, ObjConvertFloat(ori[2]) / 16f), ang);
-                    }*/
+                    //}
                     Vector3 start = new(from[0].GetSingle(), from[1].GetSingle(), from[2].GetSingle());
 					Vector3 end = new(to[0].GetSingle(), to[1].GetSingle(), to[2].GetSingle());
 					Matrix transform = Matrix.CreateScale(end.X - start.X, end.Y - start.Y, end.Z - start.Z) * Matrix.CreateTranslation(start.X, start.Y, start.Z) * Matrix.CreateScale(0.0625f);//基础缩放变换
@@ -203,9 +203,9 @@ namespace Game
 							childMesh.Indices.Add(startcount++);
 							childMesh.Indices.Add(startcount++);
 							childMesh.Indices.Add(startcount++);
-							childMesh.Vertices.Add(new ObjModelReader.ObjVertex() { position = ops[0], objNormal = new ObjModelReader.ObjNormal(0, 0, 0), texCood = ots[0] });
-							childMesh.Vertices.Add(new ObjModelReader.ObjVertex() { position = ops[1], objNormal = new ObjModelReader.ObjNormal(0, 0, 0), texCood = ots[1] });
-							childMesh.Vertices.Add(new ObjModelReader.ObjVertex() { position = ops[2], objNormal = new ObjModelReader.ObjNormal(0, 0, 0), texCood = ots[2] });
+							childMesh.Vertices.Add(new ObjModelReader.ObjVertex { position = ops[0], objNormal = new ObjModelReader.ObjNormal(0, 0, 0), texCood = ots[0] });
+							childMesh.Vertices.Add(new ObjModelReader.ObjVertex { position = ops[1], objNormal = new ObjModelReader.ObjNormal(0, 0, 0), texCood = ots[1] });
+							childMesh.Vertices.Add(new ObjModelReader.ObjVertex { position = ops[2], objNormal = new ObjModelReader.ObjNormal(0, 0, 0), texCood = ots[2] });
 							//生成第二个三角面
 							c1 = FacedirecDic[facename][3];
 							c2 = FacedirecDic[facename][4];
@@ -227,9 +227,9 @@ namespace Game
 							childMesh.Indices.Add(startcount++);
 							childMesh.Indices.Add(startcount++);
 							childMesh.Indices.Add(startcount++);
-							childMesh.Vertices.Add(new ObjModelReader.ObjVertex() { position = ops[0], objNormal = new ObjModelReader.ObjNormal(0, 0, 0), texCood = ots[0] });
-							childMesh.Vertices.Add(new ObjModelReader.ObjVertex() { position = ops[1], objNormal = new ObjModelReader.ObjNormal(0, 0, 0), texCood = ots[1] });
-							childMesh.Vertices.Add(new ObjModelReader.ObjVertex() { position = ops[2], objNormal = new ObjModelReader.ObjNormal(0, 0, 0), texCood = ots[2] });
+							childMesh.Vertices.Add(new ObjModelReader.ObjVertex { position = ops[0], objNormal = new ObjModelReader.ObjNormal(0, 0, 0), texCood = ots[0] });
+							childMesh.Vertices.Add(new ObjModelReader.ObjVertex { position = ops[1], objNormal = new ObjModelReader.ObjNormal(0, 0, 0), texCood = ots[1] });
+							childMesh.Vertices.Add(new ObjModelReader.ObjVertex { position = ops[2], objNormal = new ObjModelReader.ObjNormal(0, 0, 0), texCood = ots[2] });
 							objMesh.ChildMeshes.Add(childMesh);
 						}
 					}
@@ -287,6 +287,7 @@ namespace Game
 			jsonModel2.FirstPersonScale = FirstPersonScale;
 			jsonModel2.FirstPersonRotation = FirstPersonRotation;
 			return jsonModel2;
+			*/
 		}
 	}
 

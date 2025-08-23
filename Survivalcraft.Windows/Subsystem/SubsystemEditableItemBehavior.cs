@@ -1,6 +1,5 @@
 using Engine;
 using Engine.Serialization;
-using System.Collections.Generic;
 using TemplatesDatabase;
 
 namespace Game

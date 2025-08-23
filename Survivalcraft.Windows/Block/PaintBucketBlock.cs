@@ -1,6 +1,5 @@
 using Engine;
 using Engine.Graphics;
-using System.Collections.Generic;
 using System.Globalization;
 
 namespace Game
@@ -13,7 +12,7 @@ namespace Game
 
 		public BlockMesh m_standalonePaintBlockMesh = new();
 
-		public const string fName = "PaintBucketBlock";
+		public new const string fName = "PaintBucketBlock";
 
 		public override void Initialize()
 		{
@@ -46,13 +45,13 @@ namespace Game
 
 		public override IEnumerable<CraftingRecipe> GetProceduralCraftingRecipes()
 		{
-			string[] additives = new string[4]
-			{
+			string[] additives =
+			[
 				BlocksManager.Blocks[43].CraftingId,
 				BlocksManager.Blocks[24].CraftingId,
 				BlocksManager.Blocks[103].CraftingId,
 				BlocksManager.Blocks[22].CraftingId
-			};
+			];
 			int color = 0;
 			while (color < 16)
 			{

@@ -2,9 +2,6 @@ using Engine;
 using Engine.Graphics;
 using Engine.Media;
 using GameEntitySystem;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Xml.Linq;
 
 namespace Game
@@ -67,13 +64,13 @@ namespace Game
 				Color = white
 			});
 			AddStat(stackPanelWidget, LanguageControl.Get(fName, 6), LanguageControl.Get("GameMode", subsystemGameInfo.WorldSettings.GameMode.ToString()) + ", " + LanguageControl.Get("EnvironmentBehaviorMode", subsystemGameInfo.WorldSettings.EnvironmentBehaviorMode.ToString()));
-			AddStat(stackPanelWidget, LanguageControl.Get(fName, 7), StringsManager.GetString("TerrainGenerationMode." + subsystemGameInfo.WorldSettings.TerrainGenerationMode.ToString() + ".Name"));
+			AddStat(stackPanelWidget, LanguageControl.Get(fName, 7), StringsManager.GetString("TerrainGenerationMode." + subsystemGameInfo.WorldSettings.TerrainGenerationMode + ".Name"));
 			string seed = subsystemGameInfo.WorldSettings.Seed;
 			AddStat(stackPanelWidget, LanguageControl.Get(fName, 8), (!string.IsNullOrEmpty(seed)) ? seed : LanguageControl.Get(fName, 9));
 			AddStat(stackPanelWidget, LanguageControl.Get(fName, 10), WorldOptionsScreen.FormatOffset(subsystemGameInfo.WorldSettings.SeaLevelOffset));
 			AddStat(stackPanelWidget, LanguageControl.Get(fName, 11), WorldOptionsScreen.FormatOffset(subsystemGameInfo.WorldSettings.TemperatureOffset));
 			AddStat(stackPanelWidget, LanguageControl.Get(fName, 12), WorldOptionsScreen.FormatOffset(subsystemGameInfo.WorldSettings.HumidityOffset));
-			AddStat(stackPanelWidget, LanguageControl.Get(fName, 13), subsystemGameInfo.WorldSettings.BiomeSize.ToString() + "x");
+			AddStat(stackPanelWidget, LanguageControl.Get(fName, 13), subsystemGameInfo.WorldSettings.BiomeSize + "x");
 			if (subsystemGameInfo.WorldSettings.AreSeasonsChanging)
 			{
 				AddStat(stackPanelWidget, LanguageControl.Get(fName, 96), subsystemGameInfo.WorldSettings.YearDays + LanguageControl.Get(fName, "23"));
@@ -248,7 +245,7 @@ namespace Game
 				{
 					list.Add(new Tuple<string, Action>(LanguageControl.Get(fName, 85), delegate
 					{
-						DialogsManager.ShowDialog(ParentWidget, new ListSelectionDialog(LanguageControl.Get(fName, 86), GetRateableItems(), 60f, (object o) => ((ActiveExternalContentInfo)o).DisplayName, delegate (object o)
+						DialogsManager.ShowDialog(ParentWidget, new ListSelectionDialog(LanguageControl.Get(fName, 86), GetRateableItems(), 60f, o => ((ActiveExternalContentInfo)o).DisplayName, delegate (object o)
 						{
 							var activeExternalContentInfo = (ActiveExternalContentInfo)o;
 							DialogsManager.ShowDialog(ParentWidget, new RateCommunityContentDialog(activeExternalContentInfo.Address, activeExternalContentInfo.DisplayName, UserManager.ActiveUser.UniqueId));
@@ -285,7 +282,7 @@ namespace Game
 				{
 					DialogsManager.ShowDialog(ParentWidget, new RunJsDialog());
 				}));
-				var dialog = new ListSelectionDialog(LanguageControl.Get(fName, 92), list, 60f, (object t) => ((Tuple<string, Action>)t).Item1, delegate (object t)
+				var dialog = new ListSelectionDialog(LanguageControl.Get(fName, 92), list, 60f, t => ((Tuple<string, Action>)t).Item1, delegate (object t)
 				{
 					((Tuple<string, Action>)t).Item2();
 				});

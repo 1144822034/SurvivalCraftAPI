@@ -1,5 +1,6 @@
 using Engine.Serialization;
 using TemplatesDatabase;
+
 namespace Game
 {
 	public class WorldPalette
@@ -8,8 +9,8 @@ namespace Game
 
 		public const int MaxNameLength = 16;
 
-		public static readonly Color[] DefaultColors = new Color[MaxColors]
-		{
+		public static readonly Color[] DefaultColors =
+		[
 			new(255, 255, 255),
 			new(181, 255, 255),
 			new(255, 181, 255),
@@ -26,7 +27,7 @@ namespace Game
 			new(24, 116, 24),
 			new(136, 32, 32),
 			new(24, 24, 24)
-		};
+		];
 
 		public Color[] Colors;
 
@@ -45,13 +46,13 @@ namespace Game
 			{
 				throw new InvalidOperationException(LanguageControl.Get(GetType().Name, 0));
 			}
-			Colors = array.Select((string s, int i) => (!string.IsNullOrEmpty(s)) ? HumanReadableConverter.ConvertFromString<Color>(s) : DefaultColors[i]).ToArray();
+			Colors = array.Select((s,i) => (!string.IsNullOrEmpty(s)) ? HumanReadableConverter.ConvertFromString<Color>(s) : DefaultColors[i]).ToArray();
 			string[] array2 = valuesDictionary.GetValue("Names", new string(';', 15)).Split(';');
 			if (array2.Length != MaxColors)
 			{
 				throw new InvalidOperationException(LanguageControl.Get(GetType().Name, 1));
 			}
-			Names = array2.Select((string s, int i) => (!string.IsNullOrEmpty(s)) ? s : LanguageControl.GetWorldPalette(i)).ToArray();
+			Names = array2.Select((s,i) => (!string.IsNullOrEmpty(s)) ? s : LanguageControl.GetWorldPalette(i)).ToArray();
 			string[] names = Names;
 			int num = 0;
 			while (true)
@@ -73,8 +74,8 @@ namespace Game
 		public ValuesDictionary Save()
 		{
 			var valuesDictionary = new ValuesDictionary();
-			string value = string.Join(";", Colors.Select((Color c, int i) => (!(c == DefaultColors[i])) ? HumanReadableConverter.ConvertToString(c) : string.Empty));
-			string value2 = string.Join(";", Names.Select((string n, int i) => (!(n == LanguageControl.Get(GetType().Name, i))) ? n : string.Empty));
+			string value = string.Join(";", Colors.Select((c,i) => (!(c == DefaultColors[i])) ? HumanReadableConverter.ConvertToString(c) : string.Empty));
+			string value2 = string.Join(";", Names.Select((n,i) => (!(n == LanguageControl.Get(GetType().Name, i))) ? n : string.Empty));
 			valuesDictionary.SetValue("Colors", value);
 			valuesDictionary.SetValue("Names", value2);
 			return valuesDictionary;

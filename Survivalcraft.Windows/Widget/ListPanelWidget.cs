@@ -1,7 +1,5 @@
 using Engine;
 using Engine.Graphics;
-using System;
-using System.Collections.Generic;
 
 namespace Game
 {
@@ -133,7 +131,7 @@ namespace Game
 		public ListPanelWidget()
 		{
 			SelectionColor = Color.Gray;
-			ItemWidgetFactory = (object item) => new LabelWidget
+			ItemWidgetFactory = item => new LabelWidget
 			{
 				Text = (item != null) ? item.ToString() : string.Empty,
 				HorizontalAlignment = WidgetAlignment.Center,

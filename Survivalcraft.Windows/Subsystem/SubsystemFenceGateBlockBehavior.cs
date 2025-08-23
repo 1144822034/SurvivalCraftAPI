@@ -9,7 +9,7 @@ namespace Game
 
 		public static Random m_random = new();
 
-		public override int[] HandledBlocks => new int[0];
+		public override int[] HandledBlocks => [];
 
 		public bool OpenCloseGate(int x, int y, int z, bool open)
 		{

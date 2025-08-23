@@ -32,7 +32,7 @@ namespace Engine.Media
 		public static PngInfo GetInfo(Stream stream)
 		{
 			ArgumentNullException.ThrowIfNull(stream);
-            SixLabors.ImageSharp.ImageInfo info = SixLabors.ImageSharp.Image.Identify(stream);
+            ImageInfo info = SixLabors.ImageSharp.Image.Identify(stream);
 			if(info.Metadata.DecodedImageFormat.Name != "PNG")
 			{
 				throw new FormatException($"Image format({info.Metadata.DecodedImageFormat.Name}) is not Png");
@@ -42,11 +42,11 @@ namespace Engine.Media
 			result.Height = info.Height;
             result.Format = info.Metadata.GetPngMetadata().ColorType switch
             {
-                SixLabors.ImageSharp.Formats.Png.PngColorType.RgbWithAlpha => Format.RGBA8,
-                SixLabors.ImageSharp.Formats.Png.PngColorType.Rgb => Format.RGB8,
-                SixLabors.ImageSharp.Formats.Png.PngColorType.GrayscaleWithAlpha => Format.LA8,
-                SixLabors.ImageSharp.Formats.Png.PngColorType.Grayscale => Format.L8,
-                SixLabors.ImageSharp.Formats.Png.PngColorType.Palette => Format.Indexed,
+                PngColorType.RgbWithAlpha => Format.RGBA8,
+                PngColorType.Rgb => Format.RGB8,
+                PngColorType.GrayscaleWithAlpha => Format.LA8,
+                PngColorType.Grayscale => Format.L8,
+                PngColorType.Palette => Format.Indexed,
                 _ => throw new InvalidOperationException("Unsupported PNG pixel format."),
             };
             return result;
@@ -84,8 +84,8 @@ namespace Engine.Media
                 default:
                     throw new InvalidOperationException("Unsupported PNG pixel format.");
             }
-            PngEncoder encoder = new PngEncoder()
-			{
+            PngEncoder encoder = new PngEncoder
+            {
 				ColorType = pngColorType,
 				CompressionLevel = compressionLevel,
 				TransparentColorMode = PngTransparentColorMode.Clear

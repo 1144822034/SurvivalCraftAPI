@@ -1,6 +1,3 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
 using System.Reflection;
 
 namespace Game
@@ -127,7 +124,6 @@ namespace Game
 			if (num >= 0)
 			{
 				RemoveAt(num);
-				return;
 			}
 		}
 

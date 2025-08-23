@@ -1,7 +1,7 @@
-using System.Xml.Linq;
 using Engine;
 using Game;
 using GameEntitySystem;
+using System.Xml.Linq;
 
 public class GameWidget : CanvasWidget
 {
@@ -84,7 +84,7 @@ public class GameWidget : CanvasWidget
 
 	public T FindCamera<T>(bool throwOnError = true) where T : Camera
 	{
-		T val = (T)m_cameras.FirstOrDefault((Camera c) => c is T);
+		T val = (T)m_cameras.FirstOrDefault(c => c is T);
 		if (val != null || !throwOnError)
 		{
 			return val;
@@ -94,7 +94,7 @@ public class GameWidget : CanvasWidget
 
 	public Camera FindCamera(Type type, bool throwOnError = true)
 	{
-		var val = m_cameras.FirstOrDefault((Camera c) => c.GetType() == type);
+		var val = m_cameras.FirstOrDefault(c => c.GetType() == type);
 		if (val != null || !throwOnError)
 		{
 			return val;

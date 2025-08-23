@@ -1,7 +1,7 @@
+#nullable enable
 using Engine;
 using Engine.Graphics;
 using GameEntitySystem;
-using System;
 using TemplatesDatabase;
 
 namespace Game
@@ -182,7 +182,7 @@ namespace Game
 		        Block block = BlocksManager.Blocks[Terrain.ExtractContents(Value)];
 		        string category = block.GetCategory(Value);
 		        int remainPickables = SubsystemPickables.m_pickables.Count - SubsystemPickables.m_pickablesToRemove.Count;
-		        maxTimeExist = ((category == "Terrain") ? ((float)((remainPickables > 80) ? 60 : 120)) : ((category == "Plants" && block.GetNutritionalValue(Value) == 0f) ? ((float)((remainPickables > 80) ? 60 : 120)) : ((!(block is EggBlock)) ? ((float)((remainPickables > 80) ? 120 : 480)) : 240f)));
+		        maxTimeExist = ((category == "Terrain") ? (remainPickables > 80) ? 60 : 120 : ((category == "Plants" && block.GetNutritionalValue(Value) == 0f) ? (remainPickables > 80) ? 60 : 120 : ((!(block is EggBlock)) ? (remainPickables > 80) ? 120 : 480 : 240f)));
 	        }
 	        double timeExisted = SubsystemPickables.m_subsystemGameInfo.TotalElapsedGameTime - CreationTime;
 	        if(timeExisted > maxTimeExist)
@@ -199,8 +199,8 @@ namespace Game
             Vector2? vector2 = SubsystemPickables?.m_subsystemFluidBlockBehavior.CalculateFlowSpeed(Terrain.ToCell(Position.X), Terrain.ToCell(Position.Y + 0.1f), Terrain.ToCell(Position.Z), out surfaceBlock, out surfaceHeight);
             if (!StuckMatrix.HasValue)
             {
-                TerrainRaycastResult? terrainRaycastResult = WrappedRaycast(Position, positionAtdt, useInteractionBoxes: false, skipAirBlocks: true, (int value, float distance) => BlocksManager.Blocks[Terrain.ExtractContents(value)].IsCollidable_(value));
-				MovingBlocksRaycastResult? movingBlocksRaycastResult = SubsystemMovingBlocks?.Raycast(Position + new Vector3(0f, 0.25f, 0f), positionAtdt + new Vector3(0f, 0.25f, 0f), true,(int value,float distance) => BlocksManager.Blocks[Terrain.ExtractContents(value)].IsCollidable_(value));
+                TerrainRaycastResult? terrainRaycastResult = WrappedRaycast(Position, positionAtdt, useInteractionBoxes: false, skipAirBlocks: true, (value,distance) => BlocksManager.Blocks[Terrain.ExtractContents(value)].IsCollidable_(value));
+				MovingBlocksRaycastResult? movingBlocksRaycastResult = SubsystemMovingBlocks?.Raycast(Position + new Vector3(0f, 0.25f, 0f), positionAtdt + new Vector3(0f, 0.25f, 0f), true,(value,distance) => BlocksManager.Blocks[Terrain.ExtractContents(value)].IsCollidable_(value));
 
 				bool isMovingRaycastDominant = false;
 
@@ -228,7 +228,7 @@ namespace Game
 
 				if (terrainRaycastResult.HasValue)
                 {
-                    if (WrappedRaycast(Position, Position, useInteractionBoxes: false, skipAirBlocks: true, (int value2, float distance) => BlocksManager.Blocks[Terrain.ExtractContents(value2)].IsCollidable_(value2)).HasValue)
+                    if (WrappedRaycast(Position, Position, useInteractionBoxes: false, skipAirBlocks: true, (value2,distance) => BlocksManager.Blocks[Terrain.ExtractContents(value2)].IsCollidable_(value2)).HasValue)
                     {
                         int num8 = Terrain.ToCell(Position.X);
                         int num9 = Terrain.ToCell(Position.Y);
@@ -297,7 +297,7 @@ namespace Game
             else
             {
                 Vector3 vector3 = StuckMatrix.Value.Translation + (StuckMatrix.Value.Up * block.ProjectileTipOffset);
-                if (!WrappedRaycast(vector3, vector3, useInteractionBoxes: false, skipAirBlocks: true, (int value, float distance) => BlocksManager.Blocks[Terrain.ExtractContents(value)].IsCollidable_(value)).HasValue)
+                if (!WrappedRaycast(vector3, vector3, useInteractionBoxes: false, skipAirBlocks: true, (value,distance) => BlocksManager.Blocks[Terrain.ExtractContents(value)].IsCollidable_(value)).HasValue)
                 {
                     Position = StuckMatrix.Value.Translation;
                     Velocity = Vector3.Zero;

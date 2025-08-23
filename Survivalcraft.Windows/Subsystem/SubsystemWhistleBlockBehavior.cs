@@ -1,5 +1,4 @@
 using Engine;
-using System.Collections.Generic;
 using TemplatesDatabase;
 
 namespace Game
@@ -14,10 +13,10 @@ namespace Game
 
 		public Random m_random = new();
 
-		public override int[] HandledBlocks => new int[1]
-		{
+		public override int[] HandledBlocks =>
+		[
 			160
-		};
+		];
 
 		public override bool OnUse(Ray3 ray, ComponentMiner componentMiner)
 		{

@@ -1,5 +1,3 @@
-using System;
-
 namespace Engine
 {
 	public struct BoundingSphere : IEquatable<BoundingSphere>

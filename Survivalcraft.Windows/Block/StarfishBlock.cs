@@ -1,6 +1,5 @@
 using Engine;
 using Engine.Graphics;
-using System;
 
 namespace Game
 {
@@ -14,21 +13,21 @@ namespace Game
 
 		public BoundingBox[][] m_collisionBoxes = new BoundingBox[24][];
 
-		public static Color[] m_colors = new Color[4]
-		{
+		public static Color[] m_colors =
+		[
 			new(100, 40, 20),
 			new(90, 30, 20),
 			new(100, 30, 30),
 			new(80, 20, 10)
-		};
+		];
 
-		public static Vector2[] m_offsets = new Vector2[4]
-		{
+		public static Vector2[] m_offsets =
+		[
 			0.15f * new Vector2(-0.8f, -1f),
 			0.15f * new Vector2(1f, -0.75f),
 			0.15f * new Vector2(-0.65f, 1f),
 			0.15f * new Vector2(0.9f, 0.7f)
-		};
+		];
 
 		public override void Initialize()
 		{
@@ -54,10 +53,10 @@ namespace Game
 					m_blockMeshes[num2] = new BlockMesh();
 					m_blockMeshes[num2].AppendModelMeshPart(model.FindMesh("Starfish").MeshParts[0], boneAbsoluteTransform * m, makeEmissive: false, flipWindingOrder: false, doubleSided: false, flipNormals: false, Color.White);
 					m_blockMeshes[num2].TransformTextureCoordinates(Matrix.CreateTranslation(num % 16 / 16f, num / 16 / 16f, 0f));
-					m_collisionBoxes[num2] = new BoundingBox[1]
-					{
+					m_collisionBoxes[num2] =
+					[
 						m_blockMeshes[num2].CalculateBoundingBox()
-					};
+					];
 				}
 			}
 			m_standaloneBlockMesh = new BlockMesh();

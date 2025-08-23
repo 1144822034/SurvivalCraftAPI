@@ -65,7 +65,7 @@ namespace Game
         public bool EnableHitValueParticleSystem = true;
         public string AttackSoundName = "Audio/Impacts/Body";
         public float AttackSoundVolume = 1f;
-        public float AttackSoundPitch = 0f;
+        public float AttackSoundPitch;
 
 		/// <summary>
 		/// 该攻击被护甲结算时，护甲的防御值会除以ArmorProtectionDivision。
@@ -76,7 +76,7 @@ namespace Game
 
 		public bool AllowImpulseAndStunWhenDamageIsZero = true;
 
-		public float? m_injuryAmount = null;
+		public float? m_injuryAmount;
 		/// <summary>
 		/// 模组可以向Dictionary里面添加内容，另一个模组可以从Dictionary读取内容，以实现模组联动效果
 		/// </summary>

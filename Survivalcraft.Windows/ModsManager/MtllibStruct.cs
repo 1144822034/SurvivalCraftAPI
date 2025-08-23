@@ -1,6 +1,3 @@
-using System;
-using System.Collections.Generic;
-using System.IO;
 namespace Game
 {
 	public class MtllibStruct
@@ -13,11 +10,11 @@ namespace Game
 			{
 				StreamReader streamReader = new(stream);
 				string Tkey = null;
-				while (streamReader.EndOfStream == false)
+				while (!streamReader.EndOfStream)
 				{
 
 					string line = streamReader.ReadLine();
-					string[] spl = line.Split(new char[] { (char)0x09, (char)0x20 }, System.StringSplitOptions.None);
+					string[] spl = line.Split([(char)0x09, (char)0x20], StringSplitOptions.None);
 					switch (spl[0])
 					{
 						case "newmtl":

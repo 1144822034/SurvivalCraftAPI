@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using Engine;
 using Engine.Graphics;
 
@@ -10,10 +9,10 @@ public class FallenLeavesBlock : CubeBlock
 
 	public const float m_height = 0.0625f;
 
-	public BoundingBox[] m_collisionBoxes = new BoundingBox[1]
-	{
+	public BoundingBox[] m_collisionBoxes =
+	[
 		new BoundingBox(new Vector3(0f, 0f, 0f), new Vector3(1f, m_height, 1f))
-	};
+	];
 
 	public override void GenerateTerrainVertices(BlockGeometryGenerator generator, TerrainGeometry geometry, int value, int x, int y, int z)
 	{
@@ -49,6 +48,6 @@ public class FallenLeavesBlock : CubeBlock
 	public static Color GetColor(int x, int y, int z)
 	{
 		uint num = (uint)MathUtils.Hash(x + y * 59 + z * 2411);
-		return Color.Lerp(new Color(128, 110, 110), new Color(255, 255, 220), (float)num / 4.2949673E+09f);
+		return Color.Lerp(new Color(128, 110, 110), new Color(255, 255, 220), num / 4.2949673E+09f);
 	}
 }

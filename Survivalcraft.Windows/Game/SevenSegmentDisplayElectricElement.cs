@@ -12,8 +12,8 @@ namespace Game
 
 		public Color m_color;
 
-		public Vector2[] m_centers = new Vector2[7]
-		{
+		public Vector2[] m_centers =
+		[
 			new(0f, 6f),
 			new(-4f, 3f),
 			new(-4f, -3f),
@@ -21,10 +21,10 @@ namespace Game
 			new(4f, -3f),
 			new(4f, 3f),
 			new(0f, 0f)
-		};
+		];
 
-		public Vector2[] m_sizes = new Vector2[7]
-		{
+		public Vector2[] m_sizes =
+		[
 			new(3.2f, 1f),
 			new(1f, 2.3f),
 			new(1f, 2.3f),
@@ -32,10 +32,10 @@ namespace Game
 			new(1f, 2.3f),
 			new(1f, 2.3f),
 			new(3.2f, 1f)
-		};
+		];
 
-		public int[] m_patterns = new int[16]
-		{
+		public int[] m_patterns =
+		[
 			63,
 			6,
 			91,
@@ -52,7 +52,7 @@ namespace Game
 			94,
 			121,
 			113
-		};
+		];
 
 		public SevenSegmentDisplayElectricElement(SubsystemElectricity subsystemElectricity, CellFace cellFace)
 			: base(subsystemElectricity, cellFace)

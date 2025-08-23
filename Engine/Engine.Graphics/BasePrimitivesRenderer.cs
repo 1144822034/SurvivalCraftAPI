@@ -1,5 +1,3 @@
-using System;
-using System.Collections.Generic;
 using Engine.Media;
 
 namespace Engine.Graphics
@@ -21,10 +19,6 @@ namespace Engine.Graphics
         public IEnumerable<T2> TexturedBatches => m_texturedBatches;
 
         public IEnumerable<T3> FontBatches => m_fontBatches;
-
-        public BasePrimitivesRenderer()
-		{
-		}
 
         public T1 FindFlatBatch(int layer, DepthStencilState depthStencilState, RasterizerState rasterizerState, BlendState blendState)
 		{

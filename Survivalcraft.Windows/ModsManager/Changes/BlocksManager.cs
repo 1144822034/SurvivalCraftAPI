@@ -1,11 +1,7 @@
 using Engine;
 using Engine.Graphics;
-using GameEntitySystem;
-using Engine.Media;
 using Engine.Serialization;
-using System;
-using System.Collections.Generic;
-using System.Linq;
+using GameEntitySystem;
 using System.Reflection;
 
 namespace Game
@@ -32,7 +28,6 @@ namespace Game
                     {
                         return imageExtrusionKey.Slot == Slot;
                     }
-                    return false;
                 }
                 return false;
             }
@@ -297,7 +292,7 @@ namespace Game
                     {
                         bool staticBlockIndexBefore = false;
                         //对重名方块进行移除。复杂度n^2，如果严重影响性能可以考虑使用字典。
-                        BlockAllocateData blockAllocateDataToRemove = BlocksAllocateData.FirstOrDefault((BlockAllocateData b) => (b.Block.GetType().Name == block.GetType().Name));
+                        BlockAllocateData blockAllocateDataToRemove = BlocksAllocateData.FirstOrDefault(b => (b.Block.GetType().Name == block.GetType().Name));
                         if (blockAllocateDataToRemove != null)
                         {
                             BlocksAllocateData.Remove(blockAllocateDataToRemove);
@@ -318,7 +313,7 @@ namespace Game
             }
             //分配静态ID方块
             if (LoadBlocksStaticly)
-                Engine.Log.Information("[BlocksManager]Blocks Loaded Statically");
+                Log.Information("[BlocksManager]Blocks Loaded Statically");
             for (int i = 0; i < BlocksAllocateData.Count; i++)
             {
                 try
@@ -345,7 +340,7 @@ namespace Game
                 }
                 catch (Exception ex)
                 {
-                    Engine.Log.Error(ex);
+                    Log.Error(ex);
                 }
             }
             //进行排序
@@ -416,7 +411,7 @@ namespace Game
                 }
                 catch (Exception e)
                 {
-                    LoadingScreen.Warning("Loading Block " + block.GetType().Name + " error." + e.ToString());
+                    LoadingScreen.Warning("Loading Block " + block.GetType().Name + " error." + e);
                 }
                 foreach (int value in block.GetCreativeValues())
                 {
@@ -442,7 +437,7 @@ namespace Game
         [Obsolete("Use BlocksManager.GetBlock() instead.")]
         public static Block FindBlockByTypeName(string typeName, bool throwIfNotFound)
         {
-            Block block = Blocks.FirstOrDefault((Block b) => b.GetType().Name == typeName);
+            Block block = Blocks.FirstOrDefault(b => b.GetType().Name == typeName);
             if (block == null && throwIfNotFound)
             {
                 throw new InvalidOperationException(string.Format(LanguageControl.Get("BlocksManager", 1), typeName));
@@ -453,7 +448,7 @@ namespace Game
         public static Block[] FindBlocksByCraftingId(string craftingId)
         {
             List<Block> blocks = [];
-            foreach (var c in BlocksManager.Blocks)
+            foreach (var c in Blocks)
             {
                 if (c.MatchCrafingId(craftingId)) blocks.Add(c);
             }
@@ -668,12 +663,12 @@ namespace Game
             if (!m_imageExtrusionsCache.TryGetValue(imageExtrusionKey, out var value))
             {
                 value = new BlockMesh();
-                int num = (int)MathF.Round(m_slotTexCoords[slot].X * (float)image.Width);
-                int num2 = (int)MathF.Round(m_slotTexCoords[slot].Y * (float)image.Height);
-                int num3 = (int)MathF.Round(m_slotTexCoords[slot].Z * (float)image.Width);
-                int num4 = (int)MathF.Round(m_slotTexCoords[slot].W * (float)image.Height);
+                int num = (int)MathF.Round(m_slotTexCoords[slot].X * image.Width);
+                int num2 = (int)MathF.Round(m_slotTexCoords[slot].Y * image.Height);
+                int num3 = (int)MathF.Round(m_slotTexCoords[slot].Z * image.Width);
+                int num4 = (int)MathF.Round(m_slotTexCoords[slot].W * image.Height);
                 int num5 = MathUtils.Max(num3 - num, num4 - num2);
-                value.AppendImageExtrusion(image, new Rectangle(num, num2, num3 - num, num4 - num2), new Vector3(1f / (float)num5, 1f / (float)num5, 0.0833333358f), Color.White, 0);
+                value.AppendImageExtrusion(image, new Rectangle(num, num2, num3 - num, num4 - num2), new Vector3(1f / num5, 1f / num5, 0.0833333358f), Color.White, 0);
                 m_imageExtrusionsCache.Add(imageExtrusionKey, value);
             }
             return value;
@@ -732,7 +727,7 @@ namespace Game
                 {
                     Vector3.Transform(ref blockMeshVertex.Position, ref m, out blockMeshVertex.Position);
                 }
-                Color color2 = ((!blockMeshVertex.IsEmissive) ? new Color((byte)((float)(int)blockMeshVertex.Color.R * vector2.X), (byte)((float)(int)blockMeshVertex.Color.G * vector2.Y), (byte)((float)(int)blockMeshVertex.Color.B * vector2.Z), (byte)((float)(int)blockMeshVertex.Color.A * vector2.W)) : new Color((byte)((float)(int)blockMeshVertex.Color.R * vector.X), (byte)((float)(int)blockMeshVertex.Color.G * vector.Y), (byte)((float)(int)blockMeshVertex.Color.B * vector.Z), (byte)((float)(int)blockMeshVertex.Color.A * vector.W)));
+                Color color2 = ((!blockMeshVertex.IsEmissive) ? new Color((byte)(blockMeshVertex.Color.R * vector2.X), (byte)(blockMeshVertex.Color.G * vector2.Y), (byte)(blockMeshVertex.Color.B * vector2.Z), (byte)(blockMeshVertex.Color.A * vector2.W)) : new Color((byte)(blockMeshVertex.Color.R * vector.X), (byte)(blockMeshVertex.Color.G * vector.Y), (byte)(blockMeshVertex.Color.B * vector.Z), (byte)(blockMeshVertex.Color.A * vector.W)));
                 triangleVertices.Array[count4++] = new VertexPositionColorTexture(blockMeshVertex.Position, color2, blockMeshVertex.TextureCoordinates);
             }
             DynamicArray<int> triangleIndices = texturedBatch3D.TriangleIndices;
@@ -790,10 +785,10 @@ namespace Game
                 {
                     continue;
                 }
-                Block block = m_blocks.FirstOrDefault((Block v) => v.GetType().Name == typeName);
+                Block block = m_blocks.FirstOrDefault(v => v.GetType().Name == typeName);
                 if (block == null)
                 {
-                    Engine.Log.Warning(string.Format(LanguageControl.Get("BlocksManager", 3), typeName));
+                    Log.Warning(string.Format(LanguageControl.Get("BlocksManager", 3), typeName));
                     continue;
                 }
                 dictionary.Add(block, value: true);
@@ -819,7 +814,7 @@ namespace Game
                         if (text2.StartsWith('#'))
                         {
                             string refTypeName = text2.Substring(1);
-                            obj = (!string.IsNullOrEmpty(refTypeName)) ? (m_blocks.FirstOrDefault((Block v) => v.GetType().Name == refTypeName) ?? throw new InvalidOperationException(string.Format(LanguageControl.Get("BlocksManager", 6), refTypeName))).BlockIndex : ((object)block.BlockIndex);
+                            obj = (!string.IsNullOrEmpty(refTypeName)) ? (m_blocks.FirstOrDefault(v => v.GetType().Name == refTypeName) ?? throw new InvalidOperationException(string.Format(LanguageControl.Get("BlocksManager", 6), refTypeName))).BlockIndex : ((object)block.BlockIndex);
                         }
                         else
                         {
@@ -858,10 +853,10 @@ namespace Game
             {
                 int num = i % textureSlotCount;
                 int num2 = i / textureSlotCount;
-                float x = (num + 0.001f) / (float)textureSlotCount;
-                float y = (num2 + 0.001f) / (float)textureSlotCount;
-                float z = (num + 1 - 0.001f) / (float)textureSlotCount;
-                float w = (num2 + 1 - 0.001f) / (float)textureSlotCount;
+                float x = (num + 0.001f) / textureSlotCount;
+                float y = (num2 + 0.001f) / textureSlotCount;
+                float z = (num + 1 - 0.001f) / textureSlotCount;
+                float w = (num2 + 1 - 0.001f) / textureSlotCount;
                 slotTexCoords[i] = new Vector4(x, y, z, w);
             }
             return slotTexCoords;

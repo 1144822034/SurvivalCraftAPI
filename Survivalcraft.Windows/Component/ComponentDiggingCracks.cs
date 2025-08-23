@@ -1,8 +1,8 @@
 using Engine;
 using Engine.Graphics;
 using GameEntitySystem;
-using System.Collections.Generic;
 using TemplatesDatabase;
+
 namespace Game
 {
 	public class ComponentDiggingCracks : Component, IDrawable
@@ -19,17 +19,17 @@ namespace Game
 
 		public Geometry m_geometry;
 
-        private DynamicArray<TerrainVertex> m_vertices = new DynamicArray<TerrainVertex>();
-        private DynamicArray<int> m_indices = new DynamicArray<int>();
+        private DynamicArray<TerrainVertex> m_vertices = [];
+        private DynamicArray<int> m_indices = [];
 
         public Point3 m_point;
 
 		public int m_value;
 
-		public static int[] m_drawOrders = new int[1]
-		{
+		public static int[] m_drawOrders =
+		[
 			200//原版是1
-		};
+		];
 
 		public int[] DrawOrders => m_drawOrders;
 		public virtual void Draw(Camera camera, int drawOrder)
@@ -77,7 +77,7 @@ namespace Game
 				m_shader.GetParameter("u_viewProjectionMatrix").SetValue(value);
 				m_shader.GetParameter("u_viewPosition").SetValue(camera.ViewPosition);
 				m_shader.GetParameter("u_samplerState").SetValue(SamplerState.PointWrap);
-                m_shader.GetParameter("u_fogYMultiplier").SetValue(this.m_subsystemSky.VisibilityRangeYMultiplier);
+                m_shader.GetParameter("u_fogYMultiplier").SetValue(m_subsystemSky.VisibilityRangeYMultiplier);
                 m_shader.GetParameter("u_fogColor").SetValue(new Vector3(m_subsystemSky.ViewFogColor));
 				m_shader.GetParameter("u_fogBottomTopDensity").SetValue(new Vector3(m_subsystemSky.ViewFogBottom, m_subsystemSky.ViewFogTop, m_subsystemSky.ViewFogDensity));
 				m_shader.GetParameter("u_hazeStartDensity").SetValue(new Vector2(m_subsystemSky.ViewHazeStart, m_subsystemSky.ViewHazeDensity));
@@ -91,9 +91,9 @@ namespace Game
 		}
 		public override void Load(ValuesDictionary valuesDictionary, IdToEntityMap idToEntityMap)
 		{
-			m_subsystemTerrain = base.Project.FindSubsystem<SubsystemTerrain>(throwOnError: true);
-			m_subsystemSky = base.Project.FindSubsystem<SubsystemSky>(throwOnError: true);
-			m_componentMiner = base.Entity.FindComponent<ComponentMiner>(throwOnError: true);
+			m_subsystemTerrain = Project.FindSubsystem<SubsystemTerrain>(throwOnError: true);
+			m_subsystemSky = Project.FindSubsystem<SubsystemSky>(throwOnError: true);
+			m_componentMiner = Entity.FindComponent<ComponentMiner>(throwOnError: true);
 			m_shader = ContentManager.Get<Shader>("Shaders/AlphaTested");
 			m_textures = new Texture2D[8];
 			for (int i = 0; i < 8; i++)

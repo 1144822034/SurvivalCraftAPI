@@ -1,12 +1,9 @@
 using Engine;
 using Engine.Graphics;
-using GameEntitySystem;
-using System;
-using System.Collections.Generic;
-using System.Globalization;
-using System.Linq;
-using TemplatesDatabase;
 using Engine.Serialization;
+using GameEntitySystem;
+using System.Globalization;
+using TemplatesDatabase;
 
 namespace Game
 {
@@ -52,10 +49,10 @@ namespace Game
 
 		public const float BodyInflateAmount = 0.2f;
 
-		public static int[] m_drawOrders = new int[1]
-		{
+		public static int[] m_drawOrders =
+		[
 			10
-		};
+		];
 
 		public ReadOnlyList<Projectile> Projectiles => new(m_projectiles);
 
@@ -159,7 +156,7 @@ namespace Game
                 }
             }
             Vector3 end = firePosition + (v * block.ProjectileTipOffset);
-			return !m_subsystemTerrain.Raycast(position, end, useInteractionBoxes: false, skipAirBlocks: true, (int testValue, float distance) =>
+			return !m_subsystemTerrain.Raycast(position, end, useInteractionBoxes: false, skipAirBlocks: true, (testValue,distance) =>
 			BlocksManager.Blocks[Terrain.ExtractContents(testValue)].IsCollidable_(testValue)).HasValue;
         }
         public virtual T FireProjectile<T>(int value, Vector3 position, Vector3 velocity, Vector3 angularVelocity, ComponentCreature owner) where T : Projectile, new()
@@ -294,7 +291,7 @@ namespace Game
 			m_subsystemBlockBehaviors = Project.FindSubsystem<SubsystemBlockBehaviors>(throwOnError: true);
 			m_subsystemFluidBlockBehavior = Project.FindSubsystem<SubsystemFluidBlockBehavior>(throwOnError: true);
 			m_subsystemFireBlockBehavior = Project.FindSubsystem<SubsystemFireBlockBehavior>(throwOnError: true);
-			foreach (ValuesDictionary item in valuesDictionary.GetValue<ValuesDictionary>("Projectiles").Values.Where((object v) => v is ValuesDictionary))
+			foreach (ValuesDictionary item in valuesDictionary.GetValue<ValuesDictionary>("Projectiles").Values.Where(v => v is ValuesDictionary))
 			{
 				try
 				{

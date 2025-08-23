@@ -1,6 +1,5 @@
 using Engine;
 using GameEntitySystem;
-using System;
 using System.Globalization;
 using TemplatesDatabase;
 
@@ -260,7 +259,7 @@ namespace Game
 				{
 					m_subsystemSoundMaterials.PlayImpactSound(cellValue, new Vector3(cellFace.X, cellFace.Y, cellFace.Z), 1f);
 					BlockDebrisParticleSystem particleSystem = cellBlock.CreateDebrisParticleSystem(m_subsystemTerrain, raycastResult.HitPoint(0.1f), cellValue, 0.35f);
-					base.Project.FindSubsystem<SubsystemParticles>(throwOnError: true).AddParticleSystem(particleSystem);
+					Project.FindSubsystem<SubsystemParticles>(throwOnError: true).AddParticleSystem(particleSystem);
 				}
 			}
 			return result;
@@ -542,7 +541,7 @@ namespace Game
 			Vector3 end = ray.Position + (direction * (reach + 1f));
 			Point3 startCell = Terrain.ToCell(start);
 			BodyRaycastResult? bodyRaycastResult = null;
-			if(raycastBodies) bodyRaycastResult = m_subsystemBodies.Raycast(start, end, 0.35f, (ComponentBody body, float distance) => Vector3.DistanceSquared(start + (distance * direction), creaturePosition) <= reach * reach && body.Entity != Entity && !body.IsChildOfBody(ComponentCreature.ComponentBody) && !ComponentCreature.ComponentBody.IsChildOfBody(body) && Vector3.Dot(Vector3.Normalize(body.BoundingBox.Center() - start), direction) > 0.7f);
+			if(raycastBodies) bodyRaycastResult = m_subsystemBodies.Raycast(start, end, 0.35f, (body,distance) => Vector3.DistanceSquared(start + (distance * direction), creaturePosition) <= reach * reach && body.Entity != Entity && !body.IsChildOfBody(ComponentCreature.ComponentBody) && !ComponentCreature.ComponentBody.IsChildOfBody(body) && Vector3.Dot(Vector3.Normalize(body.BoundingBox.Center() - start), direction) > 0.7f);
 			MovingBlocksRaycastResult? movingBlocksRaycastResult = null;
 			if(raycastMovingBlocks) movingBlocksRaycastResult = m_subsystemMovingBlocks.Raycast(start, end, extendToFillCells: true);
 			TerrainRaycastResult? terrainRaycastResult = null;
@@ -689,7 +688,7 @@ namespace Game
 			{
 				DigCellFace = null;
 			}
-			if ((m_componentHealth != null && !(m_componentHealth.Health > 0f)) || !(AutoInteractRate > 0f) || !m_random.Bool(AutoInteractRate) || !m_subsystemTime.PeriodicGameTimeEvent(1.0, (float)(GetHashCode() % 100) / 100f))
+			if ((m_componentHealth != null && !(m_componentHealth.Health > 0f)) || !(AutoInteractRate > 0f) || !m_random.Bool(AutoInteractRate) || !m_subsystemTime.PeriodicGameTimeEvent(1.0, GetHashCode() % 100 / 100f))
 			{
 				return;
 			}
@@ -718,11 +717,11 @@ namespace Game
 			m_subsystemBlockBehaviors = Project.FindSubsystem<SubsystemBlockBehaviors>(throwOnError: true);
 			ComponentCreature = Entity.FindComponent<ComponentCreature>(throwOnError: true);
 			ComponentPlayer = Entity.FindComponent<ComponentPlayer>();
-			m_componentHealth = base.Entity.FindComponent<ComponentHealth>();
+			m_componentHealth = Entity.FindComponent<ComponentHealth>();
 			ComponentFactors = Entity.FindComponent<ComponentFactors>(throwOnError: true);
 			Inventory = m_subsystemGameInfo.WorldSettings.GameMode == GameMode.Creative && ComponentPlayer != null
 				? Entity.FindComponent<ComponentCreativeInventory>()
-				: (IInventory)Entity.FindComponent<ComponentInventory>();
+				: Entity.FindComponent<ComponentInventory>();
 			AttackPower = valuesDictionary.GetValue<float>("AttackPower");
 			HitInterval = valuesDictionary.GetValue<float>("HitInterval");
 			AutoInteractRate = valuesDictionary.GetValue<float>("AutoInteractRate");
@@ -842,7 +841,7 @@ namespace Game
 		{
 			int result = 0;
 			float num = CalculateDigTime(digValue, 0);
-			foreach (IInventory item in base.Entity.FindComponents<IInventory>())
+			foreach (IInventory item in Entity.FindComponents<IInventory>())
 			{
 				if (item is ComponentCreativeInventory)
 				{

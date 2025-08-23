@@ -1,7 +1,6 @@
 using Engine;
 using Engine.Graphics;
 using GameEntitySystem;
-using System.Collections.Generic;
 using TemplatesDatabase;
 
 namespace Game
@@ -16,10 +15,10 @@ namespace Game
 
 		public TexturedBatch3D[] m_batchesByType = new TexturedBatch3D[4];
 
-		public static int[] m_drawOrders = new int[1]
-		{
+		public static int[] m_drawOrders =
+		[
 			110
-		};
+		];
 
 		public int[] DrawOrders => m_drawOrders;
 

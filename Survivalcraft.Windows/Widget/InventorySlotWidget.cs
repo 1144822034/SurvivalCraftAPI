@@ -1,8 +1,6 @@
 using Engine;
 using Engine.Graphics;
 using GameEntitySystem;
-using Jint.Native;
-using System.Linq;
 using System.Xml.Linq;
 
 namespace Game
@@ -575,7 +573,6 @@ namespace Game
 				{
 					return m_slotIndex == viewPlayer.ComponentInput.SplitSourceSlotIndex;
 				}
-				return false;
 			}
 			return false;
 		}

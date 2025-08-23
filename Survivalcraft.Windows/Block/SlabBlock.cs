@@ -1,6 +1,5 @@
 using Engine;
 using Engine.Graphics;
-using System.Collections.Generic;
 
 namespace Game
 {
@@ -47,14 +46,14 @@ namespace Game
 			m_standaloneUncoloredBlockMesh.TransformTextureCoordinates(Matrix.CreateTranslation(DefaultTextureSlot % 16 / 16f, DefaultTextureSlot / 16 / 16f, 0f));
 			m_standaloneColoredBlockMesh.AppendModelMeshPart(meshPart, boneAbsoluteTransform * Matrix.CreateTranslation(0f, -0.5f, 0f), makeEmissive: false, flipWindingOrder: false, doubleSided: false, flipNormals: false, Color.White);
 			m_standaloneColoredBlockMesh.TransformTextureCoordinates(Matrix.CreateTranslation(m_coloredTextureSlot % 16 / 16f, m_coloredTextureSlot / 16 / 16f, 0f));
-			m_collisionBoxes[0] = new BoundingBox[1]
-			{
+			m_collisionBoxes[0] =
+			[
 				new(new Vector3(0f, 0f, 0f), new Vector3(1f, 0.5f, 1f))
-			};
-			m_collisionBoxes[1] = new BoundingBox[1]
-			{
+			];
+			m_collisionBoxes[1] =
+			[
 				new(new Vector3(0f, 0.5f, 0f), new Vector3(1f, 1f, 1f))
-			};
+			];
 			base.Initialize();
 		}
 

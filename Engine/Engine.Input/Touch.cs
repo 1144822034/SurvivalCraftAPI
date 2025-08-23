@@ -5,10 +5,6 @@ using Android.Views;
 
 #endif
 
-using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-
 namespace Engine.Input
 {
 	public static class Touch
@@ -176,7 +172,7 @@ namespace Engine.Input
 					};
 					touchLocations[num] = touchLocation;
 				}
-				Touch.TouchMoved?.Invoke(m_touchLocations[num]);
+				TouchMoved?.Invoke(m_touchLocations[num]);
 			}
 			else
 			{
@@ -188,7 +184,7 @@ namespace Engine.Input
 					State = TouchLocationState.Pressed
 				};
 				touchLocations2.Add(touchLocation);
-				Touch.TouchPressed?.Invoke(m_touchLocations[^1]);
+				TouchPressed?.Invoke(m_touchLocations[^1]);
 			}
 		}
 
@@ -225,7 +221,7 @@ namespace Engine.Input
 					};
 					touchLocations2[num] = value;
 				}
-				Touch.TouchReleased?.Invoke(m_touchLocations[num]);
+				TouchReleased?.Invoke(m_touchLocations[num]);
 			}
 		}
 	}

@@ -1,6 +1,3 @@
-using Engine;
-using System;
-
 namespace Game
 {
 	public static class SimplexNoise

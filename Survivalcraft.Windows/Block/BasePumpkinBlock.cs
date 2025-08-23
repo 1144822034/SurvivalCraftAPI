@@ -1,6 +1,5 @@
 using Engine;
 using Engine.Graphics;
-using System.Collections.Generic;
 
 namespace Game
 {
@@ -69,10 +68,10 @@ namespace Game
 					boundingBox.Max.Y = 0.4f;
 					boundingBox.Max.Z += num4;
 				}
-				m_collisionBoxesBySize[j] = new BoundingBox[1]
-				{
+				m_collisionBoxesBySize[j] =
+				[
 					boundingBox
-				};
+				];
 			}
 			base.Initialize();
 		}

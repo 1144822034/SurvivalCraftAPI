@@ -1,6 +1,3 @@
-using System;
-using System.Collections.Generic;
-using System.IO;
 using System.IO.Compression;
 using System.Text;
 
@@ -44,10 +41,6 @@ namespace Game
 				}
 				CrcTable[i] = num;
 			}
-		}
-
-		public ZipArchive()
-		{
 		}
 
 		public static ZipArchive Create(Stream stream, bool keepStreamOpen = false)
@@ -264,15 +257,15 @@ namespace Game
 		{
 			long position = ZipFileStream.Position;
 			byte[] bytes = Encoding.UTF8.GetBytes(_zfe.FilenameInZip);
-			ZipFileStream.Write(new byte[6]
-			{
+			ZipFileStream.Write(
+			[
 				80,
 				75,
 				3,
 				4,
 				20,
 				0
-			}, 0, 6);
+			], 0, 6);
 			ZipFileStream.Write(BitConverter.GetBytes((ushort)(_zfe.EncodeUTF8 ? 2048 : 0)), 0, 2);
 			ZipFileStream.Write(BitConverter.GetBytes((ushort)_zfe.Method), 0, 2);
 			ZipFileStream.Write(BitConverter.GetBytes(DateTimeToDosTime(_zfe.ModifyTime)), 0, 4);
@@ -288,8 +281,8 @@ namespace Game
 			Encoding uTF = Encoding.UTF8;
 			byte[] bytes = uTF.GetBytes(_zfe.FilenameInZip);
 			byte[] bytes2 = uTF.GetBytes(_zfe.Comment);
-			ZipFileStream.Write(new byte[8]
-			{
+			ZipFileStream.Write(
+			[
 				80,
 				75,
 				1,
@@ -298,7 +291,7 @@ namespace Game
 				11,
 				20,
 				0
-			}, 0, 8);
+			], 0, 8);
 			ZipFileStream.Write(BitConverter.GetBytes((ushort)(_zfe.EncodeUTF8 ? 2048 : 0)), 0, 2);
 			ZipFileStream.Write(BitConverter.GetBytes((ushort)_zfe.Method), 0, 2);
 			ZipFileStream.Write(BitConverter.GetBytes(DateTimeToDosTime(_zfe.ModifyTime)), 0, 4);
@@ -320,8 +313,8 @@ namespace Game
 		public void WriteEndRecord(uint _size, uint _offset)
 		{
 			byte[] bytes = Encoding.UTF8.GetBytes(Comment);
-			ZipFileStream.Write(new byte[8]
-			{
+			ZipFileStream.Write(
+			[
 				80,
 				75,
 				5,
@@ -330,7 +323,7 @@ namespace Game
 				0,
 				0,
 				0
-			}, 0, 8);
+			], 0, 8);
 			ZipFileStream.Write(BitConverter.GetBytes((ushort)Files.Count + ExistingFiles), 0, 2);
 			ZipFileStream.Write(BitConverter.GetBytes((ushort)Files.Count + ExistingFiles), 0, 2);
 			ZipFileStream.Write(BitConverter.GetBytes(_size), 0, 4);

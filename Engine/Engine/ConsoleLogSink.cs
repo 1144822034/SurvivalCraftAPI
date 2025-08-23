@@ -1,6 +1,7 @@
-using System;
-using System.IO;
+using System.Diagnostics;
+#if !ANDROID
 using System.Text;
+#endif
 
 namespace Engine
 {
@@ -56,7 +57,7 @@ namespace Engine
 				textWriter.Write(value);
 				textWriter.WriteLine(message);
 #if DEBUG
-                System.Diagnostics.Debug.WriteLine($"{value}{message}");
+                Debug.WriteLine($"{value}{message}");
 #endif
             }
 		}

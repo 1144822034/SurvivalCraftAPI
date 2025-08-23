@@ -1,6 +1,5 @@
 using Engine;
 using Engine.Graphics;
-using System;
 
 namespace Game
 {
@@ -22,10 +21,10 @@ namespace Game
 			{
 				m_meshesByData[i] = new BlockMesh();
 				m_meshesByData[i].AppendModelMeshPart(model.FindMesh("Magnet").MeshParts[0], boneAbsoluteTransform * Matrix.CreateRotationY((float)Math.PI / 2f * i) * Matrix.CreateTranslation(0.5f, 0f, 0.5f), makeEmissive: false, flipWindingOrder: false, doubleSided: true, flipNormals: false, Color.White);
-				m_collisionBoxesByData[i] = new BoundingBox[1]
-				{
+				m_collisionBoxesByData[i] =
+				[
 					m_meshesByData[i].CalculateBoundingBox()
-				};
+				];
 			}
 			m_standaloneMesh.AppendModelMeshPart(model.FindMesh("Magnet").MeshParts[0], boneAbsoluteTransform * Matrix.CreateScale(1.5f) * Matrix.CreateTranslation(0f, -0.25f, 0f), makeEmissive: false, flipWindingOrder: false, doubleSided: true, flipNormals: false, Color.White);
 			base.Initialize();

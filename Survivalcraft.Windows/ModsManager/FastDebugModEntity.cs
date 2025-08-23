@@ -1,10 +1,6 @@
-using System;
-using System.IO;
-using System.Xml.Linq;
-using System.Reflection;
-using System.Collections.Generic;
-
 using Engine;
+using System.Reflection;
+using System.Xml.Linq;
 
 namespace Game
 {
@@ -14,7 +10,7 @@ namespace Game
 
 		public FastDebugModEntity()
 		{
-			modInfo = new ModInfo() { Name = "[Debug]", PackageName = "debug" };
+			modInfo = new ModInfo { Name = "[Debug]", PackageName = "debug" };
 			InitResources();
             modInfo.LoadOrder = int.MinValue + 1;
         }
@@ -22,15 +18,15 @@ namespace Game
 		public override void InitResources()
 		{
 			ReadDirResouces(ModsManager.ModsPath, "");
-			if (!GetFile("modinfo.json", (stream) =>
+			if (!GetFile("modinfo.json", stream =>
 			{
 				modInfo = ModsManager.DeserializeJson(ModsManager.StreamToString(stream));
 				modInfo.Name = $"[Debug]{modInfo.Name}";
 			}))
 			{
-				modInfo = new ModInfo() { Name = "FastDebug", Version = "1.0.0", ApiVersion = ModsManager.APIVersionString, Author = "Mod", Description = "调试Mod插件", ScVersion = "2.4.0.0", PackageName = "com.fastdebug" };
+				modInfo = new ModInfo { Name = "FastDebug", Version = "1.0.0", ApiVersion = ModsManager.APIVersionString, Author = "Mod", Description = "调试Mod插件", ScVersion = "2.4.0.0", PackageName = "com.fastdebug" };
 			}
-			GetFile("icon.png", (stream) => { LoadIcon(stream); });
+			GetFile("icon.png", stream => { LoadIcon(stream); });
 		}
 
 		public void ReadDirResouces(string basepath, string path)

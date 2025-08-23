@@ -1,6 +1,3 @@
-using System;
-using System.Collections.Generic;
-using System.IO;
 using Engine.Media;
 
 namespace Engine.Graphics
@@ -97,7 +94,7 @@ namespace Engine.Graphics
 			ArgumentNullException.ThrowIfNull(absoluteTransforms);
 			if (absoluteTransforms.Length < m_bones.Count)
 			{
-				throw new ArgumentOutOfRangeException("transforms");
+				throw new ArgumentOutOfRangeException(nameof(absoluteTransforms));
 			}
 			for (int i = 0; i < m_bones.Count; i++)
 			{
@@ -117,11 +114,11 @@ namespace Engine.Graphics
         {
             if (absoluteTransforms == null)
             {
-                throw new ArgumentNullException("transforms");
+                throw new ArgumentNullException(nameof(absoluteTransforms));
             }
             if (absoluteTransforms.Length < m_bones.Count)
             {
-                throw new ArgumentOutOfRangeException("transforms");
+                throw new ArgumentOutOfRangeException(nameof(absoluteTransforms));
             }
             for (int i = 0; i < m_bones.Count; i++)
             {
@@ -142,7 +139,7 @@ namespace Engine.Graphics
 			ArgumentNullException.ThrowIfNull(absoluteTransforms);
 			if (absoluteTransforms.Length < m_bones.Count)
 			{
-				throw new ArgumentOutOfRangeException("transforms");
+				throw new ArgumentOutOfRangeException(nameof(absoluteTransforms));
 			}
 			var result = default(BoundingBox);
 			bool flag = false;

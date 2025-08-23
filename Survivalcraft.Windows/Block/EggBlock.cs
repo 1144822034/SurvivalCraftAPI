@@ -1,9 +1,6 @@
 using Engine;
 using Engine.Graphics;
-using System;
-using System.Collections.Generic;
 using System.Globalization;
-using System.Linq;
 using TemplatesDatabase;
 
 namespace Game
@@ -55,10 +52,10 @@ namespace Game
                     string value = item.GetNestedValue<string>("DisplayName");
 					if (value.StartsWith('[') && value.EndsWith(']'))
 					{
-						string[] lp = value.Substring(1, value.Length - 2).Split(new string[] { ":" }, StringSplitOptions.RemoveEmptyEntries);
+						string[] lp = value.Substring(1, value.Length - 2).Split([":"], StringSplitOptions.RemoveEmptyEntries);
 						value = LanguageControl.GetDatabase("DisplayName", lp[1]);
 					}
-					m_eggTypes[nestedValue] = new EggType()
+					m_eggTypes[nestedValue] = new EggType
 					{
 						EggTypeIndex = nestedValue,
 						ShowEgg = item.GetNestedValue<bool>("ShowEgg"),

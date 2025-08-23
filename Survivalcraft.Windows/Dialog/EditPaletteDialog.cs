@@ -42,7 +42,7 @@ namespace Game
 							{
 								new LabelWidget
 								{
-									Text = (i + 1).ToString() + ".",
+									Text = (i + 1) + ".",
 									Color = Color.Gray,
 									HorizontalAlignment = WidgetAlignment.Far,
 									VerticalAlignment = WidgetAlignment.Center,

@@ -1,8 +1,6 @@
 using Engine;
 using Engine.Audio;
-using System.Collections.Generic;
 using System.Globalization;
-using System.Linq;
 using TemplatesDatabase;
 
 namespace Game
@@ -36,7 +34,7 @@ namespace Game
 
 		public UpdateOrder UpdateOrder => UpdateOrder.Default;
 
-		public override int[] HandledBlocks => new int[0];
+		public override int[] HandledBlocks => [];
 
 		public bool IgniteFuse(int x, int y, int z)
 		{

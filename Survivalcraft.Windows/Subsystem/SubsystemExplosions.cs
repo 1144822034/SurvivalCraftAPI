@@ -1,10 +1,5 @@
 using Engine;
 using GameEntitySystem;
-using System.Collections.Concurrent;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using TemplatesDatabase;
 
 namespace Game
@@ -231,7 +226,7 @@ namespace Game
 					IsIncendiary = isIncendiary,
 					NoExplosionSound = noExplosionSound
 				});
-				ApplyBodiesShaking(new Vector3((float)x + 0.5f, (float)y + 0.5f, (float)z + 0.5f), pressure);
+				ApplyBodiesShaking(new Vector3(x + 0.5f, y + 0.5f, z + 0.5f), pressure);
 			}
 		}
 
@@ -477,8 +472,8 @@ namespace Game
 								velocity *= m_random.Float(0.5f, 1f);
 								velocity += m_random.Vector3(0.2f * velocity.Length());
 							}
-							float num9 = flag2 ? 0f : (block2.ExplosionKeepsPickables ? 1f : MathUtils.Lerp(1f, 0f, (float)m_projectilesCount / 25f));
-							Projectile projectile = m_subsystemProjectiles.AddProjectile(item.Value, new Vector3((float)x + 0.5f, (float)y + 0.5f, (float)z + 0.5f), velocity, m_random.Vector3(0f, 20f), null);
+							float num9 = flag2 ? 0f : (block2.ExplosionKeepsPickables ? 1f : MathUtils.Lerp(1f, 0f, m_projectilesCount / 25f));
+							Projectile projectile = m_subsystemProjectiles.AddProjectile(item.Value, new Vector3(x + 0.5f, y + 0.5f, z + 0.5f), velocity, m_random.Vector3(0f, 20f), null);
 							projectile.ProjectileStoppedAction = (!(m_random.Float(0f, 1f) < num9)) ? ProjectileStoppedAction.Disappear : ProjectileStoppedAction.TurnIntoPickable;
 							if (m_random.Float(0f, 1f) < 0.5f && m_projectilesCount < 35)
 							{

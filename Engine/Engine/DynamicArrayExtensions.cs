@@ -1,5 +1,3 @@
-using System.Collections.Generic;
-
 namespace Engine
 {
 	public static class DynamicArrayExtensions

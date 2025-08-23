@@ -1,5 +1,3 @@
-using System.Collections.Generic;
-
 namespace Game
 {
 	public abstract class BaseDelayGateElectricElement : RotateableElectricElement

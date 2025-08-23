@@ -8,7 +8,7 @@ namespace Game
 		{
 			if (bytes < 1024)
 			{
-				return string.Format("1KB");
+				return "1KB";
 			}
 			if (bytes < 1048576)
 			{

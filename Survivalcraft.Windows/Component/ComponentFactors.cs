@@ -1,7 +1,5 @@
 using GameEntitySystem;
-using Engine;
 using TemplatesDatabase;
-using System.Reflection;
 using static Game.ComponentLevel;
 
 namespace Game
@@ -43,7 +41,7 @@ namespace Game
 			if(!factorsGotten)
 			{
 				if(throwIfNotFound) throw new KeyNotFoundException(string.Format("Required factor key with name {0} is not found.",factorName));
-				else return 1f;
+				return 1f;
 			}
 			return CalculateFactorsResult(factors);
 		}

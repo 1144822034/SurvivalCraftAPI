@@ -1,6 +1,4 @@
-using Engine;
 using Engine.Graphics;
-using Engine.Media;
 using GameEntitySystem;
 using TemplatesDatabase;
 
@@ -54,13 +52,13 @@ public class SubsystemSeasons : Subsystem, IUpdateable
 		{
 			m_seasonsGradient = (Image)ContentManager.Get<Texture2D>("Textures/Gui/SeasonsSlider").Tag;
 		}
-		int x = (int)Math.Clamp(MathF.Round(timeOfYear * (float)m_seasonsGradient.Width), 0f, m_seasonsGradient.Width - 1);
+		int x = (int)Math.Clamp(MathF.Round(timeOfYear * m_seasonsGradient.Width), 0f, m_seasonsGradient.Width - 1);
 		return m_seasonsGradient.GetPixel(x, 0);
 	}
 
 	public override void Load(ValuesDictionary valuesDictionary)
 	{
-		m_subsystemGameInfo = base.Project.FindSubsystem<SubsystemGameInfo>(throwOnError: true);
+		m_subsystemGameInfo = Project.FindSubsystem<SubsystemGameInfo>(throwOnError: true);
 	}
 
 	public virtual void Update(float dt)

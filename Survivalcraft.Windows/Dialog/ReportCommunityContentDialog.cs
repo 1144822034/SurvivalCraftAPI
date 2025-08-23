@@ -1,5 +1,3 @@
-using System.Collections.Generic;
-using System.Linq;
 using System.Xml.Linq;
 
 namespace Game
@@ -71,7 +69,7 @@ namespace Game
 				Tag = "swearing"
 			});
 			var random = new Random();
-			m_reasonWidgetsList.RandomShuffle((int max) => random.Int(0, max - 1));
+			m_reasonWidgetsList.RandomShuffle(max => random.Int(0, max - 1));
 			m_reasonWidgetsList.Add(new CheckboxWidget
 			{
 				Text = "Other",
@@ -87,7 +85,7 @@ namespace Game
 
 		public override void Update()
 		{
-			m_reportButton.IsEnabled = m_reasonWidgetsList.Count((CheckboxWidget w) => w.IsChecked) == 1;
+			m_reportButton.IsEnabled = m_reasonWidgetsList.Count(w => w.IsChecked) == 1;
 			if (m_reportButton.IsClicked)
 			{
 				DialogsManager.HideDialog(this);

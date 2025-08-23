@@ -1,7 +1,5 @@
 using Engine;
 using Engine.Graphics;
-using System;
-using System.Collections.Generic;
 
 namespace Game
 {
@@ -72,7 +70,6 @@ namespace Game
 				{
 					return face != CellFace.OppositeFace(face2);
 				}
-				return false;
 			}
 			return false;
 		}

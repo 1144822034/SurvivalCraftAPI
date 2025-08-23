@@ -2,10 +2,7 @@ using Engine;
 using Engine.Graphics;
 using Engine.Serialization;
 using GameEntitySystem;
-using System;
-using System.Collections.Generic;
 using System.Globalization;
-using System.Linq;
 using System.Text;
 using TemplatesDatabase;
 
@@ -59,10 +56,6 @@ namespace Game
 
 			public TerrainGeometry Geometry;
 
-			public MovingBlockSet()
-			{
-			}
-
 			public void Dispose()
 			{
 				Geometry.ClearGeometry();
@@ -89,8 +82,8 @@ namespace Game
 
 			public BoundingBox BoundingBox(bool extendToFillCells)
 			{
-				Vector3 min = new(Position.X + (float)Box.Left, Position.Y + (float)Box.Top, Position.Z + (float)Box.Near);
-				Vector3 max = new(Position.X + (float)Box.Right, Position.Y + (float)Box.Bottom, Position.Z + (float)Box.Far);
+				Vector3 min = new(Position.X + Box.Left, Position.Y + Box.Top, Position.Z + Box.Near);
+				Vector3 max = new(Position.X + Box.Right, Position.Y + Box.Bottom, Position.Z + Box.Far);
 				if (extendToFillCells)
 				{
 					min.X = MathF.Floor(min.X);
@@ -105,7 +98,7 @@ namespace Game
 
 			void IMovingBlockSet.SetBlock(Point3 offset, int value)
 			{
-				Blocks.RemoveAll((MovingBlock b) => b.Offset == offset);
+				Blocks.RemoveAll(b => b.Offset == offset);
 				if (value != 0)
 				{
 					Blocks.Add(new MovingBlock
@@ -149,9 +142,12 @@ namespace Game
 
 		public bool m_canGenerateGeometry;
 
-		public static int[] m_drawOrders = new int[1] { 10 };
+		public static int[] m_drawOrders = [10];
 
-		public List<IMovingBlockSet> MovingBlockSets => new(m_movingBlockSets);
+		public List<IMovingBlockSet> MovingBlockSets =>
+		[
+			..m_movingBlockSets
+		];
 
 		public UpdateOrder UpdateOrder => UpdateOrder.Default;
 
@@ -237,7 +233,7 @@ namespace Game
 		{
 			foreach (MovingBlockSet movingBlockSet in m_movingBlockSets)
 			{
-				if (movingBlockSet.Id == id && object.Equals(movingBlockSet.Tag, tag))
+				if (movingBlockSet.Id == id && Equals(movingBlockSet.Tag, tag))
 				{
 					return movingBlockSet;
 				}
@@ -384,7 +380,7 @@ namespace Game
 			}
 			foreach (MovingBlockSet item in m_stopped)
 			{
-				this.Stopped?.Invoke(item);
+				Stopped?.Invoke(item);
 			}
 			m_stopped.Clear();
 		}
@@ -440,12 +436,12 @@ namespace Game
 
 		public override void Load(ValuesDictionary valuesDictionary)
 		{
-			m_subsystemTime = base.Project.FindSubsystem<SubsystemTime>(throwOnError: true);
-			m_subsystemTerrain = base.Project.FindSubsystem<SubsystemTerrain>(throwOnError: true);
-			m_subsystemSky = base.Project.FindSubsystem<SubsystemSky>(throwOnError: true);
-			m_subsystemAnimatedTextures = base.Project.FindSubsystem<SubsystemAnimatedTextures>(throwOnError: true);
+			m_subsystemTime = Project.FindSubsystem<SubsystemTime>(throwOnError: true);
+			m_subsystemTerrain = Project.FindSubsystem<SubsystemTerrain>(throwOnError: true);
+			m_subsystemSky = Project.FindSubsystem<SubsystemSky>(throwOnError: true);
+			m_subsystemAnimatedTextures = Project.FindSubsystem<SubsystemAnimatedTextures>(throwOnError: true);
 			m_shader = ContentManager.Get<Shader>("Shaders/AlphaTested");
-			Buffers = new DynamicArray<TerrainChunkGeometry.Buffer>();
+			Buffers = [];
 			foreach (ValuesDictionary value9 in valuesDictionary.GetValue<ValuesDictionary>("MovingBlockSets").Values)
 			{
 				Vector3 value = value9.GetValue<Vector3>("Position");
@@ -457,11 +453,11 @@ namespace Game
 				string value7 = value9.GetValue<string>("Id", null);
 				object value8 = value9.GetValue<object>("Tag", null);
 				List<MovingBlock> list = [];
-				string[] array = value9.GetValue<string>("Blocks").Split(new char[1] { ';' }, StringSplitOptions.RemoveEmptyEntries);
+				string[] array = value9.GetValue<string>("Blocks").Split([';'], StringSplitOptions.RemoveEmptyEntries);
 				foreach (string obj2 in array)
 				{
 					MovingBlock item = new MovingBlock();
-					string[] array2 = obj2.Split(new char[1] { ',' }, StringSplitOptions.RemoveEmptyEntries);
+					string[] array2 = obj2.Split([','], StringSplitOptions.RemoveEmptyEntries);
 					item.Value = HumanReadableConverter.ConvertFromString<int>(array2[0]);
 					item.Offset.X = HumanReadableConverter.ConvertFromString<int>(array2[1]);
 					item.Offset.Y = HumanReadableConverter.ConvertFromString<int>(array2[2]);
@@ -549,13 +545,13 @@ namespace Game
 		public void TerrainCollision(MovingBlockSet movingBlockSet)
 		{
 			Point3 point = default(Point3);
-			point.X = (int)MathF.Floor((float)movingBlockSet.Box.Left + movingBlockSet.Position.X);
-			point.Y = (int)MathF.Floor((float)movingBlockSet.Box.Top + movingBlockSet.Position.Y);
-			point.Z = (int)MathF.Floor((float)movingBlockSet.Box.Near + movingBlockSet.Position.Z);
+			point.X = (int)MathF.Floor(movingBlockSet.Box.Left + movingBlockSet.Position.X);
+			point.Y = (int)MathF.Floor(movingBlockSet.Box.Top + movingBlockSet.Position.Y);
+			point.Z = (int)MathF.Floor(movingBlockSet.Box.Near + movingBlockSet.Position.Z);
 			Point3 point2 = default(Point3);
-			point2.X = (int)MathF.Ceiling((float)movingBlockSet.Box.Right + movingBlockSet.Position.X);
-			point2.Y = (int)MathF.Ceiling((float)movingBlockSet.Box.Bottom + movingBlockSet.Position.Y);
-			point2.Z = (int)MathF.Ceiling((float)movingBlockSet.Box.Far + movingBlockSet.Position.Z);
+			point2.X = (int)MathF.Ceiling(movingBlockSet.Box.Right + movingBlockSet.Position.X);
+			point2.Y = (int)MathF.Ceiling(movingBlockSet.Box.Bottom + movingBlockSet.Position.Y);
+			point2.Z = (int)MathF.Ceiling(movingBlockSet.Box.Far + movingBlockSet.Position.Z);
 			for (int i = point.X; i < point2.X; i++)
 			{
 				for (int j = point.Z; j < point2.Z; j++)
@@ -564,7 +560,7 @@ namespace Game
 					{
 						if (Terrain.ExtractContents(m_subsystemTerrain.Terrain.GetCellValue(i, k, j)) != 0)
 						{
-							this.CollidedWithTerrain?.Invoke(movingBlockSet, new Point3(i, k, j));
+							CollidedWithTerrain?.Invoke(movingBlockSet, new Point3(i, k, j));
 						}
 					}
 				}
@@ -589,7 +585,7 @@ namespace Game
 			{
 				int x = 2;
 				x = (int)MathUtils.NextPowerOf2((uint)x);
-				m_blockGeometryGenerator = new BlockGeometryGenerator(new Terrain(), m_subsystemTerrain, null, base.Project.FindSubsystem<SubsystemFurnitureBlockBehavior>(throwOnError: true), null, base.Project.FindSubsystem<SubsystemPalette>(throwOnError: true));
+				m_blockGeometryGenerator = new BlockGeometryGenerator(new Terrain(), m_subsystemTerrain, null, Project.FindSubsystem<SubsystemFurnitureBlockBehavior>(throwOnError: true), null, Project.FindSubsystem<SubsystemPalette>(throwOnError: true));
 				for (int i = 0; i < x; i++)
 				{
 					for (int j = 0; j < x; j++)

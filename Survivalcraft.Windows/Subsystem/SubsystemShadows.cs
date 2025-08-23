@@ -15,10 +15,10 @@ namespace Game
 
 		public TexturedBatch3D m_batch;
 
-		public static int[] m_drawOrders = new int[1]
-		{
+		public static int[] m_drawOrders =
+		[
 			200
-		};
+		];
 
 		public int[] DrawOrders => m_drawOrders;
 
@@ -93,7 +93,7 @@ namespace Game
 		public override void Load(ValuesDictionary valuesDictionary)
 		{
 			m_subsystemTerrain = Project.FindSubsystem<SubsystemTerrain>(throwOnError: true);
-			m_subsystemSky = base.Project.FindSubsystem<SubsystemSky>(throwOnError: true);
+			m_subsystemSky = Project.FindSubsystem<SubsystemSky>(throwOnError: true);
 			m_batch = m_primitivesRenderer.TexturedBatch(ContentManager.Get<Texture2D>("Textures/Shadow"), useAlphaTest: false, 0, DepthStencilState.DepthRead, RasterizerState.CullCounterClockwiseScissor, BlendState.AlphaBlend, SamplerState.LinearClamp);
 		}
 

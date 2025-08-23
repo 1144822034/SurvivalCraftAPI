@@ -2,10 +2,6 @@ using Engine;
 using Engine.Graphics;
 using Engine.Serialization;
 using GameEntitySystem;
-using Jint.Native;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using TemplatesDatabase;
 
 namespace Game
@@ -147,7 +143,7 @@ namespace Game
 				}
 			}
 			Insulation = 1f / x;
-			LeastInsulatedSlot = (ClothingSlot)leastInsulatedSlot;
+			LeastInsulatedSlot = leastInsulatedSlot;
 			return Insulation;
 		}
 		public virtual void SetClothes(ClothingSlot slot, IEnumerable<int> clothes)
@@ -207,7 +203,7 @@ namespace Game
 					return false;
 				});
 			}
-			if (Applied == false)
+			if (!Applied)
 			{
 				//决定参与结算的衣物列表
 				float num = m_random.Float(0f, 1f);
@@ -448,12 +444,12 @@ namespace Game
 
 		public virtual int GetSlotValue(int slotIndex)
 		{
-			return GetClothes((ClothingSlot)slotIndex).LastOrDefault();
+			return GetClothes(slotIndex).LastOrDefault();
 		}
 
 		public virtual int GetSlotCount(int slotIndex)
 		{
-			if (GetClothes((ClothingSlot)slotIndex).Count <= 0)
+			if (GetClothes(slotIndex).Count <= 0)
 			{
 				return 0;
 			}
@@ -554,7 +550,7 @@ namespace Game
 		{
 			if (count == 1)
 			{
-				var list = new List<int>(GetClothes((ClothingSlot)slotIndex));
+				var list = new List<int>(GetClothes(slotIndex));
 				if (list.Count > 0)
 				{
 					int value = list[^1];
@@ -562,7 +558,7 @@ namespace Game
 					ClothingData clothingData = block.GetClothingData(value);
 					clothingData?.Dismount?.Invoke(value, this);
 					list.RemoveAt(list.Count - 1);
-					SetClothes((ClothingSlot)slotIndex, list);
+					SetClothes(slotIndex, list);
 					return 1;
 				}
 			}

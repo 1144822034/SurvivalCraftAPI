@@ -1,7 +1,3 @@
-using System;
-using System.Collections.Generic;
-using System.IO;
-
 namespace Engine.Serialization
 {
 	public class BinaryInputArchive : InputArchive, IDisposable
@@ -131,7 +127,7 @@ namespace Engine.Serialization
 
 		public override void SerializeCollection<T>(string name, ICollection<T> collection)
 		{
-			SerializeData serializeData = Archive.GetSerializeData(typeof(T), allowEmptySerializer: true);
+			SerializeData serializeData = GetSerializeData(typeof(T), allowEmptySerializer: true);
             IEnumerator<T> enumerator = ((collection.Count > 0) ? collection.GetEnumerator() : null);
 			int value = 0;
 			Serialize(null, ref value);
@@ -152,8 +148,8 @@ namespace Engine.Serialization
 
 		public override void SerializeDictionary<K, V>(string name, IDictionary<K, V> dictionary)
 		{
-			SerializeData serializeData = Archive.GetSerializeData(typeof(K), allowEmptySerializer: true);
-			SerializeData serializeData2 = Archive.GetSerializeData(typeof(V), allowEmptySerializer: true);
+			SerializeData serializeData = GetSerializeData(typeof(K), allowEmptySerializer: true);
+			SerializeData serializeData2 = GetSerializeData(typeof(V), allowEmptySerializer: true);
 			int value = 0;
 			Serialize(null, ref value);
 			for (int i = 0; i < value; i++)

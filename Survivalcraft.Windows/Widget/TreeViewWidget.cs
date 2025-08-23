@@ -11,7 +11,7 @@ namespace Game
 		private List<TreeViewNode> m_nodes = new();
 		public bool m_widgetsDirty;
 		public Vector2 lastActualSize = new(-1f);
-		public int m_visibleItemsCount = 0;//显示出来的项的数量
+		public int m_visibleItemsCount;//显示出来的项的数量
 		public Action<TreeViewNode> m_onNodeClicked;
 		private TreeViewNode m_selectedNode;
 

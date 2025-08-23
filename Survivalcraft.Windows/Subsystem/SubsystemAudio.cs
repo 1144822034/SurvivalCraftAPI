@@ -1,7 +1,6 @@
 using Engine;
 using Engine.Audio;
 using GameEntitySystem;
-using System.Collections.Generic;
 using TemplatesDatabase;
 using Vector3 = Engine.Vector3;
 
@@ -103,7 +102,7 @@ namespace Game
 
 		public void PlaySound(string name, float volume, float pitch, float pan, float delay)
 		{
-			double num = m_subsystemTime.GameTime + (double)delay;
+			double num = m_subsystemTime.GameTime + delay;
 			m_nextSoundTime = Math.Min(m_nextSoundTime, num);
 			m_queuedSounds.Add(new SoundInfo
 			{
@@ -116,7 +115,7 @@ namespace Game
 		}
 		public void PlaySound(string name,float volume,float pitch,float pan,float delay, Vector3 direction)
 		{
-			double num = m_subsystemTime.GameTime + (double)delay;
+			double num = m_subsystemTime.GameTime + delay;
 			m_nextSoundTime = Math.Min(m_nextSoundTime,num);
 			m_queuedSounds.Add(new SoundInfo
 			{
@@ -223,8 +222,8 @@ namespace Game
 
 		public override void Load(ValuesDictionary valuesDictionary)
 		{
-			m_subsystemTime = base.Project.FindSubsystem<SubsystemTime>(throwOnError: true);
-			m_subsystemViews = base.Project.FindSubsystem<SubsystemGameWidgets>(throwOnError: true);
+			m_subsystemTime = Project.FindSubsystem<SubsystemTime>(throwOnError: true);
+			m_subsystemViews = Project.FindSubsystem<SubsystemGameWidgets>(throwOnError: true);
 		}
 
 		public override void Dispose()

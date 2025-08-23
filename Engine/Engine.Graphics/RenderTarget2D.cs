@@ -1,7 +1,3 @@
-using System;
-using System.IO;
-using System.Runtime.InteropServices;
-using Engine.Media;
 #if DIRECT3D11
 using SharpDX.DXGI;
 using SharpDX;
@@ -9,6 +5,9 @@ using SharpDX.Direct3D11;
 #else
 using Silk.NET.OpenGLES;
 #endif
+using System.Runtime.InteropServices;
+using Engine.Media;
+using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.PixelFormats;
 
 namespace Engine.Graphics
@@ -79,7 +78,7 @@ namespace Engine.Graphics
         public unsafe Image GetData(Rectangle sourceRectangle)
         {
             VerifyNotDisposed();
-            SixLabors.ImageSharp.Image<Rgba32> image = new(Image.DefaultImageSharpConfiguration, sourceRectangle.Width, sourceRectangle.Height);
+            Image<Rgba32> image = new(Image.DefaultImageSharpConfiguration, sourceRectangle.Width, sourceRectangle.Height);
             image.DangerousTryGetSinglePixelMemory(out Memory<Rgba32> memory);
             GetDataInternal((nint)memory.Pin().Pointer, sourceRectangle);
             return new Image(image);
@@ -196,7 +195,7 @@ namespace Engine.Graphics
                 GLWrapper.GL.GenRenderbuffers(1u, out uint depthBuffer);
                 m_depthBuffer = (int)depthBuffer;
                 GLWrapper.GL.BindRenderbuffer(RenderbufferTarget.Renderbuffer, depthBuffer);
-                GLWrapper.GL.RenderbufferStorage(RenderbufferTarget.Renderbuffer, GLWrapper.TranslateDepthFormat(DepthFormat), (uint)base.Width, (uint)base.Height);
+                GLWrapper.GL.RenderbufferStorage(RenderbufferTarget.Renderbuffer, GLWrapper.TranslateDepthFormat(DepthFormat), (uint)Width, (uint)Height);
                 GLWrapper.GL.FramebufferRenderbuffer(FramebufferTarget.Framebuffer, FramebufferAttachment.DepthAttachment, RenderbufferTarget.Renderbuffer, depthBuffer);
                 GLWrapper.GL.FramebufferRenderbuffer(FramebufferTarget.Framebuffer, FramebufferAttachment.StencilAttachment, RenderbufferTarget.Renderbuffer, 0);
             }
@@ -315,7 +314,7 @@ namespace Engine.Graphics
 		private void VerifyParametersGetData<T>(T[] target, int targetStartIndex, Rectangle sourceRectangle) where T : struct
 		{
 			VerifyNotDisposed();
-			int size = base.ColorFormat.GetSize();
+			int size = ColorFormat.GetSize();
 			int num = Utilities.SizeOf<T>();
 			ArgumentNullException.ThrowIfNull(target);
 			if (num > size)
@@ -326,7 +325,7 @@ namespace Engine.Graphics
 			{
 				throw new ArgumentException("Pixel size is not an integer multiple of target array element size.");
 			}
-			if (sourceRectangle.Left < 0 || sourceRectangle.Width <= 0 || sourceRectangle.Top < 0 || sourceRectangle.Height <= 0 || sourceRectangle.Left + sourceRectangle.Width > base.Width || sourceRectangle.Top + sourceRectangle.Height > base.Height)
+			if (sourceRectangle.Left < 0 || sourceRectangle.Width <= 0 || sourceRectangle.Top < 0 || sourceRectangle.Height <= 0 || sourceRectangle.Left + sourceRectangle.Width > Width || sourceRectangle.Top + sourceRectangle.Height > Height)
 			{
 				throw new ArgumentOutOfRangeException("sourceRectangle");
 			}
@@ -347,7 +346,7 @@ namespace Engine.Graphics
             {
                 throw new ArgumentNullException("target");
             }
-            if (sourceRectangle.Left < 0 || sourceRectangle.Width <= 0 || sourceRectangle.Top < 0 || sourceRectangle.Height <= 0 || sourceRectangle.Left + sourceRectangle.Width > base.Width || sourceRectangle.Top + sourceRectangle.Height > base.Height)
+            if (sourceRectangle.Left < 0 || sourceRectangle.Width <= 0 || sourceRectangle.Top < 0 || sourceRectangle.Height <= 0 || sourceRectangle.Left + sourceRectangle.Width > Width || sourceRectangle.Top + sourceRectangle.Height > Height)
             {
                 throw new ArgumentOutOfRangeException("sourceRectangle");
             }

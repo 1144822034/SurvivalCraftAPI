@@ -1,8 +1,4 @@
-using System;
-using System.Collections.Generic;
 using System.Globalization;
-using System.IO;
-using System.Linq;
 using System.Text;
 using System.Xml;
 using System.Xml.Linq;
@@ -337,11 +333,11 @@ namespace Engine.Media
             {
                 Transform = modelBoneData.Transform;
                 int index = modelData.Bones.IndexOf(modelBoneData);
-                foreach (ModelBoneData item in modelData.Bones.Where((ModelBoneData b) => b.ParentBoneIndex == index))
+                foreach (ModelBoneData item in modelData.Bones.Where(b => b.ParentBoneIndex == index))
                 {
                     Children.Add(new ColladaNode(colladaRoot, modelData, item));
                 }
-                foreach (ModelMeshData item2 in modelData.Meshes.Where((ModelMeshData m) => m.ParentBoneIndex == index))
+                foreach (ModelMeshData item2 in modelData.Meshes.Where(m => m.ParentBoneIndex == index))
                 {
                     foreach (ModelMeshPartData meshPart in item2.MeshParts)
                     {
@@ -482,7 +478,7 @@ namespace Engine.Media
                         for (int i = 0; i < modelMeshPartData.IndicesCount; i++)
                         {
                             int num = ((i % 3 == 0) ? i : ((i % 3 != 1) ? (i - 1) : (i + 1)));
-                            ushort key = *(ushort*)(ptr + (nint)(num + modelMeshPartData.StartIndex) * (nint)2);
+                            ushort key = *(ushort*)(ptr + (num + modelMeshPartData.StartIndex) * (nint)2);
                             if (!dictionary.TryGetValue(key, out var value))
                             {
                                 value = (ushort)dictionary.Count;
@@ -510,7 +506,7 @@ namespace Engine.Media
                                     int num2 = item2.Key * vertexDeclaration.VertexStride + item.Offset;
                                     colladaFloatArray.Array[3 * item2.Value] = *(float*)(ptr2 + num2);
                                     colladaFloatArray.Array[3 * item2.Value + 1] = *(float*)(ptr2 + num2 + 4);
-                                    colladaFloatArray.Array[3 * item2.Value + 2] = *(float*)(ptr2 + num2 + (nint)2 * (nint)4);
+                                    colladaFloatArray.Array[3 * item2.Value + 2] = *(float*)(ptr2 + num2 + 2 * (nint)4);
                                 }
                                 Vertices = new ColladaVertices(colladaRoot, colladaSource) { Semantic = item.SemanticName, Source = colladaSource };
                             }
@@ -523,7 +519,7 @@ namespace Engine.Media
                                     int num3 = item3.Key * vertexDeclaration.VertexStride + item.Offset;
                                     colladaFloatArray.Array[3 * item3.Value] = *(float*)(ptr2 + num3);
                                     colladaFloatArray.Array[3 * item3.Value + 1] = *(float*)(ptr2 + num3 + 4);
-                                    colladaFloatArray.Array[3 * item3.Value + 2] = *(float*)(ptr2 + num3 + (nint)2 * (nint)4);
+                                    colladaFloatArray.Array[3 * item3.Value + 2] = *(float*)(ptr2 + num3 + 2 * (nint)4);
                                 }
                             }
                             else if (item.SemanticName == "TEXCOORD")
@@ -544,10 +540,10 @@ namespace Engine.Media
                                 foreach (KeyValuePair<ushort, ushort> item5 in dictionary)
                                 {
                                     int num5 = item5.Key * vertexDeclaration.VertexStride + item.Offset;
-                                    colladaFloatArray.Array[4 * item5.Value] = (float)(int)ptr2[num5] / 255f;
-                                    colladaFloatArray.Array[4 * item5.Value + 1] = (float)(int)(ptr2 + num5)[1] / 255f;
-                                    colladaFloatArray.Array[4 * item5.Value + 2] = (float)(int)(ptr2 + num5)[2] / 255f;
-                                    colladaFloatArray.Array[4 * item5.Value + 3] = (float)(int)(ptr2 + num5)[3] / 255f;
+                                    colladaFloatArray.Array[4 * item5.Value] = ptr2[num5] / 255f;
+                                    colladaFloatArray.Array[4 * item5.Value + 1] = (ptr2 + num5)[1] / 255f;
+                                    colladaFloatArray.Array[4 * item5.Value + 2] = (ptr2 + num5)[2] / 255f;
+                                    colladaFloatArray.Array[4 * item5.Value + 3] = (ptr2 + num5)[3] / 255f;
                                 }
                             }
                             Polygons[0]
@@ -670,7 +666,7 @@ namespace Engine.Media
             {
                 base.Save(node);
                 node.SetAttributeValue("count", Array.Length);
-                node.Value = string.Join(" ", Array.Select((float f) => f.ToString(CultureInfo.InvariantCulture)));
+                node.Value = string.Join(" ", Array.Select(f => f.ToString(CultureInfo.InvariantCulture)));
             }
 		}
 
@@ -801,7 +797,7 @@ namespace Engine.Media
                     }
                 }
                 VertexDeclaration vertexDeclaration = new VertexDeclaration(dictionary.Keys.ToArray());
-                ModelBuffersData modelBuffersData = modelData.Buffers.FirstOrDefault((ModelBuffersData vd) => vd.VertexDeclaration == vertexDeclaration);
+                ModelBuffersData modelBuffersData = modelData.Buffers.FirstOrDefault(vd => vd.VertexDeclaration == vertexDeclaration);
                 if (modelBuffersData == null)
                 {
                     modelBuffersData = new ModelBuffersData();
@@ -947,7 +943,7 @@ namespace Engine.Media
                 {
                     input.Save(CreateElement(node, ColladaRoot.Namespace + "input"));
                 }
-                CreateElement(node, ColladaRoot.Namespace + "p").Value = string.Join(" ", P.Select((int n) => n.ToString(CultureInfo.InvariantCulture)).ToArray());
+                CreateElement(node, ColladaRoot.Namespace + "p").Value = string.Join(" ", P.Select(n => n.ToString(CultureInfo.InvariantCulture)).ToArray());
             }
         }
 

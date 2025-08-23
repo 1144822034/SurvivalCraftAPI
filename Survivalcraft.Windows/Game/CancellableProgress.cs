@@ -1,6 +1,3 @@
-using System;
-using System.Threading;
-
 namespace Game
 {
 	public class CancellableProgress : Progress

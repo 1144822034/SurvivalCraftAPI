@@ -1,12 +1,8 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
-
 namespace Engine
 {
-	public struct ReadOnlyList<T> : IList<T>, ICollection<T>, IEnumerable<T>, IEnumerable
+	public struct ReadOnlyList<T> : IList<T>
 	{
-		public struct Enumerator : IEnumerator<T>, IDisposable, IEnumerator
+		public struct Enumerator : IEnumerator<T>
 		{
 			private IList<T> m_list;
 

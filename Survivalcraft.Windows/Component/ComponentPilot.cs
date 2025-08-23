@@ -226,7 +226,7 @@ namespace Game
 					{
 						if (RaycastDestination)
 						{
-							if (!m_subsystemTerrain.Raycast(position + new Vector3(0f, 0.5f, 0f), v + new Vector3(0f, 0.5f, 0f), useInteractionBoxes: false, skipAirBlocks: true, (int value, float distance) => BlocksManager.Blocks[Terrain.ExtractContents(value)].IsCollidable_(value)).HasValue)
+							if (!m_subsystemTerrain.Raycast(position + new Vector3(0f, 0.5f, 0f), v + new Vector3(0f, 0.5f, 0f), useInteractionBoxes: false, skipAirBlocks: true, (value,distance) => BlocksManager.Blocks[Terrain.ExtractContents(value)].IsCollidable_(value)).HasValue)
 							{
 								Destination = null;
 							}
@@ -272,7 +272,7 @@ namespace Game
 		{
 			var isTerrainSafeToGo = false;
 			var skipVanilla = false;
-			ModsManager.HookAction("IsTerrainSafeToGo",(modLoader) => {
+			ModsManager.HookAction("IsTerrainSafeToGo",modLoader => {
 				modLoader.IsTerrainSafeToGo(this,position,direction,out isTerrainSafeToGo,out skipVanilla);
 				return false;
 			});

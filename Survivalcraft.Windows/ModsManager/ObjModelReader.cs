@@ -1,8 +1,5 @@
 using Engine;
 using Engine.Graphics;
-using System;
-using System.Collections.Generic;
-using System.IO;
 
 namespace Game
 {
@@ -105,10 +102,10 @@ namespace Game
 				StreamReader streamReader = new(stream);
 				ObjMesh objMesh = null;
 				string CurrentTkey = null;
-				while (streamReader.EndOfStream == false)
+				while (!streamReader.EndOfStream)
 				{
 					string line = streamReader.ReadLine();
-					string[] spl = line.Split(new char[] { (char)0x09, (char)0x20 }, System.StringSplitOptions.None);
+					string[] spl = line.Split([(char)0x09, (char)0x20], StringSplitOptions.None);
 					switch (spl[0])
 					{
 						case "mtllib":
@@ -162,32 +159,25 @@ namespace Game
 								}
 								objMesh.TexturePath = CurrentTkey;
 								int SideCount = spl.Length - 1;
-								if (SideCount != 3) { throw new System.Exception("模型必须为三角面"); }
-								else
+								if (SideCount != 3) { throw new Exception("模型必须为三角面"); }
+								int i = 0;
+								int startCount = objMesh.Vertices.Count;
+								while (++i < spl.Length)
 								{
-									int i = 0;
-									int startCount = objMesh.Vertices.Count;
-									while (++i < spl.Length)
-									{
-										string[] param = spl[i].Split(new char[] { '/' }, System.StringSplitOptions.None);
-										if (param.Length != 3) { throw new System.Exception("面参数错误"); }
-										else
-										{
-											int pa = int.Parse(param[0]);//顶点索引
-											int pb = int.Parse(param[1]);//纹理索引
-											int pc = int.Parse(param[2]);//法线索引
-											ObjPosition objPosition = objPositions[pa - 1];
-											ObjTexCood texCood = objTexCoods[pb - 1];
-											ObjNormal objNormal = objNormals[pc - 1];
-											int face = CellFace.Vector3ToFace(new Vector3(objNormal.x, objNormal.y, objNormal.z));
-											objMesh.Indices.Add(startCount + FaceMap[face][i - 1]);
-											objMesh.Vertices.Add(new ObjVertex() { position = objPosition, objNormal = objNormal, texCood = texCood });
-										}
-									}
+									string[] param = spl[i].Split(['/'], StringSplitOptions.None);
+									if (param.Length != 3) { throw new Exception("面参数错误"); }
+									int pa = int.Parse(param[0]);//顶点索引
+									int pb = int.Parse(param[1]);//纹理索引
+									int pc = int.Parse(param[2]);//法线索引
+									ObjPosition objPosition = objPositions[pa - 1];
+									ObjTexCood texCood = objTexCoods[pb - 1];
+									ObjNormal objNormal = objNormals[pc - 1];
+									int face = CellFace.Vector3ToFace(new Vector3(objNormal.x, objNormal.y, objNormal.z));
+									objMesh.Indices.Add(startCount + FaceMap[face][i - 1]);
+									objMesh.Vertices.Add(new ObjVertex { position = objPosition, objNormal = objNormal, texCood = texCood });
 								}
 								break;
 							}
-						default: break;
 					}
 				}
 			}

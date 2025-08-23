@@ -1,6 +1,5 @@
 using Engine;
 using Engine.Graphics;
-using System.Collections.Generic;
 using System.Globalization;
 
 namespace Game
@@ -27,8 +26,8 @@ namespace Game
 
 		public BlockMesh[] m_finsBlockMeshes = new BlockMesh[2];
 
-		public static readonly string[] HeadNames = new string[8]
-		{
+		public static readonly string[] HeadNames =
+		[
 			"HeadConeSmall",
 			"HeadConeLarge",
 			"HeadCylinderSmall",
@@ -37,10 +36,10 @@ namespace Game
 			"HeadDiamondSmall",
 			"HeadDiamondLarge",
 			"HeadCylinderFlat"
-		};
+		];
 
-		public static readonly Color[] FireworksColors = new Color[8]
-		{
+		public static readonly Color[] FireworksColors =
+		[
 			new(255, 255, 255),
 			new(85, 255, 255),
 			new(255, 85, 85),
@@ -49,7 +48,7 @@ namespace Game
 			new(85, 255, 85),
 			new(255, 170, 0),
 			new(255, 85, 255)
-		};
+		];
 
 		public override void Initialize()
 		{

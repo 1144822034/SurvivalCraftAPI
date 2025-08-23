@@ -1,6 +1,4 @@
 using Engine;
-using System;
-using System.IO;
 using System.Text.RegularExpressions;
 
 namespace Game
@@ -57,7 +55,7 @@ namespace Game
 				}
 				if (shaderTextTemp == string.Empty) return string.Empty;
 				shaderTextTemp = shaderTextTemp.Replace("\n", "$");
-				string[] lines = shaderTextTemp.Split(new char[1] { '$' }, StringSplitOptions.RemoveEmptyEntries);
+				string[] lines = shaderTextTemp.Split(['$'], StringSplitOptions.RemoveEmptyEntries);
 				for (int l = 0; l < lines.Length; l++)
 				{
 					lines[l] = lines[l].Trim();

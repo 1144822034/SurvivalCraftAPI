@@ -31,7 +31,7 @@ namespace Game
         public virtual bool CanGatherPickable(Pickable pickable)
         {
             double pickableTimeExisted = m_subsystemGameInfo.TotalElapsedGameTime - pickable.CreationTime;
-            if (pickableTimeExisted < pickable.TimeWaitToAutoPick) return false;
+            if (pickableTimeExisted < pickable.TimeWaitToAutoPick) { }
             return false;
         }
         public virtual void GatherPickable(Pickable pickable)

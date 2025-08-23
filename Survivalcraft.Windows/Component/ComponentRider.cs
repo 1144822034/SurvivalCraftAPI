@@ -1,6 +1,5 @@
 using Engine;
 using GameEntitySystem;
-using System.Linq;
 using TemplatesDatabase;
 
 namespace Game
@@ -171,7 +170,7 @@ namespace Game
 		{
 			float? score = null;
 			bool modDisallows = false;
-			ModsManager.HookAction("ScoreMount",(modLoader) => {
+			ModsManager.HookAction("ScoreMount",modLoader => {
 				modLoader.ScoreMount(this,componentMount,out float? scoreByMod);
 				if(scoreByMod.HasValue && scoreByMod < 0) modDisallows = true;
 				if(scoreByMod.HasValue) score = MathUtils.Max(score ?? float.MinValue, scoreByMod.Value);

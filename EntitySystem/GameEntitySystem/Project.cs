@@ -84,7 +84,7 @@ namespace GameEntitySystem
                     NextEntityID = projectData.NextEntityID;
                     AddEntities(entities);
                 }
-				BeforeSubsystemsAndEntitiesLoad.Invoke(this);
+				BeforeSubsystemsAndEntitiesLoad?.Invoke(this);
                 foreach (Subsystem value3 in dictionary.Values)
 				{
 					LoadSubsystem(value3, dictionary, loadedSubsystems, 0);
@@ -98,7 +98,10 @@ namespace GameEntitySystem
 				{
 					Log.Error("Loading World Failed!\n" + e);
 				}
-				catch{ };
+				catch
+				{
+					// ignored
+				}
 				try
 				{
 					Dispose();
@@ -269,7 +272,6 @@ namespace GameEntitySystem
 		{
 			List<Entity> list = new(entityDataList.EntitiesData.Count);
 			Dictionary<int, Entity> dictionary = [];
-			IdToEntityMap idToEntityMap = new(dictionary);
 			foreach (EntityData entitiesDatum in entityDataList.EntitiesData)
 			{
 				try
@@ -294,16 +296,16 @@ namespace GameEntitySystem
 		{
             int num = 0;
 			if(entityDataList?.EntitiesData != null)
-            foreach (EntityData entitiesDatum2 in entityDataList.EntitiesData)
-            {
-                entityList[num].InternalLoadEntity(entitiesDatum2.ValuesDictionary, null);
-                num++;
-            }
+				foreach (EntityData entitiesDatum2 in entityDataList.EntitiesData)
+				{
+					entityList[num].InternalLoadEntity(entitiesDatum2.ValuesDictionary, null);
+					num++;
+				}
 			if(Entities != null)
-			foreach(Entity entity in Entities)
-			{
-				FireEntityAddedEvents(entity);
-            }
+				foreach(Entity entity in Entities)
+				{
+					FireEntityAddedEvents(entity);
+				}
 			PostponeFireEntityAddedEvents = false;
         }
 
@@ -440,10 +442,7 @@ namespace GameEntitySystem
 			string value = subsystem.ValuesDictionary.GetValue("Dependencies", string.Empty);
 			if (!string.IsNullOrEmpty(value))
 			{
-				string[] array = value.Split(new char[1]
-				{
-					','
-				}, StringSplitOptions.RemoveEmptyEntries);
+				string[] array = value.Split(',', StringSplitOptions.RemoveEmptyEntries);
 				for (int i = 0; i < array.Length; i++)
 				{
 					string text = array[i].Trim();

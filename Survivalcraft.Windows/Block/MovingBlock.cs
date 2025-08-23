@@ -1,8 +1,7 @@
 using Engine;
-using GameEntitySystem;
-using Jint.Native;
-using TemplatesDatabase;
 using Engine.Serialization;
+using GameEntitySystem;
+using TemplatesDatabase;
 
 namespace Game
 {
@@ -32,21 +31,15 @@ namespace Game
 			if(movingBlockSet != null)
 			{
 				MovingBlock movingBlock = movingBlockSet.Blocks.FirstOrDefault(block => block.Offset == offset,null);
-				if(!MovingBlock.IsNullOrStopped(movingBlock))
+				if(!IsNullOrStopped(movingBlock))
 				{
 					return movingBlock;
 				}
-				else
-				{
-					if(throwOnError) throw new Exception("Required moving block offset " + offset.ToString() + " is not found in MovingBlockSet " + movingBlocksPosition.ToString());
-					return null;
-				}
-			}
-			else
-			{
-				if(throwOnError) throw new Exception("Required moving block set " + movingBlocksPosition.ToString() + " is not found.");
+				if(throwOnError) throw new Exception("Required moving block offset " + offset + " is not found in MovingBlockSet " + movingBlocksPosition);
 				return null;
 			}
+			if(throwOnError) throw new Exception("Required moving block set " + movingBlocksPosition + " is not found.");
+			return null;
 		}
 		public static MovingBlock LoadFromValuesDictionary(Project project,ValuesDictionary valuesDictionary,bool throwOnError = true, bool throwIfNotFound = false)
 		{
@@ -85,7 +78,7 @@ namespace Game
 
 		public void SetValuesDicionary(ValuesDictionary valuesDictionary, bool saveWhenStopped = false)
 		{
-			if(!MovingBlock.IsNullOrStopped(this) || saveWhenStopped)
+			if(!IsNullOrStopped(this) || saveWhenStopped)
 			{
 				valuesDictionary.SetValue("MovingBlockSetPosition", MovingBlockSet.Position);
 				valuesDictionary.SetValue("MovingBlockOffset", Offset);

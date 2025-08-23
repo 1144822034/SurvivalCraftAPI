@@ -64,7 +64,6 @@ namespace Game
 					{
 						return Middusk;
 					}
-					return Midday;
 				}
 				return Midday;
 			}
@@ -80,7 +79,7 @@ namespace Game
 
 		public double CalculateDay(double totalElapsedGameTime)
 		{
-			return (totalElapsedGameTime + (TimeOfDayOffset + (double)DayStart) * DayDuration) / DayDuration;
+			return (totalElapsedGameTime + (TimeOfDayOffset + DayStart) * DayDuration) / DayDuration;
 		}
 
 		public float CalculateTimeOfDay(double totalElapsedGameTime)
@@ -92,7 +91,7 @@ namespace Game
 		public override void Load(ValuesDictionary valuesDictionary)
 		{
 			m_subsystemGameInfo = Project.FindSubsystem<SubsystemGameInfo>(throwOnError: true);
-			m_subsystemSeasons = base.Project.FindSubsystem<SubsystemSeasons>(throwOnError: true);
+			m_subsystemSeasons = Project.FindSubsystem<SubsystemSeasons>(throwOnError: true);
 			TimeOfDayOffset = valuesDictionary.GetValue<double>("TimeOfDayOffset");
 			UpdateStarts();
 		}

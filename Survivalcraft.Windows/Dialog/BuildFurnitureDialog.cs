@@ -1,7 +1,4 @@
 using Engine;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Xml.Linq;
 
 namespace Game
@@ -79,8 +76,8 @@ namespace Game
 			m_sourceDesign = sourceDesign;
 			m_axis = 1;
 			int num = 0;
-			num += m_design.Geometry.SubsetOpaqueByFace.Sum((BlockMesh b) => (b != null) ? (b.Indices.Count / 3) : 0);
-			num += m_design.Geometry.SubsetAlphaTestByFace.Sum((BlockMesh b) => (b != null) ? (b.Indices.Count / 3) : 0);
+			num += m_design.Geometry.SubsetOpaqueByFace.Sum(b => (b != null) ? (b.Indices.Count / 3) : 0);
+			num += m_design.Geometry.SubsetAlphaTestByFace.Sum(b => (b != null) ? (b.Indices.Count / 3) : 0);
 			m_isValid = num <= FurnitureDesign.MaxTriangles;
 			m_statusLabel.Text = string.Format(LanguageControl.Get(fName, 1), num, FurnitureDesign.MaxTriangles, m_isValid ? LanguageControl.Get(fName, 2) : LanguageControl.Get(fName, 3));
 			m_designWidget2d.Design = m_design;
@@ -179,7 +176,7 @@ namespace Game
 				}
 				else
 				{
-					DialogsManager.ShowDialog(ParentWidget, new ListSelectionDialog(LanguageControl.Get(fName, 11), list, 64f, (object t) => ((Tuple<string, Action>)t).Item1, delegate (object t)
+					DialogsManager.ShowDialog(ParentWidget, new ListSelectionDialog(LanguageControl.Get(fName, 11), list, 64f, t => ((Tuple<string, Action>)t).Item1, delegate (object t)
 					{
 						((Tuple<string, Action>)t).Item2();
 					}));

@@ -1,10 +1,5 @@
 using Engine;
 using GameEntitySystem;
-using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Threading;
-using System.Threading.Tasks;
 using System.Xml.Linq;
 using TemplatesDatabase;
 using XmlUtilities;
@@ -62,22 +57,22 @@ namespace Game
 				{
 					ModsManager.HookAction("OnProjectLoaded", loader => { loader.OnProjectLoaded(project); return false; });
 				};
-				Project.EntityAdded += new EventHandler<EntityAddRemoveEventArgs>((s, arg) =>
+				Project.EntityAdded += (s, arg) =>
 				{
 					ModsManager.HookAction("OnEntityAdd", loader =>
 					{
 						loader.OnEntityAdd(arg.Entity);
 						return false;
 					});
-				});
-				Project.EntityRemoved += new EventHandler<EntityAddRemoveEventArgs>((s, arg) =>
+				};
+				Project.EntityRemoved += (s, arg) =>
 				{
 					ModsManager.HookAction("OnEntityRemove", loader =>
 					{
 						loader.OnEntityRemove(arg.Entity);
 						return false;
 					});
-				});
+				};
 				Entity.EntityComponentsInitialized += (entity,componentList) =>
 				{
 					ModsManager.HookAction("EntityComponentsInitialized",loader => {
@@ -85,7 +80,7 @@ namespace Game
 						return false;
 					});
 				};
-				Project.BeforeSubsystemsAndEntitiesLoad += (project) => {
+				Project.BeforeSubsystemsAndEntitiesLoad += project => {
 					ModsManager.HookAction("ProjectBeforeSubsystemsAndEntitiesLoad",loader => {
 						loader.ProjectBeforeSubsystemsAndEntitiesLoad(project);
 						return false;

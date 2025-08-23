@@ -1,6 +1,5 @@
 using Engine;
 using Engine.Graphics;
-using System;
 
 namespace Game
 {
@@ -16,7 +15,7 @@ namespace Game
 			Size = vector2;
 			HorizontalAlignment = WidgetAlignment.Center;
 			VerticalAlignment = WidgetAlignment.Center;
-			labelWidget = new LabelWidget() { Text = text, FontScale = 0.8f, HorizontalAlignment = WidgetAlignment.Center, VerticalAlignment = WidgetAlignment.Center };
+			labelWidget = new LabelWidget { Text = text, FontScale = 0.8f, HorizontalAlignment = WidgetAlignment.Center, VerticalAlignment = WidgetAlignment.Center };
 			Children.Add(labelWidget);
 			IsDrawEnabled = true;
 			IsDrawRequired = true;

@@ -1,6 +1,4 @@
 using Engine;
-using System;
-using System.Collections.Generic;
 using System.Text;
 
 namespace Game
@@ -68,10 +66,10 @@ namespace Game
 
 		public void LoadString(string data)
 		{
-			string[] array = data.Split(new char[1]
-			{
+			string[] array = data.Split(
+			[
 				';'
-			}, StringSplitOptions.RemoveEmptyEntries);
+			], StringSplitOptions.RemoveEmptyEntries);
 			if (array.Length >= 1)
 			{
 				string text = array[0];

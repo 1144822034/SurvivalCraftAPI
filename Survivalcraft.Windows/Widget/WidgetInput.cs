@@ -1,4 +1,3 @@
-using System;
 using Engine;
 using Engine.Graphics;
 using Engine.Input;
@@ -414,7 +413,6 @@ public class WidgetInput
 				{
 					return VrManager.IsVrStarted;
 				}
-				return false;
 			}
 			return false;
 		}
@@ -883,7 +881,7 @@ public class WidgetInput
 			}
 			if (MouseWheelMovement != 0)
 			{
-				Scroll = new Vector3(value, (float)MouseWheelMovement / 120f);
+				Scroll = new Vector3(value, MouseWheelMovement / 120f);
 			}
 			if (m_mouseHoldInProgress && m_mouseDownPoint.HasValue)
 			{
@@ -902,7 +900,7 @@ public class WidgetInput
 					DragMode = ((!IsMouseButtonDown(MouseButton.Left)) ? DragMode.SingleItem : DragMode.AllItems);
 					Drag = m_mouseDownPoint.Value;
 				}
-				else if (Time.FrameStartTime - m_mouseDragTime > (double)SettingsManager.MinimumHoldDuration)
+				else if (Time.FrameStartTime - m_mouseDragTime > SettingsManager.MinimumHoldDuration)
 				{
 					m_mouseHoldInProgress = true;
 				}

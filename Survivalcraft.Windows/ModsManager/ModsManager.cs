@@ -1,15 +1,16 @@
 // Game.ModsManager
 
 using Engine;
+using Engine.Media;
+using Engine.Serialization;
 using Game;
-using GameEntitySystem;
 using System.Reflection;
 using System.Security.Cryptography;
 using System.Text;
-using System.Xml.Linq;
-using Engine.Serialization;
-using XmlUtilities;
 using System.Text.Json;
+using System.Xml.Linq;
+using XmlUtilities;
+using ZipArchive = Game.ZipArchive;
 #if DEBUG
 using Engine.Graphics;
 using System.IO.Compression;
@@ -82,7 +83,7 @@ public static class ModsManager
 
 		public void Add(ModLoader modLoader)
 		{
-			if (Loaders.TryGetValue(modLoader, out _) == false)
+			if (!Loaders.TryGetValue(modLoader, out _))
 			{
 				Loaders.Add(modLoader, true);
 			}
@@ -193,7 +194,7 @@ public static class ModsManager
 	/// <param name="modLoader"></param>
 	public static void RegisterHook(string HookName, ModLoader modLoader)
 	{
-		if (ModHooks.TryGetValue(HookName, out ModHook modHook) == false)
+		if (!ModHooks.TryGetValue(HookName, out ModHook modHook))
 		{
 			modHook = new ModHook(HookName);
 			ModHooks.Add(HookName, modHook);
@@ -285,7 +286,7 @@ public static class ModsManager
 		{
 			element.SetAttributeValue(c.Key, c.Value);
 		}
-		using (Stream stream = Storage.OpenFile(ModsManager.ConfigsPath, OpenFileMode.Create))
+		using (Stream stream = Storage.OpenFile(ConfigsPath, OpenFileMode.Create))
 		{
 			XmlUtils.SaveXmlToStream(element,stream,Encoding.UTF8,throwOnError: true);
 		}
@@ -426,7 +427,7 @@ public static class ModsManager
 			}
 			catch (Exception e)
 			{
-				Log.Error($"Load assembly [{args.Name}] failed:{e.ToString()}");
+				Log.Error($"Load assembly [{args.Name}] failed:{e}");
 				Log.Debug(e);
 				throw;
 			}
@@ -456,7 +457,7 @@ public static class ModsManager
 				if(ms == ModSuffix || ms == ".SCNEXT")
 				{
 					Stream keepOpenStream = ModsManageContentScreen.GetDecipherStream(stream);
-					var modEntity = new ModEntity(ks,Game.ZipArchive.Open(keepOpenStream,true));
+					var modEntity = new ModEntity(ks,ZipArchive.Open(keepOpenStream,true));
 					if(modEntity.modInfo == null)
 					{
 						LoadingScreen.Warning($"[{modEntity.ModFilePath}]缺少ModInfo文件，忽略加载");
@@ -570,11 +571,11 @@ public static class ModsManager
 		XElement MergeXml = XmlUtils.LoadXmlFromStream(cloorcr, Encoding.UTF8, true);
 		foreach (XElement element in MergeXml.Elements())
 		{
-			if (HasAttribute(element, (name) => { return name.StartsWith("new-"); }, out XAttribute attribute))
+			if (HasAttribute(element, name => { return name.StartsWith("new-"); }, out XAttribute attribute))
 			{
-				if (HasAttribute(element, (name) => { return name == "Index"; }, out XAttribute xAttribute))
+				if (HasAttribute(element, name => { return name == "Index"; }, out XAttribute xAttribute))
 				{
-					if (FindElement(xElement, (ele) => { return element.Attribute("Index").Value == xAttribute.Value; }, out XElement element1))
+					if (FindElement(xElement, ele => { return element.Attribute("Index").Value == xAttribute.Value; }, out XElement element1))
 					{
 						string[] px = attribute.Name.ToString().Split(["new-"], StringSplitOptions.RemoveEmptyEntries);
 						if (px.Length == 1)
@@ -584,11 +585,11 @@ public static class ModsManager
 					}
 				}
 			}
-			else if (HasAttribute(element, (name) => { return name.StartsWith("r-"); }, out var attribute1))
+			else if (HasAttribute(element, name => { return name.StartsWith("r-"); }, out var attribute1))
 			{
-				if (HasAttribute(element, (name) => { return name == "Index"; }, out XAttribute xAttribute))
+				if (HasAttribute(element, name => { return name == "Index"; }, out XAttribute xAttribute))
 				{
-					if (FindElement(xElement, (ele) => { return element.Attribute("Index").Value == xAttribute.Value; }, out XElement element1))
+					if (FindElement(xElement, ele => { return element.Attribute("Index").Value == xAttribute.Value; }, out XElement element1))
 					{
 						element1.Remove();
 						element.Remove();
@@ -608,9 +609,9 @@ public static class ModsManager
 	{
 		foreach (XElement element in needCombine.Elements())
 		{
-			if (HasAttribute(element, (name) => { return name == "Result"; }, out XAttribute xAttribute1))
+			if (HasAttribute(element, name => { return name == "Result"; }, out XAttribute xAttribute1))
 			{
-				if (HasAttribute(element, (name) => { return name.StartsWith("new-"); }, out XAttribute attribute))
+				if (HasAttribute(element, name => { return name.StartsWith("new-"); }, out XAttribute attribute))
 				{
 					string[] px = attribute.Name.ToString().Split(["new-"], StringSplitOptions.RemoveEmptyEntries);
 					string editName = "";
@@ -618,12 +619,12 @@ public static class ModsManager
 					{
 						editName = px[0];
 					}
-					if (FindElement(xElement, (ele) =>
+					if (FindElement(xElement, ele =>
 					{//原始标签
 						foreach (XAttribute xAttribute in element.Attributes())//待修改的标签
 						{
 							if (xAttribute.Name == attribute.Name) continue;
-							if (!HasAttribute(ele, (tname) => { return tname == xAttribute.Name; }, out XAttribute attribute1)) { return false; }
+							if (!HasAttribute(ele, tname => { return tname == xAttribute.Name; }, out XAttribute attribute1)) { return false; }
 						}
 						return true;
 					}, out XElement element1))
@@ -635,14 +636,14 @@ public static class ModsManager
 						}
 					}
 				}
-				else if (HasAttribute(element, (name) => { return name.StartsWith("r-"); }, out XAttribute attribute1))
+				else if (HasAttribute(element, name => { return name.StartsWith("r-"); }, out XAttribute attribute1))
 				{
-					if (FindElement(xElement, (ele) =>
+					if (FindElement(xElement, ele =>
 					{//原始标签
 						foreach (XAttribute xAttribute in element.Attributes())//待修改的标签
 						{
 							if (xAttribute.Name == attribute1.Name) continue;
-							if (!HasAttribute(ele, (tname) => { return tname == xAttribute.Name; }, out XAttribute attribute2)) { return false; }
+							if (!HasAttribute(ele, tname => { return tname == xAttribute.Name; }, out XAttribute attribute2)) { return false; }
 						}
 						return true;
 					}, out XElement element1))
@@ -662,7 +663,7 @@ public static class ModsManager
 
 	public static void Modify(XElement source, XElement change)
 	{
-		if (FindElement(source, (item) => { return item.Name.LocalName == change.Name.LocalName && item.Attribute("Guid") != null && change.Attribute("Guid") != null && item.Attribute("Guid").Value == change.Attribute("Guid").Value; }, out XElement xElement1))
+		if (FindElement(source, item => { return item.Name.LocalName == change.Name.LocalName && item.Attribute("Guid") != null && change.Attribute("Guid") != null && item.Attribute("Guid").Value == change.Attribute("Guid").Value; }, out XElement xElement1))
 		{
 			foreach (XElement xElement in change.Elements())
 			{
@@ -677,7 +678,7 @@ public static class ModsManager
 
 	public static Dictionary<string, string> ModifiedElement = new Dictionary<string, string>();
 
-	private static int collisionsToHandle = 0;
+	private static int collisionsToHandle;
 	//对于关键（绑定了API1.7新的ModLoader接口的）组件，对修改行为进行检查报错
 	//修饰就是用的internal，不提供其他模组的调用权限
 	internal static void InitModifiedElement()
@@ -729,9 +730,9 @@ public static class ModsManager
 				}
 			}
 			//处理修改
-			if(HasAttribute(element, (str) => { return str.Contains("new-"); }, out XAttribute attribute))
+			if(HasAttribute(element, str => { return str.Contains("new-"); }, out XAttribute attribute))
 			{
-				if (HasAttribute(element, (str) => { return str == "Guid"; }, out XAttribute attribute1))
+				if (HasAttribute(element, str => { return str == "Guid"; }, out XAttribute attribute1))
 				{
 					if (FindElementByGuid(DataObjects, attribute1.Value, out XElement xElement))
 					{
@@ -743,7 +744,7 @@ public static class ModsManager
 								collisionsToHandle++;
 								AllowContinue = false;
 								string warningString = string.Format(LanguageControl.Get(fName,"1"),attribute1.Value,ModifiedElement[attribute1.Value],attribute.Value);
-                                DialogsManager.ShowDialog(null, new MessageDialog(LanguageControl.Warning, warningString + LanguageControl.Get(fName, "2"), LanguageControl.Yes, LanguageControl.No, new Vector2(600,320), (vt) =>
+                                DialogsManager.ShowDialog(null, new MessageDialog(LanguageControl.Warning, warningString + LanguageControl.Get(fName, "2"), LanguageControl.Yes, LanguageControl.No, new Vector2(600,320), vt =>
 								{
                                     if (vt == MessageDialogButton.Button1 || vt == MessageDialogButton.Button2)
 									{
@@ -866,7 +867,7 @@ public static class ModsManager
     {
         try
         {
-            Image.Save(renderTarget2D.GetData(new Rectangle(0, 0, renderTarget2D.Width, renderTarget2D.Height)), Storage.CombinePaths("app:", name + ".webp"), Engine.Media.ImageFileFormat.WebP, true);
+            Image.Save(renderTarget2D.GetData(new Rectangle(0, 0, renderTarget2D.Width, renderTarget2D.Height)), Storage.CombinePaths("app:", name + ".webp"), ImageFileFormat.WebP, true);
         }
         catch (Exception e)
         {

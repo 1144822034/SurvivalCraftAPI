@@ -1,4 +1,5 @@
 using TemplatesDatabase;
+
 namespace Game
 {
 	public struct ScannedItemData

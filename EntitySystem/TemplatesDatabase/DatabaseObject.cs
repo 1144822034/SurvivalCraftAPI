@@ -511,7 +511,7 @@ namespace TemplatesDatabase
 		{
 			if (NestingParent != null)
 			{
-				return $"{Name} in {NestingParent.ToString()}";
+				return $"{Name} in {NestingParent}";
 			}
 			return $"{Name}";
 		}

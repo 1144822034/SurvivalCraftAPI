@@ -20,9 +20,9 @@ namespace Game
 		public int m_waterBlockIndex;
 		public int m_magmaBlockIndex;
 
-        public override int[] HandledBlocks => new int[9]
-		{
-			BlocksManager.GetBlockIndex<EmptyBucketBlock>(),
+        public override int[] HandledBlocks =>
+        [
+	        BlocksManager.GetBlockIndex<EmptyBucketBlock>(),
 			BlocksManager.GetBlockIndex<WaterBucketBlock>(),
 			BlocksManager.GetBlockIndex<MagmaBucketBlock>(),
 			BlocksManager.GetBlockIndex<MilkBucketBlock>(),
@@ -31,7 +31,7 @@ namespace Game
 			252,
 			129,
 			128
-		};
+        ];
 
 		public override bool OnUse(Ray3 ray, ComponentMiner componentMiner)
 		{
@@ -66,12 +66,9 @@ namespace Game
                         SubsystemTerrain.DestroyCell(0, cellFace.X, cellFace.Y, cellFace.Z, 0, noDrop: false, noParticleSystem: false);
                         return true;
                     }
-                    else
-                    {
-                        inventory.AddSlotItems(inventory.ActiveSlotIndex, activeBlockValue, 1);
-						componentMiner?.ComponentPlayer?.ComponentGui?.DisplaySmallMessage(LanguageControl.Get(fName, 1), Color.White, true, true);
-                    }
-                }
+                    inventory.AddSlotItems(inventory.ActiveSlotIndex, activeBlockValue, 1);
+                    componentMiner?.ComponentPlayer?.ComponentGui?.DisplaySmallMessage(LanguageControl.Get(fName, 1), Color.White, true, true);
+				}
 				else if (obj is BodyRaycastResult)
 				{
 					ComponentUdder componentUdder = ((BodyRaycastResult)obj).ComponentBody.Entity.FindComponent<ComponentUdder>();

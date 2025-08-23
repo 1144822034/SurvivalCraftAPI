@@ -10,13 +10,13 @@ public class SubsystemFallenLeavesBlockBehavior : SubsystemPollableBlockBehavior
 
 	private Random m_random = new Random();
 
-	public override int[] HandledBlocks => new int[0];
+	public override int[] HandledBlocks => [];
 
 	public override void OnNeighborBlockChanged(int x, int y, int z, int neighborX, int neighborY, int neighborZ)
 	{
-		if (!CanSupportFallenLeaves(base.SubsystemTerrain.Terrain.GetCellValue(x, y - 1, z)))
+		if (!CanSupportFallenLeaves(SubsystemTerrain.Terrain.GetCellValue(x, y - 1, z)))
 		{
-			base.SubsystemTerrain.DestroyCell(0, x, y, z, 0, noDrop: false, noParticleSystem: false);
+			SubsystemTerrain.DestroyCell(0, x, y, z, 0, noDrop: false, noParticleSystem: false);
 		}
 	}
 
@@ -36,8 +36,8 @@ public class SubsystemFallenLeavesBlockBehavior : SubsystemPollableBlockBehavior
 	public override void Load(ValuesDictionary valuesDictionary)
 	{
 		base.Load(valuesDictionary);
-		m_subsystemTerrain = base.Project.FindSubsystem<SubsystemTerrain>(throwOnError: true);
-		m_subsystemSeasons = base.Project.FindSubsystem<SubsystemSeasons>(throwOnError: true);
+		m_subsystemTerrain = Project.FindSubsystem<SubsystemTerrain>(throwOnError: true);
+		m_subsystemSeasons = Project.FindSubsystem<SubsystemSeasons>(throwOnError: true);
 	}
 
 	public static bool CanSupportFallenLeaves(int value)

@@ -1,5 +1,3 @@
-using System;
-
 namespace Engine
 {
 	public struct Ray3 : IEquatable<Ray3>

@@ -1,5 +1,4 @@
 using Engine;
-using System;
 using System.Reflection;
 
 namespace Game
@@ -21,10 +20,10 @@ namespace Game
 			{
 				float num = 0.875f * MathUtils.Saturate(1f - (i / (float)MaxLevel));
 				m_heightByLevel[i] = num;
-				m_boundingBoxesByLevel[i] = new BoundingBox[1]
-				{
+				m_boundingBoxesByLevel[i] =
+				[
 					new(new Vector3(0f, 0f, 0f), new Vector3(1f, num, 1f))
-				};
+				];
 			}
 		}
 

@@ -1,7 +1,5 @@
 using Engine;
 using GameEntitySystem;
-using System;
-using System.Collections.Generic;
 using TemplatesDatabase;
 
 namespace Game
@@ -112,7 +110,7 @@ namespace Game
 				}
 				return numSleepingPlayers + numDeadPlayers == m_subsystemPlayers.ComponentPlayers.Count && numSleepingPlayers >= 1;
 			}
-			catch(Exception ex)
+			catch(Exception)
 			{
 				return false;
 			}

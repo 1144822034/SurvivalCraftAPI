@@ -4,10 +4,10 @@ namespace Game
 {
 	public class SubsystemTruthTableCircuitBlockBehavior : SubsystemEditableItemBehavior<TruthTableData>
 	{
-		public override int[] HandledBlocks => new int[1]
-		{
+		public override int[] HandledBlocks =>
+		[
 			188
-		};
+		];
 
 		public SubsystemTruthTableCircuitBlockBehavior()
 			: base(188)

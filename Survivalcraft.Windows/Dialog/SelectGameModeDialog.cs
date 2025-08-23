@@ -1,6 +1,4 @@
 using Engine;
-using System;
-using System.Collections.Generic;
 using System.Xml.Linq;
 
 namespace Game
@@ -14,14 +12,14 @@ namespace Game
 				XElement node = ContentManager.Get<XElement>("Widgets/SelectGameModeItem");
 				ContainerWidget obj = (ContainerWidget)LoadWidget(null, node, null);
 				obj.Children.Find<LabelWidget>("SelectGameModeItem.Name").Text = LanguageControl.Get("GameMode", gameMode.ToString());
-				obj.Children.Find<LabelWidget>("SelectGameModeItem.Description").Text = StringsManager.GetString("GameMode." + gameMode.ToString() + ".Description");
+				obj.Children.Find<LabelWidget>("SelectGameModeItem.Description").Text = StringsManager.GetString("GameMode." + gameMode + ".Description");
 				return obj;
 			}, delegate (object item)
 			{
 				selectionHandler((GameMode)item);
 			})
 		{
-			base.ContentSize = new Vector2(750f, 420f);
+			ContentSize = new Vector2(750f, 420f);
 		}
 
 		public static IEnumerable<GameMode> GetAllowedGameModes(bool allowAdventure, bool allowCruel)

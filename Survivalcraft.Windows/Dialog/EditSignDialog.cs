@@ -43,8 +43,8 @@ namespace Game
 
 		public SubsystemSignBlockBehavior.TextData m_editingTextData;
 
-		public Color[] m_colors = new Color[8]
-		{
+		public Color[] m_colors =
+		[
 			new(0, 0, 0),
 			new(140, 0, 0),
 			new(0, 112, 0),
@@ -53,7 +53,7 @@ namespace Game
 			new(0, 112, 112),
 			new(160, 112, 0),
 			new(180, 180, 180)
-		};
+		];
 
 		public EditSignDialog(SubsystemSignBlockBehavior subsystemSignBlockBehavior, Point3 signPoint)
 		{
@@ -113,13 +113,13 @@ namespace Game
 			UpdateControls();
 			if (m_okButton.IsClicked)
 			{
-				string[] lines = new string[4]
-				{
+				string[] lines =
+				[
 					m_textBox1.Text,
 					m_textBox2.Text,
 					m_textBox3.Text,
 					m_textBox4.Text
-				};
+				];
 				var colors = new Color[4]
 				{
 					m_colorButton1.Color,

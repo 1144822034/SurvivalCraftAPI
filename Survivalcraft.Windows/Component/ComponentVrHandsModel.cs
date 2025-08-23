@@ -40,7 +40,7 @@ namespace Game
 			useAlphaThreshold: false
 		);
 
-		public static int[] m_drawOrders = new int[1] { 1 };
+		public static int[] m_drawOrders = [1];
 
 		public Vector3 ItemOffsetOrder { get; set; }
 
@@ -53,7 +53,7 @@ namespace Game
 		public virtual void Draw(Camera camera,int drawOrder)
 		{
 			if(!(m_componentPlayer.ComponentHealth.Health > 0f)
-				|| !camera.GameWidget.IsEntityFirstPersonTarget(base.Entity)
+				|| !camera.GameWidget.IsEntityFirstPersonTarget(Entity)
 				|| !m_componentPlayer.ComponentInput.IsControlledByVr)
 			{
 				return;
@@ -167,9 +167,9 @@ namespace Game
 
 		public override void Load(ValuesDictionary valuesDictionary,IdToEntityMap idToEntityMap)
 		{
-			m_subsystemTerrain = base.Project.FindSubsystem<SubsystemTerrain>(throwOnError: true);
-			m_componentPlayer = base.Entity.FindComponent<ComponentPlayer>(throwOnError: true);
-			m_componentMiner = base.Entity.FindComponent<ComponentMiner>(throwOnError: true);
+			m_subsystemTerrain = Project.FindSubsystem<SubsystemTerrain>(throwOnError: true);
+			m_componentPlayer = Entity.FindComponent<ComponentPlayer>(throwOnError: true);
+			m_componentMiner = Entity.FindComponent<ComponentMiner>(throwOnError: true);
 			m_vrHandModel = ContentManager.Get<Model>(valuesDictionary.GetValue<string>("VrHandModelName"));
 		}
 	}

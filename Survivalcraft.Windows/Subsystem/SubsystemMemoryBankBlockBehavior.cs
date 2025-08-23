@@ -4,10 +4,10 @@ namespace Game
 {
 	public class SubsystemMemoryBankBlockBehavior : SubsystemEditableItemBehavior<MemoryBankData>
 	{
-		public override int[] HandledBlocks => new int[1]
-		{
+		public override int[] HandledBlocks =>
+		[
 			186
-		};
+		];
 		public static string fName = "MemoryBankBlockBehavior";
 
 		public SubsystemMemoryBankBlockBehavior()
@@ -35,8 +35,7 @@ namespace Game
 			}
 			else
 			{
-				DialogsManager.ShowDialog(componentPlayer.GuiWidget, new EditMemoryBankDialogAPI(memoryBankData, delegate ()
-				{
+				DialogsManager.ShowDialog(componentPlayer.GuiWidget, new EditMemoryBankDialogAPI(memoryBankData, delegate {
 					int data = StoreItemDataAtUniqueId(memoryBankData);
 					int value2 = Terrain.ReplaceData(value, data);
 					inventory.RemoveSlotItems(slotIndex, count);
@@ -66,8 +65,7 @@ namespace Game
 			}
 			else
 			{
-				DialogsManager.ShowDialog(componentPlayer.GuiWidget, new EditMemoryBankDialogAPI(memoryBankData, delegate ()
-				{
+				DialogsManager.ShowDialog(componentPlayer.GuiWidget, new EditMemoryBankDialogAPI(memoryBankData, delegate {
 					SetBlockData(new Point3(x, y, z), memoryBankData);
 					int face = ((MemoryBankBlock)BlocksManager.Blocks[186]).GetFace(value);
 					SubsystemElectricity subsystemElectricity = SubsystemTerrain.Project.FindSubsystem<SubsystemElectricity>(throwOnError: true);

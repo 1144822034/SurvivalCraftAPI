@@ -1,5 +1,3 @@
-using Engine;
-
 namespace Game;
 
 public class PoplarLeavesBlock : DeciduousLeavesBlock
@@ -13,7 +11,7 @@ public class PoplarLeavesBlock : DeciduousLeavesBlock
 
 	public override int GetFaceTextureSlot(int face, int value)
 	{
-		return DeciduousLeavesBlock.GetSeason(Terrain.ExtractData(value)) switch
+		return GetSeason(Terrain.ExtractData(value)) switch
 		{
 			Season.Winter => 106, 
 			Season.Spring => 107, 

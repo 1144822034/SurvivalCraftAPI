@@ -1,5 +1,4 @@
 using Engine;
-using System.IO;
 using System.Text.Json;
 using System.Xml.Linq;
 using XmlUtilities;
@@ -50,7 +49,7 @@ namespace Game
 
 		public static Bulletin m_bulletin;
 
-		public static bool CanShowBulletin = false;
+		public static bool CanShowBulletin;
 
 		public static bool CanDownloadMotd = true;
 
@@ -58,7 +57,7 @@ namespace Game
 
 		public static Message m_message;
 
-		public static JsonDocument UpdateResult = null;
+		public static JsonDocument UpdateResult;
 
 		public static bool m_isAdmin;
 
@@ -147,8 +146,7 @@ namespace Game
 				CommunityContentManager.IsAdmin(new CancellableProgress(), delegate (bool isAdmin)
 				{
 					m_isAdmin = isAdmin;
-				}, delegate (Exception e)
-				{
+				}, delegate {
 				});
 				CanDownloadMotd = false;
 			}
@@ -177,7 +175,7 @@ namespace Game
 		{
 			using (var stream = new MemoryStream(data))
 				return new StreamReader(stream).ReadToEnd();
-			throw new InvalidOperationException($"\"motd.xml\" file not found in Motd zip archive.");
+			throw new InvalidOperationException("\"motd.xml\" file not found in Motd zip archive.");
 		}
 
 		public static Message ParseMotd(string dataString)
@@ -338,7 +336,7 @@ namespace Game
 									m_bulletin.EnContent = contentLabel.Text;
 								}
 								string languageType = (!ModsManager.Configs.TryGetValue("Language",out string value)) ? "zh-CN" : value;
-								m_bulletin.Time = languageType + "$" + DateTime.Now.ToString();
+								m_bulletin.Time = languageType + "$" + DateTime.Now;
 							}
 						}, delegate (TextBoxWidget textBox)
 						{
@@ -394,8 +392,7 @@ namespace Game
 				CommunityContentManager.IsAdmin(new CancellableProgress(), delegate (bool isAdmin)
 				{
 					m_isAdmin = isAdmin;
-				}, delegate (Exception e)
-				{
+				}, delegate {
 				});
 				bulletinDialog.m_editButton.IsVisible = m_isAdmin;
 				bulletinDialog.m_updateButton.IsVisible = m_isAdmin;

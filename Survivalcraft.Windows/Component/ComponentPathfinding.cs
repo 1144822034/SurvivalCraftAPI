@@ -198,7 +198,7 @@ namespace Game
 					m_lastPathfindingTime = m_subsystemTime.GameTime;
 					Vector3 start = m_componentCreature.ComponentBody.Position + new Vector3(0f, 0.01f, 0f);
 					Vector3 end = Destination.Value + new Vector3(0f, 0.01f, 0f);
-					ComponentMiner componentMiner = base.Entity.FindComponent<ComponentMiner>();
+					ComponentMiner componentMiner = Entity.FindComponent<ComponentMiner>();
 					bool ignoreDoors = componentMiner != null && componentMiner.AutoInteractRate > 0f && m_random.Bool(0.5f);
 					m_subsystemPathfinding.QueuePathSearch(start, end, 1f, m_componentCreature.ComponentBody.BoxSize, ignoreDoors, MaxPathfindingPositions, m_pathfindingResult);
 				}

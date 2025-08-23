@@ -9,11 +9,11 @@ namespace Game
 
 		public static Random m_random = new();
 
-		public override int[] HandledBlocks => new int[2]
-		{
+		public override int[] HandledBlocks =>
+		[
 			83,
 			84
-		};
+		];
 
 		public bool IsTrapdoorElectricallyConnected(int x, int y, int z)
 		{

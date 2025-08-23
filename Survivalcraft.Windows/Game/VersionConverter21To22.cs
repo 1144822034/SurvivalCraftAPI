@@ -1,8 +1,5 @@
 using Engine;
 using Engine.Serialization;
-using System;
-using System.IO;
-using System.Linq;
 using System.Xml.Linq;
 using XmlUtilities;
 
@@ -116,15 +113,15 @@ namespace Game
 					}
 				}
 			}
-			string[] inventoryNames = new string[6]
-			{
+			string[] inventoryNames =
+			[
 				"Inventory",
 				"CreativeInventory",
 				"CraftingTable",
 				"Chest",
 				"Furnace",
 				"Dispenser"
-			};
+			];
 			foreach (XElement item19 in projectNode.Element("Entities").Elements())
 			{
 				foreach (XElement item20 in from e in item19.Elements("Values")
@@ -171,7 +168,7 @@ namespace Game
 					Storage.DeleteFile(Storage.CombinePaths(directoryName, item2));
 				}
 			}
-			catch (Exception ex)
+			catch (Exception)
 			{
 				foreach (string item3 in from f in Storage.ListFileNames(directoryName)
 										 where Storage.GetExtension(f) == ".old"
@@ -187,7 +184,7 @@ namespace Game
 				{
 					Storage.DeleteFile(Storage.CombinePaths(directoryName, item4));
 				}
-				throw ex;
+				throw;
 			}
 		}
 

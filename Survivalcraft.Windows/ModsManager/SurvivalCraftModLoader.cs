@@ -2,10 +2,9 @@ using Engine;
 using Engine.Graphics;
 using Engine.Media;
 using Engine.Serialization;
-using GameEntitySystem;
-using Jint;
-using System.Reflection;
-using TemplatesDatabase;
+#if WINDOWS
+using ImeSharp;
+#endif
 
 namespace Game
 {
@@ -204,7 +203,7 @@ namespace Game
             TextBoxWidget.ShowCandidatesWindow = SettingsManager.FullScreenMode;
             
             #if WINDOWS
-            ImeSharp.InputMethod.ShowOSImeWindow = !SettingsManager.FullScreenMode;
+            InputMethod.ShowOSImeWindow = !SettingsManager.FullScreenMode;
             #endif
         }
     }

@@ -1,6 +1,3 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using Engine;
 
 namespace Game
@@ -9,27 +6,27 @@ namespace Game
     {
         public ArrayCache(IEnumerable<int> bucketSizes, float minCacheRatio1, float minCacheTime1, float minCacheRatio2, float minCacheTime2)
         {
-            this.m_buckets = Enumerable.ToArray<ArrayCache<T>.Bucket>(Enumerable.Select<int, ArrayCache<T>.Bucket>(Enumerable.OrderBy<int, int>(bucketSizes, (int s) => s), (int s) => new ArrayCache<T>.Bucket
+            m_buckets = bucketSizes.OrderBy(s => s).Select(s => new Bucket
             {
-                Capacity = s
-            }));
-            this.m_minCacheRatio1 = minCacheRatio1;
-            this.m_minCacheDuration1 = minCacheTime1;
-            this.m_minCacheRatio2 = minCacheRatio2;
-            this.m_minCacheDuration2 = minCacheTime2;
-            this.m_minCacheRatioLastTime1 = Time.FrameStartTime;
-            this.m_minCacheRatioLastTime2 = Time.FrameStartTime;
-            Window.LowMemory += new Action(this.ClearCache);
-            Time.QueueTimeDelayedExecution(0.0, new Action(this.CheckCache));
+	            Capacity = s
+            }).ToArray();
+            m_minCacheRatio1 = minCacheRatio1;
+            m_minCacheDuration1 = minCacheTime1;
+            m_minCacheRatio2 = minCacheRatio2;
+            m_minCacheDuration2 = minCacheTime2;
+            m_minCacheRatioLastTime1 = Time.FrameStartTime;
+            m_minCacheRatioLastTime2 = Time.FrameStartTime;
+            Window.LowMemory += ClearCache;
+            Time.QueueTimeDelayedExecution(0.0, CheckCache);
         }
 
         public T[] Rent(int capacity, bool clearArray)
         {
-            object @lock = this.m_lock;
+            object @lock = m_lock;
             T[] array2;
             lock (@lock)
             {
-                ArrayCache<T>.Bucket bucket = this.GetBucket(capacity);
+                Bucket bucket = GetBucket(capacity);
                 if (bucket != null)
                 {
                     if (bucket.Stack.Count > 0)
@@ -39,13 +36,13 @@ namespace Game
                         {
                             Array.Clear(array, 0, array.Length);
                         }
-                        this.m_cachedCount -= (long)array.Length;
-                        this.m_usedCount += (long)array.Length;
+                        m_cachedCount -= array.Length;
+                        m_usedCount += array.Length;
                         array2 = array;
                     }
                     else
                     {
-                        this.m_usedCount += (long)bucket.Capacity;
+                        m_usedCount += bucket.Capacity;
                         array2 = new T[bucket.Capacity];
                     }
                 }
@@ -59,49 +56,49 @@ namespace Game
 
         public void Return(T[] array)
         {
-            object @lock = this.m_lock;
+            object @lock = m_lock;
             lock (@lock)
             {
-                ArrayCache<T>.Bucket bucket = this.GetBucket(array.Length);
+                Bucket bucket = GetBucket(array.Length);
                 if (bucket != null)
                 {
                     bucket.Stack.Push(array);
-                    this.m_cachedCount += (long)array.Length;
-                    this.m_usedCount -= (long)array.Length;
+                    m_cachedCount += array.Length;
+                    m_usedCount -= array.Length;
                 }
-                float num = this.CalculateCacheRatio();
-                if (num >= this.m_minCacheRatio1)
+                float num = CalculateCacheRatio();
+                if (num >= m_minCacheRatio1)
                 {
-                    this.m_minCacheRatioLastTime1 = Time.FrameStartTime;
+                    m_minCacheRatioLastTime1 = Time.FrameStartTime;
                 }
-                if (num >= this.m_minCacheRatio2)
+                if (num >= m_minCacheRatio2)
                 {
-                    this.m_minCacheRatioLastTime2 = Time.FrameStartTime;
+                    m_minCacheRatioLastTime2 = Time.FrameStartTime;
                 }
             }
         }
 
         private void CheckCache()
         {
-            object @lock = this.m_lock;
+            object @lock = m_lock;
             lock (@lock)
             {
-                float num = this.CalculateCacheRatio();
-                if ((num < this.m_minCacheRatio1 && Time.FrameStartTime - this.m_minCacheRatioLastTime1 > (double)this.m_minCacheDuration1) || (num < this.m_minCacheRatio2 && Time.FrameStartTime - this.m_minCacheRatioLastTime2 > (double)this.m_minCacheDuration2))
+                float num = CalculateCacheRatio();
+                if ((num < m_minCacheRatio1 && Time.FrameStartTime - m_minCacheRatioLastTime1 > m_minCacheDuration1) || (num < m_minCacheRatio2 && Time.FrameStartTime - m_minCacheRatioLastTime2 > m_minCacheDuration2))
                 {
-                    this.ClearCache();
+                    ClearCache();
                 }
-                Time.QueueTimeDelayedExecution(Time.FrameStartTime + (double)(MathUtils.Min(this.m_minCacheDuration1, this.m_minCacheDuration2) / 5f), new Action(this.CheckCache));
+                Time.QueueTimeDelayedExecution(Time.FrameStartTime + MathUtils.Min(m_minCacheDuration1, m_minCacheDuration2) / 5f, CheckCache);
             }
         }
 
-        private ArrayCache<T>.Bucket GetBucket(int capacity)
+        private Bucket GetBucket(int capacity)
         {
-            for (int i = 0; i < this.m_buckets.Length; i++)
+            for (int i = 0; i < m_buckets.Length; i++)
             {
-                if (this.m_buckets[i].Capacity >= capacity)
+                if (m_buckets[i].Capacity >= capacity)
                 {
-                    return this.m_buckets[i];
+                    return m_buckets[i];
                 }
             }
             return null;
@@ -109,28 +106,28 @@ namespace Game
 
         private void ClearCache()
         {
-            ArrayCache<T>.Bucket[] buckets = this.m_buckets;
+            Bucket[] buckets = m_buckets;
             for (int i = 0; i < buckets.Length; i++)
             {
                 buckets[i].Stack.Clear();
             }
-            this.m_cachedCount = 0L;
-            this.m_minCacheRatioLastTime1 = Time.FrameStartTime;
-            this.m_minCacheRatioLastTime2 = Time.FrameStartTime;
+            m_cachedCount = 0L;
+            m_minCacheRatioLastTime1 = Time.FrameStartTime;
+            m_minCacheRatioLastTime2 = Time.FrameStartTime;
         }
 
         private float CalculateCacheRatio()
         {
-            if (this.m_cachedCount <= 0L)
+            if (m_cachedCount <= 0L)
             {
                 return 1f;
             }
-            return (float)this.m_usedCount / (float)(this.m_usedCount + this.m_cachedCount);
+            return m_usedCount / (float)(m_usedCount + m_cachedCount);
         }
 
         private object m_lock = new object();
 
-        private ArrayCache<T>.Bucket[] m_buckets;
+        private Bucket[] m_buckets;
 
         private long m_cachedCount;
 

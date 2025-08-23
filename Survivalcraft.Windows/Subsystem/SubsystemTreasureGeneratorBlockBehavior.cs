@@ -1,5 +1,4 @@
 using Engine;
-using System.Linq;
 using TemplatesDatabase;
 
 namespace Game
@@ -26,10 +25,10 @@ namespace Game
 
 		public static List<TreasureData> m_treasureData;
 
-		public override int[] HandledBlocks => new int[1]
-		{
+		public override int[] HandledBlocks =>
+		[
 			190
-		};
+		];
 		public override void OnNeighborBlockChanged(int x, int y, int z, int neighborX, int neighborY, int neighborZ)
 		{
 			int cellContents = SubsystemTerrain.Terrain.GetCellContents(neighborX, neighborY, neighborZ);
@@ -44,7 +43,7 @@ namespace Game
 			}
 			int num = 0;
 			int num2 = 0;
-			float max = m_treasureData.Sum((TreasureData t) => t.Probability);
+			float max = m_treasureData.Sum(t => t.Probability);
 			float num3 = m_random.Float(0f, max);
 			for (int i = 0; i < m_treasureData.Count; i++)
 			{
@@ -57,7 +56,7 @@ namespace Game
 					break;
 				}
 			}
-			ModsManager.HookAction("OnTreasureGenerate", (modLoader) =>
+			ModsManager.HookAction("OnTreasureGenerate", modLoader =>
 			{
 				modLoader.OnTreasureGenerate(SubsystemTerrain, x, y, z, neighborX, neighborY, neighborZ, ref num, ref num2, out bool IsGenerate);
 				return IsGenerate;

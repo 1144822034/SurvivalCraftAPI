@@ -1,7 +1,5 @@
 using Engine;
 using GameEntitySystem;
-using System;
-using System.Linq;
 using TemplatesDatabase;
 
 namespace Game
@@ -82,7 +80,7 @@ namespace Game
 										}
 										catch(Exception e)
 										{
-											Log.Error(array[i].ToString() + " Poll " + BlocksManager.Blocks[num3].GetType().Name + " " + cellValueFast + " at " + string.Format("({0},{1},{2}) ", x, y, z) + "\n" + e);
+											Log.Error(array[i] + " Poll " + BlocksManager.Blocks[num3].GetType().Name + " " + cellValueFast + " at " + string.Format("({0},{1},{2}) ", x, y, z) + "\n" + e);
 										}
 									}
 								}
@@ -112,7 +110,7 @@ namespace Game
 
 		public override void Load(ValuesDictionary valuesDictionary)
 		{
-			m_subsystemTime = base.Project.FindSubsystem<SubsystemTime>(throwOnError: true);
+			m_subsystemTime = Project.FindSubsystem<SubsystemTime>(throwOnError: true);
 			m_subsystemTerrain = Project.FindSubsystem<SubsystemTerrain>(throwOnError: true);
 			m_subsystemBlockBehaviors = Project.FindSubsystem<SubsystemBlockBehaviors>(throwOnError: true);
 			m_pollChunkCoordinates = valuesDictionary.GetValue<Point2>("PollChunkCoordinates");

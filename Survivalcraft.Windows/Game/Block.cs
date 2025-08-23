@@ -1,7 +1,5 @@
 using Engine;
 using Engine.Graphics;
-using System;
-using System.Collections.Generic;
 
 namespace Game
 {
@@ -200,10 +198,10 @@ namespace Game
 
 		public Random Random = new();
 
-		public static BoundingBox[] m_defaultCollisionBoxes = new BoundingBox[1]
-		{
+		public static BoundingBox[] m_defaultCollisionBoxes =
+		[
 			new(Vector3.Zero, Vector3.One)
-		};
+		];
 		public virtual float GetDensity(int value)
 		{
 			return Density;

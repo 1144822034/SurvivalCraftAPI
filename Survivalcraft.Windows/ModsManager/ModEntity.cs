@@ -1,7 +1,7 @@
 using Engine;
 using Engine.Graphics;
-using System.Xml.Linq;
 using System.Reflection;
+using System.Xml.Linq;
 
 namespace Game
 {
@@ -81,7 +81,7 @@ namespace Game
 				GetFiles(extension,action);
 				return false;
 			}
-			else { return true; }
+			return true;
 		}
 		/// <summary>
 		/// 获取指定文件
@@ -110,8 +110,8 @@ namespace Game
 				}
 				return false;
 			}
-			else return true;
-			
+			return true;
+
 		}
 		public virtual bool GetAssetsFile(string filename, Action<Stream> stream)
 		{
@@ -123,7 +123,7 @@ namespace Game
 		public virtual void LoadLauguage()
 		{
 			GetAssetsFile("Lang/en-US.json",
-				(stream) => {
+				stream => {
 					LoadingScreen.Info($"[{modInfo.Name}] Loading English Language file");
 					LanguageControl.LoadEnglishJson(stream);
 				});
@@ -133,7 +133,7 @@ namespace Game
 				return;
 			}
 			GetAssetsFile($"Lang/{language}.json",
-				(stream) => {
+				stream => {
 					LoadingScreen.Info($"[{modInfo.Name}] Loading Language file");
 					LanguageControl.loadJson(stream);
 				});
@@ -161,12 +161,12 @@ namespace Game
 					ModFiles.Add(zipArchiveEntry.FilenameInZip, zipArchiveEntry);
 				}
 			}
-			GetFile("modinfo.json", (stream) =>
+			GetFile("modinfo.json", stream =>
 			{
 				modInfo = ModsManager.DeserializeJson(ModsManager.StreamToString(stream));
 			});
 			if (modInfo == null) return;
-			GetFile("icon.png", (stream) =>
+			GetFile("icon.png", stream =>
 			{
 				LoadIcon(stream);
 			});
@@ -348,7 +348,7 @@ namespace Game
 				bool noNeedToCheckVersion = false;
 				if (name.Contains(":"))
 				{
-					string[] tmpa = name.Split(new char[] { ':' });
+					string[] tmpa = name.Split(new[] { ':' });
 					if (tmpa.Length == 2)
 					{
 						dn = tmpa[0];

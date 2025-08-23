@@ -1,7 +1,6 @@
 using Engine;
 using Engine.Audio;
 using GameEntitySystem;
-using System.Collections.Generic;
 using System.Globalization;
 using TemplatesDatabase;
 
@@ -248,7 +247,7 @@ namespace Game
 			m_lastWetness = Wetness;
 			m_targetTemperature = Temperature;
 			m_environmentTemperature = 8f;
-			m_componentPlayer.ComponentBody.Attacked += delegate (Attackment attackment) { m_lastAttackedTime = m_subsystemTime.GameTime; };
+			m_componentPlayer.ComponentBody.Attacked += delegate { m_lastAttackedTime = m_subsystemTime.GameTime; };
 			foreach (KeyValuePair<string, object> item in valuesDictionary.GetValue<ValuesDictionary>("Satiation"))
 			{
 				m_satiation[int.Parse(item.Key, CultureInfo.InvariantCulture)] = (float)item.Value;
@@ -515,7 +514,7 @@ namespace Game
 			string arg = string.Empty;
 			ClothingSlot leastInsulatedSlot = m_componentPlayer.ComponentClothing.LeastInsulatedSlot;
 			arg = leastInsulatedSlot.MessageWhenLeastInsulated;
-			if (m_subsystemTime.PeriodicGameTimeEvent(1.0, 1.0 * ((double)(GetHashCode() % 1000) / 1000.0)))
+			if (m_subsystemTime.PeriodicGameTimeEvent(1.0, 1.0 * (GetHashCode() % 1000 / 1000.0)))
 			{
 				int x = Terrain.ToCell(m_componentPlayer.ComponentBody.Position.X);
 				int y = Terrain.ToCell(m_componentPlayer.ComponentBody.Position.Y + 0.1f);

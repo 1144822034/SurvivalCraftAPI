@@ -1,13 +1,8 @@
 using Engine;
 using Engine.Graphics;
 using Game;
-using System;
-using System.Collections.Generic;
-using System.IO;
 using System.Text;
-using System.Threading.Tasks;
 using System.Xml.Linq;
-using static ModsManageContentScreen;
 
 public class ModsManageContentScreen : Screen
 {
@@ -17,7 +12,7 @@ public class ModsManageContentScreen : Screen
 
 	public static string HeadingCode2 = "修改他人mod请获得原作者授权，否则小心出名！";
 
-	public enum StateFilter { UninstallState, InstallState };
+	public enum StateFilter { UninstallState, InstallState }
 
 	public class ModItem
 	{
@@ -112,11 +107,8 @@ public class ModsManageContentScreen : Screen
 			details = string.Format(LanguageControl.Get(fName,68),modItem.ModInfo.ApiVersion);
 			return true;
 		}
-		else
-		{
-			details = string.Format(LanguageControl.Get(fName,3),modItem.ModInfo.Version,modItem.ModInfo.Author,MathF.Round(modItem.ExternalContentEntry.Size / 1000));
-			return false;
-		}
+		details = string.Format(LanguageControl.Get(fName,3),modItem.ModInfo.Version,modItem.ModInfo.Author,MathF.Round(modItem.ExternalContentEntry.Size / 1000));
+		return false;
 	}
 	public ModsManageContentScreen()
 	{
@@ -156,7 +148,7 @@ public class ModsManageContentScreen : Screen
 		{
 			ModItem modItem = (ModItem)item;
 			XElement node2 = ContentManager.Get<XElement>("Widgets/ExternalContentItem");
-			ContainerWidget containerWidget = (ContainerWidget)Widget.LoadWidget(this, node2, null);
+			ContainerWidget containerWidget = (ContainerWidget)LoadWidget(this, node2, null);
 			string details = LanguageControl.Get(fName, 2);
 			Color color = Color.White;
 			if (m_latestScanModList.Contains(modItem.Name))
@@ -253,8 +245,7 @@ public class ModsManageContentScreen : Screen
 		CommunityContentManager.IsAdmin(new CancellableProgress(), delegate (bool isAdmin)
 		{
 			m_isAdmin = isAdmin;
-		}, delegate (Exception e)
-		{
+		}, delegate {
 		});
 		if (!Storage.DirectoryExists(m_uninstallPath)) Storage.CreateDirectory(m_uninstallPath);
 		BusyDialog busyDialog = new(LanguageControl.Get(fName, 26), LanguageControl.Get(fName, 32));
@@ -423,7 +414,7 @@ public class ModsManageContentScreen : Screen
 							}
 							catch (Exception e)
 							{
-								DialogsManager.ShowDialog(null, new MessageDialog(LanguageControl.Get(fName, 50), LanguageControl.Get(fName, 51) + e.ToString(), LanguageControl.Get("Usual", "ok"), null, null));
+								DialogsManager.ShowDialog(null, new MessageDialog(LanguageControl.Get(fName, 50), LanguageControl.Get(fName, 51) + e, LanguageControl.Get("Usual", "ok"), null, null));
 							}
 						}
 					}));
@@ -470,7 +461,7 @@ public class ModsManageContentScreen : Screen
 											}
 											catch (Exception e)
 											{
-												DialogsManager.ShowDialog(null, new MessageDialog(LanguageControl.Get(fName, 56), LanguageControl.Get(fName, 51) + e.ToString(), LanguageControl.Get("Usual", "ok"), null, null));
+												DialogsManager.ShowDialog(null, new MessageDialog(LanguageControl.Get(fName, 56), LanguageControl.Get(fName, 51) + e, LanguageControl.Get("Usual", "ok"), null, null));
 											}
 											break;
 										}
@@ -583,8 +574,7 @@ public class ModsManageContentScreen : Screen
 							}
 							if (ScreensManager.CurrentScreen == this)
 							{
-								DialogsManager.ShowDialog(null, new MessageDialog(LanguageControl.Get(fName, 28), tips, LanguageControl.Get(fName, 30), null, delegate (MessageDialogButton result)
-								{
+								DialogsManager.ShowDialog(null, new MessageDialog(LanguageControl.Get(fName, 28), tips, LanguageControl.Get(fName, 30), null, delegate {
 									SetPath(m_uninstallPath);
 									UpdateListWithBusyDialog();
 								}));
@@ -655,7 +645,7 @@ public class ModsManageContentScreen : Screen
 				UpdateListWithBusyDialog();
 			}
 		}
-		if (base.Input.Back || base.Input.Cancel || Children.Find<ButtonWidget>("TopBar.Back").IsClicked)
+		if (Input.Back || Input.Cancel || Children.Find<ButtonWidget>("TopBar.Back").IsClicked)
 		{
 			if (InstallModChange())
 			{
@@ -774,7 +764,7 @@ public class ModsManageContentScreen : Screen
 		}
 		catch (Exception e)
 		{
-			Log.Warning("SetModItemList:" + e.ToString());
+			Log.Warning("SetModItemList:" + e);
 		}
 	}
 
@@ -826,7 +816,7 @@ public class ModsManageContentScreen : Screen
 						{
 							stream = Storage.OpenFile(pathName, OpenFileMode.Read);
 							stream = GetDecipherStream(stream);
-							ZipArchive zipArchive = ZipArchive.Open(stream, false);
+							ZipArchive zipArchive = ZipArchive.Open(stream);
 							foreach (ZipArchiveEntry zipArchiveEntry in zipArchive.ReadCentralDir())
 							{
 								if (zipArchiveEntry.FilenameInZip == "modinfo.json")
@@ -929,7 +919,7 @@ public class ModsManageContentScreen : Screen
 		try
 		{
 			stream = GetDecipherStream(stream);
-			ZipArchive zipArchive = ZipArchive.Open(stream, false);
+			ZipArchive zipArchive = ZipArchive.Open(stream);
 			foreach (ZipArchiveEntry zipArchiveEntry in zipArchive.ReadCentralDir())
 			{
 				string[] array = zipArchiveEntry.FilenameInZip.Split('.');
@@ -1014,7 +1004,7 @@ public class ModsManageContentScreen : Screen
 	public string SetPathText(string path)
 	{
 		string newText = Storage.GetSystemPath(path);
-		string[] arPath = path.Split(new char[] { '/' });
+		string[] arPath = path.Split(new[] { '/' });
 		if (arPath.Length > 5)
 		{
 			newText = ".../" + arPath[^3] + "/" + arPath[^2] + "/" + arPath[^1];

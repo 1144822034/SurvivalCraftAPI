@@ -1,5 +1,3 @@
-using System;
-using System.Collections.Generic;
 using System.Diagnostics;
 using System.Runtime.InteropServices;
 using Silk.NET.OpenGLES;
@@ -130,9 +128,9 @@ namespace Engine.Graphics
 			m_arrayBuffer = -1;
 			m_elementArrayBuffer = -1;
 			m_texture2D = -1;
-			m_activeTexturesByUnit = new int[8]
-			{
-				-1,
+			m_activeTexturesByUnit =
+            [
+                -1,
 				-1,
 				-1,
 				-1,
@@ -140,7 +138,7 @@ namespace Engine.Graphics
 				-1,
 				-1,
 				-1
-			};
+            ];
 			m_activeTextureUnit = (TextureUnit)(-1);
 			m_program = -1;
 			m_framebuffer = -1;

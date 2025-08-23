@@ -11,7 +11,7 @@ namespace Game
 
 		public override int GetFaceTextureSlot(int face, int value)
 		{
-			Season season = DeciduousLeavesBlock.GetSeason(Terrain.ExtractData(value));
+			Season season = GetSeason(Terrain.ExtractData(value));
 			if (season == Season.Winter)
 			{
 				return 106;

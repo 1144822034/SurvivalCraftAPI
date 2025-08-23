@@ -1,6 +1,3 @@
-using System;
-using System.Collections.Generic;
-
 namespace Engine.Graphics
 {
 	public class ModelMesh : IDisposable
@@ -35,11 +32,7 @@ namespace Engine.Graphics
 
 		public ReadOnlyList<ModelMeshPart> MeshParts => new(m_meshParts);
 
-        public ModelMesh()
-		{
-		}
-
-		public void Dispose()
+        public void Dispose()
 		{
 			Utilities.DisposeCollection(m_meshParts);
 		}

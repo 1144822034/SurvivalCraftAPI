@@ -1,15 +1,13 @@
-using Engine;
-using GameEntitySystem;
 using TemplatesDatabase;
 
 namespace Game
 {
 	public class SubsystemDispenserBlockBehavior : SubsystemEntityBlockBehavior
 	{
-		public override int[] HandledBlocks => new int[1]
-		{
+		public override int[] HandledBlocks =>
+		[
 			216
-		};
+		];
 
 		public override void Load(ValuesDictionary valuesDictionary)
 		{

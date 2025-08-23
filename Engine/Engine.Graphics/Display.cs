@@ -1,5 +1,3 @@
-using System;
-using System.Runtime.InteropServices;
 #if DIRECT3D11
 using SharpDX;
 using SharpDX.Direct3D11;
@@ -7,6 +5,7 @@ using SharpDX.DXGI;
 #else
 using Silk.NET.OpenGLES;
 #endif
+using System.Runtime.InteropServices;
 
 namespace Engine.Graphics
 {
@@ -20,7 +19,7 @@ namespace Engine.Graphics
 
         private static BlendState m_blendState = BlendState.Opaque;
 
-        private static bool m_useReducedZRange = false;
+        private static bool m_useReducedZRange;
 
         public static Point2 BackbufferSize
         {

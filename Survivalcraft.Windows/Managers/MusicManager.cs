@@ -14,9 +14,9 @@ namespace Game
 			Other//其他，由模组自己来定义(API1.72新增)
 		}
 
-		public const float m_fadeSpeed = 0.33f;
+		public static float m_fadeSpeed = 0.33f;
 
-		public const float m_fadeWait = 2f;
+		public static float m_fadeWait = 2f;
 
 		public static StreamingSound m_fadeSound;
 
@@ -30,7 +30,7 @@ namespace Game
 
 		public static Random m_random = new();
 
-		public static float? m_volume = null;
+		public static float? m_volume;
 
 		public static Mix CurrentMix
 		{
@@ -77,7 +77,7 @@ namespace Game
 		{
             float startPercentage = IsPlaying ? m_random.Float(0f, 0.75f) : 0f;
             string ContentMusicPath = string.Empty;
-            ModsManager.HookAction("MenuPlayMusic", (ModLoader loader) =>
+            ModsManager.HookAction("MenuPlayMusic", loader =>
             {
                 loader.MenuPlayMusic(out ContentMusicPath);
                 return false;
@@ -115,7 +115,7 @@ namespace Game
 		{
 			if (m_fadeSound != null)
 			{
-				m_fadeSound.Volume = MathUtils.Min(m_fadeSound.Volume - (0.33f * Volume * Time.FrameDuration), Volume);
+				m_fadeSound.Volume = MathUtils.Min(m_fadeSound.Volume - (m_fadeSpeed * Volume * Time.FrameDuration), Volume);
 				if (m_fadeSound.Volume <= 0f)
 				{
 					m_fadeSound.Dispose();
@@ -124,7 +124,7 @@ namespace Game
 			}
 			if (m_sound != null && Time.FrameStartTime >= m_fadeStartTime)
 			{
-				m_sound.Volume = MathUtils.Min(m_sound.Volume + (0.33f * Volume * Time.FrameDuration), Volume);
+				m_sound.Volume = MathUtils.Min(m_sound.Volume + (m_fadeSpeed * Volume * Time.FrameDuration), Volume);
 			}
 			if (m_currentMix == Mix.None || Volume == 0f)
 			{
@@ -181,7 +181,7 @@ namespace Game
 				try
 				{
 					StopMusic();
-					m_fadeStartTime = Time.FrameStartTime + 2.0;
+					m_fadeStartTime = Time.FrameStartTime + m_fadeWait;
 					float volume = (m_fadeSound != null) ? 0f : Volume;
                     StreamingSource streamingSource = ContentManager.Get<StreamingSource>(name);
 					streamingSource = streamingSource.Duplicate();

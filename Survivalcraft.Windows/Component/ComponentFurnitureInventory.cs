@@ -1,7 +1,5 @@
 using Engine;
 using GameEntitySystem;
-using System.Collections.Generic;
-using System.Linq;
 using TemplatesDatabase;
 
 namespace Game
@@ -82,7 +80,7 @@ namespace Game
 		{
 			m_subsystemFurnitureBlockBehavior = Project.FindSubsystem<SubsystemFurnitureBlockBehavior>(throwOnError: true);
 			string furnitureSetName = valuesDictionary.GetValue<string>("FurnitureSet");
-			FurnitureSet = m_subsystemFurnitureBlockBehavior.FurnitureSets.FirstOrDefault((FurnitureSet f) => f.Name == furnitureSetName);
+			FurnitureSet = m_subsystemFurnitureBlockBehavior.FurnitureSets.FirstOrDefault(f => f.Name == furnitureSetName);
 		}
 
 		public override void Save(ValuesDictionary valuesDictionary, EntityToIdMap entityToIdMap)

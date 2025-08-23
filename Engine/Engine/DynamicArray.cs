@@ -1,8 +1,3 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
-
 namespace Engine
 {
 	public class DynamicArray<T> : IEnumerable<T>, IEnumerable, IList<T>, ICollection<T>
@@ -64,7 +59,7 @@ namespace Engine
 
 		private int m_count;
 
-		private static T[] m_emptyArray = new T[0];
+		private static T[] m_emptyArray = [];
 
 		public int Capacity
 		{
@@ -284,7 +279,7 @@ namespace Engine
 				{
 					System.Array.Copy(m_array, index + 1, m_array, index, m_count - index);
                 }
-                this.m_array[this.m_count] = default(T);
+                m_array[m_count] = default(T);
                 return;
 			}
 			throw new IndexOutOfRangeException();
@@ -295,7 +290,7 @@ namespace Engine
 			if (m_count > 0)
 			{
 				m_count--;
-                this.m_array[this.m_count] = default(T);
+                m_array[m_count] = default(T);
                 return;
 			}
 			throw new IndexOutOfRangeException();
@@ -323,25 +318,25 @@ namespace Engine
 					m_array[i++] = m_array[j++];
 				}
             }
-            System.Array.Clear(this.m_array, i, this.m_count - i);
+            System.Array.Clear(m_array, i, m_count - i);
             int result = m_count - i;
 			m_count = i;
 			return result;
 		}
         public void RemoveRange(int index, int count)
         {
-            if (index < 0 || count < 0 || this.m_count - index < count)
+            if (index < 0 || count < 0 || m_count - index < count)
             {
                 throw new IndexOutOfRangeException();
             }
             if (count > 0)
             {
-                this.m_count -= count;
-                if (index < this.m_count)
+                m_count -= count;
+                if (index < m_count)
                 {
-                    System.Array.Copy(this.m_array, index + count, this.m_array, index, this.m_count - index);
+                    System.Array.Copy(m_array, index + count, m_array, index, m_count - index);
                 }
-                System.Array.Clear(this.m_array, this.m_count, count);
+                System.Array.Clear(m_array, m_count, count);
             }
         }
 
@@ -349,7 +344,7 @@ namespace Engine
         {
             foreach (T t in items)
             {
-                this.Remove(t);
+                Remove(t);
             }
         }
         public void Insert(int index, T item)

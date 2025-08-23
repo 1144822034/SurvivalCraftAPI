@@ -1,5 +1,4 @@
 using GameEntitySystem;
-using System.Collections.Generic;
 using TemplatesDatabase;
 
 namespace Game

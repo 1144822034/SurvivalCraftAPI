@@ -4,7 +4,6 @@ using Game;
 using System.Text.Json;
 using System.Xml.Linq;
 
-
 public class ManageUserScreen : Screen
 {
 	public class ComUserInfo
@@ -114,7 +113,7 @@ public class ManageUserScreen : Screen
 				labelWidget.Text = $"{listItem.Name}   ID:{listItem.Id}   账号:{listItem.UserNo}";
 				if (listItem.IsLock == 1)
 				{
-					labelWidget2.Text = "锁定时长: " + ((float)(int)(listItem.LockDuration / 8.64f) / 10000f) + "天";
+					labelWidget2.Text = "锁定时长: " + ((int)(listItem.LockDuration / 8.64f) / 10000f) + "天";
 					labelWidget2.Text += "  解锁时间: " + GetMsg(listItem.UnlockTime);
 					labelWidget2.Text += "  锁定原因:" + GetMsg(listItem.LockReason);
 				}
@@ -150,19 +149,19 @@ public class ManageUserScreen : Screen
 				return containerWidget;
 			}
 		};
-		m_contentList.ItemClicked += (obj) =>
+		m_contentList.ItemClicked += obj =>
 		{
 			var listItem = obj as ComUserInfo;
 			if (listItem != null && m_contentList.SelectedItem == listItem)
 			{
 				string msg = $"用户ID: {listItem.Id}\n用户名: {GetMsg(listItem.UserNo)}\n昵称: {GetMsg(listItem.Name)}\n邮箱{GetMsg(listItem.Email)}\nIP:{GetMsg(listItem.LoginIP)}";
 				msg += $"\n用户Token: {GetMsg(listItem.Token)}\n状态: " + (listItem.IsLock == 1 ? "锁定" : (listItem.Status == 0 ? "未激活" : (listItem.Die == 1 ? "死鱼" : "正常")));
-				msg += $"\n是否为管理: " + (listItem.IsAdmin == 1 ? "是" : "否") + "  " + "权限等级: " + listItem.Authority;
+				msg += "\n是否为管理: " + (listItem.IsAdmin == 1 ? "是" : "否") + "  " + "权限等级: " + listItem.Authority;
 				msg += $"\n找回密码Token: {GetMsg(listItem.PawToken)}\n称号组: {GetMsg(listItem.MGroup)}\n注册时间: {GetMsg(listItem.RegTime)}\n最后登录时间: {GetMsg(listItem.LastLoginTime)}";
 				msg += $"\n当天发送邮件次数: {GetMsg(listItem.EmailCount)}\n邮箱锁定时间: {GetMsg(listItem.EmailTime)}";
 				msg += $"\n手机号: {GetMsg(listItem.Moblie)}\n区号: {GetMsg(listItem.AreaCode)}";
-				msg += $"\n上次锁定时间: " + GetMsg(listItem.LockTime) + "\n锁定原因: " + GetMsg(listItem.LockReason);
-				msg += $"\n锁定时长: " + ((float)(int)(listItem.LockDuration / 8.64f) / 10000f) + "天\n解锁时间: " + GetMsg(listItem.UnlockTime);
+				msg += "\n上次锁定时间: " + GetMsg(listItem.LockTime) + "\n锁定原因: " + GetMsg(listItem.LockReason);
+				msg += "\n锁定时长: " + ((int)(listItem.LockDuration / 8.64f) / 10000f) + "天\n解锁时间: " + GetMsg(listItem.UnlockTime);
 				var messageDialog = new MessageDialog("详细信息:" + listItem.Name, msg, LanguageControl.Ok, null, null);
 				DialogsManager.ShowDialog(null, messageDialog);
 			}
@@ -203,7 +202,7 @@ public class ManageUserScreen : Screen
 		if (m_filterButton.IsClicked)
 		{
 			List<int> filters = [.. EnumUtils.GetEnumValues(typeof(Filter))];
-			DialogsManager.ShowDialog(null, new ListSelectionDialog("请选择", filters, 60f, (object item) => GetFilterDisplayName((Filter)item), delegate (object result)
+			DialogsManager.ShowDialog(null, new ListSelectionDialog("请选择", filters, 60f, item => GetFilterDisplayName((Filter)item), delegate (object result)
 			{
 				m_filter = (Filter)result;
 				UpdateList(null);
@@ -213,7 +212,7 @@ public class ManageUserScreen : Screen
 		if (m_searchTypeButton.IsClicked)
 		{
 			List<int> searchTypes = [.. EnumUtils.GetEnumValues(typeof(SearchType))];
-			DialogsManager.ShowDialog(null, new ListSelectionDialog("请选择", searchTypes, 60f, (object item) => GetSearchTypeName((SearchType)item), delegate (object result)
+			DialogsManager.ShowDialog(null, new ListSelectionDialog("请选择", searchTypes, 60f, item => GetSearchTypeName((SearchType)item), delegate (object result)
 			{
 				m_searchType = (SearchType)result;
 			}));
@@ -320,10 +319,7 @@ public class ManageUserScreen : Screen
 		{
 			return "Null";
 		}
-		else
-		{
-			return msg.ToString();
-		}
+		return msg.ToString();
 	}
 
 	public virtual void UpdateList(string cursor)

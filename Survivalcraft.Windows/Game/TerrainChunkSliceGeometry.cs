@@ -1,45 +1,44 @@
-using System;
-
-namespace Game
+//From original game, not used in API
+/*namespace Game
 {
     public class TerrainChunkSliceGeometry : TerrainGeometry
     {
         public TerrainChunkSliceGeometry()
         {
-            this.Subsets = new TerrainGeometrySubset[7];
-            for (int i = 0; i < this.Subsets.Length; i++)
+            Subsets = new TerrainGeometrySubset[7];
+            for (int i = 0; i < Subsets.Length; i++)
             {
-                this.Subsets[i] = new TerrainGeometrySubset();
+                Subsets[i] = new TerrainGeometrySubset();
             }
-            this.SubsetOpaque = this.Subsets[4];
-            this.SubsetAlphaTest = this.Subsets[5];
-            this.SubsetTransparent = this.Subsets[6];
-            this.OpaqueSubsetsByFace = new TerrainGeometrySubset[]
+            SubsetOpaque = Subsets[4];
+            SubsetAlphaTest = Subsets[5];
+            SubsetTransparent = Subsets[6];
+            OpaqueSubsetsByFace = new[]
             {
-                this.Subsets[0],
-                this.Subsets[1],
-                this.Subsets[2],
-                this.Subsets[3],
-                this.Subsets[4],
-                this.Subsets[4]
+                Subsets[0],
+                Subsets[1],
+                Subsets[2],
+                Subsets[3],
+                Subsets[4],
+                Subsets[4]
             };
-            this.AlphaTestSubsetsByFace = new TerrainGeometrySubset[]
+            AlphaTestSubsetsByFace = new[]
             {
-                this.Subsets[5],
-                this.Subsets[5],
-                this.Subsets[5],
-                this.Subsets[5],
-                this.Subsets[5],
-                this.Subsets[5]
+                Subsets[5],
+                Subsets[5],
+                Subsets[5],
+                Subsets[5],
+                Subsets[5],
+                Subsets[5]
             };
-            this.TransparentSubsetsByFace = new TerrainGeometrySubset[]
+            TransparentSubsetsByFace = new[]
             {
-                this.Subsets[6],
-                this.Subsets[6],
-                this.Subsets[6],
-                this.Subsets[6],
-                this.Subsets[6],
-                this.Subsets[6]
+                Subsets[6],
+                Subsets[6],
+                Subsets[6],
+                Subsets[6],
+                Subsets[6],
+                Subsets[6]
             };
         }
 
@@ -63,4 +62,4 @@ namespace Game
 
         public int GeometryHash;
     }
-}
+}*/

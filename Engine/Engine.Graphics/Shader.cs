@@ -1,7 +1,3 @@
-using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Xml.Linq;
 #if DIRECT3D11
 using SharpDX;
 using System.Runtime.InteropServices;
@@ -10,6 +6,7 @@ using SharpDX.Direct3D11;
 #else
 using Silk.NET.OpenGLES;
 #endif
+using System.Xml.Linq;
 
 namespace Engine.Graphics
 {
@@ -233,8 +230,8 @@ namespace Engine.Graphics
 
 			if (shaderCode.StartsWith("#version "))
 			{
-				string versioncode = shaderCode.Split(new char[] { '\n' })[0];
-				string versionnum = versioncode.Split(new char[] { ' ' })[1];
+				string versioncode = shaderCode.Split(new[] { '\n' })[0];
+				string versionnum = versioncode.Split(new[] { ' ' })[1];
 
                 if (int.Parse(versionnum) >= 300 || versioncode.EndsWith("es"))
                     str += $"#version {versionnum} es" + Environment.NewLine;
@@ -346,10 +343,10 @@ namespace Engine.Graphics
 			for (int i = 0; i < params4; i++)
 			{
 				GLWrapper.GL.GetActiveAttrib(program, (uint)i, 256u, out uint _, out int _, out AttributeType _, out string stringBuilder);
-				int attribLocation = GLWrapper.GL.GetAttribLocation(program, stringBuilder.ToString());
-				if (!dictionary.TryGetValue(stringBuilder.ToString(), out string value))
+				int attribLocation = GLWrapper.GL.GetAttribLocation(program, stringBuilder);
+				if (!dictionary.TryGetValue(stringBuilder, out string value))
 				{
-					throw new InvalidOperationException($"Attribute \"{stringBuilder.ToString()}\" has no semantic defined in shader metadata.");
+					throw new InvalidOperationException($"Attribute \"{stringBuilder}\" has no semantic defined in shader metadata.");
 				}
 				m_shaderAttributeData.Add(new ShaderAttributeData
 				{
@@ -364,15 +361,15 @@ namespace Engine.Graphics
 			{
 
 				GLWrapper.GL.GetActiveUniform(program, (uint)j, 256u, out uint _, out int size2, out UniformType type2, out string stringBuilder2);
-				int uniformLocation = GLWrapper.GL.GetUniformLocation(program, stringBuilder2.ToString());
+				int uniformLocation = GLWrapper.GL.GetUniformLocation(program, stringBuilder2);
 				ShaderParameterType shaderParameterType = GLWrapper.TranslateActiveUniformType(type2);
-				int num = stringBuilder2.ToString().IndexOf('[');
+				int num = stringBuilder2.IndexOf('[');
 				if (num >= 0)
 				{
 					stringBuilder2 = stringBuilder2.Remove(num, stringBuilder2.Length - num);
 				}
 
-				ShaderParameter shaderParameter = new(this, stringBuilder2.ToString(), shaderParameterType, size2);
+				ShaderParameter shaderParameter = new(this, stringBuilder2, shaderParameterType, size2);
 				shaderParameter.Location = uniformLocation;
 				dictionary3.Add(shaderParameter.Name, shaderParameter);
 				list.Add(shaderParameter);

@@ -1,5 +1,3 @@
-using System;
-
 namespace Engine.Graphics
 {
 	public static class ExtensionMethods

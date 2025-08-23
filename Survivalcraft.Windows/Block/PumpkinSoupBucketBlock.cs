@@ -1,6 +1,5 @@
 using Engine;
 using Engine.Graphics;
-using System.Collections.Generic;
 using System.Globalization;
 
 namespace Game
@@ -11,7 +10,7 @@ namespace Game
 
 		public BlockMesh m_standaloneBlockMesh = new();
 
-		public const string fName = "PumpkinSoupBucketBlock";
+		public new const string fName = "PumpkinSoupBucketBlock";
 
 		public override void Initialize()
 		{

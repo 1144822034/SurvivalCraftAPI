@@ -1,6 +1,7 @@
 using Engine;
 using Tomlyn;
 using Tomlyn.Model;
+
 namespace Game
 {
 	internal class ModListManager
@@ -62,10 +63,7 @@ namespace Game
 				}
 				return packagePath;
 			}
-			else
-			{
-				return ModsManager.ModsPath;
-			}
+			return ModsManager.ModsPath;
 		}
 	}
 }

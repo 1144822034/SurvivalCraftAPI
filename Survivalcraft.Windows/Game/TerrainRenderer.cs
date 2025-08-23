@@ -1,7 +1,6 @@
 using Engine;
 using Engine.Graphics;
-using System;
-using System.Collections.Generic;
+
 namespace Game
 {
 
@@ -74,9 +73,9 @@ namespace Game
 			m_subsystemTerrain = subsystemTerrain;
 			m_subsystemSky = subsystemTerrain.Project.FindSubsystem<SubsystemSky>(throwOnError: true);
 			m_subsystemAnimatedTextures = subsystemTerrain.SubsystemAnimatedTextures;
-			if (m_opaqueShader == null) m_opaqueShader = new Shader(ShaderCodeManager.GetFast("Shaders/Opaque.vsh"), ShaderCodeManager.GetFast("Shaders/Opaque.psh"), new ShaderMacro[] { new("Opaque") });
-			if (m_alphaTestedShader == null) m_alphaTestedShader = new Shader(ShaderCodeManager.GetFast("Shaders/AlphaTested.vsh"), ShaderCodeManager.GetFast("Shaders/AlphaTested.psh"), new ShaderMacro[] { new("ALPHATESTED") });
-			if (m_transparentShader == null) m_transparentShader = new Shader(ShaderCodeManager.GetFast("Shaders/Transparent.vsh"), ShaderCodeManager.GetFast("Shaders/Transparent.psh"), new ShaderMacro[] { new("Transparent") });
+			if (m_opaqueShader == null) m_opaqueShader = new Shader(ShaderCodeManager.GetFast("Shaders/Opaque.vsh"), ShaderCodeManager.GetFast("Shaders/Opaque.psh"),[new("Opaque")]);
+			if (m_alphaTestedShader == null) m_alphaTestedShader = new Shader(ShaderCodeManager.GetFast("Shaders/AlphaTested.vsh"), ShaderCodeManager.GetFast("Shaders/AlphaTested.psh"),[new("ALPHATESTED")]);
+			if (m_transparentShader == null) m_transparentShader = new Shader(ShaderCodeManager.GetFast("Shaders/Transparent.vsh"), ShaderCodeManager.GetFast("Shaders/Transparent.psh"),[new("Transparent")]);
 			Display.DeviceReset += Display_DeviceReset;
 		}
 
@@ -101,7 +100,7 @@ namespace Game
 						}
 					}
 				}
-				if (terrainChunk.Buffers.Count > 0 && (double)Vector2.DistanceSquared(xZ, terrainChunk.Center) <= (double)num)
+				if (terrainChunk.Buffers.Count > 0 && Vector2.DistanceSquared(xZ, terrainChunk.Center) <= (double)num)
 				{
 					if (viewFrustum.Intersection(terrainChunk.BoundingBox))
 					{
@@ -151,7 +150,7 @@ namespace Game
 			m_opaqueShader.GetParameter("u_fogColor", true).SetValue(new Vector3(m_subsystemSky.ViewFogColor));
 			m_opaqueShader.GetParameter("u_fogBottomTopDensity").SetValue(new Vector3(m_subsystemSky.ViewFogBottom, m_subsystemSky.ViewFogTop, m_subsystemSky.ViewFogDensity));
 			ShaderParameter parameter = m_opaqueShader.GetParameter("u_hazeStartDensity");
-			ModsManager.HookAction("SetShaderParameter", (modLoader) => { modLoader.SetShaderParameter(m_opaqueShader, camera); return true; });
+			ModsManager.HookAction("SetShaderParameter", modLoader => { modLoader.SetShaderParameter(m_opaqueShader, camera); return true; });
 			Point2 point = Terrain.ToChunk(camera.ViewPosition.XZ);
 			var chunk = m_subsystemTerrain.Terrain.GetChunkAtCoords(point.X, point.Y);
 			for (int i = 0; i < m_chunksToDraw.Count; i++)
@@ -200,7 +199,7 @@ namespace Game
 			m_alphaTestedShader.GetParameter("u_fogBottomTopDensity").SetValue(new Vector3(m_subsystemSky.ViewFogBottom, m_subsystemSky.ViewFogTop, m_subsystemSky.ViewFogDensity));
 			m_alphaTestedShader.GetParameter("u_alphaThreshold").SetValue(0.5f);
 			ShaderParameter parameter = m_alphaTestedShader.GetParameter("u_hazeStartDensity");
-			ModsManager.HookAction("SetShaderParameter", (modLoader) => { modLoader.SetShaderParameter(m_alphaTestedShader, camera); return true; });
+			ModsManager.HookAction("SetShaderParameter", modLoader => { modLoader.SetShaderParameter(m_alphaTestedShader, camera); return true; });
 			for (int i = 0; i < m_chunksToDraw.Count; i++)
 			{
 				TerrainChunk terrainChunk = m_chunksToDraw[i];
@@ -229,7 +228,7 @@ namespace Game
 			m_transparentShader.GetParameter("u_fogColor", true).SetValue(new Vector3(m_subsystemSky.ViewFogColor));
 			m_transparentShader.GetParameter("u_fogBottomTopDensity").SetValue(new Vector3(m_subsystemSky.ViewFogBottom, m_subsystemSky.ViewFogTop, m_subsystemSky.ViewFogDensity));
 			ShaderParameter parameter = m_transparentShader.GetParameter("u_hazeStartDensity");
-			ModsManager.HookAction("SetShaderParameter", (modLoader) => { modLoader.SetShaderParameter(m_transparentShader, camera); return true; });
+			ModsManager.HookAction("SetShaderParameter", modLoader => { modLoader.SetShaderParameter(m_transparentShader, camera); return true; });
 			for (int i = 0; i < m_chunksToDraw.Count; i++)
 			{
 				TerrainChunk terrainChunk = m_chunksToDraw[i];

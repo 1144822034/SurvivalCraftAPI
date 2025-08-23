@@ -48,7 +48,7 @@ namespace Game
 			m_copyUserIdButton.IsEnabled = UserManager.ActiveUser != null;
 			if (m_changeUserButton.IsClicked)
 			{
-				DialogsManager.ShowDialog(ParentWidget, new ListSelectionDialog(LanguageControl.Get(fName, "2"), UserManager.GetUsers(), 60f, (object item) => ((UserInfo)item).DisplayName, delegate (object item)
+				DialogsManager.ShowDialog(ParentWidget, new ListSelectionDialog(LanguageControl.Get(fName, "2"), UserManager.GetUsers(), 60f, item => ((UserInfo)item).DisplayName, delegate (object item)
 				{
 					UserManager.ActiveUser = (UserInfo)item;
 				}));

@@ -1,5 +1,5 @@
 using Engine;
-using System;
+
 namespace Game
 {
 	public class BlockGeometryGenerator
@@ -23,8 +23,8 @@ namespace Game
 			public float L111;
 		}
 
-		public static Vector2[] m_textureCoordinates = new Vector2[8]
-		{
+		public static Vector2[] m_textureCoordinates =
+		[
 			new(0.001f, 0.999f),
 			new(0.999f, 0.999f),
 			new(0.999f, 0.001f),
@@ -33,7 +33,7 @@ namespace Game
 			new(0.999f, 0.999f),
 			new(0.999f, 0.001f),
 			new(0.001f, 0.001f)
-		};
+		];
 
 		public readonly Terrain Terrain;
 
@@ -73,9 +73,9 @@ namespace Game
 		public static void SetupCornerVertex(float x, float y, float z, Color color, int light, int face, int textureSlot, int textureSlotCount, int corner, ref TerrainVertex vertex)
 		{
 			float num = LightingManager.LightIntensityByLightValueAndFace[light + (16 * face)];
-			Color color2 = new((byte)((float)(int)color.R * num), (byte)((float)(int)color.G * num), (byte)((float)(int)color.B * num), color.A);
-			float tx = (m_textureCoordinates[corner].X + (float)(textureSlot % textureSlotCount)) / textureSlotCount;
-			float ty = (m_textureCoordinates[corner].Y + (float)(textureSlot / textureSlotCount)) / textureSlotCount;
+			Color color2 = new((byte)(color.R * num), (byte)(color.G * num), (byte)(color.B * num), color.A);
+			float tx = (m_textureCoordinates[corner].X + textureSlot % textureSlotCount) / textureSlotCount;
+			float ty = (m_textureCoordinates[corner].Y + textureSlot / textureSlotCount) / textureSlotCount;
 			SetupVertex(x, y, z, color2, tx, ty, ref vertex);
 		}
 		public static void SetupLitCornerVertex(float x, float y, float z, Color color, int textureSlot, int corner, ref TerrainVertex vertex)
@@ -85,8 +85,8 @@ namespace Game
 
 		public static void SetupLitCornerVertex(float x, float y, float z, Color color, int textureSlot, int textureSlotCount, int corner, ref TerrainVertex vertex)
 		{
-			float tx = (m_textureCoordinates[corner].X + (float)(textureSlot % textureSlotCount)) / textureSlotCount;
-			float ty = (m_textureCoordinates[corner].Y + (float)(textureSlot / textureSlotCount)) / textureSlotCount;
+			float tx = (m_textureCoordinates[corner].X + textureSlot % textureSlotCount) / textureSlotCount;
+			float ty = (m_textureCoordinates[corner].Y + textureSlot / textureSlotCount) / textureSlotCount;
 			SetupVertex(x, y, z, color, tx, ty, ref vertex);
 		}
 
@@ -106,7 +106,7 @@ namespace Game
 			var indices = subset.Indices;
 			int num = Terrain.ExtractLight(value);
 			float num2 = LightingManager.LightIntensityByLightValueAndFace[num + 64];
-			Color color2 = new((byte)((float)(int)color.R * num2), (byte)((float)(int)color.G * num2), (byte)((float)(int)color.B * num2), color.A);
+			Color color2 = new((byte)(color.R * num2), (byte)(color.G * num2), (byte)(color.B * num2), color.A);
 			int count = vertices.Count;
 			vertices.Count += 8;
 			int textureSlotCount = block.GetTextureSlotCount(value);
@@ -623,9 +623,9 @@ namespace Game
 				else
 				{
 					float num2 = num / 255f;
-					color2 = new Color((byte)((float)(color.R * blockMeshVertex.Color.R) * num2), (byte)((float)(color.G * blockMeshVertex.Color.G) * num2), (byte)((float)(color.B * blockMeshVertex.Color.B) * num2));
+					color2 = new Color((byte)(color.R * blockMeshVertex.Color.R * num2), (byte)(color.G * blockMeshVertex.Color.G * num2), (byte)(color.B * blockMeshVertex.Color.B * num2));
 				}
-				SetupVertex((float)x + vector.X, (float)y + vector.Y, (float)z + vector.Z, color2, blockMeshVertex.TextureCoordinates.X, blockMeshVertex.TextureCoordinates.Y, ref vertices.Array[count + i]);
+				SetupVertex(x + vector.X, y + vector.Y, z + vector.Z, color2, blockMeshVertex.TextureCoordinates.X, blockMeshVertex.TextureCoordinates.Y, ref vertices.Array[count + i]);
 			}
 			if (blockMesh.Sides != null)
 			{
@@ -679,9 +679,9 @@ namespace Game
 				{
 					int face = (facesMap != null) ? facesMap[blockMeshVertex.Face] : blockMeshVertex.Face;
 					float num = InterpolateCornerLights(face, vector) / 255f;
-					color2 = new Color((byte)((float)(color.R * blockMeshVertex.Color.R) * num), (byte)((float)(color.G * blockMeshVertex.Color.G) * num), (byte)((float)(color.B * blockMeshVertex.Color.B) * num));
+					color2 = new Color((byte)(color.R * blockMeshVertex.Color.R * num), (byte)(color.G * blockMeshVertex.Color.G * num), (byte)(color.B * blockMeshVertex.Color.B * num));
 				}
-				SetupVertex((float)x + vector.X, (float)y + vector.Y, (float)z + vector.Z, color2, blockMeshVertex.TextureCoordinates.X, blockMeshVertex.TextureCoordinates.Y, ref vertices.Array[count + i]);
+				SetupVertex(x + vector.X, y + vector.Y, z + vector.Z, color2, blockMeshVertex.TextureCoordinates.X, blockMeshVertex.TextureCoordinates.Y, ref vertices.Array[count + i]);
 			}
 			if (blockMesh.Sides != null)
 			{
@@ -729,7 +729,7 @@ namespace Game
 			}
 			int num2 = Terrain.ExtractLight(value);
 			float num3 = LightingManager.LightIntensityByLightValue[num2];
-			Vector3 v = new Vector3((float)x + 0.5f, (float)y + 0.5f, (float)z + 0.5f) - (0.5f * CellFace.FaceToVector3(mountingFace));
+			Vector3 v = new Vector3(x + 0.5f, y + 0.5f, z + 0.5f) - (0.5f * CellFace.FaceToVector3(mountingFace));
 			Vector3 vector = CellFace.FaceToVector3(mountingFace);
 			Vector2 v2 = new(0.9376f, 0.0001f);
 			Vector2 v3 = new(0.03125f, 0.00550781237f);
@@ -798,12 +798,12 @@ namespace Game
 						float num16 = num11 * num3;
 						float num17 = num12 * num3;
 						float num18 = num12 * num9;
-						Color color5 = new((byte)((float)(int)color3.R * num13), (byte)((float)(int)color3.G * num13), (byte)((float)(int)color3.B * num13));
-						Color color6 = new((byte)((float)(int)color3.R * num14), (byte)((float)(int)color3.G * num14), (byte)((float)(int)color3.B * num14));
-						Color color7 = new((byte)((float)(int)color3.R * num15), (byte)((float)(int)color3.G * num15), (byte)((float)(int)color3.B * num15));
-						Color color8 = new((byte)((float)(int)color3.R * num16), (byte)((float)(int)color3.G * num16), (byte)((float)(int)color3.B * num16));
-						Color color9 = new((byte)((float)(int)color3.R * num17), (byte)((float)(int)color3.G * num17), (byte)((float)(int)color3.B * num17));
-						Color color10 = new((byte)((float)(int)color3.R * num18), (byte)((float)(int)color3.G * num18), (byte)((float)(int)color3.B * num18));
+						Color color5 = new((byte)(color3.R * num13), (byte)(color3.G * num13), (byte)(color3.B * num13));
+						Color color6 = new((byte)(color3.R * num14), (byte)(color3.G * num14), (byte)(color3.B * num14));
+						Color color7 = new((byte)(color3.R * num15), (byte)(color3.G * num15), (byte)(color3.B * num15));
+						Color color8 = new((byte)(color3.R * num16), (byte)(color3.G * num16), (byte)(color3.B * num16));
+						Color color9 = new((byte)(color3.R * num17), (byte)(color3.G * num17), (byte)(color3.B * num17));
+						Color color10 = new((byte)(color3.R * num18), (byte)(color3.G * num18), (byte)(color3.B * num18));
 						int count = subset.Vertices.Count;
 						subset.Vertices.Count += 6;
 						TerrainVertex[] array = subset.Vertices.Array;
@@ -862,8 +862,8 @@ namespace Game
 					Vector2 vector21 = v2 + (v3 * new Vector2(0f, 0.5f));
 					float num19 = LightingManager.CalculateLighting(vector16) * num3;
 					float num20 = LightingManager.CalculateLighting(vector) * num3;
-					Color color11 = new((byte)((float)(int)color.R * num19), (byte)((float)(int)color.G * num19), (byte)((float)(int)color.B * num19));
-					Color color12 = new((byte)((float)(int)color.R * num20), (byte)((float)(int)color.G * num20), (byte)((float)(int)color.B * num20));
+					Color color11 = new((byte)(color.R * num19), (byte)(color.G * num19), (byte)(color.B * num19));
+					Color color12 = new((byte)(color.R * num20), (byte)(color.G * num20), (byte)(color.B * num20));
 					int count3 = subset.Vertices.Count;
 					subset.Vertices.Count += 3;
 					TerrainVertex[] array3 = subset.Vertices.Array;
@@ -997,42 +997,42 @@ namespace Game
 
         public virtual void SetupCubeVertexFace0(int x, int y, int z, float height, int corner, int textureSlot, int textureSlotCount, Color color, ref TerrainVertex vertex)
 		{
-			float y2 = (float)y + height - 1f;
+			float y2 = y + height - 1f;
 			int light = CalculateVertexLightFace0(x, y, z);
 			SetupCornerVertex(x, y2, z, color, light, 0, textureSlot, textureSlotCount, corner, ref vertex);
 		}
 
         public virtual void SetupCubeVertexFace1(int x, int y, int z, float height, int corner, int textureSlot, int textureSlotCount, Color color, ref TerrainVertex vertex)
 		{
-			float y2 = (float)y + height - 1f;
+			float y2 = y + height - 1f;
 			int light = CalculateVertexLightFace1(x, y, z);
 			SetupCornerVertex(x, y2, z, color, light, 1, textureSlot, textureSlotCount, corner, ref vertex);
 		}
 
         public virtual void SetupCubeVertexFace2(int x, int y, int z, float height, int corner, int textureSlot, int textureSlotCount, Color color, ref TerrainVertex vertex)
 		{
-			float y2 = (float)y + height - 1f;
+			float y2 = y + height - 1f;
 			int light = CalculateVertexLightFace2(x, y, z);
 			SetupCornerVertex(x, y2, z, color, light, 2, textureSlot, textureSlotCount, corner, ref vertex);
 		}
 
         public virtual void SetupCubeVertexFace3(int x, int y, int z, float height, int corner, int textureSlot, int textureSlotCount, Color color, ref TerrainVertex vertex)
 		{
-			float y2 = (float)y + height - 1f;
+			float y2 = y + height - 1f;
 			int light = CalculateVertexLightFace3(x, y, z);
 			SetupCornerVertex(x, y2, z, color, light, 3, textureSlot, textureSlotCount, corner, ref vertex);
 		}
 
         public virtual void SetupCubeVertexFace4(int x, int y, int z, float height, int corner, int textureSlot, int textureSlotCount, Color color, ref TerrainVertex vertex)
 		{
-			float y2 = (float)y + height - 1f;
+			float y2 = y + height - 1f;
 			int light = CalculateVertexLightFace4(x, y, z);
 			SetupCornerVertex(x, y2, z, color, light, 4, textureSlot, textureSlotCount, corner, ref vertex);
 		}
 
         public virtual void SetupCubeVertexFace5(int x, int y, int z, float height, int corner, int textureSlot, int textureSlotCount, Color color, ref TerrainVertex vertex)
 		{
-			float y2 = (float)y + height - 1f;
+			float y2 = y + height - 1f;
 			int light = CalculateVertexLightFace5(x, y, z);
 			SetupCornerVertex(x, y2, z, color, light, 5, textureSlot, textureSlotCount, corner, ref vertex);
 		}

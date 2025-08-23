@@ -1,13 +1,10 @@
+using System.Text;
 #if ANDROID
+using Environment = Android.OS.Environment;
 using Android.OS;
 #else
 using System.Reflection;
 #endif
-using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Text;
 
 namespace Engine
 {
@@ -27,7 +24,7 @@ namespace Engine
 #if ANDROID
                 try
                 {
-                    StatFs statFs = new(Android.OS.Environment.DataDirectory.Path);
+                    StatFs statFs = new(Environment.DataDirectory.Path);
                     long num = statFs.BlockSizeLong;
                     return statFs.AvailableBlocksLong * num;
                 }
@@ -58,7 +55,7 @@ namespace Engine
             string path2 = ProcessPath(path, false, false, out bool isApp);
             if (isApp)
             {
-                return EngineActivity.m_activity.ApplicationContext.Assets.List(Storage.GetDirectoryName(path2))?.Contains(Storage.GetFileName(path2)) ?? false;
+                return EngineActivity.m_activity.ApplicationContext.Assets.List(GetDirectoryName(path2))?.Contains(GetFileName(path2)) ?? false;
             }
 #endif
             return File.Exists(ProcessPath(path, writeAccess: false, failIfApp: m_isAndroidPlatform));
@@ -277,17 +274,17 @@ namespace Engine
                 isApp = true;
                 return path.Substring(4).TrimStart(Path.DirectorySeparatorChar);
             }
-            else if (path.StartsWith("data:"))
+            if (path.StartsWith("data:"))
             {
                 isApp = false;
                 return Path.Combine(System.Environment.GetFolderPath(System.Environment.SpecialFolder.MyDocuments), path.Substring(5).TrimStart(Path.DirectorySeparatorChar));
             }
-            else if (path.StartsWith("android:"))
+            if (path.StartsWith("android:"))
             {
                 isApp = false;
-                return Path.Combine(Storage.CombinePaths(Android.OS.Environment.ExternalStorageDirectory.AbsolutePath, path.Substring(8).TrimStart(Path.DirectorySeparatorChar)));
+                return Path.Combine(CombinePaths(Environment.ExternalStorageDirectory.AbsolutePath, path.Substring(8).TrimStart(Path.DirectorySeparatorChar)));
             }
-            else if (path.StartsWith("config:"))
+            if (path.StartsWith("config:"))
             {
                 isApp = false;
                 return Path.Combine(EngineActivity.ConfigPath, path.Substring(8).TrimStart(Path.DirectorySeparatorChar));

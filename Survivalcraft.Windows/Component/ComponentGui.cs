@@ -1,6 +1,5 @@
 using Engine;
 using GameEntitySystem;
-using System;
 using TemplatesDatabase;
 
 namespace Game
@@ -225,7 +224,7 @@ namespace Game
 
 		public UpdateOrder UpdateOrder => UpdateOrder.Default;
 
-		public int[] DrawOrders => new int[] { 9 };
+		public int[] DrawOrders => [9];
 
 		public virtual void DisplayLargeMessage(string largeText, string smallText, float duration, float delay)
 		{
@@ -239,7 +238,7 @@ namespace Game
 		}
 		public virtual void DisplaySmallMessage(string text, Color color, bool blinking, bool playNotificationSound)
 		{
-			MessageWidget.Message message = new(text,color,blinking,1f);
+			MessageWidget.Message message = new(text,color,blinking);
 			DisplaySmallMessage(message, playNotificationSound);
 		}
 		public virtual void DisplaySmallMessage(string text, Color color, bool blinking, bool playNotificationSound, float fontScale=1f)
@@ -290,8 +289,8 @@ namespace Game
 			m_subsystemAudio = Project.FindSubsystem<SubsystemAudio>(throwOnError: true);
 			m_subsystemTimeOfDay = Project.FindSubsystem<SubsystemTimeOfDay>(throwOnError: true);
 			m_subsystemTerrain = Project.FindSubsystem<SubsystemTerrain>(throwOnError: true);
-			m_subsystemSky = base.Project.FindSubsystem<SubsystemSky>(throwOnError: true);
-			m_subsystemWeather = base.Project.FindSubsystem<SubsystemWeather>(throwOnError: true);
+			m_subsystemSky = Project.FindSubsystem<SubsystemSky>(throwOnError: true);
+			m_subsystemWeather = Project.FindSubsystem<SubsystemWeather>(throwOnError: true);
 			m_subsystemBlockBehaviors = Project.FindSubsystem<SubsystemBlockBehaviors>(throwOnError: true);
 			m_componentPlayer = Entity.FindComponent<ComponentPlayer>(throwOnError: true);
 			m_componentInput = Entity.FindComponent<ComponentInput>();
@@ -613,7 +612,7 @@ namespace Game
 				{
 					ModalPanelWidget = m_componentPlayer.ComponentMiner.Inventory is ComponentCreativeInventory
 						? new CreativeInventoryWidget(m_componentPlayer.Entity)
-						: (Widget)new FullInventoryWidget(m_componentPlayer.ComponentMiner.Inventory, m_componentPlayer.Entity.FindComponent<ComponentCraftingTable>(throwOnError: true));
+						: new FullInventoryWidget(m_componentPlayer.ComponentMiner.Inventory, m_componentPlayer.Entity.FindComponent<ComponentCraftingTable>(throwOnError: true));
 				}
 			}
 			if (playerInput.ToggleClothing || m_clothingButtonWidget.IsClicked)
@@ -842,7 +841,7 @@ namespace Game
 
 		public virtual void Draw(Camera camera, int drawOrder)
 		{
-			ModsManager.HookAction("GuiDraw", (modloader) => { modloader.GuiDraw(this, camera, drawOrder); return false; });
+			ModsManager.HookAction("GuiDraw", modloader => { modloader.GuiDraw(this, camera, drawOrder); return false; });
 		}
 	}
 }

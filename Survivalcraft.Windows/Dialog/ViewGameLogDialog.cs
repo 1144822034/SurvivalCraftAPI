@@ -1,8 +1,7 @@
 using Engine;
-using Engine.Media;
-using System.IO;
-using System.Xml.Linq;
 using System.Text.Json.Nodes;
+using System.Xml.Linq;
+
 namespace Game {
     public class ViewGameLogDialog : Dialog {
         public ListPanelWidget m_listPanel;
@@ -35,7 +34,7 @@ namespace Game {
             m_adviceText = Children.Find<LabelWidget>("AdviceText");
             m_listPanel.ItemClicked += delegate (object item) {
                 if (m_listPanel.SelectedItem == item) {
-                    DialogsManager.ShowDialog(ParentWidget, new MessageDialog("Log Item", item.ToString(), LanguageControl.Ok, LanguageControl.Get(GetType().Name,13), (button)=>{
+                    DialogsManager.ShowDialog(ParentWidget, new MessageDialog("Log Item", item.ToString(), LanguageControl.Ok, LanguageControl.Get(GetType().Name,13), button=>{
 						if(button == MessageDialogButton.Button2)
 						{
 							ClipboardManager.ClipboardString = item.ToString();
@@ -72,7 +71,7 @@ namespace Game {
             }
             if (m_uploadButton.IsClicked) {
                 if (string.IsNullOrEmpty(SettingsManager.ScpboxAccessToken)) {
-                    var messageDialog = new MessageDialog(LanguageControl.Get(fName, 1), LanguageControl.Get(fName, 2), LanguageControl.Get(fName, 3), LanguageControl.Get(fName, 4), (btn) => {
+                    var messageDialog = new MessageDialog(LanguageControl.Get(fName, 1), LanguageControl.Get(fName, 2), LanguageControl.Get(fName, 3), LanguageControl.Get(fName, 4), btn => {
                         DialogsManager.HideAllDialogs();
                     });
                     DialogsManager.ShowDialog(this, messageDialog);

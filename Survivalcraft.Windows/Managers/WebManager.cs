@@ -1,14 +1,15 @@
-using Engine;
-using System.Net;
-using System.Text;
-using System.Net.Http;
-using System.IO;
 #if ANDROID
 using Android.Net;
 using System.Text.Json;
-#else
+#elif WINDOWS
 using System.Runtime.InteropServices;
+#else
+using System.Net.NetworkInformation;
 #endif
+using Engine;
+using System.Net;
+using System.Net.Http;
+using System.Text;
 using Uri = System.Uri;
 
 namespace Game
@@ -72,7 +73,7 @@ namespace Game
 #elif WINDOWS
 				return InternetGetConnectedState(out int Desc, 0);
 #elif LINUX
-				return System.Net.NetworkInformation.NetworkInterface.GetIsNetworkAvailable();
+				return NetworkInterface.GetIsNetworkAvailable();
 #else
 				return true;
 #endif
@@ -86,8 +87,8 @@ namespace Game
 
 		public static void Get(string address, Dictionary<string, string> parameters, Dictionary<string, string> headers, CancellableProgress progress, Action<byte[]> success, Action<Exception> failure)
 		{
-			MemoryStream targetStream = default;
-			Exception e = default;
+			MemoryStream targetStream;
+			Exception e = null;
 			Task.Run(async delegate
 			{
 				Uri requestUri = (parameters != null && parameters.Count > 0) ? new Uri($"{address}?{UrlParametersToString(parameters)}") : new Uri(address);
@@ -153,7 +154,7 @@ namespace Game
 				}
 				catch (Exception ex)
 				{
-					Log.Warning(e.Message + ":\nThe connection is unavailable. Url: " + requestUri.ToString());
+					Log.Warning(e.Message + ":\nThe connection is unavailable. Url: " + requestUri);
 					if(failure != null)
 					{
 						Dispatcher.Dispatch(delegate
@@ -225,7 +226,7 @@ namespace Game
 
 		public static void PutOrPost(bool isPost, string address, Dictionary<string, string> parameters, Dictionary<string, string> headers, Stream data, CancellableProgress progress, Action<byte[]> success, Action<Exception> failure)
 		{
-			byte[] responseData = default;
+			byte[] responseData = null;
 			Task.Run(async delegate
 			{
 				Uri requestUri = (parameters != null && parameters.Count > 0) ? new Uri($"{address}?{UrlParametersToString(parameters)}") : new Uri(address);
@@ -273,7 +274,7 @@ namespace Game
 				}
 				catch (Exception e)
 				{
-					Log.Warning(e.Message + ":\nThe connection is unavailable. Url: " + requestUri.ToString());
+					Log.Warning(e.Message + ":\nThe connection is unavailable. Url: " + requestUri);
 					if (failure != null)
 					{
 						Dispatcher.Dispatch(delegate
@@ -296,6 +297,7 @@ namespace Game
 				}
 				catch
 				{
+					// ignored
 				}
 				throw new InvalidOperationException($"{message.StatusCode} ({(int)message.StatusCode})\n{responseText}");
 			}

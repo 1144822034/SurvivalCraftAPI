@@ -28,11 +28,11 @@ public class SubsystemDeciduousLeavesBlockBehavior : SubsystemPollableBlockBehav
 
 	private Random m_random = new Random();
 
-	private DynamicArray<LeafParticles> m_leafParticles = new DynamicArray<LeafParticles>();
+	private DynamicArray<LeafParticles> m_leafParticles = [];
 
-	private DynamicArray<LeafParticles> m_tmpLeafParticles = new DynamicArray<LeafParticles>();
+	private DynamicArray<LeafParticles> m_tmpLeafParticles = [];
 
-	public override int[] HandledBlocks => new int[0];
+	public override int[] HandledBlocks => [];
 
 	UpdateOrder IUpdateable.UpdateOrder => UpdateOrder.Default;
 
@@ -74,13 +74,13 @@ public class SubsystemDeciduousLeavesBlockBehavior : SubsystemPollableBlockBehav
 	public override void Load(ValuesDictionary valuesDictionary)
 	{
 		base.Load(valuesDictionary);
-		m_subsystemGameInfo = base.Project.FindSubsystem<SubsystemGameInfo>(throwOnError: true);
-		m_subsystemSeasons = base.Project.FindSubsystem<SubsystemSeasons>(throwOnError: true);
-		m_subsystemTerrain = base.Project.FindSubsystem<SubsystemTerrain>(throwOnError: true);
-		m_subsystemTime = base.Project.FindSubsystem<SubsystemTime>(throwOnError: true);
-		m_subsystemGameWidgets = base.Project.FindSubsystem<SubsystemGameWidgets>(throwOnError: true);
-		m_subsystemParticles = base.Project.FindSubsystem<SubsystemParticles>(throwOnError: true);
-		m_subsystemCellChangeQueue = base.Project.FindSubsystem<SubsystemCellChangeQueue>(throwOnError: true);
+		m_subsystemGameInfo = Project.FindSubsystem<SubsystemGameInfo>(throwOnError: true);
+		m_subsystemSeasons = Project.FindSubsystem<SubsystemSeasons>(throwOnError: true);
+		m_subsystemTerrain = Project.FindSubsystem<SubsystemTerrain>(throwOnError: true);
+		m_subsystemTime = Project.FindSubsystem<SubsystemTime>(throwOnError: true);
+		m_subsystemGameWidgets = Project.FindSubsystem<SubsystemGameWidgets>(throwOnError: true);
+		m_subsystemParticles = Project.FindSubsystem<SubsystemParticles>(throwOnError: true);
+		m_subsystemCellChangeQueue = Project.FindSubsystem<SubsystemCellChangeQueue>(throwOnError: true);
 	}
 
 	void IUpdateable.Update(float dt)
@@ -114,7 +114,7 @@ public class SubsystemDeciduousLeavesBlockBehavior : SubsystemPollableBlockBehav
 
 	private void UpdateTimeOfYear(int value, int x, int y, int z, bool applyImmediately)
 	{
-		float num = 0.03f * (float)MathUtils.Hash((uint)(x + y * 59 + z * 3319)) / 4.2949673E+09f;
+		float num = 0.03f * MathUtils.Hash((uint)(x + y * 59 + z * 3319)) / 4.2949673E+09f;
 		float timeOfYear = IntervalUtils.Normalize(m_subsystemGameInfo.WorldSettings.TimeOfYear + num);
 		DeciduousLeavesBlock obj = (DeciduousLeavesBlock)BlocksManager.Blocks[Terrain.ExtractContents(value)];
 		int num2 = Terrain.ExtractData(value);
@@ -139,7 +139,7 @@ public class SubsystemDeciduousLeavesBlockBehavior : SubsystemPollableBlockBehav
 			m_leafParticles.Add(new LeafParticles
 			{
 				Position = new Point3(x, y, z),
-				Time = m_subsystemTime.GameTime + (double)m_random.Float(0f, 60f)
+				Time = m_subsystemTime.GameTime + m_random.Float(0f, 60f)
 			});
 		}
 	}

@@ -26,14 +26,14 @@ namespace Game
 
 		public DynamicArray<ComponentBody> m_bodies = [];
 
-		public float[] m_speedLevels = new float[5]
-		{
+		public float[] m_speedLevels =
+		[
 			-0.33f,
 			0f,
 			0.33f,
 			0.66f,
 			1f
-		};
+		];
 
 		public int m_speedLevel;
 

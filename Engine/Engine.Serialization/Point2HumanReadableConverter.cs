@@ -1,5 +1,3 @@
-using System;
-
 namespace Engine.Serialization
 {
 	[HumanReadableConverter(typeof(Point2))]
@@ -8,7 +6,7 @@ namespace Engine.Serialization
 		public string ConvertToString(object value)
 		{
 			var point = (Point2)value;
-			return HumanReadableConverter.ValuesListToString<int>(',', point.X, point.Y);
+			return HumanReadableConverter.ValuesListToString(',', point.X, point.Y);
 		}
 
 		public object ConvertFromString(Type type, string data)

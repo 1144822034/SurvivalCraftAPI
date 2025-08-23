@@ -1,5 +1,4 @@
 using GameEntitySystem;
-using System;
 using TemplatesDatabase;
 
 namespace Game

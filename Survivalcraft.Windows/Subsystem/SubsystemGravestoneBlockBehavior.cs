@@ -2,10 +2,10 @@ namespace Game
 {
 	public class SubsystemGravestoneBlockBehavior : SubsystemBlockBehavior
 	{
-		public override int[] HandledBlocks => new int[1]
-		{
+		public override int[] HandledBlocks =>
+		[
 			189
-		};
+		];
 
 		public override void OnNeighborBlockChanged(int x, int y, int z, int neighborX, int neighborY, int neighborZ)
 		{

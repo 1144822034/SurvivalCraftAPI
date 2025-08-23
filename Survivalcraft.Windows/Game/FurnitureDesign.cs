@@ -1,6 +1,4 @@
 using Engine;
-using System;
-using System.Collections.Generic;
 using System.Globalization;
 using System.Text;
 using TemplatesDatabase;
@@ -272,13 +270,13 @@ namespace Game
 			string value2 = valuesDictionary.GetValue<string>("Values");
 			int num = 0;
 			int[] array = new int[value * value * value];
-			string[] array2 = value2.Split(new char[1]
-			{
+			string[] array2 = value2.Split(
+			[
 				','
-			}, StringSplitOptions.RemoveEmptyEntries);
+			], StringSplitOptions.RemoveEmptyEntries);
 			for (int i = 0; i < array2.Length; i++)
 			{
-				string[] array3 = array2[i].Split(new char[] { '*' }, StringSplitOptions.None);
+				string[] array3 = array2[i].Split(['*'], StringSplitOptions.None);
 				if (array3.Length != 2)
 				{
 					throw new InvalidOperationException(LanguageControl.Get(fName, 2));
@@ -885,7 +883,7 @@ namespace Game
 								{
 									blockMesh3 = blockMesh2;
 								}
-								ModsManager.HookAction("SetFurnitureDesignColor", (ModLoader loader) =>
+								ModsManager.HookAction("SetFurnitureDesignColor", loader =>
 								{
 									loader.SetFurnitureDesignColor(this, block, value2, ref num14, ref color);
 									return false;

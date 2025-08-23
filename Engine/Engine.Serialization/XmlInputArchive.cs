@@ -1,5 +1,3 @@
-using System;
-using System.Collections.Generic;
 using System.Globalization;
 using System.Xml;
 using System.Xml.Linq;
@@ -168,7 +166,7 @@ namespace Engine.Serialization
 		public override void SerializeCollection<T>(string name, ICollection<T> collection)
 		{
 			EnterNode(name);
-			SerializeData serializeData = Archive.GetSerializeData(typeof(T), allowEmptySerializer: true);
+			SerializeData serializeData = GetSerializeData(typeof(T), allowEmptySerializer: true);
 			using (IEnumerator<T> enumerator = ((collection.Count > 0) ? collection.GetEnumerator() : null))
 			{
                 foreach (XElement item in Node.Elements())
@@ -194,8 +192,8 @@ namespace Engine.Serialization
 		public override void SerializeDictionary<K, V>(string name, IDictionary<K, V> dictionary)
 		{
 			EnterNode(name);
-			SerializeData serializeData = Archive.GetSerializeData(typeof(K), allowEmptySerializer: true);
-			SerializeData serializeData2 = Archive.GetSerializeData(typeof(V), allowEmptySerializer: true);
+			SerializeData serializeData = GetSerializeData(typeof(K), allowEmptySerializer: true);
+			SerializeData serializeData2 = GetSerializeData(typeof(V), allowEmptySerializer: true);
 			if (typeof(K) == typeof(string))
 			{
 				using (IEnumerator<XElement> enumerator = Node.Elements().GetEnumerator())
@@ -214,7 +212,7 @@ namespace Engine.Serialization
 						else
 						{
 							ReadObject(null, serializeData2, ref value, true);
-							dictionary.Add(key, (V)value);
+							dictionary.Add(key, value);
 						}
 						Node = Node.Parent;
 					}
@@ -230,13 +228,13 @@ namespace Engine.Serialization
                         K value3 = default(K);
                         V value4 = default(V);
 						ReadObject("k", serializeData, ref value3, true);
-						if (dictionary.TryGetValue((K)value3, out V value5))
+						if (dictionary.TryGetValue(value3, out V value5))
 						{
 							value4 = value5;
                             ReadObject("v", serializeData2, ref value4, allowOverwriteOfExistingObject: false);
 						}
 						ReadObject("v", serializeData2, ref value4, true);
-						dictionary.Add((K)value3, (V)value4);
+						dictionary.Add(value3, value4);
 						Node = Node.Parent;
 					}
 				}

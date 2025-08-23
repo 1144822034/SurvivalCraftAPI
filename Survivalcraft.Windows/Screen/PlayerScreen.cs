@@ -1,8 +1,8 @@
-using System.Xml.Linq;
 using Engine;
 using Engine.Graphics;
 using Engine.Input;
 using GameEntitySystem;
+using System.Xml.Linq;
 using TemplatesDatabase;
 
 namespace Game;
@@ -63,15 +63,15 @@ public class PlayerScreen : Screen
 
     public ButtonWidget m_playButton;
 
-    public static WidgetInputDevice[] m_allInputDevices = new WidgetInputDevice[6]
-    {
-        WidgetInputDevice.None,
+    public static WidgetInputDevice[] m_allInputDevices =
+    [
+	    WidgetInputDevice.None,
         WidgetInputDevice.Keyboard | WidgetInputDevice.Mouse,
         WidgetInputDevice.GamePad1,
         WidgetInputDevice.GamePad2,
         WidgetInputDevice.GamePad3,
         WidgetInputDevice.GamePad4
-    };
+    ];
 
     public static ReadOnlyList<WidgetInputDevice> AllInputDevices => new(m_allInputDevices);
 
@@ -171,7 +171,7 @@ public class PlayerScreen : Screen
         if (description.StartsWith('[') && description.EndsWith(']'))
         {
             string[] lp = description.Substring(1, description.Length - 2)
-                .Split(new string[] { ":" }, StringSplitOptions.RemoveEmptyEntries);
+                .Split([":"], StringSplitOptions.RemoveEmptyEntries);
             description = LanguageControl.GetDatabase("Description", lp[1]);
         }
 
@@ -197,7 +197,7 @@ public class PlayerScreen : Screen
                 delegate(object item)
                 {
                     XElement node = ContentManager.Get<XElement>("Widgets/CharacterSkinItem");
-                    ContainerWidget containerWidget = (ContainerWidget)Widget.LoadWidget(this, node, null);
+                    ContainerWidget containerWidget = (ContainerWidget)LoadWidget(this, node, null);
                     Texture2D texture = m_characterSkinsCache.GetTexture((string)item);
                     containerWidget.Children.Find<LabelWidget>("CharacterSkinItem.Text").Text =
                         CharacterSkinsManager.GetDisplayName((string)item);

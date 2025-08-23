@@ -1,9 +1,6 @@
 using Engine;
 using Engine.Graphics;
 using Engine.Media;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Runtime.InteropServices;
 
 namespace Game
@@ -41,12 +38,12 @@ namespace Game
 
 		public virtual BoundingBox CalculateBoundingBox()
 		{
-			return new BoundingBox(Vertices.Select((BlockMeshVertex v) => v.Position));
+			return new BoundingBox(Vertices.Select(v => v.Position));
 		}
 
 		public virtual BoundingBox CalculateBoundingBox(Matrix matrix)
 		{
-			return new BoundingBox(Vertices.Select((BlockMeshVertex v) => Vector3.Transform(v.Position, matrix)));
+			return new BoundingBox(Vertices.Select(v => Vector3.Transform(v.Position, matrix)));
 		}
 
 		public static Matrix GetBoneAbsoluteTransform(ModelBone modelBone)
@@ -653,8 +650,8 @@ namespace Game
 			}
 			for (int num3 = count; num3 < Vertices.Count; num3++)
 			{
-				Vertices.Array[num3].Position.X -= (float)(bounds.Left + bounds.Right) / 2f;
-				Vertices.Array[num3].Position.Y -= (float)(bounds.Top + bounds.Bottom) / 2f;
+				Vertices.Array[num3].Position.X -= (bounds.Left + bounds.Right) / 2f;
+				Vertices.Array[num3].Position.Y -= (bounds.Top + bounds.Bottom) / 2f;
 				Vertices.Array[num3].Position.Z -= 0.5f;
 				Vertices.Array[num3].Position.X *= scale.X;
 				Vertices.Array[num3].Position.Y *= 0f - scale.Y;

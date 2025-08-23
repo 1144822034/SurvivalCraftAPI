@@ -1,7 +1,6 @@
 using Engine;
 using Engine.Graphics;
 using Engine.Media;
-using System.Diagnostics;
 
 namespace Game.IContentReader
 {
@@ -13,7 +12,7 @@ namespace Game.IContentReader
 		{
 			if(contents.Length != 2)
 			{
-				throw new System.Exception("not matches content count");
+				throw new Exception("not matches content count");
 			}
 			ContentInfo contentInfo = contents[1];
 			Texture2D texture2D = ContentManager.Get<Texture2D>(contentInfo.ContentPath, contentInfo.ContentSuffix);

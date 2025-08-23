@@ -1,6 +1,4 @@
 using Engine;
-using System.Collections.Generic;
-using System.Linq;
 using TemplatesDatabase;
 
 namespace Game
@@ -18,17 +16,17 @@ namespace Game
 
 		public Dictionary<ComponentMiner, double> m_aimStartTimes = [];
 
-		public ArrowBlock.ArrowType[] m_supportedArrowTypes = new ArrowBlock.ArrowType[3]
-		{
+		public ArrowBlock.ArrowType[] m_supportedArrowTypes =
+		[
 			ArrowBlock.ArrowType.IronBolt,
 			ArrowBlock.ArrowType.DiamondBolt,
 			ArrowBlock.ArrowType.ExplosiveBolt
-		};
+		];
 
 		public int m_CrossbowBlockIndex;
 
 		public int m_ArrowBlockIndex;
-		public override int[] HandledBlocks => new int[0];
+		public override int[] HandledBlocks => [];
 
 		public override bool OnEditInventoryItem(IInventory inventory, int slotIndex, ComponentPlayer componentPlayer)
 		{
@@ -144,7 +142,6 @@ namespace Game
 				{
 					return 1;
 				}
-				return 0;
 			}
 			return 0;
 		}

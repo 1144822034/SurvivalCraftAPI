@@ -2,7 +2,6 @@ using Engine;
 using Engine.Graphics;
 using Engine.Media;
 using GameEntitySystem;
-using System;
 using TemplatesDatabase;
 
 namespace Game
@@ -35,10 +34,10 @@ namespace Game
 
 		public bool m_isUnderWater;
 
-		public static int[] m_drawOrders = new int[1]
-		{
+		public static int[] m_drawOrders =
+		[
 			1101
-		};
+		];
 
 		public float BlackoutFactor
 		{

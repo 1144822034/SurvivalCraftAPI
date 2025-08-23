@@ -2,10 +2,7 @@
 using Engine;
 using Engine.Graphics;
 using Engine.Media;
-using System;
 using System.Collections.Concurrent;
-using System.Collections.Generic;
-using System.IO;
 
 namespace Game
 {
@@ -27,9 +24,9 @@ namespace Game
 		}
 		public void SetContentStream(Stream stream)
 		{
-			if (stream is MemoryStream)
+			if (stream is MemoryStream memoryStream)
 			{
-				ContentStream = stream as MemoryStream;
+				ContentStream = memoryStream;
 				ContentStream.Position = 0L;
 			}
 			else

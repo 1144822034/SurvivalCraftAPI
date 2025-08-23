@@ -16,8 +16,8 @@ namespace Game
 
 		public double m_playAllowedTime;
 
-		public string[] m_tones = new string[16]
-		{
+		public string[] m_tones =
+		[
 			"",
 			"Bell",
 			"Organ",
@@ -34,15 +34,15 @@ namespace Game
 			"",
 			"",
 			"Piano"
-		};
+		];
 
-		public int[] m_maxOctaves = new int[16]
-		{
+		public int[] m_maxOctaves =
+		[
 			0, 6, 5, 6, 6, 6, 6, 6, 6, 0, 6, 0, 0, 0, 0, 6
-		};
+		];
 
-		public string[] m_drums = new string[10]
-		{
+		public string[] m_drums =
+		[
 			"Snare",
 			"BassDrum",
 			"ClosedHiHat",
@@ -53,7 +53,7 @@ namespace Game
 			"CrashCymbal",
 			"RideCymbal",
 			"HandClap"
-		};
+		];
 
 		public SoundGeneratorElectricElement(SubsystemElectricity subsystemElectricity, CellFace cellFace)
 			: base(subsystemElectricity, cellFace)

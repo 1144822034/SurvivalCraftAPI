@@ -1,8 +1,6 @@
 using Engine;
 using Engine.Graphics;
 using Engine.Serialization;
-using System;
-using System.Collections.Generic;
 
 namespace Game
 {
@@ -121,7 +119,7 @@ namespace Game
 		{
 			m_parsingPending = false;
 			var list = new List<Vector2>();
-			string[] array = m_pointsString.Split(new string[] { ";" }, StringSplitOptions.None);
+			string[] array = m_pointsString.Split([";"], StringSplitOptions.None);
 			foreach (string data in array)
 			{
 				list.Add(HumanReadableConverter.ConvertFromString<Vector2>(data));

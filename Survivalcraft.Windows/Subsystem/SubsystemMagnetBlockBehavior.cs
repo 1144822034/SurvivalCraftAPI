@@ -1,6 +1,5 @@
 using Engine;
 using Engine.Serialization;
-using System.Linq;
 using TemplatesDatabase;
 
 namespace Game
@@ -13,10 +12,10 @@ namespace Game
 
 		public const int MaxMagnets = 8;
 
-		public override int[] HandledBlocks => new int[1]
-		{
+		public override int[] HandledBlocks =>
+		[
 			167
-		};
+		];
 
 		public int MagnetsCount => m_magnets.Count;
 

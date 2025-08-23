@@ -1,7 +1,4 @@
 using Engine;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 
 namespace Game
 {
@@ -42,7 +39,7 @@ namespace Game
 			{
 				text = Guid.NewGuid().ToString();
 			}
-			m_users.Add(new UserInfo(text.ToString(), "Windows User"));
+			m_users.Add(new UserInfo(text, "Windows User"));
 		}
 
 		public static IEnumerable<UserInfo> GetUsers()
@@ -52,7 +49,7 @@ namespace Game
 
 		public static UserInfo GetUser(string uniqueId)
 		{
-			return GetUsers().FirstOrDefault((UserInfo u) => u.UniqueId == uniqueId);
+			return GetUsers().FirstOrDefault(u => u.UniqueId == uniqueId);
 		}
 	}
 }

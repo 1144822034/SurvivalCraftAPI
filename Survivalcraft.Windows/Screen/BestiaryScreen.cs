@@ -1,8 +1,5 @@
 using Engine;
 using Engine.Graphics;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Xml.Linq;
 using TemplatesDatabase;
 
@@ -112,7 +109,7 @@ namespace Game
 					}
 				}
 			}
-			foreach (BestiaryCreatureInfo item in list.OrderBy((BestiaryCreatureInfo ci) => ci.Order))
+			foreach (BestiaryCreatureInfo item in list.OrderBy(ci => ci.Order))
 			{
 				m_creaturesList.AddItem(item);
 			}

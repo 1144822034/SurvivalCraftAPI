@@ -2,9 +2,6 @@ using Engine;
 using Engine.Graphics;
 using Engine.Input;
 using Engine.Serialization;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Reflection;
 using System.Xml.Linq;
 using XmlUtilities;
@@ -654,7 +651,7 @@ namespace Game
 						}
 						Type type = FindTypeFromXmlName(array[0], (attribute.Name.NamespaceName != string.Empty) ? attribute.Name.NamespaceName : node.Name.NamespaceName);
 						string setterName = "Set" + array[1];
-						MethodInfo methodInfo = type.GetRuntimeMethods().FirstOrDefault((MethodInfo mi) => mi.Name == setterName && mi.IsPublic && mi.IsStatic);
+						MethodInfo methodInfo = type.GetRuntimeMethods().FirstOrDefault(mi => mi.Name == setterName && mi.IsPublic && mi.IsStatic);
 						if (!(methodInfo != null))
 						{
 							throw new InvalidOperationException($"Attached property public static setter method \"{setterName}\" not found, property \"{attribute.Name.LocalName}\" in widget of type \"{GetType().FullName}\".");
@@ -665,15 +662,16 @@ namespace Game
 							throw new InvalidOperationException($"Attached property setter method must take 2 parameters and first one must be of type Widget, property \"{attribute.Name.LocalName}\" in widget of type \"{GetType().FullName}\".");
 						}
 						object obj = HumanReadableConverter.ConvertFromString(parameters[1].ParameterType, attribute.Value);
-						methodInfo.Invoke(null, new object[2]
-						{
+						methodInfo.Invoke(null,
+						[
 							this,
 							obj
-						});
+						]
+						);
 					}
 					else
 					{
-						PropertyInfo propertyInfo = runtimeProperties.Where((PropertyInfo pi) => pi.Name == attribute.Name.LocalName).FirstOrDefault();
+						PropertyInfo propertyInfo = runtimeProperties.Where(pi => pi.Name == attribute.Name.LocalName).FirstOrDefault();
 						if (!(propertyInfo != null))
 						{
 							throw new InvalidOperationException($"Property \"{attribute.Name.LocalName}\" not found in widget of type \"{GetType().FullName}\".");

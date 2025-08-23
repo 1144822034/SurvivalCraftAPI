@@ -1,7 +1,5 @@
 using Engine;
-using Engine.Graphics;
-using System;
-using System.Collections.Generic;
+
 namespace Game
 {
 	public class TerrainChunk : IDisposable
@@ -67,15 +65,15 @@ namespace Game
 
 		public int[] Shafts;
 
-        public static ArrayCache<int> m_cellsCache = new ArrayCache<int>((IEnumerable<int>)new int[1] { Size * Size * Height }, 0.66f, 60f, 0.33f, 5f);
+        public static ArrayCache<int> m_cellsCache = new ArrayCache<int>([Size * Size * Height], 0.66f, 60f, 0.33f, 5f);
 
-        public static ArrayCache<int> m_shaftsCache = new ArrayCache<int>((IEnumerable<int>)new int[1] { Size * Size }, 0.66f, 60f, 0.33f, 5f);
+        public static ArrayCache<int> m_shaftsCache = new ArrayCache<int>([Size * Size], 0.66f, 60f, 0.33f, 5f);
 
 		public DynamicArray<BrushPaint> m_brushPaints = [];
 		
 		public TerrainGeometry[] ChunkSliceGeometries = new TerrainGeometry[SlicesCount];
 
-		public DynamicArray<TerrainChunkGeometry.Buffer> Buffers = new DynamicArray<TerrainChunkGeometry.Buffer>();
+		public DynamicArray<TerrainChunkGeometry.Buffer> Buffers = [];
 
 		public int[] SliceContentsHashes = new int[SlicesCount];
 
@@ -88,8 +86,8 @@ namespace Game
 			Origin = new Point2(x * Size, z * Size);
 			BoundingBox = new BoundingBox(new Vector3(Origin.X, 0f, Origin.Y), new Vector3(Origin.X + Size, Height, Origin.Y + Size));
 			Center = new Vector2((float)Origin.X + Size / 2, (float)Origin.Y + Size / 2);
-            Cells = TerrainChunk.m_cellsCache.Rent(Size * Size * Height, true);
-            Shafts = TerrainChunk.m_shaftsCache.Rent(Size * Size, true);
+            Cells = m_cellsCache.Rent(Size * Size * Height, true);
+            Shafts = m_shaftsCache.Rent(Size * Size, true);
         }
 
 		public virtual void DisposeVertexIndexBuffers()
@@ -117,11 +115,11 @@ namespace Game
 		public virtual void Dispose()
 		{
 			DisposeVertexIndexBuffers();
-            if (this.Geometry == null)
+            if (Geometry == null)
                 throw new InvalidOperationException();
-            this.Geometry = null;
-            TerrainChunk.m_cellsCache.Return(this.Cells);
-            TerrainChunk.m_shaftsCache.Return(this.Shafts);
+            Geometry = null;
+            m_cellsCache.Return(Cells);
+            m_shaftsCache.Return(Shafts);
         }
 
 		public static bool IsCellValid(int x, int y, int z)
@@ -148,18 +146,15 @@ namespace Game
 			{
 				return y | (x << HeightBits) | (z << 12);
 			}
-			else
+			int absY = Math.Abs(y);
+			int yUpperBits = absY >> HeightBits;
+			if (yUpperBits > 0x7FFF)
 			{
-				int absY = Math.Abs(y);
-				int yUpperBits = absY >> HeightBits;
-				if (yUpperBits > 0x7FFF)
-				{
-					throw new ArgumentOutOfRangeException(nameof(y), "Height is too large.");
-				}
-				int yLower8Bits = absY & 0xFF;
-				yUpperBits = yUpperBits & 0x7FFF;
-				return (((y < 0) ? 1 : 0) << 31) | (yUpperBits << 16) | (z << 12) | (x << HeightBits) | yLower8Bits;
+				throw new ArgumentOutOfRangeException(nameof(y), "Height is too large.");
 			}
+			int yLower8Bits = absY & 0xFF;
+			yUpperBits = yUpperBits & 0x7FFF;
+			return (((y < 0) ? 1 : 0) << 31) | (yUpperBits << 16) | (z << 12) | (x << HeightBits) | yLower8Bits;
 		}
 
 		public virtual int CalculateTopmostCellHeight(int x, int z)

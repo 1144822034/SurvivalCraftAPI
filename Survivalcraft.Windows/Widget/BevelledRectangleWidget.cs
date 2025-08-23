@@ -258,13 +258,13 @@ namespace Game
 			Color bevelColor = BevelColor;
 			Color shadowColor = ShadowColor;
 			bool flag = shadowColor != Color.Transparent && BevelSize > 0f;
-			float globalScale = base.GlobalScale;
+			float globalScale = GlobalScale;
 			if(globalScale != m_cachedPixelsPerUnit)
 			{
 				m_cachedPixelsPerUnit = globalScale;
 				m_cachedBatchesValid = false;
 			}
-			Vector2 vector = new Vector2(TextureScale) / base.RootWidget.GlobalScale;
+			Vector2 vector = new Vector2(TextureScale) / RootWidget.GlobalScale;
 			if(vector != m_cachedTextureScale)
 			{
 				m_cachedTextureScale = vector;
@@ -275,7 +275,7 @@ namespace Game
 			{
 				if(!m_cachedBatchesValid)
 				{
-					bool flatShading = m_points.Any((BevelledShapeRenderer.Point p) => p.RoundingCount == 0);
+					bool flatShading = m_points.Any(p => p.RoundingCount == 0);
 					m_cachedShadowBatch.Clear();
 					m_cachedTexturedBatch.Clear();
 					m_cachedTexturedBatch.Texture = Texture;
@@ -311,7 +311,7 @@ namespace Game
 					{
 						m_flatBatch = dc.PrimitivesRenderer2D.FlatBatch(0,DepthStencilState.None);
 					}
-					m_flatBatch.QueueBatch(m_cachedShadowBatch,Matrix.CreateTranslation(ShadowSize,ShadowSize,0f) * base.GlobalTransform,base.GlobalColorTransform);
+					m_flatBatch.QueueBatch(m_cachedShadowBatch,Matrix.CreateTranslation(ShadowSize,ShadowSize,0f) * GlobalTransform,GlobalColorTransform);
 				}
 				if(m_texturedBatch == null)
 				{
@@ -325,12 +325,12 @@ namespace Game
 						TextureLinearFilter ? SamplerState.LinearWrap : SamplerState.PointWrap
 					);
 				}
-				m_texturedBatch.QueueBatch(m_cachedTexturedBatch,base.GlobalTransform,base.GlobalColorTransform);
+				m_texturedBatch.QueueBatch(m_cachedTexturedBatch,GlobalTransform,GlobalColorTransform);
 				return;
 			}
 			if(!m_cachedBatchesValid)
 			{
-				bool flatShading2 = m_points.Any((BevelledShapeRenderer.Point p) => p.RoundingCount == 0);
+				bool flatShading2 = m_points.Any(p => p.RoundingCount == 0);
 				m_cachedShadowBatch.Clear();
 				m_cachedFlatBatch.Clear();
 				if(flag)
@@ -363,9 +363,9 @@ namespace Game
 			}
 			if(flag)
 			{
-				m_flatBatch.QueueBatch(m_cachedShadowBatch,Matrix.CreateTranslation(ShadowSize,ShadowSize,0f) * base.GlobalTransform,base.GlobalColorTransform);
+				m_flatBatch.QueueBatch(m_cachedShadowBatch,Matrix.CreateTranslation(ShadowSize,ShadowSize,0f) * GlobalTransform,GlobalColorTransform);
 			}
-			m_flatBatch.QueueBatch(m_cachedFlatBatch,base.GlobalTransform,base.GlobalColorTransform);
+			m_flatBatch.QueueBatch(m_cachedFlatBatch,GlobalTransform,GlobalColorTransform);
 		}
 
 		public override void MeasureOverride(Vector2 parentAvailableSize)
@@ -377,9 +377,9 @@ namespace Game
 		public override void ArrangeOverride()
 		{
 			Vector2 vector = new Vector2(0f, 0f);
-			Vector2 vector2 = new Vector2(base.ActualSize.X, 0f);
-			Vector2 vector3 = new Vector2(base.ActualSize.X, base.ActualSize.Y);
-			Vector2 vector4 = new Vector2(0f, base.ActualSize.Y);
+			Vector2 vector2 = new Vector2(ActualSize.X, 0f);
+			Vector2 vector3 = new Vector2(ActualSize.X, ActualSize.Y);
+			Vector2 vector4 = new Vector2(0f, ActualSize.Y);
 			if (vector != m_points[0].Position || vector2 != m_points[1].Position || vector3 != m_points[2].Position || vector4 != m_points[3].Position)
 			{
 				m_points[0] = new BevelledShapeRenderer.Point

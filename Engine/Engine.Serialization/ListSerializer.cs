@@ -1,5 +1,3 @@
-using System.Collections.Generic;
-
 namespace Engine.Serialization
 {
     public class ListSerializer<T> : ISerializer<List<T>>

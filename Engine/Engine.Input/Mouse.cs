@@ -1,9 +1,6 @@
-using System;
-using System.Drawing;
 #if ANDROID
 using Android.OS;
 using Android.Views;
-using Org.Libsdl.App;
 #else
 using Silk.NET.Input;
 #endif
@@ -315,9 +312,9 @@ namespace Engine.Input
 				m_mouseButtonsDownArray[(int)mouseButton] = true;
                 m_mouseButtonsDownFrameArray[(int)mouseButton] = Time.FrameIndex;
 				m_mouseButtonsDownOnceArray[(int)mouseButton] = true;
-				if (IsMouseVisible && Mouse.MouseDown != null)
+				if (IsMouseVisible && MouseDown != null)
 				{
-					Mouse.MouseDown(new MouseButtonEvent
+					MouseDown(new MouseButtonEvent
 					{
 						Button = mouseButton,
 						Position = position
@@ -343,9 +340,9 @@ namespace Engine.Input
                     m_mouseButtonsDownArray[(int)mouseButton] = false;
                     m_mouseButtonsUpOnceArray[(int)mouseButton] = true;
                 }
-				if (IsMouseVisible && Mouse.MouseUp != null)
+				if (IsMouseVisible && MouseUp != null)
 				{
-					Mouse.MouseUp(new MouseButtonEvent
+					MouseUp(new MouseButtonEvent
 					{
 						Button = mouseButton,
 						Position = position
@@ -359,7 +356,7 @@ namespace Engine.Input
 			if (Window.IsActive && !Keyboard.IsKeyboardVisible && IsMouseVisible)
 			{
 				MousePosition = position;
-				Mouse.MouseMove?.Invoke(new MouseEvent
+				MouseMove?.Invoke(new MouseEvent
 				{
 					Position = position
 				});

@@ -1,7 +1,5 @@
 using Engine;
 using Engine.Graphics;
-using System;
-using System.Linq;
 
 namespace Game
 {
@@ -29,12 +27,12 @@ namespace Game
 			for (int i = 0; i < 4; i++)
 			{
 				m_matricesByData[i] = Matrix.CreateScale(1.5f) * Matrix.CreateTranslation(0.95f, 0.15f, 0.5f) * Matrix.CreateTranslation(-0.5f, 0f, -0.5f) * Matrix.CreateRotationY((i + 1) * (float)Math.PI / 2f) * Matrix.CreateTranslation(0.5f, 0f, 0.5f);
-				m_collisionBoxesByData[i] = new BoundingBox[1]
-				{
+				m_collisionBoxesByData[i] =
+				[
 					m_caseMesh.CalculateBoundingBox(m_matricesByData[i])
-				};
+				];
 			}
-			m_fluidBottomPosition = m_fluidMesh.Vertices.Min((BlockMeshVertex v) => v.Position.Y);
+			m_fluidBottomPosition = m_fluidMesh.Vertices.Min(v => v.Position.Y);
 			base.Initialize();
 		}
 
@@ -99,7 +97,7 @@ namespace Game
 			if (num < m_matricesByData.Length)
 			{
 				int num2 = (generator.SubsystemMetersBlockBehavior != null) ? generator.SubsystemMetersBlockBehavior.GetThermometerReading(x, y, z) : 8;
-				float y2 = MathUtils.Lerp(1.02f,3.91f,MathUtils.Saturate((float)num2 / 20f));
+				float y2 = MathUtils.Lerp(1.02f,3.91f,MathUtils.Saturate(num2 / 20f));
 				Matrix matrix = m_matricesByData[num];
 				Matrix value2 = Matrix.CreateTranslation(0f, 0f - m_fluidBottomPosition, 0f) * Matrix.CreateScale(1f, y2, 1f) * Matrix.CreateTranslation(0f, m_fluidBottomPosition, 0f) * matrix;
 				generator.GenerateMeshVertices(this, x, y, z, m_caseMesh, Color.White, matrix, geometry.SubsetOpaque);

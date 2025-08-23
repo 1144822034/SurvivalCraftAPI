@@ -1,8 +1,6 @@
 using Engine;
 using Engine.Graphics;
 using GameEntitySystem;
-using System;
-using System.Collections.Generic;
 using TemplatesDatabase;
 
 namespace Game
@@ -19,10 +17,10 @@ namespace Game
 
 		public bool ParticleSystemsSimulate = true;
 
-		public int[] m_drawOrders = new int[1]
-		{
+		public int[] m_drawOrders =
+		[
 			300
-		};
+		];
 
 		public List<ParticleSystemBase> m_endedParticleSystems = [];
 
@@ -64,7 +62,7 @@ namespace Game
 		public override void Load(ValuesDictionary valuesDictionary)
 		{
 			m_subsystemTime = Project.FindSubsystem<SubsystemTime>(throwOnError: true);
-			SubsystemSky = base.Project.FindSubsystem<SubsystemSky>(throwOnError: true);
+			SubsystemSky = Project.FindSubsystem<SubsystemSky>(throwOnError: true);
 		}
 
 		public virtual void Update(float dt)

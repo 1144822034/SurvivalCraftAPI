@@ -1,6 +1,5 @@
 using Engine;
 using System.Globalization;
-using System.IO;
 using System.Security.Cryptography;
 using System.Text;
 using System.Text.Json;
@@ -615,7 +614,7 @@ namespace Game
 
 		public static string MakeContentIdString(ExternalContentType type, string name)
 		{
-			return type.ToString() + ":" + name;
+			return type + ":" + name;
 		}
 
 		public static void Load()

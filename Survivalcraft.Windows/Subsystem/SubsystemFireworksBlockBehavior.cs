@@ -1,5 +1,4 @@
 using Engine;
-using System;
 using TemplatesDatabase;
 
 namespace Game
@@ -28,7 +27,7 @@ namespace Game
 
 		public const string fName = "SubsystemFireworksBlockBehavior";
 
-		public override int[] HandledBlocks => new int[0];
+		public override int[] HandledBlocks => [];
 
 		public UpdateOrder UpdateOrder => UpdateOrder.Default;
 

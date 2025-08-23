@@ -1,7 +1,5 @@
 using Engine;
 using Engine.Graphics;
-using System;
-using System.Collections.Generic;
 
 namespace Game
 {
@@ -40,10 +38,10 @@ namespace Game
 				m_sidesBlockMeshes[i] = new BlockMesh();
 				m_sidesBlockMeshes[i].AppendModelMeshPart(model.FindMesh("Sides").MeshParts[0], boneAbsoluteTransform2 * m, makeEmissive: false, flipWindingOrder: false, doubleSided: true, flipNormals: false, Color.White);
 				m_sidesBlockMeshes[i].TransformTextureCoordinates(Matrix.CreateTranslation(0.9375f, 0.1875f, 0f));
-				m_collisionBoxes[i] = new BoundingBox[1]
-				{
+				m_collisionBoxes[i] =
+				[
 					m_sidesBlockMeshes[i].CalculateBoundingBox()
-				};
+				];
 			}
 			Matrix m2 = Matrix.CreateRotationY(-(float)Math.PI / 2f) * Matrix.CreateRotationZ((float)Math.PI / 2f);
 			m_standaloneBulbBlockMesh.AppendModelMeshPart(model.FindMesh("Top").MeshParts[0], boneAbsoluteTransform * m2, makeEmissive: false, flipWindingOrder: false, doubleSided: true, flipNormals: false, Color.White);

@@ -1,6 +1,5 @@
 using Engine;
 using Engine.Graphics;
-using System;
 
 namespace Game
 {
@@ -38,10 +37,10 @@ namespace Game
 				boundingBox.Min.Z = 0f;
 				boundingBox.Max.X = 1f;
 				boundingBox.Max.Z = 1f;
-				m_collisionBoxesByData[i] = new BoundingBox[1]
-				{
+				m_collisionBoxesByData[i] =
+				[
 					boundingBox
-				};
+				];
 			}
 			m_standaloneMesh.AppendModelMeshPart(model.FindMesh("Wood").MeshParts[0], boneAbsoluteTransform * Matrix.CreateScale(3f) * Matrix.CreateTranslation(0f, 0f, 0f), makeEmissive: false, flipWindingOrder: false, doubleSided: true, flipNormals: false, Color.White);
 			m_standaloneMesh.AppendModelMeshPart(model.FindMesh("Ashes").MeshParts[0], boneAbsoluteTransform2 * Matrix.CreateScale(3f) * Matrix.CreateTranslation(0f, 0f, 0f), makeEmissive: false, flipWindingOrder: false, doubleSided: true, flipNormals: false, Color.White);

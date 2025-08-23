@@ -1,9 +1,9 @@
+using Engine;
+using Game;
 using System.Globalization;
 using System.Security.Cryptography;
 using System.Text;
 using System.Xml.Linq;
-using Engine;
-using Game;
 using XmlUtilities;
 
 public static class OriginalCommunityContentManager
@@ -321,7 +321,7 @@ public static class OriginalCommunityContentManager
 
 	private static string MakeContentIdString(ExternalContentType type, string name)
 	{
-		return type.ToString() + ":" + name;
+		return type + ":" + name;
 	}
 
 	private static void Load()

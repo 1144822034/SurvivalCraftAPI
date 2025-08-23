@@ -1,6 +1,5 @@
 using Engine;
 using Engine.Graphics;
-using System;
 
 namespace Game
 {
@@ -40,10 +39,10 @@ namespace Game
 				m_blockMeshesByData[i].AppendModelMeshPart(model.FindMesh("Door").MeshParts[0], boneAbsoluteTransform * identity, makeEmissive: false, !rightHanded, doubleSided: false, flipNormals: false, Color.White);
 				BoundingBox boundingBox = m_blockMeshesByData[i].CalculateBoundingBox();
 				boundingBox.Max.Y = 1f;
-				m_collisionBoxesByData[i] = new BoundingBox[1]
-				{
+				m_collisionBoxesByData[i] =
+				[
 					boundingBox
-				};
+				];
 			}
 			m_standaloneBlockMesh.AppendModelMeshPart(model.FindMesh("Door").MeshParts[0], boneAbsoluteTransform * Matrix.CreateTranslation(0f, -1f, 0f), makeEmissive: false, flipWindingOrder: false, doubleSided: false, flipNormals: false, Color.White);
 			base.Initialize();

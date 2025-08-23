@@ -232,13 +232,13 @@ namespace Game
 			if(!Eye.HasValue)
 			{
 				float viewAngle = 80f * SettingsManager.ViewAngle;
-				ViewWidget viewWidget = base.GameWidget.ViewWidget;
+				ViewWidget viewWidget = GameWidget.ViewWidget;
 				float aspectRatio = viewWidget.ActualSize.X / viewWidget.ActualSize.Y; //视野长宽比
 				result = Matrix.CreatePerspectiveFieldOfView(MathUtils.DegToRad(viewAngle),aspectRatio,0.1f,2048f); //参数1视野Y宽度，参数2纵横比，参数3近平面，参数4远平面
 			}
 			else
 			{
-				result = VrManager.GetProjectionMatrix(base.Eye.Value, 0.1f, 2048f);
+				result = VrManager.GetProjectionMatrix(Eye.Value, 0.1f, 2048f);
 			}
 			ModsManager.HookAction("RecalculateCameraProjection",loader => {
 				loader.RecalculateCameraProjection(this, ref result);

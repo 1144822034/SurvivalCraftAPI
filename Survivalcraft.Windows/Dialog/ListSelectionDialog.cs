@@ -1,6 +1,4 @@
 using Engine;
-using System;
-using System.Collections;
 using System.Xml.Linq;
 
 namespace Game
@@ -70,7 +68,7 @@ namespace Game
 		}
 
 		public ListSelectionDialog(string title, IEnumerable items, float itemSize, Func<object, string> itemToStringConverter, Action<object> selectionHandler)
-			: this(title, items, itemSize, (object item) => new LabelWidget
+			: this(title, items, itemSize, item => new LabelWidget
 			{
 				Text = itemToStringConverter(item),
 				HorizontalAlignment = WidgetAlignment.Center,

@@ -141,7 +141,7 @@ public static class MultiKeyboard
 			_KeyboardData[keyboardIndex].KeysDownOnceArray[(int)key] = true;
 			_KeyboardData[keyboardIndex].KeysDownRepeatArray[(int)key] = -1.0;
 		}
-		MultiKeyboard.KeyDown?.Invoke(keyboardIndex, key);
+		KeyDown?.Invoke(keyboardIndex, key);
 		return true;
 	}
 
@@ -155,7 +155,7 @@ public static class MultiKeyboard
 		{
 			_KeyboardData[keyboardIndex].KeysDownArray[(int)key] = false;
 		}
-		MultiKeyboard.KeyUp?.Invoke(keyboardIndex, key);
+		KeyUp?.Invoke(keyboardIndex, key);
 		return true;
 	}
 
@@ -166,7 +166,7 @@ public static class MultiKeyboard
 			return false;
 		}
 		_KeyboardData[keyboardIndex].LastChar = ch;
-		MultiKeyboard.CharacterEntered?.Invoke(keyboardIndex, ch);
+		CharacterEntered?.Invoke(keyboardIndex, ch);
 		return true;
 	}
 

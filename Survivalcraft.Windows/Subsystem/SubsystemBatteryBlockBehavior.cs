@@ -2,10 +2,10 @@ namespace Game
 {
 	public class SubsystemBatteryBlockBehavior : SubsystemBlockBehavior
 	{
-		public override int[] HandledBlocks => new int[1]
-		{
+		public override int[] HandledBlocks =>
+		[
 			138
-		};
+		];
 
 		public override bool OnEditInventoryItem(IInventory inventory, int slotIndex, ComponentPlayer componentPlayer)
 		{

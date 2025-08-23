@@ -1,5 +1,4 @@
 using Engine;
-using System;
 
 namespace Game
 {
@@ -13,35 +12,35 @@ namespace Game
 
 		public int Face;
 
-		public static readonly int[] m_oppositeFaces = new int[6]
-		{
+		public static readonly int[] m_oppositeFaces =
+		[
 			2,
 			3,
 			0,
 			1,
 			5,
 			4
-		};
+		];
 
-		public static readonly Point3[] m_faceToPoint3 = new Point3[6]
-		{
+		public static readonly Point3[] m_faceToPoint3 =
+		[
 			new(0, 0, 1),
 			new(1, 0, 0),
 			new(0, 0, -1),
 			new(-1, 0, 0),
 			new(0, 1, 0),
 			new(0, -1, 0)
-		};
+		];
 
-		public static readonly Vector3[] m_faceToVector3 = new Vector3[6]
-		{
+		public static readonly Vector3[] m_faceToVector3 =
+		[
 			new(0f, 0f, 1f),
 			new(1f, 0f, 0f),
 			new(0f, 0f, -1f),
 			new(-1f, 0f, 0f),
 			new(0f, 1f, 0f),
 			new(0f, -1f, 0f)
-		};
+		];
 
 		public Point3 Point
 		{
@@ -173,7 +172,7 @@ namespace Game
 
 		public override string ToString()
 		{
-			return X.ToString() + ", " + Y.ToString() + ", " + Z.ToString() + ", face " + Face.ToString();
+			return X + ", " + Y + ", " + Z + ", face " + Face;
 		}
 
 		public static bool operator ==(CellFace c1, CellFace c2)

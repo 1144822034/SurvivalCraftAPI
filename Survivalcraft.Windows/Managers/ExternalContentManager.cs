@@ -1,9 +1,5 @@
 using Engine;
-using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Threading.Tasks;
+
 namespace Game {
     public static class ExternalContentManager {
         public static List<IExternalContentProvider> m_providers;
@@ -38,7 +34,7 @@ namespace Game {
         public static ExternalContentType ExtensionToType(string extension) {
             extension = extension.ToLower();
             foreach (ExternalContentType value in Enum.GetValues(typeof(ExternalContentType))) {
-                if (GetEntryTypeExtensions(value).FirstOrDefault((string e) => e == extension) != null) {
+                if (GetEntryTypeExtensions(value).FirstOrDefault(e => e == extension) != null) {
                     return value;
                 }
             }

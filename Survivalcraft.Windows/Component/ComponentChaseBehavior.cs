@@ -1,8 +1,7 @@
 using Engine;
 using GameEntitySystem;
-using System;
-using System.Collections.Generic;
 using TemplatesDatabase;
+
 namespace Game
 {
 	public class ComponentChaseBehavior : ComponentBehavior, IUpdateable

@@ -14,21 +14,21 @@ namespace Game
 
 			public MovingBlock MovingBlock;
 
-			public string[] Lines = new string[4]
-			{
+			public string[] Lines =
+			[
 				string.Empty,
 				string.Empty,
 				string.Empty,
 				string.Empty
-			};
+			];
 
-			public Color[] Colors = new Color[4]
-			{
+			public Color[] Colors =
+			[
 				Color.Black,
 				Color.Black,
 				Color.Black,
 				Color.Black
-			};
+			];
 
 			public string Url = string.Empty;
 
@@ -87,19 +87,19 @@ namespace Game
 
 		public bool CopySignsText;
 
-		public static int[] m_drawOrders = new int[1]
-		{
+		public static int[] m_drawOrders =
+		[
 			50
-		};
+		];
 
-		public override int[] HandledBlocks => new int[5]
-		{
+		public override int[] HandledBlocks =>
+		[
 			23,
 			97,
 			98,
 			210,
 			211
-		};
+		];
 
 
 
@@ -252,19 +252,19 @@ namespace Game
 				Color value8 = value11.GetValue("Color3", Color.Black);
 				Color value9 = value11.GetValue("Color4", Color.Black);
 				string value10 = value11.GetValue("Url", string.Empty);
-				SetSignData(value, new string[4]
-				{
-					value2,
+				SetSignData(value,
+					[
+						value2,
 					value3,
 					value4,
 					value5
-				}, new Color[4]
-				{
-					value6,
+					],
+					[
+						value6,
 					value7,
 					value8,
 					value9
-				}, value10,
+					], value10,
 				movingBlock);
 			}
 			Display.DeviceReset += Display_DeviceReset;
@@ -395,7 +395,7 @@ namespace Game
 			}
 			if (list.Count > 0)
 			{
-				float num = list.Max((string l) => l.Length) * m_font.GlyphHeight * m_fontScale;
+				float num = list.Max(l => l.Length) * m_font.GlyphHeight * m_fontScale;
 				float num2 = list.Count * m_font.GlyphHeight * m_fontScale;
 				float num3 = 4f;
 				float num4;
@@ -413,7 +413,7 @@ namespace Game
 				bool flag = !string.IsNullOrEmpty(textData.Url);
 				for (int j = 0; j < list.Count; j++)
 				{
-					fontBatch.QueueText(position: new Vector2(num4 / 2f, ((float)j * m_font.GlyphHeight * m_fontScale) + ((float)textData.TextureLocation.Value * (4f * m_font.GlyphHeight * m_fontScale)) + ((num5 - num2) / 2f)), text: list[j], depth: 0f, color: flag ? new Color(0, 0, 64) : list2[j], anchor: TextAnchor.HorizontalCenter, scale: new Vector2(1f / m_font.Scale * m_fontScale), spacing: Vector2.Zero);
+					fontBatch.QueueText(position: new Vector2(num4 / 2f, (j * m_font.GlyphHeight * m_fontScale) + (textData.TextureLocation.Value * (4f * m_font.GlyphHeight * m_fontScale)) + ((num5 - num2) / 2f)), text: list[j], depth: 0f, color: flag ? new Color(0, 0, 64) : list2[j], anchor: TextAnchor.HorizontalCenter, scale: new Vector2(1f / m_font.Scale * m_fontScale), spacing: Vector2.Zero);
 				}
 				textData.UsedTextureWidth = num4;
 				textData.UsedTextureHeight = num5;
@@ -444,7 +444,7 @@ namespace Game
 				return;
 			}
 			m_lastUpdatePositions.Clear();
-			m_lastUpdatePositions.AddRange(m_subsystemViews.GameWidgets.Select((GameWidget v) => v.ActiveCamera.ViewPosition));
+			m_lastUpdatePositions.AddRange(m_subsystemViews.GameWidgets.Select(v => v.ActiveCamera.ViewPosition));
 			m_nearTexts.Clear();
 			foreach (TextData value in m_textsByPoint.Values)
 			{
@@ -467,7 +467,7 @@ namespace Game
 					m_nearTexts.Add(value);
 				}
 			}
-			m_nearTexts.Sort((TextData d1, TextData d2) => Comparer<float>.Default.Compare(d1.Distance, d2.Distance));
+			m_nearTexts.Sort((d1,d2) => Comparer<float>.Default.Compare(d1.Distance, d2.Distance));
 			if (m_nearTexts.Count > m_maxTexts)
 			{
 				m_nearTexts.RemoveRange(m_maxTexts, m_nearTexts.Count - m_maxTexts);
@@ -484,10 +484,10 @@ namespace Game
 				{
 					continue;
 				}
-				int num2 = m_textureLocations.FirstIndex((TextData d) => d == null);
+				int num2 = m_textureLocations.FirstIndex(d => d == null);
 				if (num2 < 0 || num2 >= m_maxTexts)
 				{
-					num2 = m_textureLocations.FirstIndex((TextData d) => d.ToBeRenderedFrame != Time.FrameIndex);
+					num2 = m_textureLocations.FirstIndex(d => d.ToBeRenderedFrame != Time.FrameIndex);
 				}
 				if (num2 >= 0)
 				{
@@ -563,7 +563,7 @@ namespace Game
 					float x = 0f;
 					float x2 = nearText.UsedTextureWidth / (m_font.GlyphHeight * 16f * m_fontScale);
 					float x3 = (float)nearText.TextureLocation.Value / m_maxTexts;
-					float x4 = ((float)nearText.TextureLocation.Value + (nearText.UsedTextureHeight / (m_font.GlyphHeight * 4f * m_fontScale))) / m_maxTexts;
+					float x4 = (nearText.TextureLocation.Value + (nearText.UsedTextureHeight / (m_font.GlyphHeight * 4f * m_fontScale))) / m_maxTexts;
 					Vector3 signSurfaceNormal = signBlock.GetSignSurfaceNormal(data);
 					Vector3 vector = new(nearText.Point.X, nearText.Point.Y, nearText.Point.Z);
 					if(!MovingBlock.IsNullOrStopped(nearText.MovingBlock))

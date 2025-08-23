@@ -1,6 +1,3 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Reflection;
 
 namespace Engine.Serialization
@@ -86,7 +83,7 @@ namespace Engine.Serialization
 			if (!string.IsNullOrEmpty(data))
 			{
 #if ANDROID
-				string[] array = data.Split(new char[] { separator }, StringSplitOptions.None);
+				string[] array = data.Split([separator], StringSplitOptions.None);
 #else
 				string[] array = data.Split(separator);
 #endif
@@ -97,7 +94,7 @@ namespace Engine.Serialization
 				}
 				return array2;
 			}
-			return new T[0];
+			return [];
 		}
 
 		private static IHumanReadableConverter GetConverter(Type type, bool throwIfNotFound)
@@ -134,7 +131,7 @@ namespace Engine.Serialization
 
 		private static void ScanAssembliesForConverters()
 		{
-			foreach (Assembly item in TypeCache.LoadedAssemblies.Where((Assembly a) => !TypeCache.IsKnownSystemAssembly(a)))
+			foreach (Assembly item in TypeCache.LoadedAssemblies.Where(a => !TypeCache.IsKnownSystemAssembly(a)))
 			{
 				if (!m_scannedAssemblies.Contains(item))
 				{

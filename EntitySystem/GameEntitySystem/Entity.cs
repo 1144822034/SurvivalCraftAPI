@@ -1,4 +1,3 @@
-using Engine;
 using Engine.Serialization;
 using System;
 using System.Collections;
@@ -153,7 +152,7 @@ namespace GameEntitySystem
 			}
 			EntityComponentsInitialized.Invoke(this, list);
 			// 按调整后的 LoadOrder 排序
-			list.Sort((KeyValuePair<int,Component> x,KeyValuePair<int,Component> y) => x.Key - y.Key);
+			list.Sort((x,y) => x.Key - y.Key);
 			m_components = new List<Component>(list.Select(x => x.Value));
 		}
 
@@ -290,12 +289,12 @@ namespace GameEntitySystem
 
 		internal void FireEntityAddedEvent()
 		{
-			this.EntityAdded?.Invoke(this, EventArgs.Empty);
+			EntityAdded?.Invoke(this, EventArgs.Empty);
 		}
 
 		internal void FireEntityRemovedEvent()
 		{
-			this.EntityRemoved?.Invoke(this, EventArgs.Empty);
+			EntityRemoved?.Invoke(this, EventArgs.Empty);
 		}
 	}
 }

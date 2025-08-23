@@ -37,7 +37,7 @@ namespace Game
 			dt = MathUtils.Min(dt, 0.1f);
 			Vector3 zero = Vector3.Zero;
 			Vector2 vector = Vector2.Zero;
-			ComponentInput componentInput = base.GameWidget.PlayerData.ComponentPlayer?.ComponentInput;
+			ComponentInput componentInput = GameWidget.PlayerData.ComponentPlayer?.ComponentInput;
 			if (componentInput != null)
 			{
 				zero = componentInput.PlayerInput.CameraMove * new Vector3(1f, 0f, 1f);

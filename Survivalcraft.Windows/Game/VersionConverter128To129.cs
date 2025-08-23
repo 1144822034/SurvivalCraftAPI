@@ -1,7 +1,5 @@
 using Engine;
 using Engine.Serialization;
-using System.IO;
-using System.Linq;
 using System.Xml.Linq;
 using XmlUtilities;
 
@@ -100,15 +98,15 @@ namespace Game
 					}
 				}
 			}
-			string[] inventoryNames = new string[6]
-			{
+			string[] inventoryNames =
+			[
 				"Inventory",
 				"CreativeInventory",
 				"CraftingTable",
 				"Chest",
 				"Furnace",
 				"Dispenser"
-			};
+			];
 			foreach (XElement item17 in projectNode.Element("Entities").Elements())
 			{
 				foreach (XElement item18 in from e in item17.Elements("Values")

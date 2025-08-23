@@ -1,6 +1,5 @@
 using Engine;
 using Engine.Graphics;
-using System;
 
 namespace Game
 {
@@ -17,11 +16,11 @@ namespace Game
 		public override void Initialize()
 		{
 			Model model = ContentManager.Get<Model>("Models/SpikedPlanks");
-			string[] array = new string[2]
-			{
+			string[] array =
+			[
 				"SpikedPlankRetracted",
 				"SpikedPlank"
-			};
+			];
 			for (int i = 0; i < 2; i++)
 			{
 				string name = array[i];
@@ -32,10 +31,10 @@ namespace Game
 					Matrix m = (j >= 4) ? ((j != 4) ? (Matrix.CreateRotationX((float)Math.PI) * Matrix.CreateTranslation(0.5f, 1f, 0.5f)) : Matrix.CreateTranslation(0.5f, 0f, 0.5f)) : (Matrix.CreateRotationX((float)Math.PI / 2f) * Matrix.CreateTranslation(0f, 0f, -0.5f) * Matrix.CreateRotationY(j * (float)Math.PI / 2f) * Matrix.CreateTranslation(0.5f, 0.5f, 0.5f));
 					m_blockMeshesByData[num] = new BlockMesh();
 					m_blockMeshesByData[num].AppendModelMeshPart(model.FindMesh(name).MeshParts[0], boneAbsoluteTransform * m, makeEmissive: false, flipWindingOrder: false, doubleSided: false, flipNormals: false, Color.White);
-					m_collisionBoxesByData[num] = new BoundingBox[1]
-					{
+					m_collisionBoxesByData[num] =
+					[
 						m_blockMeshesByData[num].CalculateBoundingBox()
-					};
+					];
 				}
 				Matrix identity = Matrix.Identity;
 				m_standaloneBlockMesh.AppendModelMeshPart(model.FindMesh(name).MeshParts[0], boneAbsoluteTransform * identity, makeEmissive: false, flipWindingOrder: false, doubleSided: false, flipNormals: false, Color.White);

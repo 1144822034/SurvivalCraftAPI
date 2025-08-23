@@ -1,4 +1,3 @@
-using System;
 using Engine;
 using Engine.Graphics;
 
@@ -44,14 +43,14 @@ public class LeavesParticleSystem : ParticleSystem<LeavesParticleSystem.Particle
 		m_point = point;
 		m_fadeIn = fadeIn;
 		m_createFallenLeaves = createFallenLeaves;
-		base.Texture = ContentManager.Get<Texture2D>("Textures/LeafParticle");
-		base.TextureSlotsCount = 1;
+		Texture = ContentManager.Get<Texture2D>("Textures/LeafParticle");
+		TextureSlotsCount = 1;
 		Color color = ((BlocksManager.Blocks[Terrain.ExtractContents(value)] is LeavesBlock leavesBlock) ? leavesBlock.GetLeavesBlockColor(value, m_subsystemTerrain.Terrain, point.X, point.Y, point.Z) : Color.Transparent);
-		for (int i = 0; i < base.Particles.Length; i++)
+		for (int i = 0; i < Particles.Length; i++)
 		{
 			float f = m_random.Float();
 			Color color2 = Color.Lerp(new Color(180, 120, 120), new Color(200, 255, 255), m_random.Float(0f, 1f));
-			Particle particle = base.Particles[i];
+			Particle particle = Particles[i];
 			particle.IsActive = true;
 			particle.EndTime = 12f;
 			particle.Position = new Vector3(point) + new Vector3(0.5f) + 0.45f * new Vector3(m_random.Float(-1f, 1f), MathUtils.Lerp(1f, -1f, f), m_random.Float(-1f, 1f));
@@ -64,7 +63,7 @@ public class LeavesParticleSystem : ParticleSystem<LeavesParticleSystem.Particle
 			particle.Phase = m_random.Float(0f, (float)Math.PI * 2f);
 			particle.PhaseSpeed = 2f * particle.Speed * m_random.Float(0.75f, 1.25f);
 			particle.Angle = m_random.Float(0f, (float)Math.PI * 2f);
-			particle.AngleSpeed = (float)m_random.Sign() * m_random.Float(1f, 3f);
+			particle.AngleSpeed = m_random.Sign() * m_random.Float(1f, 3f);
 			particle.FlipX = m_random.Bool();
 			particle.FlipY = m_random.Bool();
 		}
@@ -74,9 +73,9 @@ public class LeavesParticleSystem : ParticleSystem<LeavesParticleSystem.Particle
 	{
 		Terrain terrain = m_subsystemTerrain.Terrain;
 		bool flag = false;
-		for (int i = 0; i < base.Particles.Length; i++)
+		for (int i = 0; i < Particles.Length; i++)
 		{
-			Particle particle = base.Particles[i];
+			Particle particle = Particles[i];
 			if (!particle.IsActive)
 			{
 				continue;
@@ -130,7 +129,7 @@ public class LeavesParticleSystem : ParticleSystem<LeavesParticleSystem.Particle
 					if (num8.HasValue && num8 < num7 - 0f)
 					{
 						particle.BillboardingMode = ParticleBillboardingMode.Horizontal;
-						particle.Position = ray.Sample(num8.Value) + new Vector3(num2, (float)num3 + 0.03f, num4);
+						particle.Position = ray.Sample(num8.Value) + new Vector3(num2, num3 + 0.03f, num4);
 						particle.EndTime = particle.Time + 2f;
 						if (m_createFallenLeaves)
 						{

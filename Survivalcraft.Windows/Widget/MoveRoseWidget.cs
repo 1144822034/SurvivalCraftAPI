@@ -1,7 +1,6 @@
 using Engine;
 using Engine.Graphics;
 using Engine.Input;
-using System;
 
 namespace Game
 {

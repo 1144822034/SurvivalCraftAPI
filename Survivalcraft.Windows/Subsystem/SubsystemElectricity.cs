@@ -1,7 +1,5 @@
 using Engine;
 using GameEntitySystem;
-using System;
-using System.Collections.Generic;
 using System.Diagnostics;
 using System.Globalization;
 using System.Text;
@@ -12,8 +10,8 @@ namespace Game
 	public class SubsystemElectricity : Subsystem, IUpdateable
 	{
 
-		public static ElectricConnectionPath[] m_connectionPathsTable = new ElectricConnectionPath[120]
-		{
+		public static ElectricConnectionPath[] m_connectionPathsTable =
+		[
 			new(0, 1, -1, 4, 4, 0),
 			new(0, 1, 0, 0, 4, 5),
 			new(0, 1, -1, 2, 4, 5),
@@ -134,10 +132,10 @@ namespace Game
 			null,
 			null,
 			null
-		};
+		];
 
-		public static ElectricConnectorDirection?[] m_connectorDirectionsTable = new ElectricConnectorDirection?[36]
-		{
+		public static ElectricConnectorDirection?[] m_connectorDirectionsTable =
+		[
 			null,
 			ElectricConnectorDirection.Right,
 			ElectricConnectorDirection.In,
@@ -174,10 +172,10 @@ namespace Game
 			ElectricConnectorDirection.Left,
 			ElectricConnectorDirection.In,
 			null
-		};
+		];
 
-		public static int[] m_connectorFacesTable = new int[30]
-		{
+		public static int[] m_connectorFacesTable =
+		[
 			4,
 			3,
 			5,
@@ -208,7 +206,7 @@ namespace Game
 			2,
 			3,
 			4
-		};
+		];
 
 		public float m_remainingSimulationTime;
 
@@ -505,16 +503,16 @@ namespace Game
 			SubsystemTerrain = Project.FindSubsystem<SubsystemTerrain>(throwOnError: true);
 			SubsystemTime = Project.FindSubsystem<SubsystemTime>(throwOnError: true);
 			SubsystemAudio = Project.FindSubsystem<SubsystemAudio>(throwOnError: true);
-			string[] array = valuesDictionary.GetValue<string>("VoltagesByCell").Split(new char[1]
-			{
+			string[] array = valuesDictionary.GetValue<string>("VoltagesByCell").Split(
+			[
 				';'
-			}, StringSplitOptions.RemoveEmptyEntries);
+			], StringSplitOptions.RemoveEmptyEntries);
 			int num = 0;
 			while (true)
 			{
 				if (num < array.Length)
 				{
-					string[] array2 = array[num].Split(new string[] { "," }, StringSplitOptions.None);
+					string[] array2 = array[num].Split([","], StringSplitOptions.None);
 					if (array2.Length != 4)
 					{
 						break;
@@ -650,7 +648,7 @@ namespace Game
 			}
 			foreach (ElectricConnection connection in electricElement.Connections)
 			{
-				int num = connection.NeighborElectricElement.Connections.FirstIndex((ElectricConnection c) => c.NeighborElectricElement == electricElement);
+				int num = connection.NeighborElectricElement.Connections.FirstIndex(c => c.NeighborElectricElement == electricElement);
 				if (num >= 0)
 				{
 					connection.NeighborElectricElement.Connections.RemoveAt(num);

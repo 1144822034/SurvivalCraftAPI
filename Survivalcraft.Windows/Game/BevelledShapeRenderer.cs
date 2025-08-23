@@ -1,5 +1,3 @@
-using System;
-using System.Collections.Generic;
 using Engine;
 using Engine.Graphics;
 
@@ -389,7 +387,7 @@ public static class BevelledShapeRenderer
 				result.Add(vector5);
 				for (int i = 1; i <= count; i++)
 				{
-					float x = num8 + num9 * (float)i / (float)(count + 1);
+					float x = num8 + num9 * i / (count + 1);
 					Vector2 item = vector7.Value + new Vector2(num4 * MathF.Sin(x), num4 * MathF.Cos(x));
 					result.Add(item);
 				}

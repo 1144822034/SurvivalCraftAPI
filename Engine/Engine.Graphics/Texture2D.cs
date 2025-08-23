@@ -1,5 +1,3 @@
-using System.Runtime.InteropServices;
-using Engine.Media;
 #if DIRECT3D11
 using SharpDX.DXGI;
 using SharpDX;
@@ -7,6 +5,9 @@ using SharpDX.Direct3D11;
 #else
 using Silk.NET.OpenGLES;
 #endif
+using System.Runtime.InteropServices;
+using Engine.Media;
+using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.PixelFormats;
 
 namespace Engine.Graphics
@@ -188,12 +189,12 @@ namespace Engine.Graphics
 #endif
         }
 
-		public unsafe void SetData(SixLabors.ImageSharp.Image<Rgba32> source)
+		public void SetData(Image<Rgba32> source)
         {
             SetData(0, source);
         }
 
-        public unsafe void SetData(int mipLevel, SixLabors.ImageSharp.Image<Rgba32> source)
+        public unsafe void SetData(int mipLevel, Image<Rgba32> source)
         {
             VerifyParametersSetData(source);
             source.DangerousTryGetSinglePixelMemory(out Memory<Rgba32> memory);
@@ -327,7 +328,7 @@ namespace Engine.Graphics
 			return texture2D;
 		}
 
-        public static Texture2D Load(SixLabors.ImageSharp.Image<Rgba32> image, int mipLevelsCount = 1)
+        public static Texture2D Load(Image<Rgba32> image, int mipLevelsCount = 1)
         {
             var texture2D = new Texture2D(image.Width, image.Height, mipLevelsCount, ColorFormat.Rgba8888);
             texture2D.SetData(image);
@@ -468,7 +469,7 @@ namespace Engine.Graphics
             texture2.VerifyNotDisposed();
         }
 
-		private void VerifyParametersSetData(SixLabors.ImageSharp.Image<Rgba32> source)
+		private void VerifyParametersSetData(Image<Rgba32> source)
 		{
 			VerifyNotDisposed();
 			ArgumentNullException.ThrowIfNull(source);

@@ -1,7 +1,5 @@
 using Engine;
 using Engine.Input;
-using System;
-using System.Collections.Generic;
 using System.Text.Json;
 
 namespace Game
@@ -25,7 +23,7 @@ namespace Game
 
 		public int m_tapsCount;
 
-		public bool Noticed = false;
+		public bool Noticed;
 
 		public MotdWidget()
 		{
@@ -162,7 +160,7 @@ namespace Game
 					HorizontalAlignment = WidgetAlignment.Center,
 					VerticalAlignment = WidgetAlignment.Center
 				};
-				string[] array = line.Text.Replace("\r", "").Split(new string[] { "\n" }, StringSplitOptions.None);
+				string[] array = line.Text.Replace("\r", "").Split(["\n"], StringSplitOptions.None);
 				for (int i = 0; i < array.Length; i++)
 				{
 					string text = array[i].Trim();

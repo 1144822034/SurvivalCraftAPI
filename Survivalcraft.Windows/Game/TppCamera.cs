@@ -45,7 +45,7 @@ namespace Game
 			float? num = null;
 			var vector3 = Vector3.Normalize(Vector3.Cross(vector2, Vector3.UnitY));
 			var v3 = Vector3.Normalize(Vector3.Cross(vector2, vector3));
-			SubsystemTerrain subsystemTerrain = base.GameWidget.SubsystemGameWidgets.SubsystemTerrain;
+			SubsystemTerrain subsystemTerrain = GameWidget.SubsystemGameWidgets.SubsystemTerrain;
 			for (int i = 0; i <= 0; i++)
 			{
 				for (int j = 0; j <= 0; j++)

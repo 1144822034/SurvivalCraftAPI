@@ -1,5 +1,3 @@
-
-using System.Diagnostics;
 #if ANDROID
 using System.Collections.Concurrent;
 using Android.App;

@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using System.Xml.Linq;
 using TemplatesDatabase;
 
@@ -94,7 +93,7 @@ namespace Game
 			m_descriptionLabel.IsVisible = flag2;
 			m_uploadButton.IsEnabled = flag2 && !flag;
 			m_applyButton.IsEnabled = flag2 && flag;
-			m_descriptionLabel.Text = StringsManager.GetString("GameMode." + m_worldSettings.GameMode.ToString() + ".Description");
+			m_descriptionLabel.Text = StringsManager.GetString("GameMode." + m_worldSettings.GameMode + ".Description");
 			if (m_worldOptionsButton.IsClicked)
 			{
 				ScreensManager.SwitchScreen("WorldOptions", m_worldSettings, true);
@@ -154,7 +153,7 @@ namespace Game
 				WorldsManager.ChangeWorld(m_directoryName, m_worldSettings);
 				ScreensManager.SwitchScreen("Play");
 			}
-			if (!base.Input.Back && !base.Input.Cancel && !Children.Find<ButtonWidget>("TopBar.Back").IsClicked)
+			if (!Input.Back && !Input.Cancel && !Children.Find<ButtonWidget>("TopBar.Back").IsClicked)
 			{
 				return;
 			}

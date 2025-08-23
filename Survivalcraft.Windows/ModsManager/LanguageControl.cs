@@ -1,34 +1,34 @@
 using Engine;
 using System.Globalization;
 using System.Text.Json;
-using System.IO;
 using System.Text.Json.Nodes;
+
 namespace Game
 {
 	public static class LanguageControl
 	{
-		public static JsonNode jsonNode = null;
-		public static JsonNode englishJsonNode = null;
-		public static string Ok = default;
-		public static string Cancel = default;
-		public static string None = default;
-		public static string Nothing = default;
-		public static string Error = default;
-		public static string On = default;
-		public static string Off = default;
-		public static string Disable = default;
-		public static string Enable = default;
-		public static string Warning = default;
-		public static string Back = default;
-		public static string Allowed = default;
-		public static string NAllowed = default;
-		public static string Unknown = default;
-		public static string Yes = default;
-		public static string No = default;
-		public static string Unavailable = default;
-		public static string Exists = default;
-		public static string Success = default;
-		public static string Delete = default;
+		public static JsonNode jsonNode;
+		public static JsonNode englishJsonNode;
+		public static string Ok;
+		public static string Cancel;
+		public static string None;
+		public static string Nothing;
+		public static string Error;
+		public static string On;
+		public static string Off;
+		public static string Disable;
+		public static string Enable;
+		public static string Warning;
+		public static string Back;
+		public static string Allowed;
+		public static string NAllowed;
+		public static string Unknown;
+		public static string Yes;
+		public static string No;
+		public static string Unavailable;
+		public static string Exists;
+		public static string Success;
+		public static string Delete;
 		/// <summary>
 		/// 语言标识符、与相应的CultureInfo
 		/// </summary>
@@ -36,26 +36,26 @@ namespace Game
 
 		public static void Initialize(string languageType)
 		{
-			Ok = default;
-			Cancel = default;
-			None = default;
-			Nothing = default;
-			Error = default;
-			On = default;
-			Off = default;
-			Disable = default;
-			Enable = default;
-			Warning = default;
-			Back = default;
-			Allowed = default;
-			NAllowed = default;
-			Unknown = default;
-			Yes = default;
-			No = default;
-			Unavailable = default;
-			Exists = default;
-			Success = default;
-			Delete = default;
+			Ok = null;
+			Cancel = null;
+			None = null;
+			Nothing = null;
+			Error = null;
+			On = null;
+			Off = null;
+			Disable = null;
+			Enable = null;
+			Warning = null;
+			Back = null;
+			Allowed = null;
+			NAllowed = null;
+			Unknown = null;
+			Yes = null;
+			No = null;
+			Unavailable = null;
+			Exists = null;
+			Success = null;
+			Delete = null;
             jsonNode = null;
 			ModsManager.SetConfig("Language", languageType);
 		}
@@ -302,10 +302,7 @@ namespace Game
 					{
 						break;
 					}
-					else
-					{
-						flag = true;
-					}
+					flag = true;
 				}
 				else if(nowNode.GetValueKind() == JsonValueKind.Array && int.TryParse(key, out int num) && num >= 0)
 				{

@@ -1,6 +1,5 @@
 using Engine;
 using Engine.Input;
-using System;
 
 namespace Game
 {
@@ -38,7 +37,7 @@ namespace Game
 			}
 			for (Exception ex = e; ex != null; ex = ex.InnerException)
 			{
-				text = text + ((text.Length > 0) ? Environment.NewLine : string.Empty) + ex.ToString();
+				text = text + ((text.Length > 0) ? Environment.NewLine : string.Empty) + ex;
 			}
 			return text;
 		}

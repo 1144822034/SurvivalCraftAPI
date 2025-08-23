@@ -1,7 +1,5 @@
 using Engine;
 using GameEntitySystem;
-using System;
-using System.Collections.Generic;
 using TemplatesDatabase;
 
 namespace Game
@@ -48,7 +46,7 @@ namespace Game
 			{
 				list.Add(ParseLoot(value));
 			}
-			list.Sort((Loot l1, Loot l2) => l1.Value - l2.Value);
+			list.Sort((l1,l2) => l1.Value - l2.Value);
 			return list;
 		}
 
@@ -58,7 +56,7 @@ namespace Game
 			{
 				bool num = m_componentCreature.Entity.FindComponent<ComponentOnFire>()?.IsOnFire ?? false;
 				m_lootDropped = true;
-				List<BlockDropValue> blockDropValues = new List<BlockDropValue>();
+				List<BlockDropValue> blockDropValues = [];
 				foreach (Loot item in num ? m_lootOnFireList : m_lootList)
 				{
 					if (m_random.Float(0f, 1f) < item.Probability)
@@ -103,7 +101,7 @@ namespace Game
 
 		public static Loot ParseLoot(string lootString)
 		{
-			string[] array = lootString.Split(new string[] { ";" }, StringSplitOptions.None);
+			string[] array = lootString.Split([";"], StringSplitOptions.None);
 			if (array.Length >= 3)
 			{
 				try

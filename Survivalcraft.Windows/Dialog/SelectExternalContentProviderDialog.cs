@@ -1,6 +1,4 @@
 using Engine;
-using System;
-using System.Linq;
 using System.Xml.Linq;
 
 namespace Game
@@ -8,7 +6,7 @@ namespace Game
 	public class SelectExternalContentProviderDialog : ListSelectionDialog
 	{
 		public SelectExternalContentProviderDialog(string title, bool listingSupportRequired, Action<IExternalContentProvider> selectionHandler)
-			: base(title, ExternalContentManager.Providers.Where((IExternalContentProvider p) => !listingSupportRequired || p.SupportsListing), 100f, delegate (object item)
+			: base(title, ExternalContentManager.Providers.Where(p => !listingSupportRequired || p.SupportsListing), 100f, delegate (object item)
 			{
 				var externalContentProvider = (IExternalContentProvider)item;
 				XElement node = ContentManager.Get<XElement>("Widgets/SelectExternalContentProviderItem");

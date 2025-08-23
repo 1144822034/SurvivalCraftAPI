@@ -1,5 +1,3 @@
-using System;
-using System.Collections.Generic;
 using System.Xml.Linq;
 
 namespace Game
@@ -52,7 +50,7 @@ namespace Game
 			{
 				list = [LanguageControl.Get(fName,1),LanguageControl.Get(fName,2),"用户管理"];
 			}
-			DialogsManager.ShowDialog(null,new ListSelectionDialog(null,list,70f,(object item) => (string)item,delegate (object item)
+			DialogsManager.ShowDialog(null,new ListSelectionDialog(null,list,70f,item => (string)item,delegate (object item)
 			{
 				string selectionResult = (string)item;
 				if(selectionResult == LanguageControl.Get(fName,1))

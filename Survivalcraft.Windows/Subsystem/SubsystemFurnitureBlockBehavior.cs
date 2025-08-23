@@ -1,9 +1,6 @@
 using Engine;
 using Engine.Serialization;
-using System;
-using System.Collections.Generic;
 using System.Globalization;
-using System.Linq;
 using TemplatesDatabase;
 
 namespace Game
@@ -31,7 +28,7 @@ namespace Game
 
 		public Dictionary<Point3, List<FireParticleSystem>> m_particleSystemsByCell = [];
 
-		public override int[] HandledBlocks => new int[0];
+		public override int[] HandledBlocks => [];
 
 		public ReadOnlyList<FurnitureSet> FurnitureSets => new(m_furnitureSets);
 
@@ -103,11 +100,11 @@ namespace Game
 				return furnitureDesign;
 			}
 			List<FurnitureDesign> list = design.ListChain();
-			if (garbageCollectIfNeeded && m_furnitureDesigns.Count((FurnitureDesign d) => d == null) < list.Count)
+			if (garbageCollectIfNeeded && m_furnitureDesigns.Count(d => d == null) < list.Count)
 			{
 				GarbageCollectDesigns();
 			}
-			if (m_furnitureDesigns.Count((FurnitureDesign d) => d == null) < list.Count)
+			if (m_furnitureDesigns.Count(d => d == null) < list.Count)
 			{
 				return null;
 			}
@@ -385,7 +382,7 @@ namespace Game
 				name = name.Substring(0, MaxFurnitureSetNameLength);
 			}
 			int num = 0;
-			while (FurnitureSets.FirstOrDefault((FurnitureSet fs) => fs.Name == name) != null)
+			while (FurnitureSets.FirstOrDefault(fs => fs.Name == name) != null)
 			{
 				num++;
 				name = (num > 0) ? (name + num.ToString(CultureInfo.InvariantCulture)) : name;
@@ -428,7 +425,7 @@ namespace Game
 
 		public IEnumerable<FurnitureDesign> GetFurnitureSetDesigns(FurnitureSet furnitureSet)
 		{
-			return m_furnitureDesigns.Where((FurnitureDesign fd) => fd != null && fd.FurnitureSet == furnitureSet);
+			return m_furnitureDesigns.Where(fd => fd != null && fd.FurnitureSet == furnitureSet);
 		}
 
 		public static List<FurnitureDesign> LoadFurnitureDesigns(SubsystemTerrain subsystemTerrain, ValuesDictionary valuesDictionary)
@@ -445,7 +442,7 @@ namespace Game
 			{
 				if (design.m_loadTimeLinkedDesignIndex >= 0)
 				{
-					design.LinkedDesign = list.FirstOrDefault((FurnitureDesign d) => d.Index == design.m_loadTimeLinkedDesignIndex);
+					design.LinkedDesign = list.FirstOrDefault(d => d.Index == design.m_loadTimeLinkedDesignIndex);
 				}
 			}
 			return list;
@@ -534,7 +531,7 @@ namespace Game
 			{
 				m_furnitureDesigns[item.Index] = item;
 			}
-			foreach (ValuesDictionary item2 in valuesDictionary.GetValue<ValuesDictionary>("FurnitureSets").Values.Where((object v) => v is ValuesDictionary))
+			foreach (ValuesDictionary item2 in valuesDictionary.GetValue<ValuesDictionary>("FurnitureSets").Values.Where(v => v is ValuesDictionary))
 			{
 				string value2 = item2.GetValue<string>("Name");
 				string value3 = item2.GetValue<string>("ImportedFrom", null);
@@ -564,7 +561,7 @@ namespace Game
 			GarbageCollectDesigns();
 			var valuesDictionary2 = new ValuesDictionary();
 			valuesDictionary.SetValue("FurnitureDesigns", valuesDictionary2);
-			SaveFurnitureDesigns(valuesDictionary2, m_furnitureDesigns.Where((FurnitureDesign d) => d != null).ToArray());
+			SaveFurnitureDesigns(valuesDictionary2, m_furnitureDesigns.Where(d => d != null).ToArray());
 			var valuesDictionary3 = new ValuesDictionary();
 			valuesDictionary.SetValue("FurnitureSets", valuesDictionary3);
 			int num = 0;

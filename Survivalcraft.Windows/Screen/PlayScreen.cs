@@ -1,10 +1,5 @@
 using Engine;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Reflection.Metadata.Ecma335;
 using System.Text;
-using System.Threading.Tasks;
 using System.Xml.Linq;
 using TemplatesDatabase;
 
@@ -86,7 +81,7 @@ namespace Game
 				var selectedItem = (WorldInfo)m_worldsListWidget.SelectedItem;
 				WorldsManager.UpdateWorldsList();
 				var worldInfos = new List<WorldInfo>(WorldsManager.WorldInfos);
-				worldInfos.Sort((WorldInfo w1, WorldInfo w2) => DateTime.Compare(w2.LastSaveTime, w1.LastSaveTime));
+				worldInfos.Sort((w1,w2) => DateTime.Compare(w2.LastSaveTime, w1.LastSaveTime));
 				Dispatcher.Dispatch(delegate
 				{
 					m_worldsListWidget.ClearItems();
@@ -97,7 +92,7 @@ namespace Game
 					m_totalWorldsSize = worldInfos.Sum(wi => wi.Size);
 					if (selectedItem != null)
 					{
-						m_worldsListWidget.SelectedItem = worldInfos.FirstOrDefault((WorldInfo wi) => wi.DirectoryName == selectedItem.DirectoryName);
+						m_worldsListWidget.SelectedItem = worldInfos.FirstOrDefault(wi => wi.DirectoryName == selectedItem.DirectoryName);
 					}
 					DialogsManager.HideDialog(dialog);
 				});
@@ -114,13 +109,13 @@ namespace Game
 			{
 				m_worldsListWidget.SelectedItem = null;
 			}
-			if(this.m_worldsListWidget.Items.Count > 0)
+			if(m_worldsListWidget.Items.Count > 0)
 			{
-				Children.Find<LabelWidget>("TopBar.Label",true).Text = string.Format(LanguageControl.Get(fName,m_worldsListWidget.Items.Count > 1 ? "10" : "9"),m_worldsListWidget.Items.Count,DataSizeFormatter.Format(this.m_totalWorldsSize,2));
+				Children.Find<LabelWidget>("TopBar.Label").Text = string.Format(LanguageControl.Get(fName,m_worldsListWidget.Items.Count > 1 ? "10" : "9"),m_worldsListWidget.Items.Count,DataSizeFormatter.Format(m_totalWorldsSize,2));
 			}
 			else
 			{
-				Children.Find<LabelWidget>("TopBar.Label", true).Text = LanguageControl.Get(fName, "11");
+				Children.Find<LabelWidget>("TopBar.Label").Text = LanguageControl.Get(fName, "11");
 			}
 			m_playButton.IsEnabled = m_worldsListWidget.SelectedItem != null;
 			m_propertiesButton.IsEnabled = m_worldsListWidget.SelectedItem != null;
@@ -166,8 +161,8 @@ namespace Game
 				m_modTipsTime = Time.RealTime;
 				flag |= ShowTips(item);
 			}
-			List<ValuesDictionary> modsNotLoaded = new List<ValuesDictionary>();
-			List<ValuesDictionary> modsVersionNotCapable = new List<ValuesDictionary>();
+			List<ValuesDictionary> modsNotLoaded = [];
+			List<ValuesDictionary> modsVersionNotCapable = [];
 			if(worldInfo != null)
 			{
 				XElement projectNode = WorldsManager.GetProjectNode(worldInfo);
@@ -197,7 +192,6 @@ namespace Game
 								if(!versionComparePass)
 								{
 									modsVersionNotCapable.Add(modDictionary);
-									continue;
 								}
 							}
 						}
@@ -286,9 +280,9 @@ namespace Game
 			{
 				return true;
 			}
-			else if (v1.Contains("~"))
+			if (v1.Contains("~"))
 			{
-				string[] versions = v1.Split(new char[1] { '~' }, StringSplitOptions.RemoveEmptyEntries);
+				string[] versions = v1.Split(['~'], StringSplitOptions.RemoveEmptyEntries);
 				try
 				{
 					double minv = double.Parse(versions[0]);
@@ -301,9 +295,9 @@ namespace Game
 					return false;
 				}
 			}
-			else if (v1.Contains(";"))
+			if (v1.Contains(";"))
 			{
-				string[] versions = v1.Split(new char[1] { ';' }, StringSplitOptions.RemoveEmptyEntries);
+				string[] versions = v1.Split([';'], StringSplitOptions.RemoveEmptyEntries);
 				foreach (string v in versions)
 				{
 					if (v == v2)
@@ -313,10 +307,7 @@ namespace Game
 				}
 				return false;
 			}
-			else
-			{
-				return v1 == v2;
-			}
+			return v1 == v2;
 		}
 	}
 }

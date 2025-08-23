@@ -1,5 +1,4 @@
 using Engine;
-using System.Collections.Generic;
 
 namespace Game
 {
@@ -14,10 +13,10 @@ namespace Game
 
 		public List<Point3> m_toRemove = [];
 
-		public override int[] HandledBlocks => new int[1]
-		{
+		public override int[] HandledBlocks =>
+		[
 			87
-		};
+		];
 
 		public UpdateOrder UpdateOrder => UpdateOrder.Default;
 
