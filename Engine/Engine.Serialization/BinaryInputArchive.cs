@@ -127,12 +127,13 @@ namespace Engine.Serialization
 		public override void SerializeCollection<T>(string name, ICollection<T> collection)
 		{
 			SerializeData serializeData = GetSerializeData(typeof(T), allowEmptySerializer: true);
-            IEnumerator<T> enumerator = ((collection.Count > 0) ? collection.GetEnumerator() : null);
-			int value = 0;
-			Serialize(null, ref value);
+            using IEnumerator<T> enumerator = ((collection.Count > 0) ? collection.GetEnumerator() : null);
+            int value = 0;
+            Serialize(null, ref value);
+            bool flag = true;
 			for (int i = 0; i < value; i++)
 			{
-                if (enumerator != null && enumerator.MoveNext())
+                if (flag && enumerator != null && enumerator.MoveNext())
                 {
                     T value2 = enumerator.Current;
                     ReadObject(null, serializeData, ref value2, false);
@@ -141,8 +142,8 @@ namespace Engine.Serialization
                 T value3 = default(T);
                 ReadObject(null, serializeData, ref value3, true);
                 collection.Add(value3);
-                enumerator = null;
-			}
+                flag = false;
+            }
 		}
 
 		public override void SerializeDictionary<K, V>(string name, IDictionary<K, V> dictionary)

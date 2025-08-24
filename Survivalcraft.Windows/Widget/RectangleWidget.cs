@@ -24,67 +24,43 @@ namespace Game
 		public float Depth
 		{
 			get;
+			// ReSharper disable UnusedAutoPropertyAccessor.Global
 			set;
+			// ReSharper restore UnusedAutoPropertyAccessor.Global
 		}
 
 		public bool DepthWriteEnabled
 		{
 			get => m_depthWriteEnabled;
-			set
-			{
-				if (value != m_depthWriteEnabled)
-				{
-					m_depthWriteEnabled = value;
-				}
-			}
+			// ReSharper disable PropertyCanBeMadeInitOnly.Global
+			set => m_depthWriteEnabled = value;
+			// ReSharper restore PropertyCanBeMadeInitOnly.Global
 		}
 
 		public Subtexture Subtexture
 		{
 			get => m_subtexture;
-			set
-			{
-				if (value != m_subtexture)
-				{
-					m_subtexture = value;
-				}
-			}
+			set => m_subtexture = value;
 		}
 
 		public bool TextureWrap
 		{
 			get => m_textureWrap;
-			set
-			{
-				if (value != m_textureWrap)
-				{
-					m_textureWrap = value;
-				}
-			}
+			// ReSharper disable UnusedMember.Global
+			set => m_textureWrap = value;
+			// ReSharper restore UnusedMember.Global
 		}
 
 		public bool TextureLinearFilter
 		{
 			get => m_textureLinearFilter;
-			set
-			{
-				if (value != m_textureLinearFilter)
-				{
-					m_textureLinearFilter = value;
-				}
-			}
+			set => m_textureLinearFilter = value;
 		}
 
 		public bool TextureAnisotropicFilter
 		{
 			get => m_textureAnisotropicFilter;
-			set
-			{
-				if (value != m_textureAnisotropicFilter)
-				{
-					m_textureAnisotropicFilter = value;
-				}
-			}
+			set => m_textureAnisotropicFilter = value;
 		}
 
 		public bool FlipHorizontal
@@ -96,7 +72,9 @@ namespace Game
 		public bool FlipVertical
 		{
 			get;
+			// ReSharper disable UnusedAutoPropertyAccessor.Global
 			set;
+			// ReSharper restore UnusedAutoPropertyAccessor.Global
 		}
 
 		public Color FillColor

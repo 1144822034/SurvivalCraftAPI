@@ -1,4 +1,3 @@
-#nullable enable
 using Engine;
 using Engine.Graphics;
 using GameEntitySystem;
@@ -77,9 +76,9 @@ namespace Game
 
         #region 可选参数
 
-        public Project? Project;
+        public Project Project;
 
-        public Entity? OwnerEntity;
+        public Entity OwnerEntity;
 
         public ComponentCreature Owner
         {
@@ -92,8 +91,8 @@ namespace Game
         /// </summary>
         public List<ComponentBody> BodiesToIgnore = new();
 
-        protected SubsystemProjectiles? m_subsystemProjectiles;
-        public SubsystemProjectiles? SubsystemProjectiles
+        protected SubsystemProjectiles m_subsystemProjectiles;
+        public SubsystemProjectiles SubsystemProjectiles
         {
 	        get
 	        {
@@ -103,8 +102,8 @@ namespace Game
 	        }
         }
 
-        protected SubsystemTerrain? m_subsystemTerrain;
-        public SubsystemTerrain? SubsystemTerrain
+        protected SubsystemTerrain m_subsystemTerrain;
+        public SubsystemTerrain SubsystemTerrain
         {
 	        get
 	        {
@@ -114,9 +113,9 @@ namespace Game
 	        }
         }
 
-        protected SubsystemPickables? SubsystemPickables => SubsystemProjectiles?.m_subsystemPickables;
-        protected SubsystemParticles? SubsystemParticles => SubsystemProjectiles?.m_subsystemParticles;
-        protected SubsystemAudio? SubsystemAudio => SubsystemProjectiles?.m_subsystemAudio;
+        protected SubsystemPickables SubsystemPickables => SubsystemProjectiles?.m_subsystemPickables;
+        protected SubsystemParticles SubsystemParticles => SubsystemProjectiles?.m_subsystemParticles;
+        protected SubsystemAudio SubsystemAudio => SubsystemProjectiles?.m_subsystemAudio;
         #endregion
         
 		/// <summary>
@@ -261,7 +260,6 @@ namespace Game
         }
         public virtual void HitBody(BodyRaycastResult bodyRaycastResult, ref Vector3 positionAtdt)
         {
-            Block block = BlocksManager.Blocks[Terrain.ExtractContents(Value)];
             float attackPower = (Velocity.Length() > MinVelocityToAttack) ? AttackPower : 0;
             Vector3 velocityAfterAttack = Velocity * -0.05f + m_random.Vector3(-0.0166f * Velocity.Length());
             Vector3 angularVelocityAfterAttack = AngularVelocity * 0.05f;
@@ -378,7 +376,7 @@ namespace Game
 			if(TurnIntoPickableBlockValue.HasValue) damagedBlockValue = TurnIntoPickableBlockValue.Value;
 			if(damagedBlockValue != 0 && SubsystemPickables != null)
 			{
-				Pickable pickable = null;
+				Pickable pickable;
 				if(pickableStuckMatrix.HasValue)
 				{
 					SubsystemProjectiles.CalculateVelocityAlignMatrix(block,pickableStuckMatrix.Value,Velocity,out Matrix matrix);
@@ -408,7 +406,7 @@ namespace Game
             Vector3? pickableStuckMatrix = null;
             Raycast(dt, out BodyRaycastResult? bodyRaycastResult, out TerrainRaycastResult? terrainRaycastResult);
             CellFace? nullableCellFace = terrainRaycastResult.HasValue ? new CellFace?(terrainRaycastResult.Value.CellFace) : null;
-            ComponentBody componentBody = bodyRaycastResult.HasValue ? bodyRaycastResult.Value.ComponentBody : null;
+            ComponentBody componentBody = bodyRaycastResult?.ComponentBody;
             //这里增加：忽略哪些Body、是否忽略地形
             bool disintegrate = block.DisintegratesOnHit;
             //执行各方块的OnHitAsProjectile。

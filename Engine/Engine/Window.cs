@@ -10,7 +10,9 @@ using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.PixelFormats;
 using Silk.NET.Input;
 using Monitor = Silk.NET.Windowing.Monitor;
+#if WINDOWS
 using System.Runtime.InteropServices;
+#endif
 #endif
 using Engine.Audio;
 using Engine.Graphics;
@@ -80,7 +82,9 @@ namespace Engine
                     : m_gameWindow.WindowBorder != 0 ? WindowMode.Fixed : WindowMode.Resizable;
 #endif
             }
+            // ReSharper disable ValueParameterNotUsed
             set
+            // ReSharper restore ValueParameterNotUsed
             {
 #if ANDROID
 #else
@@ -129,7 +133,9 @@ namespace Engine
                 return new Point2(m_gameWindow.Position.X, m_gameWindow.Position.Y);
 #endif
             }
+            // ReSharper disable ValueParameterNotUsed
             set
+            // ReSharper restore ValueParameterNotUsed
             {
 #if ANDROID
 #else
@@ -146,7 +152,9 @@ namespace Engine
                 VerifyWindowOpened();
                 return new Point2(m_view.Size.X, m_view.Size.Y);
             }
+            // ReSharper disable ValueParameterNotUsed
             set
+            // ReSharper restore ValueParameterNotUsed
             {
 #if ANDROID
 #else
@@ -164,7 +172,9 @@ namespace Engine
                 VerifyWindowOpened();
                 return m_titlePrefix;
             }
+            // ReSharper disable ValueParameterNotUsed
             set
+            // ReSharper restore ValueParameterNotUsed
             {
 #if !ANDROID
                 VerifyWindowOpened();
@@ -181,7 +191,9 @@ namespace Engine
                 VerifyWindowOpened();
                 return m_titleSuffix;
             }
+            // ReSharper disable ValueParameterNotUsed
             set
+            // ReSharper restore ValueParameterNotUsed
             {
 #if !ANDROID
                 VerifyWindowOpened();
@@ -202,7 +214,9 @@ namespace Engine
                 return m_gameWindow.Title;
 #endif
             }
+            // ReSharper disable ValueParameterNotUsed
             set
+            // ReSharper restore ValueParameterNotUsed
             {
 #if !ANDROID
                 VerifyWindowOpened();
@@ -218,10 +232,7 @@ namespace Engine
             get
             {
                 VerifyWindowOpened();
-                if (!m_swapInterval.HasValue)
-                {
-                    m_swapInterval = m_view.VSync ? 1 : 0;
-                }
+                m_swapInterval ??= m_view.VSync ? 1 : 0;
                 return m_swapInterval.Value;
             }
             set
@@ -270,9 +281,21 @@ namespace Engine
             {
                 throw new InvalidOperationException("Window is already opened.");
             }
-            if ((width != 0 || height != 0) && (width <= 0 || height <= 0))
+            /*if ((width != 0 || height != 0) && (width <= 0 || height <= 0))
             {
                 throw new ArgumentOutOfRangeException("size");
+            }*/
+            width = Math.Max(width, 0);
+            height = Math.Max(height, 0);
+            if (width > 0
+                && height <= 0)
+            {
+                throw new ArgumentOutOfRangeException(nameof(height));
+            }
+            if (width <= 0
+                && height > 0)
+            {
+                throw new ArgumentOutOfRangeException(nameof(width));
             }
             AppDomain.CurrentDomain.UnhandledException += delegate (object _, UnhandledExceptionEventArgs args)
             {
@@ -556,10 +579,16 @@ namespace Engine
             try
 		    {
 #if !ANDROID
-                Image<Rgba32> image = SixLabors.ImageSharp.Image.Load<Rgba32>(Image.DefaultImageSharpDecoderOptions, typeof(Window).GetTypeInfo().Assembly.GetManifestResourceStream("Engine.Resources.icon.png"));
-                byte[] pixelBytes = new byte[image.Width * image.Height * Unsafe.SizeOf<Rgba32>()];
-                image.CopyPixelDataTo(pixelBytes);
-                m_gameWindow.SetWindowIcon([new RawImage(image.Width, image.Height, pixelBytes)]);
+                using (Stream iconStream = typeof(Window).GetTypeInfo().Assembly.GetManifestResourceStream("Engine.Resources.icon.png"))
+                {
+                    if (iconStream != null)
+                    {
+                        Image<Rgba32> image = SixLabors.ImageSharp.Image.Load<Rgba32>(Image.DefaultImageSharpDecoderOptions, iconStream);
+                        byte[] pixelBytes = new byte[image.Width * image.Height * Unsafe.SizeOf<Rgba32>()];
+                        image.CopyPixelDataTo(pixelBytes);
+                        m_gameWindow.SetWindowIcon([new RawImage(image.Width, image.Height, pixelBytes)]);
+                    }
+                }
 #endif
               Dispatcher.Initialize();
                Display.Initialize();

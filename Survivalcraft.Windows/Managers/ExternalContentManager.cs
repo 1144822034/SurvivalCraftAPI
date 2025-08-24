@@ -171,29 +171,37 @@ namespace Game {
         }
 
         public static void ShowLoginUiIfNeeded(IExternalContentProvider provider, bool showWarningDialog, Action handler) {
-            if (provider.RequiresLogin && !provider.IsLoggedIn) {
-                Action loginAction = delegate {
-                    CancellableBusyDialog busyDialog = new(LanguageControl.Get(fName, 5), autoHideOnCancel: true);
-                    DialogsManager.ShowDialog(null, busyDialog);
-                    provider.Login(busyDialog.Progress, delegate {
-                        DialogsManager.HideDialog(busyDialog);
-                        handler?.Invoke();
-                    }, delegate (Exception error) {
-                        DialogsManager.HideDialog(busyDialog);
-                        if (error != null) {
-                            DialogsManager.ShowDialog(null, new MessageDialog(LanguageControl.Error, error.Message, LanguageControl.Ok, null, null));
-                        }
-                    });
-                };
-                if (showWarningDialog) {
+            if (provider.RequiresLogin && !provider.IsLoggedIn)
+            {
+	            void LoginAction()
+	            {
+		            CancellableBusyDialog busyDialog = new(LanguageControl.Get(fName,5),autoHideOnCancel: true);
+		            DialogsManager.ShowDialog(null,busyDialog);
+		            provider.Login(
+			            busyDialog.Progress,
+			            delegate {
+				            DialogsManager.HideDialog(busyDialog);
+				            handler?.Invoke();
+			            },
+			            delegate(Exception error) {
+				            DialogsManager.HideDialog(busyDialog);
+				            if(error != null)
+				            {
+					            DialogsManager.ShowDialog(null,new MessageDialog(LanguageControl.Error,error.Message,LanguageControl.Ok,null,null));
+				            }
+			            }
+		            );
+	            }
+
+	            if (showWarningDialog) {
                     DialogsManager.ShowDialog(null, new MessageDialog(LanguageControl.Get(fName, 6), string.Format(LanguageControl.Get(fName, 7), provider.DisplayName), LanguageControl.Get(fName, 8), LanguageControl.Cancel, delegate (MessageDialogButton b) {
                         if (b == MessageDialogButton.Button1) {
-                            loginAction();
+                            LoginAction();
                         }
                     }));
                 }
                 else {
-                    loginAction();
+                    LoginAction();
                 }
             }
             else {
@@ -212,16 +220,25 @@ namespace Game {
                                 bool needsDelete = false;
                                 string sourcePath = null;
                                 Stream stream = null;
-                                Action cleanup = delegate {
-                                    Utilities.Dispose(ref stream);
-                                    if (needsDelete && sourcePath != null) {
-                                        try {
-                                            Storage.DeleteFile(sourcePath);
-                                        }
-                                        catch {
-                                        }
-                                    }
-                                };
+
+                                void Cleanup()
+                                {
+	                                // ReSharper disable AccessToModifiedClosure
+	                                Utilities.Dispose(ref stream);
+	                                // ReSharper restore AccessToModifiedClosure
+	                                if(needsDelete && sourcePath != null)
+	                                {
+		                                try
+		                                {
+			                                Storage.DeleteFile(sourcePath);
+		                                }
+		                                catch
+		                                {
+			                                // ignored
+		                                }
+	                                }
+                                }
+
                                 try {
                                     string path;
                                     if (type == ExternalContentType.BlocksTexture) {
@@ -261,8 +278,10 @@ namespace Game {
                                     busyDialog.LargeMessage = LanguageControl.Get(fName, 14);
                                     stream = Storage.OpenFile(sourcePath, OpenFileMode.Read);
                                     provider.Upload(path, stream, busyDialog.Progress, delegate (string link) {
-                                        long length = stream.Length;
-                                        cleanup();
+	                                    // ReSharper disable AccessToModifiedClosure
+	                                    long length = stream.Length;
+	                                    // ReSharper restore AccessToModifiedClosure
+	                                    Cleanup();
                                         DialogsManager.HideDialog(busyDialog);
                                         if (string.IsNullOrEmpty(link)) {
                                             DialogsManager.ShowDialog(null, new MessageDialog("Success", string.Format(LanguageControl.Get(fName, 15), DataSizeFormatter.Format(length)), LanguageControl.Ok, null, null));
@@ -271,13 +290,13 @@ namespace Game {
                                             DialogsManager.ShowDialog(null, new ExternalContentLinkDialog(link));
                                         }
                                     }, delegate (Exception error) {
-                                        cleanup();
+                                        Cleanup();
                                         DialogsManager.HideDialog(busyDialog);
                                         DialogsManager.ShowDialog(null, new MessageDialog(LanguageControl.Error, error.Message, LanguageControl.Ok, null, null));
                                     });
                                 }
                                 catch (Exception ex2) {
-                                    cleanup();
+                                    Cleanup();
                                     DialogsManager.HideDialog(busyDialog);
                                     DialogsManager.ShowDialog(null, new MessageDialog(LanguageControl.Error, ex2.Message, LanguageControl.Ok, null, null));
                                 }

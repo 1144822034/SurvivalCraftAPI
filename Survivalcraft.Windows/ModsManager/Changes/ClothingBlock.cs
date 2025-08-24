@@ -29,7 +29,12 @@ namespace Game
 		{
 			if (item.Name.LocalName == "ClothingData")
 			{
-				int.TryParse(item.Attribute("Index").Value, out int ClothIndex);
+				XAttribute index = item.Attribute("Index");
+				if(index == null)
+				{
+					return;
+				}
+				int.TryParse(index.Value, out int ClothIndex);
 				ClothIndex &= 0x3FF;
 				ClothingData clothingData = new(item);
 				string className = item.Attribute("Class")?.Value ?? typeof(ClothingData).FullName;
@@ -45,6 +50,10 @@ namespace Game
 					{
 						Log.Error("ClothingData from class " + className + " create failed! " + ex);
 					}
+				}
+				if(clothingData == null)
+				{
+					return;
 				}
 				clothingData.DisplayIndex = num;
 				m_clothingData[ClothIndex] = clothingData;
@@ -122,13 +131,8 @@ namespace Game
 
 		public override string GetDescription(int value)
 		{
-			int data = Terrain.ExtractData(value);
 			ClothingData clothingData = GetClothingData(value);
-			if (clothingData == null)
-			{
-				return String.Empty;
-			}
-			return clothingData.Description;
+			return clothingData == null ? string.Empty : clothingData.Description;
 		}
 
 		public override string GetCategory(int value)
@@ -151,9 +155,9 @@ namespace Game
 
 		public override int SetDamage(int value, int damage)
 		{
-			int num = Terrain.ExtractData(value);
-			num = (num & -3841) | ((damage & 0xF) << 8);
-			return Terrain.ReplaceData(value, num);
+			int num1 = Terrain.ExtractData(value);
+			num1 = (num1 & -3841) | ((damage & 0xF) << 8);
+			return Terrain.ReplaceData(value, num1);
 		}
 		public override bool CanWear(int value)
 		{
@@ -162,26 +166,21 @@ namespace Game
 		public override ClothingData GetClothingData(int value)
 		{
 			int data = Terrain.ExtractData(value);
-			int num = GetClothingIndex(data);
-			if(m_clothingData.TryGetValue(num,out ClothingData clothingData))
-			{
-				return clothingData;
-			}
-			return null;
+			int num1 = GetClothingIndex(data);
+			return m_clothingData.TryGetValue(num1,out ClothingData clothingData) ? clothingData : null;
 		}
 		public override IEnumerable<int> GetCreativeValues()
 		{
             foreach (ClothingData clothingData in m_clothingData.Values.ToList().OrderBy(cd => cd.DisplayIndex))
 			{
-                if (clothingData == null) continue;
+                //if (clothingData == null) continue;
                 int colorsCount = (!clothingData.CanBeDyed) ? 1 : 16;
                 int color = 0;
                 while (color < colorsCount)
                 {
                     int data = SetClothingColor(SetClothingIndex(0, clothingData.Index), color);
                     yield return Terrain.MakeBlockValue(203, 0, data);
-                    int num = color + 1;
-                    color = num;
+                    color = color + 1;
                 }
             }
         }
@@ -195,7 +194,7 @@ namespace Game
 			List<string> list = ingredients.Where(i => !string.IsNullOrEmpty(i)).ToList();
 			if (list.Count == 2)
 			{
-				int num = 0;
+				int num1 = 0;
 				int num2 = 0;
 				int num3 = 0;
 				foreach (string item in list)
@@ -207,22 +206,22 @@ namespace Game
 					}
 					else if (craftingId == BlocksManager.Blocks[129].CraftingId)
 					{
-						num = Terrain.MakeBlockValue(129, 0, data ?? 0);
+						num1 = Terrain.MakeBlockValue(129, 0, data ?? 0);
 					}
 					else if (craftingId == BlocksManager.Blocks[128].CraftingId)
 					{
 						num2 = Terrain.MakeBlockValue(128, 0, data ?? 0);
 					}
 				}
-				if (num != 0 && num3 != 0)
+				if (num1 != 0 && num3 != 0)
 				{
 					int data2 = Terrain.ExtractData(num3);
 					int clothingColor = GetClothingColor(data2);
 					int clothingIndex = GetClothingIndex(data2);
 					bool canBeDyed = GetClothingData(data2)?.CanBeDyed ?? false;
 					int damage = BlocksManager.Blocks[203].GetDamage(num3);
-					int color = PaintBucketBlock.GetColor(Terrain.ExtractData(num));
-					int damage2 = BlocksManager.Blocks[129].GetDamage(num);
+					int color = PaintBucketBlock.GetColor(Terrain.ExtractData(num1));
+					int damage2 = BlocksManager.Blocks[129].GetDamage(num1);
 					Block block = BlocksManager.Blocks[129];
 					Block block2 = BlocksManager.Blocks[203];
 					if (!canBeDyed)

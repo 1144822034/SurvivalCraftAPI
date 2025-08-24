@@ -101,6 +101,7 @@ public static class MultiMouse
 		}
 	}
 
+    // ReSharper disable UnusedMember.Local
 	private static void ProcessMouseDown(int mouseIndex, MouseButton mouseButton, Point2 position)
 	{
 		if (Window.IsActive && !Keyboard.IsKeyboardVisible)
@@ -159,6 +160,7 @@ public static class MultiMouse
 			}
 		}
 	}
+    // ReSharper restore UnusedMember.Local
 
 	internal static void IsConnected(int mouseIndex, bool value)
 	{

@@ -8,9 +8,11 @@ namespace Engine
 		{
 			public double Time;
 
-			public int FrameIndex;
+            // ReSharper disable MemberHidesStaticFromOuterClass
+            public int FrameIndex;
+            // ReSharper restore MemberHidesStaticFromOuterClass
 
-			public Action Action;
+            public Action Action;
 		}
 
         private static long? m_startTicks;

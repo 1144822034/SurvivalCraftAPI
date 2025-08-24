@@ -10,7 +10,7 @@ namespace GameEntitySystem
 {
 	public class Entity : IDisposable
 	{
-		public struct FilteredComponentsEnumerable<T> : IEnumerable<T>, IEnumerable where T : class
+		public struct FilteredComponentsEnumerable<T> : IEnumerable<T> where T : class
 		{
 			private Entity m_entity;
 
@@ -35,7 +35,7 @@ namespace GameEntitySystem
 			}
 		}
 
-		public struct FilteredComponentsEnumerator<T> : IEnumerator<T>, IDisposable, IEnumerator where T : class
+		public struct FilteredComponentsEnumerator<T> : IEnumerator<T> where T : class
 		{
 			private Entity m_entity;
 
@@ -83,7 +83,7 @@ namespace GameEntitySystem
 
 		private ValuesDictionary m_valuesDictionary;
 
-		private List<Component> m_components = [];
+		private List<Component> m_components;
 
 		internal bool m_isAddedToProject;
 
@@ -136,7 +136,11 @@ namespace GameEntitySystem
 					}
 					catch (TargetInvocationException ex)
 					{
-						throw ex.InnerException;
+						if(ex.InnerException is not null)
+						{
+							throw ex.InnerException;
+						}
+						throw;
 					}
 					if(obj is not Component component)
 					{
@@ -149,7 +153,7 @@ namespace GameEntitySystem
 					list.Add(new KeyValuePair<int,Component>(adjustedLoadOrder,component));
 				}
 			}
-			EntityComponentsInitialized.Invoke(this, list);
+			EntityComponentsInitialized?.Invoke(this, list);
 			// 按调整后的 LoadOrder 排序
 			list.Sort((x,y) => x.Key - y.Key);
 			m_components = new List<Component>(list.Select(x => x.Value));
@@ -223,8 +227,7 @@ namespace GameEntitySystem
 			if(newComponent.GetType().GetTypeInfo().IsAssignableFrom(oldComponent.GetType().GetTypeInfo()))
 			{
                 newComponent.InheritFromComponent(oldComponent);
-				oldComponent = newComponent;
-            }
+			}
 		}
 
 		public FilteredComponentsEnumerable<T> FindComponents<T>() where T : class

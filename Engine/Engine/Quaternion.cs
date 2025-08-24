@@ -1,3 +1,5 @@
+using System.Globalization;
+
 namespace Engine
 {
 	public struct Quaternion : IEquatable<Quaternion>
@@ -35,7 +37,7 @@ namespace Engine
 
 		public override bool Equals(object obj)
 		{
-            return obj is Quaternion && Equals((Quaternion)obj);
+            return obj is Quaternion quaternion && Equals(quaternion);
         }
 
         public override int GetHashCode()
@@ -45,7 +47,7 @@ namespace Engine
 
 		public override string ToString()
 		{
-			return $"{X.ToString()},{Y.ToString()},{Z.ToString()},{W.ToString()}";
+			return $"{X.ToString(CultureInfo.InvariantCulture)},{Y.ToString(CultureInfo.InvariantCulture)},{Z.ToString(CultureInfo.InvariantCulture)},{W.ToString(CultureInfo.InvariantCulture)}";
 		}
 
 		public bool Equals(Quaternion other)

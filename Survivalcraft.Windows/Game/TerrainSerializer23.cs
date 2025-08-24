@@ -16,7 +16,7 @@ namespace Game
 			void Save(Point2 coords, byte[] buffer, int size);
 		}
 
-        public class SingleFileStorage : IStorage, IDisposable
+        public class SingleFileStorage : IStorage
 		{
             public struct ChunkDescriptor
 			{
@@ -285,7 +285,7 @@ namespace Game
 
             public virtual void ParseNodeHeader(int node, int nodeHeader, out int dataSize, out int nextNode)
 			{
-				if (((uint)nodeHeader & (true ? 1u : 0u)) != 0)
+				if (((uint)nodeHeader & 1u) != 0)
 				{
 					dataSize = nodeHeader >> 1;
 					nextNode = -1;
@@ -319,7 +319,7 @@ namespace Game
 			}
 		}
 
-        public class RegionFileStorage : IStorage, IDisposable
+        public class RegionFileStorage : IStorage
 		{
             public struct DirectoryEntry
 			{
@@ -332,6 +332,7 @@ namespace Game
 
 			private const int ExtraSpaceBytes = 1024;
 
+			// ReSharper disable UnusedMember.Local
 			private const int RegionChunksBits = 4;
 
 			private const int RegionChunksCount = 16;
@@ -345,6 +346,7 @@ namespace Game
 			private const int RegionDataOffset = 2052;
 
 			private const int RegionChunkDataOffset = 4;
+			// ReSharper restore UnusedMember.Local
 
 			private static uint RegionMagic = MakeFourCC("RGN1");
 

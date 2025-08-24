@@ -11,20 +11,19 @@ namespace Game.Managers
         {
             //keyName = "WPCFile";
             //keyValue = "资源包文件";
-            RegistryKey isExCommand = null;
             bool isCreateRegistry = true;
 
             try
             {
-                /// 检查 文件关联是否创建 
-                isExCommand = Registry.ClassesRoot.OpenSubKey(keyName);
-                if (isExCommand == null)
+	            /// 检查 文件关联是否创建
+	            RegistryKey isExCommand = Registry.ClassesRoot.OpenSubKey(keyName);
+	            if (isExCommand == null)
                 {
                     isCreateRegistry = true;
                 }
                 else
                 {
-                    if (isExCommand.GetValue("Create").ToString() == SurvivalcraftPath)
+                    if (isExCommand.GetValue("Create")?.ToString() == SurvivalcraftPath)
                     {
                         isCreateRegistry = false;
                     }
@@ -46,17 +45,40 @@ namespace Game.Managers
             {
                 try
                 {
-                    RegistryKey key, keyico;
-                    key = Registry.ClassesRoot.CreateSubKey(keyName);
+                    if(SurvivalcraftPath == null)
+                    {
+	                    return;
+                    }
+                    RegistryKey key = Registry.ClassesRoot.CreateSubKey(keyName);
+                    if(key == null)
+                    {
+	                    return;
+                    }
                     key.SetValue("Create", SurvivalcraftPath);
 
-                    keyico = key.CreateSubKey("DefaultIcon");
+                    RegistryKey keyico = key.CreateSubKey("DefaultIcon");
+                    if(keyico == null)
+                    {
+	                    return;
+                    }
                     keyico.SetValue("", SurvivalcraftPath + ",0");
 
                     key.SetValue("", keyValue);
                     key = key.CreateSubKey("Shell");
+                    if(key == null)
+                    {
+	                    return;
+                    }
                     key = key.CreateSubKey("Open");
+                    if(key == null)
+                    {
+	                    return;
+                    }
                     key = key.CreateSubKey("Command");
+                    if(key == null)
+                    {
+	                    return;
+                    }
 
                     /// 关联的位置 
                     key.SetValue("", SurvivalcraftPath + @" %1/");
@@ -64,10 +86,15 @@ namespace Game.Managers
                     /// 关联的文件扩展名,  
                     keyName = extension;
                     key = Registry.ClassesRoot.CreateSubKey(keyName);
+                    if(key == null)
+                    {
+	                    return;
+                    }
                     key.SetValue("", keyValue);
                 }
-                catch (Exception)
+                catch(Exception)
                 {
+	                // ignored
                 }
             } 
         }

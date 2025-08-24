@@ -1,4 +1,3 @@
-#nullable enable
 using Engine;
 using Engine.Graphics;
 using GameEntitySystem;
@@ -42,14 +41,14 @@ namespace Game
         #endregion
 
         #region 可选
-        public Project? Project;
+        public Project Project;
 
-        public Entity? OwnerEntity;
+        public Entity OwnerEntity;
 
-        public ComponentPickableGatherer? FlyToGatherer;
+        public ComponentPickableGatherer FlyToGatherer;
 
-        protected SubsystemPickables? m_subsystemPickables;
-        public SubsystemPickables? SubsystemPickables
+        protected SubsystemPickables m_subsystemPickables;
+        public SubsystemPickables SubsystemPickables
         {
 	        get
 	        {
@@ -59,8 +58,8 @@ namespace Game
 	        }
         }
 
-        protected SubsystemTerrain? m_subsystemTerrain;
-        public SubsystemTerrain? SubsystemTerrain
+        protected SubsystemTerrain m_subsystemTerrain;
+        public SubsystemTerrain SubsystemTerrain
         {
 	        get
 	        {
@@ -70,8 +69,8 @@ namespace Game
 	        }
         }
 
-        protected SubsystemExplosions? m_subsystemExplosions;
-        public SubsystemExplosions? SubsystemExplosions
+        protected SubsystemExplosions m_subsystemExplosions;
+        public SubsystemExplosions SubsystemExplosions
         {
 	        get
 	        {
@@ -81,8 +80,8 @@ namespace Game
 	        }
         }
 
-        protected SubsystemMovingBlocks? m_subsystemMovingBlocks;
-        public SubsystemMovingBlocks? SubsystemMovingBlocks
+        protected SubsystemMovingBlocks m_subsystemMovingBlocks;
+        public SubsystemMovingBlocks SubsystemMovingBlocks
         {
 	        get
 	        {
@@ -212,7 +211,7 @@ namespace Game
 				}
 				else if(terrainRaycastResult.HasValue && (!movingBlocksRaycastResult.HasValue || terrainRaycastResult.Value.Distance < movingBlocksRaycastResult.Value.Distance))
 				{
-					isMovingRaycastDominant = false;
+					//isMovingRaycastDominant = false;
 					cellValue = CurrnetTerrain().GetCellValue(terrainRaycastResult.Value.CellFace.X,terrainRaycastResult.Value.CellFace.Y,terrainRaycastResult.Value.CellFace.Z);
 				}
 
@@ -304,7 +303,7 @@ namespace Game
                     StuckMatrix = null;
                 }
             }
-            if (surfaceBlock is FluidBlock && !SplashGenerated && SubsystemPickables != null)
+            if (surfaceBlock != null && !SplashGenerated && SubsystemPickables != null)
             {
                 if(surfaceBlock is MagmaBlock)
                 {
@@ -358,7 +357,7 @@ namespace Game
                 }
             }
         }
-        public virtual void UpdateMovementWithTarget(ComponentPickableGatherer? targetGatherer, float dt)
+        public virtual void UpdateMovementWithTarget(ComponentPickableGatherer targetGatherer, float dt)
 		{
 			if (!FlyToPosition.HasValue) return;
             Vector3 v2 = FlyToPosition.Value - Position;

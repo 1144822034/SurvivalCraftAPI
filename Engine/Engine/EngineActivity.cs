@@ -41,7 +41,7 @@ namespace Engine
         {
             RequestWindowFeature(WindowFeatures.NoTitle);
             base.OnCreate(savedInstanceState);
-            Window.AddFlags(WindowManagerFlags.Fullscreen | WindowManagerFlags.TranslucentStatus | WindowManagerFlags.TranslucentNavigation);
+            Window?.AddFlags(WindowManagerFlags.Fullscreen | WindowManagerFlags.TranslucentStatus | WindowManagerFlags.TranslucentNavigation);
             EnableImmersiveMode();
             VolumeControlStream = Stream.Music;
             RequestedOrientation = ScreenOrientation.SensorLandscape;
@@ -50,7 +50,7 @@ namespace Engine
         public void Vibrate(long ms)
         {
             Vibrator vibrator = (Vibrator)GetSystemService("vibrator");
-            vibrator.Vibrate(VibrationEffect.CreateOneShot(ms, VibrationEffect.DefaultAmplitude));
+            vibrator?.Vibrate(VibrationEffect.CreateOneShot(ms, VibrationEffect.DefaultAmplitude));
         }
         public void OpenLink(string link)
         {
@@ -102,6 +102,10 @@ namespace Engine
 
         public override bool DispatchKeyEvent(KeyEvent e)
         {
+            if (e == null)
+            {
+                return true;
+            }
             Debug.WriteLine($"[DispatchKeyEvent]action:{e.Action} keyCode:{e.KeyCode} unicodeChar:{e.UnicodeChar} flags:{e.Flags} metaState:{e.MetaState} source:{e.Source} deviceId:{e.DeviceId}");
             bool handled = false;
             Delegate[] invocationList = OnDispatchKeyEvent?.GetInvocationList();
@@ -114,7 +118,7 @@ namespace Engine
             }
             if (!handled)
             {
-                handled = e.Action switch
+                _ = e.Action switch
                 {
                     KeyEventActions.Down => OnKeyDown(e.KeyCode, e),
                     KeyEventActions.Up => OnKeyUp(e.KeyCode, e),
@@ -138,6 +142,10 @@ namespace Engine
                     EnableImmersiveMode();
                     break;
             }
+            if (e == null)
+            {
+                return true;
+            }
             if ((e.Source & InputSourceType.Gamepad) == InputSourceType.Gamepad || (e.Source & InputSourceType.Joystick) == InputSourceType.Joystick)
             {
                 GamePad.HandleKeyEvent(e);
@@ -151,6 +159,10 @@ namespace Engine
 
         public override bool OnKeyUp(Keycode keyCode, KeyEvent e)
         {
+            if (e == null)
+            {
+                return true;
+            }
             if ((e.Source & InputSourceType.Gamepad) == InputSourceType.Gamepad || (e.Source & InputSourceType.Joystick) == InputSourceType.Joystick)
             {
                 GamePad.HandleKeyEvent(e);
@@ -164,6 +176,10 @@ namespace Engine
 
         public override bool DispatchGenericMotionEvent(MotionEvent e)
         {
+            if (e == null)
+            {
+                return true;
+            }
             Debug.WriteLine($"[OnGenericMotionEvent]source:{e.Source} action:{e.Action}");
             if (((e.Source & InputSourceType.Gamepad) == InputSourceType.Gamepad || (e.Source & InputSourceType.Joystick) == InputSourceType.Joystick) && e.Action == MotionEventActions.Move)
             {
@@ -192,9 +208,6 @@ namespace Engine
                         break;
                     case > (BuildVersionCodes)19:
                         Window.DecorView.SystemUiFlags = SystemUiFlags.Fullscreen | SystemUiFlags.HideNavigation | SystemUiFlags.Immersive | SystemUiFlags.ImmersiveSticky;
-                        break;
-                    case >= (BuildVersionCodes)11:
-                        Window.DecorView.SystemUiVisibility = (StatusBarVisibility)6150;
                         break;
                 }
             }

@@ -32,9 +32,11 @@ public static class MultiKeyboard
 		new()
 	];
 
-	public static bool BackButtonQuitsApp { get; set; }
+    // ReSharper disable UnusedAutoPropertyAccessor.Global
+    public static bool BackButtonQuitsApp { get; set; }
+    // ReSharper restore UnusedAutoPropertyAccessor.Global
 
-	public static event Action<int, Key> KeyDown;
+    public static event Action<int, Key> KeyDown;
 
 	public static event Action<int, Key> KeyUp;
 
@@ -125,8 +127,9 @@ public static class MultiKeyboard
 		}
 	}
 
-	private static void SetIsConnected(int keyboardIndex, bool value)
-	{
+    // ReSharper disable UnusedMember.Local
+    private static void SetIsConnected(int keyboardIndex, bool value)
+    {
 		_KeyboardData[keyboardIndex].IsConnected = value;
 	}
 
@@ -171,6 +174,7 @@ public static class MultiKeyboard
 		CharacterEntered?.Invoke(keyboardIndex, ch);
 		return true;
 	}
+    // ReSharper restore UnusedMember.Local
 
 	internal static void Initialize()
 	{
