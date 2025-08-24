@@ -92,7 +92,7 @@ namespace Game
 			int index = 0;
 			while (index < MaxGameWidgets && m_gameWidgets.FirstOrDefault(v => v.GameWidgetIndex == index) != null)
 			{
-				int num = index++;
+				index++;
 			}
 			if (index >= MaxGameWidgets)
 			{

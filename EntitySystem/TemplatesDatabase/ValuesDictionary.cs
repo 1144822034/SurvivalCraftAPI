@@ -7,7 +7,7 @@ using XmlUtilities;
 
 namespace TemplatesDatabase
 {
-	public class ValuesDictionary : IEnumerable<KeyValuePair<string, object>>, IEnumerable
+	public class ValuesDictionary : IEnumerable<KeyValuePair<string, object>>
 	{
 		private Dictionary<string, object> m_dictionary = [];
 
@@ -141,9 +141,9 @@ namespace TemplatesDatabase
 			{
 				if (effectiveNestingChild.Type.SupportsValue)
 				{
-					if (effectiveNestingChild.Value is ProceduralValue)
+					if (effectiveNestingChild.Value is ProceduralValue proceduralValue)
 					{
-						object value = ((ProceduralValue)effectiveNestingChild.Value).Parse(databaseObject);
+						object value = proceduralValue.Parse(databaseObject);
 						SetValue(effectiveNestingChild.Name, value);
 					}
 					else

@@ -190,16 +190,15 @@ namespace Game
         public virtual void AttackPowerParameter(ComponentBody target, ComponentCreature attacker, Vector3 hitPoint, Vector3 hitDirection, ref float impulseFactor, ref float stunTimeFactor, ref bool recalculate)
         {
         }
+
 		/// <summary>
 		/// 当人物吃东西时执行
 		/// </summary>
 		/// <param name="componentPlayer"></param>
 		/// <param name="block"></param>
+		/// <param name="slotIndex"></param>
 		/// <param name="value"></param>
 		/// <param name="count"></param>
-		// <param name="processCount"></param>
-		// <param name="processedValue"></param>
-		// <param name="processedCount"></param>
 		/// <returns>如果为 true：不移交到下一个 mod 处理</returns>
 		[Obsolete("使用另一个ClothingProcessSlotItems接口")]
         public virtual bool ClothingProcessSlotItems(ComponentPlayer componentPlayer, Block block, int slotIndex, int value, int count)
@@ -1916,7 +1915,6 @@ namespace Game
 		/// <summary>
 		/// 初始化按键兼容组
 		/// </summary>
-		/// <param name="keyboardMappingScreen"></param>
 		public virtual void InitKeyCompatibleGroups()
 		{
 		}

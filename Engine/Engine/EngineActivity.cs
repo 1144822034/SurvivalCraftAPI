@@ -206,9 +206,11 @@ namespace Engine
                             insetsController.SystemBarsBehavior = (int)WindowInsetsControllerBehavior.ShowTransientBarsBySwipe;
                         }
                         break;
+#pragma warning disable CA1422
                     case > (BuildVersionCodes)19:
                         Window.DecorView.SystemUiFlags = SystemUiFlags.Fullscreen | SystemUiFlags.HideNavigation | SystemUiFlags.Immersive | SystemUiFlags.ImmersiveSticky;
                         break;
+#pragma warning restore CA1422
                 }
             }
         }

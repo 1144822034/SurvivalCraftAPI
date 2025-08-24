@@ -182,7 +182,6 @@ namespace Game
 		/// <summary>
 		/// 获取衣物穿着在身上时的颜色附加
 		/// </summary>
-		/// <param name="data"></param>
 		/// <returns></returns>
 		public virtual Color GetColor(ComponentClothing componentClothing, int value)
 		{

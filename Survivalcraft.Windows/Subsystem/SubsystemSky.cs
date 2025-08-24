@@ -129,7 +129,9 @@ namespace Game
 
 		public bool DrawSkyEnabled = true;
 
+		// ReSharper disable UnassignedField.Global
 		public bool DrawCloudsWireframe;
+		// ReSharper restore UnassignedField.Global
 
 		public bool FogEnabled = true;
 
@@ -230,9 +232,11 @@ namespace Game
 
 		public SkyPrimitiveRender m_primitiveRender;
 
+		// ReSharper disable UnassignedField.Global
 		public static SkyShader Shader;
 
 		public static SkyShader ShaderAlphaTest;
+		// ReSharper restore UnassignedField.Global
 
 		public static bool DrawGalaxyEnabled = true;
 
@@ -556,7 +560,7 @@ namespace Game
 			if (value.LastUpdateTimeOfDay.HasValue && !(MathF.Abs(timeOfDay - value.LastUpdateTimeOfDay.Value) > 0.0005f) && value.LastUpdatePrecipitationIntensity.HasValue && !(MathF.Abs(precipitationIntensity - value.LastUpdatePrecipitationIntensity.Value) > 0.02f) && ((precipitationIntensity != 0f && precipitationIntensity != 1f) || value.LastUpdatePrecipitationIntensity.Value == precipitationIntensity) && m_lightningStrikeBrightness == value.LastUpdateLightningStrikeBrightness && value.LastUpdateTemperature.HasValue)
 			{
 				int? lastUpdateTemperature = value.LastUpdateTemperature;
-				if (seasonalTemperature == lastUpdateTemperature.GetValueOrDefault() && lastUpdateTemperature.HasValue && value.LastUpdateTemperature.HasValue && !(MathF.Abs(m_viewFogDensity - value.LastUpdateFogDensity.Value) > 0.002f))
+				if (seasonalTemperature == lastUpdateTemperature.GetValueOrDefault() && lastUpdateTemperature.HasValue && value.LastUpdateTemperature.HasValue && !(MathF.Abs(m_viewFogDensity - (value.LastUpdateFogDensity ?? 0f)) > 0.002f))
 				{
 					flag = false;
 				}
@@ -780,14 +784,7 @@ namespace Game
 		{
 			VisibilityRange = SettingsManager.VisibilityRange;
 			SkyLightIntensity = CalculateLightIntensity(m_subsystemTimeOfDay.TimeOfDay);
-			if (MoonPhase == 4)
-			{
-				SkyLightValue = m_lightValuesMoonless[(int)MathF.Round(MathUtils.Lerp(0f, 5f, SkyLightIntensity))];
-			}
-			else
-			{
-				SkyLightValue = m_lightValuesNormal[(int)MathF.Round(MathUtils.Lerp(0f, 5f, SkyLightIntensity))];
-			}
+			SkyLightValue = MoonPhase == 4 ? m_lightValuesMoonless[(int)MathF.Round(MathUtils.Lerp(0f, 5f, SkyLightIntensity))] : m_lightValuesNormal[(int)MathF.Round(MathUtils.Lerp(0f, 5f, SkyLightIntensity))];
 		}
 
 		public virtual void UpdateMoonPhase()
@@ -909,25 +906,25 @@ namespace Game
 				Vector3 position2 = v2 + (num * (vector - v3));
 				Vector3 position3 = v2 + (num * (vector + v3));
 				Vector3 position4 = v2 + (num * (-vector + v3));
-				StarVertex starVertex = array[i * 4] = new StarVertex
+				array[i * 4] = new StarVertex
 				{
 					Position = position,
 					TextureCoordinate = new Vector2(0f, 0f),
 					Color = c
 				};
-				starVertex = array[(i * 4) + 1] = new StarVertex
+				array[(i * 4) + 1] = new StarVertex
 				{
 					Position = position2,
 					TextureCoordinate = new Vector2(1f, 0f),
 					Color = c
 				};
-				starVertex = array[(i * 4) + 2] = new StarVertex
+				array[(i * 4) + 2] = new StarVertex
 				{
 					Position = position3,
 					TextureCoordinate = new Vector2(1f, 1f),
 					Color = c
 				};
-				starVertex = array[(i * 4) + 3] = new StarVertex
+				array[(i * 4) + 3] = new StarVertex
 				{
 					Position = position4,
 					TextureCoordinate = new Vector2(0f, 1f),

@@ -2,9 +2,9 @@ using System.Reflection;
 
 namespace Game
 {
-	public class WidgetsList : IEnumerable<Widget>, IEnumerable
+	public class WidgetsList : IEnumerable<Widget>
 	{
-		public struct Enumerator : IEnumerator<Widget>, IDisposable, IEnumerator
+		public struct Enumerator : IEnumerator<Widget>
 		{
 			public WidgetsList m_collection;
 

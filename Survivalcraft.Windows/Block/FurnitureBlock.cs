@@ -9,8 +9,7 @@ namespace Game
 
 		public Matrix[] m_matrices = new Matrix[4];
 
-		public int[][] m_facesMaps = new int[4][]
-		{
+		public int[][] m_facesMaps = [
 			[
 				0,
 				1,
@@ -43,10 +42,9 @@ namespace Game
 				4,
 				5
 			]
-		};
+		];
 
-		public int[][] m_reverseFacesMaps = new int[4][]
-		{
+		public int[][] m_reverseFacesMaps = [
 			[
 				0,
 				1,
@@ -79,7 +77,7 @@ namespace Game
 				4,
 				5
 			]
-		};
+		];
 
 		public override void Initialize()
 		{
@@ -422,7 +420,7 @@ namespace Game
 				}
 				else
 				{
-					if (!(craftingId == BlocksManager.Blocks[133].CraftingId))
+					if (craftingId != BlocksManager.Blocks[133].CraftingId)
 					{
 						return null;
 					}

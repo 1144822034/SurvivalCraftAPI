@@ -64,7 +64,7 @@ namespace Game
 			string txt = new StreamReader(stream).ReadToEnd();
 			if (txt.Length > 0)
 			{//加载原版语言包
-				JsonNode newJsonNode = null;
+				JsonNode newJsonNode;
 				try
 				{
 					newJsonNode = JsonNode.Parse(txt);
@@ -90,7 +90,7 @@ namespace Game
 			string txt = new StreamReader(stream).ReadToEnd();
 			if (txt.Length > 0)
 			{
-				JsonNode newJsonNode = null;
+				JsonNode newJsonNode;
 				try
 				{
 					newJsonNode = JsonNode.Parse(txt);
@@ -331,7 +331,7 @@ namespace Game
 						return nowNode.GetValue<string>();
 					case JsonValueKind.Number:
 						r = true;
-						return nowNode.GetValue<decimal>().ToString();
+						return nowNode.GetValue<decimal>().ToString(CultureInfo.InvariantCulture);
 				}
 			}
 			return flag? keys.Last() : String.Join(':', keys);

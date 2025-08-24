@@ -236,11 +236,11 @@ namespace Game
 						throw new ArgumentOutOfRangeException(nameof(minValue));
 					}
 					long num = maxValue - minValue;
-					if (num <= 2147483647)
-					{
+					//if (num <= 2147483647)
+					//{
 						return (int)(Sample() * num) + minValue;
-					}
-					return (int)(long)(GetSampleForLargeRange() * num) + minValue;
+					//}
+					//return (int)(long)(GetSampleForLargeRange() * num) + minValue;
 				}
 
 				public void NextBytes(byte[] buffer)
@@ -1039,7 +1039,7 @@ namespace Game
 							int min = (int)MathUtils.Lerp(4f, 0f, f);
 							int max = (int)MathUtils.Lerp(7f, 0f, f);
 							int num7 = MathUtils.Min(random.UniformInt(min, max), num4);
-							int num8 = 0;
+							int num8;
 							if (num5 == 4)
 							{
 								num8 = (temperature > 4 && temperature < 7) ? 6 : 7;
@@ -1683,7 +1683,7 @@ namespace Game
 									}
 									float num8 = random.UniformFloat(0f, 1f);
 									num8 -= num6;
-									if (num5 == 0 && num8 < 0f)
+									if (/*num5 == 0 && */num8 < 0f)
 									{
 										num5 = 226;
 									}
@@ -2083,9 +2083,6 @@ namespace Game
 						}
 					}
 					break;
-#pragma warning disable CS0162 // 检测到无法访问的代码
-					continue;
-#pragma warning restore CS0162 // 检测到无法访问的代码
 				end_IL_019b:
 					break;
 				}

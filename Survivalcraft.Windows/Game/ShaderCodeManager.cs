@@ -31,7 +31,7 @@ namespace Game
 		public static string GetIncludeText(string shaderText, string includefname, bool external)
 		{
 			string includeText = string.Empty;
-			string shaderTextTemp = string.Empty;
+			string shaderTextTemp;
 			try
 			{
 				if (external)
@@ -45,7 +45,7 @@ namespace Game
 				{
 					if (includefname.Contains(".txt"))
 					{
-						includefname = includefname.Split(new char[1] { '.' })[0];
+						includefname = includefname.Split('.')[0];
 						shaderTextTemp = ContentManager.Get<string>(includefname);
 					}
 					else
@@ -68,7 +68,7 @@ namespace Game
 							continue;
 						}
 					}
-					string[] arline = lines[l].Replace("//", "$").Split(new char[1] { '$' });
+					string[] arline = lines[l].Replace("//", "$").Split('$');
 					if (arline.Length > 0)
 					{
 						lines[l] = arline[0];
@@ -97,6 +97,7 @@ namespace Game
 			}
 			catch
 			{
+				// ignored
 			}
 			return shaderText;
 		}

@@ -145,8 +145,11 @@ namespace Engine.Serialization
                 }
                 return;
             }
-			Serialize(null, collection.Count());
-			foreach (T item in collection)
+            // ReSharper disable ConstantNullCoalescingCondition
+            IEnumerable<T> enumerable = collection as T[] ?? collection.ToArray();
+            // ReSharper restore ConstantNullCoalescingCondition
+            Serialize(null, enumerable.Count());
+			foreach (T item in enumerable)
 			{
 				WriteObject(null, serializeData, item);
 			}

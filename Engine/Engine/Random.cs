@@ -6,92 +6,82 @@ namespace Engine
     {
         private static int m_counter = (int)(Stopwatch.GetTimestamp() + DateTime.Now.Ticks);
 
-        private ulong m_seed;
-        /*
-        private const ulong m_multiplier = 25214903917uL;
-        private const ulong m_addend = 11uL;
-        private const ulong m_mask = 281474976710655uL;
-        */
+        private uint m_s0;
+
+        private uint m_s1;
+
         public ulong State
         {
-            get => m_seed;
-            set => m_seed = value;
+            get
+            {
+                return m_s0 + ((ulong)m_s1 << 32);
+            }
+            set
+            {
+                m_s0 = (uint)value;
+                m_s1 = (uint)(value >> 32);
+            }
         }
 
         public Random()
-#if !ANDROID
-            : this(997 * m_counter++)
-#endif
         {
-#if ANDROID
-            Reset_A();
-#endif
+            Seed();
         }
 
         public Random(int seed)
         {
-#if !ANDROID
-            Reset_D(seed);
-#else
-            Reset_A(seed);
-#endif
+            Seed(seed);
         }
 
-        public void Reset_D(int seed)
+        public void Seed()
         {
-            m_seed = (ulong)(seed ^ 0x5DEECE66D);
+            Seed(m_counter++);
         }
-		public void Reset_A()
-		{
-			Reset_A(m_counter++);
-		}
-		public void Reset_A(int seed)
-		{
-			m_seed = MathUtils.Hash((uint)seed) + (MathUtils.Hash((uint)(seed + 1)) << 32);
-		}
-		/*
+
+        public void Seed(int seed)
+        {
+            m_s0 = (uint)(seed + 42817);
+            m_s1 = (uint)(seed + 324508639);
+        }
+
         public int Sign()
         {
-            return (Int() % 2 * 2) - 1;
+            return (int)((UInt() & 1) * 2 - 1);
         }
 
         public bool Bool()
         {
-            return Int() % 2 == 0;
+            return (UInt() & 1) != 0;
         }
-        */
-		public bool Bool(float probability)
+
+        public bool Bool(float probability)
         {
             return Int() / 2.147484E+09f < probability;
         }
-#if ANDROID
+
         public uint UInt()
         {
-            uint s = (uint)m_seed;
-            uint s2 = (uint)(m_seed>>32);
+            uint s = m_s0;
+            uint s2 = m_s1;
             s2 ^= s;
-            m_seed = RotateLeft(s, 26) ^ s2 ^ (s2 << 9)+(RotateLeft(s2, 13)<<32);
-			return RotateLeft((uint)((int)s * -1640531525), 5) * 5;
+            m_s0 = RotateLeft(s, 26) ^ s2 ^ (s2 << 9);
+            m_s1 = RotateLeft(s2, 13);
+            return RotateLeft(s * 2654435771u, 5) * 5;
         }
-#endif
+
         public int Int()
         {
-#if !ANDROID
-            m_seed = ((m_seed * 25214903917L) + 11) & 0xFFFFFFFFFFFF;
-            return (int)(m_seed >> 17);
-#else
-            return (int)(UInt() & int.MaxValue);
-#endif
+            return (int)(UInt() & 0x7FFFFFFF);
         }
 
         public int Int(int bound)
         {
-            return (int)(Int() * (long)bound / 2147483648L);
+            return (int)(Int() * (long)bound / 2147483648u);
         }
 
         public int Int(int min, int max)
         {
-            return (int)(min + (Int() * (long)(max - min + 1) / 2147483648L));
+            return (int)(min + Int() * (long)(max - min + 1) / 2147483648u);
         }
 
         public float Float()
@@ -101,7 +91,7 @@ namespace Engine
 
         public float Float(float min, float max)
         {
-            return min + (Float() * (max - min));
+            return min + Float() * (max - min);
         }
 
         public float NormalFloat(float mean, float stddev)
@@ -109,15 +99,15 @@ namespace Engine
             float num = Float();
             if (num < 0.5)
             {
-                float num2 = MathF.Sqrt(-2f * MathF.Log(num));
-                float num3 = 0.322232425f + (num2 * (1f + (num2 * (0.3422421f + (num2 * (0.0204231218f + (num2 * 4.536422E-05f)))))));
-                float num4 = 0.09934846f + (num2 * (0.588581562f + (num2 * (0.5311035f + (num2 * (0.103537753f + (num2 * 0.00385607f)))))));
-                return mean + (stddev * ((num3 / num4) - num2));
+                float num2 = MathUtils.Sqrt(-2f * MathUtils.Log(num));
+                float num3 = 0.32223243f + num2 * (1f + num2 * (0.3422421f + num2 * (0.020423122f + num2 * 4.536422E-05f)));
+                float num4 = 0.09934846f + num2 * (0.58858156f + num2 * (0.5311035f + num2 * (0.10353775f + num2 * 0.00385607f)));
+                return mean + stddev * (num3 / num4 - num2);
             }
-            float num5 = MathF.Sqrt(-2f * MathF.Log(1f - num));
-            float num6 = 0.322232425f + (num5 * (1f + (num5 * (0.3422421f + (num5 * (0.0204231218f + (num5 * 4.536422E-05f)))))));
-            float num7 = 0.09934846f + (num5 * (0.588581562f + (num5 * (0.5311035f + (num5 * (0.103537753f + (num5 * 0.00385607f)))))));
-            return mean - (stddev * ((num6 / num7) - num5));
+            float num5 = MathUtils.Sqrt(-2f * MathUtils.Log(1f - num));
+            float num6 = 0.32223243f + num5 * (1f + num5 * (0.3422421f + num5 * (0.020423122f + num5 * 4.536422E-05f)));
+            float num7 = 0.09934846f + num5 * (0.58858156f + num5 * (0.5311035f + num5 * (0.10353775f + num5 * 0.00385607f)));
+            return mean - stddev * (num6 / num7 - num5);
         }
 
         public Vector2 Vector2()
@@ -129,13 +119,13 @@ namespace Engine
             float num5;
             do
             {
-                num = (2f * Float()) - 1f;
-                num2 = (2f * Float()) - 1f;
+                num = 2f * Float() - 1f;
+                num2 = 2f * Float() - 1f;
                 num3 = num * num;
                 num4 = num2 * num2;
                 num5 = num3 + num4;
             }
-            while (!(num5 < 1f));
+            while (!(num5 < 1f) || !(num5 > 0f));
             float num6 = 1f / num5;
             return new Vector2((num3 - num4) * num6, 2f * num * num2 * num6);
         }
@@ -157,13 +147,13 @@ namespace Engine
             float num3;
             do
             {
-                num = (2f * Float()) - 1f;
-                num2 = (2f * Float()) - 1f;
-                num3 = (num * num) + (num2 * num2);
+                num = 2f * Float() - 1f;
+                num2 = 2f * Float() - 1f;
+                num3 = num * num + num2 * num2;
             }
-            while (!(num3 < 1f));
-            float num4 = MathF.Sqrt(1f - num3);
-            return new Vector3(2f * num * num4, 2f * num2 * num4, 1f - (2f * num3));
+            while (!(num3 < 1f) || !(num3 > 0f));
+            float num4 = MathUtils.Sqrt(1f - num3);
+            return new Vector3(2f * num * num4, 2f * num2 * num4, 1f - 2f * num3);
         }
 
         public Vector3 Vector3(float length)
@@ -176,11 +166,9 @@ namespace Engine
             return Engine.Vector3.Normalize(Vector3()) * Float(minLength, maxLength);
         }
 
-#if ANDROID
-        public static uint RotateLeft(uint x, int k)
+        private static uint RotateLeft(uint x, int k)
         {
-            return (x << k) | (x >> (32 - k));
+            return (x << k) | (x >> 32 - k);
         }
-#endif
     }
 }

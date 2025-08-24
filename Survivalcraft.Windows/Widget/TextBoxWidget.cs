@@ -1,3 +1,5 @@
+// ReSharper disable UnusedAutoPropertyAccessor.Global
+
 using Engine;
 using Engine.Graphics;
 using Engine.Input;
@@ -1109,8 +1111,10 @@ public class TextBoxWidget : Widget
         return;
 #endif
 
-        static List<TextBoxWidget> FindTextBoxWidgets(ContainerWidget widget)
-        {
+	    // ReSharper disable UnusedLocalFunction
+	    static List<TextBoxWidget> FindTextBoxWidgets(ContainerWidget widget)
+	    // ReSharper restore UnusedLocalFunction
+	    {
             List<TextBoxWidget> textBoxes = new(capacity: 16);
             foreach (Widget child in widget.Children)
             {
@@ -1563,7 +1567,9 @@ public class TextBoxWidget : Widget
 		    }
 	    };
     }
+    // ReSharper disable UnusedParameter.Local
     private static void SetCursorPosition(TextBoxWidget widget)
+    // ReSharper restore UnusedParameter.Local
     {
 #if WINDOWS
 	    Vector2 caretPosition = widget.Font.MeasureText(
@@ -1593,7 +1599,9 @@ public class TextBoxWidget : Widget
         set => InputMethod.Enabled = value;
 #else
         get => false;
+        // ReSharper disable ValueParameterNotUsed
         set { }
+        // ReSharper restore ValueParameterNotUsed
 #endif
     }
 
@@ -1678,6 +1686,7 @@ public class TextBoxWidget : Widget
     /// Events will be call when pressing enter.
     /// </para>
     /// </summary>
+#pragma warning disable CS0067 // 事件从未使用过
     public event Action<TextBoxWidget> Enter;
 
     /// <summary>
@@ -1689,6 +1698,7 @@ public class TextBoxWidget : Widget
     /// </para>
     /// </summary>
     public event Action<TextBoxWidget> Escape;
+#pragma warning restore CS0067 // 事件从未使用过
 
     /// <summary>
     /// <para>
@@ -1851,7 +1861,7 @@ public class TextBoxWidget : Widget
 		       selectionStart + selectionLength > charIndex)
 		    {//如果这一行有字符被选中
 			    int lineStart = charIndex;
-			    int lineEnd = charIndex + line.Length;
+			    //int lineEnd = charIndex + line.Length;
         
 			    int selectionStartInLine = Math.Max(selectionStart - lineStart, 0);
 			    int selectionEndInLine = Math.Min(selectionStart + selectionLength - lineStart, line.Length);
@@ -1960,16 +1970,7 @@ public class TextBoxWidget : Widget
         {
             return;
         }
-        
-        if (Text.Length == 0)
-        { 
-            DesiredSize = Font.MeasureText(" ", new Vector2(FontScale), FontSpacing);
-        }
-        else
-        {
-            DesiredSize = Font.MeasureText(Text, new Vector2(FontScale), FontSpacing);
-        }
-
+        DesiredSize = Font.MeasureText(Text.Length == 0 ? " " : Text, new Vector2(FontScale), FontSpacing);
         base.MeasureOverride(parentAvailableSize);
     }
 

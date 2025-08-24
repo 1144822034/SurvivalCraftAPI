@@ -142,10 +142,11 @@ namespace Game
 		}
 		public virtual void SetClothes(ClothingSlot slot, IEnumerable<int> clothes)
 		{
-			if (!m_clothes[slot].SequenceEqual(clothes))
+			IEnumerable<int> enumerable = clothes as List<int> ?? clothes.ToList();
+			if (!m_clothes[slot].SequenceEqual(enumerable))
 			{
 				m_clothes[slot].Clear();
-				m_clothes[slot].AddRange(clothes);
+				m_clothes[slot].AddRange(enumerable);
 				m_clothedTexturesValid = false;
 				float densityModiferAppliedBefore = m_densityModifierApplied;
 				m_densityModifierApplied = 0f;
@@ -160,10 +161,7 @@ namespace Game
 					{
 						Block block = BlocksManager.Blocks[Terrain.ExtractContents(item)];
 						ClothingData clothingData = block.GetClothingData(item);
-						if(clothingData != null)
-						{
-							clothingData.OnClotheSet(this);
-						}
+						clothingData?.OnClotheSet(this);
 					}
 				}
 				float num2 = m_densityModifierApplied - densityModiferAppliedBefore;
@@ -172,7 +170,7 @@ namespace Game
 			}
             ModsManager.HookAction("SetClothes", loader =>
             {
-                loader.SetClothes(this, slot, clothes);
+                loader.SetClothes(this, slot, enumerable);
                 return false;
             });
         }
@@ -204,7 +202,9 @@ namespace Game
 				ClothingSlot slot = (num < 0.1f) ? ClothingSlot.Feet : ((num < 0.3f) ? ClothingSlot.Legs : ((num < 0.9f) ? ClothingSlot.Torso : ClothingSlot.Head));
 				List<int> listBeforeProtection = new(GetClothes(slot));
 				ModsManager.HookAction("ApplyProtectionBeforeClothes",loader => {
+					// ReSharper disable AccessToModifiedClosure
 					loader.ApplyProtectionBeforeClothes(this,attackment,ref attackPowerAfterProtection);
+					// ReSharper restore AccessToModifiedClosure
 					return false;
 				});
 				ModsManager.HookAction("DecideArmorProtectionSequence",loader => {
@@ -370,7 +370,7 @@ namespace Game
 							m_clothesList.RemoveAt(num);
 							flag = true;
 						}
-						if (clothingData.PlayerLevelRequired > m_componentPlayer.PlayerData.Level)
+						if (clothingData != null && clothingData.PlayerLevelRequired > m_componentPlayer.PlayerData.Level)
 						{
 							m_componentGui.DisplaySmallMessage(string.Format(LanguageControl.Get(fName, 1), clothingData.PlayerLevelRequired, clothingData.DisplayName), Color.White, blinking: true, playNotificationSound: true);
 							m_subsystemPickables.AddPickable(value, 1, m_componentBody.Position, null, null, Entity);
@@ -643,7 +643,6 @@ namespace Game
 					{
 						foreach (int clothe in GetClothes(slot))
 						{
-							int data = Terrain.ExtractData(clothe);
 							Block block = BlocksManager.Blocks[Terrain.ExtractContents(clothe)];
 							ClothingData clothingData = block.GetClothingData(clothe);
 							if(clothingData == null)
@@ -667,7 +666,6 @@ namespace Game
 					{
 						foreach (int clothe2 in GetClothes(slot2))
 						{
-							int data2 = Terrain.ExtractData(clothe2);
 							Block block2 = BlocksManager.Blocks[Terrain.ExtractContents(clothe2)];
 							ClothingData clothingData2 = block2.GetClothingData(clothe2);
 							if(clothingData2 == null)

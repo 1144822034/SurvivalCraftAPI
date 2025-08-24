@@ -1,6 +1,8 @@
 using System.Diagnostics;
-using System.Runtime.InteropServices;
 using Silk.NET.OpenGLES;
+#if DEBUG
+using System.Runtime.InteropServices;
+#endif
 
 namespace Engine.Graphics
 {

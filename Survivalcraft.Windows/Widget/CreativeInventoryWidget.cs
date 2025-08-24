@@ -111,11 +111,11 @@ namespace Game
 			}
 			if (m_categoryLeftButton.IsClicked || Input.Left)
 			{
-				int num = --m_componentCreativeInventory.CategoryIndex;
+				--m_componentCreativeInventory.CategoryIndex;
 			}
 			if (m_categoryRightButton.IsClicked || Input.Right)
 			{
-				int num = ++m_componentCreativeInventory.CategoryIndex;
+				++m_componentCreativeInventory.CategoryIndex;
 			}
 			if (m_categoryButton.IsClicked)
 			{

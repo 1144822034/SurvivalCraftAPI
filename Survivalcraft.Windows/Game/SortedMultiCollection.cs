@@ -1,8 +1,8 @@
 namespace Game
 {
-	public class SortedMultiCollection<TKey, TValue> : IEnumerable<KeyValuePair<TKey, TValue>>, IEnumerable
+	public class SortedMultiCollection<TKey, TValue> : IEnumerable<KeyValuePair<TKey, TValue>>
 	{
-		public struct Enumerator : IEnumerator<KeyValuePair<TKey, TValue>>, IEnumerator, IDisposable
+		public struct Enumerator : IEnumerator<KeyValuePair<TKey, TValue>>
 		{
 			public SortedMultiCollection<TKey, TValue> m_collection;
 

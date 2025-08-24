@@ -63,6 +63,8 @@ namespace Game
 		public virtual Action<Projectile> ProjectileRemoved { get; set; }
 
 		public UpdateOrder UpdateOrder => UpdateOrder.Default;
+
+		private readonly Lock m_lock = new();
         public virtual Projectile AddProjectile(Projectile projectile)
         {
 			if(projectile == null) return null;
@@ -75,7 +77,7 @@ namespace Game
                 return false;
             });
 
-            lock (m_projectiles)
+            lock (m_lock)
             {
                 m_projectiles.Add(projectile);
             }
@@ -227,48 +229,41 @@ namespace Game
 
 		public virtual void Update(float dt)
 		{
-			for(int i = 0; i < m_projectiles.Count; i++)
+			lock(m_lock)
 			{
-				Projectile projectile = m_projectiles[i];
-				if(projectile != null)
+				foreach(Projectile projectile in m_projectiles)
 				{
-					lock (projectile)
+					if(projectile != null)
 					{
-                        if (projectile.ToRemove)
-                        {
-                            m_projectilesToRemove.Add(projectile);
-                        }
-                        else
-                        {
+						if(projectile.ToRemove)
+						{
+							m_projectilesToRemove.Add(projectile);
+						}
+						else
+						{
 							try
 							{
 
 								projectile.Project = Project;
 								projectile.Update(dt);
 							}
-							catch (Exception ex)
+							catch(Exception ex)
 							{
 								Log.Error("Projectile update error: ");
 								Log.Error(ex);
 								projectile.ToRemove = true;
 							}
-                        }
-                    }
-                }
-			}
-			lock (m_projectilesToRemove)
-			{
-				foreach (Projectile item in m_projectilesToRemove)
+						}
+					}
+				}
+				foreach(Projectile item in m_projectilesToRemove)
 				{
-					if (item.TrailParticleSystem != null)
+					if(item.TrailParticleSystem != null)
 					{
 						item.TrailParticleSystem.IsStopped = true;
 					}
 					item.OnRemove?.Invoke();
-					lock (m_projectiles)
-					{
-						m_projectiles.Remove(item);
-					}
+					m_projectiles.Remove(item);
 					ProjectileRemoved?.Invoke(item);
 				}
 				m_projectilesToRemove.Clear();

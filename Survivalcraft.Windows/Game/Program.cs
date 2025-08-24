@@ -28,7 +28,9 @@ namespace Game
 #endif
 		
 #if !ANDROID
+		// ReSharper disable UnusedMember.Local
 		private static void Main(string[] args)
+		// ReSharper restore UnusedMember.Local
 		{
 			if(args != null && args.Length > 0)
 			{

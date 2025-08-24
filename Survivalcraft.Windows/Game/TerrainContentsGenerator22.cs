@@ -1399,7 +1399,7 @@ namespace Game
 									}
 									float num8 = random.Float(0f, 1f);
 									num8 -= num6;
-									if (num5 == 0 && num8 < 0f)
+									if (/*num5 == 0 && */num8 < 0f)
 									{
 										num5 = 226;
 									}
@@ -1799,9 +1799,6 @@ namespace Game
 						}
 					}
 					break;
-#pragma warning disable CS0162 // 检测到无法访问的代码
-					continue;
-#pragma warning restore CS0162 // 检测到无法访问的代码
 				end_IL_019b:
 					break;
 				}

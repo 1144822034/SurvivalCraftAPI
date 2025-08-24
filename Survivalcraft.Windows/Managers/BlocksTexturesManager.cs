@@ -60,6 +60,7 @@ namespace Game
 			}
 			catch
 			{
+				// ignored
 			}
 			return new DateTime(2000, 1, 1);
 		}
@@ -86,13 +87,10 @@ namespace Game
 				}
 				catch (Exception ex)
 				{
-					Log.Warning(string.Format(LanguageControl.Get(fName,"2"), new object[2] { name, ex.Message }));
+					Log.Warning(string.Format(LanguageControl.Get(fName,"2"),name, ex.Message));
 				}
 			}
-			if (texture2D == null)
-			{
-				texture2D = DefaultBlocksTexture;
-			}
+			texture2D ??= DefaultBlocksTexture;
 			return texture2D;
 		}
 

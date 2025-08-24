@@ -53,6 +53,7 @@ namespace Game
 				}
 				catch
 				{
+					// ignored
 				}
 				throw new InvalidOperationException("Cannot import world because it does not contain valid world data.");
 			}
@@ -99,9 +100,9 @@ namespace Game
 						{
 							TerrainSerializer14.ReadTOCEntry(stream, out int cx, out int cz, out int _);
 							Vector3 vector = new(16 * cx, 255f, 16 * cz);
-							xElement.Element("Subsystems").Element("Values").Element("Value")
-								.Attribute("Value")
-								.SetValue(HumanReadableConverter.ConvertToString(vector));
+							xElement?.Element("Subsystems")?.Element("Values")?.Element("Value")
+								?.Attribute("Value")
+								?.SetValue(HumanReadableConverter.ConvertToString(vector));
 						}
 						using (Stream stream2 = Storage.OpenFile(text, OpenFileMode.Create))
 						{
@@ -310,7 +311,7 @@ namespace Game
 			{
 				return;
 			}
-			XElement xElement = null;
+			XElement xElement;
 			using (Stream stream = Storage.OpenFile(path, OpenFileMode.Read))
 			{
 				xElement = XmlUtils.LoadXmlFromStream(stream, null, throwOnError: true);
@@ -385,7 +386,7 @@ namespace Game
 
 		public static XElement GetGameInfoNode(XElement projectNode)
 		{
-			XElement xElement = (from n in projectNode.Element("Subsystems").Elements("Values")
+			XElement xElement = (from n in projectNode.Element("Subsystems")?.Elements("Values")
 								 where XmlUtils.GetAttributeValue(n, "Name", string.Empty) == "GameInfo"
 								 select n).FirstOrDefault();
 			if (xElement != null)
@@ -404,7 +405,7 @@ namespace Game
 		/// </summary>
 		public static XElement GetSubsystemNode(XElement projectNode,string subsystemName, bool throwOnError)
 		{
-			XElement xElement = (from n in projectNode.Element("Subsystems").Elements("Values")
+			XElement xElement = (from n in projectNode.Element("Subsystems")?.Elements("Values")
 								 where XmlUtils.GetAttributeValue(n,"Name",string.Empty) == subsystemName
 								 select n).FirstOrDefault();
 			if(xElement != null)
@@ -417,7 +418,7 @@ namespace Game
 
 		public static XElement GetPlayersNode(XElement projectNode)
 		{
-			XElement xElement = (from n in projectNode.Element("Subsystems").Elements("Values")
+			XElement xElement = (from n in projectNode.Element("Subsystems")?.Elements("Values")
 								 where XmlUtils.GetAttributeValue(n, "Name", string.Empty) == "Players"
 								 select n).FirstOrDefault();
 			if (xElement != null)

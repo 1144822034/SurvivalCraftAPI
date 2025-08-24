@@ -1,9 +1,8 @@
 #if ANDROID
 using Engine;
 using Game;
-using System.IO;
 
-public class AndroidSdCardExternalContentProvider : IExternalContentProvider, IDisposable
+public class AndroidSdCardExternalContentProvider : IExternalContentProvider
 {
 	private string m_rootDirectory;
 	public static string fName = "AndroidSdCardExternalContentProvider";
@@ -39,15 +38,13 @@ public class AndroidSdCardExternalContentProvider : IExternalContentProvider, ID
 
 	public void List(string path, CancellableProgress progress, Action<ExternalContentEntry> success, Action<Exception> failure)
 	{
-		ExternalContentEntry entry = default(ExternalContentEntry);
-		Exception e = default(Exception);
 		ThreadPool.QueueUserWorkItem(delegate
 		{
 			try
 			{
 				InitializeFilesystemAccess();
 				string internalPath = ToInternalPath(path);
-				entry = GetDirectoryEntry(internalPath, scanContents: true);
+				ExternalContentEntry entry = GetDirectoryEntry(internalPath, scanContents: true);
 				Dispatcher.Dispatch(delegate
 				{
 					success(entry);
@@ -65,15 +62,13 @@ public class AndroidSdCardExternalContentProvider : IExternalContentProvider, ID
 
 	public void Download(string path, CancellableProgress progress, Action<Stream> success, Action<Exception> failure)
 	{
-		FileStream stream = default(FileStream);
-		Exception e = default(Exception);
 		ThreadPool.QueueUserWorkItem(delegate
 		{
 			try
 			{
 				InitializeFilesystemAccess();
 				string path2 = ToInternalPath(path);
-				stream = new FileStream(path2, FileMode.Open, FileAccess.Read, FileShare.Read);
+				FileStream stream = new(path2, FileMode.Open, FileAccess.Read, FileShare.Read);
 				Dispatcher.Dispatch(delegate
 				{
 					success(stream);
@@ -91,7 +86,6 @@ public class AndroidSdCardExternalContentProvider : IExternalContentProvider, ID
 
 	public void Upload(string path, Stream stream, CancellableProgress progress, Action<string> success, Action<Exception> failure)
 	{
-		Exception e = default(Exception);
 		ThreadPool.QueueUserWorkItem(delegate
 		{
 			try
@@ -151,10 +145,17 @@ public class AndroidSdCardExternalContentProvider : IExternalContentProvider, ID
 	{
 		int num = 1;
 		string text = path;
-		while (System.IO.File.Exists(text) && num < 1000)
+		string directoryName = Path.GetDirectoryName(path);
+		if(directoryName == null)
 		{
-			string path2 = Path.GetFileNameWithoutExtension(path) + num.ToString() + Path.GetExtension(path);
-			text = Path.Combine(Path.GetDirectoryName(path), path2);
+			return path;
+		}
+		string fileNameWithoutExtension = Path.GetFileNameWithoutExtension(path);
+		string extension = Path.GetExtension(path);
+		while (File.Exists(text) && num < 1000)
+		{
+			string path2 = fileNameWithoutExtension + num + extension;
+			text = Path.Combine(directoryName, path2);
 			num++;
 		}
 		return text;

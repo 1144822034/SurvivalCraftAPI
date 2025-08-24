@@ -103,20 +103,20 @@ namespace Game
 				Dialog dialog = null;
 				if(SettingsManager.DeleteWorldNeedToText)
 				{
-					TextBoxDialog textBoxDialog;
-					textBoxDialog = new TextBoxDialog(LanguageControl.Get(fName, 1) + LanguageControl.Get(fName, 5), string.Empty, 3, delegate (string content)
-                    {
-                        if (content?.ToLower() == "yes")
-                        {
-                            WorldsManager.DeleteWorld(m_directoryName);
-                            ScreensManager.SwitchScreen("Play");
-                            DialogsManager.HideDialog(dialog);
-                        }
-                        else
-                        {
-                            DialogsManager.HideDialog(dialog);
-                        }
-                    });
+					TextBoxDialog textBoxDialog = new(LanguageControl.Get(fName, 1) + LanguageControl.Get(fName, 5), string.Empty, 3, delegate (string content)
+					{
+						if (content?.ToLower() == "yes")
+						{
+							WorldsManager.DeleteWorld(m_directoryName);
+							ScreensManager.SwitchScreen("Play");
+							// ReSharper disable AccessToModifiedClosure
+							DialogsManager.HideDialog(dialog);
+						}
+						else
+						{
+							DialogsManager.HideDialog(dialog);
+						}
+					});
                     dialog = textBoxDialog;
                     textBoxDialog.Children.Find<LabelWidget>("TextBoxDialog.Title").Color = Color.Red;
                     textBoxDialog.AutoHide = false;
@@ -134,6 +134,7 @@ namespace Game
                         else
                         {
                             DialogsManager.HideDialog(dialog);
+                            // ReSharper restore AccessToModifiedClosure
                         }
                     });
                 }

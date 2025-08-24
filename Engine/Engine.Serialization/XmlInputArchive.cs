@@ -21,11 +21,7 @@ namespace Engine.Serialization
 
         public void Reset(XElement node, int version = 0, object context = null)
         {
-            if (node == null)
-            {
-                throw new ArgumentNullException(nameof(node));
-            }
-            Node = node;
+            Node = node ?? throw new ArgumentNullException(nameof(node));
             Reset(version, context);
         }
 
@@ -201,20 +197,23 @@ namespace Engine.Serialization
 					while (enumerator.MoveNext())
 					{
 						XElement xElement = Node = enumerator.Current;
-                        string localName = XmlConvert.DecodeName(xElement.Name.LocalName);
-                        K key = (K)HumanReadableConverter.ConvertFromString(typeof(K), localName);
-                        V value = default(V);
-						if (dictionary.TryGetValue(key, out V value2))
-						{
-							value = value2;
-							ReadObject(null, serializeData2, ref value, false);
-						}
-						else
-						{
-							ReadObject(null, serializeData2, ref value, true);
-							dictionary.Add(key, value);
-						}
-						Node = Node.Parent;
+                        if (xElement != null)
+                        {
+                            string localName = XmlConvert.DecodeName(xElement.Name.LocalName);
+                            K key = (K)HumanReadableConverter.ConvertFromString(typeof(K), localName);
+                            V value = default(V);
+                            if (dictionary.TryGetValue(key, out V value2))
+                            {
+                                value = value2;
+                                ReadObject(null, serializeData2, ref value, false);
+                            }
+                            else
+                            {
+                                ReadObject(null, serializeData2, ref value, true);
+                                dictionary.Add(key, value);
+                            }
+                            Node = Node.Parent;
+                        }
 					}
 				}
 			}
@@ -224,7 +223,7 @@ namespace Engine.Serialization
 				{
 					while (enumerator.MoveNext())
 					{
-						XElement xElement2 = Node = enumerator.Current;
+						//XElement xElement2 = Node = enumerator.Current;
                         K value3 = default(K);
                         V value4 = default(V);
 						ReadObject("k", serializeData, ref value3, true);
@@ -235,7 +234,7 @@ namespace Engine.Serialization
 						}
 						ReadObject("v", serializeData2, ref value4, true);
 						dictionary.Add(value3, value4);
-						Node = Node.Parent;
+						Node = Node?.Parent;
 					}
 				}
 			}
@@ -255,7 +254,7 @@ namespace Engine.Serialization
 			XAttribute xAttribute2 = Node.Attribute("_def");
             objectId = ((xAttribute2 != null) ? new int?(int.Parse(xAttribute2.Value)) : null);
             XAttribute xAttribute3 = Node.Attribute("_type");
-			if (xAttribute2 != null)
+			if (xAttribute2 != null && xAttribute3 != null)
 			{
 				runtimeType = TypeCache.FindType(xAttribute3.Value, skipSystemAssemblies: false, throwIfNotFound: true);
 			}

@@ -53,7 +53,7 @@ namespace Game
         public float? StunTimeSet;
         public float StunTimeAdd = 0.2f;
         public float ImpulseFactor = 2f;
-        public string CauseOfDeath = String.Empty;
+        public string CauseOfDeath;
         public bool EnableArmorProtection = true;
         public bool EnableResilienceFactor = true;
         public bool EnableHitValueParticleSystem = true;
@@ -119,13 +119,13 @@ namespace Game
                 modLoader.SetHitValueParticleSystem(particleSystem, this);
                 return false;
             });
-            Target.Project.FindSubsystem<SubsystemParticles>()?.AddParticleSystem(particleSystem);
+            Target?.Project.FindSubsystem<SubsystemParticles>()?.AddParticleSystem(particleSystem);
         }
         public virtual void ProcessAttackmentToCreature(out float injuryAmount)
         {
             ComponentHealth componentHealth = Target.FindComponent<ComponentHealth>();
             ComponentBody componentBody = Target.FindComponent<ComponentBody>();
-            ComponentCreature attackerCreature = Attacker?.FindComponent<ComponentCreature>();
+            //ComponentCreature attackerCreature = Attacker?.FindComponent<ComponentCreature>();
 			if(componentHealth == null || componentBody == null) { injuryAmount = 0f; return; }
             injuryAmount = CalculateInjuryAmount();
             float healthBeforeAttack = componentHealth.Health;
@@ -143,7 +143,7 @@ namespace Game
         {
             ComponentDamage componentDamage = Target.FindComponent<ComponentDamage>();
             ComponentBody componentBody = Target.FindComponent<ComponentBody>();
-            ComponentCreature attackerCreature = Attacker?.FindComponent<ComponentCreature>();
+            //ComponentCreature attackerCreature = Attacker?.FindComponent<ComponentCreature>();
 			if(componentDamage == null || componentBody == null) { injuryAmount = 0f; return; }
             injuryAmount = CalculateInjuryAmount();
 			m_injuryAmount = injuryAmount;
@@ -180,7 +180,7 @@ namespace Game
             ComponentLocomotion componentLocomotion = Target.FindComponent<ComponentLocomotion>();
             if (componentLocomotion != null)
             {
-                componentLocomotion.StunTime = StunTimeSet ?? componentLocomotion.StunTime + StunTimeAdd;
+                componentLocomotion.StunTime = StunTimeSet ?? (componentLocomotion.StunTime + StunTimeAdd);
             }
         }
         public virtual void ProcessAttackment()

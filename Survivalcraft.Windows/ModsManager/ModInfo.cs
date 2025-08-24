@@ -27,7 +27,9 @@ namespace Game
 		public bool NonPersistentMod = false;//“注意这玩意写开发文档里”，git push的时候把这句话提交上去
 		public override int GetHashCode()
 		{
+			// ReSharper disable NonReadonlyMemberInGetHashCode
 			return HashCode.Combine(Name, PackageName, Version);
+			// ReSharper restore NonReadonlyMemberInGetHashCode
 		}
 
 		public override bool Equals(object obj) => obj is ModInfo && obj.GetHashCode() == GetHashCode();

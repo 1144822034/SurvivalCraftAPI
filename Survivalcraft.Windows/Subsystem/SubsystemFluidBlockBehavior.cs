@@ -132,7 +132,7 @@ namespace Game
 
 		public float? GetSurfaceHeight(int x, int y, int z)
 		{
-			return GetSurfaceHeight(x, y, z, out FluidBlock surfaceFluidBlock);
+			return GetSurfaceHeight(x, y, z, out FluidBlock _);
 		}
 
 		public Vector2? CalculateFlowSpeed(int x, int y, int z, out FluidBlock surfaceBlock, out float? surfaceHeight)
@@ -188,7 +188,7 @@ namespace Game
 
 		public Vector2? CalculateFlowSpeed(int x, int y, int z)
 		{
-			return CalculateFlowSpeed(x, y, z, out FluidBlock surfaceBlock, out float? surfaceHeight);
+			return CalculateFlowSpeed(x, y, z, out FluidBlock _, out float? _);
 		}
 
 		public override void Load(ValuesDictionary valuesDictionary)
@@ -239,14 +239,7 @@ namespace Game
 							int contents4 = Terrain.ExtractContents(SubsystemTerrain.Terrain.GetCellValue(x, y + 1, z));
 							if (!m_fluidBlock.IsTheSameFluid(contents4))
 							{
-								if (num + 1 > m_fluidBlock.MaxLevel)
-								{
-									Set(x, y, z, 0);
-								}
-								else
-								{
-									Set(x, y, z, Terrain.MakeBlockValue(contents, 0, FluidBlock.SetLevel(data, num + 1)));
-								}
+								Set(x,y,z,num + 1 > m_fluidBlock.MaxLevel ? 0 : Terrain.MakeBlockValue(contents,0,FluidBlock.SetLevel(data,num + 1)));
 								continue;
 							}
 						}

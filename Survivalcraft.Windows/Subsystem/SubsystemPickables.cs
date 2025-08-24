@@ -48,13 +48,24 @@ namespace Game
 			10
 		];
 
-		public ReadOnlyList<Pickable> Pickables => new(m_pickables);
+		public ReadOnlyList<Pickable> Pickables
+		{
+			get
+			{
+				lock (m_lock)
+				{
+					return new ReadOnlyList<Pickable>(m_pickables);
+				}
+			}
+		}
 
 		public int[] DrawOrders => m_drawOrders;
 
 		public virtual Action<Pickable> PickableAdded { get; set; }
 		public virtual Action<Pickable> PickableRemoved { get; set; }
 		public UpdateOrder UpdateOrder => UpdateOrder.Default;
+
+		private readonly Lock m_lock = new();
 
 		public virtual Pickable AddPickable(Pickable pickable)
         {
@@ -67,7 +78,7 @@ namespace Game
                 loader.OnPickableAdded(this, ref pickable, null);
                 return false;
             });
-            lock (m_pickables)
+            lock (m_lock)
             {
                 m_pickables.Add(pickable);
             }
@@ -123,19 +134,22 @@ namespace Game
 			double totalElapsedGameTime = m_subsystemGameInfo.TotalElapsedGameTime;
 			m_drawBlockEnvironmentData.SubsystemTerrain = m_subsystemTerrain;
 			Matrix matrix = Matrix.CreateRotationY((float)MathUtils.Remainder(totalElapsedGameTime, 6.2831854820251465));
-			foreach (Pickable pickable in m_pickables)
+			lock(m_lock)
 			{
-				try
+				foreach(Pickable pickable in m_pickables)
 				{
-					pickable.Project = Project;
-					pickable.Draw(camera,drawOrder,totalElapsedGameTime,matrix);
-				}
-				catch(Exception e)
-				{
-					if(pickable.LogDrawError)
+					try
 					{
-						Log.Error("Pickable draw error: " + e);
-						pickable.LogDrawError = false;
+						pickable.Project = Project;
+						pickable.Draw(camera,drawOrder,totalElapsedGameTime,matrix);
+					}
+					catch(Exception e)
+					{
+						if(pickable.LogDrawError)
+						{
+							Log.Error("Pickable draw error: " + e);
+							pickable.LogDrawError = false;
+						}
 					}
 				}
 			}
@@ -144,10 +158,11 @@ namespace Game
 
 		public virtual void Update(float dt)
 		{
-			foreach (Pickable pickable in m_pickables) {
-				lock (pickable)
+			lock(m_lock)
+			{
+				foreach(Pickable pickable in m_pickables)
 				{
-					if (pickable.ToRemove)
+					if(pickable.ToRemove)
 					{
 						m_pickablesToRemove.Add(pickable);
 					}
@@ -158,23 +173,20 @@ namespace Game
 							pickable.Project = Project;
 							pickable.Update(dt);
 						}
-						catch (Exception e)
+						catch(Exception e)
 						{
 							Log.Error("Pickable update error: " + e);
 							pickable.ToRemove = true;
 						}
 					}
 				}
-			}
-			foreach (Pickable item in m_pickablesToRemove)
-			{
-				lock (m_pickables)
+				foreach(Pickable item in m_pickablesToRemove)
 				{
-                    m_pickables.Remove(item);
-                }
-				PickableRemoved?.Invoke(item);
+					m_pickables.Remove(item);
+					PickableRemoved?.Invoke(item);
+				}
+				m_pickablesToRemove.Clear();
 			}
-			m_pickablesToRemove.Clear();
 		}
 
 		public override void Load(ValuesDictionary valuesDictionary)
@@ -227,17 +239,22 @@ namespace Game
 			ValuesDictionary valuesDictionary2 = new();
 			valuesDictionary.SetValue("Pickables", valuesDictionary2);
 			int num = 0;
-			foreach (Pickable pickable in m_pickables)
+			lock(m_lock)
 			{
-				ValuesDictionary valuesDictionary3 = new();
-				pickable.Save(valuesDictionary3);
-				ModsManager.HookAction("SavePickable", loader =>
+				foreach(Pickable pickable in m_pickables)
 				{
-					loader.SavePickable(this, pickable, ref valuesDictionary3);
-					return false;
-				});
-                valuesDictionary2.SetValue(num.ToString(), valuesDictionary3);
-                num++;
+					ValuesDictionary valuesDictionary3 = new();
+					pickable.Save(valuesDictionary3);
+					ModsManager.HookAction(
+						"SavePickable",
+						loader => {
+							loader.SavePickable(this,pickable,ref valuesDictionary3);
+							return false;
+						}
+					);
+					valuesDictionary2.SetValue(num.ToString(),valuesDictionary3);
+					num++;
+				}
 			}
 		}
 

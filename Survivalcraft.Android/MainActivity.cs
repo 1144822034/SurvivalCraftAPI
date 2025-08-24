@@ -11,8 +11,6 @@ using Android.Widget;
 using Android.Window;
 using Engine;
 using Game;
-using System.Collections.Generic;
-using System.Threading;
 using Environment = Android.OS.Environment;
 using Permission = Android.Content.PM.Permission;
 
@@ -132,7 +130,7 @@ namespace SC4Android
 			}
 		}
 
-		protected override void OnCreate(Bundle? savedInstanceState)
+		protected override void OnCreate(Bundle savedInstanceState)
 		{
 			base.OnCreate(savedInstanceState);
 			Window?.DecorView.ViewTreeObserver?.AddOnPreDrawListener(new ViewTreeObserverListener());
@@ -152,7 +150,7 @@ namespace SC4Android
 		{
 			public void OnSplashScreenExit(SplashScreenView view)
 			{
-				ObjectAnimator? slideUp = ObjectAnimator.OfFloat(view, "alpha", 1f, 0f);
+				ObjectAnimator slideUp = ObjectAnimator.OfFloat(view, "alpha", 1f, 0f);
 				if(slideUp == null)
 				{
 					return;

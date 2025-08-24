@@ -35,16 +35,19 @@ namespace Game
 				loader.CraftingRecipesManagerInitialize(m_recipes, ref sort);
 				return false;
 			});
-			if(sort) m_recipes.Sort(delegate (CraftingRecipe r1, CraftingRecipe r2)
+			if(sort)
 			{
-				if(r1.DisplayOrder == r2.DisplayOrder)
+				m_recipes.Sort(delegate (CraftingRecipe r1, CraftingRecipe r2)
 				{
-					int y = r1.Ingredients.Count(s => !string.IsNullOrEmpty(s));
-					int x = r2.Ingredients.Count(s => !string.IsNullOrEmpty(s));
-					return Comparer<int>.Default.Compare(x,y);
-				}
-				return Comparer<int>.Default.Compare(r1.DisplayOrder, r2.DisplayOrder);
-			});
+					if(r1.DisplayOrder == r2.DisplayOrder)
+					{
+						int y = r1.Ingredients.Count(s => !string.IsNullOrEmpty(s));
+						int x = r2.Ingredients.Count(s => !string.IsNullOrEmpty(s));
+						return Comparer<int>.Default.Compare(x,y);
+					}
+					return Comparer<int>.Default.Compare(r1.DisplayOrder, r2.DisplayOrder);
+				});
+			}
 			ModsManager.HookAction("CraftingRecipesManagerInitialized", loader =>
 			{
 				loader.CraftingRecipesManagerInitialized();
@@ -55,7 +58,7 @@ namespace Game
 		{
             try
             {
-                if (!ModsManager.HasAttribute(item, name => { return name == "Result"; }, out XAttribute xAttribute))
+                if (!ModsManager.HasAttribute(item, name => name == "Result", out XAttribute _))
 				{
 					foreach (XElement xElement in item.Elements())
 					{
@@ -143,7 +146,7 @@ namespace Game
 
 		public static CraftingRecipe FindMatchingRecipe(SubsystemTerrain terrain, string[] ingredients, float heatLevel, float playerLevel)
 		{
-			if (ingredients.All(s => string.IsNullOrEmpty(s)))
+			if (ingredients.All(string.IsNullOrEmpty))
 			{
 				return null;
 			}
@@ -244,7 +247,7 @@ namespace Game
 			string[] array = new string[9];
 			for (int i = 0; i < 2; i++)
 			{
-				bool flip = ((i != 0) ? true : false);
+				bool flip = i != 0;
 				for (int j = -4; j <= 2; j++)
 				{
 					for (int k = -4; k <= 2; k++)
@@ -306,7 +309,8 @@ namespace Game
 			}
 			if (actualIngredient == null)
 			{
-				return requiredIngredient == null;
+				//return requiredIngredient == null;
+				return false;
 			}
 			DecodeIngredient(requiredIngredient, out string craftingId, out int? data);
 			DecodeIngredient(actualIngredient, out string craftingId2, out int? data2);

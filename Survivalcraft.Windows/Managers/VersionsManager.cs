@@ -61,8 +61,8 @@ public static class VersionsManager
 	{
 		m_versionConverters = [];//List
 		Assembly assembly = typeof(VersionsManager).GetTypeInfo().Assembly;
-		AssemblyName assemblyName = new(assembly.FullName);
-		Version = $"{assemblyName.Version.Major}.{assemblyName.Version.Minor}.{assemblyName.Version.Build}.{assemblyName.Version.Revision}";
+		AssemblyName assemblyName = new(assembly.FullName!);
+		Version = $"{assemblyName.Version!.Major}.{assemblyName.Version.Minor}.{assemblyName.Version.Build}.{assemblyName.Version.Revision}";
 		SerializationVersion = $"{assemblyName.Version.Major}.{assemblyName.Version.Minor}";
 		foreach(TypeInfo definedType in assembly.DefinedTypes)
 		{
@@ -153,11 +153,12 @@ public static class VersionsManager
 		}
 		List<VersionConverter> result = null;
 		int num = 2147483647;
-		foreach (VersionConverter converter in converters)
+		IEnumerable<VersionConverter> versionConverters = converters as List<VersionConverter> ?? converters.ToList();
+		foreach (VersionConverter converter in versionConverters)
 		{
 			if (converter.SourceVersion == sourceVersion)
 			{
-				List<VersionConverter> list = FindTransform(converter.TargetVersion, targetVersion, converters, depth + 1);
+				List<VersionConverter> list = FindTransform(converter.TargetVersion, targetVersion, versionConverters, depth + 1);
 				if (list != null && list.Count < num)
 				{
 					num = list.Count;

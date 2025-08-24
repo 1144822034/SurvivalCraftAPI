@@ -1,5 +1,6 @@
 using Engine;
 using Engine.Graphics;
+using System.Globalization;
 using System.Xml.Linq;
 
 namespace Game
@@ -382,9 +383,9 @@ namespace Game
 			m_yearDaysPanel.IsVisible = m_worldSettings.AreSeasonsChanging;
 			m_terrainGenerationButton.Text = StringsManager.GetString("TerrainGenerationMode." + m_worldSettings.TerrainGenerationMode + ".Name");
 			m_islandSizeEW.Value = FindNearestIndex(m_islandSizes, m_worldSettings.IslandSize.X);
-			m_islandSizeEW.Text = m_worldSettings.IslandSize.X.ToString();
+			m_islandSizeEW.Text = m_worldSettings.IslandSize.X.ToString(CultureInfo.InvariantCulture);
 			m_islandSizeNS.Value = FindNearestIndex(m_islandSizes, m_worldSettings.IslandSize.Y);
-			m_islandSizeNS.Text = m_worldSettings.IslandSize.Y.ToString();
+			m_islandSizeNS.Text = m_worldSettings.IslandSize.Y.ToString(CultureInfo.InvariantCulture);
 			m_flatTerrainLevelSlider.Value = m_worldSettings.TerrainLevel;
 			m_flatTerrainLevelSlider.Text = m_worldSettings.TerrainLevel.ToString();
 			m_flatTerrainShoreRoughnessSlider.Value = m_worldSettings.ShoreRoughness;

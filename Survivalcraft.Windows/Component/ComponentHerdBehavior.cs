@@ -69,7 +69,7 @@ namespace Game
 			bool skipVanilla = false;
 			Vector3? herdCenterFromMod = null;
 			ModsManager.HookAction("FindHerdCenter",modLoader => {
-				modLoader.FindHerdCenter(m_componentCreature, out Vector3? herdCenterFromMod, out skipVanilla);
+				modLoader.FindHerdCenter(m_componentCreature, out herdCenterFromMod, out skipVanilla);
 				return false;
 			});
 			if(skipVanilla) return herdCenterFromMod;

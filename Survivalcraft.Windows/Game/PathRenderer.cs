@@ -290,7 +290,9 @@ internal static class PathRenderer
 		QueuePathInternal(batch, TmpPoints, TmpNormals, visibility, loop, flatShading, lengthOffset, depth);
 	}
 
+	// ReSharper disable UnusedParameter.Local
 	private static void QueuePathInternal(FlatBatch2D batch, DynamicArray<Point> points, DynamicArray<Vector2> normals, DynamicArray<bool> visibility, bool loop, bool flatShading, float depth)
+	// ReSharper restore UnusedParameter.Local
 	{
 		int num = (loop ? normals.Count : (normals.Count - 1));
 		for (int i = 0; i < num; i++)
@@ -348,7 +350,9 @@ internal static class PathRenderer
 		}
 	}
 
+	// ReSharper disable UnusedParameter.Local
 	private static void QueuePathInternal(TexturedBatch2D batch, DynamicArray<Point> points, DynamicArray<Vector2> normals, DynamicArray<bool> visibility, bool loop, bool flatShading, float lengthOffset, float depth)
+	// ReSharper restore UnusedParameter.Local
 	{
 		float num = lengthOffset;
 		int num2 = (loop ? normals.Count : (normals.Count - 1));

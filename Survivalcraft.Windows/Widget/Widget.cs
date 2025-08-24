@@ -26,7 +26,9 @@ namespace Game
 			/// 绘制 rootWidget 及其子 Widget。
 			/// </summary>
 			/// <param name="rootWidget"></param>
+			// ReSharper disable MemberHidesStaticFromOuterClass
 			public virtual void DrawWidgetsHierarchy(Widget rootWidget)
+			// ReSharper restore MemberHidesStaticFromOuterClass
 			{
 				m_drawItems.Clear();
 				CollateDrawItems(rootWidget, Display.ScissorRectangle);
@@ -231,9 +233,11 @@ namespace Game
 			}
 		}
 
+		// ReSharper disable UnassignedField.Global
 		public Action<Vector2> MeasureOverride1;
 
 		public Action Update1;
+		// ReSharper restore UnassignedField.Global
 
 		/// <summary>
 		/// 绘制任务，有多种类型，绘制任务会按照 <see cref="Layer"/> 进行排序。
@@ -373,10 +377,7 @@ namespace Game
 		{
 			get
 			{
-				if (!m_globalScale.HasValue)
-				{
-					m_globalScale = m_globalTransform.Right.Length();
-				}
+				m_globalScale ??= m_globalTransform.Right.Length();
 				return m_globalScale.Value;
 			}
 		}
@@ -385,10 +386,7 @@ namespace Game
 		{
 			get
 			{
-				if (!m_invertedGlobalTransform.HasValue)
-				{
-					m_invertedGlobalTransform = Matrix.Invert(m_globalTransform);
-				}
+				m_invertedGlobalTransform ??= Matrix.Invert(m_globalTransform);
 				return m_invertedGlobalTransform.Value;
 			}
 		}
@@ -606,7 +604,7 @@ namespace Game
 
 		public virtual void LoadProperties(object eventsTarget, XElement node)
 		{
-			IEnumerable<PropertyInfo> runtimeProperties = GetType().GetRuntimeProperties();
+			IEnumerable<PropertyInfo> runtimeProperties = GetType().GetRuntimeProperties().ToArray();
 			foreach (XAttribute attribute in node.Attributes())
 			{
 				if (!attribute.IsNamespaceDeclaration && !attribute.Name.LocalName.StartsWith('_'))
@@ -640,7 +638,7 @@ namespace Game
 					}
 					else
 					{
-						PropertyInfo propertyInfo = runtimeProperties.Where(pi => pi.Name == attribute.Name.LocalName).FirstOrDefault();
+						PropertyInfo propertyInfo = runtimeProperties.FirstOrDefault(pi => pi.Name == attribute.Name.LocalName);
 						if (!(propertyInfo != null))
 						{
 							throw new InvalidOperationException($"Property \"{attribute.Name.LocalName}\" not found in widget of type \"{GetType().FullName}\".");

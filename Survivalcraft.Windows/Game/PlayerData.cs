@@ -172,7 +172,7 @@ namespace Game
 		{
 			get
 			{
-				if (!(m_stateMachine.CurrentState == "Playing"))
+				if (m_stateMachine.CurrentState != "Playing")
 				{
 					return m_stateMachine.CurrentState == "PlayerDead";
 				}
@@ -326,7 +326,7 @@ namespace Game
 								GameManager.DisposeProject();
                             }
 						}
-						if(m_playerDeathTime.HasValue || ComponentPlayer.ComponentHealth.Health <= 0f)
+						if(m_playerDeathTime.HasValue || ComponentPlayer?.ComponentHealth.Health <= 0f)
 						{
 							m_playerDeathTime = Time.RealTime;
 							m_stateMachine.TransitionTo("PlayerDead");
@@ -335,10 +335,7 @@ namespace Game
 					}
 				}
 			}, null);
-			m_stateMachine.AddState("Playing", delegate
-			{
-				HideSpawnDialog();
-			}, delegate
+			m_stateMachine.AddState("Playing", HideSpawnDialog, delegate
 			{
 				if(ComponentPlayer == null)
 				{
@@ -380,7 +377,9 @@ namespace Game
 				bool respawn = false;
 				bool disableVanillaTapToRespawnAction = false;
 				ModsManager.HookAction("UpdateDeathCameraWidget",loader => {
+					// ReSharper disable AccessToModifiedClosure
 					loader.UpdateDeathCameraWidget(this, ref disableVanillaTapToRespawnAction, ref respawn);
+					// ReSharper restore AccessToModifiedClosure
 					return false;
 				});
 				if (!disableVanillaTapToRespawnAction && Time.RealTime - (m_playerDeathTime ?? 0) > 1.5 && !DialogsManager.HasDialogs(ComponentPlayer.GuiWidget) && ComponentPlayer.GameWidget.Input.Any)
@@ -626,7 +625,6 @@ namespace Game
 
 		public bool CheckIsPointInWater(Point3 p)
 		{
-			bool result = true;
 			for (int i = p.X - 1; i < p.X + 1; i++)
 			{
 				for (int j = p.Z - 1; j < p.Z + 1; j++)
@@ -646,7 +644,7 @@ namespace Game
 					}
 				}
 			}
-			return result;
+			return true;
 		}
 
 		public void SpawnPlayer(Vector3 position, SpawnMode spawnMode)
@@ -787,7 +785,7 @@ namespace Game
 				entity2.FindComponent<ComponentRider>(throwOnError: true).StartMounting(componentMount);
 			}
 			LastSpawnTime = m_subsystemGameInfo.TotalElapsedGameTime;
-			int num = ++SpawnsCount;
+			++SpawnsCount;
 			ModsManager.HookAction("OnPlayerSpawned", modLoader =>
 			{
 				modLoader.OnPlayerSpawned(spawnMode, entity2.FindComponent<ComponentPlayer>(), position);

@@ -637,21 +637,28 @@ namespace Game
 
 		public void ConfirmQuit()
 		{
-			#if ANDROID
+#if ANDROID
+#pragma warning disable CA1416
+			if(Android.OS.Build.VERSION.SdkInt < (Android.OS.BuildVersionCodes)21)
+			{
+				Window.Close();
+				return;
+			}
 			Window.Activity.RunOnUiThread(
 				() => {
 					new AlertDialog.Builder(Window.Activity).SetMessage("Exit 退出?")
-					.SetPositiveButton(
+					?.SetPositiveButton(
 						"Yes 是",
-						(sender,e) => {
+						(_,_) => {
 							Window.Close();
 						}
 					)
-					.SetNegativeButton("No 否",(_,_) => { })
-					.Show();
+					?.SetNegativeButton("No 否",(_,_) => { })
+					?.Show();
 				}
 			);
-			#elif WINDOWS
+#pragma warning restore CA1416
+#elif WINDOWS
 			/*
 			Task.Run(() =>
 			{

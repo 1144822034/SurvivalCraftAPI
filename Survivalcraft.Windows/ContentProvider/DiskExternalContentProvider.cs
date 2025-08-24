@@ -33,13 +33,12 @@ namespace Game
 
 		public void Download(string path, CancellableProgress progress, Action<Stream> success, Action<Exception> failure)
 		{
-			FileStream fileStream = null;
 			if (!File.Exists(path))
 			{
 				failure(new FileNotFoundException());
 				return;
 			}
-			fileStream = File.OpenRead(path);
+			FileStream fileStream = File.OpenRead(path);
 			ThreadPool.QueueUserWorkItem(delegate
 			{
 				try
@@ -60,16 +59,12 @@ namespace Game
 
 		public void List(string path, CancellableProgress progress, Action<ExternalContentEntry> success, Action<Exception> failure)
 		{
-			ExternalContentEntry entry = null;
-#pragma warning disable CS0219 // 变量已被赋值，但从未使用过它的值
-			Exception e = null;
-#pragma warning restore CS0219 // 变量已被赋值，但从未使用过它的值
 			ThreadPool.QueueUserWorkItem(delegate
 			{
 				try
 				{
 					string internalPath = path;
-					entry = GetDirectoryEntry(internalPath, scanContents: true);
+					ExternalContentEntry entry = GetDirectoryEntry(internalPath, scanContents: true);
 					success(entry);
 				}
 				catch (Exception ex)

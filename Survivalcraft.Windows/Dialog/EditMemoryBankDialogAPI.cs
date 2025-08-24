@@ -136,7 +136,7 @@ namespace Game
 					}
 					else
 					{
-						int p = 0;
+						int p;
 						if (i == 0 && j > 0) p = j - 1;
 						else if (j == 0 && i > 0) p = i - 1;
 						else
@@ -144,7 +144,7 @@ namespace Game
 							ClickTextWidget click = new(new Vector2(22), "", null);
 							line.Children.Add(click);
 							continue;
-						};
+						}
 						ClickTextWidget clickTextWidget = new(new Vector2(22), MemoryBankData.m_hexChars[p].ToString(), delegate {
 
 						});
@@ -168,7 +168,9 @@ namespace Game
 			clickText.labelWidget.Color = Color.White;
 			return clickText;
 		}
+		// ReSharper disable UnusedMember.Local
 		private void ChangeNumber(char pp)
+		// ReSharper restore UnusedMember.Local
 		{
 				AudioManager.PlaySound("Audio/UI/ButtonClick",1f,0f,0f);
 				Write(clickpos,(byte)pp);//写入数据

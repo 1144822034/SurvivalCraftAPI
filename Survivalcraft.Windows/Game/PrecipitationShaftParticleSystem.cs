@@ -124,8 +124,8 @@ namespace Game
 					float y = activeCamera.ViewPosition.Y;
 					float num2 = y - 5f;
 					float num3 = y + 5f;
-					float num4 = 0f;
-					float num5 = 0f;
+					float num4;
+					float num5;
 					if (m_lastViewY.HasValue)
 					{
 						if (y < m_lastViewY.Value)
@@ -214,10 +214,15 @@ namespace Game
 			{
 				return;
 			}
-			if (m_batch == null)
-			{
-				m_batch = SubsystemParticles.PrimitivesRenderer.TexturedBatch(m_texture, useAlphaTest: false, 0, DepthStencilState.DepthRead, null, BlendState.AlphaBlend, SamplerState.PointClamp);
-			}
+			m_batch ??= SubsystemParticles.PrimitivesRenderer.TexturedBatch(
+				m_texture,
+				useAlphaTest: false,
+				0,
+				DepthStencilState.DepthRead,
+				null,
+				BlendState.AlphaBlend,
+				SamplerState.PointClamp
+			);
 			float num = camera.ViewPosition.Y + 5f;
 			Vector3 viewDirection = camera.ViewDirection;
 			Vector3 vector = Vector3.Normalize(Vector3.Cross(viewDirection, Vector3.UnitY));
@@ -272,7 +277,7 @@ namespace Game
 				return;
 			}
 			Ray3 ray = new(new Vector3(particle.Position.X - Point.X, 1f, particle.Position.Z - Point.Y), -Vector3.UnitY);
-			float? num = block.Raycast(ray, m_subsystemWeather.SubsystemTerrain, m_topmostValue, useInteractionBoxes: false, out int nearestBoxIndex, out BoundingBox nearestBox);
+			float? num = block.Raycast(ray, m_subsystemWeather.SubsystemTerrain, m_topmostValue, useInteractionBoxes: false, out int _, out BoundingBox _);
 			if (num.HasValue)
 			{
 				particle.YLimit -= num.Value;

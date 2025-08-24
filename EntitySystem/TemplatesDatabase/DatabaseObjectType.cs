@@ -79,16 +79,30 @@ namespace TemplatesDatabase
 			{
 				throw new InvalidOperationException("InitializeRelations of this DatabaseObjectType was already called.");
 			}
-			m_allowedNestingParents = (allowedNestingParents != null) ? allowedNestingParents.Distinct().ToList() : [];
-			m_allowedInheritanceParents = (allowedInheritanceParents != null) ? allowedInheritanceParents.Distinct().ToList() : [];
 			m_nestedValueType = nestedValueType;
-			foreach (DatabaseObjectType allowedNestingParent in m_allowedNestingParents)
+			if(allowedNestingParents != null)
 			{
-				allowedNestingParent.m_allowedNestingChildren.Add(this);
+				m_allowedNestingParents = allowedNestingParents.Distinct().ToList();
+				foreach (DatabaseObjectType allowedNestingParent in m_allowedNestingParents)
+				{
+					allowedNestingParent.m_allowedNestingChildren.Add(this);
+				}
 			}
-			foreach (DatabaseObjectType allowedInheritanceParent in allowedInheritanceParents)
+			else
 			{
-				allowedInheritanceParent.m_allowedInheritanceChildren.Add(this);
+				m_allowedNestingParents = [];
+			}
+			if(allowedInheritanceParents != null)
+			{
+				m_allowedInheritanceParents = allowedInheritanceParents.Distinct().ToList();
+				foreach (DatabaseObjectType allowedInheritanceParent in m_allowedInheritanceParents)
+				{
+					allowedInheritanceParent.m_allowedInheritanceChildren.Add(this);
+				}
+			}
+			else
+			{
+				m_allowedInheritanceParents = [];
 			}
 		}
 

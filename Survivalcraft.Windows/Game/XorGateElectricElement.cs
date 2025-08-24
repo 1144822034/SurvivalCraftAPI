@@ -23,7 +23,7 @@ namespace Game
 				if (connection.ConnectorType != ElectricConnectorType.Output && connection.NeighborConnectorType != 0)
 				{
 					int num2 = (int)MathF.Round(connection.NeighborElectricElement.GetOutputVoltage(connection.NeighborConnectorFace) * 15f);
-					num = (!num.HasValue) ? num2 : (num ^= num2);
+					num = num.HasValue ? (num ^ num2) : num2;
 				}
 			}
 			m_voltage = num.HasValue ? (num.Value / 15f) : 0f;

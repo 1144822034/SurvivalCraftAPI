@@ -6,7 +6,9 @@ namespace Game
 {
 	public class ComponentChaseBehavior : ComponentBehavior, IUpdateable
 	{
+		// ReSharper disable UnusedMember.Local
 		private Dictionary<ModLoader, Action> Hooks = [];
+		// ReSharper restore UnusedMember.Local
 
 		public SubsystemGameInfo m_subsystemGameInfo;
 
@@ -243,8 +245,8 @@ namespace Game
                 ComponentCreature attacker = injury.Attacker;
                 if (m_random.Float(0f, 1f) < m_chaseWhenAttackedProbability)
 				{
-					float chaseRange = 0f;
-					float chaseTime = 0f;
+					float chaseRange;
+					float chaseTime;
 					bool chasePersistent = false;
 					if (m_chaseWhenAttackedProbability >= 1f)
 					{
@@ -256,7 +258,7 @@ namespace Game
 					{
 						chaseRange = 7f;
 						chaseTime = 7f;
-						chasePersistent = false;
+						//chasePersistent = false;
                     }
 					chaseRange = ChaseRangeOnAttacked ?? chaseRange;
 					chaseTime = ChaseTimeOnAttacked ?? chaseTime;

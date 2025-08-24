@@ -86,10 +86,13 @@ namespace Game
 				m_descriptionWidget.Text = m_recipe.Description;
 				m_nameWidget.IsVisible = true;
 				m_descriptionWidget.IsVisible = true;
-				foreach (CraftingRecipeSlotWidget child in m_gridWidget.Children)
+				foreach (var widget in m_gridWidget.Children)
 				{
-					Point2 widgetCell = m_gridWidget.GetWidgetCell(child);
-					child.SetIngredient(m_recipe.Ingredients[widgetCell.X + (widgetCell.Y * 3)]);
+					if(widget is CraftingRecipeSlotWidget child)
+					{
+						Point2 widgetCell = m_gridWidget.GetWidgetCell(child);
+						child.SetIngredient(m_recipe.Ingredients[widgetCell.X + (widgetCell.Y * 3)]);
+					}
 				}
 				m_resultWidget.SetResult(m_recipe.ResultValue, m_recipe.ResultCount);
 				m_fireWidget.ParticlesPerSecond = 40f;
@@ -98,9 +101,9 @@ namespace Game
 			{
 				m_nameWidget.IsVisible = false;
 				m_descriptionWidget.IsVisible = false;
-				foreach (CraftingRecipeSlotWidget child2 in m_gridWidget.Children)
+				foreach (var widget in m_gridWidget.Children)
 				{
-					child2.SetIngredient(null);
+					(widget as CraftingRecipeSlotWidget)?.SetIngredient(null);
 				}
 				m_resultWidget.SetResult(0, 0);
 				m_fireWidget.ParticlesPerSecond = 0f;

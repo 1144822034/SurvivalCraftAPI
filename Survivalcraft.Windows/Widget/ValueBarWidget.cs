@@ -86,25 +86,13 @@ namespace Game
 		public Subtexture BarSubtexture
 		{
 			get => m_barSubtexture;
-			set
-			{
-				if (value != m_barSubtexture)
-				{
-					m_barSubtexture = value;
-				}
-			}
+			set => m_barSubtexture = value;
 		}
 
 		public bool TextureLinearFilter
 		{
 			get => m_textureLinearFilter;
-			set
-			{
-				if (value != m_textureLinearFilter)
-				{
-					m_textureLinearFilter = value;
-				}
-			}
+			set => m_textureLinearFilter = value;
 		}
 
 		public LayoutDirection LayoutDirection
@@ -129,11 +117,11 @@ namespace Game
 		public override void Draw(DrawContext dc)
 		{
 			BaseBatch baseBatch = (BarSubtexture == null) ? dc.PrimitivesRenderer2D.FlatBatch(0, DepthStencilState.None) : dc.PrimitivesRenderer2D.TexturedBatch(BarSubtexture.Texture, useAlphaTest: false, 0, DepthStencilState.None, null, null, TextureLinearFilter ? SamplerState.LinearClamp : SamplerState.PointClamp);
-			int num = 0;
+			int num;
 			int start = 0;
-			if (baseBatch is TexturedBatch2D)
+			if (baseBatch is TexturedBatch2D batch2D)
 			{
-				num = ((TexturedBatch2D)baseBatch).TriangleVertices.Count;
+				num = batch2D.TriangleVertices.Count;
 			}
 			else
 			{
@@ -154,8 +142,7 @@ namespace Game
 			{
 				bool flag = i % 2 == 0;
 				float num3 = 0.5f * i;
-				float num4 = 0f;
-				num4 = (!FlipDirection) ? Math.Clamp((Value - (num3 / BarsCount)) * BarsCount, 0f, 1f) : Math.Clamp((Value - ((BarsCount - num3 - 1f) / BarsCount)) * BarsCount, 0f, 1f);
+				float num4 = (!FlipDirection) ? Math.Clamp((Value - (num3 / BarsCount)) * BarsCount, 0f, 1f) : Math.Clamp((Value - ((BarsCount - num3 - 1f) / BarsCount)) * BarsCount, 0f, 1f);
 				if (!BarBlending)
 				{
 					num4 = MathF.Ceiling(num4);
@@ -173,11 +160,14 @@ namespace Game
 					{
 						Vector2 zero2 = Vector2.Zero;
 						Vector2 v = (m_layoutDirection == LayoutDirection.Horizontal) ? new Vector2(0.5f, 1f) : new Vector2(1f, 0.5f);
-						if (baseBatch is TexturedBatch2D)
+						if (baseBatch is TexturedBatch2D texturedBatch2D)
 						{
-							Vector2 topLeft = BarSubtexture.TopLeft;
-							Vector2 texCoord = new(MathUtils.Lerp(BarSubtexture.TopLeft.X, BarSubtexture.BottomRight.X, v.X), MathUtils.Lerp(BarSubtexture.TopLeft.Y, BarSubtexture.BottomRight.Y, v.Y));
-							((TexturedBatch2D)baseBatch).QueueQuad(zero + (zero2 * BarSize), zero + (v * BarSize), 0f, topLeft, texCoord, color);
+							if(BarSubtexture != null)
+							{
+								Vector2 topLeft = BarSubtexture.TopLeft;
+								Vector2 texCoord = new(MathUtils.Lerp(BarSubtexture.TopLeft.X,BarSubtexture.BottomRight.X,v.X),MathUtils.Lerp(BarSubtexture.TopLeft.Y,BarSubtexture.BottomRight.Y,v.Y));
+								texturedBatch2D.QueueQuad(zero + (zero2 * BarSize),zero + (v * BarSize),0f,topLeft,texCoord,color);
+							}
 						}
 						else
 						{
@@ -188,11 +178,14 @@ namespace Game
 					{
 						Vector2 v2 = (m_layoutDirection == LayoutDirection.Horizontal) ? new Vector2(0.5f, 0f) : new Vector2(0f, 0.5f);
 						Vector2 one = Vector2.One;
-						if (baseBatch is TexturedBatch2D)
+						if (baseBatch is TexturedBatch2D texturedBatch2D)
 						{
-							Vector2 texCoord2 = new(MathUtils.Lerp(BarSubtexture.TopLeft.X, BarSubtexture.BottomRight.X, v2.X), MathUtils.Lerp(BarSubtexture.TopLeft.Y, BarSubtexture.BottomRight.Y, v2.Y));
-							Vector2 bottomRight = BarSubtexture.BottomRight;
-							((TexturedBatch2D)baseBatch).QueueQuad(zero + (v2 * BarSize), zero + (one * BarSize), 0f, texCoord2, bottomRight, color);
+							if(BarSubtexture != null)
+							{
+								Vector2 texCoord2 = new(MathUtils.Lerp(BarSubtexture.TopLeft.X,BarSubtexture.BottomRight.X,v2.X),MathUtils.Lerp(BarSubtexture.TopLeft.Y,BarSubtexture.BottomRight.Y,v2.Y));
+								Vector2 bottomRight = BarSubtexture.BottomRight;
+								texturedBatch2D.QueueQuad(zero + (v2 * BarSize),zero + (one * BarSize),0f,texCoord2,bottomRight,color);
+							}
 						}
 						else
 						{
@@ -204,11 +197,14 @@ namespace Game
 				{
 					Vector2 zero3 = Vector2.Zero;
 					Vector2 one2 = Vector2.One;
-					if (baseBatch is TexturedBatch2D)
+					if (baseBatch is TexturedBatch2D texturedBatch2D)
 					{
-						Vector2 topLeft2 = BarSubtexture.TopLeft;
-						Vector2 bottomRight2 = BarSubtexture.BottomRight;
-						((TexturedBatch2D)baseBatch).QueueQuad(zero + (zero3 * BarSize), zero + (one2 * BarSize), 0f, topLeft2, bottomRight2, color);
+						if(BarSubtexture != null)
+						{
+							Vector2 topLeft2 = BarSubtexture.TopLeft;
+							Vector2 bottomRight2 = BarSubtexture.BottomRight;
+							texturedBatch2D.QueueQuad(zero + (zero3 * BarSize),zero + (one2 * BarSize),0f,topLeft2,bottomRight2,color);
+						}
 					}
 					else
 					{
@@ -228,9 +224,9 @@ namespace Game
 					}
 				}
 			}
-			if (baseBatch is TexturedBatch2D)
+			if (baseBatch is TexturedBatch2D batch)
 			{
-				((TexturedBatch2D)baseBatch).TransformTriangles(GlobalTransform, num);
+				batch.TransformTriangles(GlobalTransform, num);
 			}
 			else
 			{

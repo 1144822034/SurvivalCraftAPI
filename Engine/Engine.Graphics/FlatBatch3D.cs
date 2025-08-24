@@ -58,6 +58,7 @@ namespace Engine.Graphics
         /// 绘制球线框
         /// </summary>
         /// <param name="center">球心</param>
+        /// <param name="color">颜色</param>
         /// <param name="radius">半径</param>
         /// <param name="longitudeLines">经度线</param>
         /// <param name="latitudeLines">纬度线</param>

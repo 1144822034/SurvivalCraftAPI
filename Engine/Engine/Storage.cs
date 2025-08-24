@@ -1,3 +1,4 @@
+
 using System.Text;
 #if ANDROID
 using Environment = Android.OS.Environment;

@@ -13,9 +13,13 @@ namespace Game
 			ContainerWidget containerWidget = (ContainerWidget)LoadWidget(this,node,null);
 			LabelWidget labelWidget = containerWidget.Children.Find<LabelWidget>("Name");
 			LabelWidget labelWidget2 = containerWidget.Children.Find<LabelWidget>("BoundKey");
-			labelWidget.Text = LanguageControl.Get(fName,item.ToString());
-			labelWidget2.Text = HumanReadableConverter.ConvertToString(SettingsManager.GetKeyboardMapping(item.ToString()));
-			m_widgetsByString[item.ToString()] = containerWidget;
+			string itemString = item.ToString();
+			if(itemString != null)
+			{
+				labelWidget.Text = LanguageControl.Get(fName,itemString);
+				labelWidget2.Text = HumanReadableConverter.ConvertToString(SettingsManager.GetKeyboardMapping(itemString));
+				m_widgetsByString[itemString] = containerWidget;
+			}
 			return containerWidget;
 		}
 
@@ -134,16 +138,16 @@ namespace Game
 		public override void Enter(object[] parameters)
 		{
 			m_keysList.ClearItems();
-			foreach(string keyName in ModSettingsManager.CombinedKeyboardMappingSettings.Keys)
+			foreach(string keyName1 in ModSettingsManager.CombinedKeyboardMappingSettings.Keys)
 			{
-				m_keysList.AddItem(keyName);
+				m_keysList.AddItem(keyName1);
 			}
 			RefreshConflicts();
 		}
 
-		public void SetKeyboardMapping(string keyName,object value)
+		public void SetKeyboardMapping(string keyName1,object value)
 		{
-			SettingsManager.SetKeyboardMapping(keyName, value);
+			SettingsManager.SetKeyboardMapping(keyName1, value);
 			RefreshConflicts();
 		}
 		public void ResetAll()

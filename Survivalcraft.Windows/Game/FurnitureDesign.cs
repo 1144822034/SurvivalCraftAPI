@@ -875,7 +875,7 @@ namespace Game
 								float x6 = (((n + point6.X - 0.01f) / m_resolution) + num15) / 16f;
 								float y5 = (((m + 0.01f) / m_resolution) + num16) / 16f;
 								float y6 = (((m + point6.Y - 0.01f) / m_resolution) + num16) / 16f;
-								BlockMeshVertex blockMeshVertex = array2[count] = new BlockMeshVertex
+								array2[count] = new BlockMeshVertex
 								{
 									Position = new Vector3(x, y, z) / m_resolution,
 									Color = color,
@@ -883,7 +883,7 @@ namespace Game
 									TextureCoordinates = new Vector2(x5, y5),
 									IsEmissive = isEmissive
 								};
-								blockMeshVertex = array2[count + 1] = new BlockMeshVertex
+								array2[count + 1] = new BlockMeshVertex
 								{
 									Position = new Vector3(x2, y2, z2) / m_resolution,
 									Color = color,
@@ -891,7 +891,7 @@ namespace Game
 									TextureCoordinates = new Vector2(x6, y5),
 									IsEmissive = isEmissive
 								};
-								blockMeshVertex = array2[count + 2] = new BlockMeshVertex
+								array2[count + 2] = new BlockMeshVertex
 								{
 									Position = new Vector3(x3, y3, z3) / m_resolution,
 									Color = color,
@@ -899,7 +899,7 @@ namespace Game
 									TextureCoordinates = new Vector2(x6, y6),
 									IsEmissive = isEmissive
 								};
-								blockMeshVertex = array2[count + 3] = new BlockMeshVertex
+								array2[count + 3] = new BlockMeshVertex
 								{
 									Position = new Vector3(x4, y4, z4) / m_resolution,
 									Color = color,

@@ -64,7 +64,11 @@ namespace GameEntitySystem
 						}
 						catch (TargetInvocationException ex)
 						{
-							throw ex.InnerException;
+							if(ex.InnerException != null)
+							{
+								throw ex.InnerException;
+							}
+							throw;
 						}
 						if (obj is not Subsystem subsystem)
 						{
@@ -294,22 +298,27 @@ namespace GameEntitySystem
 		{
             int num = 0;
 			if(entityDataList?.EntitiesData != null)
+			{
 				foreach (EntityData entitiesDatum2 in entityDataList.EntitiesData)
 				{
 					entityList[num].InternalLoadEntity(entitiesDatum2.ValuesDictionary, null);
 					num++;
 				}
+			}
 			if(Entities != null)
+			{
 				foreach(Entity entity in Entities)
 				{
 					FireEntityAddedEvents(entity);
 				}
+			}
 			PostponeFireEntityAddedEvents = false;
         }
 
 		public EntityDataList SaveEntities(IEnumerable<Entity> entities)
 		{
-			Dictionary<Entity, bool> dictionary = DetermineNotOwnedEntities(entities);
+			IEnumerable<Entity> enumerable = entities as Entity[] ?? entities.ToArray();
+			Dictionary<Entity, bool> dictionary = DetermineNotOwnedEntities(enumerable);
 			int num = 1;
 			Dictionary<Entity, int> dictionary2 = [];
 			EntityToIdMap entityToIdMap = new(dictionary2);
@@ -319,7 +328,7 @@ namespace GameEntitySystem
 				num++;
 			}
 			EntityDataList entityDataList = new() { EntitiesData = new List<EntityData>(dictionary.Keys.Count) };
-			foreach (Entity key2 in entities)
+			foreach (Entity key2 in enumerable)
 			{
 				EntityData entityData = new() { Id = key2.Id,ValuesDictionary =
 				[]

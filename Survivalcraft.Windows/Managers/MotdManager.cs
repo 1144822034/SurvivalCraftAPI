@@ -1,4 +1,5 @@
 using Engine;
+using System.Globalization;
 using System.Text.Json;
 using System.Xml.Linq;
 using XmlUtilities;
@@ -172,7 +173,7 @@ namespace Game
 		{
 			using (MemoryStream stream = new(data))
 				return new StreamReader(stream).ReadToEnd();
-			throw new InvalidOperationException("\"motd.xml\" file not found in Motd zip archive.");
+			//throw new InvalidOperationException("\"motd.xml\" file not found in Motd zip archive.");
 		}
 
 		public static Message ParseMotd(string dataString)
@@ -235,7 +236,32 @@ namespace Game
 			{
 				if (item.Name.LocalName == "Bulletin")
 				{
-					m_bulletin = new Bulletin { Title = item.Attribute("Title").Value,EnTitle = item.Attribute("EnTitle").Value,Time = languageType + "$" + item.Attribute("Time").Value,Content = item.Element("Content").Value,EnContent = item.Element("EnContent").Value };
+					XAttribute title = item.Attribute("Title");
+					if(title == null)
+					{
+						break;
+					}
+					XAttribute enTitle = item.Attribute("EnTitle");
+					if(enTitle == null)
+					{
+						break;
+					}
+					XAttribute time = item.Attribute("Time");
+					if(time == null)
+					{
+						break;
+					}
+					XElement content = item.Element("Content");
+					if(content == null)
+					{
+						break;
+					}
+					XElement enContent = item.Element("EnContent");
+					if(enContent == null)
+					{
+						break;
+					}
+					m_bulletin = new Bulletin { Title = title.Value,EnTitle = enTitle.Value,Time = languageType + "$" + time.Value,Content = content.Value,EnContent = enContent.Value };
 					break;
 				}
 			}
@@ -258,13 +284,7 @@ namespace Game
 				{ "Operater", SettingsManager.ScpboxAccessToken },
 				{ "Content", dataString }
 			};
-			WebManager.Post("https://m.schub.top/com/api/zh/setnotice", null, header, WebManager.UrlParametersToStream(dictionary), progress, delegate (byte[] data)
-			{
-				success(data);
-			}, delegate (Exception error)
-			{
-				failure(error);
-			});
+			WebManager.Post("https://m.schub.top/com/api/zh/setnotice", null, header, WebManager.UrlParametersToStream(dictionary), progress, success, failure);
 		}
 
 		public static void LoadFilterMods(string dataString)
@@ -285,7 +305,27 @@ namespace Game
 			{
 				if (item.Name.LocalName == "FilterMod")
 				{
-					FilterMod filterMod = new() { Name = item.Attribute("Name").Value,PackageName = item.Attribute("PackageName").Value,Version = item.Attribute("Version").Value,FilterAPIVersion = item.Attribute("FilterAPIVersion").Value,Explanation = item.Value };
+					XAttribute name = item.Attribute("Name");
+					if(name == null)
+					{
+						continue;
+					}
+					XAttribute packageName = item.Attribute("PackageName");
+					if(packageName == null)
+					{
+						continue;
+					}
+					XAttribute version = item.Attribute("Version");
+					if(version == null)
+					{
+						continue;
+					}
+					XAttribute filterAPIVersion = item.Attribute("FilterAPIVersion");
+					if(filterAPIVersion == null)
+					{
+						continue;
+					}
+					FilterMod filterMod = new() { Name = name.Value,PackageName = packageName.Value,Version = version.Value,FilterAPIVersion = filterAPIVersion.Value,Explanation = item.Value };
 					FilterModAll.Add(filterMod);
 				}
 			}
@@ -335,22 +375,42 @@ namespace Game
 					int num = SettingsManager.MotdLastDownloadedData.IndexOf("<Motd2");
 					int num2 = SettingsManager.MotdLastDownloadedData.IndexOf("</Motd2>") + 8;
 					XElement xElement = XmlUtils.LoadXmlFromString(SettingsManager.MotdLastDownloadedData.Substring(num, num2 - num), throwOnError: true);
-					string languageType = (!ModsManager.Configs.TryGetValue("Language", out string config)) ? "zh-CN" : config;
+					//string languageType = (!ModsManager.Configs.TryGetValue("Language", out string config)) ? "zh-CN" : config;
 					foreach (XElement item in xElement.Elements())
 					{
 						if (item.Name.LocalName == "Bulletin")
 						{
 							if (IsCNLanguageType())
 							{
-								item.Attribute("Title").Value = titleLabel.m_text;
-								item.Element("Content").Value = contentLabel.m_text;
+								XAttribute titleAttribute = item.Attribute("Title");
+								if(titleAttribute != null)
+								{
+									titleAttribute.Value = titleLabel.m_text;
+								}
+								XAttribute contentAttribute = item.Attribute("Content");
+								if(contentAttribute != null)
+								{
+									contentAttribute.Value = contentLabel.m_text;
+								}
 							}
 							else
 							{
-								item.Attribute("EnTitle").Value = titleLabel.m_text;
-								item.Element("EnContent").Value = contentLabel.m_text;
+								XAttribute enTitleAttribute = item.Attribute("EnTitle");
+								if(enTitleAttribute != null)
+								{
+									enTitleAttribute.Value = titleLabel.m_text;
+								}
+								XAttribute enContentAttribute = item.Attribute("EnContent");
+								if(enContentAttribute != null)
+								{
+									enContentAttribute.Value = contentLabel.m_text;
+								}
 							}
-							item.Attribute("Time").Value = DateTime.Now.ToString();
+							XAttribute timeAttribute = item.Attribute("Time");
+							if(timeAttribute != null)
+							{
+								timeAttribute.Value = DateTime.Now.ToString(CultureInfo.InvariantCulture);
+							}
 							break;
 						}
 					}

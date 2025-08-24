@@ -8,9 +8,9 @@ namespace Game
 			readonly HashSet<string> keys = [];
 
 			public void AddKey(string key) => keys.Add(key);
-			public void AddKeys(params string[] keys)
+			public void AddKeys(params string[] keys1)
 			{
-				foreach(string key in keys)
+				foreach(string key in keys1)
 					AddKey(key);
 			}
 			public bool ContainsKey(string key) => keys.Contains(key);
@@ -32,7 +32,7 @@ namespace Game
 		/// 添加按键到兼容组
 		/// </summary>
 		/// <param name="groupId"></param>
-		/// <param name="key"></param>
+		/// <param name="keys"></param>
 		/// <returns></returns>
 		public static void AddKeyToCompatibleGroup(string groupId,params string[] keys)
 		{

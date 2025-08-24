@@ -241,12 +241,9 @@ namespace Game
 			}
 			if (CottonBlock.GetIsWild(data))
 			{
-				if (size < 2)
-				{
-					int data2 = CottonBlock.SetSize(CottonBlock.SetIsWild(data, isWild: true), size + 1);
-					int value2 = Terrain.ReplaceData(value, data2);
-					m_subsystemCellChangeQueue.QueueCellChange(x, y, z, value2);
-				}
+				int data2 = CottonBlock.SetSize(CottonBlock.SetIsWild(data, isWild: true), size + 1);
+				int value2 = Terrain.ReplaceData(value, data2);
+				m_subsystemCellChangeQueue.QueueCellChange(x, y, z, value2);
 				return;
 			}
 			int cellValueFast = SubsystemTerrain.Terrain.GetCellValueFast(x, y - 1, z);

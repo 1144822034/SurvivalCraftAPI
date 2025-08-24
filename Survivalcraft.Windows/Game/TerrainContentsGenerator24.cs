@@ -1406,7 +1406,7 @@ public class TerrainContentsGenerator24 : ITerrainContentsGenerator
 								}
 								float num8 = random.Float(0f, 1f);
 								num8 -= num6;
-								if (num5 == 0 && num8 < 0f)
+								if (/*num5 == 0 && */num8 < 0f)
 								{
 									num5 = 226;
 								}
@@ -2029,7 +2029,7 @@ public class TerrainContentsGenerator24 : ITerrainContentsGenerator
 				}
 			}
 		}
-		if (num >= 190 && num <= 255 && point.X >= 1 && point.X < 15 && point.Y >= 1 && point.Y < 15)
+		if (num >= 190 /*&& num <= 255 */&& point.X >= 1 && point.X < 15 && point.Y >= 1 && point.Y < 15)
 		{
 			int data = Math.Clamp((int)(4f * MathUtils.LinearStep(190f, 256f, num)), 0, 3);
 			chunk.SetCellValueFast(point.X, num, point.Y, Terrain.MakeBlockValue(258, 0, data));

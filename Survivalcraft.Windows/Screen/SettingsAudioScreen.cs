@@ -1,3 +1,4 @@
+using System.Globalization;
 using System.Xml.Linq;
 
 namespace Game
@@ -27,9 +28,9 @@ namespace Game
 				SettingsManager.MusicVolume = m_musicVolumeSlider.Value;
 			}
 			m_soundsVolumeSlider.Value = SettingsManager.SoundsVolume;
-			m_soundsVolumeSlider.Text = MathF.Round(SettingsManager.SoundsVolume * 10f).ToString();
+			m_soundsVolumeSlider.Text = MathF.Round(SettingsManager.SoundsVolume * 10f).ToString(CultureInfo.InvariantCulture);
 			m_musicVolumeSlider.Value = SettingsManager.MusicVolume;
-			m_musicVolumeSlider.Text = MathF.Round(SettingsManager.MusicVolume * 10f).ToString();
+			m_musicVolumeSlider.Text = MathF.Round(SettingsManager.MusicVolume * 10f).ToString(CultureInfo.InvariantCulture);
 			if (Input.Back || Input.Cancel || Children.Find<ButtonWidget>("TopBar.Back").IsClicked)
 			{
 				ScreensManager.SwitchScreen(ScreensManager.PreviousScreen);

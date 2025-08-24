@@ -6,12 +6,6 @@ namespace Game
 {
 	internal class ModListManager
 	{
-		private Dictionary<string,string> RelativelySafeUrl = new()
-		{
-			{"gitee","https://gitee.com/"},
-			{"github","https://github.com"},
-			{"schub","https://schub.top"}
-		};
 		/// <summary>
 		///检查文件夹中各个整合包（更新和补充） 
 		/// </summary>
@@ -19,11 +13,11 @@ namespace Game
 		/// <returns></returns>
 		public static bool InspectionModLists(string folderPath)
 		{
-			FileInfo[] files = new DirectoryInfo(folderPath).GetFiles();
+			/*FileInfo[] files = new DirectoryInfo(folderPath).GetFiles();
 			foreach(FileInfo file in files)
 			{
 
-			}
+			}*/
 			return true;
 		}
 		public struct AggregationPackageInfo

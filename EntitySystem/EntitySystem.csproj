@@ -1,6 +1,6 @@
 <Project Sdk="Microsoft.NET.Sdk">
     <PropertyGroup>
-        <NoWarn>$(NoWarn);1591;1573</NoWarn>
+        <NoWarn>$(NoWarn);1591</NoWarn>
         <RootNamespace>EntitySystem</RootNamespace>
         <AssemblyName Condition="'$(Configuration)' != 'Direct3D11'">EntitySystem</AssemblyName>
         <AssemblyName Condition="'$(Configuration)' == 'Direct3D11'">EntitySystemDirect3D11</AssemblyName>

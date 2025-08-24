@@ -19,7 +19,8 @@ namespace TemplatesDatabase
 
 		public Database(DatabaseObject root, IEnumerable<DatabaseObjectType> databaseObjectTypes)
 		{
-			if (!databaseObjectTypes.Contains(root.Type))
+			List<DatabaseObjectType> objectTypes = databaseObjectTypes.ToList();
+			if (!objectTypes.Contains(root.Type))
 			{
 				throw new Exception("Database root has invalid database object type.");
 			}
@@ -27,7 +28,7 @@ namespace TemplatesDatabase
 			{
 				throw new Exception("Database root cannot be nested.");
 			}
-			m_databaseObjectTypes = new ReadOnlyList<DatabaseObjectType>(new List<DatabaseObjectType>(databaseObjectTypes));
+			m_databaseObjectTypes = new ReadOnlyList<DatabaseObjectType>(objectTypes);
 			m_root = root;
 			m_root.m_database = this;
 		}

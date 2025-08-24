@@ -5,7 +5,7 @@ namespace Game
 {
     public class ProjectileAttackment : Attackment
     {
-        Projectile Projectile;
+        public Projectile Projectile;
         public ProjectileAttackment(Entity target, Entity attacker, Vector3 hitPoint, Vector3 hitDirection, float attackPower, Projectile projectile)
             : base(target, attacker, hitPoint, hitDirection, attackPower)
 		{

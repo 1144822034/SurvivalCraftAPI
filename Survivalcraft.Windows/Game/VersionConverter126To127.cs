@@ -43,8 +43,8 @@ namespace Game
 					DialogsManager.ShowDialog(null, dialog);
 					Task.Run(delegate
 					{
-						string empty = string.Empty;
-						string empty2 = string.Empty;
+						string empty;
+						string empty2;
 						try
 						{
 							int num = MigrateFolder("app:/.config/.isolated-storage", "data:");

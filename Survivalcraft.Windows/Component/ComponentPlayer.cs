@@ -138,7 +138,9 @@ namespace Game
 
 		public ComponentOuterClothingModel ComponentOuterClothingModel
 		{
+			// ReSharper disable UnusedAutoPropertyAccessor.Global
 			get;
+			// ReSharper restore UnusedAutoPropertyAccessor.Global
 			set;
 		}
 
@@ -150,10 +152,7 @@ namespace Game
 		{
 			get
 			{
-				if(m_dragHostWidget == null)
-				{
-					m_dragHostWidget = GameWidget?.Children.Find<DragHostWidget>(throwIfNotFound: false);
-				}
+				m_dragHostWidget ??= GameWidget?.Children.Find<DragHostWidget>(throwIfNotFound: false);
 				return m_dragHostWidget;
 			}
 		}
@@ -169,9 +168,12 @@ namespace Game
 				if(maxPriority < priorityPlace) maxPriority = priorityPlace;
 				if(maxPriority < priorityInteract) maxPriority = priorityInteract;
 				if(maxPriority <= 0) break;
-				if(maxPriority == priorityUse && !dealed)
+				if(maxPriority == priorityUse/* && !dealed*/)
 				{
-					dealed = ComponentMiner.Use(playerInput.Interact.Value);
+					if(playerInput.Interact.HasValue)
+					{
+						dealed = ComponentMiner.Use(playerInput.Interact.Value);
+					}
 					priorityUse = -2;
 				}
 				if(maxPriority == priorityInteract && !dealed)
@@ -188,7 +190,10 @@ namespace Game
 				}
 				if(maxPriority == priorityPlace && !dealed)
 				{
-					dealed = ComponentMiner.Place(terrainRaycastResult.Value);
+					if(terrainRaycastResult.HasValue)
+					{
+						dealed = ComponentMiner.Place(terrainRaycastResult.Value);
+					}
 					priorityPlace = -2;
 				}
 			}
@@ -216,13 +221,11 @@ namespace Game
 					ComponentMiner.Inventory.ActiveSlotIndex = Math.Clamp(playerInput.SelectInventorySlot.Value,0,9);
 				}
 			}
-			ComponentSteedBehavior componentSteedBehavior = null;
-			ComponentBoat componentBoat = null;
 			ComponentMount mount = ComponentRider.Mount;
 			if(mount != null)
 			{
-				componentSteedBehavior = mount.Entity.FindComponent<ComponentSteedBehavior>();
-				componentBoat = mount.Entity.FindComponent<ComponentBoat>();
+				ComponentSteedBehavior componentSteedBehavior = mount.Entity.FindComponent<ComponentSteedBehavior>();
+				ComponentBoat componentBoat = mount.Entity.FindComponent<ComponentBoat>();
 				if(componentSteedBehavior != null)
 				{
 					bool skipVanilla_h = false;
@@ -235,27 +238,13 @@ namespace Game
 					{
 						if(playerInput.Move.Z > 0.5f && !m_speedOrderBlocked)
 						{
-							if(PlayerData.PlayerClass == PlayerClass.Male)
-							{
-								m_subsystemAudio.PlayRandomSound("Audio/Creatures/MaleYellFast",0.75f,0f,ComponentBody.Position,2f,autoDelay: false);
-							}
-							else
-							{
-								m_subsystemAudio.PlayRandomSound("Audio/Creatures/FemaleYellFast",0.75f,0f,ComponentBody.Position,2f,autoDelay: false);
-							}
+							m_subsystemAudio.PlayRandomSound(PlayerData.PlayerClass == PlayerClass.Male ? "Audio/Creatures/MaleYellFast" : "Audio/Creatures/FemaleYellFast",0.75f,0f,ComponentBody.Position,2f,autoDelay: false);
 							componentSteedBehavior.SpeedOrder = 1;
 							m_speedOrderBlocked = true;
 						}
 						else if(playerInput.Move.Z < -0.5f && !m_speedOrderBlocked)
 						{
-							if(PlayerData.PlayerClass == PlayerClass.Male)
-							{
-								m_subsystemAudio.PlayRandomSound("Audio/Creatures/MaleYellSlow",0.75f,0f,ComponentBody.Position,2f,autoDelay: false);
-							}
-							else
-							{
-								m_subsystemAudio.PlayRandomSound("Audio/Creatures/FemaleYellSlow",0.75f,0f,ComponentBody.Position,2f,autoDelay: false);
-							}
+							m_subsystemAudio.PlayRandomSound(PlayerData.PlayerClass == PlayerClass.Male ? "Audio/Creatures/MaleYellSlow" : "Audio/Creatures/FemaleYellSlow",0.75f,0f,ComponentBody.Position,2f,autoDelay: false);
 							componentSteedBehavior.SpeedOrder = -1;
 							m_speedOrderBlocked = true;
 						}
@@ -343,7 +332,9 @@ namespace Game
 					priorityInteract = BlocksManager.Blocks[Terrain.ExtractContents(raycastValue)].GetPriorityInteract(raycastValue,ComponentMiner);
 				}
 				ModsManager.HookAction("OnPlayerInputInteract",loader => {
+					// ReSharper disable AccessToModifiedClosure
 					loader.OnPlayerInputInteract(this,ref flag,ref timeIntervalLastActionTime,ref priorityUse,ref priorityInteract,ref priorityPlace);
+					// ReSharper restore AccessToModifiedClosure
 					return false;
 				});
 				if(!flag && m_subsystemTime.GameTime - m_lastActionTime > timeIntervalLastActionTime)
@@ -373,7 +364,7 @@ namespace Game
 						if(vector.X >= size.X * 0.02f && vector.X < size.X * 0.98f && vector.Y >= size.Y * 0.02f && vector.Y < size.Y * 0.98f)
 						{
 							m_aim = value;
-							if(!m_aimStartTime.HasValue) m_aimStartTime = m_subsystemTime.GameTime;
+							m_aimStartTime ??= m_subsystemTime.GameTime;
 							if(ComponentMiner.Aim(value,AimState.InProgress))
 							{
 								ComponentMiner.Aim(m_aim.Value,AimState.Cancelled);

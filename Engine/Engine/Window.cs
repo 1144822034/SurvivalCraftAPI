@@ -12,6 +12,8 @@ using Silk.NET.Input;
 using Monitor = Silk.NET.Windowing.Monitor;
 #if WINDOWS
 using System.Runtime.InteropServices;
+#else
+using System.Diagnostics;
 #endif
 #endif
 using Engine.Audio;
@@ -373,7 +375,7 @@ namespace Engine
 #else
                     if (OperatingSystem.IsLinux())
                     {
-                        System.Diagnostics.Process.Start("notify-send", $"-a \"Survivalcraft API\" -u critical \"Error\" \"{str}\"");
+                        Process.Start("notify-send", $"-a \"Survivalcraft API\" -u critical \"Error\" \"{str}\"");
                     }
 #endif
                 }

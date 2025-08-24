@@ -32,8 +32,7 @@ namespace Game
 	        InitSubsets();
 	        DefaultTexture = texture2D;
 	        //添加到默认纹理区
-	        Draws = new();
-	        Draws.Add(DefaultTexture,this);
+	        Draws = new Dictionary<Texture2D,TerrainGeometry> { { DefaultTexture, this } };
         }
 
         public virtual void InitSubsets()
@@ -77,10 +76,11 @@ namespace Game
 
         public virtual TerrainGeometry GetGeometry(Texture2D texture)
         {
-            Draws ??= [];
-            if (Draws.TryGetValue(texture, out TerrainGeometry geometries)) return geometries;
-            TerrainGeometry geometry = new();
-            Draws.Add(texture, geometry);
+            if (Draws?.TryGetValue(texture, out TerrainGeometry geometries) ?? false)
+            {
+	            return geometries;
+            }
+            TerrainGeometry geometry = new(texture);
             return geometry;
         }
 

@@ -144,14 +144,7 @@ namespace TemplatesDatabase
 				{
 					guid = value3;
 				}
-				if (dictionary4.TryGetValue(guid, out DatabaseObject value4))
-				{
-					item3.Key.ExplicitInheritanceParent = value4;
-				}
-				else
-				{
-					item3.Key.ExplicitInheritanceParent = database.FindDatabaseObject(guid, null, throwIfNotFound: true);
-				}
+				item3.Key.ExplicitInheritanceParent = dictionary4.TryGetValue(guid, out DatabaseObject value4) ? value4 : database.FindDatabaseObject(guid, null, throwIfNotFound: true);
 			}
 			return list.Where(x => x.NestingParent == null).ToList();
 		}
@@ -209,14 +202,15 @@ namespace TemplatesDatabase
 		public static void SaveDatabaseObjectsList(XElement node, IEnumerable<DatabaseObject> databaseObjects)
 		{
 			List<DatabaseObject> list = [];
-			foreach (DatabaseObject databaseObject in databaseObjects)
+			IEnumerable<DatabaseObject> enumerable = databaseObjects as DatabaseObject[] ?? databaseObjects.ToArray();
+			foreach (DatabaseObject databaseObject in enumerable)
 			{
 				list.AddRange(from x in databaseObject.GetExplicitNestingChildren(null, directChildrenOnly: false)
 							  where x.Type.SaveStandalone
 							  select x);
 			}
 			InternalSaveDatabaseObjectsList(node, list, saveNestingParents: true);
-			InternalSaveDatabaseObjectsList(node, databaseObjects, saveNestingParents: false);
+			InternalSaveDatabaseObjectsList(node, enumerable, saveNestingParents: false);
 		}
 
 		public static void SaveDatabaseObject(XElement node, DatabaseObject databaseObject)

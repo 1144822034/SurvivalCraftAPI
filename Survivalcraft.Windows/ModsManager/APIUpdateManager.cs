@@ -11,7 +11,9 @@ namespace Game
 		public static bool? IsNeedUpdate
 		{
 			get;
+			// ReSharper disable UnusedAutoPropertyAccessor.Local
 			private set;
+			// ReSharper restore UnusedAutoPropertyAccessor.Local
 		}
 
 		/// <summary>
@@ -102,7 +104,6 @@ namespace Game
 		/// <summary>
 		/// 获取 Gitee release最后一个版本的版本号
 		/// </summary>
-		/// <param name="url">平台Json文件的API链接</param>
 		/// <returns>最新版本号</returns>
 		//当 direct 为真，将获取的 json 直接当做数组中的一个元素
 		//常用于链接自带 latest 标识的情况

@@ -179,7 +179,7 @@ namespace Game
 				{
 					Ray3 ray2 = new(ray.Position - new Vector3(num2, num3, num4), ray.Direction);
 					float? num25 = BlocksManager.Blocks[num24].Raycast(ray2, this, cellValue, useInteractionBoxes, out int nearestBoxIndex, out BoundingBox nearestBox);
-					if (num25.HasValue && (!num23.HasValue || num25.Value < num23.Value))
+					if (num25.HasValue/* && (!num23.HasValue || num25.Value < num23.Value)*/)
 					{
 						num23 = num25;
 						collisionBoxIndex = nearestBoxIndex;
@@ -224,7 +224,7 @@ namespace Game
 					num27 = MathF.Abs(vector.Z - boundingBox.Max.Z);
 					if (num27 < num26)
 					{
-						num26 = num27;
+						//num26 = num27;
 						face = 0;
 					}
 					TerrainRaycastResult value = default;
@@ -330,7 +330,7 @@ namespace Game
 				{
 					Ray3 ray2 = new(ray.Position - new Vector3(num2, num3, num4), ray.Direction);
 					float? num25 = BlocksManager.Blocks[num24].Raycast(ray2, null, cellValue, useInteractionBoxes, out int nearestBoxIndex, out BoundingBox nearestBox);
-					if (num25.HasValue && (!num23.HasValue || num25.Value < num23.Value))
+					if (num25.HasValue/* && (!num23.HasValue || num25.Value < num23.Value)*/)
 					{
 						num23 = num25;
 						collisionBoxIndex = nearestBoxIndex;
@@ -375,7 +375,7 @@ namespace Game
 					num27 = MathF.Abs(vector.Z - boundingBox.Max.Z);
 					if (num27 < num26)
 					{
-						num26 = num27;
+						//num26 = num27;
 						face = 0;
 					}
 					TerrainRaycastResult value = default;
@@ -427,7 +427,9 @@ namespace Game
 		{
 			bool pass = false;
 			ModsManager.HookAction("TerrainChangeCell",loader => {
+				// ReSharper disable AccessToModifiedClosure
 				loader.TerrainChangeCell(this,x,y,z,value,out bool Skip);
+				// ReSharper restore AccessToModifiedClosure
 				pass |= Skip;
 				return false;
 			});

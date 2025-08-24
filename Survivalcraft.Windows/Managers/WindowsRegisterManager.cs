@@ -11,7 +11,7 @@ namespace Game.Managers
         {
             //keyName = "WPCFile";
             //keyValue = "资源包文件";
-            bool isCreateRegistry = true;
+            //bool isCreateRegistry = true;
 
             try
             {
@@ -19,25 +19,25 @@ namespace Game.Managers
 	            RegistryKey isExCommand = Registry.ClassesRoot.OpenSubKey(keyName);
 	            if (isExCommand == null)
                 {
-                    isCreateRegistry = true;
+                    //isCreateRegistry = true;
                 }
                 else
                 {
                     if (isExCommand.GetValue("Create")?.ToString() == SurvivalcraftPath)
                     {
-                        isCreateRegistry = false;
+                        //isCreateRegistry = false;
                     }
                     else
                     {
                         Registry.ClassesRoot.DeleteSubKeyTree(keyName);
-                        isCreateRegistry = true;
+                        //isCreateRegistry = true;
                     }
 
                 }
             }
             catch (Exception)
             {
-                isCreateRegistry = true;
+                //isCreateRegistry = true;
             }
 
             /// 假如 文件关联 还没有创建，或是关联位置已被改变 

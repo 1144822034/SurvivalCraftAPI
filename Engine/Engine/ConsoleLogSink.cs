@@ -1,4 +1,6 @@
+#if DEBUG
 using System.Diagnostics;
+#endif
 #if !ANDROID
 using System.Text;
 #endif

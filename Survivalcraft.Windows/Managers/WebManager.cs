@@ -1,15 +1,16 @@
 #if ANDROID
+using Android.OS;
 using Android.Net;
-using System.Text.Json;
 #elif WINDOWS
 using System.Runtime.InteropServices;
-#else
+#elif LINUX
 using System.Net.NetworkInformation;
 #endif
 using Engine;
 using System.Net;
 using System.Net.Http;
 using System.Text;
+using OperationCanceledException = System.OperationCanceledException;
 using Uri = System.Uri;
 
 namespace Game
@@ -62,16 +63,28 @@ namespace Game
 		}
 #if WINDOWS
 		[DllImport("wininet.dll")]
-		public static extern bool InternetGetConnectedState(out int Description, int ReservedValue);
+		internal static extern bool InternetGetConnectedState(out int Description, int ReservedValue);
+#elif ANDROID
+#pragma warning disable CA1416
+#pragma warning disable CA1422
+		internal static ConnectivityManager m_connectivityManager { get; } = GetConnectivityManager();
 #endif
 		public static bool IsInternetConnectionAvailable()
 		{
 			try
 			{
 #if ANDROID
-				return ((ConnectivityManager)Window.Activity.GetSystemService("connectivity")).ActiveNetworkInfo?.IsConnected ?? false;
+				switch(Build.VERSION.SdkInt)
+				{
+					case >= (BuildVersionCodes)29:
+						return m_connectivityManager?.GetNetworkCapabilities(m_connectivityManager.ActiveNetwork)?.HasCapability(NetCapability.Validated) ?? false;
+					case >= (BuildVersionCodes)21:
+						return m_connectivityManager?.ActiveNetworkInfo?.IsConnected ?? false;
+					default:
+						return true;
+				}
 #elif WINDOWS
-				return InternetGetConnectedState(out int Desc, 0);
+				return InternetGetConnectedState(out int _, 0);
 #elif LINUX
 				return NetworkInterface.GetIsNetworkAvailable();
 #else
@@ -84,6 +97,19 @@ namespace Game
 			}
 			return true;
 		}
+
+#if ANDROID
+		private static ConnectivityManager GetConnectivityManager()
+		{
+			if(Build.VERSION.SdkInt >= (BuildVersionCodes)21)
+			{
+				return (ConnectivityManager)Window.Activity.GetSystemService("connectivity");
+			}
+			return null;
+		}
+#pragma warning restore CA1416
+#pragma warning restore CA1422
+#endif
 
 		public static void Get(string address, Dictionary<string, string> parameters, Dictionary<string, string> headers, CancellableProgress progress, Action<byte[]> success, Action<Exception> failure)
 		{
@@ -139,16 +165,15 @@ namespace Game
 							{
 								Dispatcher.Dispatch(delegate
 								{
-									success(targetStream.ToArray());
+									// ReSharper disable AccessToDisposedClosure
+									success(targetStream?.ToArray());
+									// ReSharper restore AccessToDisposedClosure
 								});
 							}
 						}
 						finally
 						{
-							if(targetStream != null)
-							{
-								((IDisposable)targetStream).Dispose();
-							}
+							((IDisposable)targetStream)?.Dispose();
 						}
 					}
 				}
@@ -226,7 +251,6 @@ namespace Game
 
 		public static void PutOrPost(bool isPost, string address, Dictionary<string, string> parameters, Dictionary<string, string> headers, Stream data, CancellableProgress progress, Action<byte[]> success, Action<Exception> failure)
 		{
-			byte[] responseData = null;
 			Task.Run(async delegate
 			{
 				Uri requestUri = (parameters != null && parameters.Count > 0) ? new Uri($"{address}?{UrlParametersToString(parameters)}") : new Uri(address);
@@ -251,7 +275,7 @@ namespace Game
 #if !ANDROID
 					ProgressHttpContent httpContent = new(data, progress);
 #else
-					HttpContent httpContent = (progress != null) ? ((HttpContent)new ProgressHttpContent(data,progress)) : ((HttpContent)new StreamContent(data));
+					HttpContent httpContent = (progress != null) ? new ProgressHttpContent(data,progress) : new StreamContent(data);
 #endif
 					foreach(KeyValuePair<string,string> item in dictionary)
 					{
@@ -263,7 +287,7 @@ namespace Game
 					HttpResponseMessage responseMessage = isPost ? ((progress == null) ? (await client.PostAsync(requestUri,httpContent)) : (await client.PostAsync(requestUri,httpContent,progress.CancellationToken))) : ((progress == null) ? (await client.PutAsync(requestUri,httpContent)) : (await client.PutAsync(requestUri,httpContent,progress.CancellationToken)));
 #endif
 					await VerifyResponse(responseMessage);
-					responseData = await responseMessage.Content.ReadAsByteArrayAsync();
+					byte[] responseData = await responseMessage.Content.ReadAsByteArrayAsync();
 					if(success != null)
 					{
 						Dispatcher.Dispatch(delegate

@@ -142,6 +142,7 @@ namespace Engine.Media
 		/// </summary>
 		/// <param name="TextureStream">图片文件的输入流</param>
 		/// <param name="GlyphsStream">位图数据的输入流</param>
+        /// <param name="customGlyphOffset">自定义位图偏移</param>
 		public static BitmapFont Initialize(Stream TextureStream, Stream GlyphsStream, Vector2? customGlyphOffset = null)
 		{
 			return Initialize(Texture2D.Load(TextureStream), GlyphsStream, customGlyphOffset);

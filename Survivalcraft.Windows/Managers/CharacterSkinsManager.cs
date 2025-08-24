@@ -100,6 +100,7 @@ namespace Game
 			}
 			catch
 			{
+				// ignored
 			}
 			return new DateTime(2000, 1, 1);
 		}

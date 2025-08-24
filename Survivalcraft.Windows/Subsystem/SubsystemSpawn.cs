@@ -33,7 +33,9 @@ namespace Game
 
 		public Dictionary<ComponentSpawn, bool> m_spawns = [];
 
+		// ReSharper disable CollectionNeverQueried.Global
 		public Dictionary<int, SpawnEntityData> m_spawnEntityDatas = new();
+		// ReSharper restore CollectionNeverQueried.Global
 
 		public float MaxChunkAge = 76800f;
 
@@ -199,7 +201,7 @@ namespace Game
 
 		public virtual void SpawnChunks()
 		{
-			List<SpawnChunk> list = new();
+			//List<SpawnChunk> list = new();
 			foreach (GameWidget gameWidget in m_subsystemViews.GameWidgets)
 			{
 				Vector2 v = new(gameWidget.ActiveCamera.ViewPosition.X, gameWidget.ActiveCamera.ViewPosition.Z);
@@ -231,14 +233,14 @@ namespace Game
 					}
 				}
 			}
-			foreach (SpawnChunk item in list)
+			/*foreach (SpawnChunk item in list)
 			{
 				foreach (SpawnEntityData spawnsDatum2 in item.SpawnsData)
 				{
 					SpawnEntity(spawnsDatum2);
 				}
 				item.SpawnsData.Clear();
-			}
+			}*/
 		}
 
 		public virtual void DespawnChunks()
@@ -319,7 +321,7 @@ namespace Game
 				data.Position = item.GetValue<Vector3>("p");
 				data.TemplateName = item.GetValue<string>("n");
 				object obj = item.GetValue("d",new object());
-				data.Data = obj is string str && str != null ? str : string.Empty;
+				data.Data = obj is string str ? str : string.Empty;
 				creaturesData.Add(data);
 			}
 		}
@@ -347,14 +349,7 @@ namespace Game
                 {
                     spawnEntityData.ConstantSpawn = bool.Parse(array2[4]);
                 }
-                if (array2.Length >= 6)
-                {
-                    spawnEntityData.Data = array2[5];
-				}
-				else
-				{
-                    spawnEntityData.Data = string.Empty;
-                }
+                spawnEntityData.Data = array2.Length >= 6 ? array2[5] : string.Empty;
 				if(array2.Length >= 7)
 				{
 					spawnEntityData.EntityId = int.Parse(array2[6]);

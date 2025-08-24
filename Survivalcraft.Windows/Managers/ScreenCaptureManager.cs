@@ -78,6 +78,13 @@ namespace Game
 
 		public static void Capture(int width, int height, string filename)
 		{
+#if ANDROID
+#pragma warning disable CA1416
+			if(Android.OS.Build.VERSION.SdkInt < (Android.OS.BuildVersionCodes)21)
+			{
+				return;
+			}
+#endif
 			if (GameManager.Project != null)
 			{
 				using (RenderTarget2D renderTarget2D = new(width, height, 1, ColorFormat.Rgba8888, DepthFormat.Depth24Stencil8))
@@ -135,6 +142,7 @@ namespace Game
 					Intent intent = new("android.intent.action.MEDIA_SCANNER_SCAN_FILE");
 					intent.SetData(Android.Net.Uri.FromFile(new Java.IO.File(Storage.GetSystemPath(path))));
 					Window.Activity.SendBroadcast(intent);
+#pragma warning restore CA1416
 #endif
 				}
 				ModsManager.HookAction("OnCapture", loader => { loader.OnCapture(); return false; });

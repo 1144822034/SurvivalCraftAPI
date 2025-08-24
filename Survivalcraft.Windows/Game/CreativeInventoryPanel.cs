@@ -56,11 +56,11 @@ namespace Game
 				}
 				if (m_creativeInventoryWidget.PageDownButton.IsClicked)
 				{
-					int num = ++m_componentCreativeInventory.PageIndex;
+					++m_componentCreativeInventory.PageIndex;
 				}
 				if (m_creativeInventoryWidget.PageUpButton.IsClicked)
 				{
-					int num = --m_componentCreativeInventory.PageIndex;
+					--m_componentCreativeInventory.PageIndex;
 				}
 				m_componentCreativeInventory.PageIndex = (m_pagesCount > 0) ? Math.Clamp(m_componentCreativeInventory.PageIndex, 0, m_pagesCount - 1) : 0;
 			}

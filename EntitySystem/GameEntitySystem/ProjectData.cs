@@ -16,7 +16,9 @@ namespace GameEntitySystem
 		{
 		}
 
+		// ReSharper disable UnusedParameter.Local
 		public ProjectData(GameDatabase gameDatabase, DatabaseObject projectTemplate, ValuesDictionary overrides)
+		// ReSharper restore UnusedParameter.Local
 		{
 			ValuesDictionary = [];
 			ValuesDictionary.PopulateFromDatabaseObject(projectTemplate);

@@ -1,7 +1,6 @@
 // Game.ModsManager
 
 using Engine;
-using Engine.Media;
 using Engine.Serialization;
 using Game;
 using System.Reflection;
@@ -12,6 +11,7 @@ using System.Xml.Linq;
 using XmlUtilities;
 using ZipArchive = Game.ZipArchive;
 #if DEBUG
+using Engine.Media;
 using Engine.Graphics;
 using System.IO.Compression;
 #endif

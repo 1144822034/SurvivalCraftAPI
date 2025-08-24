@@ -7,19 +7,17 @@ namespace Engine.Serialization
 		{
 			Color color = (Color)value;
             return color.A != byte.MaxValue
-                ? HumanReadableConverter.ValuesListToString(',', new int[4]
-                {
-                    color.R,
-                    color.G,
-                    color.B,
-                    color.A
-                })
-                : HumanReadableConverter.ValuesListToString(',', new int[3]
-            {
+                ? HumanReadableConverter.ValuesListToString(',',
+                color.R,
+                color.G,
+                color.B,
+                color.A
+                )
+                : HumanReadableConverter.ValuesListToString(',',
                 color.R,
                 color.G,
                 color.B
-            });
+            );
         }
 
         public object ConvertFromString(Type type, string data)

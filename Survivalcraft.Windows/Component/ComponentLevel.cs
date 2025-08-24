@@ -1,5 +1,6 @@
 using Engine;
 using GameEntitySystem;
+using System.Globalization;
 using TemplatesDatabase;
 
 namespace Game
@@ -9,7 +10,7 @@ namespace Game
 		Multiply,
 		Add
 	}
-	public class ComponentLevel : ComponentFactors, IUpdateable
+	public class ComponentLevel : ComponentFactors
 	{
 		/// <summary>
 		/// 这里的Factor类型从struct改为class，是由于模组在修改Factor的时候，通常是需要修改引用的值。
@@ -108,7 +109,7 @@ namespace Game
 			{
 				Name = "Level",
 				Value = num3,
-				Description = string.Format(LanguageControl.Get(fName,2),MathF.Floor(level).ToString())
+				Description = string.Format(LanguageControl.Get(fName,2),MathF.Floor(level).ToString(CultureInfo.InvariantCulture))
 			});
 			float stamina = m_componentPlayer.ComponentVitalStats.Stamina;
 			float num5 = MathUtils.Lerp(0.5f, 1f, MathUtils.Saturate(4f * stamina)) * MathUtils.Lerp(0.9f, 1f, MathUtils.Saturate(stamina));
@@ -169,7 +170,7 @@ namespace Game
 			{
 				Name = "Level",
 				Value = num3,
-				Description = string.Format(LanguageControl.Get(fName,2),MathF.Floor(level).ToString())
+				Description = string.Format(LanguageControl.Get(fName,2),MathF.Floor(level).ToString(CultureInfo.InvariantCulture))
 			});
 			m_resilienceFactors.Add(new Factor
 			{
@@ -222,7 +223,7 @@ namespace Game
 			{
 				Name = "Level",
 				Value = num3,
-				Description = string.Format(LanguageControl.Get(fName,2),MathF.Floor(level).ToString())
+				Description = string.Format(LanguageControl.Get(fName,2),MathF.Floor(level).ToString(CultureInfo.InvariantCulture))
 			});
 			foreach(ClothingSlot clothingSlot in ClothingSlot.ClothingSlots.Values)
 			{
@@ -283,7 +284,7 @@ namespace Game
 			{
 				Name = "Level",
 				Value = num3,
-				Description = string.Format(LanguageControl.Get(fName,2),MathF.Floor(level).ToString())
+				Description = string.Format(LanguageControl.Get(fName,2),MathF.Floor(level).ToString(CultureInfo.InvariantCulture))
 			});
 			float num5 = 1f;
 			if (m_subsystemGameInfo.WorldSettings.GameMode == GameMode.Harmless)
@@ -371,7 +372,7 @@ namespace Game
 			}
 			if (!m_lastLevelTextValue.HasValue || m_lastLevelTextValue.Value != MathF.Floor(m_componentPlayer.PlayerData.Level))
 			{
-				m_componentPlayer.ComponentGui.LevelLabelWidget.Text = string.Format(LanguageControl.Get(fName, 2), MathF.Floor(m_componentPlayer.PlayerData.Level).ToString());
+				m_componentPlayer.ComponentGui.LevelLabelWidget.Text = string.Format(LanguageControl.Get(fName, 2), MathF.Floor(m_componentPlayer.PlayerData.Level).ToString(CultureInfo.InvariantCulture));
 				m_lastLevelTextValue = MathF.Floor(m_componentPlayer.PlayerData.Level);
 			}
 			m_componentPlayer.PlayerStats.HighestLevel = MathUtils.Max(m_componentPlayer.PlayerStats.HighestLevel, m_componentPlayer.PlayerData.Level);

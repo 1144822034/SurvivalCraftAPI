@@ -208,11 +208,11 @@ namespace Game
 				stringBuilder.AppendNumber(num4, -precision, '0');
 				while (stringBuilder[^1] == '0')
 				{
-					int num5 = --stringBuilder.Length;
+					--stringBuilder.Length;
 				}
 				if (stringBuilder[^1] == '.')
 				{
-					int num5 = --stringBuilder.Length;
+					--stringBuilder.Length;
 				}
 			}
 		}

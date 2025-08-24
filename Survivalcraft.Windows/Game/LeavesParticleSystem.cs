@@ -123,9 +123,7 @@ public class LeavesParticleSystem : ParticleSystem<LeavesParticleSystem.Particle
 				{
 					float num7 = 0.5f;
 					Ray3 ray = new(particle.Position - new Vector3(num2, num3, num4) + new Vector3(0f, num7, 0f), -Vector3.UnitY);
-					int nearestBoxIndex;
-					BoundingBox nearestBox;
-					float? num8 = block.Raycast(ray, m_subsystemTerrain, cellValue, useInteractionBoxes: false, out nearestBoxIndex, out nearestBox);
+					float? num8 = block.Raycast(ray, m_subsystemTerrain, cellValue, useInteractionBoxes: false, out int _, out BoundingBox _);
 					if (num8.HasValue && num8 < num7 - 0f)
 					{
 						particle.BillboardingMode = ParticleBillboardingMode.Horizontal;
