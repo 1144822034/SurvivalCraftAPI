@@ -1,12 +1,15 @@
 {
     "Language": {
-        "Name": "Română"
+        "Name": "Română (România)"
     },
     "DiskExternalContentProvider": {
         "DisplayName": "Disc",
         "Description": "Nu este necesară autentificarea; Salvează pe disc"
     },
-    "FurnitureBlock": [ "Combină mobilierul în design interactiv", "Prea multe modele de mobilier diferite" ],
+    "FurnitureBlock": [
+        "Combină mobilierul în design interactiv",
+        "Prea multe modele de mobilier diferite"
+    ],
     "MemoryBankBlockBehavior": {
         "1": "Selectează Tip editor",
         "2": "Original",
@@ -109,7 +112,7 @@
         "69": "Acest mod este un mod API 1.3 care nu poate fi utilizat în această versiune API (API 1.8)",
         "70": "Acest mod este un mod vechi al versiunii API, care nu are efect aici și este recomandat să fie eliminat",
         "71": "Eșec la accesarea folderului",
-        "72": "Dispozitivul dvs. nu poate accesa "
+        "72": "Dispozitivul dvs. nu poate accesa ",
         "73": "Dezîntărirea",
         "74": "Încărcarea iconiței {0} a eșuat, motiv: {1}",
         "75": "Încărcarea informației modului din modinfo.json din {0} a eșuat, motiv: {1}"
@@ -141,9 +144,9 @@
         "0": "S-a găsit un bloc nepotrivit",
         "1": "S-a găsit un bloc nepotrivit",
         "2": "Designul mobilierului este prea mare",
-        "3": "Prea multe modele de mobilier diferite"
+        "3": "Prea multe modele de mobilier diferite",
         "4": "Blocurile din natură nu sunt permise la construirea mobilierului",
-        "5": "Durabilitatea ciocanului este prea mică ca să construiești mobilier",
+        "5": "Durabilitatea ciocanului este prea mică ca să construiești mobilier"
     },
     "SubsystemEggBlockBehavior": {
         "1": "A eșuat generarea creaturii, verifică jurnalul jocului."
@@ -184,7 +187,11 @@
         "6": "Naufragiat pe uscat",
         "7": "Sufocat"
     },
-    "PlayerWidget": [ "{0} Controlat de {1}", "În joc timp de {0} zile", "Niciodată nu a apărut încă" ],
+    "PlayerWidget": [
+        "{0} Controlat de {1}",
+        "În joc timp de {0} zile",
+        "Niciodată nu a apărut încă"
+    ],
     "CrossbowWidget": {
         "0": "Trage",
         "1": "Încărcați boltul",
@@ -212,14 +219,14 @@
         "2": "Trebuie să fii nivelul {0} pentru a crea acest obiect",
         "3": "Trebuie să fii nivelul {0} pentru a topii acest obiect"
     },
-    "BlocksTexturesManager":{
+    "BlocksTexturesManager": {
         "1": "Could not find blocks texture \"{0}\".",
         "2": "Could not load blocks texture \"{0}\". Reason: {1}.",
         "3": "Unable to delete blocks texture \"{0}\"",
         "4": "Blocks texture is larger than 65536x65536 pixels (size={0}x{1})",
         "5": "Blocks texture does not have power-of-two size (size={0}x{1})"
     },
-    "GameManager":{
+    "GameManager": {
         "1": "S-a încărcat lumea, GameMode={0}, StartingPosition={1}, WorldName={2}, VisibilityRange={3}, Resolution={4}",
         "2": "Eroare salvând lumea",
         "3": "Detaliile sunt în junalul jocului",
@@ -354,7 +361,7 @@
         "4": "OK",
         "5": "Anulare",
         "6": "Încărcare a jurnalului",
-        "7": "Încărcarea a reușit"
+        "7": "Încărcarea a reușit",
         "8": "Încărcare eșuată",
         "9": "Eroare în Lume",
         "10": "Contactează dezvoltatorul modului cu fișierul de jurnal pentru a remedia problema.",
@@ -367,8 +374,14 @@
         "1": "Niciun Utilizator",
         "2": "Selectează un Utilizator Activ"
     },
-    "FurnitureDesignWidget": [ "Față", "Laterală" ],
-    "FurnitureSetItemWidget": [ "Necategorizat", "{0} design(-uri)" ],
+    "FurnitureDesignWidget": [
+        "Față",
+        "Laterală"
+    ],
+    "FurnitureSetItemWidget": [
+        "Necategorizat",
+        "{0} design(-uri)"
+    ],
     "FurnitureInventoryPanel": {
         "1": "{0} model(e) adăugat(e).",
         "2": "{0} model(e) era(u) deja prezente în lume și au fost ignorate.",
@@ -411,7 +424,7 @@
         "9": "Se preiau directorul",
         "10": "Descărcarea",
         "11": " | (descărcat)",
-        "12": "Importează"
+        "12": "Importează",
         "13": "S-a eșuat deschiderea fișierului",
         "14": "File type is not supported: "
     },
@@ -432,7 +445,7 @@
         "4": "Galben",
         "5": "Verde",
         "6": "Portocale",
-        "7": "Violet"
+        "7": "Violet",
         "Format": "{0} {1}",
         "CRDescription": "Faceți LED-uri colorate din cupru, sticlă și vopsea"
     },
@@ -446,7 +459,7 @@
         "1": "Fă vopsea {0}"
     },
     "PumpkinSoupBucketBlock": {
-      "1": "Gătește supă de dovleac"
+        "1": "Gătește supă de dovleac"
     },
     "GameMenuDialog": {
         "1": "Dispozitivul tău este rapid",
@@ -542,7 +555,7 @@
         "91": "Comenzi Gamepad",
         "92": "Mai Multe Acțiuni",
         "93": "Bărbat",
-        "94": "Femeie"
+        "94": "Femeie",
         "95": "Rulează Javascript",
         "96": "Durata Anului",
         "97": "Anotimp",
@@ -769,7 +782,7 @@
         "8": "{0} vsync",
         "9": "Nelimitat",
         "10": "Interval Mare de Vizibilitate",
-        "11": "Jocul se poate bloca aleatoriu dacă dispozitivul tău nu are suficientă memorie pentru a gestiona intervalul de vizibilitate pe care l-ai selectat."
+        "11": "Jocul se poate bloca aleatoriu dacă dispozitivul tău nu are suficientă memorie pentru a gestiona intervalul de vizibilitate pe care l-ai selectat.",
         "12": "Neted",
         "13": "Standard",
         "14": "1 VSYNC",
@@ -920,7 +933,7 @@
         "3": "Selectează Textura Blocurilor",
         "4": "Indisponibil",
         "5": "Terenul plat este disponibil numai în Modul Creativ",
-        "6": "Normal"
+        "6": "Normal",
         "7": "Timpul Zilei:",
         "8": " zile"
     },
@@ -950,7 +963,7 @@
         "16": "Amiază",
         "17": "Amurg",
         "18": "Miezul nopţii",
-        "19": "Cameră depanatoare"
+        "19": "Cameră depanatoare",
         "20": "Precipitații oprite",
         "21": "Precipitații pornite",
         "22": "Ceață oprită",
@@ -997,7 +1010,7 @@
         "1": "Esti sigur?",
         "2": "Lumea va fi ștearsă iremediabil.",
         "3": "Renunți la schimbări?",
-        "4": "Ai schimbat unele dintre proprietățile lumii, dar nu au fost aplicate încă."
+        "4": "Ai schimbat unele dintre proprietățile lumii, dar nu au fost aplicate încă.",
         "5": "Tastează \"yes\" pentru a continua"
     },
     "PlayScreen": {
@@ -1040,7 +1053,7 @@
         "not allowed": "Nepermis",
         "success": "Succes",
         "Unavailable": "Indisponibil",
-        "delete": "Șterge"
+        "delete": "Șterge",
         "gameName": "Survivalcraft",
         "debug": "DEPANARE",
         "api": "API"
@@ -1059,13 +1072,55 @@
         "4": "Putred",
         "5": "Necopt"
     },
-    "CottonBlock": [ "Bumbac", "Bumbac Sălbatic" ],
-    "ArrowBlock": [ "Săgeată cu Vârf de Lemn", "Săgeată cu Vârf de Piatră", "Săgeată cu Vârf de Fier", "Săgeată cu Vârf de Diamant", "Săgeată de Foc", "Bolt de Fier", "Bolt de Fier cu Vârf de Diamant", "Bolt Exploziv", "Săgeată cu Vârf de Cupru" ],
-    "BulletBlock": [ "Glonț de Muschetă", "Alice", "Bilă cu Alice" ],
-    "PressurePlateBlock": [ "Placă de Presiune Din Lemn", "Placă de Presiune Din Piatră" ],
-    "PistonBlock": [ "Piston", "Piston de Tragere", "Piston de Tragere Strict" ],
-    "DeciduousLeavesBlock": [ "Vară ", "Toamnă ", "Iarnă ", "Primăvară " ],
-    "SubsystemSeasons": [ "Îmceputul Verii", "Vară", "Sfârșitul Verii", "Începutul Toamnei", "Toamna", "Sfârșitul Toamnei", "Începutul Iernii", "Iarna", "Sfârșitul Iernii", "Începutul Primăverii", "Primăvara", "Sfârșitul Primpverii" ],
+    "CottonBlock": [
+        "Bumbac",
+        "Bumbac Sălbatic"
+    ],
+    "ArrowBlock": [
+        "Săgeată cu Vârf de Lemn",
+        "Săgeată cu Vârf de Piatră",
+        "Săgeată cu Vârf de Fier",
+        "Săgeată cu Vârf de Diamant",
+        "Săgeată de Foc",
+        "Bolt de Fier",
+        "Bolt de Fier cu Vârf de Diamant",
+        "Bolt Exploziv",
+        "Săgeată cu Vârf de Cupru"
+    ],
+    "BulletBlock": [
+        "Glonț de Muschetă",
+        "Alice",
+        "Bilă cu Alice"
+    ],
+    "PressurePlateBlock": [
+        "Placă de Presiune Din Lemn",
+        "Placă de Presiune Din Piatră"
+    ],
+    "PistonBlock": [
+        "Piston",
+        "Piston de Tragere",
+        "Piston de Tragere Strict"
+    ],
+    "DeciduousLeavesBlock": [
+        "Vară ",
+        "Toamnă ",
+        "Iarnă ",
+        "Primăvară "
+    ],
+    "SubsystemSeasons": [
+        "Îmceputul Verii",
+        "Vară",
+        "Sfârșitul Verii",
+        "Începutul Toamnei",
+        "Toamna",
+        "Sfârșitul Toamnei",
+        "Începutul Iernii",
+        "Iarna",
+        "Sfârșitul Iernii",
+        "Începutul Primăverii",
+        "Primăvara",
+        "Sfârșitul Primpverii"
+    ],
     "Blocks": {
         "AirBlock:0": {
             "DisplayName": "Aer",
@@ -2520,7 +2575,7 @@
         },
         "PistonBlock:452": {
             "CRDescription:0": "Adăugați cârlige de cupru la piston pentru a face un piston de tragere strict"
-        }
+        },
         "DirtStairsBlock:0": {
             "DisplayName": "Dirt Stairs",
             "Description": "Stairs make it easy to climb slopes. You no longer need to constantly jump and climb vertical faces, instead you move faster, saving time and energy. Stairs can be crafted from various materials. Stairs can also be placed upside-down on the ceilings. Can be painted.",
@@ -2721,7 +2776,7 @@
         },
         "41": {
             "value": "\n Jocul vă permite să răsfoiți o listă de lumi, texturi pentru blocuri și alte articole publicate de alți membri ai comunității Survivalcraft și să le descărcați.\n \n\n\n După ce faceți ceva interesant, îl puteți publica și prin intermediul acestui serviciu și va apărea pe listă pentru ca oricine să îl descarce.\n \n\n\n Pentru a publica ceva, mai întâi trebuie să îl puneți pe internet, astfel încât să fie accesibil tuturor.\n Cel mai ușor loc de utilizat este Dropbox, deși puteți folosi orice alt furnizor.\n După ce ați terminat, puteți publica linkul către acesta prin dialogul \"Publicare link\" din joc.\n \n\n\n Notă: serverul nu stochează dvs. conținut, doar linkul.\n La fel ca un motor de căutare.\n Sunteți responsabil pentru păstrarea datelor accesibile prin linkul publicat.\n Atenție la depășirea limitelor de lățime de bandă ale furnizorului dvs.,dacă aveți un link în partea de sus a listei, conținutul dvs. va primi multe mii de descărcări într-un timp scurt.\n",
-            "Name": "Comunitate"
+            "Name": "Comunitate",
             "Title": "Conținutul comunității"
         }
     },
@@ -2818,7 +2873,7 @@
             "7": "Șterge",
             "8": "...",
             "9": "Introduceți Cuvinte Cheie",
-            "10": "Căutare"
+            "10": "Căutare",
             "11": "Butic"
         },
         "OriginalCommunityContentScreen": {
@@ -2839,7 +2894,7 @@
             "6": "Descărcați un fișier direct de pe un link web, dacă îl cunoașteți (cel mai bine este să utilizați copy/paste pentru a introduce linkuri)",
             "7": "De pe Link",
             "8": "Gestionați Conținutul Descărcat",
-            "9": "Gestionează Conținutul"
+            "9": "Gestionează Conținutul",
             "10": "Accesează conținutul creat de alțti membri comunitari originali și registrat pentru access public",
             "11": "Comunitate Originală",
             "12": "Gestionează Modul Descărcat",
@@ -2859,7 +2914,7 @@
         "HelpScreen": {
             "1": "Subiecte de ajutor",
             "2": "Bestiar",
-            "3": "Rețete"
+            "3": "Rețete",
             "4": "Raportează problemă API"
         },
         "HelpTopicScreen": {
@@ -2875,7 +2930,7 @@
             "7": "Drepturi de autor 2011-2025 Candy Rufus Games.",
             "8": "Verifică ",
             "9": "kaalus.wordpress.com",
-            "10": " pentru mai multe informații."
+            "10": " pentru mai multe informații.",
             "11": "Vezi Anunțul",
             "12": "Pagina de Acasă API: "
         },
@@ -2918,7 +2973,7 @@
             "7": "Schimbă Opțiunile Lumii:",
             "8": "Opțiuni...",
             "9": "Eroare: nume de lume invalid!",
-            "10": "Configurează Jucătorii"
+            "10": "Configurează Jucătorii",
             "11": "Introdu Sămâmța Lumii",
             "12": "O sămânță diferită va cauza să se genereze o lume diferită"
         },
@@ -2947,12 +3002,27 @@
             "10": "Joacă!",
             "11": "Adaugă Altul"
         },
-        "PlayersScreen": [ "Editează Jucători", "Aspect Ecran", "Jucător Nou", "Nu se pot adăuga jucători în modul crud.", "Nu se pot adăuga jucători în modul aventură.", "Sunt permiși un maximum de {0} jucători.", " Selectează Aspectul Ecranului" ],
+        "PlayersScreen": [
+            "Editează Jucători",
+            "Aspect Ecran",
+            "Jucător Nou",
+            "Nu se pot adăuga jucători în modul crud.",
+            "Nu se pot adăuga jucători în modul aventură.",
+            "Sunt permiși un maximum de {0} jucători.",
+            " Selectează Aspectul Ecranului"
+        ],
         "RecipaediaDescriptionScreen": {
             "1": "Descrierea Blocului"
         },
-        "RecipaediaRecipesScreen": [ "Blocați Rețete", "(rețeta #{0})" ],
-        "RecipaediaScreen": [ "Rețete", "Descriere", "Reţete" ],
+        "RecipaediaRecipesScreen": [
+            "Blocați Rețete",
+            "(rețeta #{0})"
+        ],
+        "RecipaediaScreen": [
+            "Rețete",
+            "Descriere",
+            "Reţete"
+        ],
         "RespawningScreen": {
             "1": "Reapărare...",
             "2": "Obiectele tale vor rămâne pentru o perioadă scurtă de timp la locul morții."
@@ -2971,7 +3041,7 @@
             "6": "Vezi Jurnalul Jocului:",
             "7": "...",
             "8": "Resetare la valorile implicite:",
-            "9": "Resetați"
+            "9": "Resetați",
             "10": "Reportează problemă API"
         },
         "SettingsControlsScreen": [
@@ -2991,7 +3061,7 @@
             "Durata minimă de menţinere:",
             "Trasare minimă distanță:",
             "Introducere:",
-            "Stil Bancă de Memorie:"
+            "Stil Bancă de Memorie:",
             "Creative Mode Drag Max Stack Of Blocks:",
             "Drag Half Stack Of Blocks In Split:",
             "Touch Screen Joystick Offset",
@@ -3021,7 +3091,7 @@
         "SettingsGraphicsScreen": {
             "1": "Ajustează Setările Grafice",
             "2": "Realitate Virtuala (în pulă):",
-            "3": "Luminozitatea Zonelor Întunecate:"
+            "3": "Luminozitatea Zonelor Întunecate:",
             "4": "Unghiul de Vizualizare a Camerei:"
         },
         "SettingsPerformanceScreen": {
@@ -3034,7 +3104,7 @@
             "7": "Umbre Obiecte:",
             "8": "Limită de Cadre:",
             "9": "Afișează Contorul FPS:",
-            "10": "Panglică de Afișare FPS:"
+            "10": "Panglică de Afișare FPS:",
             "11": "Limitează Jocul în FPS Mic:",
             "12": "Metoda de accelerare în Timpul Somnului:",
             "13": "Limita de Reîmprospătare a Texturilor Animate:"
@@ -3059,7 +3129,7 @@
             "Afișează Sigla în Capturile de Ecran:",
             "Rezoluția Capturii de ecran:",
             "Conținutul Comunității:",
-            "Afișează Jurnalul de încărcare:"
+            "Afișează Jurnalul de încărcare:",
             "Tastează \"yes\" pentru a șterge lumea:",
             "Conținutul de Comunitate Original",
             "Ascunde Reticulul:"
@@ -3100,7 +3170,7 @@
             "22": "Reapare în Modul Aventură:",
             "23": "Mecanici de Supraviețuire în Modul Aventură:",
             "24": "Creaturi Supranaturale:",
-            "25": "Atacurile Jucător pe Jucător:"
+            "25": "Atacurile Jucător pe Jucător:",
             "26": "Anotimpuri Schimbătoare:",
             "27": "Durata Anului:",
             "28": "Anotimp:"
@@ -3262,7 +3332,7 @@
             "Resilience": "Reziliență",
             "Speed": "Viteză",
             "Hunger": "Foame",
-            "Choked": "Înecat"
+            "Choked": "Înecat",
             "PlayerLevel": "{0}, Nivelul {1}  {2}",
             "Male": "Bărbat",
             "Female": "Femeie"
@@ -3487,7 +3557,7 @@
             "48": "derulează, scimbă slotul de inventar",
             "49": "arată meniul jocului",
             "50": "OK",
-            "51": "Ajutor"
+            "51": "Ajutor",
             "52": "J",
             "53": "K",
             "54": "comută ceața (creativ)",
@@ -3537,7 +3607,7 @@
             "2": "Anulare"
         },
         "ViewGameLogDialog": [
-            "Curăță"
+            "Curăță",
             "Copiază",
             "Închide",
             "Încarcă"
