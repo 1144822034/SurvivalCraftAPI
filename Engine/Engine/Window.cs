@@ -1,4 +1,5 @@
 #if ANDROID
+#pragma warning disable CA1416
 using Android.Content;
 using Android.OS;
 #else

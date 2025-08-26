@@ -26,7 +26,7 @@ namespace Game
 			{
 				modInfo = new ModInfo { Name = "FastDebug", Version = "1.0.0", ApiVersion = ModsManager.APIVersionString, Author = "Mod", Description = "调试Mod插件", ScVersion = "2.4.0.0", PackageName = "com.fastdebug" };
 			}
-			GetFile("icon.png", stream => { LoadIcon(stream); });
+			GetFile("icon.png", LoadIcon);
 		}
 
 		public void ReadDirResouces(string basepath, string path)
@@ -127,6 +127,7 @@ namespace Game
 		/// 获取指定后缀文件列表，带.
 		/// </summary>
 		/// <param name="extension"></param>
+		/// <param name="action"></param>
 		/// <returns></returns>
 		public override void GetFiles(string extension, Action<string, Stream> action)
 		{

@@ -67,6 +67,7 @@ namespace Game
 		/// 输入按键名称列表，检查是否存在冲突，并输出冲突的按键列表
 		/// </summary>
 		/// <param name="list"></param>
+		/// <param name="conflictKeys"></param>
 		/// <returns></returns>
 
 		public static bool HasConflict(List<string> list, out List<string> conflictKeys)

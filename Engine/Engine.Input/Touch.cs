@@ -1,5 +1,4 @@
 #if ANDROID
-
 using System.Collections.Concurrent;
 using Android.Views;
 
@@ -43,6 +42,7 @@ namespace Engine.Input
         public static ConcurrentQueue<TouchInfo> m_cachedTouchEvents = [];
 		internal static void HandleTouchEvent(MotionEvent e)
         {
+#pragma warning disable CA1416
             switch (e.ActionMasked)
             {
                 case MotionEventActions.Down:
@@ -61,9 +61,8 @@ namespace Engine.Input
                 case MotionEventActions.Outside:
                     m_cachedTouchEvents.Enqueue(new TouchInfo(e.GetPointerId(e.ActionIndex), new Vector2(e.GetX(e.ActionIndex), e.GetY(e.ActionIndex)), 3));
                     break;
-                default:
-                    return;
             }
+#pragma warning restore CA1416
 		}
 
 #endif

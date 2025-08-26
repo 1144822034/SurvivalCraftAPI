@@ -184,9 +184,8 @@ namespace Game
 
 		public void RemoveExplosive(Point3 point)
 		{
-			if (m_explosiveDataByPoint.TryGetValue(point, out ExplosiveData value))
+			if (m_explosiveDataByPoint.Remove(point, out ExplosiveData value))
 			{
-				m_explosiveDataByPoint.Remove(point);
 				if (value.FuseParticleSystem != null)
 				{
 					m_subsystemParticles.RemoveParticleSystem(value.FuseParticleSystem);

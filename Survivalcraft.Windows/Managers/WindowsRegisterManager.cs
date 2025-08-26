@@ -1,4 +1,5 @@
 #if WINDOWS
+#pragma warning disable CA1416
 using Microsoft.Win32;
 
 namespace Game.Managers
@@ -15,7 +16,7 @@ namespace Game.Managers
 
             try
             {
-	            /// 检查 文件关联是否创建
+	            // 检查 文件关联是否创建
 	            RegistryKey isExCommand = Registry.ClassesRoot.OpenSubKey(keyName);
 	            if (isExCommand == null)
                 {
@@ -40,7 +41,7 @@ namespace Game.Managers
                 //isCreateRegistry = true;
             }
 
-            /// 假如 文件关联 还没有创建，或是关联位置已被改变 
+            // 假如 文件关联 还没有创建，或是关联位置已被改变
             //if (isCreateRegistry) 
             {
                 try
@@ -80,10 +81,10 @@ namespace Game.Managers
 	                    return;
                     }
 
-                    /// 关联的位置 
+                    // 关联的位置
                     key.SetValue("", SurvivalcraftPath + @" %1/");
 
-                    /// 关联的文件扩展名,  
+                    // 关联的文件扩展名,
                     keyName = extension;
                     key = Registry.ClassesRoot.CreateSubKey(keyName);
                     if(key == null)

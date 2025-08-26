@@ -22,8 +22,8 @@ namespace SC4Android
 
 	public class MainActivity : EngineActivity
 	{
-		private static bool GraterThanAndroid11 { get; } = (int)Build.VERSION.SdkInt >= (int)BuildVersionCodes.R;
-		private static bool GraterThanAndroid6 { get; } = (int)Build.VERSION.SdkInt >= (int)BuildVersionCodes.M;
+		private static bool GraterThanAndroid11 { get; } = Build.VERSION.SdkInt >= BuildVersionCodes.R;
+		private static bool GraterThanAndroid6 { get; } = Build.VERSION.SdkInt >= BuildVersionCodes.M;
 		
 		private bool CheckAndRequestPermission()
 		{

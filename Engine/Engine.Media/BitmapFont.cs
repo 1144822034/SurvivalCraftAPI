@@ -126,12 +126,22 @@ namespace Engine.Media
 				if (m_debugFont == null)
 				{
 #if ANDROID
-                    using Stream stream = EngineActivity.m_activity.Assets.Open("Debugfont.png");
-                    using Stream stream2 = EngineActivity.m_activity.Assets.Open("Debugfont.lst");
+#pragma warning disable CA1416
+                    using Stream stream = EngineActivity.m_activity.Assets?.Open("Debugfont.png");
+                    using Stream stream2 = EngineActivity.m_activity.Assets?.Open("Debugfont.lst");
+#pragma warning restore CA1416
 #else
                     using Stream stream = typeof(BitmapFont).GetTypeInfo().Assembly.GetManifestResourceStream("Engine.Resources.Debugfont.png");
                     using Stream stream2 = typeof(BitmapFont).GetTypeInfo().Assembly.GetManifestResourceStream("Engine.Resources.Debugfont.lst");
 #endif
+                    if (stream == null)
+                    {
+                        throw new FileNotFoundException("Debugfont.png");
+                    }
+                    if (stream2 == null)
+                    {
+                        throw new FileNotFoundException("Debugfont.lst");
+                    }
                     m_debugFont = Initialize(stream, stream2);
                 }
 				return m_debugFont;
@@ -155,11 +165,20 @@ namespace Engine.Media
                 char[] splitters = [(char)0x20, (char)0x09];// 空格和制表符
 				BitmapFont bitmapFont = new();
 				StreamReader streamReader = new(GlyphsStream);
-				int num = int.Parse(streamReader.ReadLine());
+                string firstLine = streamReader.ReadLine();
+                if (firstLine == null)
+                {
+                    throw new FormatException("The first line of the .lst file of the bitmap font can not be founded");
+                }
+				int num = int.Parse(firstLine);
 				Glyph[] array = new Glyph[num];
 				for (int i = 0; i < num; i++)
 				{
 					string line = streamReader.ReadLine();
+                    if (line == null)
+                    {
+                        throw new FormatException($"The {i + 2} line of the .lst file of the bitmap font can not be founded");
+                    }
 					string[] arr = line.Split(splitters, StringSplitOptions.None);
 					if (arr.Length == 9)
 					{
@@ -182,16 +201,44 @@ namespace Engine.Media
 					float width = float.Parse(arr[7]);
 					array[i] = new Glyph(code, texCoord, texCoord2, offset, width);
 				}
-				float glyphHeight = float.Parse(streamReader.ReadLine());
-				string line2 = streamReader.ReadLine();
-				string[] arr2 = line2.Split(splitters, StringSplitOptions.None);
+                string glyphHeightLine = streamReader.ReadLine();
+                if (glyphHeightLine == null)
+                {
+                    throw new FormatException("The height line of the .lst file of the bitmap font can not be founded");
+                }
+				float glyphHeight = float.Parse(glyphHeightLine);
+				string spacingLine = streamReader.ReadLine();
+                if (spacingLine == null)
+                {
+                    throw new FormatException("The spacing line of the .lst file of the bitmap font can not be founded");
+                }
+				string[] arr2 = spacingLine.Split(splitters, StringSplitOptions.None);
 				Vector2 spacing = new(float.Parse(arr2[0]), float.Parse(arr2[1]));
-				float scale = float.Parse(streamReader.ReadLine());
-				char fallbackCode = char.Parse(streamReader.ReadLine());
-                int num2 = int.Parse(streamReader.ReadLine() ?? "0");
+                string scaleLine = streamReader.ReadLine();
+                if (scaleLine == null)
+                {
+                    throw new FormatException("The scale line of the .lst file of the bitmap font can not be founded");
+                }
+				float scale = float.Parse(scaleLine);
+                string fallbackLine = streamReader.ReadLine();
+                if (fallbackLine == null)
+                {
+                    throw new FormatException("The fallback line of the .lst file of the bitmap font can not be founded");
+                }
+				char fallbackCode = char.Parse(fallbackLine);
+                string kerningCountLine = streamReader.ReadLine();
+                if (kerningCountLine == null)
+                {
+                    throw new FormatException("The kerning count line of the .lst file of the bitmap font can not be founded");
+                }
+                int num2 = int.Parse(kerningCountLine);
                 for (int j = 0; j < num2; j++)
                 {
                     string line = streamReader.ReadLine();
+                    if (line == null)
+                    {
+                        throw new FormatException($"The {j + 7} line of the .lst file of the bitmap font can not be founded");
+                    }
                     string[] arr = line.Split(splitters, StringSplitOptions.None);
                     if (arr.Length == 3)
                     {
@@ -534,94 +581,91 @@ namespace Engine.Media
 				}
 				num = y + 1;
 				y = num;
-		}
-			}
-
-            public static int[] ApplyKerningBulking(int[] depths, int radius, float gradient)
-            {
-                int[] array = new int[depths.Length];
-                for (int i = 0; i < depths.Length; i++)
-                {
-                    array[i] = depths[i];
-                    int num = MathUtils.Max(i - radius, 0);
-                    int num2 = MathUtils.Min(i + radius, depths.Length - 1);
-                    for (int j = num; j <= num2; j++)
-                    {
-                        int num3 = Math.Abs(j - i);
-                        int x = depths[j] + (int)Math.Round(gradient * num3);
-                        array[i] = MathUtils.Min(array[i], x);
-                    }
-                }
-                return array;
             }
+        }
 
-            public static void CalculateKerningDepths(Image image, Rectangle rectangle, out int[] leftDepths, out int[] rightDepths)
+        public static int[] ApplyKerningBulking(int[] depths, int radius, float gradient)
+        {
+            int[] array = new int[depths.Length];
+            for (int i = 0; i < depths.Length; i++)
             {
-                leftDepths = new int[rectangle.Height];
-                rightDepths = new int[rectangle.Height];
-                for (int i = rectangle.Top; i < rectangle.Bottom; i++)
+                array[i] = depths[i];
+                int num = MathUtils.Max(i - radius, 0);
+                int num2 = MathUtils.Min(i + radius, depths.Length - 1);
+                for (int j = num; j <= num2; j++)
                 {
-                    int num = i - rectangle.Top;
-                    leftDepths[num] = rectangle.Width;
-                    rightDepths[num] = rectangle.Width;
-                    for (int j = rectangle.Left; j < rectangle.Right; j++)
-                    {
-                        if (image.GetPixel(j, i).A != 0)
-                        {
-                            leftDepths[num] = MathUtils.Min(leftDepths[num], j - rectangle.Left);
-                            rightDepths[num] = MathUtils.Min(rightDepths[num], rectangle.Right - j - 1);
-                        }
-                    }
+                    int num3 = Math.Abs(j - i);
+                    int x = depths[j] + (int)Math.Round(gradient * num3);
+                    array[i] = MathUtils.Min(array[i], x);
                 }
             }
+            return array;
+        }
 
-            public BitmapFont Clone(float scale, Vector2 spacing)
+        public static void CalculateKerningDepths(Image image, Rectangle rectangle, out int[] leftDepths, out int[] rightDepths)
+        {
+            leftDepths = new int[rectangle.Height];
+            rightDepths = new int[rectangle.Height];
+            for (int i = rectangle.Top; i < rectangle.Bottom; i++)
             {
-                return new BitmapFont
+                int num = i - rectangle.Top;
+                leftDepths[num] = rectangle.Width;
+                rightDepths[num] = rectangle.Width;
+                for (int j = rectangle.Left; j < rectangle.Right; j++)
                 {
-                    m_glyphsByCode = m_glyphsByCode,
-                    m_kerningPairs = m_kerningPairs,
-                    m_image = m_image,
-                    Texture = Texture,
-                    GlyphHeight = GlyphHeight,
-                    LineHeight = LineHeight,
-                    Spacing = spacing,
-                    Scale = scale,
-                    FallbackGlyph = FallbackGlyph,
-                    MaxGlyphCode = MaxGlyphCode
-                };
+                    if (image.GetPixel(j, i).A != 0)
+                    {
+                        leftDepths[num] = MathUtils.Min(leftDepths[num], j - rectangle.Left);
+                        rightDepths[num] = MathUtils.Min(rightDepths[num], rectangle.Right - j - 1);
+                    }
+                }
             }
+        }
 
-            public static Rectangle CropGlyph(Image image, Rectangle rectangle)
-		{
-			int num = int.MaxValue;
-			int num2 = int.MaxValue;
-			int num3 = int.MinValue;
-			int num4 = int.MinValue;
-			for (int i = rectangle.Left; i < rectangle.Left + rectangle.Width; i++)
-			{
-				for (int j = rectangle.Top; j < rectangle.Top + rectangle.Height; j++)
-				{
-					if (image.GetPixelFast(i, j).A != 0)
-					{
-						num = Math.Min(num, i);
-						num2 = Math.Min(num2, j);
-						num3 = Math.Max(num3, i);
-						num4 = Math.Max(num4, j);
-					}
-				}
-			}
+        public BitmapFont Clone(float scale, Vector2 spacing)
+        {
+            return new BitmapFont
+            {
+                m_glyphsByCode = m_glyphsByCode,
+                m_kerningPairs = m_kerningPairs,
+                m_image = m_image,
+                Texture = Texture,
+                GlyphHeight = GlyphHeight,
+                LineHeight = LineHeight,
+                Spacing = spacing,
+                Scale = scale,
+                FallbackGlyph = FallbackGlyph,
+                MaxGlyphCode = MaxGlyphCode
+            };
+        }
+
+        public static Rectangle CropGlyph(Image image, Rectangle rectangle)
+        {
+            int num = int.MaxValue;
+            int num2 = int.MaxValue;
+            int num3 = int.MinValue;
+            int num4 = int.MinValue;
+            for (int i = rectangle.Left; i < rectangle.Left + rectangle.Width; i++)
+            {
+                for (int j = rectangle.Top; j < rectangle.Top + rectangle.Height; j++)
+                {
+                    if (image.GetPixelFast(i, j).A != 0)
+                    {
+                        num = Math.Min(num, i);
+                        num2 = Math.Min(num2, j);
+                        num3 = Math.Max(num3, i);
+                        num4 = Math.Max(num4, j);
+                    }
+                }
+            }
             return num == int.MaxValue
-                ? new Rectangle(rectangle.Left, rectangle.Top, 0, 0)
-                : new Rectangle(num, num2, num3 - num + 1, num4 - num2 + 1);
+            ? new Rectangle(rectangle.Left, rectangle.Top, 0, 0)
+            : new Rectangle(num, num2, num3 - num + 1, num4 - num2 + 1);
         }
 
         public void SetKerning(char code, char followingCode, float kerning)
         {
-            if (m_kerningPairs == null)
-            {
-                m_kerningPairs = new Dictionary<int, short>();
-            }
+            m_kerningPairs ??= new Dictionary<int, short>();
             m_kerningPairs[(int)(((uint)code << 16) | followingCode)] = (short)kerning;
         }
     }

@@ -1,6 +1,6 @@
 <Project Sdk="Microsoft.NET.Sdk">
     <PropertyGroup>
-        <NoWarn>$(NoWarn);XA0141;XA4301</NoWarn>
+        <NoWarn>$(NoWarn);CS1591;XA0141;XA4301</NoWarn>
         <RootNamespace>Game</RootNamespace>
         <AssemblyName>Survivalcraft</AssemblyName>
         <Product>Survivalcraft</Product>
@@ -9,7 +9,7 @@
         <ApplicationVersion>2.4.0.0</ApplicationVersion>
         <AssemblyVersion>2.4.0.0</AssemblyVersion>
         <FileVersion>2.4.0.0</FileVersion>
-        <Nullable>enable</Nullable>
+        <LangVersion>preview</LangVersion>
         <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
         <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
         <Nullable>disable</Nullable>

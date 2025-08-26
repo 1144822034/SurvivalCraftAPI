@@ -99,14 +99,7 @@ namespace Game
 		}
 
 #if ANDROID
-		private static ConnectivityManager GetConnectivityManager()
-		{
-			if(Build.VERSION.SdkInt >= (BuildVersionCodes)21)
-			{
-				return (ConnectivityManager)Window.Activity.GetSystemService("connectivity");
-			}
-			return null;
-		}
+		private static ConnectivityManager GetConnectivityManager() => Build.VERSION.SdkInt >= (BuildVersionCodes)21 ? (ConnectivityManager)Window.Activity.GetSystemService("connectivity") : null;
 #pragma warning restore CA1416
 #pragma warning restore CA1422
 #endif

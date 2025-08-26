@@ -1,11 +1,11 @@
-
-using System.Text;
 #if ANDROID
+#pragma warning disable CA1416
 using Environment = Android.OS.Environment;
 using Android.OS;
 #else
 using System.Reflection;
 #endif
+using System.Text;
 
 namespace Engine
 {

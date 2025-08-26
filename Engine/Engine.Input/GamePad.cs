@@ -1,5 +1,5 @@
 #if ANDROID
-
+#pragma warning disable CA1416
 using System.Collections.Concurrent;
 using Axis = Android.Views.Axis;
 using Android.Views;
@@ -215,10 +215,9 @@ namespace Engine.Input
 
 		public static void Disconnect(int deviceId)
 		{
-			if (m_deviceToIndex.TryGetValue(deviceId, out int value))
+			if (m_deviceToIndex.Remove(deviceId, out int value))
 			{
-				m_deviceToIndex.Remove(deviceId);
-				m_states[value].IsConnected = false;
+                m_states[value].IsConnected = false;
 			}
 		}
 #else

@@ -1,6 +1,6 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
     <PropertyGroup>
-        <NoWarn>1701;1702;CA1416;1591;1572;1573;1587;NETSDK1106</NoWarn>
+        <NoWarn>$(NoWarn);CS1591</NoWarn>
         <RootNamespace>Game</RootNamespace>
         <AssemblyName>Survivalcraft</AssemblyName>
         <TargetFramework>net9.0</TargetFramework>
@@ -8,6 +8,7 @@
         <ApplicationVersion>2.4.0.0</ApplicationVersion>
         <AssemblyVersion>2.4.0.0</AssemblyVersion>
         <FileVersion>2.4.0.0</FileVersion>
+        <LangVersion>preview</LangVersion>
         <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
         <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
         <Nullable>disable</Nullable>

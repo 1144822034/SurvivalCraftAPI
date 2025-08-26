@@ -25,14 +25,7 @@ namespace Game
 			}
 		}
 
-		private static Android.Content.ClipboardManager GetClipboardManager()
-		{
-			if(Build.VERSION.SdkInt < (BuildVersionCodes)21)
-			{
-				return null;
-			}
-			return Engine.Window.Activity.GetSystemService("clipboard") as Android.Content.ClipboardManager;
-		}
+		private static Android.Content.ClipboardManager GetClipboardManager() => Build.VERSION.SdkInt >= (BuildVersionCodes)21 ? Engine.Window.Activity.GetSystemService("clipboard") as Android.Content.ClipboardManager : null;
 #pragma warning restore CA1416
 #elif WINDOWS || LINUX
 		public static string ClipboardString

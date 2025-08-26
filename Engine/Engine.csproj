@@ -1,6 +1,6 @@
 <Project Sdk="Microsoft.NET.Sdk">
     <PropertyGroup>
-        <NoWarn>$(NoWarn);1591;CS0067</NoWarn>
+        <NoWarn>$(NoWarn);CS1591;CS0067</NoWarn>
         <RootNamespace>Engine</RootNamespace>
         <AssemblyName Condition="'$(Configuration)' != 'Direct3D11'">Engine</AssemblyName>
         <AssemblyName Condition="'$(Configuration)' == 'Direct3D11'">EngineDirect3D11</AssemblyName>
@@ -12,8 +12,10 @@
         <RepositoryUrl>https://gitee.com/SC-SPM/SurvivalcraftApi</RepositoryUrl>
         <RepositoryType>Git</RepositoryType>
         <NeutralLanguage>zh-CN</NeutralLanguage>
+        <LangVersion>preview</LangVersion>
         <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
         <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+        <Nullable>disable</Nullable>
         <GenerateDocumentationFile>true</GenerateDocumentationFile>
         <ProduceReferenceAssembly>true</ProduceReferenceAssembly>
     </PropertyGroup>

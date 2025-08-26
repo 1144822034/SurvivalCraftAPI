@@ -1,4 +1,5 @@
 #if ANDROID
+#pragma warning disable CA1416
 using Android.App;
 using Android.Content;
 using Android.Content.PM;
@@ -33,6 +34,18 @@ namespace Engine
         public static string BasePath = RunPath.AndroidFilePath;
         public static string ConfigPath = RunPath.AndroidFilePath;
 
+        private AudioManager AudioManager
+        {
+            get
+            {
+                if (field == null)
+                {
+                    field = GetAudioManager();
+                }
+                return field;
+            }
+        }
+
         public EngineActivity()
         {
             m_activity = this;
@@ -49,8 +62,11 @@ namespace Engine
 
         public void Vibrate(long ms)
         {
-            Vibrator vibrator = (Vibrator)GetSystemService("vibrator");
-            vibrator?.Vibrate(VibrationEffect.CreateOneShot(ms, VibrationEffect.DefaultAmplitude));
+            if (Build.VERSION.SdkInt >= (BuildVersionCodes)26)
+            {
+                Vibrator vibrator = (Vibrator)GetSystemService("vibrator");
+                vibrator?.Vibrate(VibrationEffect.CreateOneShot(ms, VibrationEffect.DefaultAmplitude));
+            }
         }
         public void OpenLink(string link)
         {
@@ -134,11 +150,11 @@ namespace Engine
             switch (keyCode)
             {
                 case Keycode.VolumeUp:
-                    ((AudioManager)Context?.GetSystemService("audio"))?.AdjustStreamVolume(Stream.Music, Adjust.Raise, VolumeNotificationFlags.ShowUi);
+                    AudioManager?.AdjustStreamVolume(Stream.Music, Adjust.Raise, VolumeNotificationFlags.ShowUi);
                     EnableImmersiveMode();
                     break;
                 case Keycode.VolumeDown:
-                    ((AudioManager)Context?.GetSystemService("audio"))?.AdjustStreamVolume(Stream.Music, Adjust.Lower, VolumeNotificationFlags.ShowUi);
+                    AudioManager?.AdjustStreamVolume(Stream.Music, Adjust.Lower, VolumeNotificationFlags.ShowUi);
                     EnableImmersiveMode();
                     break;
             }
@@ -156,6 +172,9 @@ namespace Engine
             }
             return true;
         }
+
+
+        private AudioManager GetAudioManager() => Build.VERSION.SdkInt >= (BuildVersionCodes)21 ? GetSystemService("audio") as AudioManager : null;
 
         public override bool OnKeyUp(Keycode keyCode, KeyEvent e)
         {

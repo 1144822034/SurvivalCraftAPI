@@ -64,10 +64,10 @@ namespace Game
         /// <summary>
         /// 视图雾颜色调整
         /// </summary>
-        /// <param name="ViewUnderWaterDepth">大于0则表示在水下</param>
-        /// <param name="ViewUnderMagmaDepth">大于0则表示在岩浆中</param>
+        /// <param name="viewUnderWaterDepth">大于0则表示在水下</param>
+        /// <param name="viewUnderMagmaDepth">大于0则表示在岩浆中</param>
         /// <param name="viewFogColor">视图雾颜色</param>
-        public virtual void ViewFogColor(float ViewUnderWaterDepth, float ViewUnderMagmaDepth, ref Color viewFogColor)
+        public virtual void ViewFogColor(float viewUnderWaterDepth, float viewUnderMagmaDepth, ref Color viewFogColor)
         {
 
         }
@@ -80,12 +80,18 @@ namespace Game
         {
 
         }
+
+        /// <param name="miner"></param>
+        /// <param name="componentBody"></param>
+        /// <param name="hitPoint"></param>
+        /// <param name="hitDirection"></param>
         /// <param name="attackPower">伤害值</param>
         /// <param name="playerProbability">玩家命中率</param>
         /// <param name="creatureProbability">生物命中率</param>
-        public virtual void OnMinerHit(ComponentMiner miner, ComponentBody componentBody, Vector3 hitPoint, Vector3 hitDirection, ref float attackPower, ref float playerProbability, ref float creatureProbability, out bool Hitted)
+        /// <param name="hitted"></param>
+        public virtual void OnMinerHit(ComponentMiner miner, ComponentBody componentBody, Vector3 hitPoint, Vector3 hitDirection, ref float attackPower, ref float playerProbability, ref float creatureProbability, out bool hitted)
         {
-            Hitted = false;
+            hitted = false;
         }
 		/// <summary>
 		/// 设置伤害间隔
@@ -95,14 +101,15 @@ namespace Game
 
         }
 
-		/// <summary>
-		/// 当前等级是否可以使用手中物品进行：挖掘，使用，伤害，瞄准
-		/// Mod开发者可以自定义物品是否符合使用条件
-		/// </summary>
-		/// <param name="toolValue">方块值</param>
-		/// <param name="canUse">能使用</param>
-		/// <param name="skip">跳过原版后，返回canUse值</param>
-		public virtual void IsLevelSufficientForTool(ComponentMiner miner,int toolValue,ref bool canUse,out bool skip)
+        /// <summary>
+        /// 当前等级是否可以使用手中物品进行：挖掘，使用，伤害，瞄准
+        /// Mod开发者可以自定义物品是否符合使用条件
+        /// </summary>
+        /// <param name="miner"></param>
+        /// <param name="toolValue">方块值</param>
+        /// <param name="canUse">能使用</param>
+        /// <param name="skip">跳过原版后，返回canUse值</param>
+        public virtual void IsLevelSufficientForTool(ComponentMiner miner,int toolValue,ref bool canUse,out bool skip)
         {
 			skip = false;
 		}
@@ -126,10 +133,12 @@ namespace Game
         /// </summary>
         /// <param name="miner"></param>
         /// <param name="raycastResult"></param>
+        /// <param name="digProgress"></param>
+        /// <param name="digged"></param>
         /// <returns></returns>
-        public virtual void OnMinerDig(ComponentMiner miner, TerrainRaycastResult raycastResult, ref float DigProgress, out bool Digged)
+        public virtual void OnMinerDig(ComponentMiner miner, TerrainRaycastResult raycastResult, ref float digProgress, out bool digged)
         {
-            Digged = false;
+            digged = false;
         }
 
 
@@ -142,21 +151,26 @@ namespace Game
 		/// <param name="y">放置方块的坐标y</param>
 		/// <param name="z">放置方块的坐标z</param>
 		/// <param name="placementData">包含放置方块的方块表面等信息</param>
-		/// <param name="PlacementNotAllowed">返回true则玩家不能放置方块</param>
-		public virtual void BeforeMinerPlace(ComponentMiner componentMiner, TerrainRaycastResult terrainRaycastResult, int x, int y, int z, BlockPlacementData placementData, out bool PlacementNotAllowed)
+		/// <param name="placementNotAllowed">返回true则玩家不能放置方块</param>
+		public virtual void BeforeMinerPlace(ComponentMiner componentMiner, TerrainRaycastResult terrainRaycastResult, int x, int y, int z, BlockPlacementData placementData, out bool placementNotAllowed)
 		{
-			PlacementNotAllowed = false;
+			placementNotAllowed = false;
 		}
 
-        /// <summary>
-        /// 当人物放置时执行，若Placed为true则不执行原放置操作
-        /// </summary>
-        /// <param name="miner"></param>
-        /// <param name="raycastResult"></param>
-        /// <returns></returns>
-        public virtual void OnMinerPlace(ComponentMiner miner, TerrainRaycastResult raycastResult, int x, int y, int z, int value, out bool Placed)
+		/// <summary>
+		/// 当人物放置时执行，若Placed为true则不执行原放置操作
+		/// </summary>
+		/// <param name="miner"></param>
+		/// <param name="raycastResult"></param>
+		/// <param name="x"></param>
+		/// <param name="y"></param>
+		/// <param name="z"></param>
+		/// <param name="value"></param>
+		/// <param name="placed"></param>
+		/// <returns></returns>
+		public virtual void OnMinerPlace(ComponentMiner miner, TerrainRaycastResult raycastResult, int x, int y, int z, int value, out bool placed)
         {
-            Placed = false;
+            placed = false;
         }
 
         /// <summary>
@@ -173,7 +187,7 @@ namespace Game
         /// <summary>
         /// 设置家具的颜色
         /// </summary>
-        public virtual void SetFurnitureDesignColor(FurnitureDesign design, Block block, int value, ref int FaceTextureSlot, ref Color Color)
+        public virtual void SetFurnitureDesignColor(FurnitureDesign design, Block block, int value, ref int faceTextureSlot, ref Color color)
         {
         }
 
@@ -183,6 +197,7 @@ namespace Game
         /// <param name="target">目标</param>
         /// <param name="attacker">攻击者</param>
         /// <param name="hitPoint">伤害位置</param>
+        /// <param name="hitDirection"></param>
         /// <param name="impulseFactor">击退效果</param>
         /// <param name="stunTimeFactor">眩晕时间</param>
         /// <param name="recalculate">是否重写眩晕？</param>
@@ -206,16 +221,18 @@ namespace Game
             return false;
         }
 
-		/// <summary>
-		/// 控制物品拖动到人物上方时，是否能执行操作。
-		/// 返回1表示可以处理物品。
-		/// 多个模组执行时，取最大值
-		/// </summary>
-		/// <param name="componentClothing"></param>
-		/// <param name="slotIndex"></param>
-		/// <param name="blockValue"></param>
-		/// <returns></returns>
-		public virtual void ClothingSlotProcessCapacity(ComponentClothing componentClothing, int slotIndex, int blockValue, ref bool notToProcessVanilla, out int capacity)
+        /// <summary>
+        /// 控制物品拖动到人物上方时，是否能执行操作。
+        /// 返回1表示可以处理物品。
+        /// 多个模组执行时，取最大值
+        /// </summary>
+        /// <param name="componentClothing"></param>
+        /// <param name="slotIndex"></param>
+        /// <param name="blockValue"></param>
+        /// <param name="notToProcessVanilla"></param>
+        /// <param name="capacity"></param>
+        /// <returns></returns>
+        public virtual void ClothingSlotProcessCapacity(ComponentClothing componentClothing, int slotIndex, int blockValue, ref bool notToProcessVanilla, out int capacity)
 		{
 			capacity = 0;
 		}
@@ -228,9 +245,9 @@ namespace Game
         /// <summary>
         /// 动物吃掉落物时执行
         /// </summary>
-        public virtual void OnEatPickable(ComponentEatPickableBehavior eatPickableBehavior, Pickable EatPickable, out bool Dealed)
+        public virtual void OnEatPickable(ComponentEatPickableBehavior eatPickableBehavior, Pickable eatPickable, out bool dealed)
         {
-            Dealed = false;
+            dealed = false;
         }
 
         /// <summary>
@@ -278,15 +295,15 @@ namespace Game
         /// <summary>
         /// 当模型对象进行模型设值时执行
         /// </summary>
-        public virtual void OnSetModel(ComponentModel componentModel, Model model, out bool IsSet)
+        public virtual void OnSetModel(ComponentModel componentModel, Model model, out bool isSet)
         {
-            IsSet = false;
+            isSet = false;
         }
 
 		[Obsolete("Use OnAnimateModel() instead")]
-		public virtual void OnModelAnimate(ComponentCreatureModel componentCreatureModel, out bool Skip)
+		public virtual void OnModelAnimate(ComponentCreatureModel componentCreatureModel, out bool skip)
         {
-            Skip = false;
+            skip = false;
         }
 		/// <summary>
 		/// 当模型对象作出动画时执行
@@ -354,11 +371,13 @@ namespace Game
 		/// </summary>
 		/// <param name="componentClothing"></param>
 		/// <param name="attackPower">未计算免伤前的伤害</param>
+		/// <param name="appliedByOtherMods"></param>
+		/// <param name="applied"></param>
 		/// <returns>免伤后的伤害，当多个mod都有免伤计算时，取最小值</returns>
 		[Obsolete("护甲系统调整，该接口不再适用。对于调整护甲的结算顺序，请调用DecideArmorProtectionSequence接口；对于调整单件护甲的防御效果，请给被调整的护甲创建新的ClothingData。")]
-        public virtual float ApplyArmorProtection(ComponentClothing componentClothing, float attackPower, bool appliedByOtherMods, out bool Applied)
+        public virtual float ApplyArmorProtection(ComponentClothing componentClothing, float attackPower, bool appliedByOtherMods, out bool applied)
         {
-            Applied = false;
+            applied = false;
             return attackPower;
         }
 
@@ -371,11 +390,12 @@ namespace Game
         {
         }
 
-		/// <summary>
-		/// 因素控制力量、抗性、速度、饥饿速率组件更新时执行
-		/// </summary>
-		/// <param name="componentFactors"></param>
-		[Obsolete("You can update your factors in your mod components")]
+        /// <summary>
+        /// 因素控制力量、抗性、速度、饥饿速率组件更新时执行
+        /// </summary>
+        /// <param name="componentFactors"></param>
+        /// <param name="dt"></param>
+        [Obsolete("You can update your factors in your mod components")]
         public virtual void OnFactorsUpdate(ComponentFactors componentFactors, float dt)
         {
         }
@@ -402,6 +422,7 @@ namespace Game
         /// 更新输入时执行
         /// </summary>
         /// <param name="componentInput"></param>
+        /// <param name="widgetInput"></param>
         public virtual void UpdateInput(ComponentInput componentInput, WidgetInput widgetInput)
         {
         }
@@ -458,9 +479,10 @@ namespace Game
         /// <param name="spawn"></param>
         /// <param name="entity"></param>
         /// <param name="spawnEntityData"></param>
-        public virtual void SpawnEntity(SubsystemSpawn spawn, Entity entity, SpawnEntityData spawnEntityData, out bool Spawned)
+        /// <param name="spawned"></param>
+        public virtual void SpawnEntity(SubsystemSpawn spawn, Entity entity, SpawnEntityData spawnEntityData, out bool spawned)
         {
-            Spawned = false;
+            spawned = false;
         }
 
         /// <summary>
@@ -481,11 +503,11 @@ namespace Game
 		/// 生物等实体在遭受爆炸时执行
 		/// </summary>
 		/// <param name="componentBody">遭受爆炸的实体Body</param>
-		/// <param name="explosionInjury">该爆炸的Injuty</param>
-		/// <param name="Impulse">爆炸的击退力</param>
-		/// <param name="SetOnFire">爆炸是否会让实体着火</param>
-		/// <param name="Fluctuation">爆炸的击退、伤害浮动系数。目前只对非生物的船等实体有效</param>
-        public virtual void OnComponentBodyExploded(ComponentBody componentBody, ref Injury explosionInjury, ref Vector3 Impulse, ref bool SetOnFire, ref float Fluctuation)
+		/// <param name="explosionInjury">该爆炸的Injury</param>
+		/// <param name="impulse">爆炸的击退力</param>
+		/// <param name="setOnFire">爆炸是否会让实体着火</param>
+		/// <param name="fluctuation">爆炸的击退、伤害浮动系数。目前只对非生物的船等实体有效</param>
+        public virtual void OnComponentBodyExploded(ComponentBody componentBody, ref Injury explosionInjury, ref Vector3 impulse, ref bool setOnFire, ref float fluctuation)
         {
 
         }
@@ -500,18 +522,18 @@ namespace Game
         /// <summary>
         /// 重定义方块更改方法，Skip为true则不执行原ChangeCell代码
         /// </summary>
-        public virtual void TerrainChangeCell(SubsystemTerrain subsystemTerrain, int x, int y, int z, int value, out bool Skip)
+        public virtual void TerrainChangeCell(SubsystemTerrain subsystemTerrain, int x, int y, int z, int value, out bool skip)
         {
-            Skip = false;
+            skip = false;
         }
 
         /// <summary>
         /// 重定义生物受伤方法，Skip为true则不执行原Injure代码
         /// </summary>
         [Obsolete("该方法已被弃用，请使用CalculateCreatureInjuryAmount, OnCreatureDying, OnCreatureDied代替", true)]
-        public virtual void OnCreatureInjure(ComponentHealth componentHealth, float amount, ComponentCreature attacker, bool ignoreInvulnerability, string cause, out bool Skip)
+        public virtual void OnCreatureInjure(ComponentHealth componentHealth, float amount, ComponentCreature attacker, bool ignoreInvulnerability, string cause, out bool skip)
         {
-            Skip = false;
+            skip = false;
         }
 
         /// <summary>
@@ -524,10 +546,11 @@ namespace Game
 
         /// <summary>
         /// 如果动物受到Injure且生命值小于0时，执行操作。
-		/// 如果在函数执行完毕后Health > 0，则取消死亡判定。
-		/// 通常用于各种模组的“不死图腾”机制
+        /// 如果在函数执行完毕后Health > 0，则取消死亡判定。
+        /// 通常用于各种模组的“不死图腾”机制
         /// </summary>
         /// <param name="componentHealth"></param>
+        /// <param name="injury"></param>
         public virtual void OnCreatureDying(ComponentHealth componentHealth, Injury injury)
         {
 
@@ -537,7 +560,10 @@ namespace Game
         /// 在动物收到Injure()且生命值低于0时，执行操作。
         /// </summary>
         /// <param name="componentHealth"></param>
-        public virtual void OnCreatureDied(ComponentHealth componentHealth, Injury injury, ref int experienceOrbDrop, ref bool CalculateInKill)
+        /// <param name="injury"></param>
+        /// <param name="experienceOrbDrop"></param>
+        /// <param name="calculateInKill"></param>
+        public virtual void OnCreatureDied(ComponentHealth componentHealth, Injury injury, ref int experienceOrbDrop, ref bool calculateInKill)
         {
 
         }
@@ -650,9 +676,9 @@ namespace Game
         /// 当区块即将被释放时
         /// KeepWorking为True时该区块会继续保持运作，不被释放
         /// </summary>
-        public virtual void ToFreeChunks(TerrainUpdater terrainUpdater, TerrainChunk chunk, out bool KeepWorking)
+        public virtual void ToFreeChunks(TerrainUpdater terrainUpdater, TerrainChunk chunk, out bool keepWorking)
         {
-            KeepWorking = false;
+            keepWorking = false;
         }
 
         /// <summary>
@@ -775,11 +801,12 @@ namespace Game
 		/// <summary>
 		/// 配方解码时执行
 		/// </summary>
+		/// <param name="m_recipes"></param>
 		/// <param name="element">配方的Xelement</param>
-		/// <param name="Decoded">是否解码成功，不成功交由下一个Mod处理</param>
-		public virtual void OnCraftingRecipeDecode(List<CraftingRecipe> m_recipes, XElement element, out bool Decoded)
+		/// <param name="decoded">是否解码成功，不成功交由下一个Mod处理</param>
+		public virtual void OnCraftingRecipeDecode(List<CraftingRecipe> m_recipes, XElement element, out bool decoded)
         {
-            Decoded = false;
+            decoded = false;
         }
 
         /// <summary>
@@ -787,10 +814,10 @@ namespace Game
         /// </summary>
         /// <param name="requiredIngredients"></param>
         /// <param name="actualIngredient"></param>
-        /// <param name="Matched">是否匹配成功，不成功交由下一个Mod处理</param>
-        public virtual bool MatchRecipe(string[] requiredIngredients, string[] actualIngredient, out bool Matched)
+        /// <param name="matched">是否匹配成功，不成功交由下一个Mod处理</param>
+        public virtual bool MatchRecipe(string[] requiredIngredients, string[] actualIngredient, out bool matched)
         {
-            Matched = false;
+            matched = false;
             return false;
         }
 
@@ -798,11 +825,11 @@ namespace Game
         /// 获得解码结果时执行
         /// </summary>
         /// <param name="result">结果字符串</param>
-        /// <param name="Decoded">是否解码成功，不成功交由下一个Mod处理</param>
+        /// <param name="decoded">是否解码成功，不成功交由下一个Mod处理</param>
         /// <returns></returns>
-        public virtual int DecodeResult(string result, out bool Decoded)
+        public virtual int DecodeResult(string result, out bool decoded)
         {
-            Decoded = false;
+            decoded = false;
             return 0;
         }
 
@@ -812,10 +839,10 @@ namespace Game
         /// <param name="ingredient"></param>
         /// <param name="craftingId"></param>
         /// <param name="data"></param>
-        /// <param name="Decoded">是否解码成功，不成功交由下一个Mod处理</param>
-        public virtual void DecodeIngredient(string ingredient, out string craftingId, out int? data, out bool Decoded)
+        /// <param name="decoded">是否解码成功，不成功交由下一个Mod处理</param>
+        public virtual void DecodeIngredient(string ingredient, out string craftingId, out int? data, out bool decoded)
         {
-            Decoded = false;
+            decoded = false;
             craftingId = string.Empty;
             data = null;
         }
@@ -846,75 +873,99 @@ namespace Game
         /// <summary>
         /// 更改主页背景音乐
         /// </summary>
-        public virtual void MenuPlayMusic(out string ContentMusicPath)
+        public virtual void MenuPlayMusic(out string contentMusicPath)
         {
-            ContentMusicPath = string.Empty;
+            contentMusicPath = string.Empty;
         }
 
-		/// <summary>
-		/// ComponentPilot组件接口
-		/// 用于判断是否地形是否安全
-		/// </summary>
-		/// <param name="isTerrainSafeToGo">前往地形是安全的</param>
-		/// <param name="skipVanilla">是否跳过原版逻辑</param>
-		public virtual void IsTerrainSafeToGo(ComponentPilot componentPilot,Vector3 position,Vector3 direction,out bool isTerrainSafeToGo, out bool skipVanilla)
+        /// <summary>
+        /// ComponentPilot组件接口
+        /// 用于判断是否地形是否安全
+        /// </summary>
+        /// <param name="direction"></param>
+        /// <param name="isTerrainSafeToGo">前往地形是安全的</param>
+        /// <param name="skipVanilla">是否跳过原版逻辑</param>
+        /// <param name="componentPilot"></param>
+        /// <param name="position"></param>
+        public virtual void IsTerrainSafeToGo(ComponentPilot componentPilot,Vector3 position,Vector3 direction,out bool isTerrainSafeToGo, out bool skipVanilla)
         {
 			isTerrainSafeToGo = false;
 			skipVanilla = false;
 		}
-		/// <summary>
-		/// ComponentFlyAwayBehavior组件接口
-		/// 用于判断是否将目标规划为捕食者，从而飞走
-		/// </summary>
-		/// <param name="isPredator">目标是否为捕食者</param>
-		/// <param name="skipVanilla">是否跳过原版逻辑</param>
-		public virtual void IsPredator(ComponentFlyAwayBehavior FlyAwayBehavior, Entity target, out bool isPredator, out bool skipVanilla)
+
+        /// <summary>
+        /// ComponentFlyAwayBehavior组件接口
+        /// 用于判断是否将目标规划为捕食者，从而飞走
+        /// </summary>
+        /// <param name="flyAwayBehavior"></param>
+        /// <param name="target"></param>
+        /// <param name="isPredator">目标是否为捕食者</param>
+        /// <param name="skipVanilla">是否跳过原版逻辑</param>
+        public virtual void IsPredator(ComponentFlyAwayBehavior flyAwayBehavior, Entity target, out bool isPredator, out bool skipVanilla)
         {
 			isPredator = false;
 			skipVanilla = false;
 		}
-		/// <summary>
-		/// 摇人行为。
-		/// 仅建议对自己模组的生物使用，不要干涉其他模组生物的行为。
-		/// </summary>
-		/// <param name="skipVanilla">是否跳过原版逻辑</param>
-		public virtual void CallNearbyCreaturesHelp(ComponentHerdBehavior herdBehavior, ComponentCreature target, float maxRange, float maxChaseTime, bool isPersistent,out bool skipVanilla)
+
+        /// <summary>
+        /// 摇人行为。
+        /// 仅建议对自己模组的生物使用，不要干涉其他模组生物的行为。
+        /// </summary>
+        /// <param name="herdBehavior"></param>
+        /// <param name="target"></param>
+        /// <param name="maxRange"></param>
+        /// <param name="maxChaseTime"></param>
+        /// <param name="isPersistent"></param>
+        /// <param name="skipVanilla">是否跳过原版逻辑</param>
+        public virtual void CallNearbyCreaturesHelp(ComponentHerdBehavior herdBehavior, ComponentCreature target, float maxRange, float maxChaseTime, bool isPersistent,out bool skipVanilla)
         {
 			skipVanilla = false;
 		}
-		/// <summary>
-		/// ComponentHerdBehavior组件接口，
-		/// 用于生物寻找大部队中心点。
-		/// 仅建议对自己模组的生物使用，不要干涉其他模组生物的行为。
-		/// </summary>
-		/// <param name="skipVanilla">是否跳过原版逻辑</param>
-		/// <param name="herdCenter">生物的大部队中心点，返回null则表示其行为不受大部队中心点约束</param>
-		public virtual void FindHerdCenter(ComponentCreature componentCreature, out Vector3? herdCenter, out bool skipVanilla)
+
+        /// <summary>
+        /// ComponentHerdBehavior组件接口，
+        /// 用于生物寻找大部队中心点。
+        /// 仅建议对自己模组的生物使用，不要干涉其他模组生物的行为。
+        /// </summary>
+        /// <param name="componentCreature"></param>
+        /// <param name="skipVanilla">是否跳过原版逻辑</param>
+        /// <param name="herdCenter">生物的大部队中心点，返回null则表示其行为不受大部队中心点约束</param>
+        public virtual void FindHerdCenter(ComponentCreature componentCreature, out Vector3? herdCenter, out bool skipVanilla)
         {
 			herdCenter = null;
 			skipVanilla = false;
 		}
-		/// <summary>
-		/// ComponentRider组件接口
-		/// 用于获取可符合骑行条件生物
-		/// 通过此接口，模组可以实现自定义骑行，也可以用于生物骑行生物相关逻辑
-		/// 为保证模组兼容性，建议预先判断是否是自己模组的载具，且仅处理自己模组的载具
-		/// </summary>
-		/// <param name="componentRider"></param>
-		/// <param name="score">返回的分数。返回null则表示不处理，移交给原版或下一个模组。返回正数表示允许骑乘，返回负数表示禁止骑乘（即使其他模组允许）。</param>
-		public virtual void ScoreMount(ComponentRider componentRider,ComponentMount componentMount,out float? score)
+
+        /// <summary>
+        /// ComponentRider组件接口
+        /// 用于获取可符合骑行条件生物
+        /// 通过此接口，模组可以实现自定义骑行，也可以用于生物骑行生物相关逻辑
+        /// 为保证模组兼容性，建议预先判断是否是自己模组的载具，且仅处理自己模组的载具
+        /// </summary>
+        /// <param name="componentRider"></param>
+        /// <param name="componentMount"></param>
+        /// <param name="score">返回的分数。返回null则表示不处理，移交给原版或下一个模组。返回正数表示允许骑乘，返回负数表示禁止骑乘（即使其他模组允许）。</param>
+        public virtual void ScoreMount(ComponentRider componentRider,ComponentMount componentMount,out float? score)
 		{
 			score = null;
 		}
+
 		/// <summary>
 		/// 挖掘触发宝物生成时，注意这里能获取到上个Mod生成宝物的情况
 		/// </summary>
-		/// <param name="BlockValue">宝物的方块值</param>
-		/// <param name="Count">宝物数量</param>
-		/// <param name="IsGenerate">是否继续让其它Mod处理</param>
-		public virtual void OnTreasureGenerate(SubsystemTerrain subsystemTerrain, int x, int y, int z, int neighborX, int neighborY, int neighborZ, ref int BlockValue, ref int Count, out bool IsGenerate)
+		/// <param name="subsystemTerrain"></param>
+		/// <param name="x"></param>
+		/// <param name="y"></param>
+		/// <param name="z"></param>
+		/// <param name="neighborX"></param>
+		/// <param name="neighborY"></param>
+		/// <param name="neighborZ"></param>
+		/// <param name="blockValue">宝物的方块值</param>
+		/// <param name="count">宝物数量</param>
+		/// <param name="isGenerate">是否继续让其它Mod处理</param>
+		public virtual void OnTreasureGenerate(SubsystemTerrain subsystemTerrain, int x, int y, int z, int neighborX, int neighborY, int neighborZ, ref int blockValue, ref int count, out bool isGenerate)
         {
-            IsGenerate = false;
+            isGenerate = false;
         }
         /// <summary>
         /// 当界面被创建时
@@ -960,9 +1011,10 @@ namespace Game
         /// <summary>
         /// 当ModalPanelWidget被设置时执行
         /// </summary>
-        /// <param name="Old"></param>
-        /// <param name="New"></param>
-        public virtual void OnModalPanelWidgetSet(ComponentGui gui, Widget Old, Widget New)
+        /// <param name="componentGui"></param>
+        /// <param name="oldWidget"></param>
+        /// <param name="newWidget"></param>
+        public virtual void OnModalPanelWidgetSet(ComponentGui componentGui, Widget oldWidget, Widget newWidget)
         {
 
         }
@@ -971,6 +1023,7 @@ namespace Game
         /// 生成地形顶点时使用
         /// </summary>
         /// <param name="chunk"></param>
+        /// <param name="even"></param>
         public virtual void GenerateChunkVertices(TerrainChunk chunk, bool even)
         {
 
@@ -1167,7 +1220,7 @@ namespace Game
         /// </summary>
         /// <param name="subsystemProjectiles"></param>
         /// <param name="projectile"></param>
-        /// <param name="valuesDictionary">存储射弹信息的ValuesDictionaey</param>
+        /// <param name="valuesDictionary">存储射弹信息的ValuesDictionary</param>
         public virtual void SaveProjectile(SubsystemProjectiles subsystemProjectiles, Projectile projectile, ref ValuesDictionary valuesDictionary)
         {
         }
@@ -1187,10 +1240,11 @@ namespace Game
         /// </summary>
         /// <param name="componentMiner"></param>
         /// <param name="digValue"></param>
-        /// <param name="DurabilityReduction">挖掘方块所消耗工具的耐久</param>
+        /// <param name="cellValue"></param>
+        /// <param name="durabilityReduction">挖掘方块所消耗工具的耐久</param>
         /// <param name="mute">挖掘方块是否取消播放音效</param>
-        /// <param name="PlayerDataDugAdd">是否增加玩家统计信息的挖掘方块计数</param>
-        public virtual void OnBlockDug(ComponentMiner componentMiner, BlockPlacementData digValue, int cellValue, ref int DurabilityReduction, ref bool mute, ref int PlayerDataDugAdd)
+        /// <param name="playerDataDugAdd">是否增加玩家统计信息的挖掘方块计数</param>
+        public virtual void OnBlockDug(ComponentMiner componentMiner, BlockPlacementData digValue, int cellValue, ref int durabilityReduction, ref bool mute, ref int playerDataDugAdd)
         {
             mute = false;
         }
@@ -1211,10 +1265,10 @@ namespace Game
         /// </summary>
         /// <param name="subsystemUpdate"></param>
         /// <param name="updateable"></param>
-        /// <param name="ToAdd1OrRemove0">这个IUpdateable是准备添加的，该变量为1；这个IUpdateable是准备移除的，该变量为0</param>
+        /// <param name="toAdd1OrRemove0">这个IUpdateable是准备添加的，该变量为1；这个IUpdateable是准备移除的，该变量为0</param>
         /// <param name="skippedByOtherMods">是否已经被其他模组接管</param>
         /// <param name="skip">宣布接管，则不会被原版的SubsystemUpdate执行Update()</param>
-        public virtual void OnIUpdateableAddOrRemove(SubsystemUpdate subsystemUpdate, IUpdateable updateable, bool ToAdd1OrRemove0, bool skippedByOtherMods, out bool skip)
+        public virtual void OnIUpdateableAddOrRemove(SubsystemUpdate subsystemUpdate, IUpdateable updateable, bool toAdd1OrRemove0, bool skippedByOtherMods, out bool skip)
         {
             skip = false;
         }
@@ -1224,7 +1278,7 @@ namespace Game
         /// <param name="subsystemDrawing"></param>
         /// <param name="drawable"></param>
         /// <param name="skippedByOtherMods">是否已经被其他模组接管</param>
-        /// <param name="skip">宣布接管，该IDrawable不会放入SubsystemDrawing.m_drawbles</param>
+        /// <param name="skip">宣布接管，该IDrawable不会放入SubsystemDrawing.m_drawables</param>
         public virtual void OnIDrawableAdded(SubsystemDrawing subsystemDrawing, IDrawable drawable, bool skippedByOtherMods, out bool skip)
         {
             skip = false;
@@ -1266,6 +1320,10 @@ namespace Game
         /// 当移动物品时执行。从sourceInventory的第sourceSlotIndex个格子，移动count个物品，到targetInventory的第targetSlotIndex个格子
         /// </summary>
         /// <param name="inventorySlotWidget"></param>
+        /// <param name="sourceInventory"></param>
+        /// <param name="sourceSlotIndex"></param>
+        /// <param name="targetInventory"></param>
+        /// <param name="targetSlotIndex"></param>
         /// <param name="count">留给后面模组和原版处理物品的数量</param>
         /// <param name="moved">是否完成移动操作，注意这个不影响跳过原版处理</param>
         public virtual void HandleMoveInventoryItem(InventorySlotWidget inventorySlotWidget, IInventory sourceInventory, int sourceSlotIndex, IInventory targetInventory, int targetSlotIndex, ref int count, out bool moved)
@@ -1282,8 +1340,8 @@ namespace Game
         /// <param name="sourceSlotIndex"></param>
         /// <param name="targetInventory"></param>
         /// <param name="targetSlotIndex"></param>
-        /// <param name="ProcessCapacity">目标格子接受物品的数量。设置为不大于0的数相当于跳过原版逻辑</param>
-        public virtual void HandleInventoryDragProcess(InventorySlotWidget inventorySlotWidget, IInventory sourceInventory, int sourceSlotIndex, IInventory targetInventory, int targetSlotIndex, ref int ProcessCapacity)
+        /// <param name="processCapacity">目标格子接受物品的数量。设置为不大于0的数相当于跳过原版逻辑</param>
+        public virtual void HandleInventoryDragProcess(InventorySlotWidget inventorySlotWidget, IInventory sourceInventory, int sourceSlotIndex, IInventory targetInventory, int targetSlotIndex, ref int processCapacity)
         {
         }
 
@@ -1436,6 +1494,7 @@ namespace Game
         /// <summary>
         /// 在创建世界时寻找玩家的初步生成大致位置
         /// </summary>
+        /// <param name="terrainContentsGenerator"></param>
         /// <param name="spawnPosition">玩家初步生成大致位置</param>
         public virtual void FindCoarseSpawnPosition(ITerrainContentsGenerator terrainContentsGenerator, ref Vector3 spawnPosition)
         {
@@ -1502,8 +1561,8 @@ namespace Game
         /// </summary>
         /// <param name="componentDispenser">该发射器的Component</param>
         /// <param name="pickable">要发射的掉落物</param>
-        /// <param name="RemoveSlotCount">移除发射器物品栏中物品数量</param>
-        public virtual void OnDispenserDispensePickable(ComponentDispenser componentDispenser, ref Pickable pickable, ref int RemoveSlotCount)
+        /// <param name="removeSlotCount">移除发射器物品栏中物品数量</param>
+        public virtual void OnDispenserDispensePickable(ComponentDispenser componentDispenser, ref Pickable pickable, ref int removeSlotCount)
         {
 
         }
@@ -1514,8 +1573,8 @@ namespace Game
         /// <param name="componentDispenser">该发射器的Component</param>
         /// <param name="projectile">要发射的弹射物</param>
         /// <param name="canDispensePickable">发射失败时，是否以掉落物的方式发射（即使不发射也会消耗）</param>
-        /// <param name="RemoveSlotCount">移除发射器物品栏中物品数量</param>
-        public virtual void OnDispenserShoot(ComponentDispenser componentDispenser, ref Projectile projectile, ref bool canDispensePickable, ref int RemoveSlotCount)
+        /// <param name="removeSlotCount">移除发射器物品栏中物品数量</param>
+        public virtual void OnDispenserShoot(ComponentDispenser componentDispenser, ref Projectile projectile, ref bool canDispensePickable, ref int removeSlotCount)
         {
 
         }
@@ -1589,7 +1648,7 @@ namespace Game
         /// <param name="bestiaryScreen"></param>
         /// <param name="creatureInfoWidget">可以更改的生物信息Widget</param>
         /// <param name="bestiaryCreatureInfo">该生物的基础信息</param>
-        /// <param name="entityValuesDictionary">该生物在Database中的ValuesDictioanry</param>
+        /// <param name="entityValuesDictionary">该生物在Database中的ValuesDictionary</param>
         public virtual void LoadCreatureInfoInBestiaryScreen(BestiaryScreen bestiaryScreen, ContainerWidget creatureInfoWidget, BestiaryCreatureInfo bestiaryCreatureInfo, ValuesDictionary entityValuesDictionary)
         {
 
@@ -1806,9 +1865,11 @@ namespace Game
 		{
 
 		}
+
 		/// <summary>
 		/// 在主界面更新
 		/// </summary>
+		/// <param name="mainMenuScreen"></param>
 		/// <param name="leftBottomBar">主界面左下角的按钮栏，里面有着API的切换语言和资源管理按钮</param>
 		/// <param name="rightBottomBar">主界面右下角的按钮栏，Mod作者们可以在这里面放入想要的按钮（例如Mod设置按钮、Mod作者介绍按钮等）</param>
 		public virtual void OnMainMenuScreenUpdate(MainMenuScreen mainMenuScreen,StackPanelWidget leftBottomBar,StackPanelWidget rightBottomBar)
@@ -1851,8 +1912,8 @@ namespace Game
 		/// </summary>
 		/// <param name="componentClothing">挨打者的护甲组件</param>
 		/// <param name="attackment">导致该护甲结算的攻击</param>
-		/// <param name="attackPowerAfteProtection">结算护甲后的攻击力</param>
-		public virtual void ApplyProtectionBeforeClothes(ComponentClothing componentClothing, Attackment attackment, ref float attackPowerAfteProtection)
+		/// <param name="attackPowerAfterProtection">结算护甲后的攻击力</param>
+		public virtual void ApplyProtectionBeforeClothes(ComponentClothing componentClothing, Attackment attackment, ref float attackPowerAfterProtection)
 		{
 
 		}
@@ -1862,8 +1923,9 @@ namespace Game
 		/// </summary>
 		/// <param name="componentClothing">挨打者的护甲组件</param>
 		/// <param name="attackment">导致该护甲结算的攻击</param>
-		/// <param name="attackPowerAfteProtection">结算护甲后的攻击力</param>
-		public virtual void ApplyProtectionAfterClothes(ComponentClothing componentClothing, Attackment attackment, List<int> listAfterProtection, ref float attackPowerAfteProtection)
+		/// <param name="listAfterProtection"></param>
+		/// <param name="attackPowerAfterProtection">结算护甲后的攻击力</param>
+		public virtual void ApplyProtectionAfterClothes(ComponentClothing componentClothing, Attackment attackment, List<int> listAfterProtection, ref float attackPowerAfterProtection)
 		{ 
 
 		}
@@ -1997,6 +2059,7 @@ namespace Game
 		/// </summary>
 		/// <param name="modelData"></param>
 		/// <param name="modelShader"></param>
+		/// <param name="camera"></param>
 		/// <param name="subsystemModelsRenderer"></param>
 		/// <param name="skip"></param>
 		public virtual void OnModelDataDrawing(SubsystemModelsRenderer.ModelData modelData, ModelShader modelShader, Camera camera, SubsystemModelsRenderer subsystemModelsRenderer, out bool skip)
@@ -2032,6 +2095,14 @@ namespace Game
 		/// <summary>
 		/// 在BlockMesh.AppendModelMeshPart之前执行
 		/// </summary>
+		/// <param name="blockMesh"></param>
+		/// <param name="meshPart"></param>
+		/// <param name="matrix"></param>
+		/// <param name="makeEmissive"></param>
+		/// <param name="flipWindingOrder"></param>
+		/// <param name="doubleSided"></param>
+		/// <param name="flipNormals"></param>
+		/// <param name="color"></param>
 		/// <param name="skip">如果要跳过原版方法，设置此值为true</param>
 		public virtual void OnAppendModelMeshPart(BlockMesh blockMesh,ModelMeshPart meshPart,Matrix matrix,bool makeEmissive,bool flipWindingOrder,bool doubleSided,bool flipNormals,Color color,out bool skip)
 		{
@@ -2041,6 +2112,8 @@ namespace Game
 		/// <summary>
 		/// 在BlockMesh.AppendModelMesh之前执行
 		/// </summary>
+		/// <param name="blockMesh"></param>
+		/// <param name="blockMesh1"></param>
 		/// <param name="skip">如果要跳过原版方法，设置此值为true</param>
 		public virtual void OnAppendModelMesh(BlockMesh blockMesh,BlockMesh blockMesh1,out bool skip)
 		{

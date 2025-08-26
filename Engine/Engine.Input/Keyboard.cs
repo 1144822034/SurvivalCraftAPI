@@ -1,4 +1,5 @@
 #if ANDROID
+#pragma warning disable CA1416
 using System.Collections.Concurrent;
 using Android.App;
 using Android.Views;
@@ -81,7 +82,7 @@ namespace Engine.Input
         public static bool IsKeyDownRepeat(Key key)
         {
             double num = m_keysDownRepeatArray[(int)key];
-            return num < 0.0 || num != 0.0 && Time.FrameStartTime >= num;
+            return num < 0.0 || (num != 0.0 && Time.FrameStartTime >= num);
         }
 
         public static void ShowKeyboard(string title, string description, string defaultText, bool passwordMode, Action<string> enter, Action cancel)
@@ -669,6 +670,10 @@ namespace Engine.Input
                 () =>
                 {
                     AlertDialog alertDialog = builder.Create();
+                    if (alertDialog == null)
+                    {
+                        return;
+                    }
                     alertDialog.DismissEvent += delegate
                     {
                         cancel();
@@ -677,7 +682,7 @@ namespace Engine.Input
                     {
                         cancel();
                     };
-                    alertDialog.Window.Attributes.Gravity = GravityFlags.Center;
+                    alertDialog.Window?.Attributes?.Gravity = GravityFlags.Center;
                     alertDialog.Show();
                 }
             );

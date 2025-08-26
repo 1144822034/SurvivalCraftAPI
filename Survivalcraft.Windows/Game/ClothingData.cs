@@ -139,6 +139,7 @@ namespace Game
 		/// 在ComponentClothing中每帧都会调用的UpdateGraduallyDamagedOverTime()，主要用于控制衣物随时间逐渐损坏
 		/// </summary>
 		/// <param name="componentClothing"></param>
+		/// <param name="indexInClothesList"></param>
 		/// <param name="dt"></param>
 		public virtual void UpdateGraduallyDamagedOverTime(ComponentClothing componentClothing, int indexInClothesList, float dt)
 		{

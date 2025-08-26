@@ -98,3 +98,5 @@ exe`文件
   * Kike13 (Discord: .kike.04)
 * 越南语 (Tiếng Việt) 翻译
   * Long (Discord: daylong89)
+* 罗马尼亚语 (Română) 翻译
+  * NBG (Discord: nbgr)

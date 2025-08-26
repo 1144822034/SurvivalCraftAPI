@@ -1,5 +1,4 @@
 #if ANDROID
-using Android.OS;
 using Android.Views;
 #else
 using Silk.NET.Input;
@@ -85,10 +84,6 @@ namespace Engine.Input
 		internal static void BeforeFrame()
 		{
 #if ANDROID
-            if (Build.VERSION.SdkInt < BuildVersionCodes.O)
-            {
-                return;
-            }
             if (IsMouseVisible)
             {
                 if (m_pointerCaptureRequested)
@@ -149,33 +144,27 @@ namespace Engine.Input
 #if ANDROID
         internal static void HandleMotionEvent(MotionEvent e)
         {
-            if (e.Action == MotionEventActions.Move)
-            {
-                for (int num = e.HistorySize - 1; num >= 0; num--)
-                {
-                    m_queuedMouseMovement += new Vector2(e.GetHistoricalX(num), e.GetHistoricalY(num));
-                }
-                m_queuedMouseMovement += new Vector2(e.GetX(), e.GetY());
-            }
-            else if (e.Action == MotionEventActions.HoverMove)
-            {
-                MousePosition = Round(e.GetX(), e.GetY());
-            }
-            else if (e.Action == MotionEventActions.ButtonPress)
-            {
-                ProcessMouseDown(TranslateMouseButton(e.ActionButton), Round(e.GetX(), e.GetY()));
-            }
-            else if (e.Action == MotionEventActions.ButtonRelease)
-            {
-                ProcessMouseUp(TranslateMouseButton(e.ActionButton), Round(e.GetX(), e.GetY()));
-            }
-            else if (e.Action == MotionEventActions.PointerIdShift)
-            {
-                for (int num2 = e.HistorySize - 1; num2 >= 0; num2--)
-                {
-                    m_queuedMouseWheelMovement += MathUtils.Sign(e.GetHistoricalAxisValue(Axis.Vscroll, num2));
-                }
-                m_queuedMouseWheelMovement += MathUtils.Sign(e.GetAxisValue(Axis.Vscroll));
+#pragma warning disable CA1416
+            switch (e.Action) {
+                case MotionEventActions.Move: {
+                        for (int num = e.HistorySize - 1; num >= 0; num--)
+                        {
+                            m_queuedMouseMovement += new Vector2(e.GetHistoricalX(num), e.GetHistoricalY(num));
+                        }
+                        m_queuedMouseMovement += new Vector2(e.GetX(), e.GetY());
+                        break;
+                    }
+                case MotionEventActions.HoverMove: MousePosition = Round(e.GetX(), e.GetY()); break;
+                case MotionEventActions.ButtonPress: ProcessMouseDown(TranslateMouseButton(e.ActionButton), Round(e.GetX(), e.GetY())); break;
+                case MotionEventActions.ButtonRelease: ProcessMouseUp(TranslateMouseButton(e.ActionButton), Round(e.GetX(), e.GetY())); break;
+                case MotionEventActions.PointerIdShift: {
+                        for (int num2 = e.HistorySize - 1; num2 >= 0; num2--)
+                        {
+                            m_queuedMouseWheelMovement += MathUtils.Sign(e.GetHistoricalAxisValue(Axis.Vscroll, num2));
+                        }
+                        m_queuedMouseWheelMovement += MathUtils.Sign(e.GetAxisValue(Axis.Vscroll));
+                        break;
+                    }
             }
         }
 
@@ -189,6 +178,7 @@ namespace Engine.Input
                 _ => MouseButton.Left,
             };
         }
+#pragma warning restore CA1416
 #else
 		private static void MouseDownHandler(IMouse mouse, Silk.NET.Input.MouseButton button)
 		{
