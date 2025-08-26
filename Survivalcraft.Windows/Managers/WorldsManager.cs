@@ -213,7 +213,7 @@ namespace Game
 						{
 							XElement xElement = XmlUtils.LoadXmlFromStream(stream, null, throwOnError: true);
 							worldInfo.SerializationVersion = XmlUtils.GetAttributeValue(xElement, "Version", "1.0");
-							worldInfo.APIVersion = XmlUtils.GetAttributeValue(xElement, "APIVersion", String.Empty);
+							worldInfo.APIVersion = XmlUtils.GetAttributeValue(xElement, "APIVersion", string.Empty);
 							VersionsManager.UpgradeProjectXml(xElement);
 							XElement gameInfoNode = GetGameInfoNode(xElement);
 							ValuesDictionary valuesDictionary = new();

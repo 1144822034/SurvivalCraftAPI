@@ -178,7 +178,7 @@ namespace Game
 					});
 				}
 			}
-            if (!String.IsNullOrEmpty(ExternalContentManager.openFilePath))
+            if (!string.IsNullOrEmpty(ExternalContentManager.openFilePath))
 			{
 				try
 				{

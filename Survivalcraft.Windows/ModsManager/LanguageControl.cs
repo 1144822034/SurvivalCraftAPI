@@ -268,7 +268,7 @@ namespace Game
 				if(englishJsonNode == null)
 				{
 					r = false;
-					return String.Join(':', keys);
+					return string.Join(':', keys);
 				}
 				jsonNode = englishJsonNode;
 			}
@@ -334,7 +334,7 @@ namespace Game
 						return nowNode.GetValue<decimal>().ToString(CultureInfo.InvariantCulture);
 				}
 			}
-			return flag? keys.Last() : String.Join(':', keys);
+			return flag? keys.Last() : string.Join(':', keys);
 		}
 
 		public static bool TryGet(out string result,params string[] keys)

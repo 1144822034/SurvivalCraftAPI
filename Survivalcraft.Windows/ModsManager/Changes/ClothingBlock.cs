@@ -118,7 +118,7 @@ namespace Game
 			ClothingData clothingData = GetClothingData(value);
 			if(clothingData == null)
 			{
-				return String.Empty;
+				return string.Empty;
 			}
 			int clothingColor = GetClothingColor(data);
 			string displayName = clothingData.DisplayName;

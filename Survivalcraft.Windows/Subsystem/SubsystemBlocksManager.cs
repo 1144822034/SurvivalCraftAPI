@@ -36,8 +36,8 @@ namespace Game
             //int tick1 = Environment.TickCount;
             for (int i = SurvivalCraftBlockCount + 1; i < 1024; i++)
             {
-                string blockName = m_savedValuesDictionary.GetValue(i.ToString(), String.Empty);
-                if(!String.IsNullOrEmpty(blockName)) DynamicBlockNameToIndex[blockName] = i;
+                string blockName = m_savedValuesDictionary.GetValue(i.ToString(), string.Empty);
+                if(!string.IsNullOrEmpty(blockName)) DynamicBlockNameToIndex[blockName] = i;
                 /*
                 if (!String.IsNullOrEmpty(fullName))
                 {

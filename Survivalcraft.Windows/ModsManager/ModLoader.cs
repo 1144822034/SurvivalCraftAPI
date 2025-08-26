@@ -1872,6 +1872,7 @@ namespace Game
 		/// <param name="mainMenuScreen"></param>
 		/// <param name="leftBottomBar">主界面左下角的按钮栏，里面有着API的切换语言和资源管理按钮</param>
 		/// <param name="rightBottomBar">主界面右下角的按钮栏，Mod作者们可以在这里面放入想要的按钮（例如Mod设置按钮、Mod作者介绍按钮等）</param>
+		[Obsolete("Use OnMainMenuScreenCreated instead.")]
 		public virtual void OnMainMenuScreenUpdate(MainMenuScreen mainMenuScreen,StackPanelWidget leftBottomBar,StackPanelWidget rightBottomBar)
 		{
 

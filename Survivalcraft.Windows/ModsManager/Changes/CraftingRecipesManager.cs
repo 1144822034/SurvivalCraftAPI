@@ -85,7 +85,7 @@ namespace Game
 			}
 		}
 
-		public static CraftingRecipe DecodeElementToCraftingRecipe(XElement item, int HorizontalLen = 3)
+		public static CraftingRecipe DecodeElementToCraftingRecipe(XElement item, int horizontalLen = 3)
 		{
 			CraftingRecipe craftingRecipe = new();
 			string attributeValue = XmlUtils.GetAttributeValue<string>(item, "Result");
@@ -136,7 +136,7 @@ namespace Game
 					if (char.IsLower(c))
 					{
 						string text2 = dictionary[c];
-						craftingRecipe.Ingredients[j + (i * HorizontalLen)] = text2;
+						craftingRecipe.Ingredients[j + (i * horizontalLen)] = text2;
 					}
 				}
 			}
@@ -188,10 +188,10 @@ namespace Game
 				{
 					craftingRecipe = (!(craftingRecipe.RequiredHeatLevel > 0f)) ? new CraftingRecipe
 					{
-						Message = String.Format(LanguageControl.Get(fName, 2), craftingRecipe.RequiredPlayerLevel)
+						Message = string.Format(LanguageControl.Get(fName, 2), craftingRecipe.RequiredPlayerLevel)
 					} : new CraftingRecipe
 					{
-						Message = String.Format(LanguageControl.Get(fName, 3), craftingRecipe.RequiredPlayerLevel)
+						Message = string.Format(LanguageControl.Get(fName, 3), craftingRecipe.RequiredPlayerLevel)
 					};
 				}
 			}

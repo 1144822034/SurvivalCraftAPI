@@ -73,4 +73,7 @@
         <Compile Remove="Engine.Graphics\DXWrapper.cs" Condition="'$(Configuration)' != 'Direct3D11'" />
         <Compile Remove="Engine.Graphics\GLWrapper.cs" Condition="'$(Configuration)' == 'Direct3D11'" />
     </ItemGroup>
+    <ItemGroup>
+      <EditorConfigFiles Remove=".editorconfig" />
+    </ItemGroup>
 </Project>

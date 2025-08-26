@@ -6,7 +6,7 @@ namespace Game
 {
 	public class FontTextWidget : Widget
 	{
-		public string m_text = String.Empty;
+		public string m_text = string.Empty;
 
 		public TextOrientation m_textOrientation;
 
@@ -208,7 +208,7 @@ namespace Game
 					{
 						x = ActualSize.X;
 					}
-					bool flag = true;
+					//bool flag = true;
 					Vector2 vector = Vector2.Zero;
 					float angle = 0f;
 					if (TextOrientation == TextOrientation.Horizontal)
@@ -216,22 +216,22 @@ namespace Game
 						vector = new Vector2(x, num);
 						angle = 0f;
 						_ = Display.ScissorRectangle;
-						flag = true;
+						//flag = true;
 					}
 					else if (TextOrientation == TextOrientation.VerticalLeft)
 					{
 						vector = new Vector2(x, ActualSize.Y + num);
 						angle = MathUtils.DegToRad(-90f);
-						flag = true;
+						//flag = true;
 					}
-					if (flag)
-					{
+					//if (flag)
+					//{
 						if (DropShadow)
 						{
 							fontBatch2D.QueueText(line, vector + (1f * new Vector2(FontScale)), 0f, new Color((byte)0, (byte)0, (byte)0, color.A), anchor, new Vector2(FontScale), FontSpacing, angle);
 						}
 						fontBatch2D.QueueText(line, vector, 0f, color, anchor, new Vector2(FontScale), FontSpacing, angle);
-					}
+					//}
 					num += num4;
 				}
 				fontBatch2D.TransformTriangles(GlobalTransform, count);
@@ -240,6 +240,10 @@ namespace Game
 
 		public override void MeasureOverride(Vector2 parentAvailableSize)
 		{
+			if(!m_linesSize.HasValue)
+			{
+				return;
+			}
 			IsDrawRequired = !string.IsNullOrEmpty(Text) && Color.A != 0;
 			if (TextOrientation == TextOrientation.Horizontal)
 			{
