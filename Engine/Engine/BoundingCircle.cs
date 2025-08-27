@@ -1,50 +1,26 @@
-namespace Engine
-{
-	public struct BoundingCircle : IEquatable<BoundingCircle>
-	{
-		public Vector2 Center;
+namespace Engine {
+    public struct BoundingCircle : IEquatable<BoundingCircle> {
+        public Vector2 Center;
 
-		public float Radius;
+        public float Radius;
 
-		public BoundingCircle(Vector2 center, float radius)
-		{
-			Center = center;
-			Radius = radius;
-		}
-
-		public override bool Equals(object obj)
-		{
-            return obj is BoundingCircle circle && Equals(circle);
+        public BoundingCircle(Vector2 center, float radius) {
+            Center = center;
+            Radius = radius;
         }
 
-        public override int GetHashCode()
-		{
-			return Center.GetHashCode() + Radius.GetHashCode();
-		}
+        public override bool Equals(object obj) => obj is BoundingCircle circle && Equals(circle);
 
-		public bool Equals(BoundingCircle other)
-		{
-            return Center == other.Center && Radius == other.Radius;
-        }
+        public override int GetHashCode() => Center.GetHashCode() + Radius.GetHashCode();
 
-        public override string ToString()
-		{
-			return $"{Center},{Radius}";
-		}
+        public bool Equals(BoundingCircle other) => Center == other.Center && Radius == other.Radius;
 
-        public bool Contains(Vector2 p)
-        {
-            return Vector2.DistanceSquared(Center, p) <= Radius * Radius;
-        }
+        public override string ToString() => $"{Center},{Radius}";
 
-		public static bool operator ==(BoundingCircle c1, BoundingCircle c2)
-		{
-			return c1.Equals(c2);
-		}
+        public bool Contains(Vector2 p) => Vector2.DistanceSquared(Center, p) <= Radius * Radius;
 
-		public static bool operator !=(BoundingCircle c1, BoundingCircle c2)
-		{
-			return !c1.Equals(c2);
-		}
-	}
+        public static bool operator ==(BoundingCircle c1, BoundingCircle c2) => c1.Equals(c2);
+
+        public static bool operator !=(BoundingCircle c1, BoundingCircle c2) => !c1.Equals(c2);
+    }
 }

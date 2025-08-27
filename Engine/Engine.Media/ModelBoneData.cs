@@ -1,11 +1,9 @@
-namespace Engine.Media
-{
-	public class ModelBoneData
-	{
-		public string Name;
+namespace Engine.Media {
+    public class ModelBoneData {
+        public string Name;
 
-		public int ParentBoneIndex;
+        public int ParentBoneIndex;
 
-		public Matrix Transform;
-	}
+        public Matrix Transform;
+    }
 }

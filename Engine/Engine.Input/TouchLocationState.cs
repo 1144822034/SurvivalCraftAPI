@@ -1,9 +1,7 @@
-namespace Engine.Input
-{
-	public enum TouchLocationState
-	{
-		Pressed,
-		Moved,
-		Released
-	}
+namespace Engine.Input {
+    public enum TouchLocationState {
+        Pressed,
+        Moved,
+        Released
+    }
 }

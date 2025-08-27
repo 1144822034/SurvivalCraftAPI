@@ -1,45 +1,24 @@
-namespace Engine
-{
-	public struct BoundingSphere : IEquatable<BoundingSphere>
-	{
-		public Vector3 Center;
+namespace Engine {
+    public struct BoundingSphere : IEquatable<BoundingSphere> {
+        public Vector3 Center;
 
-		public float Radius;
+        public float Radius;
 
-		public BoundingSphere(Vector3 center, float radius)
-		{
-			Center = center;
-			Radius = radius;
-		}
-
-		public override bool Equals(object obj)
-		{
-            return obj is BoundingSphere sphere && Equals(sphere);
+        public BoundingSphere(Vector3 center, float radius) {
+            Center = center;
+            Radius = radius;
         }
 
-        public override int GetHashCode()
-		{
-			return Center.GetHashCode() + Radius.GetHashCode();
-		}
+        public override bool Equals(object obj) => obj is BoundingSphere sphere && Equals(sphere);
 
-		public bool Equals(BoundingSphere other)
-		{
-            return Center == other.Center && Radius == other.Radius;
-        }
+        public override int GetHashCode() => Center.GetHashCode() + Radius.GetHashCode();
 
-        public override string ToString()
-		{
-			return $"{Center},{Radius}";
-		}
+        public bool Equals(BoundingSphere other) => Center == other.Center && Radius == other.Radius;
 
-		public static bool operator ==(BoundingSphere s1, BoundingSphere s2)
-		{
-			return s1.Equals(s2);
-		}
+        public override string ToString() => $"{Center},{Radius}";
 
-		public static bool operator !=(BoundingSphere s1, BoundingSphere s2)
-		{
-			return !s1.Equals(s2);
-		}
-	}
+        public static bool operator ==(BoundingSphere s1, BoundingSphere s2) => s1.Equals(s2);
+
+        public static bool operator !=(BoundingSphere s1, BoundingSphere s2) => !s1.Equals(s2);
+    }
 }

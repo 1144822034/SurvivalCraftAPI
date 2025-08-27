@@ -14,11 +14,8 @@ using Stream = Android.Media.Stream;
 using Uri = Android.Net.Uri;
 // ReSharper disable BitwiseOperatorOnEnumWithoutFlags
 
-namespace Engine
-{
-
-    public class EngineActivity : SilkActivity
-    {
+namespace Engine {
+    public class EngineActivity : SilkActivity {
         internal static EngineActivity m_activity;
 
         public event Action Paused;
@@ -30,28 +27,22 @@ namespace Engine
         public event Action<Intent> NewIntent;
 
         public event Func<KeyEvent, bool> OnDispatchKeyEvent;
-        
+
         public static string BasePath = RunPath.AndroidFilePath;
         public static string ConfigPath = RunPath.AndroidFilePath;
 
-        private AudioManager AudioManager
-        {
-            get
-            {
-                if (field == null)
-                {
+        AudioManager AudioManager {
+            get {
+                if (field == null) {
                     field = GetAudioManager();
                 }
                 return field;
             }
         }
 
-        public EngineActivity()
-        {
-            m_activity = this;
-        }
-        protected override void OnCreate(Bundle savedInstanceState)
-        {
+        public EngineActivity() => m_activity = this;
+
+        protected override void OnCreate(Bundle savedInstanceState) {
             RequestWindowFeature(WindowFeatures.NoTitle);
             base.OnCreate(savedInstanceState);
             Window?.AddFlags(WindowManagerFlags.Fullscreen | WindowManagerFlags.TranslucentStatus | WindowManagerFlags.TranslucentNavigation);
@@ -60,95 +51,76 @@ namespace Engine
             RequestedOrientation = ScreenOrientation.SensorLandscape;
         }
 
-        public void Vibrate(long ms)
-        {
-            if (Build.VERSION.SdkInt >= (BuildVersionCodes)26)
-            {
+        public void Vibrate(long ms) {
+            if (Build.VERSION.SdkInt >= (BuildVersionCodes)26) {
                 Vibrator vibrator = (Vibrator)GetSystemService("vibrator");
                 vibrator?.Vibrate(VibrationEffect.CreateOneShot(ms, VibrationEffect.DefaultAmplitude));
             }
         }
-        public void OpenLink(string link)
-        {
+
+        public void OpenLink(string link) {
             StartActivity(new Intent(Intent.ActionView, Uri.Parse(link)));
         }
 
-
-        protected override void OnPause()
-        {
+        protected override void OnPause() {
             base.OnPause();
             Paused?.Invoke();
         }
 
-        protected override void OnResume()
-        {
+        protected override void OnResume() {
             base.OnResume();
             Resumed?.Invoke();
         }
 
-        protected override void OnNewIntent(Intent intent)
-        {
+        protected override void OnNewIntent(Intent intent) {
             base.OnNewIntent(intent);
             NewIntent?.Invoke(intent);
         }
 
-        protected override void OnRun()
-        {
-        }
+        protected override void OnRun() { }
 
-        protected override void OnDestroy()
-        {
-            try
-            {
+        protected override void OnDestroy() {
+            try {
                 base.OnDestroy();
                 Destroyed?.Invoke();
             }
-            finally
-            {
+            finally {
                 Thread.Sleep(250);
                 Environment.Exit(0);
             }
         }
 
-        public override bool DispatchTouchEvent(MotionEvent e)
-        {
+        public override bool DispatchTouchEvent(MotionEvent e) {
             Touch.HandleTouchEvent(e);
             return true;
         }
 
-        public override bool DispatchKeyEvent(KeyEvent e)
-        {
-            if (e == null)
-            {
+        public override bool DispatchKeyEvent(KeyEvent e) {
+            if (e == null) {
                 return true;
             }
-            Debug.WriteLine($"[DispatchKeyEvent]action:{e.Action} keyCode:{e.KeyCode} unicodeChar:{e.UnicodeChar} flags:{e.Flags} metaState:{e.MetaState} source:{e.Source} deviceId:{e.DeviceId}");
+            Debug.WriteLine(
+                $"[DispatchKeyEvent]action:{e.Action} keyCode:{e.KeyCode} unicodeChar:{e.UnicodeChar} flags:{e.Flags} metaState:{e.MetaState} source:{e.Source} deviceId:{e.DeviceId}"
+            );
             bool handled = false;
             Delegate[] invocationList = OnDispatchKeyEvent?.GetInvocationList();
-            if (invocationList != null)
-            {
-                foreach (Delegate invocation in invocationList)
-                {
+            if (invocationList != null) {
+                foreach (Delegate invocation in invocationList) {
                     handled |= (bool)invocation.DynamicInvoke(e)!;
                 }
             }
-            if (!handled)
-            {
-                _ = e.Action switch
-                {
+            if (!handled) {
+                _ = e.Action switch {
                     KeyEventActions.Down => OnKeyDown(e.KeyCode, e),
                     KeyEventActions.Up => OnKeyUp(e.KeyCode, e),
                     _ => false
                 };
             }
-
             return true;
         }
 
-        public override bool OnKeyDown(Keycode keyCode, KeyEvent e)
-        {
-            switch (keyCode)
-            {
+        public override bool OnKeyDown(Keycode keyCode, KeyEvent e) {
+            switch (keyCode) {
                 case Keycode.VolumeUp:
                     AudioManager?.AdjustStreamVolume(Stream.Music, Adjust.Raise, VolumeNotificationFlags.ShowUi);
                     EnableImmersiveMode();
@@ -158,92 +130,80 @@ namespace Engine
                     EnableImmersiveMode();
                     break;
             }
-            if (e == null)
-            {
+            if (e == null) {
                 return true;
             }
-            if ((e.Source & InputSourceType.Gamepad) == InputSourceType.Gamepad || (e.Source & InputSourceType.Joystick) == InputSourceType.Joystick)
-            {
+            if ((e.Source & InputSourceType.Gamepad) == InputSourceType.Gamepad
+                || (e.Source & InputSourceType.Joystick) == InputSourceType.Joystick) {
                 GamePad.HandleKeyEvent(e);
             }
-            else
-            {
+            else {
                 Keyboard.HandleKeyEvent(e);
             }
             return true;
         }
 
+        AudioManager GetAudioManager() => Build.VERSION.SdkInt >= (BuildVersionCodes)21 ? GetSystemService("audio") as AudioManager : null;
 
-        private AudioManager GetAudioManager() => Build.VERSION.SdkInt >= (BuildVersionCodes)21 ? GetSystemService("audio") as AudioManager : null;
-
-        public override bool OnKeyUp(Keycode keyCode, KeyEvent e)
-        {
-            if (e == null)
-            {
+        public override bool OnKeyUp(Keycode keyCode, KeyEvent e) {
+            if (e == null) {
                 return true;
             }
-            if ((e.Source & InputSourceType.Gamepad) == InputSourceType.Gamepad || (e.Source & InputSourceType.Joystick) == InputSourceType.Joystick)
-            {
+            if ((e.Source & InputSourceType.Gamepad) == InputSourceType.Gamepad
+                || (e.Source & InputSourceType.Joystick) == InputSourceType.Joystick) {
                 GamePad.HandleKeyEvent(e);
             }
-            else
-            {
+            else {
                 Keyboard.HandleKeyEvent(e);
             }
             return true;
         }
 
-        public override bool DispatchGenericMotionEvent(MotionEvent e)
-        {
-            if (e == null)
-            {
+        public override bool DispatchGenericMotionEvent(MotionEvent e) {
+            if (e == null) {
                 return true;
             }
             Debug.WriteLine($"[OnGenericMotionEvent]source:{e.Source} action:{e.Action}");
-            if (((e.Source & InputSourceType.Gamepad) == InputSourceType.Gamepad || (e.Source & InputSourceType.Joystick) == InputSourceType.Joystick) && e.Action == MotionEventActions.Move)
-            {
+            if (((e.Source & InputSourceType.Gamepad) == InputSourceType.Gamepad || (e.Source & InputSourceType.Joystick) == InputSourceType.Joystick)
+                && e.Action == MotionEventActions.Move) {
                 GamePad.HandleMotionEvent(e);
             }
-            if ((e.Source & InputSourceType.Mouse) == InputSourceType.Mouse || (e.Source & InputSourceType.ClassPointer) == InputSourceType.ClassPointer || (e.Source & InputSourceType.MouseRelative) == InputSourceType.MouseRelative)
-            {
+            if ((e.Source & InputSourceType.Mouse) == InputSourceType.Mouse
+                || (e.Source & InputSourceType.ClassPointer) == InputSourceType.ClassPointer
+                || (e.Source & InputSourceType.MouseRelative) == InputSourceType.MouseRelative) {
                 Mouse.HandleMotionEvent(e);
             }
             return true;
         }
 
-        public void EnableImmersiveMode()
-        {
-            if (Window != null)
-            {
-                switch (Build.VERSION.SdkInt)
-                {
+        public void EnableImmersiveMode() {
+            if (Window != null) {
+                switch (Build.VERSION.SdkInt) {
                     case >= (BuildVersionCodes)30:
                         IWindowInsetsController insetsController = Window.InsetsController;
-                        if (insetsController != null)
-                        {
+                        if (insetsController != null) {
                             insetsController.Hide(WindowInsets.Type.SystemBars());
                             insetsController.SystemBarsBehavior = (int)WindowInsetsControllerBehavior.ShowTransientBarsBySwipe;
                         }
                         break;
 #pragma warning disable CA1422
                     case > (BuildVersionCodes)19:
-                        Window.DecorView.SystemUiFlags = SystemUiFlags.Fullscreen | SystemUiFlags.HideNavigation | SystemUiFlags.Immersive | SystemUiFlags.ImmersiveSticky;
-                        break;
+                        Window.DecorView.SystemUiFlags = SystemUiFlags.Fullscreen
+                            | SystemUiFlags.HideNavigation
+                            | SystemUiFlags.Immersive
+                            | SystemUiFlags.ImmersiveSticky; break;
 #pragma warning restore CA1422
                 }
             }
         }
 
-        public void GetGlEsVersion(out int major, out int minor)
-        {
-            try
-            {
+        public void GetGlEsVersion(out int major, out int minor) {
+            try {
                 int reqGlEsVersion = ((ActivityManager)GetSystemService(ActivityService))?.DeviceConfigurationInfo?.ReqGlEsVersion ?? 0x20000;
                 major = reqGlEsVersion >> 16;
                 minor = reqGlEsVersion & 0xFFFF;
             }
-            catch
-            {
+            catch {
                 major = 2;
                 minor = 0;
             }

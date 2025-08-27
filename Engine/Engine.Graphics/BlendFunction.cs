@@ -1,9 +1,7 @@
-namespace Engine.Graphics
-{
-	public enum BlendFunction
-	{
-		Add,
-		Subtract,
-		ReverseSubtract
-	}
+namespace Engine.Graphics {
+    public enum BlendFunction {
+        Add,
+        Subtract,
+        ReverseSubtract
+    }
 }

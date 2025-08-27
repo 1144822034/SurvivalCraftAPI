@@ -1,14 +1,9 @@
-namespace Engine
-{
-	public class UnhandledExceptionInfo
-	{
-		public readonly Exception Exception;
+namespace Engine {
+    public class UnhandledExceptionInfo {
+        public readonly Exception Exception;
 
-		public bool IsHandled;
+        public bool IsHandled;
 
-		public UnhandledExceptionInfo(Exception e)
-		{
-			Exception = e;
-		}
-	}
+        public UnhandledExceptionInfo(Exception e) => Exception = e;
+    }
 }

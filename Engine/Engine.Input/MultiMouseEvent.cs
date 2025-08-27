@@ -1,8 +1,7 @@
-namespace Engine.Input;
+namespace Engine.Input {
+    public struct MultiMouseEvent {
+        public int MouseIndex;
 
-public struct MultiMouseEvent
-{
-	public int MouseIndex;
-
-	public Point2 Position;
+        public Point2 Position;
+    }
 }

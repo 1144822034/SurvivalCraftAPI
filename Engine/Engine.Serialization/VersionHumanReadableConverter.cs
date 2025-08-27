@@ -1,16 +1,8 @@
-namespace Engine.Serialization
-{
-	[HumanReadableConverter(typeof(Version))]
-    public class VersionHumanReadableConverter : IHumanReadableConverter
-	{
-		public string ConvertToString(object value)
-		{
-			return ((Version)value).ToString();
-		}
+namespace Engine.Serialization {
+    [HumanReadableConverter(typeof(Version))]
+    public class VersionHumanReadableConverter : IHumanReadableConverter {
+        public string ConvertToString(object value) => ((Version)value).ToString();
 
-		public object ConvertFromString(Type type, string data)
-		{
-			return Version.Parse(data);
-		}
-	}
+        public object ConvertFromString(Type type, string data) => Version.Parse(data);
+    }
 }

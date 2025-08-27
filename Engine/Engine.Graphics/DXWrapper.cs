@@ -10,10 +10,8 @@ using Device3 = SharpDX.DXGI.Device3;
 using MapFlags = SharpDX.Direct3D11.MapFlags;
 using ResultCode = SharpDX.DXGI.ResultCode;
 
-namespace Engine.Graphics
-{
-    public static class DXWrapper
-    {
+namespace Engine.Graphics {
+    public static class DXWrapper {
         public static Device2 Device;
         public static DeviceContext2 Context;
         public static SwapChain2 SwapChain;
@@ -51,8 +49,7 @@ namespace Engine.Graphics
         public static int m_userIndexBufferSize;
         public static int REQ_TEXTURE2D_U_OR_V_DIMENSION;
 
-        public static FeatureLevel[] m_featureLevels =
-        [
+        public static FeatureLevel[] m_featureLevels = [
             FeatureLevel.Level_11_1,
             FeatureLevel.Level_11_0,
             FeatureLevel.Level_10_1,
@@ -62,11 +59,9 @@ namespace Engine.Graphics
             FeatureLevel.Level_9_1
         ];
 
-        public static void CreateDevice()
-        {
+        public static void CreateDevice() {
             IntPtr handle = Window.m_view.Native?.Win32?.Hwnd ?? IntPtr.Zero;
-            if (handle == IntPtr.Zero)
-            {
+            if (handle == IntPtr.Zero) {
                 throw new InvalidOperationException("Failed to get window handle");
             }
 #if DEBUG
@@ -75,22 +70,20 @@ namespace Engine.Graphics
             DeviceCreationFlags deviceCreationFlags = DeviceCreationFlags.None;
 #endif
             using (Device device = new(
-                DriverType.Hardware,
-                deviceCreationFlags,
-                FeatureLevel.Level_11_0,
-                FeatureLevel.Level_10_1,
-                FeatureLevel.Level_10_0,
-                FeatureLevel.Level_9_3,
-                FeatureLevel.Level_9_2,
-                FeatureLevel.Level_9_1
-            ))
-            {
+                    DriverType.Hardware,
+                    deviceCreationFlags,
+                    FeatureLevel.Level_11_0,
+                    FeatureLevel.Level_10_1,
+                    FeatureLevel.Level_10_0,
+                    FeatureLevel.Level_9_3,
+                    FeatureLevel.Level_9_2,
+                    FeatureLevel.Level_9_1
+                )) {
                 Device = device.QueryInterface<Device2>();
             }
             Context = Device.ImmediateContext2;
             FeatureLevel = Device.FeatureLevel;
-            SwapChainDescription1 swapChainDescription = new()
-            {
+            SwapChainDescription1 swapChainDescription = new() {
                 AlphaMode = AlphaMode.Ignore,
                 BufferCount = 2,
                 Format = Format.R8G8B8A8_UNorm,
@@ -102,12 +95,9 @@ namespace Engine.Graphics
                 SwapEffect = SwapEffect.FlipSequential,
                 Usage = Usage.RenderTargetOutput
             };
-            using (Device3 device2 = Device.QueryInterface<Device3>())
-            {
-                using (Factory3 parent = device2.Adapter.GetParent<Factory3>())
-                {
-                    using (SwapChain1 swapChain = new(parent, Device, handle, ref swapChainDescription))
-                    {
+            using (Device3 device2 = Device.QueryInterface<Device3>()) {
+                using (Factory3 parent = device2.Adapter.GetParent<Factory3>()) {
+                    using (SwapChain1 swapChain = new(parent, Device, handle, ref swapChainDescription)) {
                         SwapChain = swapChain.QueryInterface<SwapChain2>();
                     }
                 }
@@ -118,64 +108,46 @@ namespace Engine.Graphics
                 swapChainPanelNative.SwapChain = SwapChain;
             }*/
             CreateBufferViews();
-            switch(FeatureLevel)
-            {
+            switch (FeatureLevel) {
                 case FeatureLevel.Level_11_1:
-                case FeatureLevel.Level_11_0:
-                    REQ_TEXTURE2D_U_OR_V_DIMENSION = 16384;
-                    break;
+                case FeatureLevel.Level_11_0: REQ_TEXTURE2D_U_OR_V_DIMENSION = 16384; break;
                 case FeatureLevel.Level_10_1:
-                case FeatureLevel.Level_10_0:
-                    REQ_TEXTURE2D_U_OR_V_DIMENSION = 8192;
-                    break;
-                case FeatureLevel.Level_9_3:
-                    REQ_TEXTURE2D_U_OR_V_DIMENSION = 4096;
-                    break;
+                case FeatureLevel.Level_10_0: REQ_TEXTURE2D_U_OR_V_DIMENSION = 8192; break;
+                case FeatureLevel.Level_9_3: REQ_TEXTURE2D_U_OR_V_DIMENSION = 4096; break;
                 case FeatureLevel.Level_9_2:
-                case FeatureLevel.Level_9_1:
-                    REQ_TEXTURE2D_U_OR_V_DIMENSION = 2048;
-                    break;
-                default:
-                    REQ_TEXTURE2D_U_OR_V_DIMENSION = -1;
-                    break;
+                case FeatureLevel.Level_9_1: REQ_TEXTURE2D_U_OR_V_DIMENSION = 2048; break;
+                default: REQ_TEXTURE2D_U_OR_V_DIMENSION = -1; break;
             }
-            Display.DeviceDescription = $"DX11 Metro, FeatureLevel={FeatureLevel}, Debug={Context.Device.CreationFlags.HasFlag(DeviceCreationFlags.Debug)}, ReqTexture2DUOrVDimension={(REQ_TEXTURE2D_U_OR_V_DIMENSION > 0 ? REQ_TEXTURE2D_U_OR_V_DIMENSION : "unknown")}";
+            Display.DeviceDescription =
+                $"DX11 Metro, FeatureLevel={FeatureLevel}, Debug={Context.Device.CreationFlags.HasFlag(DeviceCreationFlags.Debug)}, ReqTexture2DUOrVDimension={(REQ_TEXTURE2D_U_OR_V_DIMENSION > 0 ? REQ_TEXTURE2D_U_OR_V_DIMENSION : "unknown")}";
             Log.Information("Initialized display device: " + Display.DeviceDescription);
         }
 
-        public static void Trim()
-        {
-            using (Device3 device = Device.QueryInterface<Device3>())
-            {
+        public static void Trim() {
+            using (Device3 device = Device.QueryInterface<Device3>()) {
                 device.Trim();
             }
         }
 
-        public static void DisposeDevice()
-        {
+        public static void DisposeDevice() {
             DeviceDebug deviceDebug = null;
-            if ((Device.CreationFlags & DeviceCreationFlags.Debug) != DeviceCreationFlags.None)
-            {
+            if ((Device.CreationFlags & DeviceCreationFlags.Debug) != DeviceCreationFlags.None) {
                 deviceDebug = new DeviceDebug(Device);
             }
             DisposeBufferViews();
-            foreach (SharpDX.Direct3D11.RasterizerState rasterizerState in m_dxRasterizerStates.Values)
-            {
+            foreach (SharpDX.Direct3D11.RasterizerState rasterizerState in m_dxRasterizerStates.Values) {
                 rasterizerState.Dispose();
             }
             m_dxRasterizerStates.Clear();
-            foreach (SharpDX.Direct3D11.DepthStencilState depthStencilState in m_dxDepthStencilStates.Values)
-            {
+            foreach (SharpDX.Direct3D11.DepthStencilState depthStencilState in m_dxDepthStencilStates.Values) {
                 depthStencilState.Dispose();
             }
             m_dxDepthStencilStates.Clear();
-            foreach (SharpDX.Direct3D11.BlendState blendState in m_dxBlendStates.Values)
-            {
+            foreach (SharpDX.Direct3D11.BlendState blendState in m_dxBlendStates.Values) {
                 blendState.Dispose();
             }
             m_dxBlendStates.Clear();
-            foreach (SharpDX.Direct3D11.SamplerState samplerState in m_dxSamplerStates.Values)
-            {
+            foreach (SharpDX.Direct3D11.SamplerState samplerState in m_dxSamplerStates.Values) {
                 samplerState.Dispose();
             }
             m_dxSamplerStates.Clear();
@@ -202,84 +174,72 @@ namespace Engine.Graphics
             m_blendState = null;
             Array.Clear(m_vsSamplerStates, 0, m_vsSamplerStates.Length);
             Array.Clear(m_psSamplerStates, 0, m_psSamplerStates.Length);
-            if (deviceDebug != null)
-            {
+            if (deviceDebug != null) {
                 deviceDebug.ReportLiveDeviceObjects(ReportingLevel.Detail);
                 deviceDebug.Dispose();
             }
         }
 
-        public static bool ResizeSwapChainIfNeeded()
-        {
+        public static bool ResizeSwapChainIfNeeded() {
             /*Matrix3x2 matrix3x = default(Matrix3x2);
             matrix3x.M11 = 1f / Window.m_swapChainPanel.CompositionScaleX;
             matrix3x.M22 = 1f / Window.m_swapChainPanel.CompositionScaleY;
             SwapChain.MatrixTransform = matrix3x;*/
             if (Window.Size.X != SwapChain.Description.ModeDescription.Width
-                || Window.Size.Y != SwapChain.Description.ModeDescription.Height)
-            {
+                || Window.Size.Y != SwapChain.Description.ModeDescription.Height) {
                 DisposeBufferViews();
-                SwapChain.ResizeBuffers(
-                    2,
-                    Window.Size.X,
-                    Window.Size.Y,
-                    Format.R8G8B8A8_UNorm,
-                    SwapChainFlags.None
-                );
+                SwapChain.ResizeBuffers(2, Window.Size.X, Window.Size.Y, Format.R8G8B8A8_UNorm, SwapChainFlags.None);
                 CreateBufferViews();
                 return true;
             }
             return false;
         }
 
-        public static void Present(int presentationInterval)
-        {
-            try
-            {
+        public static void Present(int presentationInterval) {
+            try {
                 SwapChain.Present(presentationInterval, PresentFlags.None);
-                if (ColorBufferView != null)
-                {
+                if (ColorBufferView != null) {
                     Context.DiscardView(ColorBufferView);
                 }
-                if (DepthBufferView != null)
-                {
+                if (DepthBufferView != null) {
                     Context.DiscardView(DepthBufferView);
                 }
             }
-            catch (SharpDXException ex)
-            {
+            catch (SharpDXException ex) {
                 if (ex.HResult == ResultCode.DeviceRemoved.Code
-                    || ex.HResult == ResultCode.DeviceReset.Code)
-                {
+                    || ex.HResult == ResultCode.DeviceReset.Code) {
                     HandleDeviceLost();
                 }
-                else
-                {
+                else {
                     Log.Error("SwapChain.Present failed. Reason: {0}", ex.Message);
                 }
             }
-            catch (Exception ex2)
-            {
+            catch (Exception ex2) {
                 Log.Error("SwapChain.Present failed. Reason: {0}", ex2.Message);
             }
             m_renderTargetView = null;
             m_depthStencilView = null;
         }
 
-        public static int AppendUserVertices<T>(T[] vertices, int vertexStride, int startVertex, int verticesCount) where T : struct
-        {
+        public static int AppendUserVertices<T>(T[] vertices, int vertexStride, int startVertex, int verticesCount) where T : struct {
             int num = vertexStride * startVertex;
             int num2 = vertexStride * verticesCount;
             if (UserVertexBuffer == null
-                || num2 > m_userVertexBufferSize)
-            {
+                || num2 > m_userVertexBufferSize) {
                 Utilities.Dispose(ref UserVertexBuffer);
                 m_userVertexBufferOffset = 0;
                 m_userVertexBufferSize = num2;
-                UserVertexBuffer = new SharpDX.Direct3D11.Buffer(Device, new BufferDescription { BindFlags = BindFlags.VertexBuffer, Usage = ResourceUsage.Dynamic, CpuAccessFlags = CpuAccessFlags.Write, SizeInBytes = m_userVertexBufferSize });
+                UserVertexBuffer = new SharpDX.Direct3D11.Buffer(
+                    Device,
+                    new BufferDescription {
+                        BindFlags = BindFlags.VertexBuffer,
+                        Usage = ResourceUsage.Dynamic,
+                        CpuAccessFlags = CpuAccessFlags.Write,
+                        SizeInBytes = m_userVertexBufferSize
+                    }
+                );
             }
-            if (m_userVertexBufferOffset + num2 <= m_userVertexBufferSize)
-            {
+            if (m_userVertexBufferOffset + num2 <= m_userVertexBufferSize) {
                 DataBox dataBox = Context.MapSubresource(UserVertexBuffer, 0, MapMode.WriteNoOverwrite, MapFlags.None);
                 GCHandle gchandle = GCHandle.Alloc(vertices, GCHandleType.Pinned);
                 CopyMemory(gchandle.AddrOfPinnedObject() + num, dataBox.DataPointer + m_userVertexBufferOffset, num2);
@@ -298,20 +258,25 @@ namespace Engine.Graphics
             return 0;
         }
 
-        public static int AppendUserIndices(int[] indices, int indexStride, int startIndex, int indicesCount)
-        {
+        public static int AppendUserIndices(int[] indices, int indexStride, int startIndex, int indicesCount) {
             int num = indexStride * startIndex;
             int num2 = indexStride * indicesCount;
             if (UserIndexBuffer == null
-                || num2 > m_userIndexBufferSize)
-            {
+                || num2 > m_userIndexBufferSize) {
                 Utilities.Dispose(ref UserIndexBuffer);
                 m_userIndexBufferOffset = 0;
                 m_userIndexBufferSize = num2;
-                UserIndexBuffer = new SharpDX.Direct3D11.Buffer(Device, new BufferDescription { BindFlags = BindFlags.IndexBuffer, Usage = ResourceUsage.Dynamic, CpuAccessFlags = CpuAccessFlags.Write, SizeInBytes = m_userIndexBufferSize });
+                UserIndexBuffer = new SharpDX.Direct3D11.Buffer(
+                    Device,
+                    new BufferDescription {
+                        BindFlags = BindFlags.IndexBuffer,
+                        Usage = ResourceUsage.Dynamic,
+                        CpuAccessFlags = CpuAccessFlags.Write,
+                        SizeInBytes = m_userIndexBufferSize
+                    }
+                );
             }
-            if (m_userIndexBufferOffset + num2 <= m_userIndexBufferSize)
-            {
+            if (m_userIndexBufferOffset + num2 <= m_userIndexBufferSize) {
                 DataBox dataBox = Context.MapSubresource(UserIndexBuffer, 0, MapMode.WriteNoOverwrite, MapFlags.None);
                 GCHandle gchandle = GCHandle.Alloc(indices, GCHandleType.Pinned);
                 CopyMemory(gchandle.AddrOfPinnedObject() + num, dataBox.DataPointer + m_userIndexBufferOffset, num2);
@@ -330,39 +295,30 @@ namespace Engine.Graphics
             return 0;
         }
 
-        public static void ApplyViewportScissor(Viewport viewport, Rectangle scissorRectangle)
-        {
+        public static void ApplyViewportScissor(Viewport viewport, Rectangle scissorRectangle) {
             if (m_viewport == null
-                || viewport != m_viewport.Value)
-            {
-                Context.Rasterizer.SetViewport(
-                    viewport.X,
-                    viewport.Y,
-                    viewport.Width,
-                    viewport.Height,
-                    viewport.MinDepth,
-                    viewport.MaxDepth
-                );
+                || viewport != m_viewport.Value) {
+                Context.Rasterizer.SetViewport(viewport.X, viewport.Y, viewport.Width, viewport.Height, viewport.MinDepth, viewport.MaxDepth);
                 m_viewport = viewport;
             }
             if (m_scissorRectangle == null
-                || scissorRectangle != m_scissorRectangle.Value)
-            {
-                Context.Rasterizer.SetScissorRectangle(scissorRectangle.Left, scissorRectangle.Top, scissorRectangle.Left + scissorRectangle.Width, scissorRectangle.Top + scissorRectangle.Height);
+                || scissorRectangle != m_scissorRectangle.Value) {
+                Context.Rasterizer.SetScissorRectangle(
+                    scissorRectangle.Left,
+                    scissorRectangle.Top,
+                    scissorRectangle.Left + scissorRectangle.Width,
+                    scissorRectangle.Top + scissorRectangle.Height
+                );
                 m_scissorRectangle = scissorRectangle;
             }
         }
 
-        public static void ApplyRasterizerState(RasterizerState rasterizerState)
-        {
-            if (rasterizerState != m_rasterizerState)
-            {
-                if (!m_dxRasterizerStates.TryGetValue(rasterizerState, out SharpDX.Direct3D11.RasterizerState rasterizerState2))
-                {
+        public static void ApplyRasterizerState(RasterizerState rasterizerState) {
+            if (rasterizerState != m_rasterizerState) {
+                if (!m_dxRasterizerStates.TryGetValue(rasterizerState, out SharpDX.Direct3D11.RasterizerState rasterizerState2)) {
                     RasterizerStateDescription rasterizerStateDescription = RasterizerStateDescription.Default();
                     rasterizerStateDescription.FillMode = FillMode.Solid;
-                    switch (rasterizerState.CullMode)
-                    {
+                    switch (rasterizerState.CullMode) {
                         case CullMode.None: rasterizerStateDescription.CullMode = SharpDX.Direct3D11.CullMode.None; break;
                         case CullMode.CullClockwise:
                             rasterizerStateDescription.CullMode = SharpDX.Direct3D11.CullMode.Back;
@@ -389,17 +345,16 @@ namespace Engine.Graphics
             }
         }
 
-        public static void ApplyDepthStencilState(DepthStencilState depthStencilState)
-        {
-            if (depthStencilState != m_depthStencilState)
-            {
-                if (!m_dxDepthStencilStates.TryGetValue(depthStencilState, out SharpDX.Direct3D11.DepthStencilState depthStencilState2))
-                {
+        public static void ApplyDepthStencilState(DepthStencilState depthStencilState) {
+            if (depthStencilState != m_depthStencilState) {
+                if (!m_dxDepthStencilStates.TryGetValue(depthStencilState, out SharpDX.Direct3D11.DepthStencilState depthStencilState2)) {
                     DepthStencilStateDescription depthStencilStateDescription = DepthStencilStateDescription.Default();
                     depthStencilStateDescription.IsStencilEnabled = false;
                     depthStencilStateDescription.IsDepthEnabled = depthStencilState.DepthBufferTestEnable || depthStencilState.DepthBufferWriteEnable;
-                    depthStencilStateDescription.DepthWriteMask = (depthStencilState.DepthBufferWriteEnable ? DepthWriteMask.All : DepthWriteMask.Zero);
-                    depthStencilStateDescription.DepthComparison = (depthStencilState.DepthBufferTestEnable ? TranslateCompareFunction(depthStencilState.DepthBufferFunction) : Comparison.Always);
+                    depthStencilStateDescription.DepthWriteMask = depthStencilState.DepthBufferWriteEnable ? DepthWriteMask.All : DepthWriteMask.Zero;
+                    depthStencilStateDescription.DepthComparison = depthStencilState.DepthBufferTestEnable
+                        ? TranslateCompareFunction(depthStencilState.DepthBufferFunction)
+                        : Comparison.Always;
                     depthStencilState2 = new SharpDX.Direct3D11.DepthStencilState(Device, depthStencilStateDescription);
                     m_dxDepthStencilStates.Add(depthStencilState, depthStencilState2);
                 }
@@ -408,12 +363,9 @@ namespace Engine.Graphics
             }
         }
 
-        public static void ApplyBlendState(BlendState blendState)
-        {
-            if (blendState != m_blendState)
-            {
-                if (!m_dxBlendStates.TryGetValue(blendState, out SharpDX.Direct3D11.BlendState blendState2))
-                {
+        public static void ApplyBlendState(BlendState blendState) {
+            if (blendState != m_blendState) {
+                if (!m_dxBlendStates.TryGetValue(blendState, out SharpDX.Direct3D11.BlendState blendState2)) {
                     BlendStateDescription blendStateDescription = BlendStateDescription.Default();
                     blendStateDescription.RenderTarget[0].RenderTargetWriteMask = ColorWriteMaskFlags.All;
                     if (blendState.ColorBlendFunction == BlendFunction.Add
@@ -421,12 +373,10 @@ namespace Engine.Graphics
                         && blendState.ColorDestinationBlend == Blend.Zero
                         && blendState.AlphaBlendFunction == BlendFunction.Add
                         && blendState.AlphaSourceBlend == Blend.One
-                        && blendState.AlphaDestinationBlend == Blend.Zero)
-                    {
+                        && blendState.AlphaDestinationBlend == Blend.Zero) {
                         blendStateDescription.RenderTarget[0].IsBlendEnabled = false;
                     }
-                    else
-                    {
+                    else {
                         blendStateDescription.RenderTarget[0].IsBlendEnabled = true;
                         blendStateDescription.RenderTarget[0].BlendOperation = TranslateBlendFunction(blendState.ColorBlendFunction);
                         blendStateDescription.RenderTarget[0].AlphaBlendOperation = TranslateBlendFunction(blendState.AlphaBlendFunction);
@@ -444,59 +394,46 @@ namespace Engine.Graphics
             }
         }
 
-        public static void ApplyVsSamplerState(int slot, SamplerState samplerState)
-        {
-            if (m_vsSamplerStates[slot] != samplerState)
-            {
+        public static void ApplyVsSamplerState(int slot, SamplerState samplerState) {
+            if (m_vsSamplerStates[slot] != samplerState) {
                 Context.VertexShader.SetSampler(slot, GetDxSamplerState(samplerState));
                 m_vsSamplerStates[slot] = samplerState;
             }
         }
 
-        public static void ApplyPsSamplerState(int slot, SamplerState samplerState)
-        {
-            if (m_psSamplerStates[slot] != samplerState)
-            {
+        public static void ApplyPsSamplerState(int slot, SamplerState samplerState) {
+            if (m_psSamplerStates[slot] != samplerState) {
                 Context.PixelShader.SetSampler(slot, GetDxSamplerState(samplerState));
                 m_psSamplerStates[slot] = samplerState;
             }
         }
 
-        public static void ApplyShaderAndRenderTarget(RenderTarget2D renderTarget, Shader shader, VertexDeclaration vertexDeclaration)
-        {
+        public static void ApplyShaderAndRenderTarget(RenderTarget2D renderTarget, Shader shader, VertexDeclaration vertexDeclaration) {
             shader.PrepareForDrawing();
-            if (renderTarget != null)
-            {
+            if (renderTarget != null) {
                 if (renderTarget.m_colorTextureView != m_renderTargetView
-                    || renderTarget.m_depthTextureView != m_depthStencilView)
-                {
+                    || renderTarget.m_depthTextureView != m_depthStencilView) {
                     Context.OutputMerger.SetRenderTargets(renderTarget.m_depthTextureView, renderTarget.m_colorTextureView);
                     m_renderTargetView = renderTarget.m_colorTextureView;
                     m_depthStencilView = renderTarget.m_depthTextureView;
                 }
             }
             else if (ColorBufferView != m_renderTargetView
-                || DepthBufferView != m_depthStencilView)
-            {
+                || DepthBufferView != m_depthStencilView) {
                 Context.OutputMerger.SetRenderTargets(DepthBufferView, ColorBufferView);
                 m_renderTargetView = ColorBufferView;
                 m_depthStencilView = DepthBufferView;
             }
             InputLayout inputLayout;
-            if (vertexDeclaration == shader.m_lastVertexDeclaration)
-            {
+            if (vertexDeclaration == shader.m_lastVertexDeclaration) {
                 inputLayout = shader.m_lastInputLayout;
             }
-            else
-            {
-                if (!shader.m_inputLayouts.TryGetValue(vertexDeclaration, out inputLayout))
-                {
+            else {
+                if (!shader.m_inputLayouts.TryGetValue(vertexDeclaration, out inputLayout)) {
                     InputElement[] array = new InputElement[vertexDeclaration.m_elements.Length];
-                    for (int i = 0; i < array.Length; i++)
-                    {
+                    for (int i = 0; i < array.Length; i++) {
                         VertexElement vertexElement = vertexDeclaration.m_elements[i];
-                        array[i] = new InputElement
-                        {
+                        array[i] = new InputElement {
                             SemanticName = vertexElement.SemanticName,
                             AlignedByteOffset = vertexElement.Offset,
                             Format = TranslateVertexElementFormat(vertexElement.Format),
@@ -511,110 +448,95 @@ namespace Engine.Graphics
                 shader.m_lastVertexDeclaration = vertexDeclaration;
                 shader.m_lastInputLayout = inputLayout;
             }
-            if (inputLayout != m_inputLayout)
-            {
+            if (inputLayout != m_inputLayout) {
                 Context.InputAssembler.InputLayout = inputLayout;
                 m_inputLayout = inputLayout;
             }
             if (m_dataPointers == null
-                || m_dataPointers.Length < shader.m_allConstantBuffers.Length)
-            {
+                || m_dataPointers.Length < shader.m_allConstantBuffers.Length) {
                 m_dataPointers = new IntPtr[shader.m_allConstantBuffers.Length];
             }
-            for (int j = 0; j < shader.m_parameters.Length; j++)
-            {
+            for (int j = 0; j < shader.m_parameters.Length; j++) {
                 ShaderParameter shaderParameter = shader.m_parameters[j];
-                if (shaderParameter.Type == ShaderParameterType.Texture2D)
-                {
+                if (shaderParameter.Type == ShaderParameterType.Texture2D) {
                     if (shaderParameter.IsChanged
                         || shader.m_pixelShader != m_pixelShader
-                        || shader.m_vertexShader != m_vertexShader)
-                    {
+                        || shader.m_vertexShader != m_vertexShader) {
                         Texture2D texture2D = (Texture2D)shaderParameter.Resource;
-                        if (shaderParameter.VsResourceBindingSlot != -1)
-                        {
-                            Context.VertexShader.SetShaderResource(shaderParameter.VsResourceBindingSlot, (texture2D != null) ? texture2D.m_textureView : null);
+                        if (shaderParameter.VsResourceBindingSlot != -1) {
+                            Context.VertexShader.SetShaderResource(
+                                shaderParameter.VsResourceBindingSlot,
+                                texture2D != null ? texture2D.m_textureView : null
+                            );
                         }
-                        if (shaderParameter.PsResourceBindingSlot != -1)
-                        {
-                            Context.PixelShader.SetShaderResource(shaderParameter.PsResourceBindingSlot, (texture2D != null) ? texture2D.m_textureView : null);
+                        if (shaderParameter.PsResourceBindingSlot != -1) {
+                            Context.PixelShader.SetShaderResource(
+                                shaderParameter.PsResourceBindingSlot,
+                                texture2D != null ? texture2D.m_textureView : null
+                            );
                         }
                         shaderParameter.IsChanged = false;
                     }
                 }
-                else if (shaderParameter.Type == ShaderParameterType.Sampler2D)
-                {
+                else if (shaderParameter.Type == ShaderParameterType.Sampler2D) {
                     if (shaderParameter.IsChanged
                         || shader.m_pixelShader != m_pixelShader
-                        || shader.m_vertexShader != m_vertexShader)
-                    {
+                        || shader.m_vertexShader != m_vertexShader) {
                         SamplerState samplerState = (SamplerState)shaderParameter.Resource;
-                        if (samplerState != null)
-                        {
-                            if (shaderParameter.VsResourceBindingSlot != -1)
-                            {
+                        if (samplerState != null) {
+                            if (shaderParameter.VsResourceBindingSlot != -1) {
                                 ApplyVsSamplerState(shaderParameter.VsResourceBindingSlot, samplerState);
                             }
-                            if (shaderParameter.PsResourceBindingSlot != -1)
-                            {
+                            if (shaderParameter.PsResourceBindingSlot != -1) {
                                 ApplyPsSamplerState(shaderParameter.PsResourceBindingSlot, samplerState);
                             }
                         }
                         shaderParameter.IsChanged = false;
                     }
                 }
-                else if (shaderParameter.IsChanged)
-                {
+                else if (shaderParameter.IsChanged) {
                     if (shaderParameter.VsBufferIndex != -1
-                        && m_dataPointers[shaderParameter.VsBufferIndex] == IntPtr.Zero)
-                    {
+                        && m_dataPointers[shaderParameter.VsBufferIndex] == IntPtr.Zero) {
                         SharpDX.Direct3D11.Buffer buffer = shader.m_allConstantBuffers[shaderParameter.VsBufferIndex];
-                        m_dataPointers[shaderParameter.VsBufferIndex] = Context.MapSubresource(buffer, 0, MapMode.WriteDiscard, MapFlags.None).DataPointer;
+                        m_dataPointers[shaderParameter.VsBufferIndex] = Context.MapSubresource(buffer, 0, MapMode.WriteDiscard, MapFlags.None)
+                            .DataPointer;
                     }
                     if (shaderParameter.PsBufferIndex != -1
-                        && m_dataPointers[shaderParameter.PsBufferIndex] == IntPtr.Zero)
-                    {
+                        && m_dataPointers[shaderParameter.PsBufferIndex] == IntPtr.Zero) {
                         SharpDX.Direct3D11.Buffer buffer2 = shader.m_allConstantBuffers[shaderParameter.PsBufferIndex];
-                        m_dataPointers[shaderParameter.PsBufferIndex] = Context.MapSubresource(buffer2, 0, MapMode.WriteDiscard, MapFlags.None).DataPointer;
+                        m_dataPointers[shaderParameter.PsBufferIndex] = Context.MapSubresource(buffer2, 0, MapMode.WriteDiscard, MapFlags.None)
+                            .DataPointer;
                     }
                     shaderParameter.IsChanged = false;
                 }
             }
-            for (int k = 0; k < shader.m_allConstantBuffers.Length; k++)
-            {
-                if (m_dataPointers[k] != IntPtr.Zero)
-                {
+            for (int k = 0; k < shader.m_allConstantBuffers.Length; k++) {
+                if (m_dataPointers[k] != IntPtr.Zero) {
                     CopyMemory(shader.m_allConstantBuffersCpu[k], m_dataPointers[k], shader.m_allConstantBuffersSizes[k]);
                     Context.UnmapSubresource(shader.m_allConstantBuffers[k], 0);
                     m_dataPointers[k] = IntPtr.Zero;
                 }
             }
-            if (shader.m_vertexShader != m_vertexShader)
-            {
+            if (shader.m_vertexShader != m_vertexShader) {
                 Context.VertexShader.Set(shader.m_vertexShader);
                 m_vertexShader = shader.m_vertexShader;
-                if (shader.m_vertexShaderConstantBuffers.Length != 0)
-                {
+                if (shader.m_vertexShaderConstantBuffers.Length != 0) {
                     Context.VertexShader.SetConstantBuffers(0, shader.m_vertexShaderConstantBuffers);
                 }
             }
-            if (shader.m_pixelShader != m_pixelShader)
-            {
+            if (shader.m_pixelShader != m_pixelShader) {
                 Context.PixelShader.Set(shader.m_pixelShader);
                 m_pixelShader = shader.m_pixelShader;
-                if (shader.m_pixelShaderConstantBuffers.Length != 0)
-                {
+                if (shader.m_pixelShaderConstantBuffers.Length != 0) {
                     Context.PixelShader.SetConstantBuffers(0, shader.m_pixelShaderConstantBuffers);
                 }
             }
         }
 
-        public static void ApplyVertexBuffer(SharpDX.Direct3D11.Buffer vertexBuffer, int vertexStride, int vertexOffset)
-        {
+        public static void ApplyVertexBuffer(SharpDX.Direct3D11.Buffer vertexBuffer, int vertexStride, int vertexOffset) {
             if (vertexBuffer != m_vertexBuffer
                 || vertexStride != m_vertexStride
-                || vertexOffset != m_vertexOffset)
-            {
+                || vertexOffset != m_vertexOffset) {
                 Context.InputAssembler.SetVertexBuffers(0, new VertexBufferBinding(vertexBuffer, vertexStride, vertexOffset));
                 m_vertexBuffer = vertexBuffer;
                 m_vertexStride = vertexStride;
@@ -622,38 +544,31 @@ namespace Engine.Graphics
             }
         }
 
-        public static void ApplyIndexBuffer(SharpDX.Direct3D11.Buffer indexBuffer, Format format, int indexOffset)
-        {
+        public static void ApplyIndexBuffer(SharpDX.Direct3D11.Buffer indexBuffer, Format format, int indexOffset) {
             if (indexBuffer != m_indexBuffer
-                || indexOffset != m_indexOffset)
-            {
+                || indexOffset != m_indexOffset) {
                 Context.InputAssembler.SetIndexBuffer(indexBuffer, format, indexOffset);
                 m_indexBuffer = indexBuffer;
                 m_indexOffset = indexOffset;
             }
         }
 
-        public static void ApplyPrimitiveType(PrimitiveType primitiveType)
-        {
+        public static void ApplyPrimitiveType(PrimitiveType primitiveType) {
             PrimitiveTopology primitiveTopology = TranslatePrimitiveType(primitiveType);
-            if (primitiveTopology != m_primitiveTopology)
-            {
+            if (primitiveTopology != m_primitiveTopology) {
                 Context.InputAssembler.PrimitiveTopology = primitiveTopology;
                 m_primitiveTopology = primitiveTopology;
             }
         }
 
-        public static SharpDX.Direct3D11.SamplerState GetDxSamplerState(SamplerState samplerState)
-        {
-            if (!m_dxSamplerStates.TryGetValue(samplerState, out SharpDX.Direct3D11.SamplerState samplerState2))
-            {
+        public static SharpDX.Direct3D11.SamplerState GetDxSamplerState(SamplerState samplerState) {
+            if (!m_dxSamplerStates.TryGetValue(samplerState, out SharpDX.Direct3D11.SamplerState samplerState2)) {
                 SamplerStateDescription samplerStateDescription = SamplerStateDescription.Default();
                 samplerStateDescription.AddressU = TranslateTextureAddressMode(samplerState.AddressModeU);
                 samplerStateDescription.AddressV = TranslateTextureAddressMode(samplerState.AddressModeV);
                 samplerStateDescription.AddressW = SharpDX.Direct3D11.TextureAddressMode.Wrap;
                 samplerStateDescription.MaximumAnisotropy = samplerState.MaxAnisotropy;
-                if (FeatureLevel >= FeatureLevel.Level_10_0)
-                {
+                if (FeatureLevel >= FeatureLevel.Level_10_0) {
                     samplerStateDescription.MinimumLod = samplerState.MinLod;
                     samplerStateDescription.MaximumLod = samplerState.MaxLod;
                 }
@@ -667,10 +582,8 @@ namespace Engine.Graphics
             return samplerState2;
         }
 
-        public static PrimitiveTopology TranslatePrimitiveType(PrimitiveType primitiveType)
-        {
-            switch (primitiveType)
-            {
+        public static PrimitiveTopology TranslatePrimitiveType(PrimitiveType primitiveType) {
+            switch (primitiveType) {
                 case PrimitiveType.LineList: return PrimitiveTopology.LineList;
                 case PrimitiveType.LineStrip: return PrimitiveTopology.LineStrip;
                 case PrimitiveType.TriangleList: return PrimitiveTopology.TriangleList;
@@ -679,36 +592,34 @@ namespace Engine.Graphics
             }
         }
 
-        public static ShaderParameterType TranslateShaderTypeDescription(ShaderTypeDescription description)
-        {
-            return description.Type switch
-            {
+        public static ShaderParameterType TranslateShaderTypeDescription(ShaderTypeDescription description) {
+            return description.Type switch {
                 ShaderVariableType.Float when description.Class == ShaderVariableClass.Scalar => ShaderParameterType.Float,
                 ShaderVariableType.Float when description is { Class: ShaderVariableClass.Vector, ColumnCount: 2 } => ShaderParameterType.Vector2,
                 ShaderVariableType.Float when description is { Class: ShaderVariableClass.Vector, ColumnCount: 3 } => ShaderParameterType.Vector3,
                 ShaderVariableType.Float when description is { Class: ShaderVariableClass.Vector, ColumnCount: 4 } => ShaderParameterType.Vector4,
-                ShaderVariableType.Float when description is { Class: ShaderVariableClass.MatrixColumns, RowCount: 4, ColumnCount: 4 } => ShaderParameterType.Matrix,
-                _ => throw new InvalidOperationException(string.Format("Variable \"{0}\" uses unsupported shader variable type.", new object[] { description.Name }))
+                ShaderVariableType.Float when description is { Class: ShaderVariableClass.MatrixColumns, RowCount: 4, ColumnCount: 4 } =>
+                    ShaderParameterType.Matrix,
+                _ => throw new InvalidOperationException(
+                    string.Format("Variable \"{0}\" uses unsupported shader variable type.", new object[] { description.Name })
+                )
             };
         }
 
-        public static ShaderParameterType TranslateInputBindingDescription(InputBindingDescription description)
-        {
-            if (description is { Type: ShaderInputType.Texture, Dimension: ShaderResourceViewDimension.Texture2D, BindCount: 1 })
-            {
+        public static ShaderParameterType TranslateInputBindingDescription(InputBindingDescription description) {
+            if (description is { Type: ShaderInputType.Texture, Dimension: ShaderResourceViewDimension.Texture2D, BindCount: 1 }) {
                 return ShaderParameterType.Texture2D;
             }
-            if (description is { Type: ShaderInputType.Sampler, BindCount: 1 })
-            {
+            if (description is { Type: ShaderInputType.Sampler, BindCount: 1 }) {
                 return ShaderParameterType.Sampler2D;
             }
-            throw new InvalidOperationException(string.Format("Shader resource \"{0}\" uses unsupported shader resource type.", new object[] { description.Name }));
+            throw new InvalidOperationException(
+                string.Format("Shader resource \"{0}\" uses unsupported shader resource type.", new object[] { description.Name })
+            );
         }
 
-        public static Format TranslateVertexElementFormat(VertexElementFormat vertexElementFormat)
-        {
-            switch (vertexElementFormat)
-            {
+        public static Format TranslateVertexElementFormat(VertexElementFormat vertexElementFormat) {
+            switch (vertexElementFormat) {
                 case VertexElementFormat.Single: return Format.R32_Float;
                 case VertexElementFormat.Vector2: return Format.R32G32_Float;
                 case VertexElementFormat.Vector3: return Format.R32G32B32_Float;
@@ -723,23 +634,18 @@ namespace Engine.Graphics
             }
         }
 
-        public static Format TranslateIndexFormat(IndexFormat indexFormat)
-        {
-            if (indexFormat == IndexFormat.SixteenBits)
-            {
+        public static Format TranslateIndexFormat(IndexFormat indexFormat) {
+            if (indexFormat == IndexFormat.SixteenBits) {
                 return Format.R16_UInt;
             }
-            if (indexFormat != IndexFormat.ThirtyTwoBits)
-            {
+            if (indexFormat != IndexFormat.ThirtyTwoBits) {
                 throw new InvalidOperationException("Unsupported IndexFormat.");
             }
             return Format.R32_UInt;
         }
 
-        public static Format TranslateColorFormat(ColorFormat colorFormat)
-        {
-            switch (colorFormat)
-            {
+        public static Format TranslateColorFormat(ColorFormat colorFormat) {
+            switch (colorFormat) {
                 case ColorFormat.Rgba8888: return Format.R8G8B8A8_UNorm;
                 case ColorFormat.Rgba5551: return Format.B5G5R5A1_UNorm;
                 case ColorFormat.Rgb565: return Format.B5G6R5_UNorm;
@@ -751,23 +657,18 @@ namespace Engine.Graphics
             }
         }
 
-        public static Format TranslateDepthFormat(DepthFormat depthFormat)
-        {
-            if (depthFormat == DepthFormat.Depth16)
-            {
+        public static Format TranslateDepthFormat(DepthFormat depthFormat) {
+            if (depthFormat == DepthFormat.Depth16) {
                 return Format.D16_UNorm;
             }
-            if (depthFormat != DepthFormat.Depth24Stencil8)
-            {
+            if (depthFormat != DepthFormat.Depth24Stencil8) {
                 throw new InvalidOperationException("Unsupported DepthFormat.");
             }
             return Format.D24_UNorm_S8_UInt;
         }
 
-        public static BlendOperation TranslateBlendFunction(BlendFunction blendFunction)
-        {
-            switch (blendFunction)
-            {
+        public static BlendOperation TranslateBlendFunction(BlendFunction blendFunction) {
+            switch (blendFunction) {
                 case BlendFunction.Add: return BlendOperation.Add;
                 case BlendFunction.Subtract: return BlendOperation.Subtract;
                 case BlendFunction.ReverseSubtract: return BlendOperation.ReverseSubtract;
@@ -775,10 +676,8 @@ namespace Engine.Graphics
             }
         }
 
-        public static BlendOption TranslateBlend(Blend blend)
-        {
-            switch (blend)
-            {
+        public static BlendOption TranslateBlend(Blend blend) {
+            switch (blend) {
                 case Blend.Zero: return BlendOption.Zero;
                 case Blend.One: return BlendOption.One;
                 case Blend.SourceColor: return BlendOption.SourceColor;
@@ -796,10 +695,8 @@ namespace Engine.Graphics
             }
         }
 
-        public static SharpDX.Direct3D11.TextureAddressMode TranslateTextureAddressMode(TextureAddressMode textureAddressMode)
-        {
-            switch (textureAddressMode)
-            {
+        public static SharpDX.Direct3D11.TextureAddressMode TranslateTextureAddressMode(TextureAddressMode textureAddressMode) {
+            switch (textureAddressMode) {
                 case TextureAddressMode.Clamp: return SharpDX.Direct3D11.TextureAddressMode.Clamp;
                 case TextureAddressMode.Wrap: return SharpDX.Direct3D11.TextureAddressMode.Wrap;
                 case TextureAddressMode.MirrorWrap: return SharpDX.Direct3D11.TextureAddressMode.Mirror;
@@ -807,10 +704,8 @@ namespace Engine.Graphics
             }
         }
 
-        public static Filter TranslateTextureFilterMode(TextureFilterMode textureFilterMode)
-        {
-            switch (textureFilterMode)
-            {
+        public static Filter TranslateTextureFilterMode(TextureFilterMode textureFilterMode) {
+            switch (textureFilterMode) {
                 case TextureFilterMode.Point: return Filter.MinMagMipPoint;
                 case TextureFilterMode.Linear: return Filter.MinMagMipLinear;
                 case TextureFilterMode.Anisotropic: return Filter.Anisotropic;
@@ -824,10 +719,8 @@ namespace Engine.Graphics
             }
         }
 
-        public static Comparison TranslateCompareFunction(CompareFunction compareFunction)
-        {
-            switch (compareFunction)
-            {
+        public static Comparison TranslateCompareFunction(CompareFunction compareFunction) {
+            switch (compareFunction) {
                 case CompareFunction.Always: return Comparison.Always;
                 case CompareFunction.Never: return Comparison.Never;
                 case CompareFunction.Less: return Comparison.Less;
@@ -840,16 +733,13 @@ namespace Engine.Graphics
             }
         }
 
-        public static void CreateBufferViews()
-        {
+        public static void CreateBufferViews() {
             Point2 point;
-            using (SharpDX.Direct3D11.Texture2D backBuffer = SwapChain.GetBackBuffer<SharpDX.Direct3D11.Texture2D>(0))
-            {
+            using (SharpDX.Direct3D11.Texture2D backBuffer = SwapChain.GetBackBuffer<SharpDX.Direct3D11.Texture2D>(0)) {
                 ColorBufferView = new RenderTargetView(Device, backBuffer);
                 point = new Point2(backBuffer.Description.Width, backBuffer.Description.Height);
             }
-            Texture2DDescription texture2DDescription = new()
-            {
+            Texture2DDescription texture2DDescription = new() {
                 ArraySize = 1,
                 BindFlags = BindFlags.DepthStencil,
                 CpuAccessFlags = CpuAccessFlags.None,
@@ -861,25 +751,21 @@ namespace Engine.Graphics
                 Width = point.X,
                 Height = point.Y
             };
-            using (SharpDX.Direct3D11.Texture2D texture2D = new(Device, texture2DDescription))
-            {
+            using (SharpDX.Direct3D11.Texture2D texture2D = new(Device, texture2DDescription)) {
                 DepthBufferView = new DepthStencilView(Device, texture2D);
             }
         }
 
-        public static void DisposeBufferViews()
-        {
+        public static void DisposeBufferViews() {
             Utilities.Dispose(ref ColorBufferView);
             Utilities.Dispose(ref DepthBufferView);
         }
 
-        public static unsafe void CopyMemory(IntPtr source, IntPtr destination, int count)
-        {
+        public static unsafe void CopyMemory(IntPtr source, IntPtr destination, int count) {
             int* ptr = (int*)source.ToPointer();
-            int* ptr2 = (int*)((byte*)source.ToPointer() + ((IntPtr)(count / 4) * 4));
+            int* ptr2 = (int*)((byte*)source.ToPointer() + (IntPtr)(count / 4) * 4);
             int* ptr3 = (int*)destination.ToPointer();
-            while (ptr < ptr2)
-            {
+            while (ptr < ptr2) {
                 *ptr3 = *ptr;
                 ptr++;
                 ptr3++;
@@ -887,18 +773,15 @@ namespace Engine.Graphics
             byte* ptr4 = (byte*)ptr;
             byte* ptr5 = (byte*)source.ToPointer() + count;
             byte* ptr6 = (byte*)ptr3;
-            while (ptr4 < ptr5)
-            {
+            while (ptr4 < ptr5) {
                 *ptr6 = *ptr4;
                 ptr4++;
                 ptr6++;
             }
         }
 
-        public static void HandleDeviceLost()
-        {
-            try
-            {
+        public static void HandleDeviceLost() {
+            try {
                 Log.Information("Device lost");
                 Display.HandleDeviceLost();
                 DisposeDevice();
@@ -908,8 +791,7 @@ namespace Engine.Graphics
                 Display.HandleDeviceReset();
                 Log.Information("Device reset");
             }
-            catch (Exception ex)
-            {
+            catch (Exception ex) {
                 Log.Error("Failed to recreate graphics device. Reason: {0}", ex.Message);
             }
         }

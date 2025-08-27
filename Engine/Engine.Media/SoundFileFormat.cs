@@ -1,10 +1,8 @@
-namespace Engine.Media
-{
-	public enum SoundFileFormat
-	{
-		Wav,
-		Ogg,
-		Flac,
-		Mp3
-	}
+namespace Engine.Media {
+    public enum SoundFileFormat {
+        Wav,
+        Ogg,
+        Flac,
+        Mp3
+    }
 }

@@ -4,103 +4,75 @@ using SharpDX.Direct3D11;
 using SharpDX.DXGI;
 #else
 using Silk.NET.OpenGLES;
-#endif
 using System.Runtime.InteropServices;
+#endif
 
-namespace Engine.Graphics
-{
-    public static class Display
-    {
-        private static RenderTarget2D m_renderTarget;
+namespace Engine.Graphics {
+    public static class Display {
+        static RenderTarget2D m_renderTarget;
 
-        private static RasterizerState m_rasterizerState = RasterizerState.CullCounterClockwise;
+        static RasterizerState m_rasterizerState = RasterizerState.CullCounterClockwise;
 
-        private static DepthStencilState m_depthStencilState = DepthStencilState.Default;
+        static DepthStencilState m_depthStencilState = DepthStencilState.Default;
 
-        private static BlendState m_blendState = BlendState.Opaque;
+        static BlendState m_blendState = BlendState.Opaque;
 
-        private static bool m_useReducedZRange;
+        static bool m_useReducedZRange;
 
-        public static Point2 BackbufferSize
-        {
-            get;
-            private set;
-        }
+        public static Point2 BackbufferSize { get; private set; }
 
-        public static Viewport Viewport
-        {
-            get;
-            set;
-        }
+        public static Viewport Viewport { get; set; }
 
-        public static Rectangle ScissorRectangle
-        {
-            get;
-            set;
-        }
+        public static Rectangle ScissorRectangle { get; set; }
 
-        public static RasterizerState RasterizerState
-        {
+        public static RasterizerState RasterizerState {
             get => m_rasterizerState;
-            set
-            {
+            set {
                 ArgumentNullException.ThrowIfNull(value);
                 m_rasterizerState = value;
                 value.IsLocked = true;
             }
         }
 
-        public static DepthStencilState DepthStencilState
-        {
+        public static DepthStencilState DepthStencilState {
             get => m_depthStencilState;
-            set
-            {
+            set {
                 ArgumentNullException.ThrowIfNull(value);
                 m_depthStencilState = value;
                 value.IsLocked = true;
             }
         }
 
-        public static BlendState BlendState
-        {
+        public static BlendState BlendState {
             get => m_blendState;
-            set
-            {
+            set {
                 ArgumentNullException.ThrowIfNull(value);
                 m_blendState = value;
                 value.IsLocked = true;
             }
         }
 
-        public static RenderTarget2D RenderTarget
-        {
+        public static RenderTarget2D RenderTarget {
             get => m_renderTarget;
-            set
-            {
+            set {
                 m_renderTarget = value;
-                if (value != null)
-                {
+                if (value != null) {
                     Viewport = new Viewport(0, 0, value.Width, value.Height);
                     ScissorRectangle = new Rectangle(0, 0, value.Width, value.Height);
                 }
-                else
-                {
+                else {
                     Viewport = new Viewport(0, 0, BackbufferSize.X, BackbufferSize.Y);
                     ScissorRectangle = new Rectangle(0, 0, BackbufferSize.X, BackbufferSize.Y);
                 }
             }
         }
-        
-                        public static bool UseReducedZRange
-        {
+
+        public static bool UseReducedZRange {
             get => m_useReducedZRange;
-            set
-            {
-                if (value != m_useReducedZRange)
-                {
+            set {
+                if (value != m_useReducedZRange) {
                     m_useReducedZRange = value;
-                    foreach (GraphicsResource resource in GraphicsResource.m_resources)
-                    {
+                    foreach (GraphicsResource resource in GraphicsResource.m_resources) {
                         (resource as Shader)?.CompileShaders();
                     }
                 }
@@ -113,11 +85,15 @@ namespace Engine.Graphics
 
         public static event Action DeviceReset;
 
-        public static void DrawUser<T>(PrimitiveType primitiveType, Shader shader, VertexDeclaration vertexDeclaration, T[] vertexData, int startVertex, int verticesCount) where T : struct
-        {
+        public static void DrawUser<T>(PrimitiveType primitiveType,
+            Shader shader,
+            VertexDeclaration vertexDeclaration,
+            T[] vertexData,
+            int startVertex,
+            int verticesCount) where T : struct {
             VerifyParametersDrawUser(primitiveType, shader, vertexDeclaration, vertexData, startVertex, verticesCount);
 #if DIRECT3D11
-            int num = DXWrapper.AppendUserVertices<T>(vertexData, vertexDeclaration.VertexStride, startVertex, verticesCount);
+            int num = DXWrapper.AppendUserVertices(vertexData, vertexDeclaration.VertexStride, startVertex, verticesCount);
             DXWrapper.ApplyViewportScissor(Viewport, ScissorRectangle);
             DXWrapper.ApplyRasterizerState(RasterizerState);
             DXWrapper.ApplyDepthStencilState(DepthStencilState);
@@ -129,26 +105,47 @@ namespace Engine.Graphics
             DXWrapper.Context.Draw(verticesCount, 0);
 #else
             GCHandle gCHandle = GCHandle.Alloc(vertexData, GCHandleType.Pinned);
-            try
-            {
+            try {
                 GLWrapper.ApplyRenderTarget(RenderTarget);
                 GLWrapper.ApplyViewportScissor(Viewport, ScissorRectangle, RasterizerState.ScissorTestEnable);
-                GLWrapper.ApplyShaderAndBuffers(shader, vertexDeclaration, gCHandle.AddrOfPinnedObject() + (startVertex * vertexDeclaration.VertexStride), 0, null);
+                GLWrapper.ApplyShaderAndBuffers(
+                    shader,
+                    vertexDeclaration,
+                    gCHandle.AddrOfPinnedObject() + startVertex * vertexDeclaration.VertexStride,
+                    0,
+                    null
+                );
                 GLWrapper.ApplyRasterizerState(RasterizerState);
                 GLWrapper.ApplyDepthStencilState(DepthStencilState);
                 GLWrapper.ApplyBlendState(BlendState);
                 GLWrapper.GL.DrawArrays(GLWrapper.TranslatePrimitiveType(primitiveType), startVertex, (uint)verticesCount);
             }
-            finally
-            {
+            finally {
                 gCHandle.Free();
             }
 #endif
         }
 
-        public static unsafe void DrawUserIndexed<T>(PrimitiveType primitiveType, Shader shader, VertexDeclaration vertexDeclaration, T[] vertexData, int startVertex, int verticesCount, int[] indexData, int startIndex, int indicesCount) where T : struct
-        {
-            VerifyParametersDrawUserIndexed(primitiveType, shader, vertexDeclaration, vertexData, startVertex, verticesCount, indexData, startIndex, indicesCount);
+        public static void DrawUserIndexed<T>(PrimitiveType primitiveType,
+            Shader shader,
+            VertexDeclaration vertexDeclaration,
+            T[] vertexData,
+            int startVertex,
+            int verticesCount,
+            int[] indexData,
+            int startIndex,
+            int indicesCount) where T : struct {
+            VerifyParametersDrawUserIndexed(
+                primitiveType,
+                shader,
+                vertexDeclaration,
+                vertexData,
+                startVertex,
+                verticesCount,
+                indexData,
+                startIndex,
+                indicesCount
+            );
 #if DIRECT3D11
             int num = DXWrapper.AppendUserVertices(vertexData, vertexDeclaration.VertexStride, startVertex, verticesCount);
             int num2 = DXWrapper.AppendUserIndices(indexData, 4, startIndex, indicesCount);
@@ -162,28 +159,32 @@ namespace Engine.Graphics
             DXWrapper.ApplyPrimitiveType(primitiveType);
             DXWrapper.Context.DrawIndexed(indicesCount, 0, 0);
 #else
-            GCHandle gCHandle = GCHandle.Alloc(vertexData, GCHandleType.Pinned);
-            GCHandle gCHandle2 = GCHandle.Alloc(indexData, GCHandleType.Pinned);
-            try
-            {
-                GLWrapper.ApplyRenderTarget(RenderTarget);
-                GLWrapper.ApplyViewportScissor(Viewport, ScissorRectangle, RasterizerState.ScissorTestEnable);
-                GLWrapper.ApplyShaderAndBuffers(shader, vertexDeclaration, gCHandle.AddrOfPinnedObject(), 0, 0);
-                GLWrapper.ApplyRasterizerState(RasterizerState);
-                GLWrapper.ApplyDepthStencilState(DepthStencilState);
-                GLWrapper.ApplyBlendState(BlendState);
-                GLWrapper.GL.DrawElements(GLWrapper.TranslatePrimitiveType(primitiveType), (uint)indicesCount, DrawElementsType.UnsignedInt, (gCHandle2.AddrOfPinnedObject() + (4 * startIndex)).ToPointer());
-            }
-            finally
-            {
-                gCHandle.Free();
-                gCHandle2.Free();
+            unsafe {
+                GCHandle gCHandle = GCHandle.Alloc(vertexData, GCHandleType.Pinned);
+                GCHandle gCHandle2 = GCHandle.Alloc(indexData, GCHandleType.Pinned);
+                try {
+                    GLWrapper.ApplyRenderTarget(RenderTarget);
+                    GLWrapper.ApplyViewportScissor(Viewport, ScissorRectangle, RasterizerState.ScissorTestEnable);
+                    GLWrapper.ApplyShaderAndBuffers(shader, vertexDeclaration, gCHandle.AddrOfPinnedObject(), 0, 0);
+                    GLWrapper.ApplyRasterizerState(RasterizerState);
+                    GLWrapper.ApplyDepthStencilState(DepthStencilState);
+                    GLWrapper.ApplyBlendState(BlendState);
+                    GLWrapper.GL.DrawElements(
+                        GLWrapper.TranslatePrimitiveType(primitiveType),
+                        (uint)indicesCount,
+                        DrawElementsType.UnsignedInt,
+                        (gCHandle2.AddrOfPinnedObject() + 4 * startIndex).ToPointer()
+                    );
+                }
+                finally {
+                    gCHandle.Free();
+                    gCHandle2.Free();
+                }
             }
 #endif
         }
 
-        public static void Draw(PrimitiveType primitiveType, Shader shader, VertexBuffer vertexBuffer, int startVertex, int verticesCount)
-        {
+        public static void Draw(PrimitiveType primitiveType, Shader shader, VertexBuffer vertexBuffer, int startVertex, int verticesCount) {
             VerifyParametersDraw(primitiveType, shader, vertexBuffer, startVertex, verticesCount);
 #if DIRECT3D11
             DXWrapper.ApplyViewportScissor(Viewport, ScissorRectangle);
@@ -206,8 +207,12 @@ namespace Engine.Graphics
 #endif
         }
 
-        public static unsafe void DrawIndexed(PrimitiveType primitiveType, Shader shader, VertexBuffer vertexBuffer, IndexBuffer indexBuffer, int startIndex, int indicesCount)
-        {
+        public static void DrawIndexed(PrimitiveType primitiveType,
+            Shader shader,
+            VertexBuffer vertexBuffer,
+            IndexBuffer indexBuffer,
+            int startIndex,
+            int indicesCount) {
             VerifyParametersDrawIndexed(primitiveType, shader, vertexBuffer, indexBuffer, startIndex, indicesCount);
 #if DIRECT3D11
             DXWrapper.ApplyViewportScissor(Viewport, ScissorRectangle);
@@ -220,52 +225,59 @@ namespace Engine.Graphics
             DXWrapper.ApplyPrimitiveType(primitiveType);
             DXWrapper.Context.DrawIndexed(indicesCount, startIndex, 0);
 #else
-            GLWrapper.ApplyRenderTarget(RenderTarget);
-            GLWrapper.ApplyViewportScissor(Viewport, ScissorRectangle, RasterizerState.ScissorTestEnable);
-            GLWrapper.ApplyShaderAndBuffers(shader, vertexBuffer.VertexDeclaration, IntPtr.Zero, vertexBuffer.m_buffer, indexBuffer.m_buffer);
-            GLWrapper.ApplyRasterizerState(RasterizerState);
-            GLWrapper.ApplyDepthStencilState(DepthStencilState);
-            GLWrapper.ApplyBlendState(BlendState);
-            GLWrapper.GL.DrawElements(GLWrapper.TranslatePrimitiveType(primitiveType), (uint)indicesCount, GLWrapper.TranslateIndexFormat(indexBuffer.IndexFormat), new IntPtr(startIndex * indexBuffer.IndexFormat.GetSize()).ToPointer());
+            unsafe {
+                GLWrapper.ApplyRenderTarget(RenderTarget);
+                GLWrapper.ApplyViewportScissor(Viewport, ScissorRectangle, RasterizerState.ScissorTestEnable);
+                GLWrapper.ApplyShaderAndBuffers(shader, vertexBuffer.VertexDeclaration, IntPtr.Zero, vertexBuffer.m_buffer, indexBuffer.m_buffer);
+                GLWrapper.ApplyRasterizerState(RasterizerState);
+                GLWrapper.ApplyDepthStencilState(DepthStencilState);
+                GLWrapper.ApplyBlendState(BlendState);
+                GLWrapper.GL.DrawElements(
+                    GLWrapper.TranslatePrimitiveType(primitiveType),
+                    (uint)indicesCount,
+                    GLWrapper.TranslateIndexFormat(indexBuffer.IndexFormat),
+                    new IntPtr(startIndex * indexBuffer.IndexFormat.GetSize()).ToPointer()
+                );
+            }
 #endif
         }
 
-        public static void Clear(Vector4? color, float? depth = null, int? stencil = null)
-        {
+        public static void Clear(Vector4? color, float? depth = null, int? stencil = null) {
 #if DIRECT3D11
-            if (color != null)
-            {
-                if (RenderTarget != null && RenderTarget.m_colorTextureView != null)
-                {
-                    DXWrapper.Context.ClearRenderTargetView(RenderTarget.m_colorTextureView, new Color4(color.Value.X, color.Value.Y, color.Value.Z, color.Value.W));
+            if (color != null) {
+                if (RenderTarget != null
+                    && RenderTarget.m_colorTextureView != null) {
+                    DXWrapper.Context.ClearRenderTargetView(
+                        RenderTarget.m_colorTextureView,
+                        new Color4(color.Value.X, color.Value.Y, color.Value.Z, color.Value.W)
+                    );
                 }
-                else if (DXWrapper.ColorBufferView != null)
-                {
-                    DXWrapper.Context.ClearRenderTargetView(DXWrapper.ColorBufferView, new Color4(color.Value.X, color.Value.Y, color.Value.Z, color.Value.W));
+                else if (DXWrapper.ColorBufferView != null) {
+                    DXWrapper.Context.ClearRenderTargetView(
+                        DXWrapper.ColorBufferView,
+                        new Color4(color.Value.X, color.Value.Y, color.Value.Z, color.Value.W)
+                    );
                 }
             }
-            if (depth != null || stencil != null)
-            {
+            if (depth != null
+                || stencil != null) {
                 float num = 0f;
                 byte b = 0;
-                DepthStencilClearFlags depthStencilClearFlags = (DepthStencilClearFlags)0;
-                if (depth != null)
-                {
+                DepthStencilClearFlags depthStencilClearFlags = 0;
+                if (depth != null) {
                     depthStencilClearFlags |= DepthStencilClearFlags.Depth;
                     num = depth.Value;
                 }
-                if (stencil != null)
-                {
+                if (stencil != null) {
                     depthStencilClearFlags |= DepthStencilClearFlags.Stencil;
                     b = (byte)stencil.Value;
                 }
-                if (RenderTarget != null && RenderTarget.m_depthTextureView != null)
-                {
+                if (RenderTarget != null
+                    && RenderTarget.m_depthTextureView != null) {
                     DXWrapper.Context.ClearDepthStencilView(RenderTarget.m_depthTextureView, depthStencilClearFlags, num, b);
                     return;
                 }
-                if (DXWrapper.DepthBufferView != null)
-                {
+                if (DXWrapper.DepthBufferView != null) {
                     DXWrapper.Context.ClearDepthStencilView(DXWrapper.DepthBufferView, depthStencilClearFlags, num, b);
                 }
             }
@@ -274,15 +286,13 @@ namespace Engine.Graphics
 #endif
         }
 
-        public static void ResetGLStateCache()
-        {
+        public static void ResetGLStateCache() {
 #if !DIRECT3D11
             GLWrapper.InitializeCache();
 #endif
         }
 
-        public static void Initialize()
-        {
+        public static void Initialize() {
 #if DIRECT3D11
             DXWrapper.CreateDevice();
 #else
@@ -292,23 +302,17 @@ namespace Engine.Graphics
             Resize();
         }
 
-        public static void Dispose()
-        {
+        public static void Dispose() {
 #if DIRECT3D11
             DXWrapper.DisposeDevice();
 #endif
         }
 
-        public static void BeforeFrame()
-        {
-        }
+        public static void BeforeFrame() { }
 
-        public static void AfterFrame()
-        {
-        }
+        public static void AfterFrame() { }
 
-        public static void Resize()
-        {
+        public static void Resize() {
             BackbufferSize = new Point2(Window.Size.X, Window.Size.Y);
             Viewport = new Viewport(0, 0, Window.Size.X, Window.Size.Y);
             ScissorRectangle = new Rectangle(0, 0, Window.Size.X, Window.Size.Y);
@@ -317,79 +321,101 @@ namespace Engine.Graphics
 #endif
         }
 
-        public static long GetGpuMemoryUsage()
-        {
+        public static long GetGpuMemoryUsage() {
             long num = 8 * BackbufferSize.X * BackbufferSize.Y;
-            foreach (GraphicsResource resource in GraphicsResource.m_resources)
-            {
+            foreach (GraphicsResource resource in GraphicsResource.m_resources) {
                 num += resource.GetGpuMemoryUsage();
             }
             return num;
         }
 
-        public static void Clear(Color? color, float? depth = null, int? stencil = null)
-        {
+        public static void Clear(Color? color, float? depth = null, int? stencil = null) {
             Clear(color.HasValue ? new Vector4?(new Vector4(color.Value)) : null, depth, stencil);
         }
 
-        public static void VerifyParametersDrawUser<T>(PrimitiveType primitiveType, Shader shader, VertexDeclaration vertexDeclaration, T[] vertexData, int startVertex, int verticesCount) where T : struct
-        {
+        public static void VerifyParametersDrawUser<T>(PrimitiveType primitiveType,
+            Shader shader,
+            VertexDeclaration vertexDeclaration,
+            T[] vertexData,
+            int startVertex,
+            int verticesCount) where T : struct {
             int num = Utilities.SizeOf<T>();
             ArgumentNullException.ThrowIfNull(shader);
             ArgumentNullException.ThrowIfNull(vertexDeclaration);
             ArgumentNullException.ThrowIfNull(vertexData);
-            if (vertexDeclaration.VertexStride / num * num != vertexDeclaration.VertexStride)
-            {
-                throw new InvalidOperationException($"Vertex is not an integer multiple of array element, vertex stride is {vertexDeclaration.VertexStride}, array element is {num}.");
+            if (vertexDeclaration.VertexStride / num * num != vertexDeclaration.VertexStride) {
+                throw new InvalidOperationException(
+                    $"Vertex is not an integer multiple of array element, vertex stride is {vertexDeclaration.VertexStride}, array element is {num}."
+                );
             }
-            if (startVertex < 0 || verticesCount < 0 || startVertex + verticesCount > vertexData.Length)
-            {
+            if (startVertex < 0
+                || verticesCount < 0
+                || startVertex + verticesCount > vertexData.Length) {
                 throw new ArgumentException("Vertices range is out of bounds.");
             }
             shader.VerifyNotDisposed();
         }
 
-        public static void VerifyParametersDrawUserIndexed<T>(PrimitiveType primitiveType, Shader shader, VertexDeclaration vertexDeclaration, T[] vertexData, int startVertex, int verticesCount, int[] indexData, int startIndex, int indicesCount) where T : struct
-        {
+        public static void VerifyParametersDrawUserIndexed<T>(PrimitiveType primitiveType,
+            Shader shader,
+            VertexDeclaration vertexDeclaration,
+            T[] vertexData,
+            int startVertex,
+            int verticesCount,
+            int[] indexData,
+            int startIndex,
+            int indicesCount) where T : struct {
             int num = Utilities.SizeOf<T>();
             ArgumentNullException.ThrowIfNull(shader);
             ArgumentNullException.ThrowIfNull(vertexDeclaration);
             ArgumentNullException.ThrowIfNull(vertexData);
             ArgumentNullException.ThrowIfNull(indexData);
-            if (vertexDeclaration.VertexStride / num * num != vertexDeclaration.VertexStride)
-            {
-                throw new InvalidOperationException($"Vertex is not an integer multiple of array element, vertex stride is {vertexDeclaration.VertexStride}, array element is {num}.");
+            if (vertexDeclaration.VertexStride / num * num != vertexDeclaration.VertexStride) {
+                throw new InvalidOperationException(
+                    $"Vertex is not an integer multiple of array element, vertex stride is {vertexDeclaration.VertexStride}, array element is {num}."
+                );
             }
-            if (startVertex < 0 || verticesCount < 0 || startVertex + verticesCount > vertexData.Length)
-            {
+            if (startVertex < 0
+                || verticesCount < 0
+                || startVertex + verticesCount > vertexData.Length) {
                 throw new ArgumentException("Vertices range is out of bounds.");
             }
-            if (startIndex < 0 || indicesCount < 0 || startIndex + indicesCount > indexData.Length)
-            {
+            if (startIndex < 0
+                || indicesCount < 0
+                || startIndex + indicesCount > indexData.Length) {
                 throw new ArgumentException("Indices range is out of bounds.");
             }
             shader.VerifyNotDisposed();
         }
 
-        public static void VerifyParametersDraw(PrimitiveType primitiveType, Shader shader, VertexBuffer vertexBuffer, int startVertex, int verticesCount)
-        {
+        public static void VerifyParametersDraw(PrimitiveType primitiveType,
+            Shader shader,
+            VertexBuffer vertexBuffer,
+            int startVertex,
+            int verticesCount) {
             vertexBuffer.VerifyNotDisposed();
             ArgumentNullException.ThrowIfNull(shader);
             ArgumentNullException.ThrowIfNull(vertexBuffer);
-            if (startVertex < 0 || verticesCount < 0 || startVertex + verticesCount > vertexBuffer.VerticesCount)
-            {
+            if (startVertex < 0
+                || verticesCount < 0
+                || startVertex + verticesCount > vertexBuffer.VerticesCount) {
                 throw new ArgumentException("Vertices range is out of bounds.");
             }
             shader.VerifyNotDisposed();
         }
 
-        public static void VerifyParametersDrawIndexed(PrimitiveType primitiveType, Shader shader, VertexBuffer vertexBuffer, IndexBuffer indexBuffer, int startIndex, int indicesCount)
-        {
+        public static void VerifyParametersDrawIndexed(PrimitiveType primitiveType,
+            Shader shader,
+            VertexBuffer vertexBuffer,
+            IndexBuffer indexBuffer,
+            int startIndex,
+            int indicesCount) {
             ArgumentNullException.ThrowIfNull(shader);
             ArgumentNullException.ThrowIfNull(vertexBuffer);
             ArgumentNullException.ThrowIfNull(indexBuffer);
-            if (startIndex < 0 || indicesCount < 0 || startIndex + indicesCount > indexBuffer.IndicesCount)
-            {
+            if (startIndex < 0
+                || indicesCount < 0
+                || startIndex + indicesCount > indexBuffer.IndicesCount) {
                 throw new ArgumentException("Indices range is out of bounds.");
             }
             shader.VerifyNotDisposed();
@@ -397,19 +423,15 @@ namespace Engine.Graphics
             indexBuffer.VerifyNotDisposed();
         }
 
-        public static void HandleDeviceLost()
-        {
-            foreach (GraphicsResource resource in GraphicsResource.m_resources)
-            {
+        public static void HandleDeviceLost() {
+            foreach (GraphicsResource resource in GraphicsResource.m_resources) {
                 resource.HandleDeviceLost();
             }
             DeviceLost?.Invoke();
         }
 
-        public static void HandleDeviceReset()
-        {
-            foreach (GraphicsResource resource in GraphicsResource.m_resources)
-            {
+        public static void HandleDeviceReset() {
+            foreach (GraphicsResource resource in GraphicsResource.m_resources) {
                 resource.HandleDeviceReset();
             }
             DeviceReset?.Invoke();

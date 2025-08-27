@@ -1,7 +1,5 @@
-namespace Engine.Serialization
-{
-    public enum AutoConstructMode
-    {
+namespace Engine.Serialization {
+    public enum AutoConstructMode {
         NotSet,
         No,
         Yes
