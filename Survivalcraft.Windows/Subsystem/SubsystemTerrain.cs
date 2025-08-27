@@ -388,7 +388,7 @@ namespace Game {
                 ChangeCellToBehavior(x, y, z, cellValueFast, value, movingBlock);
             }
             catch (Exception e) {
-                Log.Error("Block behavior on terrain change execute error: " + e);
+                Log.Error($"Block behavior on terrain change execute error: {e}");
             }
         }
 

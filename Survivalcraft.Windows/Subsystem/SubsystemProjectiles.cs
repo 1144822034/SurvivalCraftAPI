@@ -106,7 +106,7 @@ namespace Game {
                 return projectile;
             }
             catch (Exception ex) {
-                Log.Error("Projectile create error: " + ex);
+                Log.Error($"Projectile create error: {ex}");
                 return null;
             }
         }
@@ -119,7 +119,7 @@ namespace Game {
                 return projectile2 as T;
             }
             catch (Exception ex) {
-                Log.Error("Projectile add error: " + ex);
+                Log.Error($"Projectile add error: {ex}");
                 return null;
             }
         }
@@ -204,7 +204,7 @@ namespace Game {
                 }
                 catch (Exception e) {
                     if (projectile.LogDrawError) {
-                        Log.Error("Projectile draw error: " + e);
+                        Log.Error($"Projectile draw error: {e}");
                         projectile.LogDrawError = false;
                     }
                 }
@@ -301,7 +301,7 @@ namespace Game {
                     num++;
                 }
                 catch (Exception ex) {
-                    Log.Error("Projectile Save Error: " + ex);
+                    Log.Error($"Projectile Save Error: {ex}");
                 }
             }
         }

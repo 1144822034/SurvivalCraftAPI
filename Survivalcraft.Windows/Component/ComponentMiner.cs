@@ -699,7 +699,7 @@ namespace Game {
                 attackment.ProcessAttackment();
             }
             catch (Exception e) {
-                Log.Error("Attack execute error: " + e);
+                Log.Error($"Attack execute error: {e}");
             }
         }
 

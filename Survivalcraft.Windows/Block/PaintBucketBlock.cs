@@ -84,7 +84,7 @@ namespace Game {
                             ResultCount = 1,
                             RequiredHeatLevel = 1f,
                             Ingredients = {
-                                [0] = BlocksManager.Blocks[129].CraftingId + ":" + color.ToString(CultureInfo.InvariantCulture),
+                                [0] = $"{BlocksManager.Blocks[129].CraftingId}:{color.ToString(CultureInfo.InvariantCulture)}",
                                 [1] = additives[additive]
                             }
                         };

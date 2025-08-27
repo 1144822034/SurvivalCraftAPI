@@ -75,7 +75,7 @@ namespace Game {
                 Canvas.AddChildren(LogList);
                 AddChildren(Canvas);
             }
-            Info("Initializing Mods Manager. Api Version: " + ModsManager.APIVersionString);
+            Info($"Initializing Mods Manager. Api Version: {ModsManager.APIVersionString}");
         }
 
         public void ContentLoaded() {
@@ -128,7 +128,7 @@ namespace Game {
         }
 
         public static void Advice(string mesg) {
-            Add(LogType.Advice, "[Advice]" + mesg);
+            Add(LogType.Advice, $"[Advice]{mesg}");
         }
 
         public static void Add(LogType type, string mesg) {
@@ -213,12 +213,11 @@ namespace Game {
                                     string separator = new('-', 10); //生成10个 '-' 连一起的字符串
                                     Log.Error($"{separator}Handle assembly failed{separator}");
                                     Log.Error(
-                                        "Loaded assembly:\n"
-                                        + string.Join("\n", AppDomain.CurrentDomain.GetAssemblies().Select(x => x.FullName ?? x.GetName().FullName))
+                                        $"Loaded assembly:\n{string.Join("\n", AppDomain.CurrentDomain.GetAssemblies().Select(x => x.FullName ?? x.GetName().FullName))}"
                                     );
                                     Log.Error(separator);
-                                    Log.Error("Error assembly: " + asm.FullName);
-                                    Log.Error("Dependencies:\n" + string.Join("\n", asm.GetReferencedAssemblies().Select(x => x.FullName)));
+                                    Log.Error($"Error assembly: {asm.FullName}");
+                                    Log.Error($"Dependencies:\n{string.Join("\n", asm.GetReferencedAssemblies().Select(x => x.FullName))}");
                                     Log.Error(separator);
                                     Log.Error(e);
                                     isLoadSucceed = false;

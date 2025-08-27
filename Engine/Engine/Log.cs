@@ -28,7 +28,7 @@ namespace Engine {
                 }
             }
 #if ANDROID
-            Console.WriteLine("SCAPI[" + type + "]" + message);
+            Console.WriteLine($"SCAPI[{type}]{message}");
 #endif
         }
 
@@ -87,7 +87,7 @@ namespace Engine {
         public static void Error(string message) {
             Write(LogType.Error, message);
 #if !ANDROID
-            Window.TitleSuffix = " #" + message;
+            Window.TitleSuffix = $" #{message}";
 #endif
         }
 
@@ -96,12 +96,12 @@ namespace Engine {
         }
 
         public static void Warning(Exception e) {
-            Write(LogType.Warning, e.Message + "↓");
+            Write(LogType.Warning, $"{e.Message}↓");
             Write(LogType.Warning, e.ToString());
         }
 
         public static void Error(Exception e) {
-            Write(LogType.Error, e.Message + "↓");
+            Write(LogType.Error, $"{e.Message}↓");
             if (e is NullReferenceException e_null) {
                 Write(LogType.Error, $"NullReferenceException: {e_null.TargetSite?.DeclaringType?.Name}.{e_null.TargetSite?.Name} is null");
             }

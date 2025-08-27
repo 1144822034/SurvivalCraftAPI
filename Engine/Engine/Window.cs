@@ -290,14 +290,14 @@ namespace Engine {
             GraphicsAPI api = new(ContextAPI.OpenGLES, new APIVersion(3, 2));
 #endif
 #if ANDROID
-            Log.Information("Android.OS.Build.Display: " + Build.Display);
-            Log.Information("Android.OS.Build.Device: " + Build.Device);
-            Log.Information("Android.OS.Build.Hardware: " + Build.Hardware);
-            Log.Information("Android.OS.Build.Manufacturer: " + Build.Manufacturer);
-            Log.Information("Android.OS.Build.Model: " + Build.Model);
-            Log.Information("Android.OS.Build.Product: " + Build.Product);
-            Log.Information("Android.OS.Build.Brand: " + Build.Brand);
-            Log.Information("Android.OS.Build.VERSION.SdkInt: " + (int)Build.VERSION.SdkInt);
+            Log.Information($"Android.OS.Build.Display: {Build.Display}");
+            Log.Information($"Android.OS.Build.Device: {Build.Device}");
+            Log.Information($"Android.OS.Build.Hardware: {Build.Hardware}");
+            Log.Information($"Android.OS.Build.Manufacturer: {Build.Manufacturer}");
+            Log.Information($"Android.OS.Build.Model: {Build.Model}");
+            Log.Information($"Android.OS.Build.Product: {Build.Product}");
+            Log.Information($"Android.OS.Build.Brand: {Build.Brand}");
+            Log.Information($"Android.OS.Build.VERSION.SdkInt: {(int)Build.VERSION.SdkInt}");
             ViewOptions options = ViewOptions.Default with { API = api };
             m_view = Silk.NET.Windowing.Window.GetView(options);
             Activity.Paused += PausedHandler;
@@ -523,7 +523,7 @@ namespace Engine {
                 Mixer.Initialize();
             }
             catch (Exception ex) {
-                Log.Error("Error occupies in InitializeAll: " + ex);
+                Log.Error($"Error occupies in InitializeAll: {ex}");
             }
         }
 

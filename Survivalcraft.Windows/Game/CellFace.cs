@@ -104,7 +104,7 @@ namespace Game {
             return false;
         }
 
-        public override string ToString() => X + ", " + Y + ", " + Z + ", face " + Face;
+        public override string ToString() => $"{X}, {Y}, {Z}, face {Face}";
 
         public static bool operator ==(CellFace c1, CellFace c2) => c1.Equals(c2);
 

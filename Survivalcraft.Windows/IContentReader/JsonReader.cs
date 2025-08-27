@@ -7,7 +7,7 @@ namespace Game.IContentReader {
 
         public override object Get(ContentInfo[] contents) {
             JsonElement element = JsonDocument.Parse(new StreamReader(contents[0].Duplicate()).ReadToEnd()).RootElement;
-            return element.ValueKind == JsonValueKind.Array ? element : throw new InvalidDataException(contents[0].Filename + "is not Json array");
+            return element.ValueKind == JsonValueKind.Array ? element : throw new InvalidDataException($"{contents[0].Filename}is not Json array");
         }
     }
 
@@ -23,7 +23,7 @@ namespace Game.IContentReader {
 
         public override object Get(ContentInfo[] contents) {
             JsonElement element = JsonDocument.Parse(new StreamReader(contents[0].Duplicate()).ReadToEnd()).RootElement;
-            return element.ValueKind == JsonValueKind.Object ? element : throw new InvalidDataException(contents[0].Filename + "is not Json object");
+            return element.ValueKind == JsonValueKind.Object ? element : throw new InvalidDataException($"{contents[0].Filename}is not Json object");
         }
     }
 

@@ -22,9 +22,9 @@ namespace Game {
             int num = (int)(MathF.Log10(value) + 1f);
             int num2 = MathUtils.Max(significantDigits - num, 0);
             if (num2 > 0) {
-                return "{0:0." + new string('#', num2) + "}" + unit;
+                return $"{{0:0.{new string('#', num2)}}}{unit}";
             }
-            return "{0:0}" + unit;
+            return $"{{0:0}}{unit}";
         }
     }
 }

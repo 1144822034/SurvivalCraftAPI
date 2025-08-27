@@ -92,7 +92,7 @@ namespace Game {
             }
             ValuesDictionary value2 = valuesDictionary.GetValue<ValuesDictionary>("Slots");
             for (int j = 0; j < m_slots.Count; j++) {
-                ValuesDictionary value3 = value2.GetValue<ValuesDictionary>("Slot" + j.ToString(CultureInfo.InvariantCulture), null);
+                ValuesDictionary value3 = value2.GetValue<ValuesDictionary>($"Slot{j.ToString(CultureInfo.InvariantCulture)}", null);
                 if (value3 != null) {
                     Slot slot = m_slots[j];
                     slot.Value = value3.GetValue<int>("Contents");
@@ -108,7 +108,7 @@ namespace Game {
                 Slot slot = m_slots[i];
                 if (slot.Count > 0) {
                     ValuesDictionary valuesDictionary3 = new();
-                    valuesDictionary2.SetValue("Slot" + i.ToString(CultureInfo.InvariantCulture), valuesDictionary3);
+                    valuesDictionary2.SetValue($"Slot{i.ToString(CultureInfo.InvariantCulture)}", valuesDictionary3);
                     valuesDictionary3.SetValue("Contents", slot.Value);
                     valuesDictionary3.SetValue("Count", slot.Count);
                 }

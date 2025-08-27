@@ -74,7 +74,7 @@ namespace Game {
                 m_versionStringTrial = MarketplaceManager.IsTrialMode;
             }
             Children.Find("Buy").IsVisible = MarketplaceManager.IsTrialMode;
-            Children.Find<LabelWidget>("Version").Text = m_versionString + " -  API " + ModsManager.APIVersionString;
+            Children.Find<LabelWidget>("Version").Text = $"{m_versionString} -  API {ModsManager.APIVersionString}";
             RectangleWidget rectangleWidget = Children.Find<RectangleWidget>("Logo");
             float num = 1f + 0.02f * MathF.Sin(1.5f * (float)MathUtils.Remainder(Time.FrameStartTime, 10000.0));
             rectangleWidget.RenderTransform =

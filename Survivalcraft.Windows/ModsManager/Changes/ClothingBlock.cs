@@ -41,7 +41,7 @@ namespace Game {
                         }
                     }
                     catch (Exception ex) {
-                        Log.Error("ClothingData from class " + className + " create failed! " + ex);
+                        Log.Error($"ClothingData from class {className} create failed! {ex}");
                     }
                 }
                 if (clothingData == null) {
@@ -259,7 +259,7 @@ namespace Game {
                             RemainsValue =
                                 BlocksManager.DamageItem(Terrain.MakeBlockValue(128, 0, 0), damage4 + MathUtils.Max(block3.Durability / 4, 1)),
                             RequiredHeatLevel = 1f,
-                            Description = LanguageControl.Get("BlocksManager", "Not Dyed") + " " + LanguageControl.Get("BlocksManager", "Clothes"),
+                            Description = $"{LanguageControl.Get("BlocksManager", "Not Dyed")} {LanguageControl.Get("BlocksManager", "Clothes")}",
                             Ingredients = (string[])ingredients.Clone()
                         };
                     }

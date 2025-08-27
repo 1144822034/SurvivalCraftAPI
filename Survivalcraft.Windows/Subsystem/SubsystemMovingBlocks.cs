@@ -255,7 +255,7 @@ namespace Game {
                 }
             }
             catch (Exception e) {
-                Log.Error("Moving Blocks raycast error" + e);
+                Log.Error($"Moving Blocks raycast error{e}");
             }
             if (movingBlockSet != null) {
                 float distance = float.MaxValue;
@@ -692,7 +692,7 @@ namespace Game {
                 //m_subsystemTerrain.ChangeCell(x,y,z,value,true,movingBlock);
             }
             catch (Exception ex) {
-                Log.Error("Add terrain block when moving blocks stop error: " + ex);
+                Log.Error($"Add terrain block when moving blocks stop error: {ex}");
             }
         }
     }

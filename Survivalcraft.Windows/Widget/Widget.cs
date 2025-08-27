@@ -497,7 +497,7 @@ namespace Game {
                             array[0],
                             attribute.Name.NamespaceName != string.Empty ? attribute.Name.NamespaceName : node.Name.NamespaceName
                         );
-                        string setterName = "Set" + array[1];
+                        string setterName = $"Set{array[1]}";
                         MethodInfo methodInfo = type.GetRuntimeMethods().FirstOrDefault(mi => mi.Name == setterName && mi.IsPublic && mi.IsStatic);
                         if (!(methodInfo != null)) {
                             throw new InvalidOperationException(
@@ -758,7 +758,7 @@ namespace Game {
             if (!string.IsNullOrEmpty(namespaceName)) {
                 Uri uri = new(namespaceName);
                 if (uri.Scheme == "runtime-namespace") {
-                    return TypeCache.FindType(uri.AbsolutePath + "." + name, false, true);
+                    return TypeCache.FindType($"{uri.AbsolutePath}.{name}", false, true);
                 }
                 throw new InvalidOperationException("Unknown uri scheme when loading widget. Scheme must be runtime-namespace.");
             }

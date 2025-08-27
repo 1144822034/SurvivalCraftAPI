@@ -182,15 +182,15 @@ namespace Game {
                         LabelWidget propertyNames1Widget = m_propertyNames1Widget;
                         string keyText = LanguageControl.Get(fName, item.Key) ?? item.Key;
                         //if (String.IsNullOrEmpty(keyText)) keyText = item.Key;
-                        propertyNames1Widget.Text = propertyNames1Widget.Text + keyText + ":\n";
+                        propertyNames1Widget.Text = $"{propertyNames1Widget.Text}{keyText}:\n";
                         LabelWidget propertyValues1Widget = m_propertyValues1Widget;
-                        propertyValues1Widget.Text = propertyValues1Widget.Text + item.Value + "\n";
+                        propertyValues1Widget.Text = $"{propertyValues1Widget.Text}{item.Value}\n";
                     }
                     else {
                         LabelWidget propertyNames2Widget = m_propertyNames2Widget;
-                        propertyNames2Widget.Text = propertyNames2Widget.Text + LanguageControl.Get(fName, item.Key) + ":\n";
+                        propertyNames2Widget.Text = $"{propertyNames2Widget.Text}{LanguageControl.Get(fName, item.Key)}:\n";
                         LabelWidget propertyValues2Widget = m_propertyValues2Widget;
-                        propertyValues2Widget.Text = propertyValues2Widget.Text + item.Value + "\n";
+                        propertyValues2Widget.Text = $"{propertyValues2Widget.Text}{item.Value}\n";
                     }
                     num2++;
                 }

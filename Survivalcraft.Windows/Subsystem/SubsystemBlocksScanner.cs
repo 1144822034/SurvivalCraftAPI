@@ -69,15 +69,7 @@ namespace Game {
                                         }
                                         catch (Exception e) {
                                             Log.Error(
-                                                array[i]
-                                                + " Poll "
-                                                + BlocksManager.Blocks[num3].GetType().Name
-                                                + " "
-                                                + cellValueFast
-                                                + " at "
-                                                + $"({x},{y},{z}) "
-                                                + "\n"
-                                                + e
+                                                $"{array[i]} Poll {BlocksManager.Blocks[num3].GetType().Name} {cellValueFast} at ({x},{y},{z}) \n{e}"
                                             );
                                         }
                                     }

@@ -477,7 +477,7 @@ namespace Game {
             string text2 = m_filter is string s ? s : string.Empty;
             string text3 = m_filter is ExternalContentType ? LanguageControl.Get(GetType().Name, m_filter.ToString()) : string.Empty;
             string text4 = m_order.ToString();
-            string cacheKey = text2 + "\n" + text3 + "\n" + text4 + "\n" + text + "\n" + m_inputKey.Text;
+            string cacheKey = $"{text2}\n{text3}\n{text4}\n{text}\n{m_inputKey.Text}";
             if (string.IsNullOrEmpty(cursor)
                 && !force) {
                 m_treePanel.ScrollPosition = 0f;

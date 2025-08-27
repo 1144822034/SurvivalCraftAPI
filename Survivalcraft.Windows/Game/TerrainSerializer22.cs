@@ -138,7 +138,7 @@ namespace Game {
                 return result;
             }
             catch (Exception e) {
-                Log.Error(ExceptionManager.MakeFullErrorMessage("Error loading data for chunk (" + num + "," + num2 + ").", e));
+                Log.Error(ExceptionManager.MakeFullErrorMessage($"Error loading data for chunk ({num},{num2}).", e));
                 return result;
             }
         }
@@ -196,7 +196,7 @@ namespace Game {
                 m_stream.Flush();
             }
             catch (Exception e) {
-                Log.Error(ExceptionManager.MakeFullErrorMessage("Error writing data for chunk (" + num + "," + num2 + ").", e));
+                Log.Error(ExceptionManager.MakeFullErrorMessage($"Error writing data for chunk ({num},{num2}).", e));
             }
             _ = Time.RealTime;
         }

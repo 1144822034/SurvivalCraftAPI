@@ -202,16 +202,19 @@ namespace Game {
         }
 
         public override void MeasureOverride(Vector2 parentAvailableSize) {
-            if (!m_linesSize.HasValue) {
-                return;
-            }
             IsDrawRequired = !string.IsNullOrEmpty(Text) && Color.A != 0;
             if (TextOrientation == TextOrientation.Horizontal) {
                 UpdateLines(parentAvailableSize.X, parentAvailableSize.Y);
+                if (!m_linesSize.HasValue) {
+                    return;
+                }
                 DesiredSize = new Vector2(Size.X < 0f ? m_linesSize.Value.X : Size.X, Size.Y < 0f ? m_linesSize.Value.Y : Size.Y);
             }
             else if (TextOrientation == TextOrientation.VerticalLeft) {
                 UpdateLines(parentAvailableSize.Y, parentAvailableSize.X);
+                if (!m_linesSize.HasValue) {
+                    return;
+                }
                 DesiredSize = new Vector2(Size.X < 0f ? m_linesSize.Value.Y : Size.X, Size.Y < 0f ? m_linesSize.Value.X : Size.Y);
             }
         }

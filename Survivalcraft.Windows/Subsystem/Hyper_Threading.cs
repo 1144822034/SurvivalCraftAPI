@@ -9,7 +9,7 @@ class Hyper_Threading {
         Thread currentThread = Thread.CurrentThread;
         // 修改当前线程的优先级为最高
         currentThread.Priority = ThreadPriority.Highest;
-        Log.Debug("当前线程的优先级: " + currentThread.Priority);
+        Log.Debug($"当前线程的优先级: {currentThread.Priority}");
     }
 
     //设置进程优先级,参数为真实时优先级,否则正常优先级
@@ -28,7 +28,7 @@ class Hyper_Threading {
             }
         }
         catch (Exception ex) {
-            Log.Error("无法设置进程优先级：" + ex.Message);
+            Log.Error($"无法设置进程优先级：{ex.Message}");
         }
     }
 }

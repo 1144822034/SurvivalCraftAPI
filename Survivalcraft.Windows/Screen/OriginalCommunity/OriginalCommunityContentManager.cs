@@ -398,9 +398,9 @@ public static class OriginalCommunityContentManager {
 
     static string CalculateContentHashString(byte[] data) => Convert.ToBase64String(SHA1.HashData(data));
 
-    static string MakeFeedbackCacheKey(string address, string feedback, string userId) => address + "\n" + feedback + "\n" + userId;
+    static string MakeFeedbackCacheKey(string address, string feedback, string userId) => $"{address}\n{feedback}\n{userId}";
 
-    static string MakeContentIdString(ExternalContentType type, string name) => type + ":" + name;
+    static string MakeContentIdString(ExternalContentType type, string name) => $"{type}:{name}";
 
     static void Load() {
         try {

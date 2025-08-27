@@ -89,7 +89,7 @@ namespace GameEntitySystem {
             }
             catch (Exception e) {
                 try {
-                    Log.Error("Loading World Failed!\n" + e);
+                    Log.Error($"Loading World Failed!\n{e}");
                 }
                 catch {
                     // ignored
@@ -227,7 +227,7 @@ namespace GameEntitySystem {
                     list.Add(entity);
                     if (entitiesDatum.Id != 0) {
                         if (dictionary.ContainsKey(entitiesDatum.Id)) {
-                            Log.Warning("Multiple Entities use the same ID" + entitiesDatum.Id);
+                            Log.Warning($"Multiple Entities use the same ID{entitiesDatum.Id}");
                         }
                         dictionary[entitiesDatum.Id] = entity;
                     }

@@ -68,14 +68,12 @@ namespace Game {
             AddStat(
                 stackPanelWidget,
                 LanguageControl.Get(fName, 6),
-                LanguageControl.Get("GameMode", subsystemGameInfo.WorldSettings.GameMode.ToString())
-                + ", "
-                + LanguageControl.Get("EnvironmentBehaviorMode", subsystemGameInfo.WorldSettings.EnvironmentBehaviorMode.ToString())
+                $"{LanguageControl.Get("GameMode", subsystemGameInfo.WorldSettings.GameMode.ToString())}, {LanguageControl.Get("EnvironmentBehaviorMode", subsystemGameInfo.WorldSettings.EnvironmentBehaviorMode.ToString())}"
             );
             AddStat(
                 stackPanelWidget,
                 LanguageControl.Get(fName, 7),
-                StringsManager.GetString("TerrainGenerationMode." + subsystemGameInfo.WorldSettings.TerrainGenerationMode + ".Name")
+                StringsManager.GetString($"TerrainGenerationMode.{subsystemGameInfo.WorldSettings.TerrainGenerationMode}.Name")
             );
             string seed = subsystemGameInfo.WorldSettings.Seed;
             AddStat(stackPanelWidget, LanguageControl.Get(fName, 8), !string.IsNullOrEmpty(seed) ? seed : LanguageControl.Get(fName, 9));
@@ -94,7 +92,7 @@ namespace Game {
                 LanguageControl.Get(fName, 12),
                 WorldOptionsScreen.FormatOffset(subsystemGameInfo.WorldSettings.HumidityOffset)
             );
-            AddStat(stackPanelWidget, LanguageControl.Get(fName, 13), subsystemGameInfo.WorldSettings.BiomeSize + "x");
+            AddStat(stackPanelWidget, LanguageControl.Get(fName, 13), $"{subsystemGameInfo.WorldSettings.BiomeSize}x");
             if (subsystemGameInfo.WorldSettings.AreSeasonsChanging) {
                 AddStat(
                     stackPanelWidget,
@@ -270,7 +268,7 @@ namespace Game {
                 );
                 AddStat(stackPanelWidget, LanguageControl.Get(fName, 57), FormatDistance(playerStats.LowestAltitude));
                 AddStat(stackPanelWidget, LanguageControl.Get(fName, 58), FormatDistance(playerStats.HighestAltitude));
-                AddStat(stackPanelWidget, LanguageControl.Get(fName, 59), playerStats.DeepestDive.ToString("N1") + "m");
+                AddStat(stackPanelWidget, LanguageControl.Get(fName, 59), $"{playerStats.DeepestDive:N1}m");
                 AddStat(stackPanelWidget, LanguageControl.Get(fName, 60), playerStats.Jumps.ToString("N0"));
                 stackPanelWidget.Children.Add(
                     new LabelWidget {
@@ -281,7 +279,7 @@ namespace Game {
                         Color = white
                     }
                 );
-                AddStat(stackPanelWidget, LanguageControl.Get(fName, 62), (playerStats.TotalHealthLost * 100.0).ToString("N0") + "%");
+                AddStat(stackPanelWidget, LanguageControl.Get(fName, 62), $"{(playerStats.TotalHealthLost * 100.0):N0}%");
                 AddStat(stackPanelWidget, LanguageControl.Get(fName, 63), playerStats.FoodItemsEaten.ToString("N0") + LanguageControl.Get(fName, 64));
                 AddStat(
                     stackPanelWidget,
@@ -477,7 +475,7 @@ namespace Game {
                     HorizontalAlignment = WidgetAlignment.Center,
                     Children = {
                         new LabelWidget {
-                            Text = title + ":", HorizontalAlignment = WidgetAlignment.Far, Font = font, Color = gray, Margin = new Vector2(5f, 1f)
+                            Text = $"{title}:", HorizontalAlignment = WidgetAlignment.Far, Font = font, Color = gray, Margin = new Vector2(5f, 1f)
                         },
                         new StackPanelWidget {
                             Direction = LayoutDirection.Horizontal,

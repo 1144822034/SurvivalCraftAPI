@@ -16,7 +16,7 @@ namespace Game {
                 ComponentHealth componentHealth = bodyRaycastResult.Value.ComponentBody.Entity.FindComponent<ComponentHealth>();
                 if (componentHealth == null
                     || componentHealth.Health > 0f) {
-                    string entityTemplateName = bodyRaycastResult.Value.ComponentBody.Entity.ValuesDictionary.DatabaseObject.Name + "_Saddled";
+                    string entityTemplateName = $"{bodyRaycastResult.Value.ComponentBody.Entity.ValuesDictionary.DatabaseObject.Name}_Saddled";
                     Entity entity = DatabaseManager.CreateEntity(Project, entityTemplateName, false);
                     if (entity != null) {
                         ComponentBody componentBody = entity.FindComponent<ComponentBody>(true);

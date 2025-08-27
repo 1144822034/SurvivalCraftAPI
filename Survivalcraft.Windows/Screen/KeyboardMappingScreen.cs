@@ -6,7 +6,7 @@ namespace Game {
     public class KeyboardMappingScreen : Screen {
         public Widget KeyInfoWidget(object item) {
             XElement node = ContentManager.Get<XElement>("Widgets/KeyboardMappingItem");
-            node.SetAttributeValue("Name", "KeyboardMappingItem_" + item);
+            node.SetAttributeValue("Name", $"KeyboardMappingItem_{item}");
             ContainerWidget containerWidget = (ContainerWidget)LoadWidget(this, node, null);
             LabelWidget labelWidget = containerWidget.Children.Find<LabelWidget>("Name");
             LabelWidget labelWidget2 = containerWidget.Children.Find<LabelWidget>("BoundKey");

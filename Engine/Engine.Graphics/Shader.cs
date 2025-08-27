@@ -203,30 +203,28 @@ namespace Engine.Graphics {
                 string versionnum = versioncode.Split(new[] { ' ' })[1];
                 if (int.Parse(versionnum) >= 300
                     || versioncode.EndsWith("es")) {
-                    str += $"#version {versionnum} es" + Environment.NewLine;
+                    str += $"#version {versionnum} es{Environment.NewLine}";
                 }
                 else {
-                    str += $"#version {versionnum}" + Environment.NewLine;
+                    str += $"#version {versionnum}{Environment.NewLine}";
                 }
-                shaderCode = "//" + shaderCode;
+                shaderCode = $"//{shaderCode}";
             }
             else {
                 //[WARN] 未指定版本时，会主动加上最低的版本号
-                str += "#version 100" + Environment.NewLine;
+                str += $"#version 100{Environment.NewLine}";
             }
-            str = str + "#define GLSL" + Environment.NewLine;
+            str = $"{str}#define GLSL{Environment.NewLine}";
             if (isVertexShader) {
                 str = !Display.UseReducedZRange
-                    ? str
-                    + "#define OPENGL_POSITION_FIX gl_Position.y *= u_glymul; gl_Position.z = 2.0 * gl_Position.z - gl_Position.w;"
-                    + Environment.NewLine
-                    : str + "#define OPENGL_POSITION_FIX gl_Position.y *= u_glymul;" + Environment.NewLine;
-                str = str + "uniform float u_glymul;" + Environment.NewLine;
+                    ? $"{str}#define OPENGL_POSITION_FIX gl_Position.y *= u_glymul; gl_Position.z = 2.0 * gl_Position.z - gl_Position.w;{Environment.NewLine}"
+                    : $"{str}#define OPENGL_POSITION_FIX gl_Position.y *= u_glymul;{Environment.NewLine}";
+                str = $"{str}uniform float u_glymul;{Environment.NewLine}";
             }
             foreach (ShaderMacro shaderMacro in shaderMacros) {
-                str = str + "#define " + shaderMacro.Name + " " + shaderMacro.Value + Environment.NewLine;
+                str = $"{str}#define {shaderMacro.Name} {shaderMacro.Value}{Environment.NewLine}";
             }
-            str = str + "#line 1" + Environment.NewLine;
+            str = $"{str}#line 1{Environment.NewLine}";
             return str + shaderCode;
         }
 #endif

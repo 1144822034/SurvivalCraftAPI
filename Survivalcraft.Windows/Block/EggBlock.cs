@@ -182,7 +182,7 @@ namespace Game {
                         };
                         int data = SetEggType(SetIsLaid(0, true), eggType.EggTypeIndex);
                         int value = SetDamage(Terrain.MakeBlockValue(118, 0, data), rot);
-                        craftingRecipe.Ingredients[0] = "egg:" + Terrain.ExtractData(value).ToString(CultureInfo.InvariantCulture);
+                        craftingRecipe.Ingredients[0] = $"egg:{Terrain.ExtractData(value).ToString(CultureInfo.InvariantCulture)}";
                         craftingRecipe.Ingredients[1] = "waterbucket";
                         yield return craftingRecipe;
                         rot++;

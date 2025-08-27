@@ -353,7 +353,7 @@ namespace Game {
                 return xElement;
             }
             if (throwOnError) {
-                throw new InvalidOperationException(subsystemName + " node not found in project.");
+                throw new InvalidOperationException($"{subsystemName} node not found in project.");
             }
             return null;
         }
@@ -407,7 +407,7 @@ namespace Game {
                         );
                         string filenameInZip = Storage.CombinePaths(
                             "EmbeddedContent",
-                            Storage.GetFileNameWithoutExtension(worldInfo.WorldSettings.BlocksTextureName) + ".scbtex"
+                            $"{Storage.GetFileNameWithoutExtension(worldInfo.WorldSettings.BlocksTextureName)}.scbtex"
                         );
                         zipArchive.AddStream(filenameInZip, source2);
                     }
@@ -424,7 +424,7 @@ namespace Game {
                             );
                             string filenameInZip2 = Storage.CombinePaths(
                                 "EmbeddedContent",
-                                Storage.GetFileNameWithoutExtension(playerInfo.CharacterSkinName) + ".scskin"
+                                $"{Storage.GetFileNameWithoutExtension(playerInfo.CharacterSkinName)}.scskin"
                             );
                             zipArchive.AddStream(filenameInZip2, source3);
                         }

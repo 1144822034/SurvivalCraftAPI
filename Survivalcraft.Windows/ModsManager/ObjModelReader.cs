@@ -217,7 +217,7 @@ namespace Game {
         public static T ObjMeshesToModel<T>(Dictionary<string, ObjMesh> Meshes) where T : class {
             Type ctype = typeof(T);
             if (!ctype.IsSubclassOf(typeof(Model))) {
-                throw new Exception("不能将" + ctype.Name + "转换为Model类型");
+                throw new Exception($"不能将{ctype.Name}转换为Model类型");
             }
             object iobj = Activator.CreateInstance(ctype);
             Model Model = iobj as Model;

@@ -92,7 +92,7 @@ namespace Game {
             if (obj is long v1) {
                 return v1;
             }
-            throw new Exception("错误的数据转换，不能将" + obj.GetType().Name + "转换为float");
+            throw new Exception($"错误的数据转换，不能将{obj.GetType().Name}转换为float");
         }
 
         public static JsonModel Load(Stream stream) => throw new Exception("很抱歉，JsonModel功能暂时下线");

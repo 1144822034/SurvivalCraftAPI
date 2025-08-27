@@ -97,7 +97,7 @@ namespace Game {
                     }
                 }
                 else {
-                    texture2D = ContentManager.Get<Texture2D>("Textures/Creatures/Human" + name.Substring(1).Replace(" ", ""));
+                    texture2D = ContentManager.Get<Texture2D>($"Textures/Creatures/Human{name.Substring(1).Replace(" ", "")}");
                 }
             }
             catch (Exception ex) {

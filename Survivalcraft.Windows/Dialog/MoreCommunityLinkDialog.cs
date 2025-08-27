@@ -30,12 +30,12 @@ namespace Game {
         public override void Update() {
             string text = UserManager.ActiveUser != null ? UserManager.ActiveUser.DisplayName : LanguageControl.Get(fName, "1");
             if (text.Length > 15) {
-                text = text.Substring(0, 15) + "...";
+                text = $"{text.Substring(0, 15)}...";
             }
             m_userLabel.Text = text;
             string text2 = UserManager.ActiveUser != null ? UserManager.ActiveUser.UniqueId : LanguageControl.Get(fName, "1");
             if (text2.Length > 15) {
-                text2 = text2.Substring(0, 15) + "...";
+                text2 = $"{text2.Substring(0, 15)}...";
             }
             m_userIdLabel.Text = text2;
             m_publishButton.IsEnabled = UserManager.ActiveUser != null;

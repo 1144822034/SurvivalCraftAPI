@@ -30,7 +30,7 @@ namespace Engine.Audio {
             string fullPath = Path.GetDirectoryName(
                 RunPath.GetExecutablePath() == "" ? RunPath.GetEntryPath() : RunPath.GetExecutablePath()
             ); //路径备选方案
-            Environment.SetEnvironmentVariable("PATH", fullPath + ";" + RunPath.GetEnvironmentPath(), EnvironmentVariableTarget.Process);
+            Environment.SetEnvironmentVariable("PATH", $"{fullPath};{RunPath.GetEnvironmentPath()}", EnvironmentVariableTarget.Process);
 #endif
             m_audioContext = ALContext.GetApi();
             AL = AL.GetApi();
@@ -87,7 +87,7 @@ namespace Engine.Audio {
         public static AudioError CheckALError() {
             AudioError error = AL.GetError();
             if (error != AudioError.NoError) {
-                Log.Error("OPENAL ERROR: " + error);
+                Log.Error($"OPENAL ERROR: {error}");
             }
             return error;
         }
@@ -101,14 +101,14 @@ namespace Engine.Audio {
             try {
                 AudioError error = AL.GetError();
                 if (error != AudioError.NoError) {
-                    Log.Error("OPENAL ERROR: " + error);
+                    Log.Error($"OPENAL ERROR: {error}");
                     //throw new InvalidOperationException(AL.GetErrorString(error));
                     return true;
                 }
                 return false;
             }
             catch (Exception e) {
-                Log.Error("Unable to load OPENAL: " + e);
+                Log.Error($"Unable to load OPENAL: {e}");
                 return true;
             }
         }

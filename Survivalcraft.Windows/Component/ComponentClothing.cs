@@ -210,7 +210,7 @@ namespace Game {
                         );
                     }
                     catch (Exception e) {
-                        Log.Error("ClothingData of clothing" + clothingData.DisplayName + " applies armor protection error: " + e);
+                        Log.Error($"ClothingData of clothing{clothingData.DisplayName} applies armor protection error: {e}");
                     }
                 }
                 //移除护甲结算后，破损衣物

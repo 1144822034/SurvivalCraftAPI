@@ -102,14 +102,14 @@ namespace Game {
                     stream?.Invoke(ms);
                 }
                 catch (Exception e) {
-                    LoadingScreen.Error($"[{modInfo.Name}] Get file [{filename}] failed: " + e);
+                    LoadingScreen.Error($"[{modInfo.Name}] Get file [{filename}] failed: {e}");
                 }
                 return false;
             }
             return true;
         }
 
-        public virtual bool GetAssetsFile(string filename, Action<Stream> stream) => GetFile("Assets/" + filename, stream);
+        public virtual bool GetAssetsFile(string filename, Action<Stream> stream) => GetFile($"Assets/{filename}", stream);
 
         /// <summary>
         ///     初始化语言包

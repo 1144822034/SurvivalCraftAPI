@@ -90,7 +90,7 @@ namespace Game {
                 null,
                 new CancellableProgress(),
                 data => { UpdateResult = JsonDocument.Parse(data); },
-                ex => { Log.Warning("Failed processing Update check. Reason: " + ex.Message); }
+                ex => { Log.Warning($"Failed processing Update check. Reason: {ex.Message}"); }
             );
         }
 
@@ -109,10 +109,10 @@ namespace Game {
                         Log.Information("Downloaded MOTD");
                     }
                     catch (Exception ex) {
-                        Log.Warning("Failed processing MOTD string. Reason: " + ex.Message);
+                        Log.Warning($"Failed processing MOTD string. Reason: {ex.Message}");
                     }
                 },
-                delegate(Exception error) { Log.Warning("Failed downloading MOTD. Reason: " + error.Message); }
+                delegate(Exception error) { Log.Warning($"Failed downloading MOTD. Reason: {error.Message}"); }
             );
         }
 
@@ -191,7 +191,7 @@ namespace Game {
                 return message;
             }
             catch (Exception ex) {
-                Log.Warning("Failed extracting MOTD string. Reason: " + ex.Message);
+                Log.Warning($"Failed extracting MOTD string. Reason: {ex.Message}");
             }
             return null;
         }
@@ -233,7 +233,7 @@ namespace Game {
                     m_bulletin = new Bulletin {
                         Title = title.Value,
                         EnTitle = enTitle.Value,
-                        Time = languageType + "$" + time.Value,
+                        Time = $"{languageType}${time.Value}",
                         Content = content.Value,
                         EnContent = enContent.Value
                     };
@@ -346,7 +346,7 @@ namespace Game {
                                                     string languageType = !ModsManager.Configs.TryGetValue("Language", out string value)
                                                         ? "zh-CN"
                                                         : value;
-                                                    m_bulletin.Time = languageType + "$" + DateTime.Now;
+                                                    m_bulletin.Time = $"{languageType}${DateTime.Now}";
                                                 }
                                             },
                                             delegate(TextBoxWidget textBox) { textBox.Text = textBox.Text.Replace("\n", "[n]"); }
@@ -410,7 +410,7 @@ namespace Game {
                             },
                             delegate(Exception e) {
                                 DialogsManager.HideDialog(busyDialog);
-                                Log.Warning("SaveBulletin:" + e.Message);
+                                Log.Warning($"SaveBulletin:{e.Message}");
                             }
                         );
                     }
@@ -422,7 +422,7 @@ namespace Game {
                 CanShowBulletin = false;
             }
             catch (Exception ex) {
-                Log.Warning("Failed ShowBulletin. Reason: " + ex.Message);
+                Log.Warning($"Failed ShowBulletin. Reason: {ex.Message}");
             }
         }
 

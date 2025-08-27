@@ -574,12 +574,12 @@ namespace Game {
                         value = "";
                         value2 = MakeClothingValue(37, 2);
                         value3 = MakeClothingValue(16, 14);
-                        value4 = MakeClothingValue(26, 6) + ";" + MakeClothingValue(27, 0);
+                        value4 = $"{MakeClothingValue(26, 6)};{MakeClothingValue(27, 0)}";
                     }
                     else if (CharacterSkinsManager.IsBuiltIn(CharacterSkinName)
                         && CharacterSkinName.Contains("3")) {
                         value = MakeClothingValue(31, 0);
-                        value2 = MakeClothingValue(13, 7) + ";" + MakeClothingValue(5, 0);
+                        value2 = $"{MakeClothingValue(13, 7)};{MakeClothingValue(5, 0)}";
                         value3 = MakeClothingValue(17, 15);
                         value4 = MakeClothingValue(29, 0);
                     }
@@ -588,41 +588,41 @@ namespace Game {
                         value = MakeClothingValue(30, 7);
                         value2 = MakeClothingValue(14, 6);
                         value3 = MakeClothingValue(25, 7);
-                        value4 = MakeClothingValue(26, 6) + ";" + MakeClothingValue(8, 0);
+                        value4 = $"{MakeClothingValue(26, 6)};{MakeClothingValue(8, 0)}";
                     }
                     else {
                         value = MakeClothingValue(30, 12);
-                        value2 = MakeClothingValue(37, 3) + ";" + MakeClothingValue(1, 3);
+                        value2 = $"{MakeClothingValue(37, 3)};{MakeClothingValue(1, 3)}";
                         value3 = MakeClothingValue(0, 12);
-                        value4 = MakeClothingValue(26, 6) + ";" + MakeClothingValue(29, 0);
+                        value4 = $"{MakeClothingValue(26, 6)};{MakeClothingValue(29, 0)}";
                     }
                 }
                 else if (CharacterSkinsManager.IsBuiltIn(CharacterSkinName)
                     && CharacterSkinName.Contains("2")) {
                     value = "";
-                    value2 = MakeClothingValue(13, 0) + ";" + MakeClothingValue(5, 0);
+                    value2 = $"{MakeClothingValue(13, 0)};{MakeClothingValue(5, 0)}";
                     value3 = MakeClothingValue(25, 8);
-                    value4 = MakeClothingValue(26, 6) + ";" + MakeClothingValue(29, 0);
+                    value4 = $"{MakeClothingValue(26, 6)};{MakeClothingValue(29, 0)}";
                 }
                 else if (CharacterSkinsManager.IsBuiltIn(CharacterSkinName)
                     && CharacterSkinName.Contains("3")) {
                     value = MakeClothingValue(32, 0);
                     value2 = MakeClothingValue(37, 5);
                     value3 = MakeClothingValue(0, 15);
-                    value4 = MakeClothingValue(26, 6) + ";" + MakeClothingValue(8, 0);
+                    value4 = $"{MakeClothingValue(26, 6)};{MakeClothingValue(8, 0)}";
                 }
                 else if (CharacterSkinsManager.IsBuiltIn(CharacterSkinName)
                     && CharacterSkinName.Contains("4")) {
                     value = MakeClothingValue(31, 0);
                     value2 = MakeClothingValue(15, 14);
                     value3 = MakeClothingValue(0, 0);
-                    value4 = MakeClothingValue(26, 6) + ";" + MakeClothingValue(8, 0);
+                    value4 = $"{MakeClothingValue(26, 6)};{MakeClothingValue(8, 0)}";
                 }
                 else {
                     value = MakeClothingValue(32, 0);
-                    value2 = MakeClothingValue(37, 0) + ";" + MakeClothingValue(1, 9);
+                    value2 = $"{MakeClothingValue(37, 0)};{MakeClothingValue(1, 9)}";
                     value3 = MakeClothingValue(0, 12);
-                    value4 = MakeClothingValue(26, 6) + ";" + MakeClothingValue(29, 0);
+                    value4 = $"{MakeClothingValue(26, 6)};{MakeClothingValue(29, 0)}";
                 }
                 value5 = m_subsystemGameInfo.WorldSettings.GameMode <= GameMode.Survival ? 1 : 0;
             }

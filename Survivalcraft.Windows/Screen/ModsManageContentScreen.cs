@@ -196,7 +196,7 @@ public class ModsManageContentScreen : Screen {
                             null,
                             new MessageDialog(
                                 LanguageControl.Get(fName, 4),
-                                LanguageControl.Get(fName, 5) + "\n" + modItem.ExternalContentEntry.Path,
+                                $"{LanguageControl.Get(fName, 5)}\n{modItem.ExternalContentEntry.Path}",
                                 LanguageControl.Ok,
                                 null,
                                 null
@@ -210,13 +210,8 @@ public class ModsManageContentScreen : Screen {
                         string modDescription;
                         if (modItem.ModInfo != null) {
                             title = modItem.ModInfo.Name;
-                            modDescription = LanguageControl.Get(fName, 6)
-                                + modItem.ModInfo.Description
-                                + "\n"
-                                + LanguageControl.Get(fName, 7)
-                                + modItem.ModInfo.PackageName
-                                + "，"
-                                + LanguageControl.Get(fName, 8);
+                            modDescription =
+                                $"{LanguageControl.Get(fName, 6)}{modItem.ModInfo.Description}\n{LanguageControl.Get(fName, 7)}{modItem.ModInfo.PackageName}，{LanguageControl.Get(fName, 8)}";
                         }
                         else {
                             title = LanguageControl.Get(fName, 8);
@@ -242,11 +237,8 @@ public class ModsManageContentScreen : Screen {
                         if (modItem.ModInfo == null) {
                             return;
                         }
-                        string modDescription = LanguageControl.Get(fName, 6)
-                            + modItem.ModInfo.Description
-                            + "\n"
-                            + LanguageControl.Get(fName, 7)
-                            + modItem.ModInfo.PackageName;
+                        string modDescription =
+                            $"{LanguageControl.Get(fName, 6)}{modItem.ModInfo.Description}\n{LanguageControl.Get(fName, 7)}{modItem.ModInfo.PackageName}";
                         DialogsManager.ShowDialog(
                             null,
                             new MessageDialog(
@@ -300,15 +292,15 @@ public class ModsManageContentScreen : Screen {
             m_firstEnterScreen = true;
             string explanation = "";
             if (m_androidSystem && !m_androidDataPathEnterEnabled) {
-                explanation += LanguageControl.Get(fName, 46) + "\n\n";
+                explanation += $"{LanguageControl.Get(fName, 46)}\n\n";
             }
             explanation += LanguageControl.Get(fName, 47);
             if (m_commonPathList.Count > 0) {
-                explanation += "\n\n" + LanguageControl.Get(fName, 48);
+                explanation += $"\n\n{LanguageControl.Get(fName, 48)}";
                 for (int i = 0; i < m_commonPathList.Count; i++) {
-                    explanation += "\n" + (i + 1) + ". " + m_commonPathList[i];
+                    explanation += $"\n{(i + 1)}. {m_commonPathList[i]}";
                 }
-                explanation += "\n\n" + LanguageControl.Get(fName, 12);
+                explanation += $"\n\n{LanguageControl.Get(fName, 12)}";
             }
             DialogsManager.ShowDialog(
                 null,
@@ -414,13 +406,8 @@ public class ModsManageContentScreen : Screen {
                 if (m_filter == StateFilter.InstallState) {
                     string modDescription;
                     if (modItem.ModInfo != null) {
-                        modDescription = LanguageControl.Get(fName, 6)
-                            + modItem.ModInfo.Description
-                            + "\n"
-                            + LanguageControl.Get(fName, 7)
-                            + modItem.ModInfo.PackageName
-                            + "，"
-                            + LanguageControl.Get(fName, 8);
+                        modDescription =
+                            $"{LanguageControl.Get(fName, 6)}{modItem.ModInfo.Description}\n{LanguageControl.Get(fName, 7)}{modItem.ModInfo.PackageName}，{LanguageControl.Get(fName, 8)}";
                     }
                     else {
                         modDescription = LanguageControl.Get(fName, 70);
@@ -605,24 +592,28 @@ public class ModsManageContentScreen : Screen {
                                 string systemPath = Storage.GetSystemPath(m_path);
                                 systemPath = systemPath.Replace("\\", "/");
                                 int index = systemPath.IndexOf('/');
-                                scanPath = "system:" + systemPath.Substring(0, index) + "/";
+                                scanPath = $"system:{systemPath.Substring(0, index)}/";
                             }
                             int allCount = ScanModFile(scanPath, m_cancellableBusyDialog);
                             DialogsManager.HideDialog(m_cancellableBusyDialog);
                             m_cancellableBusyDialog = null;
                             if (allCount == 0) {
-                                string tips = LanguageControl.Get(fName, 33);
+                                StringBuilder tips = new();
+                                tips.Append(LanguageControl.Get(fName, 33));
                                 if (m_scanFailPaths.Count > 0) {
-                                    tips += "\n\n" + LanguageControl.Get(fName, 58) + "\n";
+                                    tips.Append("\n\n");
+                                    tips.Append(LanguageControl.Get(fName, 58));
+                                    tips.Append('\n');
                                     foreach (string p in m_scanFailPaths) {
-                                        tips += p + "\n";
+                                        tips.Append(p);
+                                        tips.Append('\n');
                                     }
                                 }
                                 DialogsManager.ShowDialog(
                                     null,
                                     new MessageDialog(
                                         LanguageControl.Get(fName, 4),
-                                        tips,
+                                        tips.ToString(),
                                         LanguageControl.Get(fName, 34),
                                         LanguageControl.Get(fName, 10),
                                         delegate(MessageDialogButton result) {
@@ -634,11 +625,15 @@ public class ModsManageContentScreen : Screen {
                                 );
                             }
                             else {
-                                string tips = string.Format(LanguageControl.Get(fName, 35), allCount);
+                                StringBuilder tips = new();
+                                tips.Append(string.Format(LanguageControl.Get(fName, 35), allCount));
                                 if (m_scanFailPaths.Count > 0) {
-                                    tips += "\n\n" + LanguageControl.Get(fName, 58) + "\n";
+                                    tips.Append("\n\n");
+                                    tips.Append(LanguageControl.Get(fName, 58));
+                                    tips.Append('\n');
                                     foreach (string p in m_scanFailPaths) {
-                                        tips += p + "\n";
+                                        tips.Append(p);
+                                        tips.Append('\n');
                                     }
                                 }
                                 if (ScreensManager.CurrentScreen == this) {
@@ -646,7 +641,7 @@ public class ModsManageContentScreen : Screen {
                                         null,
                                         new MessageDialog(
                                             LanguageControl.Get(fName, 28),
-                                            tips,
+                                            tips.ToString(),
                                             LanguageControl.Get(fName, 30),
                                             null,
                                             delegate {
@@ -659,7 +654,7 @@ public class ModsManageContentScreen : Screen {
                                 else {
                                     DialogsManager.ShowDialog(
                                         null,
-                                        new MessageDialog(LanguageControl.Get(fName, 28), tips, LanguageControl.Ok, null, null)
+                                        new MessageDialog(LanguageControl.Get(fName, 28), tips.ToString(), LanguageControl.Ok, null, null)
                                     );
                                 }
                             }
@@ -698,7 +693,7 @@ public class ModsManageContentScreen : Screen {
             }
             Stream stream2 = GetDecipherStream(stream);
             FileStream fileStream = new(
-                Storage.GetSystemPath(ModsManager.ModDisPath) + "/Original.scmod",
+                $"{Storage.GetSystemPath(ModsManager.ModDisPath)}/Original.scmod",
                 FileMode.Create,
                 FileAccess.ReadWrite,
                 FileShare.ReadWrite
@@ -712,7 +707,7 @@ public class ModsManageContentScreen : Screen {
             stream2.Dispose();
             DialogsManager.ShowDialog(
                 null,
-                new MessageDialog("操作成功", Storage.GetSystemPath(ModsManager.ModDisPath) + "/Original.scmod", LanguageControl.Ok, null, null)
+                new MessageDialog("操作成功", $"{Storage.GetSystemPath(ModsManager.ModDisPath)}/Original.scmod", LanguageControl.Ok, null, null)
             );
         }
         if (m_upDirectoryButton.IsClicked) {
@@ -721,7 +716,7 @@ public class ModsManageContentScreen : Screen {
                 && m_path != "app:") {
                 if (directory.StartsWith("system:")
                     && !directory.Contains("/")) {
-                    directory = directory + "/";
+                    directory = $"{directory}/";
                 }
                 SetPath(directory);
                 UpdateListWithBusyDialog();
@@ -730,7 +725,7 @@ public class ModsManageContentScreen : Screen {
                 string systemPath = Storage.GetSystemPath(m_path);
                 systemPath = systemPath.Replace("\\", "/");
                 int index = systemPath.LastIndexOf('/');
-                directory = "system:" + systemPath.Substring(0, index);
+                directory = $"system:{systemPath.Substring(0, index)}";
                 SetPath(directory);
                 UpdateListWithBusyDialog();
             }
@@ -847,7 +842,7 @@ public class ModsManageContentScreen : Screen {
             }
         }
         catch (Exception e) {
-            Log.Warning("SetModItemList:" + e);
+            Log.Warning($"SetModItemList:{e}");
         }
     }
 
@@ -878,7 +873,7 @@ public class ModsManageContentScreen : Screen {
                     if (busyDialog != null) {
                         string showName = validPath;
                         if (validPath.Length > 40) {
-                            showName = validPath.Substring(0, 40) + "...";
+                            showName = $"{validPath.Substring(0, 40)}...";
                         }
                         busyDialog.SmallMessage = string.Format(LanguageControl.Get(fName, 59) + showName, m_count);
                     }
@@ -1068,7 +1063,7 @@ public class ModsManageContentScreen : Screen {
         string newText = Storage.GetSystemPath(path);
         string[] arPath = path.Split(new[] { '/' });
         if (arPath.Length > 5) {
-            newText = ".../" + arPath[^3] + "/" + arPath[^2] + "/" + arPath[^1];
+            newText = $".../{arPath[^3]}/{arPath[^2]}/{arPath[^1]}";
         }
         return newText;
     }

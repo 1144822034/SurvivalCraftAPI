@@ -75,9 +75,7 @@ namespace Game {
                         ExternalContentManager.GetEntryTypeIcon(communityContentEntry.Type);
                     containerWidget.Children.Find<LabelWidget>("CommunityContentItem.Text").Text = communityContentEntry.Name;
                     containerWidget.Children.Find<LabelWidget>("CommunityContentItem.Details").Text =
-                        ExternalContentManager.GetEntryTypeDescription(communityContentEntry.Type)
-                        + " "
-                        + DataSizeFormatter.Format(communityContentEntry.Size);
+                        $"{ExternalContentManager.GetEntryTypeDescription(communityContentEntry.Type)} {DataSizeFormatter.Format(communityContentEntry.Size)}";
                     containerWidget.Children.Find<StarRatingWidget>("CommunityContentItem.Rating").Rating = communityContentEntry.RatingsAverage;
                     containerWidget.Children.Find<StarRatingWidget>("CommunityContentItem.Rating").IsVisible =
                         communityContentEntry.RatingsAverage > 0f;
@@ -227,7 +225,7 @@ namespace Game {
                 text5 = "0";
             }
             string text6 = m_order.ToString();
-            string cacheKey = text + "\n" + text2 + "\n" + text4 + "\n" + text5 + "\n" + m_search + "\n" + text6;
+            string cacheKey = $"{text}\n{text2}\n{text4}\n{text5}\n{m_search}\n{text6}";
             m_moreLink = null;
             if (string.IsNullOrEmpty(cursor)
                 && m_itemsCacheExpiryTime != 0.0

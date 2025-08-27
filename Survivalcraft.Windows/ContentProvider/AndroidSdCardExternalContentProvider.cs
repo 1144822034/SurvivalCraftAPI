@@ -137,7 +137,7 @@ public class AndroidSdCardExternalContentProvider : IExternalContentProvider {
 
     public void InitializeFilesystemAccess() {
         //Java.IO.File externalFilesDir = ((Context)Window.Activity).GetExternalFilesDir((string)null);
-        m_rootDirectory = RunPath.AndroidFilePath + "/files";
+        m_rootDirectory = $"{RunPath.AndroidFilePath}/files";
         if (!Storage.DirectoryExists(m_rootDirectory)) {
             Storage.CreateDirectory(m_rootDirectory);
         }

@@ -47,11 +47,9 @@ namespace Game {
                 LanguageControl.Get("EnvironmentBehaviorMode", worldInfo.WorldSettings.EnvironmentBehaviorMode.ToString())
             );
             if (worldInfo.SerializationVersion != VersionsManager.SerializationVersion) {
-                labelWidget2.Text = labelWidget2.Text
-                    + " | "
-                    + (string.IsNullOrEmpty(worldInfo.SerializationVersion)
-                        ? LanguageControl.GetContentWidgets("Usual", "Unknown")
-                        : "(" + worldInfo.SerializationVersion + ")");
+                labelWidget2.Text = $"{labelWidget2.Text} | {(string.IsNullOrEmpty(worldInfo.SerializationVersion)
+                    ? LanguageControl.GetContentWidgets("Usual", "Unknown")
+                    : $"({worldInfo.SerializationVersion})")}";
             }
             ModsManager.HookAction(
                 "LoadWorldInfoWidget",

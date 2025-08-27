@@ -216,7 +216,7 @@ namespace Game {
                 httpListener.Start();
             }
             catch (Exception e) {
-                Log.Error("Remote control server starts failed: " + e);
+                Log.Error($"Remote control server starts failed: {e}");
             }
             while (httpListener.IsListening) {
                 HttpListenerContext context = await httpListener.GetContextAsync();

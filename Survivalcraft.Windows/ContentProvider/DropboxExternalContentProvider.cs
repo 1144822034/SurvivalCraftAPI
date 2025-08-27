@@ -95,7 +95,7 @@ namespace Game {
             try {
                 VerifyLoggedIn();
                 Dictionary<string, string> dictionary = new() {
-                    { "Authorization", "Bearer " + SettingsManager.DropboxAccessToken }, { "Content-Type", "application/json" }
+                    { "Authorization", $"Bearer {SettingsManager.DropboxAccessToken}" }, { "Content-Type", "application/json" }
                 };
                 JsonObject jsonObject = new() {
                     { "path", NormalizePath(path) },
@@ -132,7 +132,7 @@ namespace Game {
                 VerifyLoggedIn();
                 JsonObject jsonObject = new() { { "path", NormalizePath(path) } };
                 Dictionary<string, string> dictionary = new() {
-                    { "Authorization", "Bearer " + SettingsManager.DropboxAccessToken }, { "Dropbox-API-Arg", jsonObject.ToJsonString() }
+                    { "Authorization", $"Bearer {SettingsManager.DropboxAccessToken}" }, { "Dropbox-API-Arg", jsonObject.ToJsonString() }
                 };
                 WebManager.Get(
                     "https://content.dropboxapi.com/2/files/download",
@@ -153,7 +153,7 @@ namespace Game {
                 VerifyLoggedIn();
                 JsonObject jsonObject = new() { { "path", NormalizePath(path) }, { "mode", "add" }, { "autorename", true }, { "mute", false } };
                 Dictionary<string, string> dictionary = new() {
-                    { "Authorization", "Bearer " + SettingsManager.DropboxAccessToken },
+                    { "Authorization", $"Bearer {SettingsManager.DropboxAccessToken}" },
                     { "Content-Type", "application/octet-stream" },
                     { "Dropbox-API-Arg", jsonObject.ToJsonString() }
                 };
@@ -176,7 +176,7 @@ namespace Game {
             try {
                 VerifyLoggedIn();
                 Dictionary<string, string> dictionary = new() {
-                    { "Authorization", "Bearer " + SettingsManager.DropboxAccessToken }, { "Content-Type", "application/json" }
+                    { "Authorization", $"Bearer {SettingsManager.DropboxAccessToken}" }, { "Content-Type", "application/json" }
                 };
                 JsonObject jsonObject = new() { { "path", NormalizePath(path) }, { "short_url", false } };
                 MemoryStream data = new(Encoding.UTF8.GetBytes(jsonObject.ToJsonString()));
@@ -210,7 +210,7 @@ namespace Game {
                     { "client_id", "1unnzwkb8igx70k" },
                     { "redirect_uri", "com.candyrufusgames.survivalcraft2://redirect" }
                 };
-                WebBrowserManager.LaunchBrowser("https://www.dropbox.com/oauth2/authorize?" + WebManager.UrlParametersToString(dictionary));
+                WebBrowserManager.LaunchBrowser($"https://www.dropbox.com/oauth2/authorize?{WebManager.UrlParametersToString(dictionary)}");
             }
             catch (Exception error) {
                 m_loginProcessData.Fail(this, error);
@@ -322,7 +322,7 @@ namespace Game {
 
         public static string JsonElementToLinkAddress(JsonElement jsonElement) {
             if (jsonElement.TryGetProperty("url", out JsonElement url)) {
-                return url.GetString().Replace("www.dropbox.", "dl.dropbox.").Replace("?dl=0", "") + "?dl=1";
+                return $"{url.GetString().Replace("www.dropbox.", "dl.dropbox.").Replace("?dl=0", "")}?dl=1";
             }
             throw new InvalidOperationException("Share information not found.");
         }
@@ -333,7 +333,7 @@ namespace Game {
             }
             if (path.Length > 0
                 && path[0] != '/') {
-                return "/" + path;
+                return $"/{path}";
             }
             return path;
         }

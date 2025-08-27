@@ -107,7 +107,7 @@ namespace Game {
                     fieldInfo.SetValue(null, block.BlockIndex); // 对于静态字段，第一个参数为null
                 }
                 catch (Exception ex) {
-                    Log.Error("Failed to edit Index of <" + block.GetType().AssemblyQualifiedName + ">! " + ex);
+                    Log.Error($"Failed to edit Index of <{block.GetType().AssemblyQualifiedName}>! {ex}");
                 }
             }
         }
@@ -163,7 +163,7 @@ namespace Game {
                 return index;
             }
             if (throwIfNotFound) {
-                throw new KeyNotFoundException("Block with name <" + BlockName + "> is not found.");
+                throw new KeyNotFoundException($"Block with name <{BlockName}> is not found.");
             }
             return -1;
         }
@@ -195,7 +195,7 @@ namespace Game {
             }
             if (mustBeInSameType) {
                 if (throwIfNotFound) {
-                    throw new KeyNotFoundException("Block with type <" + blockType.AssemblyQualifiedName + "> is not found.");
+                    throw new KeyNotFoundException($"Block with type <{blockType.AssemblyQualifiedName}> is not found.");
                 }
                 return -1;
             }
@@ -242,11 +242,7 @@ namespace Game {
             T blockT = Blocks[blockIndex] as T;
             if (blockT == null && throwIfNotFound) {
                 throw new InvalidCastException(
-                    "Block <"
-                    + typeof(T).AssemblyQualifiedName
-                    + "> is modified into <"
-                    + Blocks[blockIndex].GetType().AssemblyQualifiedName
-                    + "> thus not capable for type."
+                    $"Block <{typeof(T).AssemblyQualifiedName}> is modified into <{Blocks[blockIndex].GetType().AssemblyQualifiedName}> thus not capable for type."
                 );
             }
             return blockT; //方块列表中有名为"T"的方块，但无法转化为T也返回null
@@ -266,11 +262,7 @@ namespace Game {
             Block block = Blocks[blockIndex];
             if (throwIfNotFound && block.GetType() == blockType) {
                 throw new InvalidCastException(
-                    "Block <"
-                    + blockType.AssemblyQualifiedName
-                    + "> is modified into <"
-                    + block.GetType().AssemblyQualifiedName
-                    + "> thus not capable for type."
+                    $"Block <{blockType.AssemblyQualifiedName}> is modified into <{block.GetType().AssemblyQualifiedName}> thus not capable for type."
                 );
             }
             return block;
@@ -411,7 +403,7 @@ namespace Game {
                     block.Initialize();
                 }
                 catch (Exception e) {
-                    LoadingScreen.Warning("Loading Block " + block.GetType().Name + " error." + e);
+                    LoadingScreen.Warning($"Loading Block {block.GetType().Name} error.{e}");
                 }
                 foreach (int value in block.GetCreativeValues()) {
                     string category = block.GetCategory(value);

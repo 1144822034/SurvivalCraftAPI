@@ -439,7 +439,7 @@ namespace Game {
             m_cloudsTexture = ContentManager.Get<Texture2D>("Textures/Clouds");
             m_primitiveRender = new SkyPrimitiveRender();
             for (int i = 0; i < 8; i++) {
-                m_moonTextures[i] = ContentManager.Get<Texture2D>("Textures/Moon" + (i + 1).ToString(CultureInfo.InvariantCulture));
+                m_moonTextures[i] = ContentManager.Get<Texture2D>($"Textures/Moon{(i + 1).ToString(CultureInfo.InvariantCulture)}");
             }
             InitializeCalculation();
             UpdateMoonPhase();

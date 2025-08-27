@@ -240,7 +240,7 @@ namespace Game {
                                 craftingRecipe.Ingredients[7] = "gunpowder";
                                 craftingRecipe.Ingredients[8] = "gunpowder";
                             }
-                            craftingRecipe.Ingredients[4] = "paintbucket:" + (color != 7 ? color : 10).ToString(CultureInfo.InvariantCulture);
+                            craftingRecipe.Ingredients[4] = $"paintbucket:{(color != 7 ? color : 10).ToString(CultureInfo.InvariantCulture)}";
                             yield return craftingRecipe;
                             num = color + 1;
                         }

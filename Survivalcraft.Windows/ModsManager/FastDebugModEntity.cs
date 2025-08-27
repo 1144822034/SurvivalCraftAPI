@@ -39,10 +39,10 @@ namespace Game {
                 path = basepath;
             }
             foreach (string d in Storage.ListDirectoryNames(path)) {
-                ReadDirResouces(basepath, path + "/" + d);
+                ReadDirResouces(basepath, $"{path}/{d}");
             }
             foreach (string f in Storage.ListFileNames(path)) {
-                string abpath = path + "/" + f;
+                string abpath = $"{path}/{f}";
                 string FilenameInZip = abpath.Substring(basepath.Length + 1);
                 if (FilenameInZip.StartsWith("Assets/")) {
                     string name = FilenameInZip.Substring(7);
@@ -90,7 +90,7 @@ namespace Game {
             string path = Storage.CombinePaths(ModsManager.ModsPath, "Assets/Lang");
             if (Storage.DirectoryExists(path)) {
                 foreach (string c in Storage.ListFileNames(path)) {
-                    string fn = ModsManager.Configs["Language"] + ".json";
+                    string fn = $"{ModsManager.Configs["Language"]}.json";
                     string fpn = Storage.CombinePaths(path, c);
                     if (c == fn
                         && Storage.FileExists(fpn)) {
@@ -166,6 +166,6 @@ namespace Game {
             return false;
         }
 
-        public override bool GetAssetsFile(string filename, Action<Stream> stream) => GetFile("Assets/" + filename, stream);
+        public override bool GetAssetsFile(string filename, Action<Stream> stream) => GetFile($"Assets/{filename}", stream);
     }
 }

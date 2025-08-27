@@ -87,7 +87,7 @@ namespace Game {
             string desc = XmlUtils.GetAttributeValue<string>(item, "Description");
             if (desc.StartsWith('[')
                 && desc.EndsWith(']')
-                && LanguageControl.TryGetBlock(attributeValue, "CRDescription:" + desc.Substring(1, desc.Length - 2), out string r)) {
+                && LanguageControl.TryGetBlock(attributeValue, $"CRDescription:{desc.Substring(1, desc.Length - 2)}", out string r)) {
                 desc = r;
             }
             craftingRecipe.ResultValue = DecodeResult(attributeValue);

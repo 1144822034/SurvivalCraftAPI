@@ -57,7 +57,7 @@ namespace Engine.Serialization {
             public void VerifySerializable() {
                 if (!IsSerializable) {
                     throw new InvalidOperationException(
-                        "Type " + Type.FullName + " is not serializable. Type must have an associated ISerializer<T> or implement ISerializable."
+                        $"Type {Type.FullName} is not serializable. Type must have an associated ISerializer<T> or implement ISerializable."
                     );
                 }
             }
@@ -336,7 +336,7 @@ namespace Engine.Serialization {
                     .MakeGenericMethod(type)
                     .Invoke(null, [@delegate, delegate2]);
             }
-            throw new InvalidOperationException("Serialization methods not found in " + serializerType.Name);
+            throw new InvalidOperationException($"Serialization methods not found in {serializerType.Name}");
         }
 
         /*

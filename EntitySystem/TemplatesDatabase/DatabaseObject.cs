@@ -137,16 +137,12 @@ namespace TemplatesDatabase {
                         || EffectivelyInheritsFrom(value)
                         || value.IsNestedIn(this)) {
                         throw new InvalidOperationException(
-                            "Cannot set nesting parent of database object \""
-                            + Name
-                            + "\" to database object \""
-                            + value.Name
-                            + "\" because it would create recursive nesting/inheritance."
+                            $"Cannot set nesting parent of database object \"{Name}\" to database object \"{value.Name}\" because it would create recursive nesting/inheritance."
                         );
                     }
                     if (value.FindExplicitNestedChild(Name, null, true, false) != null) {
                         throw new InvalidOperationException(
-                            "Another database object with name \"" + Name + "\" is already nested in database object \"" + value.Name + "\"."
+                            $"Another database object with name \"{Name}\" is already nested in database object \"{value.Name}\"."
                         );
                     }
                 }
@@ -193,11 +189,7 @@ namespace TemplatesDatabase {
                         || value.IsNestedIn(this)
                         || IsNestedIn(value)) {
                         throw new InvalidOperationException(
-                            "Cannot set inheritance parent of database object \""
-                            + Name
-                            + "\" to database object \""
-                            + value.Name
-                            + "\" because it would create recursive nesting/inheritance."
+                            $"Cannot set inheritance parent of database object \"{Name}\" to database object \"{value.Name}\" because it would create recursive nesting/inheritance."
                         );
                     }
                     if (!Type.AllowedInheritanceParents.Contains(value.Type)) {

@@ -34,7 +34,7 @@ namespace Game {
             m_switchViewButton = Children.Find<ButtonWidget>("EditMemoryBankDialog.SwitchViewButton");
             m_linearTextBox = Children.Find<TextBoxWidget>("EditMemoryBankDialog.LinearText");
             for (int i = 0; i < 16; i++) {
-                m_lineTextBoxes[i] = Children.Find<TextBoxWidget>("EditMemoryBankDialog.Line" + i);
+                m_lineTextBoxes[i] = Children.Find<TextBoxWidget>($"EditMemoryBankDialog.Line{i}");
             }
             m_handler = handler;
             m_memoryBankData = memoryBankData;

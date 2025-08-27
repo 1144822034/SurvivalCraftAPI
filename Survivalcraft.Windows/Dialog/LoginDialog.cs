@@ -87,7 +87,7 @@ namespace Game {
                 Dictionary<string, string> par = new() { { "user", txa.Text }, { "pass", txb.Text } };
                 DialogsManager.ShowDialog(this, busyDialog);
                 WebManager.Post(
-                    SchubExternalContentProvider.m_redirectUri + "/com/api/login",
+                    $"{SchubExternalContentProvider.m_redirectUri}/com/api/login",
                     par,
                     null,
                     new MemoryStream(),
@@ -97,7 +97,7 @@ namespace Game {
                 );
             }
             if (btnb.IsClicked) {
-                WebBrowserManager.LaunchBrowser(SchubExternalContentProvider.m_redirectUri + "/com/reg");
+                WebBrowserManager.LaunchBrowser($"{SchubExternalContentProvider.m_redirectUri}/com/reg");
             }
             if (btnc.IsClicked) {
                 cancel?.Invoke();

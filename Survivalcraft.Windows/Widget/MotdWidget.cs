@@ -51,7 +51,7 @@ namespace Game {
                         );
                     }
                     catch (Exception e) {
-                        Log.Error("Failed processing Update check. Reason: " + e.Message);
+                        Log.Error($"Failed processing Update check. Reason: {e.Message}");
                     }
                     finally {
                         Noticed = true;

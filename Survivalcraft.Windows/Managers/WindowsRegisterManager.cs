@@ -4,7 +4,7 @@ using Microsoft.Win32;
 
 namespace Game.Managers {
     static class WindowsRegisterManager {
-        public static string SurvivalcraftPath => ModsManager.ExternalPath + "Survivalcraft.exe";
+        public static string SurvivalcraftPath => $"{ModsManager.ExternalPath}Survivalcraft.exe";
 
         public static void RegisterFileType(string keyName, string keyValue, string extension) {
             //keyName = "WPCFile";
@@ -46,7 +46,7 @@ namespace Game.Managers {
                     if (keyico == null) {
                         return;
                     }
-                    keyico.SetValue("", SurvivalcraftPath + ",0");
+                    keyico.SetValue("", $"{SurvivalcraftPath},0");
                     key.SetValue("", keyValue);
                     key = key.CreateSubKey("Shell");
                     if (key == null) {
@@ -62,7 +62,7 @@ namespace Game.Managers {
                     }
 
                     // 关联的位置
-                    key.SetValue("", SurvivalcraftPath + @" %1/");
+                    key.SetValue("", $@"{SurvivalcraftPath} %1/");
 
                     // 关联的文件扩展名,
                     keyName = extension;

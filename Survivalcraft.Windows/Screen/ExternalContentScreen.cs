@@ -208,7 +208,7 @@ namespace Game {
                         null,
                         new MessageDialog(LanguageControl.Get(GetType().Name, 13), e.ToString(), LanguageControl.Yes, null, delegate { })
                     );
-                    Log.Error("Open File" + ExternalContentManager.openFilePath + "Failed! " + e);
+                    Log.Error($"Open File{ExternalContentManager.openFilePath}Failed! {e}");
                 }
                 ExternalContentManager.openFilePath = string.Empty;
             }
@@ -222,7 +222,7 @@ namespace Game {
         public void SetPath(string path) {
             if (string.IsNullOrEmpty(path)) {
 #if ANDROID
-                path = Storage.GetSystemPath(RunPath.AndroidFilePath + "/files");
+                path = Storage.GetSystemPath($"{RunPath.AndroidFilePath}/files");
 #else
                 path = DiskExternalContentProvider.LocalPath;
 #endif

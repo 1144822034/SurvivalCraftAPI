@@ -165,21 +165,20 @@ namespace Engine.Media {
                 }
                 char fallbackCode = char.Parse(fallbackLine);
                 string kerningCountLine = streamReader.ReadLine();
-                if (kerningCountLine == null) {
-                    throw new FormatException("The kerning count line of the .lst file of the bitmap font can not be founded");
-                }
-                int num2 = int.Parse(kerningCountLine);
-                for (int j = 0; j < num2; j++) {
-                    string line = streamReader.ReadLine();
-                    if (line == null) {
-                        throw new FormatException($"The {j + 7} line of the .lst file of the bitmap font can not be founded");
-                    }
-                    string[] arr = line.Split(splitters, StringSplitOptions.None);
-                    if (arr.Length == 3) {
-                        char code2 = char.Parse(arr[0]);
-                        char followingCode = char.Parse(arr[1]);
-                        float num3 = float.Parse(arr[2]);
-                        bitmapFont.SetKerning(code2, followingCode, num3);
+                if (kerningCountLine != null) {
+                    int kerningCount = int.Parse(kerningCountLine);
+                    for (int j = 0; j < kerningCount; j++) {
+                        string line = streamReader.ReadLine();
+                        if (line == null) {
+                            throw new FormatException($"The {j + 7} line of the .lst file of the bitmap font can not be founded");
+                        }
+                        string[] arr = line.Split(splitters, StringSplitOptions.None);
+                        if (arr.Length == 3) {
+                            char code2 = char.Parse(arr[0]);
+                            char followingCode = char.Parse(arr[1]);
+                            float num3 = float.Parse(arr[2]);
+                            bitmapFont.SetKerning(code2, followingCode, num3);
+                        }
                     }
                 }
                 bitmapFont.Initialize(

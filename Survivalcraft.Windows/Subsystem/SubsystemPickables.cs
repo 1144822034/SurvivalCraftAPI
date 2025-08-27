@@ -106,7 +106,7 @@ namespace Game {
                 return pickable;
             }
             catch (Exception e) {
-                Log.Error("Pickable create error: " + e);
+                Log.Error($"Pickable create error: {e}");
                 return null;
             }
         }
@@ -119,7 +119,7 @@ namespace Game {
                 return pickable2 as T;
             }
             catch (Exception e) {
-                Log.Error("Pickable add error: " + e);
+                Log.Error($"Pickable add error: {e}");
                 return null;
             }
         }
@@ -136,7 +136,7 @@ namespace Game {
                     }
                     catch (Exception e) {
                         if (pickable.LogDrawError) {
-                            Log.Error("Pickable draw error: " + e);
+                            Log.Error($"Pickable draw error: {e}");
                             pickable.LogDrawError = false;
                         }
                     }
@@ -157,7 +157,7 @@ namespace Game {
                             pickable.Update(dt);
                         }
                         catch (Exception e) {
-                            Log.Error("Pickable update error: " + e);
+                            Log.Error($"Pickable update error: {e}");
                             pickable.ToRemove = true;
                         }
                     }

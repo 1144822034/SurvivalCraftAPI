@@ -64,7 +64,7 @@ namespace Game {
                         [0] = "glass",
                         [1] = "glass",
                         [2] = "glass",
-                        [4] = "paintbucket:" + color.ToString(CultureInfo.InvariantCulture),
+                        [4] = $"paintbucket:{color.ToString(CultureInfo.InvariantCulture)}",
                         [6] = "copperingot",
                         [7] = "copperingot",
                         [8] = "copperingot"

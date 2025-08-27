@@ -103,7 +103,7 @@ namespace Game {
                     Description = LanguageControl.Get(GetType().Name, "CRDescription"),
                     Ingredients = {
                         [1] = "glass",
-                        [4] = "paintbucket:" + color.ToString(CultureInfo.InvariantCulture),
+                        [4] = $"paintbucket:{color.ToString(CultureInfo.InvariantCulture)}",
                         [6] = "copperingot",
                         [7] = "copperingot",
                         [8] = "copperingot"

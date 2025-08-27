@@ -33,12 +33,12 @@ namespace Game {
                     return movingBlock;
                 }
                 if (throwOnError) {
-                    throw new Exception("Required moving block offset " + offset + " is not found in MovingBlockSet " + movingBlocksPosition);
+                    throw new Exception($"Required moving block offset {offset} is not found in MovingBlockSet {movingBlocksPosition}");
                 }
                 return null;
             }
             if (throwOnError) {
-                throw new Exception("Required moving block set " + movingBlocksPosition + " is not found.");
+                throw new Exception($"Required moving block set {movingBlocksPosition} is not found.");
             }
             return null;
         }
@@ -65,7 +65,7 @@ namespace Game {
                 string[] str1 = movingBlockInfo.Split(';');
                 if (str1.Length == 0
                     || !str1[0].Contains("MovingBlock")) {
-                    exception = new InvalidDataException("String \"" + movingBlockInfo + "\"" + " is not valid for moving block load.");
+                    exception = new InvalidDataException($"String \"{movingBlockInfo}\" is not valid for moving block load.");
                     return null;
                 }
                 Vector3 movingBlockSetPosition = HumanReadableConverter.ConvertFromString<Vector3>(str1[1]);
@@ -85,10 +85,8 @@ namespace Game {
             }
         }
 
-        public override string ToString() => "MovingBlock;"
-            + HumanReadableConverter.ConvertToString(MovingBlockSet.Position)
-            + ";"
-            + HumanReadableConverter.ConvertToString(Offset);
+        public override string ToString() =>
+            $"MovingBlock;{HumanReadableConverter.ConvertToString(MovingBlockSet.Position)};{HumanReadableConverter.ConvertToString(Offset)}";
 
         public Point3 Offset;
 

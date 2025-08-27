@@ -114,7 +114,7 @@ namespace Engine.Graphics {
             string OpenGLVendor = $"OpenGL ES, Vendor={GL.GetStringS(StringName.Vendor) ?? string.Empty}";
             Display.DeviceDescription =
                 $"{OpenGLVendor}, Renderer={GL.GetStringS(StringName.Renderer) ?? string.Empty}, Version={GL.GetStringS(StringName.Version) ?? string.Empty}, R={bits[0]} G={bits[1]} B={bits[2]} A={bits[3]}, D={bits[4]} S={bits[5]}, MaxTextureSize={GL_MAX_TEXTURE_SIZE}";
-            Log.Information("Initialized display device: " + Display.DeviceDescription);
+            Log.Information($"Initialized display device: {Display.DeviceDescription}");
             string @string = GL.GetStringS(StringName.Extensions);
             GL_EXT_texture_filter_anisotropic = @string?.Contains("GL_EXT_texture_filter_anisotropic") ?? false;
             GL_OES_packed_depth_stencil = @string?.Contains("GL_OES_packed_depth_stencil") ?? false;

@@ -33,7 +33,7 @@ namespace Game {
                             Size = new Vector2(32f, 60f),
                             Children = {
                                 new LabelWidget {
-                                    Text = i + 1 + ".",
+                                    Text = $"{i + 1}.",
                                     Color = Color.Gray,
                                     HorizontalAlignment = WidgetAlignment.Far,
                                     VerticalAlignment = WidgetAlignment.Center

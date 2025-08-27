@@ -81,7 +81,7 @@ namespace TemplatesDatabase {
                     Assembly.Load(new AssemblyName(attributeValue13));
                 }
                 catch (Exception ex) {
-                    Log.Warning("Error loading assembly " + attributeValue13 + ". " + ex);
+                    Log.Warning($"Error loading assembly {attributeValue13}. {ex}");
                 }
             }
             XElement node2 = XmlUtils.FindChildElement(node, "DatabaseObjects", true);
@@ -167,12 +167,12 @@ namespace TemplatesDatabase {
                 XmlUtils.SetAttributeValue(
                     node2,
                     "AllowedNestingParents",
-                    databaseObjectType.AllowedNestingParents.Aggregate(string.Empty, (r, d) => r.Length != 0 ? r + "," + d.Name : d.Name)
+                    databaseObjectType.AllowedNestingParents.Aggregate(string.Empty, (r, d) => r.Length != 0 ? $"{r},{d.Name}" : d.Name)
                 );
                 XmlUtils.SetAttributeValue(
                     node2,
                     "AllowedInheritanceParents",
-                    databaseObjectType.AllowedInheritanceParents.Aggregate(string.Empty, (r, d) => r.Length != 0 ? r + "," + d.Name : d.Name)
+                    databaseObjectType.AllowedInheritanceParents.Aggregate(string.Empty, (r, d) => r.Length != 0 ? $"{r},{d.Name}" : d.Name)
                 );
                 XmlUtils.SetAttributeValue(
                     node2,

@@ -74,7 +74,7 @@ namespace Game {
             if (index.HasValue) {
                 string text = LanguageControl.GetWorldPalette(index.Value);
                 if (!string.IsNullOrEmpty(suffix)) {
-                    return text + " " + suffix;
+                    return $"{text} {suffix}";
                 }
                 return text;
             }

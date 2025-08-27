@@ -95,8 +95,8 @@ namespace Game {
                     DialogsManager.ShowDialog(this, dialog);
                     JsonObject jsonObject = new();
                     Dictionary<string, string> dictionary = new();
-                    jsonObject.Add("path", "/GameLog/" + DateTime.Now.Ticks + ".log");
-                    dictionary.Add("Authorization", "Bearer " + SettingsManager.ScpboxAccessToken);
+                    jsonObject.Add("path", $"/GameLog/{DateTime.Now.Ticks}.log");
+                    dictionary.Add("Authorization", $"Bearer {SettingsManager.ScpboxAccessToken}");
                     dictionary.Add("Content-Type", "application/octet-stream");
                     dictionary.Add("Dropbox-API-Arg", jsonObject.ToJsonString());
                     MemoryStream memoryStream = new();
@@ -104,7 +104,7 @@ namespace Game {
                     GameLogSink.m_stream.CopyTo(memoryStream);
                     memoryStream.Seek(0, SeekOrigin.Begin);
                     WebManager.Post(
-                        SchubExternalContentProvider.m_redirectUri + "/com/files/upload",
+                        $"{SchubExternalContentProvider.m_redirectUri}/com/files/upload",
                         null,
                         dictionary,
                         memoryStream,

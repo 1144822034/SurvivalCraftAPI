@@ -392,7 +392,7 @@ namespace Game {
                 && clothingData.MovementSpeedFactor != 1f) {
                 m_speedFactors.Add(
                     new Factor {
-                        Name = "Clothing " + clothingValue, Value = clothingData.MovementSpeedFactor, Description = clothingData.DisplayName
+                        Name = $"Clothing {clothingValue}", Value = clothingData.MovementSpeedFactor, Description = clothingData.DisplayName
                     }
                 );
             }

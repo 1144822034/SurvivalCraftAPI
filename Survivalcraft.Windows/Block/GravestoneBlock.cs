@@ -17,7 +17,7 @@ namespace Game {
             for (int i = 0; i < 16; i++) {
                 int variant = GetVariant(i);
                 float radians = GetRotation(i) == 0 ? 0f : (float)Math.PI / 2f;
-                string name = "Grave" + (variant % 4 + 1).ToString(CultureInfo.InvariantCulture);
+                string name = $"Grave{(variant % 4 + 1).ToString(CultureInfo.InvariantCulture)}";
                 bool num = variant >= 4;
                 Matrix boneAbsoluteTransform = BlockMesh.GetBoneAbsoluteTransform(model.FindMesh(name).ParentBone);
                 m_blockMeshes[i] = new BlockMesh();

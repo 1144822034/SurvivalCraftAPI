@@ -54,7 +54,7 @@ namespace Game {
                         string text = lines[l].Substring(2).TrimStart();
                         if (text.StartsWith('<')
                             && text.EndsWith("/>")) {
-                            includeText += lines[l] + "\n";
+                            includeText += $"{lines[l]}\n";
                             continue;
                         }
                     }
@@ -69,11 +69,11 @@ namespace Game {
                     }
                     else {
                         if (!ModsManager.IsAndroid) {
-                            includeText += lines[l].Replace("highp", "").Replace("lowp", "").Replace("mediump", "") + "\n";
+                            includeText += $"{lines[l].Replace("highp", "").Replace("lowp", "").Replace("mediump", "")}\n";
                         }
                         else {
 #pragma warning disable CS0162 // 检测到无法访问的代码
-                            includeText += lines[l] + "\n";
+                            includeText += $"{lines[l]}\n";
 #pragma warning restore CS0162 // 检测到无法访问的代码
                         }
                     }

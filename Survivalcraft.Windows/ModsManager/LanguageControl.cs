@@ -309,9 +309,9 @@ namespace Game {
                 return false;
             }
             string[] nm = blockName.Split(':'); //这里不要改成集合表达式，在不同的编译器上会导致bug或者编译失败
-            result = Get(out bool r, "Blocks", nm.Length < 2 ? blockName + ":0" : blockName, prop);
+            result = Get(out bool r, "Blocks", nm.Length < 2 ? $"{blockName}:0" : blockName, prop);
             if (!r) {
-                result = Get(out r, "Blocks", nm[0] + ":0", prop);
+                result = Get(out r, "Blocks", $"{nm[0]}:0", prop);
             }
             return r;
         }

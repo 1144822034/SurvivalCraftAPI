@@ -63,7 +63,7 @@ namespace Game {
                     if (value != null) {
                         string[] array = value.GetValue<string>().Split(["\n"], StringSplitOptions.None);
                         foreach (string text2 in array) {
-                            text = text + text2.Trim() + " ";
+                            text = $"{text}{text2.Trim()} ";
                         }
                         text = text.Replace("\r", "");
                         text = text.Replace("’", "'");

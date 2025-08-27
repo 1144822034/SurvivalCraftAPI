@@ -84,7 +84,7 @@ namespace Game {
             m_descriptionLabel.IsVisible = flag2;
             m_uploadButton.IsEnabled = flag2 && !flag;
             m_applyButton.IsEnabled = flag2 && flag;
-            m_descriptionLabel.Text = StringsManager.GetString("GameMode." + m_worldSettings.GameMode + ".Description");
+            m_descriptionLabel.Text = StringsManager.GetString($"GameMode.{m_worldSettings.GameMode}.Description");
             if (m_worldOptionsButton.IsClicked) {
                 ScreensManager.SwitchScreen("WorldOptions", m_worldSettings, true);
             }

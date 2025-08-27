@@ -171,7 +171,7 @@ namespace Game {
             m_holdDurationSlider.Value = SettingsManager.MinimumHoldDuration;
             m_holdDurationSlider.Text = $"{MathF.Round(1000f * SettingsManager.MinimumHoldDuration)}ms";
             m_dragDistanceSlider.Value = SettingsManager.MinimumDragDistance;
-            m_dragDistanceSlider.Text = $"{MathF.Round(SettingsManager.MinimumDragDistance)} " + LanguageControl.Get(GetType().Name, 1);
+            m_dragDistanceSlider.Text = $"{MathF.Round(SettingsManager.MinimumDragDistance)} {LanguageControl.Get(GetType().Name, 1)}";
             m_moveWidgetMarginXSlider.Value = SettingsManager.MoveWidgetMarginX;
             m_moveWidgetMarginXSlider.Text = $"{SettingsManager.MoveWidgetMarginX * 100f:F0}%";
             m_moveWidgetMarginYSlider.Value = SettingsManager.MoveWidgetMarginY;

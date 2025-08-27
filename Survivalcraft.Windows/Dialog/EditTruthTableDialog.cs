@@ -36,7 +36,7 @@ namespace Game {
             m_switchViewButton = Children.Find<ButtonWidget>("EditTruthTableDialog.SwitchViewButton");
             m_linearTextBox = Children.Find<TextBoxWidget>("EditTruthTableDialog.LinearText");
             for (int i = 0; i < 16; i++) {
-                m_lineCheckboxes[i] = Children.Find<CheckboxWidget>("EditTruthTableDialog.Line" + i);
+                m_lineCheckboxes[i] = Children.Find<CheckboxWidget>($"EditTruthTableDialog.Line{i}");
             }
             m_handler = handler;
             m_truthTableData = truthTableData;

@@ -102,7 +102,7 @@ namespace Game {
                             80f,
                             delegate(object o) {
                                 string str = o.ToString();
-                                string name = "Textures/Atlas/ScreenLayout" + str;
+                                string name = $"Textures/Atlas/ScreenLayout{str}";
                                 return new StackPanelWidget {
                                     Direction = LayoutDirection.Horizontal,
                                     VerticalAlignment = WidgetAlignment.Center,
@@ -119,9 +119,9 @@ namespace Game {
                                             VerticalAlignment = WidgetAlignment.Center,
                                             Margin = new Vector2(10f, 0f),
                                             Children = {
-                                                new LabelWidget { Text = StringsManager.GetString("ScreenLayout." + str + ".Name") },
+                                                new LabelWidget { Text = StringsManager.GetString($"ScreenLayout.{str}.Name") },
                                                 new LabelWidget {
-                                                    Text = StringsManager.GetString("ScreenLayout." + str + ".Description"), Color = Color.Gray
+                                                    Text = StringsManager.GetString($"ScreenLayout.{str}.Description"), Color = Color.Gray
                                                 }
                                             }
                                         }

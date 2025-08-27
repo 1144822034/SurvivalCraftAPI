@@ -40,30 +40,30 @@ public static class ModsManager {
 #if !ANDROID
     public static string ExternalPath => "app:";
     public static string DocPath = "app:/doc";
-    public static string WorldsDirectoryName = DocPath + "/Worlds";
+    public static string WorldsDirectoryName = $"{DocPath}/Worlds";
 #endif
 #if ANDROID
     public static string ExternalPath => EngineActivity.BasePath;
     public static string DocPath = EngineActivity.BasePath;
-    public static string WorldsDirectoryName = ExternalPath + "/Worlds";
+    public static string WorldsDirectoryName = $"{ExternalPath}/Worlds";
 #endif
-    public static string ProcessModListPath = ExternalPath + "/ProcessModLists";
+    public static string ProcessModListPath = $"{ExternalPath}/ProcessModLists";
 
-    public static string ScreenCapturePath { get; } = ExternalPath + "/ScreenCapture";
+    public static string ScreenCapturePath { get; } = $"{ExternalPath}/ScreenCapture";
 
-    public static string UserDataPath { get; } = DocPath + "/UserId.dat";
-    public static string CharacterSkinsDirectoryName { get; } = DocPath + "/CharacterSkins";
-    public static string FurniturePacksDirectoryName { get; } = DocPath + "/FurniturePacks";
+    public static string UserDataPath { get; } = $"{DocPath}/UserId.dat";
+    public static string CharacterSkinsDirectoryName { get; } = $"{DocPath}/CharacterSkins";
+    public static string FurniturePacksDirectoryName { get; } = $"{DocPath}/FurniturePacks";
 
-    public static string BlockTexturesDirectoryName { get; } = DocPath + "/TexturePacks";
-    public static string CommunityContentCachePath { get; } = DocPath + "/CommunityContentCache.xml";
-    public static string OriginalCommunityContentCachePath { get; } = DocPath + "/OriginalCommunityContentCache.xml";
-    public static string ModsSettingsPath { get; } = DocPath + "/ModSettings.xml";
-    public static string SettingPath { get; } = DocPath + "/Settings.xml";
-    public static string ConfigsPath { get; } = DocPath + "/Configs.xml";
-    public static string ModDisPath { get; } = ExternalPath + "/DisabledMods";
-    public static string LogPath { get; } = ExternalPath + "/Bugs";
-    public static string ModsPath = ExternalPath + "/Mods";
+    public static string BlockTexturesDirectoryName { get; } = $"{DocPath}/TexturePacks";
+    public static string CommunityContentCachePath { get; } = $"{DocPath}/CommunityContentCache.xml";
+    public static string OriginalCommunityContentCachePath { get; } = $"{DocPath}/OriginalCommunityContentCache.xml";
+    public static string ModsSettingsPath { get; } = $"{DocPath}/ModSettings.xml";
+    public static string SettingPath { get; } = $"{DocPath}/Settings.xml";
+    public static string ConfigsPath { get; } = $"{DocPath}/Configs.xml";
+    public static string ModDisPath { get; } = $"{ExternalPath}/DisabledMods";
+    public static string LogPath { get; } = $"{ExternalPath}/Bugs";
+    public static string ModsPath = $"{ExternalPath}/Mods";
     public static bool IsAndroid => OperatingSystem.IsAndroid();
     //public static bool IsAndroid => VersionsManager.Platform == Platform.Android;
 
@@ -330,7 +330,7 @@ public static class ModsManager {
         string path = Storage.CombinePaths(ModDisPath, realName);
         int num = 1;
         while (Storage.FileExists(path)) {
-            realName = name + "(" + num + ")" + ModSuffix;
+            realName = $"{name}({num}){ModSuffix}";
             path = Storage.CombinePaths(ModDisPath, realName);
             num++;
         }

@@ -211,11 +211,11 @@ namespace Engine.Media {
 
             public ColladaScene(ColladaRoot collada, XElement node) {
                 XElement xElement = node.Element(ColladaRoot.Namespace + "instance_visual_scene");
-                VisualScene = (ColladaVisualScene)collada.ObjectsById[xElement.Attribute("url").Value.Substring(1) + "-ColladaVisualScene"];
+                VisualScene = (ColladaVisualScene)collada.ObjectsById[$"{xElement.Attribute("url").Value.Substring(1)}-ColladaVisualScene"];
             }
 
             public void Save(XElement node) {
-                CreateElement(node, ColladaRoot.Namespace + "instance_visual_scene").SetAttributeValue("url", "#" + VisualScene.Id);
+                CreateElement(node, ColladaRoot.Namespace + "instance_visual_scene").SetAttributeValue("url", $"#{VisualScene.Id}");
             }
         }
 
@@ -352,7 +352,7 @@ namespace Engine.Media {
                 }
                 foreach (ColladaGeometry geometry in Geometries) {
                     XElement xElement2 = CreateElement(node, ColladaRoot.Namespace + "instance_geometry");
-                    xElement2.SetAttributeValue("url", "#" + geometry.Id);
+                    xElement2.SetAttributeValue("url", $"#{geometry.Id}");
                     xElement2.SetAttributeValue("name", Name);
                 }
             }
@@ -361,9 +361,8 @@ namespace Engine.Media {
         public class ColladaGeometry : ColladaNameId {
             public ColladaMesh Mesh;
 
-            public static string CreateId(ModelMeshData modelMeshData, ModelMeshPartData modelMeshPartData) => modelMeshData.Name
-                + "-part"
-                + modelMeshData.MeshParts.IndexOf(modelMeshPartData).ToString(CultureInfo.InvariantCulture);
+            public static string CreateId(ModelMeshData modelMeshData, ModelMeshPartData modelMeshPartData) =>
+                $"{modelMeshData.Name}-part{modelMeshData.MeshParts.IndexOf(modelMeshPartData).ToString(CultureInfo.InvariantCulture)}";
 
             public ColladaGeometry(ColladaRoot colladaRoot, ModelData modelData, ModelMeshData modelMeshData, ModelMeshPartData modelMeshPartData) :
                 base(colladaRoot, CreateId(modelMeshData, modelMeshPartData), null) =>
@@ -415,8 +414,8 @@ namespace Engine.Media {
                             }
                         }
                         foreach (VertexElement item in vertexElements) {
-                            ColladaSource colladaSource = new(colladaRoot, colladaGeometry.Id + "-" + item.Semantic);
-                            ColladaFloatArray colladaFloatArray = new(colladaRoot, colladaSource.Id + "-array");
+                            ColladaSource colladaSource = new(colladaRoot, $"{colladaGeometry.Id}-{item.Semantic}");
+                            ColladaFloatArray colladaFloatArray = new(colladaRoot, $"{colladaSource.Id}-array");
                             ColladaAccessor colladaAccessor = new() { Source = colladaFloatArray };
                             Sources.Add(colladaSource);
                             colladaSource.FloatArray = colladaFloatArray;
@@ -581,7 +580,7 @@ namespace Engine.Media {
             }
 
             public void Save(XElement node) {
-                node.SetAttributeValue("source", "#" + Source.Id);
+                node.SetAttributeValue("source", $"#{Source.Id}");
                 node.SetAttributeValue("offset", Offset.ToString(CultureInfo.InvariantCulture));
                 node.SetAttributeValue("count", (Source.Array.Length / Stride).ToString(CultureInfo.InvariantCulture));
                 node.SetAttributeValue("stride", Stride.ToString(CultureInfo.InvariantCulture));
@@ -596,7 +595,7 @@ namespace Engine.Media {
 
             public ColladaSource Source;
 
-            public ColladaVertices(ColladaRoot colladaRoot, ColladaSource colladaSource) : base(colladaRoot, colladaSource.Id + "-vertices", null) { }
+            public ColladaVertices(ColladaRoot colladaRoot, ColladaSource colladaSource) : base(colladaRoot, $"{colladaSource.Id}-vertices", null) { }
 
             public ColladaVertices(ColladaRoot collada, XElement node) : base(collada, node) {
                 XElement xElement = node.Element(ColladaRoot.Namespace + "input");
@@ -608,7 +607,7 @@ namespace Engine.Media {
                 base.Save(node);
                 XElement xElement = CreateElement(node, ColladaRoot.Namespace + "input");
                 xElement.SetAttributeValue("semantic", Semantic);
-                xElement.SetAttributeValue("source", "#" + Source.Id);
+                xElement.SetAttributeValue("source", $"#{Source.Id}");
             }
         }
 
@@ -645,19 +644,19 @@ namespace Engine.Media {
                 foreach (ColladaInput input in Inputs) {
                     string text = input.Set == 0 ? string.Empty : input.Set.ToString(CultureInfo.InvariantCulture);
                     if (input.Semantic == "POSITION") {
-                        dictionary[new VertexElement(num, VertexElementFormat.Vector3, "POSITION" + text)] = input;
+                        dictionary[new VertexElement(num, VertexElementFormat.Vector3, $"POSITION{text}")] = input;
                         num += 12;
                     }
                     else if (input.Semantic == "NORMAL") {
-                        dictionary[new VertexElement(num, VertexElementFormat.Vector3, "NORMAL" + text)] = input;
+                        dictionary[new VertexElement(num, VertexElementFormat.Vector3, $"NORMAL{text}")] = input;
                         num += 12;
                     }
                     else if (input.Semantic == "TEXCOORD") {
-                        dictionary[new VertexElement(num, VertexElementFormat.Vector2, "TEXCOORD" + text)] = input;
+                        dictionary[new VertexElement(num, VertexElementFormat.Vector2, $"TEXCOORD{text}")] = input;
                         num += 8;
                     }
                     else if (input.Semantic == "COLOR") {
-                        dictionary[new VertexElement(num, VertexElementFormat.NormalizedByte4, "COLOR" + text)] = input;
+                        dictionary[new VertexElement(num, VertexElementFormat.NormalizedByte4, $"COLOR{text}")] = input;
                         num += 4;
                     }
                 }
@@ -837,10 +836,10 @@ namespace Engine.Media {
                     node.SetAttributeValue("set", Set.ToString(CultureInfo.InvariantCulture));
                 }
                 if (Vertices != null) {
-                    node.SetAttributeValue("source", "#" + Vertices.Id);
+                    node.SetAttributeValue("source", $"#{Vertices.Id}");
                 }
                 else {
-                    node.SetAttributeValue("source", "#" + Source.Id);
+                    node.SetAttributeValue("source", $"#{Source.Id}");
                 }
                 node.SetAttributeValue("offset", Offset.ToString(CultureInfo.InvariantCulture));
             }

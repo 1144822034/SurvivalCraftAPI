@@ -43,7 +43,7 @@ namespace Game {
                 Description = (string)((TomlTable)model["packageinfo"]!)["Description"]
             };
             if (((TomlTable)model["requisite"]).Count != 0) {
-                string packagePath = ModsManager.ProcessModListPath + '/' + packageInfo.PackageName;
+                string packagePath = $"{ModsManager.ProcessModListPath}/{packageInfo.PackageName}";
                 Storage.CreateDirectory(packagePath);
                 foreach (KeyValuePair<string, object> item in (TomlTable)model["requisite"]!) {
                     Log.Information(item.Key);

@@ -2428,7 +2428,7 @@ namespace Game {
             }
             catch (Exception e) {
                 if (!step.ErrorLogged) {
-                    Log.Error("ChunkGenerationStep \"" + step.Name + "\" at generateOrder " + step.GenerateOrder);
+                    Log.Error($"ChunkGenerationStep \"{step.Name}\" at generateOrder {step.GenerateOrder}");
                     Log.Error(e);
                 }
                 step.ErrorLogged = true;

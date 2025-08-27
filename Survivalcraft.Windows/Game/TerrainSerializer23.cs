@@ -321,7 +321,7 @@ namespace Game {
             }
 
             public virtual void Open(string directoryName, string suffix) {
-                RegionsDirectoryName = Storage.CombinePaths(directoryName, "Regions" + suffix);
+                RegionsDirectoryName = Storage.CombinePaths(directoryName, $"Regions{suffix}");
                 Storage.CreateDirectory(RegionsDirectoryName);
                 TmpFilePath = Storage.CombinePaths(RegionsDirectoryName, "tmp");
                 Storage.DeleteFile(TmpFilePath);
@@ -436,13 +436,13 @@ namespace Game {
                 }
                 if (text != null) {
                     regionStream.Dispose();
-                    string text2 = text + ".new";
+                    string text2 = $"{text}.new";
                     Storage.MoveFile(TmpFilePath, text2);
                     Storage.MoveFile(text2, text);
                 }
             }
 
-            public virtual string GetRegionPath(Point2 region) => RegionsDirectoryName + "/Region " + region.X + "," + region.Y + ".dat";
+            public virtual string GetRegionPath(Point2 region) => $"{RegionsDirectoryName}/Region {region.X},{region.Y}.dat";
 
             public virtual Stream GetRegionStream(Point2 region, bool createNew) {
                 if (!StreamsByRegion.TryGetValue(region, out Stream value)
@@ -622,7 +622,7 @@ namespace Game {
                     return false;
                 }
                 catch (Exception e) {
-                    Log.Error(ExceptionManager.MakeFullErrorMessage("Error loading chunk (" + chunk.Coords.X + "," + chunk.Coords.Y + ").", e));
+                    Log.Error(ExceptionManager.MakeFullErrorMessage($"Error loading chunk ({chunk.Coords.X},{chunk.Coords.Y}).", e));
                 }
                 _ = Time.RealTime;
                 return true;
@@ -637,7 +637,7 @@ namespace Game {
                     m_storage.Save(chunk.Coords, m_storageBuffer, size);
                 }
                 catch (Exception e) {
-                    Log.Error(ExceptionManager.MakeFullErrorMessage("Error saving chunk (" + chunk.Coords.X + "," + chunk.Coords.Y + ").", e));
+                    Log.Error(ExceptionManager.MakeFullErrorMessage($"Error saving chunk ({chunk.Coords.X},{chunk.Coords.Y}).", e));
                 }
                 _ = Time.RealTime;
             }

@@ -70,7 +70,7 @@ namespace Game {
             m_playButton.IsVisible = flag;
             m_errorLabel.IsVisible = !flag;
             m_blankSeedLabel.IsVisible = m_worldSettings.Seed.Length == 0 && !m_seedTextBox.HasFocus;
-            m_descriptionLabel.Text = StringsManager.GetString("GameMode." + m_worldSettings.GameMode + ".Description");
+            m_descriptionLabel.Text = StringsManager.GetString($"GameMode.{m_worldSettings.GameMode}.Description");
             if (m_worldOptionsButton.IsClicked) {
                 ScreensManager.SwitchScreen("WorldOptions", m_worldSettings, false);
             }

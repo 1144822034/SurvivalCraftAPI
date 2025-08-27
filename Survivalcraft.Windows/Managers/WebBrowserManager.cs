@@ -17,7 +17,7 @@ namespace Game {
 #endif
             }
             catch (Exception ex) {
-                Log.Error("Error launching web browser with URL \"" + url + "\". Reason: " + ex.Message);
+                Log.Error($"Error launching web browser with URL \"{url}\". Reason: {ex.Message}");
             }
         }
     }

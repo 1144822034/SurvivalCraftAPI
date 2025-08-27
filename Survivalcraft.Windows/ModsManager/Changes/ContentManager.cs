@@ -27,7 +27,7 @@ namespace Game {
                 ContentStream.Position = 0L;
             }
             else {
-                throw new Exception("Can't set ContentStream width type " + stream.GetType().Name);
+                throw new Exception($"Can't set ContentStream width type {stream.GetType().Name}");
             }
         }
 
@@ -74,7 +74,7 @@ namespace Game {
         public static object Get(Type type, string name, string suffix = null, bool throwOnNotFound = true) {
             ArgumentNullException.ThrowIfNull(type);
             object obj = null;
-            string key = suffix == null ? name : name + (suffix.StartsWith('.') ? suffix : '.' + suffix);
+            string key = suffix == null ? name : name + (suffix.StartsWith('.') ? suffix : $".{suffix}");
             if (type == typeof(Subtexture)) {
                 return TextureAtlasManager.GetSubtexture(name, throwOnNotFound);
             }
@@ -89,7 +89,7 @@ namespace Game {
                 string p;
                 if (suffix == null) {
                     for (int i = 0; i < reader.DefaultSuffix.Length; i++) {
-                        p = name + "." + reader.DefaultSuffix[i];
+                        p = $"{name}.{reader.DefaultSuffix[i]}";
                         if (Caches.TryGetValue(p, out List<object> cacheList2)) {
                             obj = cacheList2.Find(f => f.GetType() == type);
                         }
@@ -113,7 +113,7 @@ namespace Game {
                 }
                 if (contents.Count == 0) {
                     //没有找到对应资源
-                    return throwOnNotFound ? throw new Exception("Not Found Res [" + key + "][" + type.FullName + "]") : null;
+                    return throwOnNotFound ? throw new Exception($"Not Found Res [{key}][{type.FullName}]") : null;
                 }
                 obj = reader.Get([.. contents]);
             }

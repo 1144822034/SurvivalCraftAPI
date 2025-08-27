@@ -160,7 +160,7 @@ namespace Game {
                         }
                     }
                     catch (Exception ex) {
-                        Log.Warning(e.Message + ":\nThe connection is unavailable. Url: " + requestUri);
+                        Log.Warning($"{e.Message}:\nThe connection is unavailable. Url: {requestUri}");
                         if (failure != null) {
                             Dispatcher.Dispatch(delegate { failure(ex); });
                         }
@@ -295,7 +295,7 @@ namespace Game {
                         }
                     }
                     catch (Exception e) {
-                        Log.Warning(e.Message + ":\nThe connection is unavailable. Url: " + requestUri);
+                        Log.Warning($"{e.Message}:\nThe connection is unavailable. Url: {requestUri}");
                         if (failure != null) {
                             Dispatcher.Dispatch(delegate { failure(e); });
                         }

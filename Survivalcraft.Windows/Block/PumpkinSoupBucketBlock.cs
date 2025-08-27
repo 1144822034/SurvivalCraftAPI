@@ -57,7 +57,7 @@ namespace Game {
                     };
                     int data = BasePumpkinBlock.SetIsDead(BasePumpkinBlock.SetSize(0, 7), isDead != 0);
                     int value = SetDamage(Terrain.MakeBlockValue(131, 0, data), rot);
-                    craftingRecipe.Ingredients[0] = "pumpkin:" + Terrain.ExtractData(value).ToString(CultureInfo.InvariantCulture);
+                    craftingRecipe.Ingredients[0] = $"pumpkin:{Terrain.ExtractData(value).ToString(CultureInfo.InvariantCulture)}";
                     craftingRecipe.Ingredients[1] = "waterbucket";
                     yield return craftingRecipe;
                     num = rot + 1;

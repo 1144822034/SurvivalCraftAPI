@@ -38,7 +38,7 @@ namespace Game {
             ValidateFurniturePack(stream);
             stream.Position = 0L;
             string fileNameWithoutExtension = Storage.GetFileNameWithoutExtension(name);
-            name = fileNameWithoutExtension + ".scfpack";
+            name = $"{fileNameWithoutExtension}.scfpack";
             string fileName = GetFileName(name);
             int num = 0;
             while (Storage.FileExists(fileName)) {

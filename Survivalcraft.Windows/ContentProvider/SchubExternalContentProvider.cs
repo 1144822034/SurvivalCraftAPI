@@ -97,7 +97,7 @@ namespace Game {
             try {
                 VerifyLoggedIn();
                 Dictionary<string, string> dictionary = new() {
-                    { "Authorization", "Bearer " + SettingsManager.ScpboxAccessToken }, { "Content-Type", "application/json" }
+                    { "Authorization", $"Bearer {SettingsManager.ScpboxAccessToken}" }, { "Content-Type", "application/json" }
                 };
                 JsonObject jsonObject = new() {
                     { "path", NormalizePath(path) },
@@ -108,7 +108,7 @@ namespace Game {
                 };
                 MemoryStream data = new(Encoding.UTF8.GetBytes(jsonObject.ToJsonString()));
                 WebManager.Post(
-                    m_redirectUri + "/com/files/list_folder",
+                    $"{m_redirectUri}/com/files/list_folder",
                     null,
                     dictionary,
                     data,
@@ -134,10 +134,10 @@ namespace Game {
                 VerifyLoggedIn();
                 JsonObject jsonObject = new() { { "path", NormalizePath(path) } };
                 Dictionary<string, string> dictionary = new() {
-                    { "Authorization", "Bearer " + SettingsManager.ScpboxAccessToken }, { "Dropbox-API-Arg", jsonObject.ToJsonString() }
+                    { "Authorization", $"Bearer {SettingsManager.ScpboxAccessToken}" }, { "Dropbox-API-Arg", jsonObject.ToJsonString() }
                 };
                 WebManager.Get(
-                    m_redirectUri + "/com/files/download",
+                    $"{m_redirectUri}/com/files/download",
                     null,
                     dictionary,
                     progress,
@@ -155,12 +155,12 @@ namespace Game {
                 VerifyLoggedIn();
                 JsonObject jsonObject = new() { { "path", NormalizePath(path) }, { "mode", "add" }, { "autorename", true }, { "mute", false } };
                 Dictionary<string, string> dictionary = new() {
-                    { "Authorization", "Bearer " + SettingsManager.ScpboxAccessToken },
+                    { "Authorization", $"Bearer {SettingsManager.ScpboxAccessToken}" },
                     { "Content-Type", "application/octet-stream" },
                     { "Dropbox-API-Arg", jsonObject.ToJsonString() }
                 };
                 WebManager.Post(
-                    m_redirectUri + "/com/files/upload",
+                    $"{m_redirectUri}/com/files/upload",
                     null,
                     dictionary,
                     stream,
@@ -178,12 +178,12 @@ namespace Game {
             try {
                 VerifyLoggedIn();
                 Dictionary<string, string> dictionary = new() {
-                    { "Authorization", "Bearer " + SettingsManager.ScpboxAccessToken }, { "Content-Type", "application/json" }
+                    { "Authorization", $"Bearer {SettingsManager.ScpboxAccessToken}" }, { "Content-Type", "application/json" }
                 };
                 JsonObject jsonObject = new() { { "path", NormalizePath(path) }, { "short_url", false } };
                 MemoryStream data = new(Encoding.UTF8.GetBytes(jsonObject.ToJsonString()));
                 WebManager.Post(
-                    m_redirectUri + "/com/sharing/create_shared_link",
+                    $"{m_redirectUri}/com/sharing/create_shared_link",
                     null,
                     dictionary,
                     data,
@@ -215,10 +215,9 @@ namespace Game {
                         SettingsManager.ScpboxAccessToken = data.GetProperty("accessToken").GetString() ?? string.Empty;
                         SettingsManager.ScpboxUserInfo = string.Empty;
                         string nickName = data.GetProperty("nickName").GetString() ?? string.Empty;
-                        SettingsManager.ScpboxUserInfo += "昵称：" + nickName;
-                        SettingsManager.ScpboxUserInfo += "\n账号：" + data.GetProperty("user").GetString();
-                        SettingsManager.ScpboxUserInfo += "\n登录时间："
-                        + TimeZoneInfo.ConvertTimeFromUtc(
+                        SettingsManager.ScpboxUserInfo += $"昵称：{nickName}";
+                        SettingsManager.ScpboxUserInfo += $"\n账号：{data.GetProperty("user").GetString()}";
+                        SettingsManager.ScpboxUserInfo += $"\n登录时间：{TimeZoneInfo.ConvertTimeFromUtc(
                             new DateTime(
                                 1970,
                                 1,
@@ -229,12 +228,12 @@ namespace Game {
                                 DateTimeKind.Utc
                             ).AddSeconds(data.GetProperty("loginTime").GetInt64()),
                             TimeZoneInfo.Local
-                        );
+                        )}";
                         DialogsManager.ShowDialog(
                             null,
                             new MessageDialog(
                                 LanguageControl.Ok,
-                                "登录成功:" + nickName,
+                                $"登录成功:{nickName}",
                                 LanguageControl.Ok,
                                 null,
                                 delegate {
@@ -250,7 +249,7 @@ namespace Game {
                             null,
                             new MessageDialog(
                                 LanguageControl.Ok,
-                                "登录失败:" + login.tip.Text,
+                                $"登录失败:{login.tip.Text}",
                                 LanguageControl.Ok,
                                 null,
                                 delegate {
@@ -267,7 +266,7 @@ namespace Game {
                         null,
                         new MessageDialog(
                             LanguageControl.Error,
-                            "登录失败:" + e.Message,
+                            $"登录失败:{e.Message}",
                             LanguageControl.Ok,
                             null,
                             delegate {
@@ -400,7 +399,7 @@ namespace Game {
         //获取分享连接
         public static string JsonElementToLinkAddress(JsonElement jsonElement) {
             if (jsonElement.TryGetProperty("url", out JsonElement url)) {
-                return url.GetString()?.Replace("www.dropbox.", "dl.dropbox.").Replace("?dl=0", "") + "?dl=1";
+                return $"{url.GetString()?.Replace("www.dropbox.", "dl.dropbox.").Replace("?dl=0", "")}?dl=1";
             }
             throw new InvalidOperationException("Share information not found.");
         }
@@ -411,7 +410,7 @@ namespace Game {
             }
             if (path.Length > 0
                 && path[0] != '/') {
-                return "/" + path;
+                return $"/{path}";
             }
             return path;
         }

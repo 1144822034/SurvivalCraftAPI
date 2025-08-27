@@ -1557,7 +1557,7 @@ namespace Game {
             // 绘制候选词文字。
             for (int i = CandidatesSelection / CandidatesPageSize; i < CandidatesSelection / CandidatesPageSize + CandidatesPageSize; i++) {
                 // 获取候选词文字，并在前面加上序号。
-                string candidate = i + 1 + " " + CandidatesList[i];
+                string candidate = $"{i + 1} {CandidatesList[i]}";
 
                 // 遍历计算当前文本长度
                 float width = 0;

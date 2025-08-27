@@ -81,22 +81,19 @@ namespace Game {
                 m_propertyValues1Widget.Text = string.Empty;
                 m_propertyNames1Widget.Text += LanguageControl.Get(GetType().Name, "resilience");
                 LabelWidget propertyValues1Widget = m_propertyValues1Widget;
-                propertyValues1Widget.Text = propertyValues1Widget.Text + bestiaryCreatureInfo.AttackResilience + "\n";
+                propertyValues1Widget.Text = $"{propertyValues1Widget.Text}{bestiaryCreatureInfo.AttackResilience}\n";
                 m_propertyNames1Widget.Text += LanguageControl.Get(GetType().Name, "attack");
                 LabelWidget propertyValues1Widget2 = m_propertyValues1Widget;
-                propertyValues1Widget2.Text = propertyValues1Widget2.Text
-                    + (bestiaryCreatureInfo.AttackPower > 0f ? bestiaryCreatureInfo.AttackPower.ToString("0.0") : LanguageControl.None)
-                    + "\n";
+                propertyValues1Widget2.Text =
+                    $"{propertyValues1Widget2.Text}{(bestiaryCreatureInfo.AttackPower > 0f ? bestiaryCreatureInfo.AttackPower.ToString("0.0") : LanguageControl.None)}\n";
                 m_propertyNames1Widget.Text += LanguageControl.Get(GetType().Name, "herding");
                 LabelWidget propertyValues1Widget3 = m_propertyValues1Widget;
-                propertyValues1Widget3.Text = propertyValues1Widget3.Text
-                    + (bestiaryCreatureInfo.IsHerding ? LanguageControl.Yes : LanguageControl.No)
-                    + "\n";
+                propertyValues1Widget3.Text =
+                    $"{propertyValues1Widget3.Text}{(bestiaryCreatureInfo.IsHerding ? LanguageControl.Yes : LanguageControl.No)}\n";
                 m_propertyNames1Widget.Text += LanguageControl.Get(GetType().Name, 1);
                 LabelWidget propertyValues1Widget4 = m_propertyValues1Widget;
-                propertyValues1Widget4.Text = propertyValues1Widget4.Text
-                    + (bestiaryCreatureInfo.CanBeRidden ? LanguageControl.Yes : LanguageControl.No)
-                    + "\n";
+                propertyValues1Widget4.Text =
+                    $"{propertyValues1Widget4.Text}{(bestiaryCreatureInfo.CanBeRidden ? LanguageControl.Yes : LanguageControl.No)}\n";
                 m_propertyNames1Widget.Text = m_propertyNames1Widget.Text.TrimEnd();
                 m_propertyValues1Widget.Text = m_propertyValues1Widget.Text.TrimEnd();
                 m_propertyNames2Widget.Text = string.Empty;
@@ -116,11 +113,10 @@ namespace Game {
                 propertyValues2Widget3.Text = propertyValues2Widget3.Text
                     + bestiaryCreatureInfo.Mass
                     + LanguageControl.Get(GetType().Name, "weight unit");
-                m_propertyNames2Widget.Text += LanguageControl.Get("BlocksManager", "Spawner Eggs") + ":";
+                m_propertyNames2Widget.Text += $"{LanguageControl.Get("BlocksManager", "Spawner Eggs")}:";
                 LabelWidget propertyValues2Widget4 = m_propertyValues2Widget;
-                propertyValues2Widget4.Text = propertyValues2Widget4.Text
-                    + (bestiaryCreatureInfo.HasSpawnerEgg ? LanguageControl.Exists : LanguageControl.None)
-                    + "\n";
+                propertyValues2Widget4.Text =
+                    $"{propertyValues2Widget4.Text}{(bestiaryCreatureInfo.HasSpawnerEgg ? LanguageControl.Exists : LanguageControl.None)}\n";
                 m_propertyNames2Widget.Text = m_propertyNames2Widget.Text.TrimEnd();
                 m_propertyValues2Widget.Text = m_propertyValues2Widget.Text.TrimEnd();
                 m_dropsPanel.Children.Clear();

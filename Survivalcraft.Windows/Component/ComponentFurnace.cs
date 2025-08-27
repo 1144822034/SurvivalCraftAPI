@@ -241,7 +241,7 @@ namespace Game {
                     int num2 = Terrain.ExtractData(slotValue);
                     if (GetSlotCount(i) > 0) {
                         Block block = BlocksManager.Blocks[num];
-                        m_matchedIngredients[i] = block.GetCraftingId(slotValue) + ":" + num2.ToString(CultureInfo.InvariantCulture);
+                        m_matchedIngredients[i] = $"{block.GetCraftingId(slotValue)}:{num2.ToString(CultureInfo.InvariantCulture)}";
                     }
                     else {
                         m_matchedIngredients[i] = null;
