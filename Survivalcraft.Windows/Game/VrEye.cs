@@ -1,8 +1,6 @@
-namespace Game
-{
-	public enum VrEye
-	{
-		Left,
-		Right
-	}
+namespace Game {
+    public enum VrEye {
+        Left,
+        Right
+    }
 }

@@ -1,12 +1,7 @@
-namespace Game
-{
-	public class StoneSlabBlock : SlabBlock
-	{
-		public static int Index = 136;
+namespace Game {
+    public class StoneSlabBlock : SlabBlock {
+        public static int Index = 136;
 
-		public StoneSlabBlock()
-			: base(24, 3)
-		{
-		}
-	}
+        public StoneSlabBlock() : base(24, 3) { }
+    }
 }

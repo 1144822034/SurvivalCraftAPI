@@ -1,8 +1,5 @@
-namespace Game
-{
-	public class SureDialog : Dialog
-	{
-		//decimal
-
-	}
+namespace Game {
+    public class SureDialog : Dialog {
+        //decimal
+    }
 }

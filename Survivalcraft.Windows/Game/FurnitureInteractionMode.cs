@@ -1,11 +1,9 @@
-namespace Game
-{
-	public enum FurnitureInteractionMode
-	{
-		None,
-		Multistate,
-		ElectricButton,
-		ElectricSwitch,
-		ConnectedMultistate
-	}
+namespace Game {
+    public enum FurnitureInteractionMode {
+        None,
+        Multistate,
+        ElectricButton,
+        ElectricSwitch,
+        ConnectedMultistate
+    }
 }

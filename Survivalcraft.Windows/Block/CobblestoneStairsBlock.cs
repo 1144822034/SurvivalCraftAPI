@@ -1,12 +1,7 @@
-namespace Game
-{
-	public class CobblestoneStairsBlock : StairsBlock
-	{
-		public static int Index = 48;
+namespace Game {
+    public class CobblestoneStairsBlock : StairsBlock {
+        public static int Index = 48;
 
-		public CobblestoneStairsBlock()
-			: base(69)
-		{
-		}
-	}
+        public CobblestoneStairsBlock() : base(69) { }
+    }
 }

@@ -1,12 +1,7 @@
-namespace Game
-{
-	public class WireThroughCobblestoneBlock : WireThroughBlock
-	{
-		public static int Index = 243;
+namespace Game {
+    public class WireThroughCobblestoneBlock : WireThroughBlock {
+        public static int Index = 243;
 
-		public WireThroughCobblestoneBlock()
-			: base(136, 16)
-		{
-		}
-	}
+        public WireThroughCobblestoneBlock() : base(136, 16) { }
+    }
 }

@@ -1,787 +1,591 @@
 using Engine;
 using Engine.Graphics;
 
-namespace Game
-{
-	public abstract class Block
-	{
-		public int BlockIndex;
+namespace Game {
+    public abstract class Block {
+        public int BlockIndex;
 
-		public string DefaultDisplayName = string.Empty;
+        public string DefaultDisplayName = string.Empty;
 
-		public string DefaultDescription = string.Empty;
+        public string DefaultDescription = string.Empty;
 
-		public string DefaultCategory = string.Empty;
+        public string DefaultCategory = string.Empty;
 
-		public int DisplayOrder;
+        public int DisplayOrder;
 
-		public Vector3 DefaultIconBlockOffset = Vector3.Zero;
+        public Vector3 DefaultIconBlockOffset = Vector3.Zero;
 
-		public Vector3 DefaultIconViewOffset = new(1f);
+        public Vector3 DefaultIconViewOffset = new(1f);
 
-		public float DefaultIconViewScale = 1f;
+        public float DefaultIconViewScale = 1f;
 
-		public float FirstPersonScale = 1f;
+        public float FirstPersonScale = 1f;
 
-		public Vector3 FirstPersonOffset = Vector3.Zero;
+        public Vector3 FirstPersonOffset = Vector3.Zero;
 
-		[Obsolete("overrode \"IsIndexDynamic\" instead.")]
-		public bool StaticBlockIndex = false;
-		public virtual bool IsIndexDynamic => !StaticBlockIndex;
+        [Obsolete("overrode \"IsIndexDynamic\" instead.")]
+        public bool StaticBlockIndex = false;
 
-		public bool CanBeBuiltIntoFurniture = false;
+        public virtual bool IsIndexDynamic => !StaticBlockIndex;
 
-		public bool IsCollapsable = false;
-		public virtual Vector3 GetFirstPersonOffset(int value)
-		{
-			return FirstPersonOffset;
-		}
+        public bool CanBeBuiltIntoFurniture = false;
 
-		public Vector3 FirstPersonRotation = Vector3.Zero;
-		public virtual Vector3 GetFirstPersonRotation(int value)
-		{
-			return FirstPersonRotation;
-		}
-		public float InHandScale = 1f;
-		public virtual float GetInHandScale(int value)
-		{
-			return InHandScale;
-		}
-		public Vector3 InHandOffset = Vector3.Zero;
-		public virtual Vector3 GetInHandOffset(int value)
-		{
-			return InHandOffset;
-		}
-		public Vector3 InHandRotation = Vector3.Zero;
+        public bool IsCollapsable = false;
+        public virtual Vector3 GetFirstPersonOffset(int value) => FirstPersonOffset;
 
-		public virtual Vector3 GetInHandRotation(int value)
-		{
-			return InHandRotation;
-		}
-		public string Behaviors = string.Empty;
+        public Vector3 FirstPersonRotation = Vector3.Zero;
+        public virtual Vector3 GetFirstPersonRotation(int value) => FirstPersonRotation;
+        public float InHandScale = 1f;
+        public virtual float GetInHandScale(int value) => InHandScale;
+        public Vector3 InHandOffset = Vector3.Zero;
+        public virtual Vector3 GetInHandOffset(int value) => InHandOffset;
+        public Vector3 InHandRotation = Vector3.Zero;
 
-		public string CraftingId = string.Empty;
+        public virtual Vector3 GetInHandRotation(int value) => InHandRotation;
+        public string Behaviors = string.Empty;
 
-		public int DefaultCreativeData;
+        public string CraftingId = string.Empty;
 
-		public bool IsCollidable = true;
+        public int DefaultCreativeData;
 
-		public bool IsPlaceable = true;
+        public bool IsCollidable = true;
 
-		public bool IsDiggingTransparent;
+        public bool IsPlaceable = true;
 
-		public bool IsPlacementTransparent;
+        public bool IsDiggingTransparent;
 
-		public bool DefaultIsInteractive;
+        public bool IsPlacementTransparent;
 
-		public bool IsEditable;
+        public bool DefaultIsInteractive;
 
-		public bool IsNonDuplicable;
+        public bool IsEditable;
 
-		public bool IsGatherable;
+        public bool IsNonDuplicable;
 
-		public bool HasCollisionBehavior;
+        public bool IsGatherable;
 
-		public bool KillsWhenStuck;
+        public bool HasCollisionBehavior;
 
-		public bool IsFluidBlocker = true;
+        public bool KillsWhenStuck;
 
-		public bool IsTransparent;
+        public bool IsFluidBlocker = true;
 
-		public bool GenerateFacesForSameNeighbors;
+        public bool IsTransparent;
 
-		public int DefaultShadowStrength;
+        public bool GenerateFacesForSameNeighbors;
 
-		public int LightAttenuation;
+        public int DefaultShadowStrength;
 
-		public int DefaultEmittedLightAmount;
+        public int LightAttenuation;
 
-		public float ObjectShadowStrength;
+        public int DefaultEmittedLightAmount;
 
-		public int DefaultDropContent;
+        public float ObjectShadowStrength;
 
-		public float DefaultDropCount = 1f;
+        public int DefaultDropContent;
 
-		public float DefaultExperienceCount;
+        public float DefaultDropCount = 1f;
 
-		public int RequiredToolLevel;
+        public float DefaultExperienceCount;
 
-		public int MaxStacking = 40;
+        public int RequiredToolLevel;
 
-		public float SleepSuitability;
+        public int MaxStacking = 40;
 
-		public float FrictionFactor = 1f;
+        public float SleepSuitability;
 
-		public float Density = 4f;
+        public float FrictionFactor = 1f;
 
-		public bool NoAutoJump;
+        public float Density = 4f;
 
-		public bool NoSmoothRise;
+        public bool NoAutoJump;
 
-		public int DefaultTextureSlot;
+        public bool NoSmoothRise;
 
-		public float DestructionDebrisScale = 1f;
+        public int DefaultTextureSlot;
 
-		public float FuelHeatLevel;
+        public float DestructionDebrisScale = 1f;
 
-		public float FuelFireDuration;
+        public float FuelHeatLevel;
 
-		public string DefaultSoundMaterialName;
+        public float FuelFireDuration;
 
-		public float ShovelPower = 1f;
+        public string DefaultSoundMaterialName;
 
-		public float QuarryPower = 1f;
+        public float ShovelPower = 1f;
 
-		public float HackPower = 1f;
+        public float QuarryPower = 1f;
 
-		public float DefaultMeleePower = 1f;
+        public float HackPower = 1f;
 
-		public float DefaultMeleeHitProbability = 0.66f;
+        public float DefaultMeleePower = 1f;
 
-		public float DefaultProjectilePower = 1f;
+        public float DefaultMeleeHitProbability = 0.66f;
 
-		public int ToolLevel;
+        public float DefaultProjectilePower = 1f;
 
-		public int PlayerLevelRequired = 1;
+        public int ToolLevel;
 
-		public int Durability = -1;
+        public int PlayerLevelRequired = 1;
 
-		public BlockDigMethod DigMethod;
+        public int Durability = -1;
 
-		public float DigResilience = 1f;
+        public BlockDigMethod DigMethod;
 
-		public float ProjectileResilience = 1f;
+        public float DigResilience = 1f;
 
-		public bool IsAimable;
+        public float ProjectileResilience = 1f;
 
-		public bool IsStickable;
+        public bool IsAimable;
 
-		public bool AlignToVelocity;
+        public bool IsStickable;
 
-		public float ProjectileSpeed = 15f;
+        public bool AlignToVelocity;
 
-		public float ProjectileDamping = 0.8f;
+        public float ProjectileSpeed = 15f;
 
-		public float ProjectileTipOffset;
+        public float ProjectileDamping = 0.8f;
 
-		public bool DisintegratesOnHit;
+        public float ProjectileTipOffset;
 
-		public float ProjectileStickProbability;
+        public bool DisintegratesOnHit;
 
-		public float DefaultHeat;
+        public float ProjectileStickProbability;
 
-		public float FireDuration;
+        public float DefaultHeat;
 
-		public float ExplosionResilience;
+        public float FireDuration;
 
-		public float DefaultExplosionPressure;
+        public float ExplosionResilience;
 
-		public bool DefaultExplosionIncendiary;
+        public float DefaultExplosionPressure;
 
-		public bool ExplosionKeepsPickables;
+        public bool DefaultExplosionIncendiary;
 
-		public float DefaultNutritionalValue;
+        public bool ExplosionKeepsPickables;
 
-		public FoodType FoodType;
+        public float DefaultNutritionalValue;
 
-		public int DefaultRotPeriod;
+        public FoodType FoodType;
 
-		public float DefaultSicknessProbability;
+        public int DefaultRotPeriod;
 
-		public bool? DefaultIsNonAttachable = null;
+        public float DefaultSicknessProbability;
 
-		public int PriorityUse = 3000;
-		public int PriorityInteract = 2000;
-		public int PriorityPlace = 1000;
+        public bool? DefaultIsNonAttachable = null;
 
-		public static string fName = "Block";
+        public int PriorityUse = 3000;
+        public int PriorityInteract = 2000;
+        public int PriorityPlace = 1000;
 
-		public Random Random = new();
+        public static string fName = "Block";
 
-		public static BoundingBox[] m_defaultCollisionBoxes =
-		[
-			new(Vector3.Zero, Vector3.One)
-		];
-		public virtual float GetDensity(int value)
-		{
-			return Density;
-		}
-		public virtual float GetFirstPersonScale(int value)
-		{
-			return FirstPersonScale;
-		}
-		public virtual void Initialize()
-		{
-			if (Durability < -1 || Durability > 65535)
-			{
-				throw new InvalidOperationException(string.Format(LanguageControl.Get(fName, 1), DefaultDisplayName));
-			}
-		}
-		public virtual TerrainVertex SetDiggingCrackingTextureTransform(TerrainVertex vertex)
-		{
-			byte b = (byte)((vertex.Color.R + vertex.Color.G + vertex.Color.B) / 3);
-			vertex.Tx = (short)(vertex.Tx * 16f);
-			vertex.Ty = (short)(vertex.Ty * 16f);
-			vertex.Color = new Color(b, b, b, (byte)128);
-			return vertex;
-		}
-		public virtual Texture2D GetDiggingCrackingTexture(ComponentMiner miner, float digProgress, int value, Texture2D[] defaultCrackTextures)
-		{
-			int num2 = Math.Clamp((int)(digProgress * 8f), 0, 7);
-			return defaultCrackTextures[num2];
-		}
-		public virtual bool GetIsDiggingTransparent(int value)
-		{
-			return IsDiggingTransparent;
-		}
-
-		public virtual float GetObjectShadowStrength(int value)
-		{
-			return ObjectShadowStrength;
-		}
-
-		public virtual float GetFuelHeatLevel(int value)
-		{
-			return FuelHeatLevel;
-		}
-
-		public virtual float GetExplosionResilience(int value)
-		{
-			return ExplosionResilience;
-		}
-		public virtual float GetExplosionPressure(int value)
-		{
-			return DefaultExplosionPressure;
-		}
-		public virtual int GetMaxStacking(int value)
-		{
-			return MaxStacking;
-		}
-		public virtual float GetFuelFireDuration(int value)
-		{
-			return FuelFireDuration;
-		}
-		public virtual float GetProjectileResilience(int value)
-		{
-			return ProjectileResilience;
-		}
-		public virtual float GetFireDuration(int value) { return FireDuration; }
-		public virtual float GetProjectileStickProbability(int value)
-		{
-			return ProjectileStickProbability;
-		}
-		public virtual bool MatchCrafingId(string CraftId)
-		{
-			return CraftId == CraftingId;
-		}
-
-		public virtual int GetPlayerLevelRequired(int value)
-		{
-			return PlayerLevelRequired;
-		}
-		public virtual bool HasCollisionBehavior_(int value)
-		{
-			return HasCollisionBehavior;
-		}
-		public virtual string GetDisplayName(SubsystemTerrain subsystemTerrain, int value)
-		{
-			int data = Terrain.ExtractData(value);
-			string bn = $"{GetType().Name}:{data}";
-			if (LanguageControl.TryGetBlock(bn, "DisplayName", out string result))
-			{
-				return result;
-			}
-			return DefaultDisplayName;
-		}
-		/// <summary>
-		/// 设置材质(正方形)单行格子(分割后每个材质)数,对放置后的方块无效
-		/// </summary>
-		/// <param name="value">材质(正方形)单行格子(分割后每个材质)数</param>
-		public virtual int GetTextureSlotCount(int value)
-		{
-			return 16;
-		}
-		public virtual bool IsEditable_(int value)
-		{
-			return IsEditable;
-		}
-		public virtual bool IsAimable_(int value)
-		{
-			return IsAimable;
-		}
-		public virtual bool Eat(ComponentVitalStats vitalStats, int value)
-		{
-			return false;
-		}
-		public virtual bool CanWear(int value)
-		{
-			return false;
-		}
-		public virtual ClothingData GetClothingData(int value)
-		{
-			return null;
-		}
-		public virtual int GetToolLevel(int value)
-		{
-			return ToolLevel;
-		}
-		public virtual bool IsCollidable_(int value)
-		{
-			return IsCollidable;
-		}
-		public virtual bool IsTransparent_(int value)
-		{
-			return IsTransparent;
-		}
-		public virtual bool GenerateFacesForSameNeighbors_(int value)
-		{
-			return GenerateFacesForSameNeighbors;
-		}
-		public virtual bool IsFluidBlocker_(int value)
-		{
-			return IsFluidBlocker;
-		}
-		public virtual bool IsGatherable_(int value)
-		{
-			return IsGatherable;
-		}
-		public virtual bool IsNonDuplicable_(int value)
-		{
-			return IsNonDuplicable;
-		}
-		public virtual bool IsPlaceable_(int value)
-		{
-			return IsPlaceable;
-		}
-		public virtual bool IsPlacementTransparent_(int value)
-		{
-			return IsPlacementTransparent;
-		}
-		public virtual bool IsStickable_(int value)
-		{
-			return IsStickable;
-		}
-		public virtual float GetProjectileSpeed(int value)
-		{
-			return ProjectileSpeed;
-		}
-		public virtual float GetProjectileDamping(int value)
-		{
-			return ProjectileDamping;
-		}
-		public virtual string GetDescription(int value)
-		{
-			int data = Terrain.ExtractData(value);
-			string bn = $"{GetType().Name}:{data}";
-			if (LanguageControl.TryGetBlock(bn, "Description", out string r)) return r;
-			return DefaultDescription;
-		}
-		public virtual FoodType GetFoodType(int value) { return FoodType; }
-		public virtual string GetCategory(int value)
-		{
-			return DefaultCategory;
-		}
-		public virtual float GetDigResilience(int value)
-		{
-			return DigResilience;
-		}
-		public virtual BlockDigMethod GetBlockDigMethod(int value)
-		{
-			return DigMethod;
-		}
-		public virtual float GetShovelPower(int value)
-		{
-			return ShovelPower;
-		}
-		public virtual float GetQuarryPower(int value)
-		{
-			return QuarryPower;
-		}
-		public virtual float GetHackPower(int value)
-		{
-			return HackPower;
-		}
-		public virtual IEnumerable<int> GetCreativeValues()
-		{
-			if (DefaultCreativeData >= 0)
-			{
-				yield return Terrain.ReplaceContents(Terrain.ReplaceData(0, DefaultCreativeData), BlockIndex);
-			}
-		}
-		public virtual bool GetAlignToVelocity(int value)
-		{
-			return AlignToVelocity;
-		}
-
-		public virtual bool IsInteractive(SubsystemTerrain subsystemTerrain, int value)
-		{
-			return DefaultIsInteractive;
-		}
-
-		public virtual IEnumerable<CraftingRecipe> GetProceduralCraftingRecipes()
-		{
-			yield break;
-		}
-
-		public virtual CraftingRecipe GetAdHocCraftingRecipe(SubsystemTerrain subsystemTerrain, string[] ingredients, float heatLevel, float playerLevel)
-		{
-			return null;
-		}
-
-		public virtual bool IsFaceTransparent(SubsystemTerrain subsystemTerrain, int face, int value)
-		{
-			return IsTransparent;
-		}
-
-		public virtual bool ShouldGenerateFace(SubsystemTerrain subsystemTerrain, int face, int value, int neighborValue, int x, int y, int z)
-		{
-			int num = Terrain.ExtractContents(neighborValue);
-			return BlocksManager.Blocks[num].IsFaceTransparent(subsystemTerrain, CellFace.OppositeFace(face), neighborValue);
-		}
-
-		public virtual int GetShadowStrength(int value)
-		{
-			return DefaultShadowStrength;
-		}
-
-		public virtual int GetFaceTextureSlot(int face, int value)
-		{
-			return DefaultTextureSlot;
-		}
-
-		public virtual string GetSoundMaterialName(SubsystemTerrain subsystemTerrain, int value)
-		{
-			return DefaultSoundMaterialName;
-		}
-		/// <summary>
-		/// 生成地形顶点(用于绘制放置的方块)
-		/// </summary>
-		/// <param name="generator"></param>
-		/// <param name="geometry"></param>
-		/// <param name="value"></param>
-		/// <param name="x"></param>
-		/// <param name="y"></param>
-		/// <param name="z"></param>
-		public abstract void GenerateTerrainVertices(BlockGeometryGenerator generator, TerrainGeometry geometry, int value, int x, int y, int z);
-		public virtual void GenerateTerrainVertices(BlockGeometryGenerator generator, TerrainGeometrySubset geometry, int value, int x, int y, int z) { }
-		/// <summary>
-		/// 绘制方块_用于绘制方块物品形态
-		/// </summary>
-		/// <param name="primitivesRenderer"></param>
-		/// <param name="value"></param>
-		/// <param name="color"></param>
-		/// <param name="size"></param>
-		/// <param name="matrix"></param>
-		/// <param name="environmentData"></param>
-		public abstract void DrawBlock(PrimitivesRenderer3D primitivesRenderer, int value, Color color, float size, ref Matrix matrix, DrawBlockEnvironmentData environmentData);
-		/// <summary>
-		/// 方块放置方向
-		/// </summary>
-		public virtual BlockPlacementData GetPlacementValue(SubsystemTerrain subsystemTerrain, ComponentMiner componentMiner, int value, TerrainRaycastResult raycastResult)
-		{
-			BlockPlacementData result = default;
-			result.Value = value;
-			result.CellFace = raycastResult.CellFace;
-			return result;
-		}
-		public virtual string GetCraftingId(int value)
-		{
-
-			return CraftingId;
-		}
-		public virtual int GetDisplayOrder(int value)
-		{
-			return DisplayOrder;
-		}
-		public virtual BlockPlacementData GetDigValue(SubsystemTerrain subsystemTerrain, ComponentMiner componentMiner, int value, int toolValue, TerrainRaycastResult raycastResult)
-		{
-			BlockPlacementData result = default;
-			result.Value = 0;
-			result.CellFace = raycastResult.CellFace;
-			return result;
-		}
-		public virtual float GetRequiredToolLevel(int value)
-		{
-
-			return RequiredToolLevel;
-		}
-		public virtual void GetDropValues(SubsystemTerrain subsystemTerrain, int oldValue, int newValue, int toolLevel, List<BlockDropValue> dropValues, out bool showDebris)
-		{
-			showDebris = DestructionDebrisScale > 0f;
-			if (toolLevel < RequiredToolLevel)
-			{
-				return;
-			}
-			BlockDropValue item;
-			if (DefaultDropContent != 0)
-			{
-				int num = (int)DefaultDropCount;
-				if (Random.Bool(DefaultDropCount - num))
-				{
-					num++;
-				}
-				for (int i = 0; i < num; i++)
-				{
-					item = new BlockDropValue
-					{
-						Value = Terrain.MakeBlockValue(DefaultDropContent),
-						Count = 1
-					};
-					dropValues.Add(item);
-				}
-			}
-			int num2 = (int)DefaultExperienceCount;
-			if (Random.Bool(DefaultExperienceCount - num2))
-			{
-				num2++;
-			}
-			for (int j = 0; j < num2; j++)
-			{
-				item = new BlockDropValue
-				{
-					Value = Terrain.MakeBlockValue(248),
-					Count = 1
-				};
-				dropValues.Add(item);
-			}
-		}
-
-		public virtual int GetDamage(int value)
-		{
-			return (Terrain.ExtractData(value) >> 4) & 0xFFF;
-		}
-
-		public virtual int SetDamage(int value, int damage)
-		{
-			int num = Terrain.ExtractData(value);
-			num &= 0xF;
-			num |= Math.Clamp(damage, 0, 4095) << 4;
-			return Terrain.ReplaceData(value, num);
-		}
-
-		public virtual int GetDamageDestructionValue(int value)
-		{
-			return 0;
-		}
-
-		public virtual int GetRotPeriod(int value)
-		{
-			return DefaultRotPeriod;
-		}
-
-		public virtual float GetSicknessProbability(int value)
-		{
-			return DefaultSicknessProbability;
-		}
-
-		public virtual float GetMeleePower(int value)
-		{
-			return DefaultMeleePower;
-		}
-
-		public virtual float GetMeleeHitProbability(int value)
-		{
-			return DefaultMeleeHitProbability;
-		}
-
-		public virtual float GetProjectilePower(int value)
-		{
-			return DefaultProjectilePower;
-		}
-
-		public virtual float GetHeat(int value)
-		{
-			return DefaultHeat;
-		}
-		public virtual float GetBlockHealth(int value)
-		{
-			int dur = GetDurability(value);
-			int dag = GetDamage(value);
-			if (dur > 0)
-			{
-				return (dur - dag) / (float)dur;
-			}
-			return -1f;
-		}
-		public virtual int GetDurability(int value)
-		{
-			return Durability;
-		}
-
-
-		public virtual bool GetExplosionIncendiary(int value)
-		{
-			return DefaultExplosionIncendiary;
-		}
-
-		public virtual Vector3 GetIconBlockOffset(int value, DrawBlockEnvironmentData environmentData)
-		{
-			return DefaultIconBlockOffset;
-		}
-
-		public virtual Vector3 GetIconViewOffset(int value, DrawBlockEnvironmentData environmentData)
-		{
-			return DefaultIconViewOffset;
-		}
-
-		public virtual float GetIconViewScale(int value, DrawBlockEnvironmentData environmentData)
-		{
-			return DefaultIconViewScale;
-		}
-
-		public virtual BlockDebrisParticleSystem CreateDebrisParticleSystem(SubsystemTerrain subsystemTerrain, Vector3 position, int value, float strength)
-		{
-			return new BlockDebrisParticleSystem(subsystemTerrain, position, strength, DestructionDebrisScale, Color.White, GetFaceTextureSlot(4, value));
-		}
-
-		public virtual BoundingBox[] GetCustomCollisionBoxes(SubsystemTerrain terrain, int value)
-		{
-			return m_defaultCollisionBoxes;
-		}
-
-		public virtual BoundingBox[] GetCustomInteractionBoxes(SubsystemTerrain terrain, int value)
-		{
-			return GetCustomCollisionBoxes(terrain, value);
-		}
-
-		public virtual int GetEmittedLightAmount(int value)
-		{
-			return DefaultEmittedLightAmount;
-		}
-
-		public virtual float GetNutritionalValue(int value)
-		{
-			return DefaultNutritionalValue;
-		}
-
-		public virtual bool ShouldAvoid(int value)
-		{
-			return false;
-		}
-		public virtual bool ShouldAvoid(int value, ComponentPilot componentPilot)
-		{
-			return ShouldAvoid(value);
-		}
-
-		public virtual bool IsSwapAnimationNeeded(int oldValue, int newValue)
-		{
-			return true;
-		}
-
-		public virtual bool IsHeatBlocker(int value)
-		{
-			return IsCollidable_(value);
-		}
-
-		public virtual float? Raycast(Ray3 ray, SubsystemTerrain subsystemTerrain, int value, bool useInteractionBoxes, out int nearestBoxIndex, out BoundingBox nearestBox)
-		{
-			float? result = null;
-			nearestBoxIndex = 0;
-			nearestBox = default;
-			BoundingBox[] array = useInteractionBoxes ? GetCustomInteractionBoxes(subsystemTerrain, value) : GetCustomCollisionBoxes(subsystemTerrain, value);
-			for (int i = 0; i < array.Length; i++)
-			{
-				float? num = ray.Intersection(array[i]);
-				if (num.HasValue && (!result.HasValue || num.Value < result.Value))
-				{
-					nearestBoxIndex = i;
-					result = num;
-				}
-			}
-			nearestBox = array[nearestBoxIndex];
-			return result;
-		}
-
-		public virtual bool GetIsCollapsable(int value)
-		{
-			return IsCollapsable;
-		}
-		public virtual bool IsCollapseSupportBlock(SubsystemTerrain subsystemTerrain, int value)
-		{
-			return !IsFaceNonAttachable(subsystemTerrain, 4, value, 0);
-		}
-
-		public virtual bool IsCollapseDestructibleBlock(int value)
-		{
-            return true;
+        public Random Random = new();
+
+        public static BoundingBox[] m_defaultCollisionBoxes = [new(Vector3.Zero, Vector3.One)];
+        public virtual float GetDensity(int value) => Density;
+
+        public virtual float GetFirstPersonScale(int value) => FirstPersonScale;
+
+        public virtual void Initialize() {
+            if (Durability < -1
+                || Durability > 65535) {
+                throw new InvalidOperationException(string.Format(LanguageControl.Get(fName, 1), DefaultDisplayName));
+            }
         }
 
-		public virtual bool IsMovableByPiston(int value, int pistonFace, int y, out bool isEnd)
-		{
-			isEnd = false;
-            if (IsNonDuplicable_(value))
-            {
+        public virtual TerrainVertex SetDiggingCrackingTextureTransform(TerrainVertex vertex) {
+            byte b = (byte)((vertex.Color.R + vertex.Color.G + vertex.Color.B) / 3);
+            vertex.Tx = (short)(vertex.Tx * 16f);
+            vertex.Ty = (short)(vertex.Ty * 16f);
+            vertex.Color = new Color(b, b, b, (byte)128);
+            return vertex;
+        }
+
+        public virtual Texture2D GetDiggingCrackingTexture(ComponentMiner miner, float digProgress, int value, Texture2D[] defaultCrackTextures) {
+            int num2 = Math.Clamp((int)(digProgress * 8f), 0, 7);
+            return defaultCrackTextures[num2];
+        }
+
+        public virtual bool GetIsDiggingTransparent(int value) => IsDiggingTransparent;
+
+        public virtual float GetObjectShadowStrength(int value) => ObjectShadowStrength;
+
+        public virtual float GetFuelHeatLevel(int value) => FuelHeatLevel;
+
+        public virtual float GetExplosionResilience(int value) => ExplosionResilience;
+
+        public virtual float GetExplosionPressure(int value) => DefaultExplosionPressure;
+
+        public virtual int GetMaxStacking(int value) => MaxStacking;
+
+        public virtual float GetFuelFireDuration(int value) => FuelFireDuration;
+
+        public virtual float GetProjectileResilience(int value) => ProjectileResilience;
+        public virtual float GetFireDuration(int value) => FireDuration;
+
+        public virtual float GetProjectileStickProbability(int value) => ProjectileStickProbability;
+
+        public virtual bool MatchCrafingId(string CraftId) => CraftId == CraftingId;
+
+        public virtual int GetPlayerLevelRequired(int value) => PlayerLevelRequired;
+
+        public virtual bool HasCollisionBehavior_(int value) => HasCollisionBehavior;
+
+        public virtual string GetDisplayName(SubsystemTerrain subsystemTerrain, int value) {
+            int data = Terrain.ExtractData(value);
+            string bn = $"{GetType().Name}:{data}";
+            if (LanguageControl.TryGetBlock(bn, "DisplayName", out string result)) {
+                return result;
+            }
+            return DefaultDisplayName;
+        }
+
+        /// <summary>
+        ///     设置材质(正方形)单行格子(分割后每个材质)数,对放置后的方块无效
+        /// </summary>
+        /// <param name="value">材质(正方形)单行格子(分割后每个材质)数</param>
+        public virtual int GetTextureSlotCount(int value) => 16;
+
+        public virtual bool IsEditable_(int value) => IsEditable;
+
+        public virtual bool IsAimable_(int value) => IsAimable;
+
+        public virtual bool Eat(ComponentVitalStats vitalStats, int value) => false;
+
+        public virtual bool CanWear(int value) => false;
+
+        public virtual ClothingData GetClothingData(int value) => null;
+
+        public virtual int GetToolLevel(int value) => ToolLevel;
+
+        public virtual bool IsCollidable_(int value) => IsCollidable;
+
+        public virtual bool IsTransparent_(int value) => IsTransparent;
+
+        public virtual bool GenerateFacesForSameNeighbors_(int value) => GenerateFacesForSameNeighbors;
+
+        public virtual bool IsFluidBlocker_(int value) => IsFluidBlocker;
+
+        public virtual bool IsGatherable_(int value) => IsGatherable;
+
+        public virtual bool IsNonDuplicable_(int value) => IsNonDuplicable;
+
+        public virtual bool IsPlaceable_(int value) => IsPlaceable;
+
+        public virtual bool IsPlacementTransparent_(int value) => IsPlacementTransparent;
+
+        public virtual bool IsStickable_(int value) => IsStickable;
+
+        public virtual float GetProjectileSpeed(int value) => ProjectileSpeed;
+
+        public virtual float GetProjectileDamping(int value) => ProjectileDamping;
+
+        public virtual string GetDescription(int value) {
+            int data = Terrain.ExtractData(value);
+            string bn = $"{GetType().Name}:{data}";
+            if (LanguageControl.TryGetBlock(bn, "Description", out string r)) {
+                return r;
+            }
+            return DefaultDescription;
+        }
+
+        public virtual FoodType GetFoodType(int value) => FoodType;
+
+        public virtual string GetCategory(int value) => DefaultCategory;
+
+        public virtual float GetDigResilience(int value) => DigResilience;
+
+        public virtual BlockDigMethod GetBlockDigMethod(int value) => DigMethod;
+
+        public virtual float GetShovelPower(int value) => ShovelPower;
+
+        public virtual float GetQuarryPower(int value) => QuarryPower;
+
+        public virtual float GetHackPower(int value) => HackPower;
+
+        public virtual IEnumerable<int> GetCreativeValues() {
+            if (DefaultCreativeData >= 0) {
+                yield return Terrain.ReplaceContents(Terrain.ReplaceData(0, DefaultCreativeData), BlockIndex);
+            }
+        }
+
+        public virtual bool GetAlignToVelocity(int value) => AlignToVelocity;
+
+        public virtual bool IsInteractive(SubsystemTerrain subsystemTerrain, int value) => DefaultIsInteractive;
+
+        public virtual IEnumerable<CraftingRecipe> GetProceduralCraftingRecipes() {
+            yield break;
+        }
+
+        public virtual CraftingRecipe GetAdHocCraftingRecipe(SubsystemTerrain subsystemTerrain,
+            string[] ingredients,
+            float heatLevel,
+            float playerLevel) => null;
+
+        public virtual bool IsFaceTransparent(SubsystemTerrain subsystemTerrain, int face, int value) => IsTransparent;
+
+        public virtual bool ShouldGenerateFace(SubsystemTerrain subsystemTerrain,
+            int face,
+            int value,
+            int neighborValue,
+            int x,
+            int y,
+            int z) {
+            int num = Terrain.ExtractContents(neighborValue);
+            return BlocksManager.Blocks[num].IsFaceTransparent(subsystemTerrain, CellFace.OppositeFace(face), neighborValue);
+        }
+
+        public virtual int GetShadowStrength(int value) => DefaultShadowStrength;
+
+        public virtual int GetFaceTextureSlot(int face, int value) => DefaultTextureSlot;
+
+        public virtual string GetSoundMaterialName(SubsystemTerrain subsystemTerrain, int value) => DefaultSoundMaterialName;
+
+        /// <summary>
+        ///     生成地形顶点(用于绘制放置的方块)
+        /// </summary>
+        /// <param name="generator"></param>
+        /// <param name="geometry"></param>
+        /// <param name="value"></param>
+        /// <param name="x"></param>
+        /// <param name="y"></param>
+        /// <param name="z"></param>
+        public abstract void GenerateTerrainVertices(BlockGeometryGenerator generator, TerrainGeometry geometry, int value, int x, int y, int z);
+
+        public virtual void GenerateTerrainVertices(BlockGeometryGenerator generator,
+            TerrainGeometrySubset geometry,
+            int value,
+            int x,
+            int y,
+            int z) { }
+
+        /// <summary>
+        ///     绘制方块_用于绘制方块物品形态
+        /// </summary>
+        /// <param name="primitivesRenderer"></param>
+        /// <param name="value"></param>
+        /// <param name="color"></param>
+        /// <param name="size"></param>
+        /// <param name="matrix"></param>
+        /// <param name="environmentData"></param>
+        public abstract void DrawBlock(PrimitivesRenderer3D primitivesRenderer,
+            int value,
+            Color color,
+            float size,
+            ref Matrix matrix,
+            DrawBlockEnvironmentData environmentData);
+
+        /// <summary>
+        ///     方块放置方向
+        /// </summary>
+        public virtual BlockPlacementData GetPlacementValue(SubsystemTerrain subsystemTerrain,
+            ComponentMiner componentMiner,
+            int value,
+            TerrainRaycastResult raycastResult) {
+            BlockPlacementData result = default;
+            result.Value = value;
+            result.CellFace = raycastResult.CellFace;
+            return result;
+        }
+
+        public virtual string GetCraftingId(int value) => CraftingId;
+
+        public virtual int GetDisplayOrder(int value) => DisplayOrder;
+
+        public virtual BlockPlacementData GetDigValue(SubsystemTerrain subsystemTerrain,
+            ComponentMiner componentMiner,
+            int value,
+            int toolValue,
+            TerrainRaycastResult raycastResult) {
+            BlockPlacementData result = default;
+            result.Value = 0;
+            result.CellFace = raycastResult.CellFace;
+            return result;
+        }
+
+        public virtual float GetRequiredToolLevel(int value) => RequiredToolLevel;
+
+        public virtual void GetDropValues(SubsystemTerrain subsystemTerrain,
+            int oldValue,
+            int newValue,
+            int toolLevel,
+            List<BlockDropValue> dropValues,
+            out bool showDebris) {
+            showDebris = DestructionDebrisScale > 0f;
+            if (toolLevel < RequiredToolLevel) {
+                return;
+            }
+            BlockDropValue item;
+            if (DefaultDropContent != 0) {
+                int num = (int)DefaultDropCount;
+                if (Random.Bool(DefaultDropCount - num)) {
+                    num++;
+                }
+                for (int i = 0; i < num; i++) {
+                    item = new BlockDropValue { Value = Terrain.MakeBlockValue(DefaultDropContent), Count = 1 };
+                    dropValues.Add(item);
+                }
+            }
+            int num2 = (int)DefaultExperienceCount;
+            if (Random.Bool(DefaultExperienceCount - num2)) {
+                num2++;
+            }
+            for (int j = 0; j < num2; j++) {
+                item = new BlockDropValue { Value = Terrain.MakeBlockValue(248), Count = 1 };
+                dropValues.Add(item);
+            }
+        }
+
+        public virtual int GetDamage(int value) => (Terrain.ExtractData(value) >> 4) & 0xFFF;
+
+        public virtual int SetDamage(int value, int damage) {
+            int num = Terrain.ExtractData(value);
+            num &= 0xF;
+            num |= Math.Clamp(damage, 0, 4095) << 4;
+            return Terrain.ReplaceData(value, num);
+        }
+
+        public virtual int GetDamageDestructionValue(int value) => 0;
+
+        public virtual int GetRotPeriod(int value) => DefaultRotPeriod;
+
+        public virtual float GetSicknessProbability(int value) => DefaultSicknessProbability;
+
+        public virtual float GetMeleePower(int value) => DefaultMeleePower;
+
+        public virtual float GetMeleeHitProbability(int value) => DefaultMeleeHitProbability;
+
+        public virtual float GetProjectilePower(int value) => DefaultProjectilePower;
+
+        public virtual float GetHeat(int value) => DefaultHeat;
+
+        public virtual float GetBlockHealth(int value) {
+            int dur = GetDurability(value);
+            int dag = GetDamage(value);
+            if (dur > 0) {
+                return (dur - dag) / (float)dur;
+            }
+            return -1f;
+        }
+
+        public virtual int GetDurability(int value) => Durability;
+
+        public virtual bool GetExplosionIncendiary(int value) => DefaultExplosionIncendiary;
+
+        public virtual Vector3 GetIconBlockOffset(int value, DrawBlockEnvironmentData environmentData) => DefaultIconBlockOffset;
+
+        public virtual Vector3 GetIconViewOffset(int value, DrawBlockEnvironmentData environmentData) => DefaultIconViewOffset;
+
+        public virtual float GetIconViewScale(int value, DrawBlockEnvironmentData environmentData) => DefaultIconViewScale;
+
+        public virtual BlockDebrisParticleSystem CreateDebrisParticleSystem(SubsystemTerrain subsystemTerrain,
+            Vector3 position,
+            int value,
+            float strength) => new(subsystemTerrain, position, strength, DestructionDebrisScale, Color.White, GetFaceTextureSlot(4, value));
+
+        public virtual BoundingBox[] GetCustomCollisionBoxes(SubsystemTerrain terrain, int value) => m_defaultCollisionBoxes;
+
+        public virtual BoundingBox[] GetCustomInteractionBoxes(SubsystemTerrain terrain, int value) => GetCustomCollisionBoxes(terrain, value);
+
+        public virtual int GetEmittedLightAmount(int value) => DefaultEmittedLightAmount;
+
+        public virtual float GetNutritionalValue(int value) => DefaultNutritionalValue;
+
+        public virtual bool ShouldAvoid(int value) => false;
+
+        public virtual bool ShouldAvoid(int value, ComponentPilot componentPilot) => ShouldAvoid(value);
+
+        public virtual bool IsSwapAnimationNeeded(int oldValue, int newValue) => true;
+
+        public virtual bool IsHeatBlocker(int value) => IsCollidable_(value);
+
+        public virtual float? Raycast(Ray3 ray,
+            SubsystemTerrain subsystemTerrain,
+            int value,
+            bool useInteractionBoxes,
+            out int nearestBoxIndex,
+            out BoundingBox nearestBox) {
+            float? result = null;
+            nearestBoxIndex = 0;
+            nearestBox = default;
+            BoundingBox[] array = useInteractionBoxes
+                ? GetCustomInteractionBoxes(subsystemTerrain, value)
+                : GetCustomCollisionBoxes(subsystemTerrain, value);
+            for (int i = 0; i < array.Length; i++) {
+                float? num = ray.Intersection(array[i]);
+                if (num.HasValue
+                    && (!result.HasValue || num.Value < result.Value)) {
+                    nearestBoxIndex = i;
+                    result = num;
+                }
+            }
+            nearestBox = array[nearestBoxIndex];
+            return result;
+        }
+
+        public virtual bool GetIsCollapsable(int value) => IsCollapsable;
+
+        public virtual bool IsCollapseSupportBlock(SubsystemTerrain subsystemTerrain, int value) =>
+            !IsFaceNonAttachable(subsystemTerrain, 4, value, 0);
+
+        public virtual bool IsCollapseDestructibleBlock(int value) => true;
+
+        public virtual bool IsMovableByPiston(int value, int pistonFace, int y, out bool isEnd) {
+            isEnd = false;
+            if (IsNonDuplicable_(value)) {
                 return false;
             }
-            if (IsCollidable_(value))
-            {
+            if (IsCollidable_(value)) {
                 return true;
             }
             return false;
         }
 
-		public virtual bool IsBlockingPiston(int value)
-		{
-			return IsCollidable_(value);
-		}
+        public virtual bool IsBlockingPiston(int value) => IsCollidable_(value);
 
-		public virtual bool IsSuitableForPlants(int value, int plantValue)
-		{
-			return false;
-		}
+        public virtual bool IsSuitableForPlants(int value, int plantValue) => false;
 
-		public virtual bool IsNonAttachable(int value)
-		{
-			if(DefaultIsNonAttachable.HasValue) return DefaultIsNonAttachable.Value;
-			return IsTransparent_(value);
-		}
-
-		public virtual bool IsFaceNonAttachable(SubsystemTerrain subsystemTerrain,int face,int value, int attachBlockValue)
-		{
-			if(!IsCollidable_(value) || IsNonAttachable(value)) return true;
-			return false;
-		}
-
-		public virtual bool ShouldBeAddedToProject(SubsystemBlocksManager subsystemBlocksManager)
-		{
-			return true;
-		}
-
-		public virtual bool CanBlockBeBuiltIntoFurniture(int value)
-		{
-			return CanBeBuiltIntoFurniture;
-		}
-
-		public virtual int GetPriorityUse(int value, ComponentMiner componentMiner)
-		{
-			return PriorityUse;
-		}
-		public virtual int GetPriorityInteract(int value, ComponentMiner componentMiner)
-		{
-			if(componentMiner.m_subsystemTerrain != null && IsInteractive(componentMiner.m_subsystemTerrain, value))
-			{
-                return PriorityInteract;
+        public virtual bool IsNonAttachable(int value) {
+            if (DefaultIsNonAttachable.HasValue) {
+                return DefaultIsNonAttachable.Value;
             }
-			return 0;
-		}
-		public virtual int GetPriorityPlace(int value, ComponentMiner componentMiner)
-		{
-			if (!IsPlaceable_(value)) return 0;
-			return PriorityPlace;
-		}
-		public virtual bool CanBeFiredByDispenser(int value)
-		{
-			return true;
-		}
-
-		public virtual RecipaediaDescriptionScreen GetBlockDescriptionScreen(int value)
-		{
-			return RecipaediaDescriptionScreen.Default;
+            return IsTransparent_(value);
         }
 
-		public virtual RecipaediaRecipesScreen GetBlockRecipeScreen(int value)
-		{
-			return RecipaediaRecipesScreen.Default;
-		}
+        public virtual bool IsFaceNonAttachable(SubsystemTerrain subsystemTerrain, int face, int value, int attachBlockValue) {
+            if (!IsCollidable_(value)
+                || IsNonAttachable(value)) {
+                return true;
+            }
+            return false;
+        }
+
+        public virtual bool ShouldBeAddedToProject(SubsystemBlocksManager subsystemBlocksManager) => true;
+
+        public virtual bool CanBlockBeBuiltIntoFurniture(int value) => CanBeBuiltIntoFurniture;
+
+        public virtual int GetPriorityUse(int value, ComponentMiner componentMiner) => PriorityUse;
+
+        public virtual int GetPriorityInteract(int value, ComponentMiner componentMiner) {
+            if (componentMiner.m_subsystemTerrain != null
+                && IsInteractive(componentMiner.m_subsystemTerrain, value)) {
+                return PriorityInteract;
+            }
+            return 0;
+        }
+
+        public virtual int GetPriorityPlace(int value, ComponentMiner componentMiner) {
+            if (!IsPlaceable_(value)) {
+                return 0;
+            }
+            return PriorityPlace;
+        }
+
+        public virtual bool CanBeFiredByDispenser(int value) => true;
+
+        public virtual RecipaediaDescriptionScreen GetBlockDescriptionScreen(int value) => RecipaediaDescriptionScreen.Default;
+
+        public virtual RecipaediaRecipesScreen GetBlockRecipeScreen(int value) => RecipaediaRecipesScreen.Default;
     }
 }

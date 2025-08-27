@@ -2,10 +2,8 @@ using GameEntitySystem;
 using TemplatesDatabase;
 using static Game.BlocksManager;
 
-namespace Game
-{
-    public class SubsystemBlocksManager : Subsystem
-    {
+namespace Game {
+    public class SubsystemBlocksManager : Subsystem {
         //以ClassName, BlockContent的形式存储和读取方块信息
 
         /*流程：
@@ -21,8 +19,8 @@ namespace Game
         public Dictionary<string, int> DynamicBlockNameToIndex = new();
 
         public ValuesDictionary m_savedValuesDictionary;
-        public override void Initialize(Project project, ValuesDictionary valuesDictionary)
-        {
+
+        public override void Initialize(Project project, ValuesDictionary valuesDictionary) {
             base.Initialize(project, valuesDictionary);
             DynamicBlockNameToIndex.Clear();
             m_savedValuesDictionary = valuesDictionary;
@@ -31,13 +29,13 @@ namespace Game
             CraftingRecipesManager.Initialize();
         }
 
-        public virtual void CallAllocate()
-        {
+        public virtual void CallAllocate() {
             //int tick1 = Environment.TickCount;
-            for (int i = SurvivalCraftBlockCount + 1; i < 1024; i++)
-            {
+            for (int i = SurvivalCraftBlockCount + 1; i < 1024; i++) {
                 string blockName = m_savedValuesDictionary.GetValue(i.ToString(), string.Empty);
-                if(!string.IsNullOrEmpty(blockName)) DynamicBlockNameToIndex[blockName] = i;
+                if (!string.IsNullOrEmpty(blockName)) {
+                    DynamicBlockNameToIndex[blockName] = i;
+                }
                 /*
                 if (!String.IsNullOrEmpty(fullName))
                 {
@@ -56,10 +54,8 @@ namespace Game
             //Engine.Log.Information("加载项目方块系统耗时" + (tick2 - tick1).ToString() + "ms");
         }
 
-        public override void Save(ValuesDictionary valuesDictionary)
-        {
-            foreach (KeyValuePair<string,int> item in DynamicBlockNameToIndex)
-            {
+        public override void Save(ValuesDictionary valuesDictionary) {
+            foreach (KeyValuePair<string, int> item in DynamicBlockNameToIndex) {
                 valuesDictionary.SetValue(item.Value.ToString(), item.Key);
             }
         }

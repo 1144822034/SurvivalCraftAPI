@@ -1,8 +1,6 @@
-namespace Game
-{
-	public enum TextOrientation
-	{
-		Horizontal,
-		VerticalLeft
-	}
+namespace Game {
+    public enum TextOrientation {
+        Horizontal,
+        VerticalLeft
+    }
 }

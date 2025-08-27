@@ -1,19 +1,16 @@
-namespace Game
-{
-	public class SandBlock : CubeBlock
-	{
-		public static int Index = 7;
+namespace Game {
+    public class SandBlock : CubeBlock {
+        public static int Index = 7;
 
         public SandBlock() {
             CanBeBuiltIntoFurniture = true;
-			IsCollapsable = true;
+            IsCollapsable = true;
         }
-        public override bool IsSuitableForPlants(int value, int plantValue)
-        {
+
+        public override bool IsSuitableForPlants(int value, int plantValue) {
             int plantContent = Terrain.ExtractContents(plantValue);
             Block plantBlock = BlocksManager.Blocks[plantContent];
-            if (plantBlock is SaplingBlock)
-            {
+            if (plantBlock is SaplingBlock) {
                 return false;
             }
             return true;

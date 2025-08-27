@@ -1,12 +1,7 @@
-namespace Game
-{
-	public class IronAxeBlock : AxeBlock
-	{
-		public static int Index = 37;
+namespace Game {
+    public class IronAxeBlock : AxeBlock {
+        public static int Index = 37;
 
-		public IronAxeBlock()
-			: base(47, 63)
-		{
-		}
-	}
+        public IronAxeBlock() : base(47, 63) { }
+    }
 }

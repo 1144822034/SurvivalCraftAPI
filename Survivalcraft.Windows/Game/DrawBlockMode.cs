@@ -1,10 +1,8 @@
-namespace Game
-{
-	public enum DrawBlockMode
-	{
-		World,
-		FirstPerson,
-		ThirdPerson,
-		UI
-	}
+namespace Game {
+    public enum DrawBlockMode {
+        World,
+        FirstPerson,
+        ThirdPerson,
+        UI
+    }
 }

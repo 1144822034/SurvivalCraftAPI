@@ -1,7 +1,5 @@
-namespace Game
-{
-	public interface IElectricWireElementBlock : IElectricElementBlock
-	{
-		int GetConnectedWireFacesMask(int value, int face);
-	}
+namespace Game {
+    public interface IElectricWireElementBlock : IElectricElementBlock {
+        int GetConnectedWireFacesMask(int value, int face);
+    }
 }

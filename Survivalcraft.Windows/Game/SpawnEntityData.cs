@@ -1,18 +1,15 @@
 using Engine;
 
-namespace Game
-{
-	public class SpawnEntityData
-	{
-		public string TemplateName;
+namespace Game {
+    public class SpawnEntityData {
+        public string TemplateName;
 
-		public Vector3 Position;
+        public Vector3 Position;
 
-		public bool ConstantSpawn;
+        public bool ConstantSpawn;
 
-		public string Data;
+        public string Data;
 
-		public int EntityId;
-
-	}
+        public int EntityId;
+    }
 }

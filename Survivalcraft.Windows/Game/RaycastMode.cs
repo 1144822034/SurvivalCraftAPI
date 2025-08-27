@@ -1,9 +1,7 @@
-namespace Game
-{
-	public enum RaycastMode
-	{
-		Digging,
-		Interaction,
-		Gathering
-	}
+namespace Game {
+    public enum RaycastMode {
+        Digging,
+        Interaction,
+        Gathering
+    }
 }

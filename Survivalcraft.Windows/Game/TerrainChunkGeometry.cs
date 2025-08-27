@@ -1,14 +1,11 @@
 using Engine;
 using Engine.Graphics;
 
-namespace Game
-{
-    public class TerrainChunkGeometry
-    {
+namespace Game {
+    public class TerrainChunkGeometry {
         public TerrainChunk TerrainChunk;
 
-        public class Buffer : IDisposable
-        {
+        public class Buffer : IDisposable {
             public VertexBuffer VertexBuffer;
 
             public IndexBuffer IndexBuffer;
@@ -23,8 +20,7 @@ namespace Game
 
             public int[] SubsetVertexBufferEnds = new int[7];
 
-            public virtual void Dispose()
-            {
+            public virtual void Dispose() {
                 Utilities.Dispose(ref VertexBuffer);
                 Utilities.Dispose(ref IndexBuffer);
             }

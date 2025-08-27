@@ -1,8 +1,6 @@
-namespace Game
-{
-	public enum PlayerClass
-	{
-		Male,
-		Female
-	}
+namespace Game {
+    public enum PlayerClass {
+        Male,
+        Female
+    }
 }

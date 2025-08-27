@@ -1,9 +1,7 @@
-namespace Game
-{
-	public enum ProjectileStoppedAction
-	{
-		TurnIntoPickable,
-		Disappear,
-		DoNothing
-	}
+namespace Game {
+    public enum ProjectileStoppedAction {
+        TurnIntoPickable,
+        Disappear,
+        DoNothing
+    }
 }

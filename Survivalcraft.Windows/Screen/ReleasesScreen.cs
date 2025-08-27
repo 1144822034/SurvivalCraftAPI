@@ -1,178 +1,188 @@
-using Engine;
 using System.Text.Json;
 using System.Xml.Linq;
+using Engine;
 
-namespace Game
-{
-	public class ReleasesScreen : Screen
-	{
-		#region 用户自定义区
-		public string m_releasesName = string.Empty;//此界面发布版系列的名称
+namespace Game {
+    public class ReleasesScreen : Screen {
+        #region 用户自定义区
 
-		public string m_releasesURL = string.Empty;//此界面发布版系列的Releases链接
+        public string m_releasesName = string.Empty; //此界面发布版系列的名称
 
-		public IComparer<ReleaseInfo> m_versionComparer;
-		#endregion
+        public string m_releasesURL = string.Empty; //此界面发布版系列的Releases链接
 
+        public IComparer<ReleaseInfo> m_versionComparer;
 
-		public List<ReleaseInfo> Releases { get; set; } = new();//所有发布版的信息
+        #endregion
 
-		public LabelWidget m_titleLabel;
+        public List<ReleaseInfo> Releases { get; set; } = new(); //所有发布版的信息
 
-		public LabelWidget m_textLabel;
+        public LabelWidget m_titleLabel;
 
-		public LabelWidget m_infoLabel;
+        public LabelWidget m_textLabel;
 
-		public ListPanelWidget m_releasesListPanel;
+        public LabelWidget m_infoLabel;
 
-		public StackPanelWidget m_releaseInfoPanel;
+        public ListPanelWidget m_releasesListPanel;
 
-		public Dictionary<BevelledButtonWidget, Asset> m_assetButtons = new();//点击就下载资源的按钮
+        public StackPanelWidget m_releaseInfoPanel;
 
-		public ScrollPanelWidget m_scrollPanel;
+        public Dictionary<BevelledButtonWidget, Asset> m_assetButtons = new(); //点击就下载资源的按钮
 
-		public BusyDialog m_busyDialog;//进入时展示的"获取发布版..."的对话框
+        public ScrollPanelWidget m_scrollPanel;
 
-		public ReleasesScreen()
-		{
-			XElement node = ContentManager.Get<XElement>("Screens/ReleasesScreen");
-			LoadContents(this, node);
-			m_titleLabel = Children.Find<LabelWidget>("ReleaseTitle");
-			m_textLabel = Children.Find<LabelWidget>("ReleaseText");
-			m_scrollPanel = Children.Find<ScrollPanelWidget>("ScrollPanel");
-			m_releasesListPanel = Children.Find<ListPanelWidget>("ReleasesList");
-			m_infoLabel = Children.Find<LabelWidget>("ReleaseInfo");
-			m_releaseInfoPanel = Children.Find<StackPanelWidget>("ReleaseInfoPanel");
-			m_releasesListPanel.ItemWidgetFactory = item => new LabelWidget
-			{
-				Text = (item is ReleaseInfo releaseInfo) ? releaseInfo.name + GetVersionSuffix(releaseInfo.tag_name, APIUpdateManager.CurrentVersion) : string.Empty,
-				HorizontalAlignment = WidgetAlignment.Center,
-				VerticalAlignment = WidgetAlignment.Center
-			};
-			m_releasesListPanel.ItemClicked += DisplayReleaseInfo;
-		}
+        public BusyDialog m_busyDialog; //进入时展示的"获取发布版..."的对话框
 
-		public override void Enter(object[] parameters)
-		{
-			string previousName = m_releasesName;
-			m_releasesURL = (string)parameters[0];
-			m_releasesName = (string)parameters[1];
-			if(parameters.Length >= 3)
-			{
-				m_versionComparer = parameters[2] as IComparer<ReleaseInfo> ?? new ReleaseInfoComparer();
-			}
-			else
-			{
-				m_versionComparer = new ReleaseInfoComparer();
-			}
-			m_busyDialog = new(LanguageControl.GetContentWidgets(nameof(ReleasesScreen),3),string.Format(LanguageControl.GetContentWidgets(nameof(ReleasesScreen),2),m_releasesName));
-			Children.Find<LabelWidget>("TopBar.Label").Text = string.Format(LanguageControl.GetContentWidgets(nameof(ReleasesScreen),1),m_releasesName);
+        public ReleasesScreen() {
+            XElement node = ContentManager.Get<XElement>("Screens/ReleasesScreen");
+            LoadContents(this, node);
+            m_titleLabel = Children.Find<LabelWidget>("ReleaseTitle");
+            m_textLabel = Children.Find<LabelWidget>("ReleaseText");
+            m_scrollPanel = Children.Find<ScrollPanelWidget>("ScrollPanel");
+            m_releasesListPanel = Children.Find<ListPanelWidget>("ReleasesList");
+            m_infoLabel = Children.Find<LabelWidget>("ReleaseInfo");
+            m_releaseInfoPanel = Children.Find<StackPanelWidget>("ReleaseInfoPanel");
+            m_releasesListPanel.ItemWidgetFactory = item => new LabelWidget {
+                Text = item is ReleaseInfo releaseInfo
+                    ? releaseInfo.name + GetVersionSuffix(releaseInfo.tag_name, APIUpdateManager.CurrentVersion)
+                    : string.Empty,
+                HorizontalAlignment = WidgetAlignment.Center,
+                VerticalAlignment = WidgetAlignment.Center
+            };
+            m_releasesListPanel.ItemClicked += DisplayReleaseInfo;
+        }
 
-			if(Releases.Count == 0 || m_releasesName != previousName) Task.Run(() => Task.FromResult(GetReleasesAsync()));
-			m_scrollPanel.ScrollPosition = 0f;
-		}
+        public override void Enter(object[] parameters) {
+            string previousName = m_releasesName;
+            m_releasesURL = (string)parameters[0];
+            m_releasesName = (string)parameters[1];
+            if (parameters.Length >= 3) {
+                m_versionComparer = parameters[2] as IComparer<ReleaseInfo> ?? new ReleaseInfoComparer();
+            }
+            else {
+                m_versionComparer = new ReleaseInfoComparer();
+            }
+            m_busyDialog = new BusyDialog(
+                LanguageControl.GetContentWidgets(nameof(ReleasesScreen), 3),
+                string.Format(LanguageControl.GetContentWidgets(nameof(ReleasesScreen), 2), m_releasesName)
+            );
+            Children.Find<LabelWidget>("TopBar.Label").Text = string.Format(
+                LanguageControl.GetContentWidgets(nameof(ReleasesScreen), 1),
+                m_releasesName
+            );
+            if (Releases.Count == 0
+                || m_releasesName != previousName) {
+                Task.Run(() => Task.FromResult(GetReleasesAsync()));
+            }
+            m_scrollPanel.ScrollPosition = 0f;
+        }
 
-		public async Task GetReleasesAsync()//异步获取发布版
-		{
-			Exception e = null;
-			if(m_busyDialog.RootWidget != ScreensManager.RootWidget)
-			{
-				DialogsManager.ShowDialog(null, m_busyDialog);
-			}
-			try
-			{
-				JsonDocument document = await OnlineJsonReader.GetJsonFromUrlAsync(m_releasesURL);
-				Releases = JsonSerializer.Deserialize<List<ReleaseInfo>>(document.RootElement.GetRawText());
-				Releases.Sort(m_versionComparer);
-				PopulateReleasesList();
-			}
-			catch(Exception exception)
-			{
-				e = exception;
-			}
-			finally
-			{
-				if(m_busyDialog.RootWidget == ScreensManager.RootWidget)
-				{
-					DialogsManager.HideDialog(m_busyDialog);
-				}
-				if(e != null)
-				{
-					DialogsManager.ShowDialog(null, new MessageDialog(LanguageControl.GetContentWidgets(nameof(ReleasesScreen), 3), string.Format(LanguageControl.GetContentWidgets(nameof(ReleasesScreen), 20), m_releasesName, e.Message), LanguageControl.Ok, null, null));
-					Log.Error(LanguageControl.GetContentWidgets(nameof(ReleasesScreen), 20), m_releasesName, e.Message);
-				}
-			}
-		}
+        public async Task GetReleasesAsync() //异步获取发布版
+        {
+            Exception e = null;
+            if (m_busyDialog.RootWidget != ScreensManager.RootWidget) {
+                DialogsManager.ShowDialog(null, m_busyDialog);
+            }
+            try {
+                JsonDocument document = await OnlineJsonReader.GetJsonFromUrlAsync(m_releasesURL);
+                Releases = JsonSerializer.Deserialize<List<ReleaseInfo>>(document.RootElement.GetRawText());
+                Releases.Sort(m_versionComparer);
+                PopulateReleasesList();
+            }
+            catch (Exception exception) {
+                e = exception;
+            }
+            finally {
+                if (m_busyDialog.RootWidget == ScreensManager.RootWidget) {
+                    DialogsManager.HideDialog(m_busyDialog);
+                }
+                if (e != null) {
+                    DialogsManager.ShowDialog(
+                        null,
+                        new MessageDialog(
+                            LanguageControl.GetContentWidgets(nameof(ReleasesScreen), 3),
+                            string.Format(LanguageControl.GetContentWidgets(nameof(ReleasesScreen), 20), m_releasesName, e.Message),
+                            LanguageControl.Ok,
+                            null,
+                            null
+                        )
+                    );
+                    Log.Error(LanguageControl.GetContentWidgets(nameof(ReleasesScreen), 20), m_releasesName, e.Message);
+                }
+            }
+        }
 
-		public void PopulateReleasesList()//向左侧版本列表中加入Release条目
-		{
-			m_releasesListPanel.ClearItems();
-			foreach(ReleaseInfo releaseInfo in Releases)
-			{
-				m_releasesListPanel.AddItem(releaseInfo);
-			}
-			if(Releases.Count > 0) DisplayReleaseInfo(Releases[0]);
-		}
+        public void PopulateReleasesList() //向左侧版本列表中加入Release条目
+        {
+            m_releasesListPanel.ClearItems();
+            foreach (ReleaseInfo releaseInfo in Releases) {
+                m_releasesListPanel.AddItem(releaseInfo);
+            }
+            if (Releases.Count > 0) {
+                DisplayReleaseInfo(Releases[0]);
+            }
+        }
 
-		public string GetVersionSuffix(string currentVersion,string targetVersion)
-		{
-			return APIUpdateManager.CompareVersion(currentVersion,targetVersion) switch
-			{
-				-1 => string.Empty,
-				0 => LanguageControl.GetContentWidgets(nameof(ReleasesScreen),5),
-				1 => LanguageControl.GetContentWidgets(nameof(ReleasesScreen),6),
-				_ => throw new ArgumentOutOfRangeException()
-			};
-		}
+        public string GetVersionSuffix(string currentVersion, string targetVersion) {
+            return APIUpdateManager.CompareVersion(currentVersion, targetVersion) switch {
+                -1 => string.Empty,
+                0 => LanguageControl.GetContentWidgets(nameof(ReleasesScreen), 5),
+                1 => LanguageControl.GetContentWidgets(nameof(ReleasesScreen), 6),
+                _ => throw new ArgumentOutOfRangeException()
+            };
+        }
 
-		public void PopulateAssetsList(ReleaseInfo releaseInfo)
-		{
-			foreach(BevelledButtonWidget assetButton in m_assetButtons.Keys)
-			{
-				m_releaseInfoPanel.Children.Remove(assetButton);
-			}
-			m_assetButtons.Clear();
-			foreach(Asset asset in releaseInfo.assets)
-			{
-				BevelledButtonWidget button = new() { Size = new Vector2(float.PositiveInfinity,56),Text = asset.name, FontScale = 0.85f};
-				m_assetButtons.Add(button, asset);
-				m_releaseInfoPanel.Children.Add(button);
-			}
-		}
+        public void PopulateAssetsList(ReleaseInfo releaseInfo) {
+            foreach (BevelledButtonWidget assetButton in m_assetButtons.Keys) {
+                m_releaseInfoPanel.Children.Remove(assetButton);
+            }
+            m_assetButtons.Clear();
+            foreach (Asset asset in releaseInfo.assets) {
+                BevelledButtonWidget button = new() { Size = new Vector2(float.PositiveInfinity, 56), Text = asset.name, FontScale = 0.85f };
+                m_assetButtons.Add(button, asset);
+                m_releaseInfoPanel.Children.Add(button);
+            }
+        }
 
-		public void DisplayReleaseInfo(object item)//档左侧版本列表中某条目点击时
-		{
-			ReleaseInfo releaseInfo = (ReleaseInfo)item;
-			m_titleLabel.Text = releaseInfo.name;
-			m_infoLabel.Text = string.Format(LanguageControl.GetContentWidgets(nameof(ReleasesScreen), 4), releaseInfo.author.name, releaseInfo.created_at);
-			m_textLabel.Text = releaseInfo.body;
-			PopulateAssetsList(releaseInfo);
-		}
+        public void DisplayReleaseInfo(object item) //档左侧版本列表中某条目点击时
+        {
+            ReleaseInfo releaseInfo = (ReleaseInfo)item;
+            m_titleLabel.Text = releaseInfo.name;
+            m_infoLabel.Text = string.Format(
+                LanguageControl.GetContentWidgets(nameof(ReleasesScreen), 4),
+                releaseInfo.author.name,
+                releaseInfo.created_at
+            );
+            m_textLabel.Text = releaseInfo.body;
+            PopulateAssetsList(releaseInfo);
+        }
 
-		public override void Update()
-		{
-			foreach(KeyValuePair<BevelledButtonWidget,Asset> assetButton in m_assetButtons)
-			{
-				if(assetButton.Key.IsClicked)
-				{
-					WebBrowserManager.LaunchBrowser(assetButton.Value.browser_download_url);
-				}
-			}
-			if (Input.Back || Input.Cancel || Children.Find<ButtonWidget>("TopBar.Back").IsClicked)
-			{
-				ScreensManager.SwitchScreen(ScreensManager.PreviousScreen);
-			}
-		}
+        public override void Update() {
+            foreach (KeyValuePair<BevelledButtonWidget, Asset> assetButton in m_assetButtons) {
+                if (assetButton.Key.IsClicked) {
+                    WebBrowserManager.LaunchBrowser(assetButton.Value.browser_download_url);
+                }
+            }
+            if (Input.Back
+                || Input.Cancel
+                || Children.Find<ButtonWidget>("TopBar.Back").IsClicked) {
+                ScreensManager.SwitchScreen(ScreensManager.PreviousScreen);
+            }
+        }
 
-		//用于给版本列表排序
-		public class ReleaseInfoComparer : IComparer<ReleaseInfo>
-		{
-			public int Compare(ReleaseInfo x, ReleaseInfo y) {
-				if (ReferenceEquals(x, y)) return 0;
-				if (y is null) return 1;
-				if (x is null) return -1;
-				return -APIUpdateManager.CompareVersion(x.tag_name,y.tag_name);
-			}
-		}
-	}
+        //用于给版本列表排序
+        public class ReleaseInfoComparer : IComparer<ReleaseInfo> {
+            public int Compare(ReleaseInfo x, ReleaseInfo y) {
+                if (ReferenceEquals(x, y)) {
+                    return 0;
+                }
+                if (y is null) {
+                    return 1;
+                }
+                if (x is null) {
+                    return -1;
+                }
+                return -APIUpdateManager.CompareVersion(x.tag_name, y.tag_name);
+            }
+        }
+    }
 }

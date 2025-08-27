@@ -1,12 +1,7 @@
-namespace Game
-{
-	public class IronFenceBlock : FenceBlock
-	{
-		public static int Index = 193;
+namespace Game {
+    public class IronFenceBlock : FenceBlock {
+        public static int Index = 193;
 
-		public IronFenceBlock()
-			: base("Models/IronFence", doubleSidedPlanks: true, useAlphaTest: true, 58, new Color(192, 192, 192), new Color(80, 80, 80))
-		{
-		}
-	}
+        public IronFenceBlock() : base("Models/IronFence", true, true, 58, new Color(192, 192, 192), new Color(80, 80, 80)) { }
+    }
 }

@@ -1,8 +1,6 @@
-namespace Game
-{
-	public enum BreathingMode
-	{
-		Air,
-		Water
-	}
+namespace Game {
+    public enum BreathingMode {
+        Air,
+        Water
+    }
 }

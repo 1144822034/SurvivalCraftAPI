@@ -1,18 +1,17 @@
-namespace Game;
+namespace Game {
+    public class OriginalCommunityContentEntry {
+        public ExternalContentType Type;
 
-public class OriginalCommunityContentEntry
-{
-	public ExternalContentType Type;
+        public string Name;
 
-	public string Name;
+        public string Url;
 
-	public string Url;
+        public Version Version;
 
-	public Version Version;
+        public long Size;
 
-	public long Size;
+        public string ExtraText;
 
-	public string ExtraText;
-
-	public float RatingsAverage;
+        public float RatingsAverage;
+    }
 }

@@ -1,9 +1,7 @@
-namespace Game
-{
-	public enum SkyRenderingMode
-	{
-		Full,
-		NoClouds,
-		Disabled
-	}
+namespace Game {
+    public enum SkyRenderingMode {
+        Full,
+        NoClouds,
+        Disabled
+    }
 }

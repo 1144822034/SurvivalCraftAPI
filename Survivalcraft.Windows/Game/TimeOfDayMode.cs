@@ -1,11 +1,9 @@
-namespace Game
-{
-	public enum TimeOfDayMode
-	{
-		Changing,
-		Day,
-		Night,
-		Sunrise,
-		Sunset
-	}
+namespace Game {
+    public enum TimeOfDayMode {
+        Changing,
+        Day,
+        Night,
+        Sunrise,
+        Sunset
+    }
 }

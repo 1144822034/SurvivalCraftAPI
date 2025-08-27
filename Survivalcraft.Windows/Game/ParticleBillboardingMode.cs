@@ -1,10 +1,8 @@
-namespace Game
-{
-	public enum ParticleBillboardingMode : byte
-	{
-		Camera,
-		Vertical,
-		Horizontal,
-		None
-	}
+namespace Game {
+    public enum ParticleBillboardingMode : byte {
+        Camera,
+        Vertical,
+        Horizontal,
+        None
+    }
 }

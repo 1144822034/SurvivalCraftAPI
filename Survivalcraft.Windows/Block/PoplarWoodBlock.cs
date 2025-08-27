@@ -1,11 +1,7 @@
-namespace Game;
+namespace Game {
+    public class PoplarWoodBlock : WoodBlock {
+        public const int Index = 262;
 
-public class PoplarWoodBlock : WoodBlock
-{
-	public const int Index = 262;
-
-	public PoplarWoodBlock()
-		: base(21, 109)
-	{
-	}
+        public PoplarWoodBlock() : base(21, 109) { }
+    }
 }

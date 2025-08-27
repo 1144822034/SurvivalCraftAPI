@@ -1,40 +1,23 @@
 using Engine;
 
-namespace Game
-{
-	public interface IMovingBlockSet
-	{
-		Vector3 Position
-		{
-			get;
-		}
+namespace Game {
+    public interface IMovingBlockSet {
+        Vector3 Position { get; }
 
-		string Id
-		{
-			get;
-		}
+        string Id { get; }
 
-		object Tag
-		{
-			get;
-		}
+        object Tag { get; }
 
-		Vector3 CurrentVelocity
-		{
-			get;
-		}
+        Vector3 CurrentVelocity { get; }
 
-		List<MovingBlock> Blocks
-		{
-			get;
-		}
+        List<MovingBlock> Blocks { get; }
 
-		public bool Stopped {  get; }
+        public bool Stopped { get; }
 
-		BoundingBox BoundingBox(bool extendToFillCells);
+        BoundingBox BoundingBox(bool extendToFillCells);
 
-		void SetBlock(Point3 offset, int value);
+        void SetBlock(Point3 offset, int value);
 
-		void Stop();
-	}
+        void Stop();
+    }
 }

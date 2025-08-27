@@ -1,13 +1,7 @@
-namespace Game
-{
-	public class MarbleBlock : PaintedCubeBlock
-	{
-		public static int Index = 68;
+namespace Game {
+    public class MarbleBlock : PaintedCubeBlock {
+        public static int Index = 68;
 
-		public MarbleBlock()
-			: base(51)
-		{
-			CanBeBuiltIntoFurniture = true;
-		}
-	}
+        public MarbleBlock() : base(51) => CanBeBuiltIntoFurniture = true;
+    }
 }

@@ -1,15 +1,13 @@
-namespace Game
-{
-	public class ExternalContentEntry
-	{
-		public ExternalContentType Type;
+namespace Game {
+    public class ExternalContentEntry {
+        public ExternalContentType Type;
 
-		public string Path;
+        public string Path;
 
-		public long Size;
+        public long Size;
 
-		public DateTime Time;
+        public DateTime Time;
 
-		public List<ExternalContentEntry> ChildEntries = [];
-	}
+        public List<ExternalContentEntry> ChildEntries = [];
+    }
 }

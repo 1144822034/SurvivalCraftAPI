@@ -1,12 +1,7 @@
-namespace Game
-{
-	public class IronMacheteBlock : MacheteBlock
-	{
-		public static int Index = 124;
+namespace Game {
+    public class IronMacheteBlock : MacheteBlock {
+        public static int Index = 124;
 
-		public IronMacheteBlock()
-			: base(47, 63)
-		{
-		}
-	}
+        public IronMacheteBlock() : base(47, 63) { }
+    }
 }

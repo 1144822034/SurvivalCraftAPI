@@ -3,22 +3,20 @@
 using System.Net.Http;
 using System.Text.Json;
 
-namespace Game
-{
-    public static class OnlineJsonReader
-    {
-		public static readonly HttpClient m_client = new();
-		/// <summary>
-		/// 从链接获取 Json 文档
-		/// </summary>
-		/// <param name="url">Json文件链接</param>
-		/// <returns>Json文档</returns>
-		public static async Task<JsonDocument> GetJsonFromUrlAsync(string url)
-		{
-			HttpResponseMessage response = await m_client.GetAsync(url);
-			response.EnsureSuccessStatusCode();
-			string jsonString = await response.Content.ReadAsStringAsync();
-			return JsonDocument.Parse(jsonString);
-		}
+namespace Game {
+    public static class OnlineJsonReader {
+        public static readonly HttpClient m_client = new();
+
+        /// <summary>
+        ///     从链接获取 Json 文档
+        /// </summary>
+        /// <param name="url">Json文件链接</param>
+        /// <returns>Json文档</returns>
+        public static async Task<JsonDocument> GetJsonFromUrlAsync(string url) {
+            HttpResponseMessage response = await m_client.GetAsync(url);
+            response.EnsureSuccessStatusCode();
+            string jsonString = await response.Content.ReadAsStringAsync();
+            return JsonDocument.Parse(jsonString);
+        }
     }
 }

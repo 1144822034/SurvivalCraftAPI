@@ -1,9 +1,7 @@
-namespace Game
-{
-	public enum ResolutionMode
-	{
-		Low,
-		Medium,
-		High
-	}
+namespace Game {
+    public enum ResolutionMode {
+        Low,
+        Medium,
+        High
+    }
 }

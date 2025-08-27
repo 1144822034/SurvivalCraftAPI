@@ -1,7 +1,5 @@
-namespace Game
-{
-    public class BlockAllocateData
-    {
+namespace Game {
+    public class BlockAllocateData {
         public Block Block;
         public ModEntity ModEntity;
         public int Index = 0;

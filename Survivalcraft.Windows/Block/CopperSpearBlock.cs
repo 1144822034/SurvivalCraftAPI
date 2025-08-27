@@ -1,12 +1,7 @@
-namespace Game
-{
-	public class CopperSpearBlock : SpearBlock
-	{
-		public static int Index = 220;
+namespace Game {
+    public class CopperSpearBlock : SpearBlock {
+        public static int Index = 220;
 
-		public CopperSpearBlock()
-			: base(47, 79)
-		{
-		}
-	}
+        public CopperSpearBlock() : base(47, 79) { }
+    }
 }

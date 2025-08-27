@@ -1,8 +1,6 @@
-namespace Game
-{
-	public enum MoveControlMode
-	{
-		Pad,
-		Buttons
-	}
+namespace Game {
+    public enum MoveControlMode {
+        Pad,
+        Buttons
+    }
 }

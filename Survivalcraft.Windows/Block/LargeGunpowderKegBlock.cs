@@ -1,12 +1,7 @@
-namespace Game
-{
-	public class LargeGunpowderKegBlock : GunpowderKegBlock
-	{
-		public static int Index = 107;
+namespace Game {
+    public class LargeGunpowderKegBlock : GunpowderKegBlock {
+        public static int Index = 107;
 
-		public LargeGunpowderKegBlock()
-			: base("Models/LargeGunpowderKeg", isIncendiary: false)
-		{
-		}
-	}
+        public LargeGunpowderKegBlock() : base("Models/LargeGunpowderKeg", false) { }
+    }
 }

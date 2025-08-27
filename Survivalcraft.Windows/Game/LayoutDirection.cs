@@ -1,8 +1,6 @@
-namespace Game
-{
-	public enum LayoutDirection
-	{
-		Horizontal,
-		Vertical
-	}
+namespace Game {
+    public enum LayoutDirection {
+        Horizontal,
+        Vertical
+    }
 }

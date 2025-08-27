@@ -6,7 +6,10 @@
     "DisplayName": "Ổ đĩa",
     "Description": "Không cần đăng nhập; Lưu vào ổ đĩa"
   },
-  "FurnitureBlock": [ "Kết hợp đồ nội thất thành thiết kế tương tác", "Quá nhiều thiết kế nội thất khác nhau" ],
+  "FurnitureBlock": [
+    "Kết hợp đồ nội thất thành thiết kế tương tác",
+    "Quá nhiều thiết kế nội thất khác nhau"
+  ],
   "MemoryBankBlockBehavior": {
     "1": "Chọn Loại Trình Soạn thảo",
     "2": "Nguyên bản",
@@ -22,11 +25,11 @@
     "4": "Tải bộ nhớ đệm Nội dung Cộng đồng thất bại.",
     "5": "Lưu bộ nhớ đệm Nội dung Cộng đồng thất bại."
   },
-  "ModsManager":{
+  "ModsManager": {
     "1": "Do you allow a mod to replace \"{1}\" with \"{2}\"? (Database Guid=\"{0}\")",
     "2": "\nIf you choose Yes, other mods may not work properly; if you choose No, the mod may not work properly. Additionally, either choice may cause the entire game to malfunction.",
     "3": "Đã Bật Thay đổi",
-    "4": "Đã Tắt Thay đổi", 
+    "4": "Đã Tắt Thay đổi",
     "5": "Tải Mod Thành công",
     "6": "Bạn có muốn chuyển sang Màn hình Quản lý Mod để cài đặt thủ công không?"
   },
@@ -181,7 +184,11 @@
     "6": "Bị mắc cạn trên đất liền",
     "7": "Ngỏm vì đuối nước"
   },
-  "PlayerWidget": [ "{0} Được điều khiển bởi {1}", "Trong trò chơi được {0} ngày", "Chưa bao giờ sinh ra" ],
+  "PlayerWidget": [
+    "{0} Được điều khiển bởi {1}",
+    "Trong trò chơi được {0} ngày",
+    "Chưa bao giờ sinh ra"
+  ],
   "CrossbowWidget": {
     "0": "Kéo dây",
     "1": "Nạp đạn",
@@ -209,7 +216,7 @@
     "2": "Bạn phải đạt cấp {0} để chế tạo vật phẩm này",
     "3": "Bạn phải đạt cấp {0} để nấu chảy vật phẩm này"
   },
-  "BlocksTexturesManager":{
+  "BlocksTexturesManager": {
     "1": "Could not find blocks texture \"{0}\".",
     "2": "Could not load blocks texture \"{0}\". Reason: {1}.",
     "3": "Unable to delete blocks texture \"{0}\"",
@@ -338,8 +345,14 @@
     "1": "Không có Người dùng",
     "2": "Chọn Người dùng Đang hoạt động"
   },
-  "FurnitureDesignWidget": [ "Trước", "Bên" ],
-  "FurnitureSetItemWidget": [ "Chưa phân loại", "{0} thiết kế" ],
+  "FurnitureDesignWidget": [
+    "Trước",
+    "Bên"
+  ],
+  "FurnitureSetItemWidget": [
+    "Chưa phân loại",
+    "{0} thiết kế"
+  ],
   "FurnitureInventoryPanel": {
     "1": "{0} thiết kế đã được thêm. ",
     "2": "{0} thiết kế đã tồn tại trong thế giới và đã bị bỏ qua. ",
@@ -713,13 +726,13 @@
     "API"
   ],
   "SettingsPerformanceScreen": {
-		"1": "{0} khối",
-		"2": "(Máy yếu quá khỏi chơi!!!)",
-		"3": "(khuyến nghị 1GB RAM, Dành cho thiết bị lỏ)",
-		"4": "(khuyến nghị 2GB RAM và thiết bị tầm trung",
-		"5": "(khuyến nghị 4GB RAM và thiết bị tốt)",
-		"6": "(khuyến nghị 8GB RAM và thiết bị VIP)",
-		"7": "(khuyến nghị 16GB RAM và thiết bị được cực VIP)",
+    "1": "{0} khối",
+    "2": "(Máy yếu quá khỏi chơi!!!)",
+    "3": "(khuyến nghị 1GB RAM, Dành cho thiết bị lỏ)",
+    "4": "(khuyến nghị 2GB RAM và thiết bị tầm trung",
+    "5": "(khuyến nghị 4GB RAM và thiết bị tốt)",
+    "6": "(khuyến nghị 8GB RAM và thiết bị VIP)",
+    "7": "(khuyến nghị 16GB RAM và thiết bị được cực VIP)",
     "8": "{0} vsync",
     "9": "Không giới hạn",
     "10": "Tầm nhìn Lớn",
@@ -760,11 +773,11 @@
     "2": "{0} ngày"
   },
   "ComponentVitalStats": {
-		"1": "Bạn cảm thấy bệnh sắp chết tới nơi nên không thể ăn món này",
-		"2": "Bạn quá no, không thể ăn thêm!\nNote: No lòng đói con mắt",
+    "1": "Bạn cảm thấy bệnh sắp chết tới nơi nên không thể ăn món này",
+    "2": "Bạn quá no, không thể ăn thêm!\nNote: No lòng đói con mắt",
     "3": "Nó có vị tệ hơn cả cứt, không ăn nữa!",
     "4": "Nó có vị khá kì lạ, không ăn nữa",
-		"5": "Ăn món khác đi, muốn bị ngộ độc thực phẩm chết hả?",
+    "5": "Ăn món khác đi, muốn bị ngộ độc thực phẩm chết hả?",
     "6": "Bạn ăn món này quá thường xuyên",
     "7": "Bạn đã ăn ngon miệng",
     "8": "Ngon, nhưng bạn muốn ăn thêm",
@@ -859,8 +872,8 @@
   },
   "ComponentSleep": {
     "1": "Bạn phải ở trên đất khô",
-		"2": "Bạn quá chảnh nên nơi này không thoải mái để ngủ",
-		"3": "Đừng lãng phí thời gian nữa, những cái loại ngủ quá giờ trưa ý, đêm thì thức, xong chỉ đi\n ăn bám ăn ké, đi chỗ nào thấy ăn là tìm đến, thấy đói là tìm đi,\n làm không làm, cả đời không khá được.  ",
+    "2": "Bạn quá chảnh nên nơi này không thoải mái để ngủ",
+    "3": "Đừng lãng phí thời gian nữa, những cái loại ngủ quá giờ trưa ý, đêm thì thức, xong chỉ đi\n ăn bám ăn ké, đi chỗ nào thấy ăn là tìm đến, thấy đói là tìm đi,\n làm không làm, cả đời không khá được.  ",
     "4": "Bạn quá ướt",
     "5": "Bạn cần một nơi trú ẩn tốt hơn",
     "6": "Brrr, ướt!",
@@ -1001,7 +1014,7 @@
     "0": "Không phải Minecraft Oke? Thay vào đó hãy làm rìu đá",
     "1": "Không phải Minecraft Oke? Thay vào đó hãy làm cào gỗ"
   },
-  "GameLogSink":{
+  "GameLogSink": {
     "1": "Tệp nhật ký có thể bị chiếm bởi chương trình khác, dẫn đến tải thất bại."
   },
   "BasePumpkinBlock": {
@@ -1011,13 +1024,55 @@
     "4": "Thối",
     "5": "Chưa chín"
   },
-  "CottonBlock": [ "Bông", "Bông dại" ],
-  "ArrowBlock": [ "Mũi tên Gỗ", "Mũi tên Đá", "Mũi tên Sắt", "Mũi tên Kim cương", "Mũi tên Lửa", "Nỏ tên Sắt", "Nỏ tên Sắt Mũi Kim cương", "Nỏ tên Nổ", "Mũi tên Đồng" ],
-  "BulletBlock": [ "Đạn Súng hỏa mai", "Đạn ghém", "Viên Đạn ghém" ],
-  "PressurePlateBlock": [ "Tấm áp suất Gỗ", "Tấm áp suất Đá" ],
-  "PistonBlock": [ "Piston", "Piston Kéo", "Piston Kéo Nghiêm ngặt" ],
-  "DeciduousLeavesBlock": [ "Mùa hè ", "Mùa thu ", "Mùa đông ", "Mùa xuân "],
-  "SubsystemSeasons": [ "Đầu Hè", "Hè", "Cuối Hè", "Đầu Thu", "Thu", "Cuối Thu", "Đầu Đông", "Đông", "Cuối Đông", "Đầu Xuân", "Xuân", "Cuối Xuân"],
+  "CottonBlock": [
+    "Bông",
+    "Bông dại"
+  ],
+  "ArrowBlock": [
+    "Mũi tên Gỗ",
+    "Mũi tên Đá",
+    "Mũi tên Sắt",
+    "Mũi tên Kim cương",
+    "Mũi tên Lửa",
+    "Nỏ tên Sắt",
+    "Nỏ tên Sắt Mũi Kim cương",
+    "Nỏ tên Nổ",
+    "Mũi tên Đồng"
+  ],
+  "BulletBlock": [
+    "Đạn Súng hỏa mai",
+    "Đạn ghém",
+    "Viên Đạn ghém"
+  ],
+  "PressurePlateBlock": [
+    "Tấm áp suất Gỗ",
+    "Tấm áp suất Đá"
+  ],
+  "PistonBlock": [
+    "Piston",
+    "Piston Kéo",
+    "Piston Kéo Nghiêm ngặt"
+  ],
+  "DeciduousLeavesBlock": [
+    "Mùa hè ",
+    "Mùa thu ",
+    "Mùa đông ",
+    "Mùa xuân "
+  ],
+  "SubsystemSeasons": [
+    "Đầu Hè",
+    "Hè",
+    "Cuối Hè",
+    "Đầu Thu",
+    "Thu",
+    "Cuối Thu",
+    "Đầu Đông",
+    "Đông",
+    "Cuối Đông",
+    "Đầu Xuân",
+    "Xuân",
+    "Cuối Xuân"
+  ],
   "Blocks": {
     "AirBlock:0": {
       "DisplayName": "Không Khí",
@@ -1292,7 +1347,7 @@
     "CobblestoneBlock:0": {
       "DisplayName": "Đá Cuội",
       "Description": "Đá cuội là loại đá thu được bằng cách khai thác đá granite. Nó là một vật liệu cứng, chắc chắn, hoạt động tốt khi được sử dụng trong xây dựng tường và sàn. Bằng cách nấu chảy nó trong lò nung, bạn có thể thu được đá granite tinh khiết. Có thể sơn.",
-      "CRDescription:0": "" 
+      "CRDescription:0": ""
     },
     "StoneBrickBlock:0": {
       "DisplayName": "Gạch Đá",
@@ -1584,7 +1639,7 @@
     },
     "WoodenAttachedSignBlock:0": {
       "DisplayName": "Biển Báo Gỗ (Gắn tường)",
-      "Description": "" 
+      "Description": ""
     },
     "IronPostedSignBlock:0": {
       "DisplayName": "Biển Báo Sắt",
@@ -1593,7 +1648,7 @@
     },
     "IronAttachedSignBlock:0": {
       "DisplayName": "Biển Báo Sắt (Gắn tường)",
-      "Description": "" 
+      "Description": ""
     },
     "SmallGunpowderKegBlock:0": {
       "DisplayName": "Thùng Thuốc Súng Nhỏ",
@@ -2014,7 +2069,7 @@
     "PumpkinSoupBucketBlock:0": {
       "DisplayName": "Súp Bí Ngô",
       "Description": "Súp bí ngô, ngon và bổ dưỡng. Có thể làm bằng cách nấu bí ngô sống trong một xô nước.",
-       "CRDescription:0": "Nấu bí ngô trong xô nước để làm súp bí ngô"
+      "CRDescription:0": "Nấu bí ngô trong xô nước để làm súp bí ngô"
     },
     "RottenPumpkinSoupBucketBlock:0": {
       "DisplayName": "Súp Bí Ngô Thối",
@@ -2192,12 +2247,12 @@
     "MulticoloredLedBlock:0": {
       "DisplayName": "LED Nhiều Màu",
       "Description": "Điốt phát quang. Khi kết nối với nguồn điện, phát ra ánh sáng màu yếu. Màu sắc của ánh sáng phụ thuộc vào giá trị tín hiệu áp dụng cho điốt. 0.8V trở lên tạo ra ánh sáng có 8 màu khác nhau. Ánh sáng quá yếu để chiếu sáng xung quanh, nhưng dễ nhìn thấy. Hữu ích để tạo đèn trạng thái. Nó có đầu vào ở tất cả các mặt để dễ dàng kết nối và có thể đặt trên bất kỳ bề mặt nào.",
-      "CRDescription:0": "Làm đèn LED nhiều màu từ đồng, kính và dây điện" 
+      "CRDescription:0": "Làm đèn LED nhiều màu từ đồng, kính và dây điện"
     },
     "OneLedBlock:0": {
       "DisplayName": "1-LED Trắng",
       "Description": "Điốt phát quang hình vuông lớn. Khi kết nối với nguồn điện, đèn LED phát ra ánh sáng màu yếu. Màu sắc của ánh sáng phụ thuộc vào giá trị tín hiệu áp dụng cho điốt. 0.8V trở lên tạo ra ánh sáng có 8 màu khác nhau. Ánh sáng quá yếu để chiếu sáng xung quanh, nhưng dễ nhìn thấy. Hữu ích để tạo màn hình màu. Nó có đầu vào ở tất cả các mặt để dễ dàng kết nối và có thể đặt trên bất kỳ bề mặt nào.",
-       "CRDescription:0": "Làm đèn LED 1 bóng màu từ đồng, kính và sơn"
+      "CRDescription:0": "Làm đèn LED 1 bóng màu từ đồng, kính và sơn"
     },
     "PhotodiodeBlock:0": {
       "DisplayName": "Điốt Quang",
@@ -2502,11 +2557,11 @@
       "CRDescription:0": "Sử dụng ván, chất bán dẫn và đồng để tạo piston đẩy"
     },
     "PistonBlock:450": {
-       "DisplayName": "Piston Kéo",
+      "DisplayName": "Piston Kéo",
       "CRDescription:0": "Thêm móc sắt vào piston để tạo piston kéo"
     },
     "PistonBlock:452": {
-       "DisplayName": "Piston Kéo Nghiêm ngặt",
+      "DisplayName": "Piston Kéo Nghiêm ngặt",
       "CRDescription:0": "Thêm móc đồng vào piston để tạo piston kéo nghiêm ngặt"
     },
     "DirtStairsBlock:0": {
@@ -2853,12 +2908,27 @@
       "10": "Chơi!",
       "11": "Thêm Người khác"
     },
-    "PlayersScreen": [ "Chỉnh sửa Người chơi", "Bố cục Màn hình", "Người chơi Mới", "Không thể thêm người chơi trong chế độ tàn khốc.", "Không thể thêm người chơi trong chế độ phiêu lưu.", "Tối đa cho phép {0} người chơi.", "Chọn Bố cục Màn hình" ],
+    "PlayersScreen": [
+      "Chỉnh sửa Người chơi",
+      "Bố cục Màn hình",
+      "Người chơi Mới",
+      "Không thể thêm người chơi trong chế độ tàn khốc.",
+      "Không thể thêm người chơi trong chế độ phiêu lưu.",
+      "Tối đa cho phép {0} người chơi.",
+      "Chọn Bố cục Màn hình"
+    ],
     "RecipaediaDescriptionScreen": {
       "1": "Mô tả Khối"
     },
-    "RecipaediaRecipesScreen": [ "Công thức Khối", "(công thức #{0})" ],
-    "RecipaediaScreen": [ "Sách Công thức (Recipaedia)", "Mô tả", "Công thức" ],
+    "RecipaediaRecipesScreen": [
+      "Công thức Khối",
+      "(công thức #{0})"
+    ],
+    "RecipaediaScreen": [
+      "Sách Công thức (Recipaedia)",
+      "Mô tả",
+      "Công thức"
+    ],
     "RespawningScreen": {
       "1": "Đang hồi sinh...",
       "2": "Vật phẩm của bạn sẽ còn lại trong thời gian ngắn tại nơi chết."
@@ -2964,7 +3034,7 @@
     "WorldOptionsScreen": {
       "1": "Thay đổi Tùy chọn Thế giới",
       "2": "Loại Địa hình:",
-      "3": "", 
+      "3": "",
       "4": "Kích thước Đảo Đông/Tây:",
       "5": "Kích thước Đảo Bắc/Nam:",
       "6": "Mực Địa hình Phẳng:",
@@ -3007,13 +3077,13 @@
     "BowWidget": {
       "1": "Cung",
       "2": "Túi đồ",
-      "3": "" 
+      "3": ""
     },
     "CharacterSkinItem": {
-      "1": "" 
+      "1": ""
     },
     "CheckboxContents": {
-      "1": "" 
+      "1": ""
     },
     "ChestWidget": {
       "1": "Rương",
@@ -3022,19 +3092,19 @@
     "ClothingWidget": {
       "1": "Cơ thể/Thức ăn",
       "2": "Túi đồ",
-      "3": "", 
-      "4": "" 
+      "3": "",
+      "4": ""
     },
     "CommunityContentItem": {
-      "1": "", 
-      "2": "", 
+      "1": "",
+      "2": "",
       "3": ""
     },
     "CommunityContentItemMore": {
       "1": "Thêm Vật phẩm..."
     },
     "CraftingRecipeSlot": {
-      "1": "" 
+      "1": ""
     },
     "CraftingTableWidget": {
       "1": "...",
@@ -3043,13 +3113,13 @@
     },
     "CreativeInventoryWidget": {
       "1": "Vũ khí",
-      "2": "", 
-      "3": "" 
+      "2": "",
+      "3": ""
     },
     "CrossbowWidget": {
       "1": "Nỏ",
       "2": "Túi đồ",
-      "3": "" 
+      "3": ""
     },
     "DispenserWidget": {
       "1": "Máy Phân Phát",
@@ -3060,10 +3130,10 @@
     },
     "ExternalContentItem": {
       "1": "",
-      "2": "" 
+      "2": ""
     },
     "FullInventoryWidget": {
-      "1": "...", 
+      "1": "...",
       "2": "Chế tạo Tay",
       "3": "Túi đồ"
     },
@@ -3076,53 +3146,53 @@
     },
     "FurnitureInventoryPanel": {
       "1": "Thêm",
-      "2": "..." 
+      "2": "..."
     },
     "FurniturePackItem": {
-      "1": "" 
+      "1": ""
     },
     "GameWidget": {
       "1": "Di chuyển",
       "2": "Nhìn",
-      "3": "", 
-      "4": "", 
-      "5": "", 
+      "3": "",
+      "4": "",
+      "5": "",
       "6": "",
-      "7": "", 
-      "8": "", 
-      "9": "", 
-      "10": "", 
-      "11": "", 
+      "7": "",
+      "8": "",
+      "9": "",
+      "10": "",
+      "11": "",
       "12": "",
       "13": "",
-      "14": "", 
-      "15": "" 
+      "14": "",
+      "15": ""
     },
     "HelpTopicItem": {
-      "1": "" 
+      "1": ""
     },
     "InventoryDragWidget": {
-      "1": "", 
-      "2": "64" 
+      "1": "",
+      "2": "64"
     },
     "LinkContents": {
-      "1": "" 
+      "1": ""
     },
     "MusketWidget": {
       "1": "Súng Hỏa Mai",
       "2": "Túi đồ",
-      "3": "" 
+      "3": ""
     },
     "RecipaediaItem": {
-      "1": "", 
-      "2": "" 
+      "1": "",
+      "2": ""
     },
     "SliderContents": {
-      "1": "" 
+      "1": ""
     },
     "TopBarContents": {
-      "1": "", 
-      "2": "" 
+      "1": "",
+      "2": ""
     },
     "VitalStatsWidget": {
       "1": "Chỉ số Quan trọng",
@@ -3139,7 +3209,7 @@
       "12": "Tốc độ",
       "13": "Độ đói",
       "14": "Cách nhiệt",
-      "15": "", 
+      "15": "",
       "16": "Ảnh hưởng đến sức mạnh tấn công cận chiến, tốc độ đào, tầm ném và tầm bắn cung.",
       "17": "Ảnh hưởng đến sát thương nhận được từ các cuộc tấn công, rơi ngã, lửa và ngạt thở.",
       "18": "Ảnh hưởng đến tốc độ di chuyển trên bộ, tốc độ bơi, chiều cao nhảy và tốc độ hồi phục thể lực.",
@@ -3162,7 +3232,7 @@
       "Hủy"
     ],
     "BuildFurnitureDialog": {
-      "1": "...", 
+      "1": "...",
       "2": "Xây dựng",
       "3": "Hủy"
     },
@@ -3275,7 +3345,7 @@
     "GameMenuDialog": {
       "1": "Tiếp tục",
       "2": "Thoát",
-      "3": "..." 
+      "3": "..."
     },
     "GamepadHelpDialog": {
       "1": "Điều khiển Tay cầm",
@@ -3473,12 +3543,12 @@
       "7": "Tím"
     },
     "Other": {
-      "1": "Pháo hoa {2} {0} {1}{3}", 
+      "1": "Pháo hoa {2} {0} {1}{3}",
       "2": " Nhấp nháy",
       "3": " (Thấp)",
       "4": " (Cao)"
     },
-    "CRDescription":"Make fireworks"
+    "CRDescription": "Make fireworks"
   },
   "WorldPalette": {
     "Colors": [
@@ -3505,7 +3575,7 @@
   },
   "Database": {
     "DisplayName": {
-      "1": "Trứng", 
+      "1": "Trứng",
       "2": "Ngựa Trắng",
       "3": "Trứng Sinh sản Ngựa Trắng",
       "4": "Gấu Nâu",
@@ -3589,7 +3659,7 @@
       "82": "Trứng Sinh sản Linh Cẩu",
       "83": "Hải Âu",
       "84": "Trứng Hải Âu",
-      "85": "Trứng Sinh sản Lạc Đà Alpaca Trắng", 
+      "85": "Trứng Sinh sản Lạc Đà Alpaca Trắng",
       "86": "Bò Đực Trắng",
       "87": "Cá Mập Trắng Lớn",
       "88": "Trứng Sinh sản Cá Mập Trắng Lớn",
@@ -3603,13 +3673,13 @@
       "96": "Trứng Đà Điểu Đầu Mào",
       "97": "Người chơi Nữ",
       "98": "Người chơi Nam",
-      "99": "", 
+      "99": "",
       "100": "Bồ Câu",
       "101": "Trứng Bồ Câu",
       "102": "Chim Sẻ",
       "103": "Trứng Chim Sẻ"
     },
-"Description": {
+    "Description": {
       "1": "Động vật có vú ăn cỏ lớn. Bình thường không hung dữ nhưng không thích bất kỳ ai đến quá gần. Rất bảo vệ đối với bò cái. Nguy hiểm khi nổi giận. Thịt ngon.",
       "2": "Động vật hiền lành có thể cưỡi nếu được trang bị yên ngựa. Sau khi được đặt yên, sẽ phản ứng với còi. Di chuyển rất nhanh và không hung dữ.",
       "3": "Động vật có vú ăn tạp lớn, nguy hiểm. Sẽ đuổi theo bất cứ thứ gì tiếp cận nó. Khá chậm, nhưng mạnh mẽ. Không giống gấu đen, thích khu vực ấm áp. Không ăn được, nhưng cung cấp lông thú khi săn bắn.",

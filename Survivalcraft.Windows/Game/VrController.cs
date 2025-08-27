@@ -1,7 +1,6 @@
-namespace Game
-{
-	public enum VrController {
-		Left,
-		Right
-	}
+namespace Game {
+    public enum VrController {
+        Left,
+        Right
+    }
 }

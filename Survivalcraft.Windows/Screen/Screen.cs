@@ -1,13 +1,7 @@
-namespace Game
-{
-	public class Screen : CanvasWidget
-	{
-		public virtual void Enter(object[] parameters)
-		{
-		}
+namespace Game {
+    public class Screen : CanvasWidget {
+        public virtual void Enter(object[] parameters) { }
 
-		public virtual void Leave()
-		{
-		}
-	}
+        public virtual void Leave() { }
+    }
 }

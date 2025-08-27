@@ -1,9 +1,7 @@
-namespace Game
-{
-	public class FurnitureSet
-	{
-		public string Name;
+namespace Game {
+    public class FurnitureSet {
+        public string Name;
 
-		public string ImportedFrom;
-	}
+        public string ImportedFrom;
+    }
 }

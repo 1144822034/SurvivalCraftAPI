@@ -1,7 +1,5 @@
-namespace Game
-{
-	public class IronOreBlock : CubeBlock
-	{
-		public static int Index = 39;
-	}
+namespace Game {
+    public class IronOreBlock : CubeBlock {
+        public static int Index = 39;
+    }
 }

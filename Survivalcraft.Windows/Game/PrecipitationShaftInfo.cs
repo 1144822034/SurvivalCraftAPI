@@ -1,11 +1,9 @@
-namespace Game
-{
-	public struct PrecipitationShaftInfo
-	{
-		public PrecipitationType Type;
+namespace Game {
+    public struct PrecipitationShaftInfo {
+        public PrecipitationType Type;
 
-		public float Intensity;
+        public float Intensity;
 
-		public int YLimit;
-	}
+        public int YLimit;
+    }
 }

@@ -1,10 +1,8 @@
-namespace Game
-{
-	public enum CommunityContentMode
-	{
-		Disabled,
-		Strict,
-		Normal,
-		ShowAll
-	}
+namespace Game {
+    public enum CommunityContentMode {
+        Disabled,
+        Strict,
+        Normal,
+        ShowAll
+    }
 }

@@ -1,8 +1,6 @@
-namespace Game
-{
-	public enum EnvironmentBehaviorMode
-	{
-		Living,
-		Static
-	}
+namespace Game {
+    public enum EnvironmentBehaviorMode {
+        Living,
+        Static
+    }
 }

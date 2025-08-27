@@ -1,11 +1,9 @@
-namespace Game
-{
-	public enum ElectricConnectorDirection
-	{
-		Top,
-		Left,
-		Bottom,
-		Right,
-		In
-	}
+namespace Game {
+    public enum ElectricConnectorDirection {
+        Top,
+        Left,
+        Bottom,
+        Right,
+        In
+    }
 }
