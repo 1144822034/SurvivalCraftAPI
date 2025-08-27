@@ -14,12 +14,12 @@
         <StackPanelWidget Direction="Vertical" HorizontalAlignment="Center" VerticalAlignment="Center">
 
           <UniformSpacingPanelWidget Direction="Horizontal" Margin="0, 3">
-            <LabelWidget Text="[SettingsAudioScreen:2]"  HorizontalAlignment="Far" VerticalAlignment="Center" Margin="20, 0" />
+            <LabelWidget Text="[SettingsAudioScreen:2]" HorizontalAlignment="Far" VerticalAlignment="Center" Margin="20, 0" />
             <SliderWidget Name="SoundsVolumeSlider" Size="Infinity, 60" VerticalAlignment="Center" Margin="20, 0" />
           </UniformSpacingPanelWidget>
 
           <UniformSpacingPanelWidget Direction="Horizontal" Margin="0, 3">
-            <LabelWidget Text="[SettingsAudioScreen:3]"  HorizontalAlignment="Far" VerticalAlignment="Center" Margin="20, 0" />
+            <LabelWidget Text="[SettingsAudioScreen:3]" HorizontalAlignment="Far" VerticalAlignment="Center" Margin="20, 0" />
             <SliderWidget Name="MusicVolumeSlider" Size="Infinity, 60" VerticalAlignment="Center" Margin="20, 0" />
           </UniformSpacingPanelWidget>
 

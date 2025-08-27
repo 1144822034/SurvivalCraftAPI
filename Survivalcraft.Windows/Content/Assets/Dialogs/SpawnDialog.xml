@@ -5,7 +5,7 @@
   <StackPanelWidget Direction="Vertical" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="10, 30">
     <LabelWidget Name="SpawnDialog.SeasonLabel" HorizontalAlignment="Center" TextAnchor="HorizontalCenter" WordWrap="true"/>
     <CanvasWidget Size="0, 90"/>
-    <LabelWidget Name="SpawnDialog.LargeLabel"  Color="255, 255, 255" HorizontalAlignment="Center" TextAnchor="HorizontalCenter" WordWrap="true"/>
+    <LabelWidget Name="SpawnDialog.LargeLabel" Color="255, 255, 255" HorizontalAlignment="Center" TextAnchor="HorizontalCenter" WordWrap="true"/>
     <CanvasWidget Size="0, 15"/>
     <ValueBarWidget Name="SpawnDialog.Progress" LayoutDirection="Horizontal" HorizontalAlignment="Center" BarsCount="5" BarSize="12, 12" BarSubtexture="{Textures/Atlas/ProgressBar}" Spacing="10" />
   </StackPanelWidget>

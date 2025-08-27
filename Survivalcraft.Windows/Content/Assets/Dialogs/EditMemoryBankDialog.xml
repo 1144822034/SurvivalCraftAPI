@@ -21,61 +21,61 @@
 
           <StackPanelWidget Direction="Vertical" HorizontalAlignment="Center">
 
-            <LabelWidget Text="[EditMemoryBankDialog:3]"  FontScale="1" FontSpacing="2, 0" TextureLinearFilter="false" Color="128, 128, 128" Margin="54, 10" VerticalAlignment="Center"/>
+            <LabelWidget Text="[EditMemoryBankDialog:3]" FontScale="1" FontSpacing="2, 0" TextureLinearFilter="false" Color="128, 128, 128" Margin="54, 10" VerticalAlignment="Center"/>
 
             <StackPanelWidget Direction="Horizontal">
-              <LabelWidget Text="[EditMemoryBankDialog:4]"  FontScale="1" FontSpacing="2, 0" TextureLinearFilter="false" Color="128, 128, 128" Margin="7, 0" VerticalAlignment="Center"/>
-              <TextBoxWidget Name="EditMemoryBankDialog.Line0" Size="483, 50" MaximumLength="16" OverwriteMode="true"  FontScale="1" FontSpacing="2, 0" TextureLinearFilter="false" Margin="10, 0" VerticalAlignment="Center"/>
+              <LabelWidget Text="[EditMemoryBankDialog:4]" FontScale="1" FontSpacing="2, 0" TextureLinearFilter="false" Color="128, 128, 128" Margin="7, 0" VerticalAlignment="Center"/>
+              <TextBoxWidget Name="EditMemoryBankDialog.Line0" Size="483, 50" MaximumLength="16" OverwriteMode="true" FontScale="1" FontSpacing="2, 0" TextureLinearFilter="false" Margin="10, 0" VerticalAlignment="Center"/>
             </StackPanelWidget>
 
             <StackPanelWidget Direction="Horizontal">
-              <LabelWidget Text="[EditMemoryBankDialog:5]"  FontScale="1" FontSpacing="2, 0" TextureLinearFilter="false" Color="128, 128, 128" Margin="7, 0" VerticalAlignment="Center"/>
-              <TextBoxWidget Name="EditMemoryBankDialog.Line1" Size="483, 50" MaximumLength="16" OverwriteMode="true"  FontScale="1" FontSpacing="2, 0" TextureLinearFilter="false" Margin="10, 0" VerticalAlignment="Center"/>
+              <LabelWidget Text="[EditMemoryBankDialog:5]" FontScale="1" FontSpacing="2, 0" TextureLinearFilter="false" Color="128, 128, 128" Margin="7, 0" VerticalAlignment="Center"/>
+              <TextBoxWidget Name="EditMemoryBankDialog.Line1" Size="483, 50" MaximumLength="16" OverwriteMode="true" FontScale="1" FontSpacing="2, 0" TextureLinearFilter="false" Margin="10, 0" VerticalAlignment="Center"/>
             </StackPanelWidget>
 
             <StackPanelWidget Direction="Horizontal">
-              <LabelWidget Text="[EditMemoryBankDialog:6]"  FontScale="1" FontSpacing="2, 0" TextureLinearFilter="false" Color="128, 128, 128" Margin="7, 0" VerticalAlignment="Center"/>
-              <TextBoxWidget Name="EditMemoryBankDialog.Line2" Size="483, 50" MaximumLength="16" OverwriteMode="true"  FontScale="1" FontSpacing="2, 0" TextureLinearFilter="false" Margin="10, 0" VerticalAlignment="Center"/>
+              <LabelWidget Text="[EditMemoryBankDialog:6]" FontScale="1" FontSpacing="2, 0" TextureLinearFilter="false" Color="128, 128, 128" Margin="7, 0" VerticalAlignment="Center"/>
+              <TextBoxWidget Name="EditMemoryBankDialog.Line2" Size="483, 50" MaximumLength="16" OverwriteMode="true" FontScale="1" FontSpacing="2, 0" TextureLinearFilter="false" Margin="10, 0" VerticalAlignment="Center"/>
             </StackPanelWidget>
 
             <StackPanelWidget Direction="Horizontal">
-              <LabelWidget Text="[EditMemoryBankDialog:7]"  FontScale="1" FontSpacing="2, 0" TextureLinearFilter="false" Color="128, 128, 128" Margin="7, 0" VerticalAlignment="Center"/>
-              <TextBoxWidget Name="EditMemoryBankDialog.Line3" Size="483, 50" MaximumLength="16" OverwriteMode="true"  FontScale="1" FontSpacing="2, 0" TextureLinearFilter="false" Margin="10, 0" VerticalAlignment="Center"/>
+              <LabelWidget Text="[EditMemoryBankDialog:7]" FontScale="1" FontSpacing="2, 0" TextureLinearFilter="false" Color="128, 128, 128" Margin="7, 0" VerticalAlignment="Center"/>
+              <TextBoxWidget Name="EditMemoryBankDialog.Line3" Size="483, 50" MaximumLength="16" OverwriteMode="true" FontScale="1" FontSpacing="2, 0" TextureLinearFilter="false" Margin="10, 0" VerticalAlignment="Center"/>
             </StackPanelWidget>
 
             <StackPanelWidget Direction="Horizontal">
-              <LabelWidget Text="[EditMemoryBankDialog:8]"  FontScale="1" FontSpacing="2, 0" TextureLinearFilter="false" Color="128, 128, 128" Margin="7, 0" VerticalAlignment="Center"/>
-              <TextBoxWidget Name="EditMemoryBankDialog.Line4" Size="483, 50" MaximumLength="16" OverwriteMode="true"  FontScale="1" FontSpacing="2, 0" TextureLinearFilter="false" Margin="10, 0" VerticalAlignment="Center"/>
+              <LabelWidget Text="[EditMemoryBankDialog:8]" FontScale="1" FontSpacing="2, 0" TextureLinearFilter="false" Color="128, 128, 128" Margin="7, 0" VerticalAlignment="Center"/>
+              <TextBoxWidget Name="EditMemoryBankDialog.Line4" Size="483, 50" MaximumLength="16" OverwriteMode="true" FontScale="1" FontSpacing="2, 0" TextureLinearFilter="false" Margin="10, 0" VerticalAlignment="Center"/>
             </StackPanelWidget>
 
             <StackPanelWidget Direction="Horizontal">
-              <LabelWidget Text="[EditMemoryBankDialog:9]"  FontScale="1" FontSpacing="2, 0" TextureLinearFilter="false" Color="128, 128, 128" Margin="7, 0" VerticalAlignment="Center"/>
-              <TextBoxWidget Name="EditMemoryBankDialog.Line5" Size="483, 50" MaximumLength="16" OverwriteMode="true"  FontScale="1" FontSpacing="2, 0" TextureLinearFilter="false" Margin="10, 0" VerticalAlignment="Center"/>
+              <LabelWidget Text="[EditMemoryBankDialog:9]" FontScale="1" FontSpacing="2, 0" TextureLinearFilter="false" Color="128, 128, 128" Margin="7, 0" VerticalAlignment="Center"/>
+              <TextBoxWidget Name="EditMemoryBankDialog.Line5" Size="483, 50" MaximumLength="16" OverwriteMode="true" FontScale="1" FontSpacing="2, 0" TextureLinearFilter="false" Margin="10, 0" VerticalAlignment="Center"/>
             </StackPanelWidget>
 
             <StackPanelWidget Direction="Horizontal">
-              <LabelWidget Text="[EditMemoryBankDialog:10]"  FontScale="1" FontSpacing="2, 0" TextureLinearFilter="false" Color="128, 128, 128" Margin="7, 0" VerticalAlignment="Center"/>
-              <TextBoxWidget Name="EditMemoryBankDialog.Line6" Size="483, 50" MaximumLength="16" OverwriteMode="true"  FontScale="1" FontSpacing="2, 0" TextureLinearFilter="false" Margin="10, 0" VerticalAlignment="Center"/>
+              <LabelWidget Text="[EditMemoryBankDialog:10]" FontScale="1" FontSpacing="2, 0" TextureLinearFilter="false" Color="128, 128, 128" Margin="7, 0" VerticalAlignment="Center"/>
+              <TextBoxWidget Name="EditMemoryBankDialog.Line6" Size="483, 50" MaximumLength="16" OverwriteMode="true" FontScale="1" FontSpacing="2, 0" TextureLinearFilter="false" Margin="10, 0" VerticalAlignment="Center"/>
             </StackPanelWidget>
 
             <StackPanelWidget Direction="Horizontal">
-              <LabelWidget Text="[EditMemoryBankDialog:11]"  FontScale="1" FontSpacing="2, 0" TextureLinearFilter="false" Color="128, 128, 128" Margin="7, 0" VerticalAlignment="Center"/>
-              <TextBoxWidget Name="EditMemoryBankDialog.Line7" Size="483, 50" MaximumLength="16" OverwriteMode="true"  FontScale="1" FontSpacing="2, 0" TextureLinearFilter="false" Margin="10, 0" VerticalAlignment="Center"/>
+              <LabelWidget Text="[EditMemoryBankDialog:11]" FontScale="1" FontSpacing="2, 0" TextureLinearFilter="false" Color="128, 128, 128" Margin="7, 0" VerticalAlignment="Center"/>
+              <TextBoxWidget Name="EditMemoryBankDialog.Line7" Size="483, 50" MaximumLength="16" OverwriteMode="true" FontScale="1" FontSpacing="2, 0" TextureLinearFilter="false" Margin="10, 0" VerticalAlignment="Center"/>
             </StackPanelWidget>
 
             <StackPanelWidget Direction="Horizontal">
-              <LabelWidget Text="[EditMemoryBankDialog:12]"  FontScale="1" FontSpacing="2, 0" TextureLinearFilter="false" Color="128, 128, 128" Margin="7, 0" VerticalAlignment="Center"/>
-              <TextBoxWidget Name="EditMemoryBankDialog.Line8" Size="483, 50" MaximumLength="16" OverwriteMode="true"  FontScale="1" FontSpacing="2, 0" TextureLinearFilter="false" Margin="10, 0" VerticalAlignment="Center"/>
+              <LabelWidget Text="[EditMemoryBankDialog:12]" FontScale="1" FontSpacing="2, 0" TextureLinearFilter="false" Color="128, 128, 128" Margin="7, 0" VerticalAlignment="Center"/>
+              <TextBoxWidget Name="EditMemoryBankDialog.Line8" Size="483, 50" MaximumLength="16" OverwriteMode="true" FontScale="1" FontSpacing="2, 0" TextureLinearFilter="false" Margin="10, 0" VerticalAlignment="Center"/>
             </StackPanelWidget>
 
             <StackPanelWidget Direction="Horizontal">
-              <LabelWidget Text="[EditMemoryBankDialog:13]"  FontScale="1" FontSpacing="2, 0" TextureLinearFilter="false" Color="128, 128, 128" Margin="7, 0" VerticalAlignment="Center"/>
-              <TextBoxWidget Name="EditMemoryBankDialog.Line9" Size="483, 50" MaximumLength="16" OverwriteMode="true"  FontScale="1" FontSpacing="2, 0" TextureLinearFilter="false" Margin="10, 0" VerticalAlignment="Center"/>
+              <LabelWidget Text="[EditMemoryBankDialog:13]" FontScale="1" FontSpacing="2, 0" TextureLinearFilter="false" Color="128, 128, 128" Margin="7, 0" VerticalAlignment="Center"/>
+              <TextBoxWidget Name="EditMemoryBankDialog.Line9" Size="483, 50" MaximumLength="16" OverwriteMode="true" FontScale="1" FontSpacing="2, 0" TextureLinearFilter="false" Margin="10, 0" VerticalAlignment="Center"/>
             </StackPanelWidget>
 
             <StackPanelWidget Direction="Horizontal">
-              <LabelWidget Text="[EditMemoryBankDialog:14]"  FontScale="1" FontSpacing="2, 0" TextureLinearFilter="false" Color="128, 128, 128" Margin="7, 0" VerticalAlignment="Center"/>
-              <TextBoxWidget Name="EditMemoryBankDialog.Line10" Size="483, 50" MaximumLength="16" OverwriteMode="true"  FontScale="1" FontSpacing="2, 0" TextureLinearFilter="false" Margin="10, 0" VerticalAlignment="Center"/>
+              <LabelWidget Text="[EditMemoryBankDialog:14]" FontScale="1" FontSpacing="2, 0" TextureLinearFilter="false" Color="128, 128, 128" Margin="7, 0" VerticalAlignment="Center"/>
+              <TextBoxWidget Name="EditMemoryBankDialog.Line10" Size="483, 50" MaximumLength="16" OverwriteMode="true" FontScale="1" FontSpacing="2, 0" TextureLinearFilter="false" Margin="10, 0" VerticalAlignment="Center"/>
             </StackPanelWidget>
 
             <StackPanelWidget Direction="Horizontal">

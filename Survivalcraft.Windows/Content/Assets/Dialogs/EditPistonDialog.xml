@@ -4,14 +4,14 @@
     <BevelledRectangleWidget Style="{Styles/DialogArea}" />
     <StackPanelWidget Direction="Vertical" HorizontalAlignment="Center" VerticalAlignment="Near" Margin="15, 15">
       
-      <LabelWidget Name="EditPistonDialog.Title"  HorizontalAlignment="Center"/>
+      <LabelWidget Name="EditPistonDialog.Title" HorizontalAlignment="Center"/>
 
       <CanvasWidget Size="0, Infinity" />
 
       <CanvasWidget Size="Infinity, 75">
         <StackPanelWidget Direction="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center">
           <CanvasWidget Size="180, -1" VerticalAlignment="Center">
-            <LabelWidget Name="EditPistonDialog.Label1" Text="[EditPistonDialog:1]"  HorizontalAlignment="Center"/>
+            <LabelWidget Name="EditPistonDialog.Label1" Text="[EditPistonDialog:1]" HorizontalAlignment="Center"/>
           </CanvasWidget>
           <SliderWidget Name="EditPistonDialog.Slider1" VerticalAlignment="Center" LabelWidth="120" />
         </StackPanelWidget>
@@ -20,7 +20,7 @@
       <CanvasWidget Name="EditPistonDialog.Panel2" Size="Infinity, 75">
         <StackPanelWidget Name="EditPistonDialog.Panel2" Direction="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center">
           <CanvasWidget Size="180, -1" VerticalAlignment="Center">
-            <LabelWidget Name="EditPistonDialog.Label2" Text="[EditPistonDialog:2]"  HorizontalAlignment="Center"/>
+            <LabelWidget Name="EditPistonDialog.Label2" Text="[EditPistonDialog:2]" HorizontalAlignment="Center"/>
           </CanvasWidget>
           <SliderWidget Name="EditPistonDialog.Slider2" VerticalAlignment="Center" LabelWidth="120" />
         </StackPanelWidget>
@@ -29,7 +29,7 @@
       <CanvasWidget Size="Infinity, 75">
         <StackPanelWidget Direction="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center">
           <CanvasWidget Size="180, -1" VerticalAlignment="Center">
-            <LabelWidget Name="EditPistonDialog.Label3" Text="[EditPistonDialog:3]"  HorizontalAlignment="Center"/>
+            <LabelWidget Name="EditPistonDialog.Label3" Text="[EditPistonDialog:3]" HorizontalAlignment="Center"/>
           </CanvasWidget>
           <SliderWidget Name="EditPistonDialog.Slider3" VerticalAlignment="Center" LabelWidth="120" />
         </StackPanelWidget>

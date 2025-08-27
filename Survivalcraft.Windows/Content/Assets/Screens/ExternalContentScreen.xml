@@ -14,7 +14,7 @@
 
       <StackPanelWidget Direction="Horizontal" Margin="10, 0">
         <CanvasWidget Size="10, 0"/>
-        <LabelWidget Name="ProviderName" Text="[ExternalContentScreen:2]"  VerticalAlignment="Center"/>
+        <LabelWidget Name="ProviderName" Text="[ExternalContentScreen:2]" VerticalAlignment="Center"/>
         <CanvasWidget Size="10, 0"/>
         <BevelledButtonWidget Name="ChangeProvider" Text="[ExternalContentScreen:3]" Style="{Styles/ButtonStyle_70x60}" VerticalAlignment="Center"/>
         <CanvasWidget Size="Infinity, 0"/>

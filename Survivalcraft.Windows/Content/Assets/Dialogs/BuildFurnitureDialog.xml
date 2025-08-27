@@ -10,7 +10,7 @@
       <CanvasWidget Size="Infinity, 70">
         <StackPanelWidget Direction="Vertical" HorizontalAlignment="Center" VerticalAlignment="Center">
           <LabelWidget Name="BuildFurnitureDialog.Name" HorizontalAlignment="Center"/>
-          <LabelWidget Name="BuildFurnitureDialog.Status"  Color="128, 128, 128, 255" HorizontalAlignment="Center"/>
+          <LabelWidget Name="BuildFurnitureDialog.Status" Color="128, 128, 128, 255" HorizontalAlignment="Center"/>
         </StackPanelWidget>
         <BevelledButtonWidget Style="{Styles/ButtonStyle_70x60}" HorizontalAlignment="Far" VerticalAlignment="Center" Name="BuildFurnitureDialog.NameButton" Text="[BuildFurnitureDialog:1]" Margin="12, 0" />
       </CanvasWidget>
@@ -21,7 +21,7 @@
 
         <CanvasWidget VerticalAlignment="Center">
           <StackPanelWidget Direction="Vertical" VerticalAlignment="Center">
-            <BevelledButtonWidget Size="218, 60" HorizontalAlignment="Center" Name="BuildFurnitureDialog.AxisButton"  />
+            <BevelledButtonWidget Size="218, 60" HorizontalAlignment="Center" Name="BuildFurnitureDialog.AxisButton" />
             <StackPanelWidget Direction="Horizontal" HorizontalAlignment="Center">
               <BevelledButtonWidget Style="{Styles/ButtonStyle_Mirror}" Name="BuildFurnitureDialog.MirrorButton" />
               <BevelledButtonWidget Style="{Styles/ButtonStyle_ArrowUp}" Name="BuildFurnitureDialog.UpButton" />

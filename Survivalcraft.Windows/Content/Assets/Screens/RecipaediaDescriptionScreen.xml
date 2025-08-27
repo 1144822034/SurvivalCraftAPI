@@ -27,19 +27,19 @@
       <CanvasWidget Size="0, 20" />
 
       <ScrollPanelWidget Direction="Vertical">
-        <LabelWidget Name="Description"  WordWrap="true" Margin="10, 0" TextAnchor="HorizontalCenter" HorizontalAlignment="Center"/>
+        <LabelWidget Name="Description" WordWrap="true" Margin="10, 0" TextAnchor="HorizontalCenter" HorizontalAlignment="Center"/>
       </ScrollPanelWidget>
       
       <CanvasWidget Size="0, 20" />
 
       <StackPanelWidget Direction="Horizontal" HorizontalAlignment="Center" Margin="30, 0">
-        <LabelWidget Name="PropertyNames1"  Color="128, 128, 128" />
+        <LabelWidget Name="PropertyNames1" Color="128, 128, 128" />
         <CanvasWidget Size="10, 0" />
-        <LabelWidget Name="PropertyValues1"  />
+        <LabelWidget Name="PropertyValues1" />
         <CanvasWidget Size="60, 0" />
-        <LabelWidget Name="PropertyNames2"  Color="128, 128, 128" />
+        <LabelWidget Name="PropertyNames2" Color="128, 128, 128" />
         <CanvasWidget Size="10, 0" />
-        <LabelWidget Name="PropertyValues2"  />
+        <LabelWidget Name="PropertyValues2" />
       </StackPanelWidget>
 
     </StackPanelWidget>

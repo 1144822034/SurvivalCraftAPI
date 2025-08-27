@@ -5,7 +5,7 @@
     <StackPanelWidget Direction="Vertical" HorizontalAlignment="Center" VerticalAlignment="Near" Margin="0, 15">
 
       <LabelWidget  HorizontalAlignment="Center" Text="[RateCommunityContentDialog:1]"/>
-      <LabelWidget Name="RateCommunityContentDialog.Name"  HorizontalAlignment="Center"/>
+      <LabelWidget Name="RateCommunityContentDialog.Name" HorizontalAlignment="Center"/>
 
       <CanvasWidget Size="0, Infinity" />
 
@@ -18,7 +18,7 @@
       <StackPanelWidget Direction="Horizontal" HorizontalAlignment="Center">
         <LabelWidget  Color="128, 128, 128" Text="[RateCommunityContentDialog:2]" HorizontalAlignment="Center" VerticalAlignment="Center" TextAnchor="HorizontalCenter" />
         <CanvasWidget Size="10, 0" />
-        <LinkWidget Name="RateCommunityContentDialog.Report"  VerticalAlignment="Center" Text="[RateCommunityContentDialog:3]" Color="64, 192, 64" />
+        <LinkWidget Name="RateCommunityContentDialog.Report" VerticalAlignment="Center" Text="[RateCommunityContentDialog:3]" Color="64, 192, 64" />
       </StackPanelWidget>
 
       <CanvasWidget Size="0, Infinity" />

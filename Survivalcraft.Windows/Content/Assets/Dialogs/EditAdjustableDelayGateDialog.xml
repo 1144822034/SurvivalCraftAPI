@@ -11,7 +11,7 @@
       <StackPanelWidget Direction="Horizontal" HorizontalAlignment="Center">
         <BevelledButtonWidget Name="EditAdjustableDelayGateDialog.MinusButton" Style="{Styles/ButtonStyle_Minus}" VerticalAlignment="Center"/>
         <CanvasWidget Size="200, 50" VerticalAlignment="Center">
-          <LabelWidget Name="EditAdjustableDelayGateDialog.Label"  HorizontalAlignment="Center" VerticalAlignment="Center"/>
+          <LabelWidget Name="EditAdjustableDelayGateDialog.Label" HorizontalAlignment="Center" VerticalAlignment="Center"/>
         </CanvasWidget>
         <BevelledButtonWidget Name="EditAdjustableDelayGateDialog.PlusButton" Style="{Styles/ButtonStyle_Plus}" VerticalAlignment="Center"/>
       </StackPanelWidget>

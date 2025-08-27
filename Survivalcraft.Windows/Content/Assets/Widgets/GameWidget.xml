@@ -25,7 +25,7 @@
             <CanvasWidget Name="MovePadContainer" Size="160, 160">
               <CanvasWidget Name="MoveRectangleContainer" Size="160, 160">
                 <RectangleWidget Name="MoveRectangle" Subtexture="{Textures/Atlas/TouchController}" FillColor="255, 255, 255" OutlineColor="0, 0, 0, 0" FlipHorizontal="true" />
-                <LabelWidget Text="[GameWidget:1]"  HorizontalAlignment="Near" VerticalAlignment="Far" Margin="11, 4" DropShadow="false" FontScale="1.5" />
+                <LabelWidget Text="[GameWidget:1]" HorizontalAlignment="Near" VerticalAlignment="Far" Margin="11, 4" DropShadow="false" FontScale="1.5" />
               </CanvasWidget>
               <TouchInputWidget Name="Move" />
             </CanvasWidget>
@@ -35,7 +35,7 @@
             <CanvasWidget Name="LookPadContainer" Size="160, 160">
               <CanvasWidget Name="LookRectangleContainer" Size="160, 160">
                 <RectangleWidget Name="LookRectangle" Subtexture="{Textures/Atlas/TouchController}" FillColor="255, 255, 255" OutlineColor="0, 0, 0, 0" FlipHorizontal="false" />
-                <LabelWidget Text="[GameWidget:2]"  HorizontalAlignment="Near" VerticalAlignment="Far" Margin="22, 4" DropShadow="false" FontScale="1.5" />
+                <LabelWidget Text="[GameWidget:2]" HorizontalAlignment="Near" VerticalAlignment="Far" Margin="22, 4" DropShadow="false" FontScale="1.5" />
               </CanvasWidget>
               <TouchInputWidget Name="Look" />
             </CanvasWidget>
@@ -50,7 +50,7 @@
         <StackPanelWidget Name="BottomBarsContainer" Direction="Horizontal" HorizontalAlignment="Center" Margin="0, 2">
           <ValueBarWidget Name="HealthBar" LayoutDirection="Horizontal" Margin="8, 0" VerticalAlignment="Center" BarsCount="10" Spacing="-1" BarBlending="false" HalfBars="true" LitBarColor="0, 0, 0" UnlitBarColor="64, 64, 64, 255" BarSize="15, 16" BarSubtexture="{Textures/Atlas/HealthBar}" TextureLinearFilter="true"/>
           <ValueBarWidget Name="TemperatureBar" LayoutDirection="Horizontal" Margin="8, 0" VerticalAlignment="Far" BarsCount="1" LitBarColor="255, 255, 255" BarSize="50, 14" TextureLinearFilter="true" Value="1"/>
-          <LabelWidget Name="LevelLabel" TextAnchor="HorizontalCenter" Margin="8, 0" FontScale="0.6" VerticalAlignment="Center"  DropShadow="true" Color="255, 255, 255"/>
+          <LabelWidget Name="LevelLabel" TextAnchor="HorizontalCenter" Margin="8, 0" FontScale="0.6" VerticalAlignment="Center" DropShadow="true" Color="255, 255, 255"/>
           <ValueBarWidget Name="FoodBar" LayoutDirection="Horizontal" Margin="8, 0" VerticalAlignment="Center" BarsCount="10" BarBlending="false" HalfBars="true" LitBarColor="150, 170, 190" UnlitBarColor="64, 64, 64, 255" BarSize="15, 16" Spacing="-1.5" BarSubtexture="{Textures/Atlas/FoodBar}" TextureLinearFilter="true"/>
         </StackPanelWidget>
         <ShortInventoryWidget Name="ShortInventory" HorizontalAlignment="Center" />
@@ -88,8 +88,8 @@
     <CanvasWidget Name="LargeMessage" HorizontalAlignment="Center" IsVisible="false" IsHitTestVisible="false">
       <StackPanelWidget Direction="Vertical" IsHitTestVisible="false">
         <CanvasWidget Size="0, 50" />
-        <LabelWidget Name="LargeLabel"  HorizontalAlignment="Center" DropShadow="true" FontSpacing="12, 0" Margin="0, 50"/>
-        <LabelWidget Name="SmallLabel"  HorizontalAlignment="Center" DropShadow="true" TextAnchor="HorizontalCenter"/>
+        <LabelWidget Name="LargeLabel" HorizontalAlignment="Center" DropShadow="true" FontSpacing="12, 0" Margin="0, 50"/>
+        <LabelWidget Name="SmallLabel" HorizontalAlignment="Center" DropShadow="true" TextAnchor="HorizontalCenter"/>
       </StackPanelWidget>
     </CanvasWidget>
 

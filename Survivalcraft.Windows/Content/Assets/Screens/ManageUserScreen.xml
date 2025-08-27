@@ -24,7 +24,7 @@
           <BevelledButtonWidget Name="Search" Text="[CommunityContentScreen:10]" Style="{Styles/ButtonStyle_70x60}" VerticalAlignment="Far"/>
         </StackPanelWidget>
         <StackPanelWidget HorizontalAlignment="Far">
-          <LabelWidget Name="Filter" Text="[CommunityContentScreen:4]"  VerticalAlignment="Center"/>
+          <LabelWidget Name="Filter" Text="[CommunityContentScreen:4]" VerticalAlignment="Center"/>
           <CanvasWidget Size="10, 0"/>
           <BevelledButtonWidget Name="ChangeFilter" Text="[CommunityContentScreen:5]" Style="{Styles/ButtonStyle_70x60}" VerticalAlignment="Center"/>
         </StackPanelWidget>

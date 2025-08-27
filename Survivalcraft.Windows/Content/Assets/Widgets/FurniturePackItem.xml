@@ -4,6 +4,6 @@
   </CanvasWidget>
   <StackPanelWidget Direction="Vertical" VerticalAlignment="Center">
     <LabelWidget Name="FurniturePackItem.Text" Color="255, 255, 255" />
-    <LabelWidget Name="FurniturePackItem.Details"  Color="128, 128, 128" VerticalAlignment="Center" />
+    <LabelWidget Name="FurniturePackItem.Details" Color="128, 128, 128" VerticalAlignment="Center" />
   </StackPanelWidget>
 </StackPanelWidget>

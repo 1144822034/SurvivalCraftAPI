@@ -21,7 +21,7 @@
 
 					<StackPanelWidget Direction="Vertical" HorizontalAlignment="Center">
 
-						<LabelWidget Text="[EditTruthTableDialog:3]"  FontScale="1.2" Color="255, 255, 255" TextureLinearFilter="false" Margin="10, 10" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+						<LabelWidget Text="[EditTruthTableDialog:3]" FontScale="1.2" Color="255, 255, 255" TextureLinearFilter="false" Margin="10, 10" VerticalAlignment="Center" HorizontalAlignment="Center"/>
 
 						<StackPanelWidget Direction="Horizontal" HorizontalAlignment="Center">
 							<LabelWidget Text="[EditTruthTableDialog:4]" FontSpacing="12,0" FontScale="1.5" Color="128, 128, 128" TextureLinearFilter="false" Margin="10, 10" VerticalAlignment="Center"/>
@@ -130,7 +130,7 @@
 				<CanvasWidget Size="0, 10" />
 				<CanvasWidget Size="504, 54" HorizontalAlignment="Center">
           <BevelledRectangleWidget Style="{Styles/TextBoxArea}" />
-					<TextBoxWidget Name="EditTruthTableDialog.LinearText" Size="500, 50" MaximumLength="16"  FontScale="1.5" TextureLinearFilter="false" Margin="2, 2" />
+					<TextBoxWidget Name="EditTruthTableDialog.LinearText" Size="500, 50" MaximumLength="16" FontScale="1.5" TextureLinearFilter="false" Margin="2, 2" />
 				</CanvasWidget>
 				<CanvasWidget Size="0, Infinity" />
 			</StackPanelWidget>

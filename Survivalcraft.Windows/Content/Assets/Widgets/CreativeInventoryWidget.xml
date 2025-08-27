@@ -9,9 +9,9 @@
     <StackPanelWidget Name="ControlsPanel" HorizontalAlignment="Center">
       <BevelledButtonWidget Name="CategoryLeftButton" Style="{Styles/ButtonStyle_ArrowLeft}" />
       <BevelledButtonWidget Name="CategoryRightButton" Style="{Styles/ButtonStyle_ArrowRight}" />
-      <BevelledButtonWidget Name="CategoryButton" Text="[CreativeInventoryWidget:1]" Size="240, 60" HorizontalAlignment="Center" VerticalAlignment="Center"  />
+      <BevelledButtonWidget Name="CategoryButton" Text="[CreativeInventoryWidget:1]" Size="240, 60" HorizontalAlignment="Center" VerticalAlignment="Center" />
       <CanvasWidget Size="Infinity, 0" />
-      <LabelWidget Name="PageLabel" HorizontalAlignment="Center" VerticalAlignment="Center"  Margin="6, 0"/>
+      <LabelWidget Name="PageLabel" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="6, 0"/>
       <BevelledButtonWidget Name="PageUpButton" Style="{Styles/ButtonStyle_ArrowUp}" />
       <BevelledButtonWidget Name="PageDownButton" Style="{Styles/ButtonStyle_ArrowDown}" />
     </StackPanelWidget>

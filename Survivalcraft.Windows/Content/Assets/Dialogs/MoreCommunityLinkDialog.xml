@@ -15,9 +15,9 @@
       <CanvasWidget Size="0, Infinity" />
 
       <StackPanelWidget Direction="Horizontal" HorizontalAlignment="Center">
-        <LabelWidget Text="[MoreCommunityLinkDialog:3]"  Color="128, 128, 128" HorizontalAlignment="Far" VerticalAlignment="Center"/>
+        <LabelWidget Text="[MoreCommunityLinkDialog:3]" Color="128, 128, 128" HorizontalAlignment="Far" VerticalAlignment="Center"/>
         <CanvasWidget Size="20, 0" />
-        <LabelWidget Name="MoreCommunityLinkDialog.User" Text="[MoreCommunityLinkDialog:4]"  VerticalAlignment="Center" ClampToBounds="true"/>
+        <LabelWidget Name="MoreCommunityLinkDialog.User" Text="[MoreCommunityLinkDialog:4]" VerticalAlignment="Center" ClampToBounds="true"/>
         <CanvasWidget Size="10, 0"/>
         <BevelledButtonWidget Name="MoreCommunityLinkDialog.ChangeUser" Text="[MoreCommunityLinkDialog:5]" Style="{Styles/ButtonStyle_70x60}" VerticalAlignment="Center"/>
       </StackPanelWidget>
@@ -25,9 +25,9 @@
       <CanvasWidget Size="0, 5" />
 
       <StackPanelWidget Direction="Horizontal" HorizontalAlignment="Center">
-        <LabelWidget Text="[MoreCommunityLinkDialog:6]"  Color="128, 128, 128" HorizontalAlignment="Far" VerticalAlignment="Center"/>
+        <LabelWidget Text="[MoreCommunityLinkDialog:6]" Color="128, 128, 128" HorizontalAlignment="Far" VerticalAlignment="Center"/>
         <CanvasWidget Size="20, 0" />
-        <LabelWidget Name="MoreCommunityLinkDialog.UserId" Text="[MoreCommunityLinkDialog:7]"  VerticalAlignment="Center" ClampToBounds="true"/>
+        <LabelWidget Name="MoreCommunityLinkDialog.UserId" Text="[MoreCommunityLinkDialog:7]" VerticalAlignment="Center" ClampToBounds="true"/>
         <CanvasWidget Size="10, 0"/>
         <BevelledButtonWidget Name="MoreCommunityLinkDialog.CopyUserId" Text="[MoreCommunityLinkDialog:8]" Style="{Styles/ButtonStyle_160x60}" VerticalAlignment="Center"/>
       </StackPanelWidget>

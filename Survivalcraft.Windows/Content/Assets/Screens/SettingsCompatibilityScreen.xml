@@ -22,7 +22,7 @@
           <StackPanelWidget Direction="Vertical" HorizontalAlignment="Center" VerticalAlignment="Center">
 
             <UniformSpacingPanelWidget Direction="Horizontal">
-              <LabelWidget Text="[SettingsCompatibilityScreen:6]"  HorizontalAlignment="Far" VerticalAlignment="Center" Margin="20, 0" />
+              <LabelWidget Text="[SettingsCompatibilityScreen:6]" HorizontalAlignment="Far" VerticalAlignment="Center" Margin="20, 0" />
               <BevelledButtonWidget Name="ViewGameLogButton" Style="{Styles/ButtonStyle_310x60}" VerticalAlignment="Center" Margin="20, 0" Text="[SettingsCompatibilityScreen:7]"/>
             </UniformSpacingPanelWidget>
 
@@ -32,7 +32,7 @@
             </UniformSpacingPanelWidget>
 
             <UniformSpacingPanelWidget Direction="Horizontal">
-			  <LabelWidget Text="[SettingsCompatibilityScreen:8]"  HorizontalAlignment="Far" VerticalAlignment="Center" Margin="20, 0" />
+			  <LabelWidget Text="[SettingsCompatibilityScreen:8]" HorizontalAlignment="Far" VerticalAlignment="Center" Margin="20, 0" />
               <BevelledButtonWidget Name="ResetDefaultsButton" Style="{Styles/ButtonStyle_310x60}" VerticalAlignment="Center" Margin="20, 0" Text="[SettingsCompatibilityScreen:9]"/>
             </UniformSpacingPanelWidget>
 
@@ -43,7 +43,7 @@
       <CanvasWidget Size="0, 10"/>
 
       <CanvasWidget Size="Infinity, 80" HorizontalAlignment="Center" VerticalAlignment="Center">
-        <LabelWidget Name="Description" HorizontalAlignment="Center" VerticalAlignment="Center" TextAnchor="HorizontalCenter, VerticalCenter"  Color="128, 128, 128" WordWrap="true" />
+        <LabelWidget Name="Description" HorizontalAlignment="Center" VerticalAlignment="Center" TextAnchor="HorizontalCenter, VerticalCenter" Color="128, 128, 128" WordWrap="true" />
       </CanvasWidget>
 
       <CanvasWidget Size="0, 10"/>

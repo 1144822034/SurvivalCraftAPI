@@ -18,7 +18,7 @@
           <StackPanelWidget Direction="Vertical" HorizontalAlignment="Center" Margin="10, 10" >
             <LabelWidget Name="Title" HorizontalAlignment="Center" TextAnchor="HorizontalCenter" WordWrap="true" />
             <CanvasWidget Size="0, 20" />
-            <LabelWidget Name="Text"  Color="128, 128, 128" HorizontalAlignment="Center" TextAnchor="HorizontalCenter" WordWrap="true" />
+            <LabelWidget Name="Text" Color="128, 128, 128" HorizontalAlignment="Center" TextAnchor="HorizontalCenter" WordWrap="true" />
           </StackPanelWidget>
 
         </CanvasWidget>

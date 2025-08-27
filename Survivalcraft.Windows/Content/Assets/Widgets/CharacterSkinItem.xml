@@ -5,6 +5,6 @@
   </CanvasWidget>
   <StackPanelWidget Direction="Vertical" VerticalAlignment="Center">
     <LabelWidget Name="CharacterSkinItem.Text" Color="255, 255, 255" />
-    <LabelWidget Name="CharacterSkinItem.Details"  Color="128, 128, 128" VerticalAlignment="Center" />
+    <LabelWidget Name="CharacterSkinItem.Details" Color="128, 128, 128" VerticalAlignment="Center" />
   </StackPanelWidget>
 </StackPanelWidget>

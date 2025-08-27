@@ -8,8 +8,8 @@
     <UniformSpacingPanelWidget Direction="Vertical" HorizontalAlignment="Center" _ExcludePlatforms="Ios">
       <StackPanelWidget Direction="Vertical" HorizontalAlignment="Center" VerticalAlignment="Center">
         <LabelWidget Text="[TrialEndedScreen:1]" HorizontalAlignment="Center" Margin="0, 20" />
-        <LabelWidget Text="[TrialEndedScreen:2]"  Color="128, 128, 128" HorizontalAlignment="Center" Margin="0, 0" />
-        <LabelWidget Text="[TrialEndedScreen:3]"  Color="128, 128, 128" HorizontalAlignment="Center" Margin="0, 0" />
+        <LabelWidget Text="[TrialEndedScreen:2]" Color="128, 128, 128" HorizontalAlignment="Center" Margin="0, 0" />
+        <LabelWidget Text="[TrialEndedScreen:3]" Color="128, 128, 128" HorizontalAlignment="Center" Margin="0, 0" />
       </StackPanelWidget>
       <StackPanelWidget Direction="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center">
         <BevelledButtonWidget Name="Buy" Style="{Styles/ButtonStyle_310x60}" Text="[TrialEndedScreen:4]" HorizontalAlignment="Center" Margin="20, 0" />
@@ -20,7 +20,7 @@
     <StackPanelWidget Direction="Vertical" HorizontalAlignment="Center" _IncludePlatforms="Ios">
       <StackPanelWidget Direction="Vertical" HorizontalAlignment="Center">
         <LabelWidget Text="[TrialEndedScreen:6]" HorizontalAlignment="Center" TextAnchor="HorizontalCenter" Margin="0, 30" />
-        <LabelWidget Text="[TrialEndedScreen:7]" WordWrap="true"  Color="128, 128, 128" HorizontalAlignment="Center" TextAnchor="HorizontalCenter" Margin="100, 0" />
+        <LabelWidget Text="[TrialEndedScreen:7]" WordWrap="true" Color="128, 128, 128" HorizontalAlignment="Center" TextAnchor="HorizontalCenter" Margin="100, 0" />
       </StackPanelWidget>
       <CanvasWidget Size="0, Infinity"/>
       <StackPanelWidget Direction="Horizontal" HorizontalAlignment="Center">
