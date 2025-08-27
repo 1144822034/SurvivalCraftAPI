@@ -50,6 +50,8 @@ namespace Game {
                 return geometries;
             }
             TerrainGeometry geometry = new(texture);
+            Draws ??= [];
+            Draws.Add(texture, geometry);
             return geometry;
         }
 
