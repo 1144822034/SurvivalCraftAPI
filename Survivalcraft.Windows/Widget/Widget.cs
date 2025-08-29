@@ -789,6 +789,7 @@ namespace Game {
 
         public static void UpdateWidgetsHierarchy(Widget widget, ref bool isMouseCursorVisible) {
             if (!widget.IsVisible
+                || !widget.IsUpdateEnabled
                 || !widget.IsEnabled) {
                 return;
             }

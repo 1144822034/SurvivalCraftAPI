@@ -339,63 +339,40 @@ namespace Engine.Serialization {
             throw new InvalidOperationException($"Serialization methods not found in {serializerType.Name}");
         }
 
-        /*
-        private static SerializeData CreateSerializeDataForSerializableHelper<T>() where T : ISerializable
-        {
+        private static SerializeData CreateSerializeDataForSerializableHelper<T>() where T : ISerializable {
             SerializeData<T> serializeData = new SerializeData<T>();
-            serializeData.ReadGeneric = delegate(InputArchive archive, ref T value)
-            {
-                value.Serialize(archive);
-            };
-            serializeData.WriteGeneric = delegate(OutputArchive archive, T value)
-            {
-                value.Serialize(archive);
-            };
-            if (serializeData.IsValueType)
-            {
-                serializeData.Read = delegate(InputArchive archive, ref object value)
-                {
+            serializeData.ReadGeneric = delegate(InputArchive archive, ref T value) { value.Serialize(archive); };
+            serializeData.WriteGeneric = delegate(OutputArchive archive, T value) { value.Serialize(archive); };
+            if (serializeData.IsValueType) {
+                serializeData.Read = delegate(InputArchive archive, ref object value) {
                     T val = (T)value;
                     val.Serialize(archive);
                     value = val;
                 };
             }
-            else
-            {
-                serializeData.Read = delegate(InputArchive archive, ref object value)
-                {
-                    ((T)value $cast due to .constrained prefix$ ).Serialize(archive);
-                };
+            else {
+                serializeData.Read = delegate(InputArchive archive, ref object value) { ((T)value).Serialize(archive); };
             }
-            serializeData.Write = delegate (OutputArchive archive, object value)
-            {
-                ((T)value).Serialize(archive);
-            };
+            serializeData.Write = delegate(OutputArchive archive, object value) { ((T)value).Serialize(archive); };
             serializeData.AutoConstruct = AutoConstructMode.Yes;
             return serializeData;
         }
 
-        private static SerializeData CreateSerializeDataForSerializerHelper<T>(Delegate readDelegate, Delegate writeDelegate)
-        {
+        private static SerializeData CreateSerializeDataForSerializerHelper<T>(Delegate readDelegate, Delegate writeDelegate) {
             ReadDelegateGeneric<T> readDelegateGeneric = (ReadDelegateGeneric<T>)readDelegate;
             WriteDelegateGeneric<T> writeDelegateGeneric = (WriteDelegateGeneric<T>)writeDelegate;
-            return new SerializeData<T>
-            {
+            return new SerializeData<T> {
                 ReadGeneric = (ReadDelegateGeneric<T>)readDelegate,
                 WriteGeneric = (WriteDelegateGeneric<T>)writeDelegate,
-                Read = delegate(InputArchive archive, ref object value)
-                {
+                Read = delegate(InputArchive archive, ref object value) {
                     T value2 = ((value != null) ? ((T)value) : default(T));
                     readDelegateGeneric(archive, ref value2);
                     value = value2;
                 },
-                Write = delegate(OutputArchive archive, object value)
-                {
-                    writeDelegateGeneric(archive, (T)value);
-                }
+                Write = delegate(OutputArchive archive, object value) { writeDelegateGeneric(archive, (T)value); }
             };
         }
-        */
+
         static void ApplySerializationOptionsAttribute(SerializeData serializeData, TypeInfo attributeTarget) {
             SerializationOptionsAttribute serializationOptionsAttribute =
                 (SerializationOptionsAttribute)attributeTarget.GetCustomAttribute(typeof(SerializationOptionsAttribute));
