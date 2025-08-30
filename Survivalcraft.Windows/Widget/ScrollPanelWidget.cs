@@ -117,7 +117,7 @@ namespace Game {
                 num = 0f;
                 m_scrollBarAlpha = 3f;
             }
-            float num4 = MathUtils.Max(m_scrollAreaLength - ActualSize.Y, 0f);
+            float num4 = MathUtils.Max(m_scrollAreaLength - ((Direction == LayoutDirection.Horizontal) ? ActualSize.X : ActualSize.Y), 0f);
             if (ScrollPosition < 0f) {
                 if (!m_lastDragPosition.HasValue) {
                     ScrollPosition = MathUtils.Min(ScrollPosition + 6f * Time.FrameDuration * (0f - ScrollPosition + 5f), 0f);

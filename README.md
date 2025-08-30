@@ -68,9 +68,9 @@ exe`文件
      
      ```xml
      <ItemGroup>
-       <PackageReference Include="SurvivalcraftAPI.Engine" Version="1.8.1.2"/>
-       <PackageReference Include="SurvivalcraftAPI.EntitySystem" Version="1.8.1.2"/>
-       <PackageReference Include="SurvivalcraftAPI.Survivalcraft" Version="1.8.1.2"/>
+       <PackageReference Include="SurvivalcraftAPI.Engine" Version="1.8.1.3"/>
+       <PackageReference Include="SurvivalcraftAPI.EntitySystem" Version="1.8.1.3"/>
+       <PackageReference Include="SurvivalcraftAPI.Survivalcraft" Version="1.8.1.3"/>
      </ItemGroup>
      ```
 
