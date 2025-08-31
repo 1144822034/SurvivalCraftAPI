@@ -65,6 +65,9 @@
         <None Update="init.js">
             <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
         </None>
+        <None Update="Compatible Patch Note 兼容补丁使用说明.txt" Condition="'$(Configuration)' == 'Direct3D11'">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </None>
     </ItemGroup>
     <Target Name="PreBuild" BeforeTargets="PreBuildEvent" Condition="'$(TargetFramework)' == 'net9.0-windows'">
         <ZipDirectory SourceDirectory="Content" DestinationFile="Content.zip" Overwrite="true" />
