@@ -99,9 +99,9 @@ namespace Engine {
             if (e == null) {
                 return true;
             }
-            Debug.WriteLine(
+            /*Debug.WriteLine(
                 $"[DispatchKeyEvent]action:{e.Action} keyCode:{e.KeyCode} unicodeChar:{e.UnicodeChar} flags:{e.Flags} metaState:{e.MetaState} source:{e.Source} deviceId:{e.DeviceId}"
-            );
+            );*/
             bool handled = false;
             Delegate[] invocationList = OnDispatchKeyEvent?.GetInvocationList();
             if (invocationList != null) {
@@ -163,7 +163,7 @@ namespace Engine {
             if (e == null) {
                 return true;
             }
-            Debug.WriteLine($"[OnGenericMotionEvent]source:{e.Source} action:{e.Action}");
+            //Debug.WriteLine($"[OnGenericMotionEvent]source:{e.Source} action:{e.Action}");
             if (((e.Source & InputSourceType.Gamepad) == InputSourceType.Gamepad || (e.Source & InputSourceType.Joystick) == InputSourceType.Joystick)
                 && e.Action == MotionEventActions.Move) {
                 GamePad.HandleMotionEvent(e);
