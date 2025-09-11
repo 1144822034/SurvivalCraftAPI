@@ -154,11 +154,9 @@ namespace Game {
                         }
                         return true;
                     }
-                    if (componentMiner.Place(terrainRaycastResult.Value, Terrain.MakeBlockValue(fluidValue)))
-                    {
+                    if (componentMiner.Place(terrainRaycastResult.Value, Terrain.MakeBlockValue(fluidValue))) {
                         inventory.RemoveSlotItems(inventory.ActiveSlotIndex, 1);
-                        if (inventory.GetSlotCount(inventory.ActiveSlotIndex) == 0)
-                        {
+                        if (inventory.GetSlotCount(inventory.ActiveSlotIndex) == 0) {
                             inventory.AddSlotItems(inventory.ActiveSlotIndex, m_emptyBucketBlockIndex, 1);
                         }
                         return true;

@@ -183,7 +183,7 @@ namespace Game {
                     m_text = text;
                     Caret = Math.Clamp(Caret, 0, m_text.Length);
                     TextChanged?.Invoke(this);
-                    Scroll = Scroll;
+                    LimitScrollValue();
                 }
             }
         }
@@ -224,6 +224,8 @@ namespace Game {
         /// </summary>
         public int CompositionTextCaret { get; set; }
 
+        public int m_caret;
+
         /// <summary>
         ///     <para>
         ///         光标的位置，可被视为 <see cref="Text" /> 的索引。
@@ -234,7 +236,15 @@ namespace Game {
         ///         The caret is drawn at the left of the character that corresponds to the index.
         ///     </para>
         /// </summary>
-        public int Caret { get; set; }
+        public int Caret {
+            get => m_caret;
+            set {
+                if (!TasksQueue.OfType<SetCursorPositionTask>().Any()) {
+                    TasksQueue.Enqueue(new SetCursorPositionTask());
+                }
+                m_caret = Math.Clamp(value, 0, Text.Length);
+            }
+        }
 
         #endregion
 
@@ -323,7 +333,9 @@ namespace Game {
                 bool originValue = HasFocus;
                 if (value) {
                     FocusedTextBox = this;
-                    SetCursorPosition(this);
+                    if (!TasksQueue.OfType<SetCursorPositionTask>().Any()) {
+                        TasksQueue.Enqueue(new SetCursorPositionTask());
+                    }
                 }
                 else {
                     FocusedTextBox = null;
@@ -765,11 +777,10 @@ namespace Game {
                     Caret = CalculateClickedCharacterIndex(
                         Font,
                         PasswordMode ? new string('*', Text.Length) : Text,
-                        ScreenToWidgetWithoutScale(Input.Click.Value.Start + new Vector2(Scroll, 0)),
+                        ScreenToWidget(Input.Click.Value.Start) + new Vector2(Scroll, 0),
                         FontScale,
                         FontSpacing,
-                        ActualSize,
-                        GlobalTransform
+                        ActualSize
                     );
                 }
                 else if (FocusedTextBox == this) {
@@ -798,11 +809,10 @@ namespace Game {
                         Caret = CalculateClickedCharacterIndex(
                             Font,
                             PasswordMode ? new string('*', Text.Length) : Text,
-                            ScreenToWidgetWithoutScale(Input.Drag.Value + new Vector2(Scroll, 0)),
+                            ScreenToWidget(Input.Click.Value.Start) + new Vector2(Scroll, 0),
                             FontScale,
                             FontSpacing,
-                            ActualSize,
-                            GlobalTransform
+                            ActualSize
                         );
                         DragStartedInsideTextBox = true;
                     }
@@ -817,11 +827,10 @@ namespace Game {
                     int caret2 = CalculateClickedCharacterIndex(
                         Font,
                         PasswordMode ? new string('*', Text.Length) : Text,
-                        ScreenToWidgetWithoutScale(Input.Drag.Value + new Vector2(Scroll, 0)),
+                        ScreenToWidget(Input.Click.Value.Start) + new Vector2(Scroll, 0),
                         FontScale,
                         FontSpacing,
-                        ActualSize,
-                        GlobalTransform
+                        ActualSize
                     );
                     if (SelectionStarted) {
                         SelectionLength = caret2 - Caret;
@@ -984,10 +993,7 @@ namespace Game {
                 Vector2 clickPosition,
                 float fontScale,
                 Vector2 fontSpacing,
-                Vector2 widgetActualSize,
-                Matrix widgetGlobalTransform) {
-                clickPosition.Y /= widgetGlobalTransform.Up.Y;
-                clickPosition.X /= widgetGlobalTransform.Right.X;
+                Vector2 widgetActualSize) {
                 float scale = fontScale * font.Scale;
                 Vector2 spacing = fontSpacing + font.Spacing;
                 float currentPosition = 0f;
@@ -1017,8 +1023,6 @@ namespace Game {
                 }
                 return text.Length;
             }
-
-            Vector2 ScreenToWidgetWithoutScale(Vector2 p) => p - GlobalTransform.Translation.XY;
         }
 
         /// <summary>
@@ -1204,8 +1208,27 @@ namespace Game {
         public float Scroll {
             get => m_scroll;
             set {
-                m_scroll = Math.Clamp(value, 0, Font.MeasureText(FullText, new Vector2(FontScale), FontSpacing).X);
-                SetCursorPosition(this);
+                m_scroll = value;
+                LimitScrollValue();
+            }
+        }
+
+        /// <summary>
+        ///     限制 <see cref="Scroll" /> 属性的值。
+        /// </summary>
+        public void LimitScrollValue() {
+            const double tolerance = 0.01;
+            float scrollRange = Font.MeasureText(FullText, new Vector2(FontScale), FontSpacing).X - Size.X;
+            if (scrollRange < 0) {
+                scrollRange = 0;
+            }
+            float newValue = Math.Clamp(m_scroll, 0, scrollRange);
+            if (Math.Abs(newValue - m_scroll) > tolerance) {
+                m_scroll = newValue;
+                // 请勿改为 Scroll 属性，会引起无限递归
+                if (!TasksQueue.OfType<SetCursorPositionTask>().Any()) {
+                    TasksQueue.Enqueue(new SetCursorPositionTask());
+                }
             }
         }
 
@@ -1385,7 +1408,7 @@ namespace Game {
             );
             Vector2 windowPosition = Vector2.Transform(
                 new Vector2(caretPosition.X, 0),
-                widget.GlobalTransform * Matrix.CreateTranslation(-widget.Scroll, 0, 0)
+                Matrix.CreateTranslation(-widget.Scroll, 0, 0) * widget.GlobalTransform
             );
             InputMethod.SetTextInputRect((int)windowPosition.X, (int)(windowPosition.Y + widget.Font.LineHeight * widget.GlobalTransform.M11), 0, 0);
 #endif
@@ -1642,7 +1665,6 @@ namespace Game {
                     && selectionStart < charIndex + line.Length
                     && selectionStart + selectionLength > charIndex) { //如果这一行有字符被选中
                     int lineStart = charIndex;
-                    //int lineEnd = charIndex + line.Length;
                     int selectionStartInLine = Math.Max(selectionStart - lineStart, 0);
                     int selectionEndInLine = Math.Min(selectionStart + selectionLength - lineStart, line.Length);
                     int actualSelectionLength = selectionEndInLine - selectionStartInLine;
@@ -1725,14 +1747,14 @@ namespace Game {
             foreach (TextDrawItem drawItem in drawItems) {
                 drawItem.Draw(ref currentDrawPosition);
             }
-            fontBatch.TransformTriangles(GlobalTransform);
-            flatBatch.TransformTriangles(GlobalTransform);
-            flatBatch.TransformLines(GlobalTransform);
-            outlineFlatBatch.TransformLines(GlobalTransform);
             Matrix scrollTransform = Matrix.CreateTranslation(new Vector3(-Scroll, 0, 0));
             flatBatch.TransformTriangles(scrollTransform);
             fontBatch.TransformTriangles(scrollTransform);
             underlineFlatBatch.TransformLines(scrollTransform);
+            fontBatch.TransformTriangles(GlobalTransform);
+            flatBatch.TransformTriangles(GlobalTransform);
+            flatBatch.TransformLines(GlobalTransform);
+            outlineFlatBatch.TransformLines(GlobalTransform);
         }
 
         /// <inheritdoc />
