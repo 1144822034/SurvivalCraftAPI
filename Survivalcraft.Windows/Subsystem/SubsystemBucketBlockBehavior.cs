@@ -42,7 +42,7 @@ namespace Game {
                     int num2 = Terrain.ExtractContents(cellValue);
                     int data = Terrain.ExtractData(cellValue);
                     Block block = BlocksManager.Blocks[num2];
-                    int newBucketValue = -1;
+                    int newBucketValue = 0;
                     if (block is WaterBlock
                         && FluidBlock.GetLevel(data) == 0) {
                         newBucketValue = m_waterBucketBlockIndex;
@@ -51,13 +51,34 @@ namespace Game {
                         && FluidBlock.GetLevel(data) == 0) {
                         newBucketValue = m_magmaBucketBlockIndex;
                     }
-                    if (newBucketValue <= 0) {
+                    if (newBucketValue == 0) {
                         return false;
                     }
-                    inventory.RemoveSlotItems(inventory.ActiveSlotIndex, 1);
-                    int acquireSlot = ComponentInventoryBase.FindAcquireSlotForItem(inventory, newBucketValue);
-                    if (acquireSlot >= 0) {
-                        inventory.AddSlotItems(acquireSlot, newBucketValue, 1);
+                    int currentCount = inventory.GetSlotCount(inventory.ActiveSlotIndex);
+                    if (currentCount > 1) {
+                        inventory.RemoveSlotItems(inventory.ActiveSlotIndex, 1);
+                        int acquireSlot = ComponentInventoryBase.FindAcquireSlotForItem(inventory, newBucketValue);
+                        if (acquireSlot >= 0) {
+                            inventory.AddSlotItems(acquireSlot, newBucketValue, 1);
+                            SubsystemTerrain.DestroyCell(
+                                0,
+                                cellFace.X,
+                                cellFace.Y,
+                                cellFace.Z,
+                                0,
+                                false,
+                                false
+                            );
+                            return true;
+                        }
+                        inventory.AddSlotItems(inventory.ActiveSlotIndex, activeBlockValue, 1);
+                        componentMiner?.ComponentPlayer?.ComponentGui?.DisplaySmallMessage(LanguageControl.Get(fName, 1), Color.White, true, true);
+                    }
+                    else {
+                        inventory.RemoveSlotItems(inventory.ActiveSlotIndex, currentCount);
+                        if (inventory.GetSlotCount(inventory.ActiveSlotIndex) == 0) {
+                            inventory.AddSlotItems(inventory.ActiveSlotIndex, newBucketValue, 1);
+                        }
                         SubsystemTerrain.DestroyCell(
                             0,
                             cellFace.X,
@@ -69,29 +90,42 @@ namespace Game {
                         );
                         return true;
                     }
-                    inventory.AddSlotItems(inventory.ActiveSlotIndex, activeBlockValue, 1);
-                    componentMiner?.ComponentPlayer?.ComponentGui?.DisplaySmallMessage(LanguageControl.Get(fName, 1), Color.White, true, true);
                 }
                 else if (obj is BodyRaycastResult) {
                     ComponentUdder componentUdder = ((BodyRaycastResult)obj).ComponentBody.Entity.FindComponent<ComponentUdder>();
                     int newBucketValue = m_milkBucketBlockIndex;
-                    inventory.RemoveSlotItems(inventory.ActiveSlotIndex, 1);
-                    int acquireSlot = ComponentInventoryBase.FindAcquireSlotForItem(inventory, newBucketValue);
-                    bool success = false;
-                    if (acquireSlot < 0) {
-                        componentMiner?.ComponentPlayer?.ComponentGui?.DisplaySmallMessage(LanguageControl.Get(fName, 2), Color.White, true, true);
-                    }
-                    if (acquireSlot >= 0
-                        && componentUdder != null
-                        && componentUdder.Milk(componentMiner)) {
-                        inventory.AddSlotItems(acquireSlot, newBucketValue, 1);
-                        m_subsystemAudio.PlaySound("Audio/Milked", 1f, 0f, ray.Position, 2f, true);
-                        return true;
-                    }
-                    if (!success) {
+                    int currentCount = inventory.GetSlotCount(inventory.ActiveSlotIndex);
+                    if (currentCount > 1) {
+                        inventory.RemoveSlotItems(inventory.ActiveSlotIndex, 1);
+                        int acquireSlot = ComponentInventoryBase.FindAcquireSlotForItem(inventory, newBucketValue);
+                        if (acquireSlot < 0) {
+                            componentMiner?.ComponentPlayer?.ComponentGui?.DisplaySmallMessage(
+                                LanguageControl.Get(fName, 2),
+                                Color.White,
+                                true,
+                                true
+                            );
+                        }
+                        if (acquireSlot >= 0
+                            && componentUdder != null
+                            && componentUdder.Milk(componentMiner)) {
+                            inventory.AddSlotItems(acquireSlot, newBucketValue, 1);
+                            m_subsystemAudio.PlaySound("Audio/Milked", 1f, 0f, ray.Position, 2f, true);
+                            return true;
+                        }
                         inventory.AddSlotItems(inventory.ActiveSlotIndex, activeBlockValue, 1);
                         return false;
                     }
+                    if (componentUdder != null
+                        && componentUdder.Milk(componentMiner)) {
+                        inventory.RemoveSlotItems(inventory.ActiveSlotIndex, currentCount);
+                        if (inventory.GetSlotCount(inventory.ActiveSlotIndex) == 0) {
+                            inventory.AddSlotItems(inventory.ActiveSlotIndex, m_milkBucketBlockIndex, 1);
+                        }
+                        m_subsystemAudio.PlaySound("Audio/Milked", 1f, 0f, ray.Position, 2f, true);
+                        return true;
+                    }
+                    return false;
                 }
             }
             if (num == m_waterBucketBlockIndex
@@ -99,19 +133,36 @@ namespace Game {
                 int fluidValue = num == m_waterBucketBlockIndex ? m_waterBlockIndex : m_magmaBlockIndex;
                 TerrainRaycastResult? terrainRaycastResult = componentMiner.Raycast<TerrainRaycastResult>(ray, RaycastMode.Interaction);
                 if (terrainRaycastResult.HasValue) {
-                    inventory.RemoveSlotItems(inventory.ActiveSlotIndex, 1);
-                    int newBucketValue = m_emptyBucketBlockIndex;
-                    int acquireSlot = ComponentInventoryBase.FindAcquireSlotForItem(inventory, newBucketValue);
-                    if (acquireSlot >= 0
-                        && componentMiner.Place(terrainRaycastResult.Value, Terrain.MakeBlockValue(fluidValue))) {
-                        inventory.AddSlotItems(acquireSlot, newBucketValue, 1);
+                    int currentCount = inventory.GetSlotCount(inventory.ActiveSlotIndex);
+                    if (currentCount > 1) {
+                        inventory.RemoveSlotItems(inventory.ActiveSlotIndex, 1);
+                        int newBucketValue = m_emptyBucketBlockIndex;
+                        int acquireSlot = ComponentInventoryBase.FindAcquireSlotForItem(inventory, newBucketValue);
+                        if (acquireSlot >= 0
+                            && componentMiner.Place(terrainRaycastResult.Value, Terrain.MakeBlockValue(fluidValue))) {
+                            inventory.AddSlotItems(acquireSlot, newBucketValue, 1);
+                        }
+                        else {
+                            inventory.AddSlotItems(inventory.ActiveSlotIndex, activeBlockValue, 1);
+                            componentMiner?.ComponentPlayer?.ComponentGui?.DisplaySmallMessage(
+                                LanguageControl.Get(fName, 3),
+                                Color.White,
+                                true,
+                                true
+                            );
+                            return false;
+                        }
+                        return true;
                     }
-                    else {
-                        inventory.AddSlotItems(inventory.ActiveSlotIndex, activeBlockValue, 1);
-                        componentMiner?.ComponentPlayer?.ComponentGui?.DisplaySmallMessage(LanguageControl.Get(fName, 3), Color.White, true, true);
-                        return false;
+                    if (componentMiner.Place(terrainRaycastResult.Value, Terrain.MakeBlockValue(fluidValue)))
+                    {
+                        inventory.RemoveSlotItems(inventory.ActiveSlotIndex, 1);
+                        if (inventory.GetSlotCount(inventory.ActiveSlotIndex) == 0)
+                        {
+                            inventory.AddSlotItems(inventory.ActiveSlotIndex, m_emptyBucketBlockIndex, 1);
+                        }
+                        return true;
                     }
-                    return true;
                 }
             }
             switch (num) {

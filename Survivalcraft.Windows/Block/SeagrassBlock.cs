@@ -28,16 +28,6 @@ namespace Game {
                 false,
                 environmentData
             );
-            BlocksManager.DrawFlatBlock(
-                primitivesRenderer,
-                value,
-                size,
-                ref matrix,
-                null,
-                color * BlockColorsMap.Seagrass.Lookup(environmentData.Temperature, environmentData.Humidity),
-                false,
-                environmentData
-            );
         }
 
         public override void GenerateTerrainVertices(BlockGeometryGenerator generator, TerrainGeometry geometry, int value, int x, int y, int z) {
