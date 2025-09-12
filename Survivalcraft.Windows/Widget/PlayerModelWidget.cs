@@ -41,7 +41,7 @@ namespace Game {
 
         public PlayerClass PlayerClass { get; set; }
 
-        public PlayerData PlayerData { //Ŀǰ����ֵ����Ϸ��û��ʹ�ø����ԣ�����ɾ��ģ����ܻ��õ�
+        public PlayerData PlayerData { //目前仅赋值，游戏里没有使用该属性，但勿删，模组可能会用到
             get;
             set;
         }
@@ -91,12 +91,8 @@ namespace Game {
             if (OuterClothing) {
                 return;
             }
-            if (m_modelWidget.Models.Contains(PlayerModel)) {
-                m_modelWidget.Models.Remove(PlayerModel);
-            }
-            if (m_modelWidget.Models.Contains(OuterClothingModel)) {
-                m_modelWidget.Models.Remove(OuterClothingModel);
-            }
+            m_modelWidget.RemoveModel(PlayerModel);
+            m_modelWidget.RemoveModel(OuterClothingModel);
             OuterClothingModel = CharacterSkinsManager.GetOuterClothingModel(PlayerClass);
             PlayerModel = CharacterSkinsManager.GetPlayerModel(PlayerClass);
             m_modelWidget.AddModel(PlayerModel);
@@ -117,23 +113,14 @@ namespace Game {
             m_modelWidget.Textures[PlayerModel] = CharacterSkinName != null
                 ? CharacterSkinsCache.GetTexture(CharacterSkinName)
                 : CharacterSkinTexture;
-            if (OuterClothingTexture == null) {
-                OuterClothingTexture = new RenderTarget2D(
-                    m_modelWidget.Textures[PlayerModel].Width,
-                    m_modelWidget.Textures[PlayerModel].Height,
-                    1,
-                    ColorFormat.Rgba8888,
-                    DepthFormat.None
-                );
-            }
+            //OuterClothingTexture ??= new RenderTarget2D(m_modelWidget.Textures[PlayerModel].Width, m_modelWidget.Textures[PlayerModel].Height, 1, ColorFormat.Rgba8888, DepthFormat.None);
             m_modelWidget.Textures[OuterClothingModel] = OuterClothingTexture;
             if (AnimateHeadSeed != 0) {
                 int num = AnimateHeadSeed < 0 ? GetHashCode() : AnimateHeadSeed;
                 float num2 = (float)MathUtils.Remainder(Time.FrameStartTime + 1000.0 * num, 10000.0);
-                Vector2 vector = default;
-                vector.X = MathUtils.Lerp(-0.75f, 0.75f, SimplexNoise.OctavedNoise(num2 + 100f, 0.2f, 1, 2f, 0.5f));
-                vector.Y = MathUtils.Lerp(-0.5f, 0.5f, SimplexNoise.OctavedNoise(num2 + 200f, 0.17f, 1, 2f, 0.5f));
-                Matrix value = Matrix.CreateRotationX(vector.Y) * Matrix.CreateRotationZ(vector.X);
+                float rotationZ = MathUtils.Lerp(-0.75f, 0.75f, SimplexNoise.OctavedNoise(num2 + 100f, 0.2f, 1, 2f, 0.5f));
+                float rotationX = MathUtils.Lerp(-0.5f, 0.5f, SimplexNoise.OctavedNoise(num2 + 200f, 0.17f, 1, 2f, 0.5f));
+                Matrix value = Matrix.CreateRotationX(rotationX) * Matrix.CreateRotationZ(rotationZ);
                 m_modelWidget.SetBoneTransform(OuterClothingModel, OuterClothingModel.FindBone("Head").Index, value);
                 m_modelWidget.SetBoneTransform(PlayerModel, PlayerModel.FindBone("Head").Index, value);
             }

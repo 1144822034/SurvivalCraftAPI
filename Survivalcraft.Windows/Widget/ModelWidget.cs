@@ -73,6 +73,17 @@ namespace Game {
             }
         }
 
+        public bool RemoveModel(Model value) {
+            if (value != null) {
+                Models.Remove(value);
+                m_boneTransforms.Remove(value);
+                m_absoluteBoneTransforms.Remove(value);
+                Textures.Remove(value);
+                return true;
+            }
+            return false;
+        }
+
         [Obsolete("A ModelWidget may contains multiple models. TextureOverride only represents the texture of the first model.")]
         public Texture2D TextureOverride {
             get => Textures[Models[0]];
@@ -151,7 +162,11 @@ namespace Game {
                 ? Matrix.CreateFromAxisAngle(Vector3.Normalize(AutoRotationVector), AutoRotationVector.Length() * num2)
                 : Matrix.Identity;
             foreach (Model model in Models) {
-                shader.GetParameter("u_texture", true)?.SetValue(Textures[model]);
+                Texture2D texture = Textures[model];
+                if (texture == null) {
+                    continue;
+                }
+                shader.GetParameter("u_texture", true)?.SetValue(texture);
                 foreach (ModelMesh mesh in model.Meshes) {
                     shader.Transforms.World[0] = m_absoluteBoneTransforms[mesh.ParentBone.Model][mesh.ParentBone.Index] * ModelMatrix * m;
                     OnSetupShaderParameters?.Invoke(this, shader, model, mesh);

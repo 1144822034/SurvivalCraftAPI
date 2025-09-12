@@ -102,11 +102,11 @@ namespace Game {
             m_worldInfo = worldInfo;
             Log.Information(
                 LanguageControl.Get(fName, "1"),
-                worldInfo.WorldSettings.GameMode,
-                worldInfo.WorldSettings.StartingPositionMode,
+                LanguageControl.Get("GameMode", worldInfo.WorldSettings.GameMode.ToString()),
+                LanguageControl.Get("StartingPositionMode", worldInfo.WorldSettings.StartingPositionMode.ToString()),
                 worldInfo.WorldSettings.Name,
                 SettingsManager.VisibilityRange.ToString(),
-                SettingsManager.ResolutionMode.ToString()
+                LanguageControl.Get("ResolutionMode", SettingsManager.ResolutionMode.ToString())
             );
             GC.Collect();
         }
