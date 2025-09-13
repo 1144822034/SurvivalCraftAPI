@@ -74,7 +74,7 @@
               <!-- Terrain options -->
               <UniformSpacingPanelWidget Direction="Horizontal" Margin="0, 3">
                 <LabelWidget Text="[WorldOptionsScreen:11]" Color="128, 128, 128" HorizontalAlignment="Far" VerticalAlignment="Center" Margin="20, 0" />
-                <SliderWidget Name="SeaLevelOffset" Size="Infinity, 60" VerticalAlignment="Center" Margin="20, 0" Granularity="1" MinValue="0" MaxValue="16" />
+                <SliderWidget Name="SeaLevelOffset" Size="Infinity, 60" VerticalAlignment="Center" Margin="20, 0" Granularity="1" MinValue="-64" MaxValue="191" />
               </UniformSpacingPanelWidget>
 
               <UniformSpacingPanelWidget Direction="Horizontal" Margin="0, 3">

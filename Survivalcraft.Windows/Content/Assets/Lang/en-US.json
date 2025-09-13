@@ -937,7 +937,9 @@
     "5": "Flat terrain is only available in Creative Mode",
     "6": "Normal",
     "7": "Time Of Day:",
-    "8": " days"
+    "8": " days",
+    "9": "Input Block Contents Manually",
+    "10": "Invalid Block Contents"
   },
   "ComponentSickness": {
     "1": "Sickness",

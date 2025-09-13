@@ -85,6 +85,9 @@ namespace Game {
         public BlocksTexturesCache m_blockTexturesCache = new();
 
         public static float[] m_islandSizes = [
+            1f,
+            7f,
+            15f,
             30f,
             40f,
             50f,
@@ -108,6 +111,8 @@ namespace Game {
         ];
 
         public static float[] m_biomeSizes = [
+            0.01f,
+            0.1f,
             0.25f,
             0.33f,
             0.5f,
@@ -116,10 +121,19 @@ namespace Game {
             1.5f,
             2f,
             3f,
-            4f
+            4f,
+            6f,
+            8f,
+            10f,
+            12f,
+            16f,
+            20f,
+            24f,
+            32f
         ];
 
-        static float[] m_yearDays = [
+        public static float[] m_yearDays = [
+            4f,
             8f,
             12f,
             16f,
@@ -128,7 +142,36 @@ namespace Game {
             32f,
             48f,
             64f,
-            96f
+            96f,
+            128f,
+            192f,
+            256f,
+            365f,
+            384f,
+            512f
+        ];
+
+        public static int[] m_flatTerrainBlockList = [
+            -1,
+            8,
+            2,
+            7,
+            3,
+            67,
+            66,
+            4,
+            5,
+            26,
+            73,
+            21,
+            46,
+            47,
+            15,
+            62,
+            68,
+            126,
+            71,
+            1
         ];
 
         public WorldOptionsScreen() {
@@ -226,6 +269,23 @@ namespace Game {
                                 m_descriptionLabel.Text = StringsManager.GetString(
                                     $"TerrainGenerationMode.{m_worldSettings.TerrainGenerationMode}.Description"
                                 );
+                                if (m_worldSettings.TerrainGenerationMode == TerrainGenerationMode.Continent
+                                    || m_worldSettings.TerrainGenerationMode == TerrainGenerationMode.Island) {
+                                    m_seaLevelOffsetSlider.MinValue = -64f;
+                                    m_seaLevelOffsetSlider.MaxValue = 191f;
+                                    m_worldSettings.SeaLevelOffset = Math.Clamp(m_worldSettings.SeaLevelOffset, -64, 191);
+                                    m_seaLevelOffsetSlider.Value = m_worldSettings.SeaLevelOffset;
+                                }
+                                else {
+                                    m_seaLevelOffsetSlider.MinValue = -m_worldSettings.TerrainLevel;
+                                    m_seaLevelOffsetSlider.MaxValue = 255 - m_worldSettings.TerrainLevel;
+                                    m_worldSettings.SeaLevelOffset = Math.Clamp(
+                                        m_worldSettings.SeaLevelOffset,
+                                        -m_worldSettings.TerrainLevel,
+                                        255 - m_worldSettings.TerrainLevel
+                                    );
+                                    m_seaLevelOffsetSlider.Value = m_worldSettings.SeaLevelOffset;
+                                }
                             }
                         }
                     )
@@ -246,6 +306,14 @@ namespace Game {
                     2,
                     252
                 );
+                m_seaLevelOffsetSlider.MinValue = -m_worldSettings.TerrainLevel;
+                m_seaLevelOffsetSlider.MaxValue = 255 - m_worldSettings.TerrainLevel;
+                m_worldSettings.SeaLevelOffset = Math.Clamp(
+                    m_worldSettings.SeaLevelOffset,
+                    -m_worldSettings.TerrainLevel,
+                    255 - m_worldSettings.TerrainLevel
+                );
+                m_seaLevelOffsetSlider.Value = m_worldSettings.SeaLevelOffset;
                 m_descriptionLabel.Text = StringsManager.GetString("FlatTerrainLevel.Description");
             }
             if (m_flatTerrainShoreRoughnessSlider.IsSliding
@@ -255,34 +323,25 @@ namespace Game {
             }
             if (m_flatTerrainBlockButton.IsClicked
                 && !m_isExistingWorld) {
-                int[] items = [
-                    8,
-                    2,
-                    7,
-                    3,
-                    67,
-                    66,
-                    4,
-                    5,
-                    26,
-                    73,
-                    21,
-                    46,
-                    47,
-                    15,
-                    62,
-                    68,
-                    126,
-                    71,
-                    1
-                ];
                 DialogsManager.ShowDialog(
                     null,
                     new ListSelectionDialog(
                         LanguageControl.Get(fName, 2),
-                        items,
+                        m_flatTerrainBlockList,
                         72f,
                         delegate(object index) {
+                            if ((int)index == -1) {
+                                return new StackPanelWidget() {
+                                    VerticalAlignment = WidgetAlignment.Center,
+                                    Children = {
+                                        new CanvasWidget(){Size = new Vector2(94f, 0f)},
+                                        new LabelWidget() {
+                                            Text = LanguageControl.Get(fName, "9"),
+                                            Color = Color.White
+                                        }
+                                    }
+                                };
+                            }
                             XElement node2 = ContentManager.Get<XElement>("Widgets/SelectBlockItem");
                             ContainerWidget obj2 = (ContainerWidget)LoadWidget(null, node2, null);
                             obj2.Children.Find<BlockIconWidget>("SelectBlockItem.Block").Contents = (int)index;
@@ -290,7 +349,43 @@ namespace Game {
                                 .GetDisplayName(null, Terrain.MakeBlockValue((int)index));
                             return obj2;
                         },
-                        delegate(object index) { m_worldSettings.TerrainBlockIndex = (int)index; }
+                        delegate(object index) {
+                            if ((int)index == -1) {
+                                DialogsManager.ShowDialog(
+                                    this,
+                                    new TextBoxDialog(
+                                        LanguageControl.Get(fName, "9"),
+                                        m_worldSettings.TerrainBlockIndex.ToString(),
+                                        10,
+                                        str => {
+                                            bool flag = true;
+                                            if (int.TryParse(str, out int num)) {
+                                                int contents = Terrain.ExtractContents(num);
+                                                if (contents == 0 || BlocksManager.Blocks[contents] is not AirBlock) {
+                                                    flag = false;
+                                                    m_worldSettings.TerrainBlockIndex = num;
+                                                }
+                                            }
+                                            if(flag) {
+                                                DialogsManager.ShowDialog(
+                                                    this,
+                                                    new MessageDialog(
+                                                        LanguageControl.Error,
+                                                        LanguageControl.Get(fName, "10"),
+                                                        LanguageControl.Ok,
+                                                        null,
+                                                        null
+                                                    )
+                                                );
+                                            }
+                                        }
+                                    )
+                                );
+                            }
+                            else {
+                                m_worldSettings.TerrainBlockIndex = (int)index;
+                            }
+                        }
                     )
                 );
             }
@@ -417,10 +512,7 @@ namespace Game {
             m_flatTerrainShoreRoughnessSlider.Text = $"{m_worldSettings.ShoreRoughness * 100f:0}%";
             m_flatTerrainBlock.Contents = m_worldSettings.TerrainBlockIndex;
             m_flatTerrainMagmaOceanCheckbox.IsChecked = m_worldSettings.TerrainOceanBlockIndex == 92;
-            string text = BlocksManager.Blocks[m_worldSettings.TerrainBlockIndex] != null
-                ? BlocksManager.Blocks[m_worldSettings.TerrainBlockIndex]
-                    .GetDisplayName(null, Terrain.MakeBlockValue(m_worldSettings.TerrainBlockIndex))
-                : string.Empty;
+            string text = BlocksManager.Blocks[Terrain.ExtractContents(m_worldSettings.TerrainBlockIndex)]?.GetDisplayName(null, m_worldSettings.TerrainBlockIndex) ?? string.Empty;
             m_flatTerrainBlockLabel.Text = text.Length > 10 ? $"{text.Substring(0, 10)}..." : text;
             Texture2D texture = m_blockTexturesCache.GetTexture(m_worldSettings.BlocksTextureName);
             m_blocksTextureIcon.Subtexture = new Subtexture(texture, Vector2.Zero, Vector2.One);
