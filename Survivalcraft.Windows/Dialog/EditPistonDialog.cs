@@ -28,12 +28,6 @@ namespace Game {
 
         public int m_speed;
 
-        public static string[] m_speedNames = ["Fast", "Medium", "Slow", "Very Slow"];
-
-        public static string[] m_speedCNNames = ["快", "中", "慢", "非常慢"];
-
-        public string m_languageType;
-
         public EditPistonDialog(int data, Action<int> handler) {
             XElement node = ContentManager.Get<XElement>("Dialogs/EditPistonDialog");
             LoadContents(this, node);
@@ -50,7 +44,6 @@ namespace Game {
             m_maxExtension = PistonBlock.GetMaxExtension(data);
             m_pullCount = PistonBlock.GetPullCount(data);
             m_speed = PistonBlock.GetSpeed(data);
-            m_languageType = ModsManager.Configs.TryGetValue("Language", out string config) ? config : "zh-CN";
             m_title.Text = BlocksManager.Blocks[237].GetDisplayName(null, Terrain.MakeBlockValue(237, 0, data));
             m_slider1.Granularity = 1f;
             m_slider1.MinValue = 1f;
@@ -92,7 +85,7 @@ namespace Game {
             m_slider2.Value = m_pullCount + 1;
             m_slider2.Text = string.Format(LanguageControl.Get(GetType().Name, 1), m_pullCount + 1);
             m_slider3.Value = m_speed;
-            m_slider3.Text = m_languageType == "zh-CN" ? m_speedCNNames[m_speed] : m_speedNames[m_speed];
+            m_slider3.Text = LanguageControl.Get(GetType().Name, "Speed", m_speed.ToString());
         }
 
         public void Dismiss(int? result) {

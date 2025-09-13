@@ -1,4 +1,4 @@
-﻿{
+{
   "Language": {
     "Name": "English"
   },
@@ -348,7 +348,13 @@
     "3": "Invalid name"
   },
   "EditPistonDialog": {
-    "1": "{0} blocks"
+    "1": "{0} blocks",
+    "Speed": {
+      "0": "Fast",
+      "1": "Medium",
+      "2": "Slow",
+      "3": "Very Slow"
+    }
   },
   "EditTruthTableDialog": {
     "1": "Table",
