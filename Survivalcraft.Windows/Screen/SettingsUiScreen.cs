@@ -1,6 +1,7 @@
 using System.Globalization;
 using System.Xml.Linq;
 using Engine;
+using Engine.Graphics;
 
 namespace Game {
     public class SettingsUiScreen : Screen {
@@ -25,6 +26,10 @@ namespace Game {
         public ButtonWidget m_showLogoInScreenshotsButton;
 
         public ButtonWidget m_screenshotSizeButton;
+        public ContainerWidget m_screenshotSizeCustomWidthSliderContainer;
+        public SliderWidget m_screenshotSizeCustomWidthSlider;
+        public ContainerWidget m_screenshotSizeCustomHeightSliderContainer;
+        public SliderWidget m_screenshotSizeCustomHeightSlider;
 
         public ButtonWidget m_communityContentModeButton;
 
@@ -48,9 +53,22 @@ namespace Game {
             m_showGuiInScreenshotsButton = Children.Find<ButtonWidget>("ShowGuiInScreenshotsButton");
             m_showLogoInScreenshotsButton = Children.Find<ButtonWidget>("ShowLogoInScreenshotsButton");
             m_screenshotSizeButton = Children.Find<ButtonWidget>("ScreenshotSizeButton");
+            m_screenshotSizeCustomWidthSliderContainer = Children.Find<ContainerWidget>("ScreenshotSizeCustomWidthSliderContainer");
+            m_screenshotSizeCustomWidthSlider = Children.Find<SliderWidget>("ScreenshotSizeCustomWidthSlider");
+            m_screenshotSizeCustomHeightSliderContainer = Children.Find<ContainerWidget>("ScreenshotSizeCustomHeightSliderContainer");
+            m_screenshotSizeCustomHeightSlider = Children.Find<SliderWidget>("ScreenshotSizeCustomHeightSlider");
             m_communityContentModeButton = Children.Find<ButtonWidget>("CommunityContentModeButton");
             m_originalCommunityContentModeButton = Children.Find<ButtonWidget>("OriginalCommunityContentModeButton");
             m_deleteWorldNeedToTextButton = Children.Find<ButtonWidget>("DeleteWorldNeedToTextButton");
+            int max = Math.Min(Display.MaxTextureSize / 120 * 120, 16320);
+            m_screenshotSizeCustomWidthSlider.MaxValue = max;
+            m_screenshotSizeCustomHeightSlider.MaxValue = max;
+            m_screenshotSizeCustomWidthSlider.Value = SettingsManager.ScreenshotSizeCustom.X;
+            m_screenshotSizeCustomHeightSlider.Value = SettingsManager.ScreenshotSizeCustom.Y;
+            if (SettingsManager.ScreenshotSize != ScreenshotSize.Custom) {
+                m_screenshotSizeCustomWidthSliderContainer.IsVisible = false;
+                m_screenshotSizeCustomHeightSliderContainer.IsVisible = false;
+            }
         }
 
         public override void Enter(object[] parameters) {
@@ -117,6 +135,26 @@ namespace Game {
             if (m_screenshotSizeButton.IsClicked) {
                 SettingsManager.ScreenshotSize = (ScreenshotSize)((int)(SettingsManager.ScreenshotSize + 1)
                     % EnumUtils.GetEnumValues(typeof(ScreenshotSize)).Count);
+                if (SettingsManager.ScreenshotSize == ScreenshotSize.Custom) {
+                    m_screenshotSizeCustomWidthSliderContainer.IsVisible = true;
+                    m_screenshotSizeCustomHeightSliderContainer.IsVisible = true;
+                }
+                else {
+                    m_screenshotSizeCustomWidthSliderContainer.IsVisible = false;
+                    m_screenshotSizeCustomHeightSliderContainer.IsVisible = false;
+                }
+            }
+            if (m_screenshotSizeCustomWidthSlider.IsSliding) {
+                SettingsManager.ScreenshotSizeCustom = new Point2(
+                    (int)m_screenshotSizeCustomWidthSlider.Value,
+                    SettingsManager.ScreenshotSizeCustom.Y
+                );
+            }
+            if (m_screenshotSizeCustomHeightSlider.IsSliding) {
+                SettingsManager.ScreenshotSizeCustom = new Point2(
+                    SettingsManager.ScreenshotSizeCustom.X,
+                    (int)m_screenshotSizeCustomHeightSlider.Value
+                );
             }
             if (m_deleteWorldNeedToTextButton.IsClicked) {
                 SettingsManager.DeleteWorldNeedToText = !SettingsManager.DeleteWorldNeedToText;
@@ -138,6 +176,8 @@ namespace Game {
             m_showGuiInScreenshotsButton.Text = SettingsManager.ShowGuiInScreenshots ? LanguageControl.Yes : LanguageControl.No;
             m_showLogoInScreenshotsButton.Text = SettingsManager.ShowLogoInScreenshots ? LanguageControl.Yes : LanguageControl.No;
             m_screenshotSizeButton.Text = LanguageControl.Get("ScreenshotSize", SettingsManager.ScreenshotSize.ToString());
+            m_screenshotSizeCustomWidthSlider.Text = SettingsManager.ScreenshotSizeCustom.X.ToString();
+            m_screenshotSizeCustomHeightSlider.Text = SettingsManager.ScreenshotSizeCustom.Y.ToString();
             m_deleteWorldNeedToTextButton.Text = SettingsManager.DeleteWorldNeedToText ? LanguageControl.Yes : LanguageControl.No;
             m_communityContentModeButton.Text = LanguageControl.Get("CommunityContentMode", SettingsManager.CommunityContentMode.ToString());
             m_originalCommunityContentModeButton.Text = LanguageControl.Get(

@@ -18,29 +18,39 @@ namespace Game {
         public static void Run() {
             if (m_captureRequested) {
                 try {
-                    int num;
+                    int width;
                     int height;
                     switch (SettingsManager.ScreenshotSize) {
                         case ScreenshotSize.ScreenSize: {
-                            num = Math.Max(Window.ScreenSize.X, Window.ScreenSize.Y);
+                            width = Math.Max(Window.ScreenSize.X, Window.ScreenSize.Y);
                             height = Math.Min(Window.ScreenSize.X, Window.ScreenSize.Y);
-                            float num2 = num / (float)height;
-                            num = Math.Min(num, 2048);
-                            height = (int)MathF.Round(num / num2);
+                            float num2 = width / (float)height;
+                            width = Math.Min(width, 2048);
+                            height = (int)MathF.Round(width / num2);
                             break;
                         }
                         case ScreenshotSize.FullHD:
-                            num = 5760;
-                            height = 3240;
+                            if (Display.MaxTextureSize < 3840) {
+                                width = Display.MaxTextureSize;
+                                height = (int)MathF.Round(width * 9f / 16f);
+                            }
+                            else {
+                                width = 3840;
+                                height = 2160;
+                            }
+                            break;
+                        case ScreenshotSize.Custom:
+                            width = SettingsManager.ScreenshotSizeCustom.X;
+                            height = SettingsManager.ScreenshotSizeCustom.Y;
                             break;
                         default:
-                            num = 3840;
-                            height = 2160;
+                            width = 1920;
+                            height = 1080;
                             break;
                     }
                     DateTime now = DateTime.Now;
                     Capture(
-                        num,
+                        width,
                         height,
                         $"Survivalcraft {now.Year:D4}-{now.Month:D2}-{now.Day:D2} {now.Hour:D2}-{now.Minute:D2}-{now.Second:D2}.png"
                     );
@@ -115,7 +125,7 @@ namespace Game {
                         Image.Save(
                             renderTarget2D.GetData(new Rectangle(0, 0, renderTarget2D.Width, renderTarget2D.Height)),
                             stream,
-                            ImageFileFormat.Png,
+                            renderTarget2D.Width * renderTarget2D.Height <= 8294400 ? ImageFileFormat.Png : ImageFileFormat.Bmp,
                             false
                         );
                     }
@@ -128,7 +138,7 @@ namespace Game {
                         Image.Save(
                             renderTarget2D.GetData(new Rectangle(0, 0, renderTarget2D.Width, renderTarget2D.Height)),
                             stream,
-                            ImageFileFormat.Png,
+                            renderTarget2D.Width * renderTarget2D.Height <= 8294400 ? ImageFileFormat.Png : ImageFileFormat.Bmp,
                             false
                         );
                     }

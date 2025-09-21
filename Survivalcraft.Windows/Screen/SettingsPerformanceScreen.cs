@@ -28,7 +28,10 @@ namespace Game {
             832,
             896,
             960,
-            1024
+            1024,
+            1280,
+            1536,
+            2048
         ];
 
         public ButtonWidget m_resolutionButton;

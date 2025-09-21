@@ -81,6 +81,16 @@ namespace Engine.Graphics {
 
         public static string DeviceDescription { get; set; }
 
+        public static int MaxTextureSize {
+            get {
+#if DIRECT3D11
+                return DXWrapper.REQ_TEXTURE2D_U_OR_V_DIMENSION;
+#else
+                return GLWrapper.GL_MAX_TEXTURE_SIZE;
+#endif
+            }
+        }
+
         public static event Action DeviceLost;
 
         public static event Action DeviceReset;

@@ -282,14 +282,9 @@ namespace Game {
         }
 
         public void CreateRenderTarget() {
-#if DIRECT3D11
-			int maxTextureSize = DXWrapper.REQ_TEXTURE2D_U_OR_V_DIMENSION;
-#else
-            int maxTextureSize = GLWrapper.GL_MAX_TEXTURE_SIZE;
-#endif
             int eachSignHeight = (int)(m_font.GlyphHeight * m_fontScale * 4);
-            if (maxTextureSize < eachSignHeight * 32) {
-                m_maxTexts = maxTextureSize / eachSignHeight;
+            if (Display.MaxTextureSize < eachSignHeight * 32) {
+                m_maxTexts = Display.MaxTextureSize / eachSignHeight;
             }
             m_renderTarget = new RenderTarget2D(
                 (int)(m_font.GlyphHeight * 16 * m_fontScale),

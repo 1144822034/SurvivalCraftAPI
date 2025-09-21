@@ -698,7 +698,8 @@
   },
   "ScreenshotSize": {
     "ScreenSize": "ScreenSize",
-    "FullHD": "FullHD"
+    "FullHD": "FullHD",
+    "Custom": "Custom"
   },
   "StartingPositionMode": {
     "Easy": "Easy",
@@ -3184,7 +3185,9 @@
       "Show loading log:",
       "Input \"yes\" to delete world:",
       "Original Community Content",
-      "Hide Crosshair:"
+      "Hide Crosshair:",
+      "Custom screenshot width",
+      "Custom screenshot height"
     ],
     "TrialEndedScreen": {
       "1": "The day has ended",

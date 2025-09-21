@@ -700,7 +700,8 @@
   },
   "ScreenshotSize": {
     "ScreenSize": "屏幕大小",
-    "FullHD": "高清"
+    "FullHD": "高清",
+    "Custom": "自定义"
   },
   "StartingPositionMode": {
     "Easy": "简单",
@@ -3741,7 +3742,9 @@
       "展示加载日志:",
       "删除世界输入\"yes\"确认:",
       "原版社区内容",
-      "隐藏十字准星:"
+      "隐藏十字准星:",
+      "自定义截图宽度",
+      "自定义截图高度"
     ],
     "TrialEndedScreen": {
       "1": "The day has ended",

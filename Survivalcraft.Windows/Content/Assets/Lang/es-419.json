@@ -856,7 +856,8 @@
     "3": "Selecciona un pack de textura",
     "4": "Desactivado",
     "5": "El terreno plano solo esta disponible en modo creativo.",
-    "6": "Normal"
+    "6": "Normal",
+    "7": "Tiempo del dia:"
   },
   "ComponentSickness": {
     "1": "Náuseas",
@@ -2886,7 +2887,7 @@
       "2": "Jugar",
       "3": "Contenido",
       "4": "Configuración",
-      "5": "Administrar",
+      "5": "Ayuda",
       "6": "Full Version...",
       "7": "© 2011-2025 Candy Rufus Games.",
       "8": "visite ",

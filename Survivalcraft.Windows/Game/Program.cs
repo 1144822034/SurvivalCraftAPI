@@ -7,7 +7,6 @@ using Engine;
 using Engine.Graphics;
 #if !ANDROID
 using Engine.Input;
-using System.Reflection;
 #endif
 
 namespace Game {
@@ -46,18 +45,18 @@ namespace Game {
             }
 
             // Process.Start("C:\\Windows\\System32\\msg.exe",  "/server:127.0.0.1 * \"此版本为预览版 不建议长期使用");
-            Window.Created += () => {
 #if WINDOWS
+            Window.Created += () => {
                 InputMethod.Initialize(Process.GetCurrentProcess().MainWindowHandle);
                 InputMethod.Enabled = false;
-#endif
             };
+#endif
             EntryPoint();
-            AppDomain.CurrentDomain.AssemblyResolve += (_, e) => {
+            /*AppDomain.CurrentDomain.AssemblyResolve += (_, e) => {
                 //在程序目录下面寻找dll,解决部分设备找不到目录下程序集的问题
                 string location = new FileInfo(typeof(Program).Assembly.Location).Directory!.FullName;
                 return Assembly.LoadFrom(Path.Combine(location, e.Name));
-            };
+            };*/
 
             //RootCommand rootCommand =
             //[

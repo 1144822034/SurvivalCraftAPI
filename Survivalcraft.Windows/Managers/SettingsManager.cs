@@ -2,6 +2,7 @@ using System.Reflection;
 using System.Text;
 using System.Xml.Linq;
 using Engine;
+using Engine.Graphics;
 using Engine.Input;
 using TemplatesDatabase;
 using XmlUtilities;
@@ -85,6 +86,16 @@ namespace Game {
         public static bool ShowLogoInScreenshots { get; set; }
 
         public static ScreenshotSize ScreenshotSize { get; set; }
+
+        public static Point2 ScreenshotSizeCustom {
+            get;
+            set {
+                int max = Math.Min(Display.MaxTextureSize, 16384);
+                int width = MathUtils.Clamp(value.X, 120, max);
+                int height = MathUtils.Clamp(value.Y, 120, max);
+                field = new Point2(width, height);
+            }
+        }
 
         public static WindowMode WindowMode {
             get => m_windowMode;
@@ -264,6 +275,7 @@ namespace Game {
                 ShowGuiInScreenshots = false;
                 ShowLogoInScreenshots = true;
                 ScreenshotSize = ScreenshotSize.ScreenSize;
+                ScreenshotSizeCustom = new Point2(1920, 1080);
                 MoveControlMode = MoveControlMode.Buttons;
                 HideMoveLookPads = false;
                 HideCrosshair = false;
