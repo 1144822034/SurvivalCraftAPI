@@ -13,10 +13,9 @@ using Silk.NET.Input;
 using Monitor = Silk.NET.Windowing.Monitor;
 #if WINDOWS
 using System.Runtime.InteropServices;
-#else
+#endif
+#endif
 using System.Diagnostics;
-#endif
-#endif
 using Engine.Audio;
 using Engine.Graphics;
 using Engine.Input;
@@ -59,7 +58,45 @@ namespace Engine {
 #if ANDROID
                 return new Point2(m_view.Size.X, m_view.Size.Y);
 #else
-                Vector2D<int> size = m_gameWindow?.Monitor?.Bounds.Size ?? Monitor.GetMainMonitor(null).Bounds.Size;
+                IMonitor monitor = m_gameWindow?.Monitor;
+                if (monitor == null) {
+                    try {
+                        monitor = Monitor.GetMainMonitor(null);
+                    }
+                    catch (Exception e) {
+                        if (e is PlatformNotSupportedException) {
+#if WINDOWS
+                            string str =
+                                "GLFW Window Platform is not applicable. Please install Microsoft Visual C++ Redistributable. Click \"OK\" to open download page.\nGLFW 窗口平台无法使用。请安装 Microsoft Visual C++ Redistributable，点击\"确定\"来打开下载页面。";
+                            const string downloadLink =
+                                "https://learn.microsoft.com/en-us/cpp/windows/latest-supported-vc-redist?view=msvc-170#latest-microsoft-visual-c-redistributable-version";
+                            Log.Error($"GLFW Window Platform is not applicable. Please install Microsoft Visual C++ Redistributable. GLFW 窗口平台无法使用。请安装 Microsoft Visual C++ Redistributable。\nDownload page 下载页: {downloadLink}\nException details: {e}");
+                            new Thread(() => {
+                                    if (MessageBox(IntPtr.Zero, str, null, 0x11u) == 1) {
+                                        Process.Start(
+                                            new ProcessStartInfo(
+                                                downloadLink
+                                            ) { UseShellExecute = true }
+                                        );
+                                    }
+                                }
+                            ).Start();
+#else
+                            if (OperatingSystem.IsLinux()) {
+                                const string str =
+                                    "GLFW Window Platform is not applicable. Please check: https://dotnet.github.io/Silk.NET/docs/hlu/troubleshooting.html";
+                                Process.Start("notify-send", $"-a \"Survivalcraft API\" -u critical \"Error\" \"{str}\"");
+                                Log.Error(str);
+                            }
+#endif
+                        }
+                        else {
+                            Log.Error($"Get screen size failed.\n{e}");
+                        }
+                        return Point2.Zero;
+                    }
+                }
+                Vector2D<int> size = monitor.Bounds.Size;
                 return new Point2(size.X, size.Y);
 #endif
             }
@@ -305,15 +342,20 @@ namespace Engine {
             Activity.Destroyed += DestroyedHandler;
             Activity.NewIntent += NewIntentHandler;
 #else
-            width = width == 0 ? ScreenSize.X * 4 / 5 : width;
-            height = height == 0 ? ScreenSize.Y * 4 / 5 : height;
+            Point2 screenSize = ScreenSize;
+            if (screenSize.X == 0
+                && screenSize.Y == 0) {
+                return;
+            }
+            width = width == 0 ? screenSize.X * 4 / 5 : width;
+            height = height == 0 ? screenSize.Y * 4 / 5 : height;
             WindowOptions windowOptions = WindowOptions.Default with {
                 Title = title, PreferredDepthBufferBits = 24, PreferredStencilBufferBits = 8, API = api, Size = new Vector2D<int>(width, height)
             };
             m_gameWindow = Silk.NET.Windowing.Window.Create(windowOptions);
             m_view = m_gameWindow;
             m_titlePrefix = title;
-            Position = new Point2(Math.Max((ScreenSize.X - m_gameWindow.Size.X) / 2, 0), Math.Max((ScreenSize.Y - m_gameWindow.Size.Y) / 2, 0));
+            Position = new Point2(Math.Max((screenSize.X - m_gameWindow.Size.X) / 2, 0), Math.Max((screenSize.Y - m_gameWindow.Size.Y) / 2, 0));
             WindowMode = windowMode;
 #endif
             m_view.ShouldSwapAutomatically = false;
@@ -330,8 +372,7 @@ namespace Engine {
 #if WINDOWS
                     new Thread(() => { MessageBox(IntPtr.Zero, str, null, 0x10u); }).Start();
 #else
-                    if (OperatingSystem.IsLinux())
-                    {
+                    if (OperatingSystem.IsLinux()) {
                         Process.Start("notify-send", $"-a \"Survivalcraft API\" -u critical \"Error\" \"{str}\"");
                     }
 #endif

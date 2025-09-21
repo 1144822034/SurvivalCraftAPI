@@ -25,6 +25,8 @@
 如果弹窗提示`你的显卡驱动不支持当前程序使用的图形API，请尝试更新显卡驱动，或使用兼容补丁。`，如果显卡驱动更新后仍然弹窗，请尝试下载名称中有`兼容补丁`的压缩包，然后解压到之前解压到的目录，运行<font color="red">解压后的新的</font>`.exe`文件  
 如果使用兼容补丁后仍然弹窗，建议为您的电脑购买并装上五年内发布的显卡
 
+如果弹窗提示`GLFW 窗口平台无法使用。请安装 Microsoft Visual C++ Redistributable，点击"确定"来打开下载页面。`，请按提示完成下载和安装。或者[点击此处](https://learn.microsoft.com/zh-cn/cpp/windows/latest-supported-vc-redist?view=msvc-170#latest-microsoft-visual-c-redistributable-version)打开下载页面
+
 ### Linux 系统看这里
 > 需要 x64 架构 CPU，最低系统版本详见 [此处](https://github.com/dotnet/core/blob/main/release-notes/9.0/supported-os.md#linux)，显卡驱动需要支持 OpenGL ES 3.2 图形 API
 
