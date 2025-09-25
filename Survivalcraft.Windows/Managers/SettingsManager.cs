@@ -87,14 +87,65 @@ namespace Game {
 
         public static ScreenshotSize ScreenshotSize { get; set; }
 
-        public static Point2 ScreenshotSizeCustom {
+        public static int[] ScreenshotSizeCustomWidths = [
+            80,
+            160,
+            320,
+            480,
+            640,
+            800,
+            960,
+            1280,
+            1600,
+            1920, //default
+            2560,
+            3840,
+            5120,
+            6144,
+            7680,
+            10240,
+            12288,
+            15360
+        ];
+
+        public static int ScreenshotSizeCustomWidthIndex {
             get;
             set {
-                int max = Math.Min(Display.MaxTextureSize, 16384);
-                int width = MathUtils.Clamp(value.X, 120, max);
-                int height = MathUtils.Clamp(value.Y, 120, max);
-                field = new Point2(width, height);
+                value = MathUtils.Clamp(value, 0, ScreenshotSizeCustomWidths.Length - 1);
+                int widthMax = Math.Min(Display.MaxTextureSize, 16384);
+                field = widthMax > ScreenshotSizeCustomWidths[value] ? value : ScreenshotSizeCustomWidths.LastIndexOfAnyInRange(0, widthMax);
             }
+        }
+
+        public static float[] ScreenshotSizeCustomAspectRatios = [
+            1f,
+            4f / 5f,
+            3f / 4f,
+            2f / 3f,
+            10f / 16f,
+            9f / 16f, //default
+            0.5f,
+            27f / 64f,
+            9f / 32f,
+            27f / 128f
+        ];
+
+        public static string[] ScreenshotSizeCustomAspectRatiosNames = [
+            "1:1",
+            "5:4",
+            "4:3",
+            "3:2",
+            "16:10",
+            "16:9",
+            "18:9",
+            "21:9",
+            "32:9",
+            "42:9"
+        ];
+
+        public static int ScreenshotSizeCustomAspectRatioIndex {
+            get;
+            set => field = MathUtils.Clamp(value, 0, ScreenshotSizeCustomAspectRatios.Length - 1);
         }
 
         public static WindowMode WindowMode {
@@ -275,7 +326,8 @@ namespace Game {
                 ShowGuiInScreenshots = false;
                 ShowLogoInScreenshots = true;
                 ScreenshotSize = ScreenshotSize.ScreenSize;
-                ScreenshotSizeCustom = new Point2(1920, 1080);
+                ScreenshotSizeCustomWidthIndex = 9;
+                ScreenshotSizeCustomAspectRatioIndex = 5;
                 MoveControlMode = MoveControlMode.Buttons;
                 HideMoveLookPads = false;
                 HideCrosshair = false;

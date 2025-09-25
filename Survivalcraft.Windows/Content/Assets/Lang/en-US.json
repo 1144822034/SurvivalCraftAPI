@@ -796,7 +796,8 @@
     "14": "1 VSYNC",
     "15": "2 VSYNC",
     "16": "Stop Refreshing",
-    "17": "Every Frame"
+    "17": "Every Frame",
+    "18": "(32GB RAM and an extremely fast\ndevice recommended)"
   },
   "RecipaediaDescriptionScreen": {
     "Luminosity": "Luminosity",
@@ -3186,8 +3187,8 @@
       "Input \"yes\" to delete world:",
       "Original Community Content",
       "Hide Crosshair:",
-      "Custom screenshot width",
-      "Custom screenshot height"
+      "Custom screenshot height",
+      "Custom screenshot aspect ratio"
     ],
     "TrialEndedScreen": {
       "1": "The day has ended",

@@ -182,7 +182,7 @@ namespace Engine.Graphics {
                 (uint)m_texture,
                 0
             );
-            if (DepthFormat != 0) {
+            if (DepthFormat != DepthFormat.None) {
                 GLWrapper.GL.GenRenderbuffers(1u, out uint depthBuffer);
                 m_depthBuffer = (int)depthBuffer;
                 GLWrapper.GL.BindRenderbuffer(RenderbufferTarget.Renderbuffer, depthBuffer);

@@ -65,12 +65,12 @@
 
           <UniformSpacingPanelWidget Name="ScreenshotSizeCustomWidthSliderContainer" Direction="Horizontal" Margin="0, 3">
             <LabelWidget Text="[SettingsUiScreen:14]" HorizontalAlignment="Far" VerticalAlignment="Center" Margin="20, 0" />
-            <SliderWidget Name="ScreenshotSizeCustomWidthSlider" Size="Infinity, 60" VerticalAlignment="Center" Margin="20, 0" MinValue="120" MaxValue="3840" Granularity="120" />
+            <SliderWidget Name="ScreenshotSizeCustomWidthSlider" Size="Infinity, 60" VerticalAlignment="Center" Margin="20, 0" MinValue="0" MaxValue="17" Granularity="1" />
           </UniformSpacingPanelWidget>
 
-          <UniformSpacingPanelWidget Name="ScreenshotSizeCustomHeightSliderContainer" Direction="Horizontal" Margin="0, 3">
+          <UniformSpacingPanelWidget Name="ScreenshotSizeCustomAspectRatioSliderContainer" Direction="Horizontal" Margin="0, 3">
             <LabelWidget Text="[SettingsUiScreen:15]" HorizontalAlignment="Far" VerticalAlignment="Center" Margin="20, 0" />
-            <SliderWidget Name="ScreenshotSizeCustomHeightSlider" Size="Infinity, 60" VerticalAlignment="Center" Margin="20, 0" MinValue="120" MaxValue="3840" Granularity="120" />
+            <SliderWidget Name="ScreenshotSizeCustomAspectRatioSlider" Size="Infinity, 60" VerticalAlignment="Center" Margin="20, 0" MinValue="0" MaxValue="9" Granularity="1" />
           </UniformSpacingPanelWidget>
 
 					<UniformSpacingPanelWidget Direction="Horizontal" Margin="0, 3">
