@@ -1,3 +1,4 @@
+using System.Globalization;
 using System.Text;
 using System.Xml.Linq;
 using Engine;
@@ -19,6 +20,8 @@ namespace Game {
 
         public long m_totalWorldsSize;
 
+        public CultureInfo m_cultureInfo;
+
         public static string fName = "PlayScreen";
 
         public virtual void OnWorldsListWidgetItemClicked(object item) {
@@ -37,9 +40,9 @@ namespace Game {
             containerWidget.Tag = worldInfo;
             labelWidget.Text = worldInfo.WorldSettings.Name;
             labelWidget2.Text = string.Format(
-                "{0} | {1:dd MMM yyyy HH:mm} | {2} | {3} | {4}",
+                "{0} | {1} | {2} | {3} | {4}",
                 DataSizeFormatter.Format(worldInfo.Size),
-                worldInfo.LastSaveTime.ToLocalTime(),
+                worldInfo.LastSaveTime.ToLocalTime().ToString(m_cultureInfo),
                 worldInfo.PlayerInfos.Count > 1
                     ? string.Format(LanguageControl.GetContentWidgets(fName, 9), worldInfo.PlayerInfos.Count)
                     : string.Format(LanguageControl.GetContentWidgets(fName, 10), 1),
@@ -74,6 +77,9 @@ namespace Game {
             m_worldsListWidget.ScrollSpeed = 0f;
             m_worldsListWidget.ItemClicked += OnWorldsListWidgetItemClicked;
             m_modTipsTime = -10000000f;
+            m_cultureInfo = Program.SystemLanguage == null
+                ? CultureInfo.CurrentCulture
+                : new CultureInfo(Program.SystemLanguage);
         }
 
         public override void Enter(object[] parameters) {

@@ -70,8 +70,8 @@
               <LabelWidget Text="[KeyboardHelpDialog:45]" Color="160, 160, 160" />
               <LabelWidget Text="[KeyboardHelpDialog:46]" Color="160, 160, 160" />
               <LabelWidget Text="[KeyboardHelpDialog:47]" Color="160, 160, 160" />
-              <LabelWidget Text="[KeyboardHelpDialog:48]"  Color="160, 160, 160" />
-              <LabelWidget Text="[KeyboardHelpDialog:49]"  Color="160, 160, 160" />
+              <LabelWidget Text="[KeyboardHelpDialog:48]" Color="160, 160, 160" />
+              <LabelWidget Text="[KeyboardHelpDialog:49]" Color="160, 160, 160" />
             </StackPanelWidget>
           </StackPanelWidget>
 

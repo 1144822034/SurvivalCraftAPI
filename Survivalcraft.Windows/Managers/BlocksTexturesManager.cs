@@ -30,7 +30,7 @@ namespace Game {
 
         public static string GetDisplayName(string name) {
             if (IsBuiltIn(name)) {
-                return "Survivalcraft";
+                return LanguageControl.Get("Usual", "gameName");
             }
             return Storage.GetFileNameWithoutExtension(name);
         }
