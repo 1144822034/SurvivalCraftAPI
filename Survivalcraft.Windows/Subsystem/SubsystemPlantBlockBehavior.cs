@@ -44,16 +44,10 @@ namespace Game {
             int plantValue = SubsystemTerrain.Terrain.GetCellValue(x, y, z);
             int plantContents = Terrain.ExtractContents(plantValue);
             int cellValue = SubsystemTerrain.Terrain.GetCellValue(x, y - 1, z);
-            int soilContents = Terrain.ExtractContents(cellValue);
-            Block blockUnder = BlocksManager.Blocks[soilContents];
-            if (BlocksManager.Blocks[plantContents] is BasePumpkinBlock) {
-                if (blockUnder.IsFaceNonAttachable(SubsystemTerrain, 4, cellValue, plantValue)) {
-                    destroyCell = true;
-                }
-            }
-            else if (plantContents == 132) {
+            Block blockUnder = BlocksManager.Blocks[Terrain.ExtractContents(cellValue)];
+            if (plantContents == 132) { //JackOLanternBlock
                 if (blockUnder.IsFaceTransparent(SubsystemTerrain, 4, cellValue)
-                    && !(blockUnder is FenceBlock)) {
+                    && blockUnder is not FenceBlock) {
                     destroyCell = true;
                 }
             }
