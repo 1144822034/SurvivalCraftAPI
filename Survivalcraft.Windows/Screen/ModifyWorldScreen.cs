@@ -77,7 +77,7 @@ namespace Game {
             bool flag = !CompareValueDictionaries(m_originalWorldSettingsData, m_worldSettingsData);
             bool flag2 = WorldsManager.ValidateWorldName(m_worldSettings.Name);
             m_nameTextBox.Text = m_worldSettings.Name;
-            m_seedLabel.Text = m_worldSettings.Seed;
+            m_seedLabel.Text = $"{(string.IsNullOrEmpty(m_worldSettings.Seed) ? LanguageControl.Get(fName, "6") : m_worldSettings.Seed)} ({m_worldSettings.WorldSeed})";
             m_gameModeButton.Text = LanguageControl.Get("GameMode", m_worldSettings.GameMode.ToString());
             m_gameModeButton.IsEnabled = m_changingGameModeAllowed;
             m_errorLabel.IsVisible = !flag2;

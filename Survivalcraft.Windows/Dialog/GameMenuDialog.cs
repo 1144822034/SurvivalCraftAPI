@@ -76,7 +76,7 @@ namespace Game {
                 StringsManager.GetString($"TerrainGenerationMode.{subsystemGameInfo.WorldSettings.TerrainGenerationMode}.Name")
             );
             string seed = subsystemGameInfo.WorldSettings.Seed;
-            AddStat(stackPanelWidget, LanguageControl.Get(fName, 8), !string.IsNullOrEmpty(seed) ? seed : LanguageControl.Get(fName, 9));
+            AddStat(stackPanelWidget, LanguageControl.Get(fName, 8), $"{(!string.IsNullOrEmpty(seed) ? seed : LanguageControl.Get(fName, 9))} ({subsystemGameInfo.WorldSeed})");
             AddStat(
                 stackPanelWidget,
                 LanguageControl.Get(fName, 10),

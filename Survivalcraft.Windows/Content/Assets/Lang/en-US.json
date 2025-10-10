@@ -380,6 +380,11 @@
     "1": "No User",
     "2": "Select Active User"
   },
+  "EditWorldSeedDialog": {
+    "1": "(none)",
+    "2": "(True seed is edited)",
+    "3": "True seed must be a integer between -2147483648 and 2147483647"
+  },
   "FurnitureDesignWidget": [
     "Front",
     "Side"
@@ -796,7 +801,8 @@
     "14": "1 VSYNC",
     "15": "2 VSYNC",
     "16": "Stop Refreshing",
-    "17": "Every Frame"
+    "17": "Every Frame",
+    "18": "(32GB RAM and an extremely fast\ndevice recommended)"
   },
   "RecipaediaDescriptionScreen": {
     "Luminosity": "Luminosity",
@@ -946,7 +952,8 @@
     "7": "Time Of Day:",
     "8": " days",
     "9": "Input Block Contents Manually",
-    "10": "Invalid Block Contents"
+    "10": "Invalid Block Contents",
+    "11": "Terrain Generator Version"
   },
   "ComponentSickness": {
     "1": "Sickness",
@@ -1022,7 +1029,8 @@
     "2": "The world will be irrecoverably deleted.",
     "3": "Abandon changes?",
     "4": "You changed some of the world properties, but they were not applied yet.",
-    "5": "Enter \"yes\" to continue"
+    "5": "Enter \"yes\" to continue",
+    "6": "(none)"
   },
   "PlayScreen": {
     "1": "Mod Incompatibility Warning!",
@@ -1036,6 +1044,10 @@
     "9": "{0} world, {1}",
     "10": "{0} worlds, {1}",
     "11": "No worlds"
+  },
+  "NewWorldScreen": {
+    "1": "Leave blank for a random seed",
+    "2": "True seed {0} is set"
   },
   "JsInterface": {
     "1": "There is already a script running.",
@@ -3186,8 +3198,8 @@
       "Input \"yes\" to delete world:",
       "Original Community Content",
       "Hide Crosshair:",
-      "Custom screenshot width",
-      "Custom screenshot height"
+      "Custom screenshot height",
+      "Custom screenshot aspect ratio"
     ],
     "TrialEndedScreen": {
       "1": "The day has ended",
@@ -3228,7 +3240,8 @@
       "25": "Player-on-Player Attacks:",
       "26": "Changing Seasons:",
       "27": "Length Of Year:",
-      "28": "Season:"
+      "28": "Season:",
+      "29": "Terrain Generator Version:"
     },
     "ReleasesScreen": {
       "1": "{0} Version List",
@@ -3689,6 +3702,15 @@
       "9": "Password: ",
       "10": "Change Password",
       "11": "Close"
+    },
+    "EditWorldSeedDialog": {
+      "1": "Edit World Seed",
+      "2": "After editing the true seed, the seed will be fixed to empty string.\n The true seed is an integer between -2147483648 and 2147483647.",
+      "3": "Seed",
+      "4": "True Seed",
+      "5": "Reset",
+      "6": "OK",
+      "7": "Cancel"
     }
   },
   "FireworksBlock": {

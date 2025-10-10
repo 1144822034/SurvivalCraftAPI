@@ -160,9 +160,13 @@ namespace Game {
                 m_visibilityRangeWarningLabel.IsVisible = true;
                 m_visibilityRangeWarningLabel.Text = LanguageControl.Get(fName, 6);
             }
-            else {
+            else if (SettingsManager.VisibilityRange <= 1024) {
                 m_visibilityRangeWarningLabel.IsVisible = true;
                 m_visibilityRangeWarningLabel.Text = LanguageControl.Get(fName, 7);
+            }
+            else {
+                m_visibilityRangeWarningLabel.IsVisible = true;
+                m_visibilityRangeWarningLabel.Text = LanguageControl.Get(fName, 18);
             }
             m_terrainMipmapsButton.Text = SettingsManager.TerrainMipmapsEnabled ? LanguageControl.Enable : LanguageControl.Disable;
             m_skyRenderingModeButton.Text = LanguageControl.Get("SkyRenderingMode", SettingsManager.SkyRenderingMode.ToString());

@@ -40,15 +40,15 @@ namespace Game {
             BlockPlacementData result = default;
             result.CellFace = raycastResult.CellFace;
             if (raycastResult.CellFace.Face == 4) {
-                switch (Terrain.ExtractData(value)) {
-                    case 0: result.Value = Terrain.MakeBlockValue(19, 0, TallGrassBlock.SetIsSmall(0, true)); break;
-                    case 1: result.Value = Terrain.MakeBlockValue(20, 0, FlowerBlock.SetIsSmall(0, true)); break;
-                    case 2: result.Value = Terrain.MakeBlockValue(24, 0, FlowerBlock.SetIsSmall(0, true)); break;
-                    case 3: result.Value = Terrain.MakeBlockValue(25, 0, FlowerBlock.SetIsSmall(0, true)); break;
-                    case 4: result.Value = Terrain.MakeBlockValue(174, 0, RyeBlock.SetSize(RyeBlock.SetIsWild(0, false), 0)); break;
-                    case 5: result.Value = Terrain.MakeBlockValue(174, 0, RyeBlock.SetSize(RyeBlock.SetIsWild(0, false), 0)); break;
-                    case 6: result.Value = Terrain.MakeBlockValue(204, 0, CottonBlock.SetSize(CottonBlock.SetIsWild(0, false), 0)); break;
-                    case 7: result.Value = Terrain.MakeBlockValue(131, 0, BasePumpkinBlock.SetSize(BasePumpkinBlock.SetIsDead(0, false), 0)); break;
+                switch ((SeedType)Terrain.ExtractData(value)) {
+                    case SeedType.TallGrass: result.Value = Terrain.MakeBlockValue(19, 0, TallGrassBlock.SetIsSmall(0, true)); break;
+                    case SeedType.RedFlower: result.Value = Terrain.MakeBlockValue(20, 0, FlowerBlock.SetIsSmall(0, true)); break;
+                    case SeedType.PurpleFlower: result.Value = Terrain.MakeBlockValue(24, 0, FlowerBlock.SetIsSmall(0, true)); break;
+                    case SeedType.WhiteFlower: result.Value = Terrain.MakeBlockValue(25, 0, FlowerBlock.SetIsSmall(0, true)); break;
+                    case SeedType.WildRye: result.Value = Terrain.MakeBlockValue(174, 0, RyeBlock.SetSize(RyeBlock.SetIsWild(0, false), 0)); break;
+                    case SeedType.Rye: result.Value = Terrain.MakeBlockValue(174, 0, RyeBlock.SetSize(RyeBlock.SetIsWild(0, false), 0)); break;
+                    case SeedType.Cotton: result.Value = Terrain.MakeBlockValue(204, 0, CottonBlock.SetSize(CottonBlock.SetIsWild(0, false), 0)); break;
+                    case SeedType.Pumpkin: result.Value = Terrain.MakeBlockValue(131, 0, BasePumpkinBlock.SetSize(BasePumpkinBlock.SetIsDead(0, false), 0)); break;
                 }
             }
             return result;
@@ -60,14 +60,14 @@ namespace Game {
             float size,
             ref Matrix matrix,
             DrawBlockEnvironmentData environmentData) {
-            switch (Terrain.ExtractData(value)) {
-                case 0: color *= new Color(160, 150, 125); break;
-                case 1: color *= new Color(192, 160, 160); break;
-                case 2: color *= new Color(192, 160, 192); break;
-                case 3: color *= new Color(192, 192, 192); break;
-                case 4: color *= new Color(60, 138, 76); break;
-                case 6: color *= new Color(255, 255, 255); break;
-                case 7: color *= new Color(240, 225, 190); break;
+            switch ((SeedType)Terrain.ExtractData(value)) {
+                case SeedType.TallGrass: color *= new Color(160, 150, 125); break;
+                case SeedType.RedFlower: color *= new Color(192, 160, 160); break;
+                case SeedType.PurpleFlower: color *= new Color(192, 160, 192); break;
+                case SeedType.WhiteFlower: color *= new Color(192, 192, 192); break;
+                case SeedType.WildRye: color *= new Color(60, 138, 76); break;
+                case SeedType.Rye: color *= new Color(255, 255, 255); break;
+                case SeedType.Pumpkin: color *= new Color(240, 225, 190); break;
             }
             BlocksManager.DrawFlatOrImageExtrusionBlock(
                 primitivesRenderer,

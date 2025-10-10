@@ -28,9 +28,7 @@ namespace Engine {
         public static long Ticks {
             get {
                 long timestamp = Stopwatch.GetTimestamp();
-                if (!m_startTicks.HasValue) {
-                    m_startTicks = timestamp;
-                }
+                m_startTicks ??= timestamp;
                 return timestamp - m_startTicks.Value;
             }
         }

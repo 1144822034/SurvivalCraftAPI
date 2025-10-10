@@ -57,6 +57,10 @@ namespace Game {
 
         public WorldPalette Palette = new();
 
+        public bool CustomWorldSeed;
+
+        public int WorldSeed;
+
         public void ResetOptionsForNonCreativeMode(WorldSettings originalWorldSettings) {
             if (TerrainGenerationMode == TerrainGenerationMode.FlatContinent) {
                 TerrainGenerationMode = TerrainGenerationMode.Continent;
@@ -124,6 +128,7 @@ namespace Game {
             BiomeSize = valuesDictionary.GetValue("BiomeSize", 1f);
             BlocksTextureName = valuesDictionary.GetValue("BlockTextureName", string.Empty);
             Palette = new WorldPalette(valuesDictionary.GetValue("Palette", new ValuesDictionary()));
+            WorldSeed = valuesDictionary.GetValue("WorldSeed", 0);
         }
 
         public void Save(ValuesDictionary valuesDictionary, bool liveModifiableParametersOnly) {
