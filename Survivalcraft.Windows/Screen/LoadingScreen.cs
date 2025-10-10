@@ -365,19 +365,23 @@ namespace Game {
             );
             AddLoadAction(
                 delegate {
-                    Info(LanguageControl.Get(fName, "3"));
+                    var stopwatch = Stopwatch.StartNew();
                     try {
                         DatabaseManager.LoadDataBaseFromXml(DatabaseManager.DatabaseNode);
                     }
                     catch (Exception e) {
-                        Warning(e.ToString());
+                        Error(e.ToString());
                     }
+                    stopwatch.Stop();
+                    Info($"{LanguageControl.Get(fName, "3")}({stopwatch.ElapsedMilliseconds}ms)");
                 }
             );
             AddLoadAction(
                 delegate { //初始化方块管理器
-                    Info(LanguageControl.Get(fName, "4"));
+                    var stopwatch = Stopwatch.StartNew();
                     BlocksManager.Initialize();
+                    stopwatch.Stop();
+                    Info($"{LanguageControl.Get(fName, "4")}({stopwatch.ElapsedMilliseconds}ms)");
                 }
             );
             AddLoadAction(CraftingRecipesManager.Initialize); //初始化合成谱
