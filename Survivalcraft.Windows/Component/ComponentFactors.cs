@@ -1,3 +1,4 @@
+using Engine;
 using GameEntitySystem;
 using TemplatesDatabase;
 using static Game.ComponentLevel;
@@ -92,17 +93,31 @@ namespace Game {
 
         public static float CalculateFactorsResult(ICollection<Factor> factors) {
             float ans = 1f;
-            foreach (Factor factor in factors) {
+            foreach (var factor in factors) {
+                if (float.IsNaN(factor.Value) || float.IsInfinity(factor.Value)) {
+                    Log.Error($"[Factor计算警告] 跳过无效因素: {factor.Name} = {factor.Value}");
+                    continue;
+                }
                 switch (factor.FactorAdditionType) {
                     case FactorAdditionType.Multiply: {
-                        ans *= factor.Value;
-                        break;
-                    }
+                            ans *= factor.Value;
+                            break;
+                        }
                     case FactorAdditionType.Add: {
-                        ans += factor.Value;
-                        break;
-                    }
+                            ans += factor.Value;
+                            break;
+                        }
                 }
+                if (float.IsNaN(ans) || float.IsInfinity(ans)) {
+                    Log.Error($"[Factor计算错误] 计算过程中产生无效值: {ans}，重置为1");
+                    Log.Error($"[Factor计算错误] 当前因素: {factor.Name} = {factor.Value}, 类型: {factor.FactorAdditionType}");
+                    ans = 1f;
+                    break;
+                }
+            }
+            if (float.IsNaN(ans) || float.IsInfinity(ans)) {
+                Log.Error($"[Factor计算错误] 最终结果无效: {ans}，重置为1");
+                ans = 1f;
             }
             return ans;
         }
