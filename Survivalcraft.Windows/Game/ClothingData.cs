@@ -40,9 +40,39 @@ namespace Game {
             CanBeDyed = XmlUtils.GetAttributeValue<bool>(item, "CanBeDyed");
             Layer = XmlUtils.GetAttributeValue<int>(item, "Layer");
             PlayerLevelRequired = XmlUtils.GetAttributeValue<int>(item, "PlayerLevelRequired");
-            Texture = ContentManager.Get<Texture2D>(XmlUtils.GetAttributeValue<string>(item, "TextureName"));
             ImpactSoundsFolder = XmlUtils.GetAttributeValue<string>(item, "ImpactSoundsFolder");
             Description = newDescription;
+
+            var textureRoute = XmlUtils.GetAttributeValue<string>(item, "TextureName");
+
+            var useLazyLoading = XmlUtils.GetAttributeValue<bool>(item, "UseLazyLoading", false);
+
+            if (useLazyLoading) {
+                _textureName = textureRoute; // 保存纹理名称用于按需加载
+            }
+            else {
+               
+                Texture = ContentManager.Get<Texture2D>(textureRoute);//立即加载纹理
+            }
+        }
+
+        private string _textureName;
+        private Texture2D _texture;
+        private bool _textureLoaded = false;
+
+        public Texture2D Texture {
+            get {
+                if (!_textureLoaded && !string.IsNullOrEmpty(_textureName)) {
+                    // 按需加载纹理
+                    _texture = ContentManager.Get<Texture2D>(_textureName);
+                    _textureLoaded = true;
+                }
+                return _texture;
+            }
+            set {
+                _texture = value;
+                _textureLoaded = true;
+            }
         }
 
         public XElement xElement;
@@ -64,8 +94,6 @@ namespace Game {
         public float SteedMovementSpeedFactor;
 
         public float DensityModifier;
-
-        public Texture2D Texture;
 
         public string DisplayName;
 
