@@ -365,7 +365,7 @@ namespace Game {
             );
             AddLoadAction(
                 delegate {
-                    var stopwatch = Stopwatch.StartNew();
+                    Stopwatch stopwatch = Stopwatch.StartNew();
                     try {
                         DatabaseManager.LoadDataBaseFromXml(DatabaseManager.DatabaseNode);
                     }
@@ -378,7 +378,7 @@ namespace Game {
             );
             AddLoadAction(
                 delegate { //初始化方块管理器
-                    var stopwatch = Stopwatch.StartNew();
+                    Stopwatch stopwatch = Stopwatch.StartNew();
                     BlocksManager.Initialize();
                     stopwatch.Stop();
                     Info($"{LanguageControl.Get(fName, "4")}({stopwatch.ElapsedMilliseconds}ms)");

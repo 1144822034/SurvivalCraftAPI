@@ -2,8 +2,7 @@
     <PropertyGroup>
         <NoWarn>$(NoWarn);CS1591;CS0067</NoWarn>
         <RootNamespace>Engine</RootNamespace>
-        <AssemblyName Condition="'$(Configuration)' != 'Direct3D11'">Engine</AssemblyName>
-        <AssemblyName Condition="'$(Configuration)' == 'Direct3D11'">EngineDirect3D11</AssemblyName>
+        <AssemblyName>Engine</AssemblyName>
         <Configurations>Debug;Release;Direct3D11</Configurations>
         <PackageId>SurvivalcraftAPI.Engine</PackageId>
         <Title>SurvivalcraftAPI.Engine</Title><!--For NuGet Package-->

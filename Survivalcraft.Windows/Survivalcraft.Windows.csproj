@@ -2,8 +2,7 @@
     <PropertyGroup>
         <NoWarn>$(NoWarn);CS1591</NoWarn>
         <RootNamespace>Game</RootNamespace>
-        <AssemblyName Condition="'$(Configuration)' != 'Direct3D11'">Survivalcraft</AssemblyName>
-        <AssemblyName Condition="'$(Configuration)' == 'Direct3D11'">SurvivalcraftDirect3D11</AssemblyName>
+        <AssemblyName>Survivalcraft</AssemblyName>
         <Configurations>Debug;Release;Direct3D11</Configurations>
         <PackageId>SurvivalcraftAPI.Survivalcraft</PackageId>
         <Title>SurvivalcraftAPI.Survivalcraft</Title><!--For NuGet Package-->

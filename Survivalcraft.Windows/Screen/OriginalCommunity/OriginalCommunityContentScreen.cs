@@ -39,7 +39,7 @@ namespace Game {
         public const string fName = "OriginalCommunityContentScreen";
         public const string fName1 = "CommunityContentScreen";
 
-        public CancellableBusyDialog m_busyDialog = new($"[{fName}:2]", false);
+        public CancellableBusyDialog m_busyDialog = new($"[{fName1}:2]", false);
 
         public object m_filter;
 

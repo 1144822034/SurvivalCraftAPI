@@ -401,7 +401,7 @@ namespace Game {
             flag |= m_aim.HasValue;
             if (playerInput.Hit.HasValue) {
                 bool skipVanilla_ = false;
-                double timeIntervalHit = 0.33000001311302185;
+                double timeIntervalHit = 0.33;
                 float meleeAttackRange = 2f;
                 ModsManager.HookAction(
                     "OnPlayerInputHit",
@@ -434,7 +434,7 @@ namespace Game {
                     }
                 }
             }
-            double timeIntervalDig = 0.33000001311302185;
+            double timeIntervalDig = 0.33;
             if (m_subsystemGameInfo.WorldSettings.GameMode == GameMode.Creative) {
                 timeIntervalDig = SettingsManager.CreativeDigTime;
             }
