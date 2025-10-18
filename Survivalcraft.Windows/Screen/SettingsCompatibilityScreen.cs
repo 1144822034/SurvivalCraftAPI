@@ -1,15 +1,17 @@
 using System.Xml.Linq;
+using Engine;
+#if !ANDROID
+using System.Diagnostics;
+#endif
 
 namespace Game {
     public class SettingsCompatibilityScreen : Screen {
         //public ButtonWidget m_singlethreadedTerrainUpdateButton;
 
         public ButtonWidget m_viewGameLogButton;
-
+        public ButtonWidget m_openGameLogButton;
         public ButtonWidget m_reportButton;
-
         public ButtonWidget m_resetDefaultsButton;
-
         public LabelWidget m_descriptionLabel;
 
         public SettingsCompatibilityScreen() {
@@ -17,6 +19,7 @@ namespace Game {
             LoadContents(this, node);
             //m_singlethreadedTerrainUpdateButton = Children.Find<ButtonWidget>("SinglethreadedTerrainUpdateButton");
             m_viewGameLogButton = Children.Find<ButtonWidget>("ViewGameLogButton");
+            m_openGameLogButton = Children.Find<ButtonWidget>("OpenGameLogButton");
             m_reportButton = Children.Find<ButtonWidget>("ReportButton");
             m_resetDefaultsButton = Children.Find<ButtonWidget>("ResetDefaultsButton");
             m_descriptionLabel = Children.Find<LabelWidget>("Description");
@@ -34,6 +37,24 @@ namespace Game {
             //}
             if (m_viewGameLogButton.IsClicked) {
                 DialogsManager.ShowDialog(null, new ViewGameLogDialog());
+            }
+            if (m_openGameLogButton.IsClicked) {
+                string path = Storage.CombinePaths(ModsManager.LogPath, "Game.log");
+                if (Storage.FileExists(path)) {
+                    path = Storage.ProcessPath(path, false, false);
+                    try {
+#if WINDOWS
+                        Process.Start("explorer.exe", path);
+#elif LINUX
+                        Process.Start("xdg-open", path);
+#elif ANDROID
+                        Window.Activity.OpenFile(path, LanguageControl.GetContentWidgets("SettingsCompatibilityScreen", "13"), "text/plain");
+#endif
+                    }
+                    catch (Exception e) {
+                        DialogsManager.ShowDialog(null, new MessageDialog(LanguageControl.Error, e.Message, LanguageControl.Ok, null, null));
+                    }
+                }
             }
             if (m_reportButton.IsClicked) {
                 WebBrowserManager.LaunchBrowser(ModsManager.ReportLink);

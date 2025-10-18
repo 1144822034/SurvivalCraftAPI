@@ -506,8 +506,8 @@ namespace Game {
                 m_swimming = true;
             }
             if (JumpOrder > 0f
-                && (m_componentCreature.ComponentBody.StandingOnValue.HasValue || m_componentCreature.ComponentBody.ImmersionFactor > 0.5f)
-                && !m_componentCreature.ComponentBody.IsCrouching) {
+                && (m_componentCreature.ComponentBody.StandingOnValue.HasValue || m_componentCreature.ComponentBody.ImmersionFactor > 0.5f)) {
+                m_componentCreature.ComponentBody.TargetCrouchFactor = 0f;
                 float num6 = JumpSpeed;
                 if (m_componentFactors != null) {
                     num6 *= 0.25f * (m_componentFactors.SpeedFactor - 1f) + 1f;

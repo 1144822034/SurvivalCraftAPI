@@ -95,7 +95,7 @@ public class ModsManageContentScreen : Screen {
     public static bool IsOldApiVersionMod(ModItem modItem, out string details) {
         ModInfo modInfo = modItem.ModInfo;
         if (modItem.ModInfo == null) {
-            details = string.Format(LanguageControl.Get(fName, 68), "1.3");
+            details = string.Format(LanguageControl.Get(fName, 68), LanguageControl.Unknown);
             return true;
         }
         if (modInfo.ApiVersion.StartsWith("1.4")

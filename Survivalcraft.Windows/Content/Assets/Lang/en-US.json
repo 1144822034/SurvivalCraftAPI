@@ -374,7 +374,10 @@
     "11": "Error loading world",
     "12": "Error Spawning Player",
     "13": "Copy This log",
-    "14": "The world files may be occupied by another program."
+    "14": "The world files may be occupied by another program.",
+    "15": "All",
+    "16": "Warnings",
+    "17": "Errors"
   },
   "MoreCommunityLinkDialog": {
     "1": "No User",
@@ -3107,7 +3110,10 @@
       "7": "...",
       "8": "Reset To Defaults:",
       "9": "Reset",
-      "10": "Report API Bug"
+      "10": "Report API Bug",
+      "11": "Game Log:",
+      "12": "View Log",
+      "13": "Open Log File"
     },
     "SettingsControlsScreen": [
       "Adjust Controls Settings",

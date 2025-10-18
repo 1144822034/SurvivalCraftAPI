@@ -8,7 +8,6 @@ using Android.OS;
 using Android.Views;
 using Engine.Input;
 using Silk.NET.Windowing.Sdl.Android;
-using Debug = System.Diagnostics.Debug;
 using Environment = System.Environment;
 using Stream = Android.Media.Stream;
 using Uri = Android.Net.Uri;
@@ -60,6 +59,38 @@ namespace Engine {
 
         public void OpenLink(string link) {
             StartActivity(new Intent(Intent.ActionView, Uri.Parse(link)));
+        }
+
+        public void OpenFile(string path, string chooserTitle = null, string mimeType = null) {
+            string processedAndroidFilePath = Storage.ProcessPath(RunPath.AndroidFilePath, false, false);
+            if (!path.StartsWith(processedAndroidFilePath)) {
+                throw new ArgumentException($"Open {path} failed, because it is not in {processedAndroidFilePath}.");
+            }
+            Java.IO.File file = new(path);
+            if (!file.Exists()) {
+                throw new FileNotFoundException($"Open {path} failed, because it is not exists.");
+            }
+            Uri uri = Build.VERSION.SdkInt >= BuildVersionCodes.N
+                ? AndroidX.Core.Content.FileProvider.GetUriForFile(this, PackageName + ".fileprovider", file)
+                : Uri.FromFile(file);
+            Intent intent = new(Intent.ActionView);
+            mimeType ??= Android.Webkit.MimeTypeMap.Singleton?.GetMimeTypeFromExtension(Storage.GetExtension(path));
+            if (mimeType == null) {
+                intent.SetData(uri);
+            }
+            else {
+                intent.SetDataAndType(uri, mimeType);
+            }
+            intent.AddFlags(ActivityFlags.GrantReadUriPermission | ActivityFlags.NewTask);
+
+            if (Application.Context.PackageManager?.QueryIntentActivities(intent, PackageInfoFlags.MatchDefaultOnly)?.Any() ?? false)
+            {
+                StartActivity(Intent.CreateChooser(intent, chooserTitle ?? Storage.GetFileName(path)));
+            }
+            else
+            {
+                throw new InvalidOperationException($"Open {path} failed, because no app can open it.");
+            }
         }
 
         protected override void OnPause() {

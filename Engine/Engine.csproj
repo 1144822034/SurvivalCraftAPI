@@ -60,6 +60,7 @@
         <PackageReference Include="System.Private.Uri" Version="4.3.2" />
         <PackageReference Include="System.Text.RegularExpressions" Version="4.3.1" />
         <PackageReference Include="Tomlyn" Version="0.19.0" />
+        <PackageReference Include="Xamarin.AndroidX.Core" Version="1.17.0" Condition="'$(TargetFramework)' == 'net9.0-android'" />
     </ItemGroup>
     <ItemGroup Condition="'$(Configuration)' == 'Direct3D11'">
         <PackageReference Include="SharpDX" Version="4.2.0" />
@@ -71,8 +72,5 @@
     <ItemGroup>
         <Compile Remove="Engine.Graphics\DXWrapper.cs" Condition="'$(Configuration)' != 'Direct3D11'" />
         <Compile Remove="Engine.Graphics\GLWrapper.cs" Condition="'$(Configuration)' == 'Direct3D11'" />
-    </ItemGroup>
-    <ItemGroup>
-      <EditorConfigFiles Remove=".editorconfig" />
     </ItemGroup>
 </Project>

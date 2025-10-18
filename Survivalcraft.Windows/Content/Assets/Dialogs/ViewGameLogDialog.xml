@@ -26,9 +26,9 @@
 						<CanvasWidget Size="5, 0" />
 						<BevelledButtonWidget Name="ViewGameLogDialog.Filter" Style="{Styles/ButtonStyle_160x60}" VerticalAlignment="Center"/>
 						<CanvasWidget Size="5, 0" />
-						<BevelledButtonWidget Name="ViewGameLogDialog.Close" Style="{Styles/ButtonStyle_115x60}" VerticalAlignment="Center" Text="[ViewGameLogDialog:2]"/>
-						<CanvasWidget Size="5, 0" />
 						<BevelledButtonWidget Name="ViewGameLogDialog.Upload" Style="{Styles/ButtonStyle_115x60}" VerticalAlignment="Center" Text="[ViewGameLogDialog:3]"/>
+						<CanvasWidget Size="5, 0" />
+						<BevelledButtonWidget Name="ViewGameLogDialog.Close" Style="{Styles/ButtonStyle_115x60}" VerticalAlignment="Center" Text="[ViewGameLogDialog:2]"/>
 					</StackPanelWidget>
 			</CanvasWidget>
 			<CanvasWidget Size="0, 10" />

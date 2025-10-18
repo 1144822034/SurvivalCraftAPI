@@ -22,8 +22,13 @@
           <StackPanelWidget Direction="Vertical" HorizontalAlignment="Center" VerticalAlignment="Center">
 
             <UniformSpacingPanelWidget Direction="Horizontal">
-              <LabelWidget Text="[SettingsCompatibilityScreen:6]" HorizontalAlignment="Far" VerticalAlignment="Center" Margin="20, 0" />
-              <BevelledButtonWidget Name="ViewGameLogButton" Style="{Styles/ButtonStyle_310x60}" VerticalAlignment="Center" Margin="20, 0" Text="[SettingsCompatibilityScreen:7]"/>
+              <LabelWidget Text="[SettingsCompatibilityScreen:11]" HorizontalAlignment="Far" VerticalAlignment="Center" Margin="20, 0" />
+              <BevelledButtonWidget Name="ViewGameLogButton" Style="{Styles/ButtonStyle_310x60}" VerticalAlignment="Center" Margin="20, 0" Text="[SettingsCompatibilityScreen:12]"/>
+            </UniformSpacingPanelWidget>
+
+            <UniformSpacingPanelWidget Direction="Horizontal">
+              <LabelWidget HorizontalAlignment="Far" VerticalAlignment="Center" Margin="20, 0" />
+              <BevelledButtonWidget Name="OpenGameLogButton" Style="{Styles/ButtonStyle_310x60}" VerticalAlignment="Center" Margin="20, 0" Text="[SettingsCompatibilityScreen:13]"/>
             </UniformSpacingPanelWidget>
 
             <UniformSpacingPanelWidget Direction="Horizontal">
@@ -32,11 +37,11 @@
             </UniformSpacingPanelWidget>
 
             <UniformSpacingPanelWidget Direction="Horizontal">
-			  <LabelWidget Text="[SettingsCompatibilityScreen:8]" HorizontalAlignment="Far" VerticalAlignment="Center" Margin="20, 0" />
+                <LabelWidget Text="[SettingsCompatibilityScreen:8]" HorizontalAlignment="Far" VerticalAlignment="Center" Margin="20, 0" />
               <BevelledButtonWidget Name="ResetDefaultsButton" Style="{Styles/ButtonStyle_310x60}" VerticalAlignment="Center" Margin="20, 0" Text="[SettingsCompatibilityScreen:9]"/>
             </UniformSpacingPanelWidget>
 
-			</StackPanelWidget>
+      </StackPanelWidget>
         </ScrollPanelWidget>
       </CanvasWidget>
 

@@ -70,13 +70,13 @@ namespace Game {
                 DialogsManager.HideDialog(this);
             }
             if (m_filter == LogType.Debug) {
-                m_filterButton.Text = LanguageControl.Get("Usual", "All");
+                m_filterButton.Text = LanguageControl.Get(fName, "15");
             }
             else if (m_filter == LogType.Warning) {
-                m_filterButton.Text = LanguageControl.Get("Usual", "Warnings");
+                m_filterButton.Text = LanguageControl.Get(fName, "16");
             }
             else if (m_filter == LogType.Error) {
-                m_filterButton.Text = LanguageControl.Get("Usual", "Errors");
+                m_filterButton.Text = LanguageControl.Get(fName, "17");
             }
             if (m_uploadButton.IsClicked) {
                 if (string.IsNullOrEmpty(SettingsManager.ScpboxAccessToken)) {
