@@ -5,28 +5,19 @@ using TemplatesDatabase;
 namespace Game {
     public class ComponentSickness : Component, IUpdateable {
         public SubsystemGameInfo m_subsystemGameInfo;
-
         public SubsystemTerrain m_subsystemTerrain;
-
         public SubsystemTime m_subsystemTime;
-
         public SubsystemParticles m_subsystemParticles;
-
         public ComponentPlayer m_componentPlayer;
-
         public PukeParticleSystem m_pukeParticleSystem;
 
         public float m_sicknessDuration;
-
         public float m_greenoutDuration;
-
         public float m_greenoutFactor;
-
         public double? m_lastNauseaTime;
-
         public double? m_lastMessageTime;
-
         public double? m_lastPukeTime;
+        public const string fName = "ComponentSickness";
 
         public bool IsSick => m_sicknessDuration > 0f;
 
@@ -48,7 +39,7 @@ namespace Game {
             if (injury > 0f) {
                 m_subsystemTime.QueueGameTimeDelayedExecution(
                     m_subsystemTime.GameTime + 0.75,
-                    delegate { m_componentPlayer.ComponentHealth.Injure(injury, null, false, LanguageControl.Get(GetType().Name, 1)); }
+                    delegate { m_componentPlayer.ComponentHealth.Injure(injury, null, false, LanguageControl.Get(fName, 1)); }
                 );
             }
             if (m_pukeParticleSystem == null
@@ -69,7 +60,7 @@ namespace Game {
                     m_subsystemTime.QueueGameTimeDelayedExecution(
                         m_subsystemTime.GameTime + 1.5,
                         delegate {
-                            m_componentPlayer.ComponentGui.DisplaySmallMessage(LanguageControl.Get(GetType().Name, 2), Color.White, true, true);
+                            m_componentPlayer.ComponentGui.DisplaySmallMessage(LanguageControl.Get(fName, 2), Color.White, true, true);
                         }
                     );
                 }

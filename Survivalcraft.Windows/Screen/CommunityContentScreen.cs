@@ -38,11 +38,8 @@ namespace Game {
         public LinkWidget m_clearSearchLink;
 
         public object m_filter;
-
         public Order m_order;
-
         public SearchType m_searchType;
-
         public double m_contentExpiryTime;
 
         public bool m_isOwn;
@@ -160,14 +157,14 @@ namespace Game {
             m_downloadButton.IsEnabled = communityContentEntry != null;
             if (communityContentEntry != null) {
                 m_actionButton.IsEnabled = m_isAdmin || m_isOwn;
-                m_actionButton.Text = m_order == Order.ByHide || m_isOwn ? LanguageControl.Get(GetType().Name, 23) :
-                    communityContentEntry.Boutique == 0 ? LanguageControl.Get(GetType().Name, 15) : LanguageControl.Get(GetType().Name, 16);
+                m_actionButton.Text = m_order == Order.ByHide || m_isOwn ? LanguageControl.Get(fName, 23) :
+                    communityContentEntry.Boutique == 0 ? LanguageControl.Get(fName, 15) : LanguageControl.Get(fName, 16);
                 m_action2Button.IsEnabled = m_filter.ToString() != "Mod" && (m_isAdmin || m_isOwn);
             }
             else {
                 m_actionButton.IsEnabled = false;
                 m_action2Button.IsEnabled = false;
-                m_actionButton.Text = LanguageControl.Get(GetType().Name, 17);
+                m_actionButton.Text = LanguageControl.Get(fName, 17);
             }
             if (m_isOwn) {
                 m_searchType = SearchType.ByName;
@@ -177,8 +174,8 @@ namespace Game {
                 m_searchTypeButton.IsEnabled = true;
             }
             m_action2Button.Text = communityContentEntry != null && communityContentEntry.IsShow == 0
-                ? LanguageControl.Get(GetType().Name, 24)
-                : LanguageControl.Get(GetType().Name, 25);
+                ? LanguageControl.Get(fName, 24)
+                : LanguageControl.Get(fName, 25);
             m_orderLabel.Text = GetOrderDisplayName(m_order);
             m_filterLabel.Text = GetFilterDisplayName(m_filter);
             m_searchTypeButton.Text = GetSearchTypeDisplayName(m_searchType);
@@ -190,7 +187,7 @@ namespace Game {
                 DialogsManager.ShowDialog(
                     null,
                     new ListSelectionDialog(
-                        LanguageControl.Get(GetType().Name, "Order Type"),
+                        LanguageControl.Get(fName, "Order Type"),
                         items,
                         60f,
                         item => GetOrderDisplayName((Order)item),
@@ -217,7 +214,7 @@ namespace Game {
                 DialogsManager.ShowDialog(
                     null,
                     new ListSelectionDialog(
-                        LanguageControl.Get(GetType().Name, "Filter"),
+                        LanguageControl.Get(fName, "Filter"),
                         list,
                         60f,
                         GetFilterDisplayName,
@@ -243,13 +240,13 @@ namespace Game {
                     DialogsManager.ShowDialog(
                         null,
                         new MessageDialog(
-                            LanguageControl.Get(GetType().Name, 26),
+                            LanguageControl.Get(fName, 26),
                             communityContentEntry.Name,
                             LanguageControl.Ok,
                             LanguageControl.Cancel,
                             delegate(MessageDialogButton button) {
                                 if (button == MessageDialogButton.Button1) {
-                                    CancellableBusyDialog busyDialog = new(LanguageControl.Get(GetType().Name, 2), false);
+                                    CancellableBusyDialog busyDialog = new(LanguageControl.Get(fName, 2), false);
                                     DialogsManager.ShowDialog(null, busyDialog);
                                     CommunityContentManager.DeleteFile(
                                         communityContentEntry.Index,
@@ -259,11 +256,11 @@ namespace Game {
                                             m_treePanel.RemoveAtTag(communityContentEntry);
                                             JsonElement result = JsonDocument.Parse(data).RootElement;
                                             string msg = result[0].GetInt32() == 200
-                                                ? LanguageControl.Get(GetType().Name, 27) + communityContentEntry.Name
+                                                ? LanguageControl.Get(fName, 27) + communityContentEntry.Name
                                                 : result[1].GetString();
                                             DialogsManager.ShowDialog(
                                                 null,
-                                                new MessageDialog(LanguageControl.Get(GetType().Name, 20), msg, LanguageControl.Ok, null, null)
+                                                new MessageDialog(LanguageControl.Get(fName, 20), msg, LanguageControl.Ok, null, null)
                                             );
                                         },
                                         delegate(Exception e) {
@@ -284,7 +281,7 @@ namespace Game {
                         DialogsManager.ShowDialog(
                             null,
                             new TextBoxDialog(
-                                LanguageControl.Get(GetType().Name, 18),
+                                LanguageControl.Get(fName, 18),
                                 "5",
                                 4,
                                 delegate(string s) {
@@ -296,7 +293,7 @@ namespace Game {
                                         catch {
                                             // ignored
                                         }
-                                        CancellableBusyDialog busyDialog = new(LanguageControl.Get(GetType().Name, 2), false);
+                                        CancellableBusyDialog busyDialog = new(LanguageControl.Get(fName, 2), false);
                                         DialogsManager.ShowDialog(null, busyDialog);
                                         CommunityContentManager.UpdateBoutique(
                                             communityContentEntry.Type.ToString(),
@@ -309,11 +306,11 @@ namespace Game {
                                                 PopulateList(null, true);
                                                 JsonElement result = JsonDocument.Parse(data).RootElement;
                                                 string msg = result[0].GetInt32() == 200
-                                                    ? LanguageControl.Get(GetType().Name, 19) + communityContentEntry.Name
+                                                    ? LanguageControl.Get(fName, 19) + communityContentEntry.Name
                                                     : result[1].GetString();
                                                 DialogsManager.ShowDialog(
                                                     null,
-                                                    new MessageDialog(LanguageControl.Get(GetType().Name, 20), msg, LanguageControl.Ok, null, null)
+                                                    new MessageDialog(LanguageControl.Get(fName, 20), msg, LanguageControl.Ok, null, null)
                                                 );
                                             },
                                             delegate(Exception e) {
@@ -333,13 +330,13 @@ namespace Game {
                         DialogsManager.ShowDialog(
                             null,
                             new MessageDialog(
-                                LanguageControl.Get(GetType().Name, 21),
+                                LanguageControl.Get(fName, 21),
                                 communityContentEntry.Name,
                                 LanguageControl.Ok,
                                 LanguageControl.Cancel,
                                 delegate(MessageDialogButton button) {
                                     if (button == MessageDialogButton.Button1) {
-                                        CancellableBusyDialog busyDialog = new(LanguageControl.Get(GetType().Name, 2), false);
+                                        CancellableBusyDialog busyDialog = new(LanguageControl.Get(fName, 2), false);
                                         DialogsManager.ShowDialog(null, busyDialog);
                                         CommunityContentManager.UpdateBoutique(
                                             communityContentEntry.Type.ToString(),
@@ -351,11 +348,11 @@ namespace Game {
                                                 PopulateList(null, true);
                                                 JsonElement result = JsonDocument.Parse(data).RootElement;
                                                 string msg = result[0].GetInt32() == 200
-                                                    ? LanguageControl.Get(GetType().Name, 22) + communityContentEntry.Name
+                                                    ? LanguageControl.Get(fName, 22) + communityContentEntry.Name
                                                     : result[1].GetString();
                                                 DialogsManager.ShowDialog(
                                                     null,
-                                                    new MessageDialog(LanguageControl.Get(GetType().Name, 20), msg, LanguageControl.Ok, null, null)
+                                                    new MessageDialog(LanguageControl.Get(fName, 20), msg, LanguageControl.Ok, null, null)
                                                 );
                                             },
                                             delegate(Exception e) {
@@ -375,10 +372,10 @@ namespace Game {
             }
             if (m_action2Button.IsClicked
                 && communityContentEntry != null) {
-                CancellableBusyDialog busyDialog = new(LanguageControl.Get(GetType().Name, 2), false);
+                CancellableBusyDialog busyDialog = new(LanguageControl.Get(fName, 2), false);
                 DialogsManager.ShowDialog(null, busyDialog);
                 int isShow = (communityContentEntry.IsShow + 1) % 2;
-                string sucessMsg = isShow == 1 ? LanguageControl.Get(GetType().Name, 28) : LanguageControl.Get(GetType().Name, 29);
+                string sucessMsg = isShow == 1 ? LanguageControl.Get(fName, 28) : LanguageControl.Get(fName, 29);
                 CommunityContentManager.UpdateHidePara(
                     communityContentEntry.Index,
                     isShow,
@@ -395,7 +392,7 @@ namespace Game {
                         string msg = result[0].GetInt32() == 200 ? sucessMsg + communityContentEntry.Name : result[1].GetString();
                         DialogsManager.ShowDialog(
                             null,
-                            new MessageDialog(LanguageControl.Get(GetType().Name, 20), msg, LanguageControl.Ok, null, null)
+                            new MessageDialog(LanguageControl.Get(fName, 20), msg, LanguageControl.Ok, null, null)
                         );
                     },
                     delegate(Exception e) {
@@ -475,7 +472,7 @@ namespace Game {
                 text = "0";
             }
             string text2 = m_filter is string s ? s : string.Empty;
-            string text3 = m_filter is ExternalContentType ? LanguageControl.Get(GetType().Name, m_filter.ToString()) : string.Empty;
+            string text3 = m_filter is ExternalContentType ? LanguageControl.Get(fName, m_filter.ToString()) : string.Empty;
             string text4 = m_order.ToString();
             string cacheKey = $"{text2}\n{text3}\n{text4}\n{text}\n{m_inputKey.Text}";
             if (string.IsNullOrEmpty(cursor)
@@ -498,7 +495,7 @@ namespace Game {
             if (force) {
                 m_treePanel.Clear();
             }
-            CancellableBusyDialog busyDialog = new(LanguageControl.Get(GetType().Name, 2), false);
+            CancellableBusyDialog busyDialog = new(LanguageControl.Get(fName, 2), false);
             DialogsManager.ShowDialog(null, busyDialog);
             CommunityContentManager.List(
                 cursor,
@@ -602,7 +599,7 @@ namespace Game {
 
         public void DownloadEntry(CommunityContentEntry entry) {
             string userId = UserManager.ActiveUser != null ? UserManager.ActiveUser.UniqueId : string.Empty;
-            CancellableBusyDialog busyDialog = new(string.Format(LanguageControl.Get(GetType().Name, 1), entry.Name), false);
+            CancellableBusyDialog busyDialog = new(string.Format(LanguageControl.Get(fName, 1), entry.Name), false);
             DialogsManager.ShowDialog(null, busyDialog);
             CommunityContentManager.Download(
                 entry.Address,
@@ -623,13 +620,13 @@ namespace Game {
                 DialogsManager.ShowDialog(
                     null,
                     new MessageDialog(
-                        LanguageControl.Get(GetType().Name, 4),
-                        LanguageControl.Get(GetType().Name, 5),
+                        LanguageControl.Get(fName, 4),
+                        LanguageControl.Get(fName, 5),
                         LanguageControl.Yes,
                         LanguageControl.No,
                         delegate(MessageDialogButton button) {
                             if (button == MessageDialogButton.Button1) {
-                                CancellableBusyDialog busyDialog = new(string.Format(LanguageControl.Get(GetType().Name, 3), entry.Name), false);
+                                CancellableBusyDialog busyDialog = new(string.Format(LanguageControl.Get(fName, 3), entry.Name), false);
                                 DialogsManager.ShowDialog(null, busyDialog);
                                 CommunityContentManager.Delete(
                                     entry.Address,
@@ -640,8 +637,8 @@ namespace Game {
                                         DialogsManager.ShowDialog(
                                             null,
                                             new MessageDialog(
-                                                LanguageControl.Get(GetType().Name, 6),
-                                                LanguageControl.Get(GetType().Name, 7),
+                                                LanguageControl.Get(fName, 6),
+                                                LanguageControl.Get(fName, 7),
                                                 LanguageControl.Ok,
                                                 null,
                                                 null

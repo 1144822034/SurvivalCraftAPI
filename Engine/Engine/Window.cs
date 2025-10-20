@@ -462,7 +462,12 @@ namespace Engine {
             }
             else {
 #if ANDROID
-                Activity.Finish();
+                if (Build.VERSION.SdkInt >= (BuildVersionCodes)21) {
+                    Activity.FinishAndRemoveTask();
+                }
+                else {
+                    Activity.FinishAffinity();
+                }
 #else
                 m_gameWindow.Close();
 #endif

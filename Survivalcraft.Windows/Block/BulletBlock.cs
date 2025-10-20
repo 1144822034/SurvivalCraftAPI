@@ -72,7 +72,7 @@ namespace Game {
                 || bulletType >= Enum.GetValues(typeof(BulletType)).Length) {
                 return string.Empty;
             }
-            return LanguageControl.Get(GetType().Name, bulletType);
+            return LanguageControl.Get("BulletBlock", bulletType);
         }
 
         public override int GetFaceTextureSlot(int face, int value) {

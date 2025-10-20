@@ -3,30 +3,20 @@ using System.Xml.Linq;
 namespace Game {
     public class EditPistonDialog : Dialog {
         public LabelWidget m_title;
-
         public SliderWidget m_slider1;
-
         public SliderWidget m_slider2;
-
         public ContainerWidget m_panel2;
-
         public SliderWidget m_slider3;
-
         public ButtonWidget m_okButton;
-
         public ButtonWidget m_cancelButton;
-
+        
         public Action<int> m_handler;
-
         public int m_data;
-
         public PistonMode m_mode;
-
         public int m_maxExtension;
-
         public int m_pullCount;
-
         public int m_speed;
+        public const string fName = "EditPistonDialog";
 
         public EditPistonDialog(int data, Action<int> handler) {
             XElement node = ContentManager.Get<XElement>("Dialogs/EditPistonDialog");
@@ -81,11 +71,11 @@ namespace Game {
 
         public virtual void UpdateControls() {
             m_slider1.Value = m_maxExtension + 1;
-            m_slider1.Text = string.Format(LanguageControl.Get(GetType().Name, 1), m_maxExtension + 1);
+            m_slider1.Text = string.Format(LanguageControl.Get(fName, 1), m_maxExtension + 1);
             m_slider2.Value = m_pullCount + 1;
-            m_slider2.Text = string.Format(LanguageControl.Get(GetType().Name, 1), m_pullCount + 1);
+            m_slider2.Text = string.Format(LanguageControl.Get(fName, 1), m_pullCount + 1);
             m_slider3.Value = m_speed;
-            m_slider3.Text = LanguageControl.Get(GetType().Name, "Speed", m_speed.ToString());
+            m_slider3.Text = LanguageControl.Get(fName, "Speed", m_speed.ToString());
         }
 
         public void Dismiss(int? result) {

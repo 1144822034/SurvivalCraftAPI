@@ -25,7 +25,6 @@
         <AndroidSigningStorePass>android</AndroidSigningStorePass>
         <AndroidSigningKeyPass>android</AndroidSigningKeyPass>
         <!--优化-->
-        <LinkAll>true</LinkAll>
         <PublishTrimmed>false</PublishTrimmed><!--切记不要修改，如果修改会导致运行时不完整-->
         <TrimMode>partial</TrimMode>
         <AndroidDexTool>d8</AndroidDexTool>

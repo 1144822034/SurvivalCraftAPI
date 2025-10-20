@@ -266,7 +266,7 @@ namespace Game {
                 || arrowType >= Enum.GetValues(typeof(ArrowType)).Length) {
                 return string.Empty;
             }
-            return LanguageControl.Get(GetType().Name, arrowType);
+            return LanguageControl.Get("ArrowBlock", arrowType);
         }
 
         public static ArrowType GetArrowType(int data) => (ArrowType)(data & 0xF);

@@ -5,11 +5,8 @@ using Engine.Graphics;
 namespace Game {
     public class FourLedBlock : MountedElectricElementBlock {
         public static int Index = 182;
-
         public BlockMesh m_standaloneBlockMesh;
-
         public BlockMesh[] m_blockMeshesByFace = new BlockMesh[6];
-
         public BoundingBox[][] m_collisionBoxesByFace = new BoundingBox[6][];
 
         public override void Initialize() {
@@ -59,7 +56,7 @@ namespace Game {
                     RemainsCount = 1,
                     RemainsValue = Terrain.MakeBlockValue(90),
                     RequiredHeatLevel = 0f,
-                    Description = LanguageControl.Get(GetType().Name, 1),
+                    Description = LanguageControl.Get("FourLedBlock", 1),
                     Ingredients = {
                         [0] = "glass",
                         [1] = "glass",
@@ -89,7 +86,7 @@ namespace Game {
             return string.Format(
                 LanguageControl.Get("LedBlock", "Format"),
                 LanguageControl.Get("LedBlock", color),
-                LanguageControl.GetBlock($"{GetType().Name}:{data.ToString()}", "DisplayName")
+                LanguageControl.GetBlock($"FourLedBlock:{data.ToString()}", "DisplayName")
             );
         }
 

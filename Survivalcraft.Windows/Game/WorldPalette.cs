@@ -4,7 +4,6 @@ using TemplatesDatabase;
 namespace Game {
     public class WorldPalette {
         public const int MaxColors = 16;
-
         public const int MaxNameLength = 16;
 
         public static readonly Color[] DefaultColors = [
@@ -27,24 +26,24 @@ namespace Game {
         ];
 
         public Color[] Colors;
-
         public string[] Names;
+        public const string fName = "WorldPalette";
 
         public WorldPalette() {
             Colors = DefaultColors.ToArray();
-            Names = LanguageControl.jsonNode[GetType().Name]["Colors"].AsArray().Select(x => x.ToString()).ToArray();
+            Names = LanguageControl.jsonNode[fName]["Colors"].AsArray().Select(x => x.ToString()).ToArray();
         }
 
         public WorldPalette(ValuesDictionary valuesDictionary) {
             string[] array = valuesDictionary.GetValue("Colors", new string(';', 15)).Split(';');
             if (array.Length != MaxColors) {
-                throw new InvalidOperationException(LanguageControl.Get(GetType().Name, 0));
+                throw new InvalidOperationException(LanguageControl.Get(fName, 0));
             }
             Colors = array.Select((s, i) => !string.IsNullOrEmpty(s) ? HumanReadableConverter.ConvertFromString<Color>(s) : DefaultColors[i])
                 .ToArray();
             string[] array2 = valuesDictionary.GetValue("Names", new string(';', 15)).Split(';');
             if (array2.Length != MaxColors) {
-                throw new InvalidOperationException(LanguageControl.Get(GetType().Name, 1));
+                throw new InvalidOperationException(LanguageControl.Get(fName, 1));
             }
             Names = array2.Select((s, i) => !string.IsNullOrEmpty(s) ? s : LanguageControl.GetWorldPalette(i)).ToArray();
             string[] names = Names;
@@ -59,7 +58,7 @@ namespace Game {
                 }
                 return;
             }
-            throw new InvalidOperationException(LanguageControl.Get(GetType().Name, 2));
+            throw new InvalidOperationException(LanguageControl.Get(fName, 2));
         }
 
         public ValuesDictionary Save() {
@@ -68,7 +67,7 @@ namespace Game {
                 ";",
                 Colors.Select((c, i) => !(c == DefaultColors[i]) ? HumanReadableConverter.ConvertToString(c) : string.Empty)
             );
-            string value2 = string.Join(";", Names.Select((n, i) => !(n == LanguageControl.Get(GetType().Name, i)) ? n : string.Empty));
+            string value2 = string.Join(";", Names.Select((n, i) => !(n == LanguageControl.Get(fName, i)) ? n : string.Empty));
             valuesDictionary.SetValue("Colors", value);
             valuesDictionary.SetValue("Names", value2);
             return valuesDictionary;

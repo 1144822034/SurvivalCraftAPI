@@ -279,7 +279,7 @@ namespace Game {
                         assemblies.Add(Assembly.Load(ModsManager.StreamToBytes(stream)));
                     }
                 }
-            ); //获取mod文件内的dll文件（不包括Assets文件夹内的dll）
+            ); //获取mod文件内的dll文件（不包括Assets目录内的dll）
             return [.. assemblies];
         }
 

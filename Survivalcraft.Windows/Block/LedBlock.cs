@@ -5,7 +5,6 @@ using Engine.Graphics;
 namespace Game {
     public class LedBlock : MountedElectricElementBlock {
         public static int Index = 152;
-
         public static readonly Color[] LedColors = [
             new(255, 255, 255),
             new(0, 255, 255),
@@ -16,12 +15,11 @@ namespace Game {
             new(255, 120, 0),
             new(255, 0, 255)
         ];
-
+        
         public BlockMesh[] m_standaloneBlockMeshesByColor = new BlockMesh[8];
-
         public BlockMesh[] m_blockMeshesByData = new BlockMesh[64];
-
         public BoundingBox[][] m_collisionBoxesByData = new BoundingBox[64][];
+        public const string fName = "LedBlock";
 
         public override void Initialize() {
             Model model = ContentManager.Get<Model>("Models/Leds");
@@ -100,7 +98,7 @@ namespace Game {
                     RemainsCount = 1,
                     RemainsValue = Terrain.MakeBlockValue(90),
                     RequiredHeatLevel = 0f,
-                    Description = LanguageControl.Get(GetType().Name, "CRDescription"),
+                    Description = LanguageControl.Get(fName, "CRDescription"),
                     Ingredients = {
                         [1] = "glass",
                         [4] = $"paintbucket:{color.ToString(CultureInfo.InvariantCulture)}",
@@ -121,9 +119,9 @@ namespace Game {
             int data = Terrain.ExtractData(value);
             int color = GetColor(data);
             return string.Format(
-                LanguageControl.Get("LedBlock", "Format"),
-                LanguageControl.Get("LedBlock", color),
-                LanguageControl.GetBlock($"{GetType().Name}:{data.ToString()}", "DisplayName")
+                LanguageControl.Get(fName, "Format"),
+                LanguageControl.Get(fName, color),
+                LanguageControl.GetBlock($"{fName}:{data.ToString()}", "DisplayName")
             );
         }
 

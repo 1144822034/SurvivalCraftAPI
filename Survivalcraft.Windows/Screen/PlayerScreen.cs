@@ -27,35 +27,22 @@ namespace Game {
         }
 
         public PlayerData m_playerData;
-
         public Mode m_mode;
-
         public CharacterSkinsCache m_characterSkinsCache;
-
         public bool m_nameWasInvalid;
+        public const string fName = "PlayerScreen";
 
         public PlayerModelWidget m_playerModel;
-
         public ButtonWidget m_playerClassButton;
-
         public TextBoxWidget m_nameTextBox;
-
         public LabelWidget m_characterSkinLabel;
-
         public ButtonWidget m_characterSkinButton;
-
         public LabelWidget m_controlsLabel;
-
         public ButtonWidget m_controlsButton;
-
         public LabelWidget m_descriptionLabel;
-
         public ButtonWidget m_addButton;
-
         public ButtonWidget m_addAnotherButton;
-
         public ButtonWidget m_deleteButton;
-
         public ButtonWidget m_playButton;
 
         public static WidgetInputDevice[] m_allInputDevices = [
@@ -222,7 +209,7 @@ namespace Game {
                     null,
                     new MessageDialog(
                         LanguageControl.Warning,
-                        LanguageControl.Get(GetType().Name, "3"),
+                        LanguageControl.Get(fName, "3"),
                         LanguageControl.Ok,
                         LanguageControl.Cancel,
                         delegate(MessageDialogButton b) {

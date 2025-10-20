@@ -5,9 +5,9 @@ using Tomlyn.Model;
 namespace Game {
     class ModListManager {
         /// <summary>
-        ///     检查文件夹中各个整合包（更新和补充）
+        ///     检查目录中各个整合包（更新和补充）
         /// </summary>
-        /// <param name="folderPath">按照系统格式的文件夹路径</param>
+        /// <param name="folderPath">按照系统格式的目录路径</param>
         /// <returns></returns>
         public static bool InspectionModLists(string folderPath) =>
             /*FileInfo[] files = new DirectoryInfo(folderPath).GetFiles();

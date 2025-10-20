@@ -39,7 +39,7 @@ namespace Game {
                             "Log Item",
                             item.ToString(),
                             LanguageControl.Ok,
-                            LanguageControl.Get(GetType().Name, 13),
+                            LanguageControl.Get(fName, 13),
                             button => {
                                 if (button == MessageDialogButton.Button2) {
                                     ClipboardManager.ClipboardString = item.ToString();

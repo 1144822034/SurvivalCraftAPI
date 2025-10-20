@@ -5,28 +5,19 @@ using Engine;
 namespace Game {
     public class ExternalContentScreen : Screen {
         public LabelWidget m_directoryLabel;
-
         public ListPanelWidget m_directoryList;
-
         public LabelWidget m_providerNameLabel;
-
         public ButtonWidget m_changeProviderButton;
-
         public ButtonWidget m_loginLogoutButton;
-
         public ButtonWidget m_upDirectoryButton;
-
         public ButtonWidget m_actionButton;
-
         public ButtonWidget m_copyLinkButton;
 
         public string m_path;
-
         public bool m_listDirty;
-
         public Dictionary<string, bool> m_downloadedFiles = [];
-
         public IExternalContentProvider m_externalContentProvider = ExternalContentManager.DefaultProvider;
+        public const string fName = "ExternalContentScreen";
 
         public ExternalContentScreen() {
             XElement node = ContentManager.Get<XElement>("Screens/ExternalContentScreen");
@@ -44,7 +35,7 @@ namespace Game {
                 XElement node2 = ContentManager.Get<XElement>("Widgets/ExternalContentItem");
                 ContainerWidget containerWidget = (ContainerWidget)LoadWidget(this, node2, null);
                 string fileName = Storage.GetFileName(externalContentEntry2.Path);
-                string text = m_downloadedFiles.ContainsKey(externalContentEntry2.Path) ? LanguageControl.Get(GetType().Name, 11) : string.Empty;
+                string text = m_downloadedFiles.ContainsKey(externalContentEntry2.Path) ? LanguageControl.Get(fName, 11) : string.Empty;
                 string text2 = externalContentEntry2.Type != ExternalContentType.Directory
                     ? $"{ExternalContentManager.GetEntryTypeDescription(externalContentEntry2.Type)} | {DataSizeFormatter.Format(externalContentEntry2.Size)} | {externalContentEntry2.Time:dd-MMM-yyyy HH:mm}{text}"
                     : ExternalContentManager.GetEntryTypeDescription(externalContentEntry2.Type);
@@ -82,12 +73,12 @@ namespace Game {
             if (externalContentEntry != null) {
                 m_actionButton.IsVisible = true;
                 if (externalContentEntry.Type == ExternalContentType.Directory) {
-                    m_actionButton.Text = LanguageControl.Get(GetType().Name, 1);
+                    m_actionButton.Text = LanguageControl.Get(fName, 1);
                     m_actionButton.IsEnabled = true;
                     m_copyLinkButton.IsEnabled = false;
                 }
                 else {
-                    m_actionButton.Text = LanguageControl.Get(GetType().Name, 2);
+                    m_actionButton.Text = LanguageControl.Get(fName, 2);
                     if (ExternalContentManager.IsEntryTypeDownloadSupported(
                             ExternalContentManager.ExtensionToType(Storage.GetExtension(externalContentEntry.Path).ToLower())
                         )) {
@@ -105,13 +96,13 @@ namespace Game {
                 m_copyLinkButton.IsVisible = false;
             }
             m_directoryLabel.Text = m_externalContentProvider.IsLoggedIn
-                ? string.Format(LanguageControl.Get(GetType().Name, 3), m_path)
-                : LanguageControl.Get(GetType().Name, 4);
+                ? string.Format(LanguageControl.Get(fName, 3), m_path)
+                : LanguageControl.Get(fName, 4);
             m_providerNameLabel.Text = m_externalContentProvider.DisplayName;
             m_upDirectoryButton.IsEnabled = m_externalContentProvider.IsLoggedIn && m_path != "/";
             m_loginLogoutButton.Text = m_externalContentProvider.IsLoggedIn
-                ? LanguageControl.Get(GetType().Name, 5)
-                : LanguageControl.Get(GetType().Name, 6);
+                ? LanguageControl.Get(fName, 5)
+                : LanguageControl.Get(fName, 6);
             m_loginLogoutButton.IsVisible = m_externalContentProvider.RequiresLogin;
             m_copyLinkButton.IsVisible = m_externalContentProvider.SupportsLinks;
             m_copyLinkButton.IsEnabled = externalContentEntry != null
@@ -120,7 +111,7 @@ namespace Game {
                 DialogsManager.ShowDialog(
                     null,
                     new SelectExternalContentProviderDialog(
-                        LanguageControl.Get(GetType().Name, 7),
+                        LanguageControl.Get(fName, 7),
                         true,
                         delegate(IExternalContentProvider provider) {
                             m_externalContentProvider = provider;
@@ -146,7 +137,7 @@ namespace Game {
             if (m_copyLinkButton.IsClicked
                 && externalContentEntry != null
                 && ExternalContentManager.IsEntryTypeDownloadSupported(externalContentEntry.Type)) {
-                CancellableBusyDialog busyDialog = new(LanguageControl.Get(GetType().Name, 8), false);
+                CancellableBusyDialog busyDialog = new(LanguageControl.Get(fName, 8), false);
                 DialogsManager.ShowDialog(null, busyDialog);
                 m_externalContentProvider.Link(
                     externalContentEntry.Path,
@@ -190,25 +181,26 @@ namespace Game {
                         DownloadEntry(externalContentEntry1);
                     }
                     else {
+                        string message = LanguageControl.Get(fName, 14) + ExternalContentManager.openFilePath;
                         DialogsManager.ShowDialog(
                             null,
                             new MessageDialog(
-                                LanguageControl.Get(GetType().Name, 13),
-                                LanguageControl.Get(GetType().Name, 14) + ExternalContentManager.openFilePath,
-                                LanguageControl.Yes,
+                                LanguageControl.Get(fName, 13),
+                                message,
+                                LanguageControl.Ok,
                                 null,
-                                delegate { }
+                                null
                             )
                         );
-                        Log.Error("Unsupported file type!");
+                        Log.Error(message);
                     }
                 }
                 catch (Exception e) {
                     DialogsManager.ShowDialog(
                         null,
-                        new MessageDialog(LanguageControl.Get(GetType().Name, 13), e.ToString(), LanguageControl.Yes, null, delegate { })
+                        new MessageDialog(LanguageControl.Get(fName, 13), e.ToString(), LanguageControl.Ok, null, null)
                     );
-                    Log.Error($"Open File{ExternalContentManager.openFilePath}Failed! {e}");
+                    Log.Error($"{LanguageControl.Get(fName, 13)} {ExternalContentManager.openFilePath}\n{e}");
                 }
                 ExternalContentManager.openFilePath = string.Empty;
             }
@@ -238,7 +230,7 @@ namespace Game {
             m_directoryList.ClearItems();
             if (m_externalContentProvider != null
                 && m_externalContentProvider.IsLoggedIn) {
-                CancellableBusyDialog busyDialog = new(LanguageControl.Get(GetType().Name, 9), false);
+                CancellableBusyDialog busyDialog = new(LanguageControl.Get(fName, 9), false);
                 DialogsManager.ShowDialog(null, busyDialog);
                 m_externalContentProvider.List(
                     m_path,
@@ -264,13 +256,13 @@ namespace Game {
         }
 
         public void DownloadEntry(ExternalContentEntry entry) {
-            CancellableBusyDialog busyDialog = new(LanguageControl.Get(GetType().Name, 10), false);
+            CancellableBusyDialog busyDialog = new(LanguageControl.Get(fName, 10), false);
             DialogsManager.ShowDialog(null, busyDialog);
             m_externalContentProvider.Download(
                 entry.Path,
                 busyDialog.Progress,
                 delegate(Stream stream) {
-                    busyDialog.LargeMessage = LanguageControl.Get(GetType().Name, 12);
+                    busyDialog.LargeMessage = LanguageControl.Get(fName, 12);
                     ExternalContentManager.ImportExternalContent(
                         stream,
                         entry.Type,

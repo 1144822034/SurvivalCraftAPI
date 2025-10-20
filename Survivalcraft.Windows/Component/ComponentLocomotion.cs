@@ -5,70 +5,40 @@ using TemplatesDatabase;
 namespace Game {
     public class ComponentLocomotion : Component, IUpdateable {
         public SubsystemTime m_subsystemTime;
-
         public SubsystemNoise m_subsystemNoise;
-
         public SubsystemTerrain m_subsystemTerrain;
-
         public SubsystemGameInfo m_subsystemGameInfo;
-
         public ComponentCreature m_componentCreature;
-
         public ComponentPlayer m_componentPlayer;
-
         public ComponentLevel m_componentLevel;
-
         public ComponentFactors m_componentFactors;
-
         public ComponentClothing m_componentClothing;
-
         public ComponentMount m_componentMount;
-
         public ComponentRider m_componentRider;
 
         public Random m_random = new();
-
         public Vector2? m_walkOrder;
-
         public Vector3? m_flyOrder;
-
         public Vector3? m_swimOrder;
-
         public Vector2 m_turnOrder;
-
         public Vector2 m_lookOrder;
-
         public float m_jumpOrder;
-
         public bool m_lookAutoLevelX;
-
         public bool m_lookAutoLevelY;
-
         public double m_shoesWarningTime;
-
         public float m_walkSpeedWhenTurning;
-
         public float m_minFrictionFactor;
-
         public double m_ladderActivationTime;
-
         public float m_swimBurstRemaining;
-
         public Vector2 m_lookAngles;
-
         public Vector3? m_lastPosition;
-
         public bool m_walking;
-
         public bool m_falling;
-
         public bool m_climbing;
-
         public bool m_jumping;
-
         public bool m_swimming;
-
         public bool m_flying;
+        public const string fName = "ComponentLocomotion";
 
         public float AccelerationFactor { get; set; }
 
@@ -474,7 +444,7 @@ namespace Game {
                         if (!flag
                             && vector2.LengthSquared() / velocity.LengthSquared() > 0.99f
                             && WalkOrder.Value.LengthSquared() > 0.99f) {
-                            m_componentPlayer.ComponentGui.DisplaySmallMessage(LanguageControl.Get(GetType().Name, 1), Color.White, true, true);
+                            m_componentPlayer.ComponentGui.DisplaySmallMessage(LanguageControl.Get(fName, 1), Color.White, true, true);
                             m_shoesWarningTime = Time.FrameStartTime;
                         }
                     }

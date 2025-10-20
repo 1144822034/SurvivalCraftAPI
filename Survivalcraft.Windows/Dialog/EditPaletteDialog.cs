@@ -4,20 +4,15 @@ using Engine;
 namespace Game {
     public class EditPaletteDialog : Dialog {
         public ContainerWidget m_listPanel;
-
         public ButtonWidget m_okButton;
-
         public ButtonWidget m_cancelButton;
-
         public LinkWidget[] m_labels = new LinkWidget[16];
-
         public BevelledButtonWidget[] m_rectangles = new BevelledButtonWidget[16];
-
         public ButtonWidget[] m_resetButtons = new ButtonWidget[16];
-
+        
         public WorldPalette m_palette;
-
         public WorldPalette m_tmpPalette;
+        public const string fName = "EditPaletteDialog";
 
         public EditPaletteDialog(WorldPalette palette) {
             XElement node = ContentManager.Get<XElement>("Dialogs/EditPaletteDialog");
@@ -57,7 +52,7 @@ namespace Game {
                 obj.Children.Add(new CanvasWidget { Size = new Vector2(10f, 0f) });
                 obj.Children.Add(
                     m_resetButtons[i] = new BevelledButtonWidget {
-                        Size = new Vector2(160f, 60f), VerticalAlignment = WidgetAlignment.Center, Text = LanguageControl.Get(GetType().Name, 1)
+                        Size = new Vector2(160f, 60f), VerticalAlignment = WidgetAlignment.Center, Text = LanguageControl.Get(fName, 1)
                     }
                 );
                 obj.Children.Add(new CanvasWidget { Size = new Vector2(10f, 0f) });
@@ -82,7 +77,7 @@ namespace Game {
                     DialogsManager.ShowDialog(
                         this,
                         new TextBoxDialog(
-                            LanguageControl.Get(GetType().Name, 2),
+                            LanguageControl.Get(fName, 2),
                             m_labels[k].Text,
                             16,
                             delegate(string s) {
@@ -93,7 +88,7 @@ namespace Game {
                                     else {
                                         DialogsManager.ShowDialog(
                                             this,
-                                            new MessageDialog(LanguageControl.Get(GetType().Name, 3), null, LanguageControl.Ok, null, null)
+                                            new MessageDialog(LanguageControl.Get(fName, 3), null, LanguageControl.Ok, null, null)
                                         );
                                     }
                                 }
