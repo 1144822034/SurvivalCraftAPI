@@ -126,14 +126,15 @@ namespace Game {
             if (m_componentGui.ModalPanelWidget != null
                 || DialogsManager.HasDialogs(m_componentPlayer.GuiWidget)) {
                 if (!input.IsMouseCursorVisible) {
-                    ViewWidget viewWidget = m_componentPlayer.ViewWidget;
-                    Vector2 value = viewWidget.WidgetToScreen(viewWidget.ActualSize / 2f);
                     input.IsMouseCursorVisible = true;
-                    SetMousePositionInNextFrame = value;
+                    ViewWidget viewWidget = m_componentPlayer.ViewWidget;
+                    SetMousePositionInNextFrame = viewWidget.WidgetToScreen(viewWidget.ActualSize / 2f);
                 }
                 else if (SetMousePositionInNextFrame.HasValue
                     && input.MousePosition.HasValue) {
-                    input.MousePosition = SetMousePositionInNextFrame.Value;
+                    if (!input.IsPadCursorVisible) {
+                        input.MousePosition = SetMousePositionInNextFrame.Value;
+                    }
                     SetMousePositionInNextFrame = null;
                 }
             }

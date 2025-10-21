@@ -172,7 +172,7 @@ namespace Game {
                     vector = Vector2.Zero;
                     vector2 = new Vector2(Window.Size);
                 }
-                if ((Devices & WidgetInputDevice.Mouse) != 0
+                if ((Devices & WidgetInputDevice.Mouse) != WidgetInputDevice.None
                     && value.HasValue) {
                     if (m_useSoftMouseCursor) {
                         m_softMouseCursorPosition = new Vector2(
