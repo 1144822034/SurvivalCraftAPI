@@ -299,7 +299,7 @@ namespace Game {
                 BlocksManager.DrawMeshBlock(
                     primitivesRenderer,
                     m_outerMesh,
-                    clothingData.GetTexture(),
+                    clothingData.Texture,
                     color * SubsystemPalette.GetFabricColor(environmentData, clothingColor),
                     1f,
                     ref matrix2,
@@ -310,7 +310,7 @@ namespace Game {
                 BlocksManager.DrawMeshBlock(
                     primitivesRenderer,
                     m_innerMesh,
-                    clothingData.GetTexture(),
+                    clothingData.Texture,
                     color * SubsystemPalette.GetFabricColor(environmentData, clothingColor),
                     1f,
                     ref matrix2,
