@@ -45,36 +45,28 @@ namespace Game {
 
             var textureRoute = XmlUtils.GetAttributeValue<string>(item, "TextureName");
 
-            var useLazyLoading = XmlUtils.GetAttributeValue<bool>(item, "UseLazyLoading", false);
+            useLazyLoading = XmlUtils.GetAttributeValue<bool>(item, "UseLazyLoading", false);
 
             if (useLazyLoading) {
-                _textureName = textureRoute; // 保存纹理名称用于按需加载
+                textureName = textureRoute; // 保存纹理名称用于按需加载
             }
             else {
-               
                 Texture = ContentManager.Get<Texture2D>(textureRoute);//立即加载纹理
             }
         }
 
-        private string _textureName;
-        private Texture2D _texture;
-        private bool _textureLoaded = false;
+        public Texture2D Texture;
 
-        public Texture2D Texture {
-            get {
-                if (!_textureLoaded && !string.IsNullOrEmpty(_textureName)) {
-                    // 按需加载纹理
-                    _texture = ContentManager.Get<Texture2D>(_textureName);
-                    _textureLoaded = true;
-                }
-                return _texture;
+        private string textureName;
+
+        private bool useLazyLoading;
+        public Texture2D GetTexture() {
+            if (useLazyLoading && Texture == null && !string.IsNullOrEmpty(textureName)) {
+                Texture = ContentManager.Get<Texture2D>(textureName);
             }
-            set {
-                _texture = value;
-                _textureLoaded = true;
-            }
+            return Texture;
         }
-
+   
         public XElement xElement;
 
         public int Index;

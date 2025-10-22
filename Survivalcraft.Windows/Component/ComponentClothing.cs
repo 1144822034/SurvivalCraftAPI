@@ -623,7 +623,7 @@ namespace Game {
                             }
                             Color fabricColor = clothingData.GetColor(this, clothe);
                             texturedBatch2D = m_primitivesRenderer.TexturedBatch(
-                                clothingData.Texture,
+                                clothingData.GetTexture(),
                                 false,
                                 num++,
                                 DepthStencilState.None,
@@ -657,7 +657,7 @@ namespace Game {
                             }
                             Color fabricColor2 = clothingData2.GetColor(this, clothe2);
                             texturedBatch2D = m_primitivesRenderer.TexturedBatch(
-                                clothingData2.Texture,
+                                clothingData2.GetTexture(),
                                 false,
                                 num++,
                                 DepthStencilState.None,
