@@ -661,10 +661,10 @@ namespace Game {
         }
 
         public string GetFilterDisplayName(object filter) => filter is string s ? !string.IsNullOrEmpty(s)
-                ? LanguageControl.Get(nameof(CommunityContentScreen), 8)
-                : LanguageControl.Get(nameof(CommunityContentScreen), 9) :
+                ? LanguageControl.Get(fName, 8)
+                : LanguageControl.Get(fName, 9) :
             filter is ExternalContentType externalContentType ? ExternalContentManager.GetEntryTypeDescription(externalContentType) :
-            throw new InvalidOperationException(LanguageControl.Get(nameof(CommunityContentScreen), 10));
+            throw new InvalidOperationException(LanguageControl.Get(fName, 10));
 
         public string GetOrderDisplayName(Order order) {
             return order switch {
@@ -672,7 +672,7 @@ namespace Game {
                 Order.ByTime => LanguageControl.Get(fName, "32"),
                 Order.ByBoutique => LanguageControl.Get(fName, "33"),
                 Order.ByHide => LanguageControl.Get(fName, "34"),
-                _ => throw new InvalidOperationException(LanguageControl.Get(nameof(CommunityContentScreen), 13))
+                _ => throw new InvalidOperationException(LanguageControl.Get(fName, 13))
             };
         }
 

@@ -7,21 +7,14 @@ using TemplatesDatabase;
 namespace Game {
     public class PlayScreen : Screen {
         public ListPanelWidget m_worldsListWidget;
-
         public ButtonWidget m_playButton;
-
         public ButtonWidget m_newWorldButton;
-
         public ButtonWidget m_propertiesButton;
 
         public static int MaxWorlds = 300;
-
         public double m_modTipsTime;
-
         public long m_totalWorldsSize;
-
         public CultureInfo m_cultureInfo;
-
         public static string fName = "PlayScreen";
 
         public virtual void OnWorldsListWidgetItemClicked(object item) {
@@ -222,35 +215,35 @@ namespace Game {
                     || modsVersionNotCapable.Count > 0) {
                     StringBuilder text = new();
                     if (modsNotLoaded.Count > 0) {
-                        text.AppendLine(LanguageControl.Get(nameof(PlayScreen), 3));
+                        text.AppendLine(LanguageControl.Get(fName, 3));
                     }
                     foreach (ValuesDictionary modDictionary in modsNotLoaded) {
                         text.AppendLine(
                             string.Format(
-                                LanguageControl.Get(nameof(PlayScreen), 4),
+                                LanguageControl.Get(fName, 4),
                                 modDictionary.GetValue("Name", "?"),
                                 modDictionary.GetValue("Version", "?")
                             )
                         );
                     }
                     if (modsVersionNotCapable.Count > 0) {
-                        text.AppendLine(LanguageControl.Get(nameof(PlayScreen), 5));
+                        text.AppendLine(LanguageControl.Get(fName, 5));
                     }
                     foreach (ValuesDictionary modDictionary in modsVersionNotCapable) {
                         text.AppendLine(
                             string.Format(
-                                LanguageControl.Get(nameof(PlayScreen), 6),
+                                LanguageControl.Get(fName, 6),
                                 modDictionary.GetValue("Name", "?"),
                                 modDictionary.GetValue("Version", "?"),
                                 modDictionary.GetValue("CurrentVersion", "?")
                             )
                         );
                     }
-                    text.AppendLine(LanguageControl.Get(nameof(PlayScreen), 7));
+                    text.AppendLine(LanguageControl.Get(fName, 7));
                     DialogsManager.ShowDialog(
                         this,
                         new MessageDialog(
-                            LanguageControl.Get(nameof(PlayScreen), 8),
+                            LanguageControl.Get(fName, 8),
                             text.ToString(),
                             LanguageControl.Yes,
                             LanguageControl.No,

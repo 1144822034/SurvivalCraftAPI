@@ -68,10 +68,10 @@ namespace Game {
 
         public override void Update() {
             m_titleLabel.Text = string.Format(
-                LanguageControl.GetContentWidgets(nameof(VitalStatsWidget), "PlayerLevel"),
+                LanguageControl.GetContentWidgets(fName, "PlayerLevel"),
                 m_componentPlayer.PlayerData.Name,
                 MathF.Floor(m_componentPlayer.PlayerData.Level),
-                LanguageControl.GetContentWidgets(nameof(VitalStatsWidget), m_componentPlayer.PlayerData.PlayerClass.ToString())
+                LanguageControl.GetContentWidgets(fName, m_componentPlayer.PlayerData.PlayerClass.ToString())
             );
             m_healthValueBar.Value = m_componentPlayer.ComponentHealth.Health;
             m_staminaValueBar.Value = m_componentPlayer.ComponentVitalStats.Stamina;
