@@ -23,6 +23,10 @@ namespace Game {
         }
 
         public override void OnBlockAdded(int value, int oldValue, int x, int y, int z) {
+            if(m_subsystemBlockEntities.GetBlockEntity(x, y, z) != null) {
+                Log.Error("A blockEntity already exists. The new entity does not add.");
+                return;
+            }
             ValuesDictionary valuesDictionary = new();
             valuesDictionary.PopulateFromDatabaseObject(m_databaseObject);
             valuesDictionary.GetValue<ValuesDictionary>("BlockEntity").SetValue("Coordinates", new Point3(x, y, z));
@@ -77,7 +81,7 @@ namespace Game {
             ComponentBlockEntity blockEntity = m_subsystemBlockEntities.GetBlockEntity(x, y, z);
             if (blockEntity != null) {
                 m_subsystemBlockEntities.m_blockEntities.Remove(blockEntity.Coordinates);
-                m_subsystemBlockEntities.m_movingBlockEntities[movingBlock] = blockEntity;
+                m_subsystemBlockEntities.m_movingBlockEntities.Add(movingBlock, blockEntity);
                 blockEntity.MovingBlock = movingBlock;
             }
         }
@@ -86,7 +90,7 @@ namespace Game {
             ComponentBlockEntity blockEntity = m_subsystemBlockEntities.GetBlockEntity(movingBlock);
             if (blockEntity != null) {
                 m_subsystemBlockEntities.m_movingBlockEntities.Remove(movingBlock);
-                m_subsystemBlockEntities.m_blockEntities[new Point3(x, y, z)] = blockEntity;
+                m_subsystemBlockEntities.m_blockEntities.Add(new Point3(x, y, z), blockEntity);
                 blockEntity.MovingBlock = null;
                 blockEntity.Coordinates = new Point3(x, y, z);
             }

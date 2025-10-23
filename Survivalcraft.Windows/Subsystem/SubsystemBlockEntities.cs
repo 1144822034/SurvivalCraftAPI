@@ -21,10 +21,10 @@ namespace Game {
             ComponentBlockEntity componentBlockEntity = entity.FindComponent<ComponentBlockEntity>();
             if (componentBlockEntity != null) {
                 if (!MovingBlock.IsNullOrStopped(componentBlockEntity.MovingBlock)) {
-                    m_movingBlockEntities[componentBlockEntity.MovingBlock] = componentBlockEntity;
+                    m_movingBlockEntities.Add(componentBlockEntity.MovingBlock, componentBlockEntity);
                 }
                 else if (componentBlockEntity.Coordinates.Y >= 0) {
-                    m_blockEntities[componentBlockEntity.Coordinates] = componentBlockEntity;
+                    m_blockEntities.Add(componentBlockEntity.Coordinates, componentBlockEntity);
                 }
             }
         }
