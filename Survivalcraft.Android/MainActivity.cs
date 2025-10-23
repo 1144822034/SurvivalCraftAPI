@@ -13,6 +13,7 @@ using Engine;
 using Game;
 using Environment = Android.OS.Environment;
 using Permission = Android.Content.PM.Permission;
+using Uri = Android.Net.Uri;
 
 #pragma warning disable CA1416
 namespace SC4Android {
@@ -46,7 +47,7 @@ namespace SC4Android {
                 if (!Environment.IsExternalStorageManager) {
                     arePermissionsGranted = false;
                     RunOnUiThread(() => Toast.MakeText(this, "Need Permission 需要权限", ToastLength.Short)!.Show());
-                    StartActivity(new Intent(Settings.ActionManageAllFilesAccessPermission));
+                    StartActivity(new Intent(Settings.ActionManageAppAllFilesAccessPermission, Uri.Parse($"package:{PackageName}")));
                 }
                 return arePermissionsGranted;
             }

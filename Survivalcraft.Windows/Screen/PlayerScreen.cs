@@ -248,20 +248,20 @@ namespace Game {
 
         public static string GetDeviceDisplayName(WidgetInputDevice device) {
             switch (device) {
-                case WidgetInputDevice.Keyboard | WidgetInputDevice.Mouse: return LanguageControl.Get(nameof(PlayerScreen), 4);
+                case WidgetInputDevice.Keyboard | WidgetInputDevice.Mouse: return LanguageControl.Get(fName, 4);
                 case WidgetInputDevice.GamePad1:
-                    return LanguageControl.Get(nameof(PlayerScreen), 5)
-                        + (GamePad.IsConnected(0) ? "" : LanguageControl.Get(nameof(PlayerScreen), 9));
+                    return LanguageControl.Get(fName, 5)
+                        + (GamePad.IsConnected(0) ? "" : LanguageControl.Get(fName, 9));
                 case WidgetInputDevice.GamePad2:
-                    return LanguageControl.Get(nameof(PlayerScreen), 6)
-                        + (GamePad.IsConnected(1) ? "" : LanguageControl.Get(nameof(PlayerScreen), 9));
+                    return LanguageControl.Get(fName, 6)
+                        + (GamePad.IsConnected(1) ? "" : LanguageControl.Get(fName, 9));
                 case WidgetInputDevice.GamePad3:
-                    return LanguageControl.Get(nameof(PlayerScreen), 7)
-                        + (GamePad.IsConnected(2) ? "" : LanguageControl.Get(nameof(PlayerScreen), 9));
+                    return LanguageControl.Get(fName, 7)
+                        + (GamePad.IsConnected(2) ? "" : LanguageControl.Get(fName, 9));
                 case WidgetInputDevice.GamePad4:
-                    return LanguageControl.Get(nameof(PlayerScreen), 8)
-                        + (GamePad.IsConnected(3) ? "" : LanguageControl.Get(nameof(PlayerScreen), 9));
-                default: return LanguageControl.Get(nameof(PlayerScreen), 10);
+                    return LanguageControl.Get(fName, 8)
+                        + (GamePad.IsConnected(3) ? "" : LanguageControl.Get(fName, 9));
+                default: return LanguageControl.Get(fName, 10);
             }
         }
 
@@ -275,9 +275,9 @@ namespace Game {
             DialogsManager.ShowDialog(
                 null,
                 new MessageDialog(
-                    "Error",
-                    "Invalid player name. Only letters, digits and spaces allowed. Not too short, not too long either.",
-                    "OK",
+                    LanguageControl.Error,
+                    LanguageControl.Get(fName, "12"),
+                    LanguageControl.Ok,
                     null,
                     null
                 )
