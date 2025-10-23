@@ -1025,7 +1025,7 @@
     "9": "(not found)",
     "10": "Touchscreen",
     "11": "Virtual Reality",
-    "12": "Invalid player name. Only letters, digits and spaces allowed. Not too short, not too long either."
+    "12": "Invalid player name. At least one character."
   },
   "ModifyWorldScreen": {
     "1": "Are you sure? ",
