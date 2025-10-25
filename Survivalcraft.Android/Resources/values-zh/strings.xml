@@ -1,4 +1,5 @@
 ﻿<resources>
-	<string name="ApiTitle">生存战争2.4 API插件版1.8</string>
-	<string name="ShortTitle">[API1.8]生存战争2插件版</string>
+  <string name="ApiTitle">生存战争2.4 API插件版1.8</string>
+  <string name="ShortTitle">[API1.8]生存战争2插件版</string>
+  <string name="ImportExternalContentActivityLabel">导入额外内容</string>
 </resources>

@@ -405,6 +405,7 @@ namespace Game {
                 }
             );
             InitScreens();
+            AddLoadAction(FileAssociationManager.Initialize);
             AddLoadAction(
                 delegate {
                     ModsManager.ModListAllDo(modEntity => {

@@ -18,6 +18,7 @@ using System.IO.Compression;
 public static class ModsManager {
     public static string ModSuffix = ".scmod";
     public static string APIVersionString = "1.8.1.3";
+    public static string ShortAPIVersionString = "1.8";
     public static string GameVersion = "2.4.0.0";
     public static string ShortGameVersion = "2.4";
     public static string ReportLink = "https://gitee.com/SC-SPM/SurvivalcraftApi/issues";
@@ -316,7 +317,9 @@ public static class ModsManager {
         }
     }
 
-    public static string ImportMod(string name, Stream stream) {
+    public static string ImportMod(string name, Stream stream) => ImportMod(name, stream, true);
+
+    public static string ImportMod(string name, Stream stream, bool showDialog) {
         if (!Storage.DirectoryExists(ModDisPath)) {
             Storage.CreateDirectory(ModDisPath);
         }
@@ -337,25 +340,27 @@ public static class ModsManager {
         using (Stream fileStream = Storage.OpenFile(path, OpenFileMode.CreateOrOpen)) {
             stream.CopyTo(fileStream);
         }
-        List<string> importModList = ScreensManager.FindScreen<ModsManageContentScreen>("ModsManageContent").m_latestScanModList;
-        if (!importModList.Contains(realName)) {
-            importModList.Add(realName);
-        }
-        DialogsManager.ShowDialog(
-            null,
-            new MessageDialog(
-                LanguageControl.Get(fName, "5"),
-                LanguageControl.Get(fName, "6"),
-                LanguageControl.Yes,
-                LanguageControl.Back,
-                delegate(MessageDialogButton result) {
-                    if (result == MessageDialogButton.Button1) {
-                        ScreensManager.SwitchScreen("ModsManageContent");
+        if (showDialog) {
+            List<string> importModList = ScreensManager.FindScreen<ModsManageContentScreen>("ModsManageContent").m_latestScanModList;
+            if (!importModList.Contains(realName)) {
+                importModList.Add(realName);
+            }
+            DialogsManager.ShowDialog(
+                null,
+                new MessageDialog(
+                    LanguageControl.Get(fName, "5"),
+                    LanguageControl.Get(fName, "6"),
+                    LanguageControl.Yes,
+                    LanguageControl.Back,
+                    delegate(MessageDialogButton result) {
+                        if (result == MessageDialogButton.Button1) {
+                            ScreensManager.SwitchScreen("ModsManageContent");
+                        }
                     }
-                }
-            )
-        );
-        return LanguageControl.Get(fName, "5");
+                )
+            );
+        }
+        return realName;
     }
 
     public static void ModListAllDo(Action<ModEntity> entity) {

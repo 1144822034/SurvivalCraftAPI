@@ -154,7 +154,7 @@ namespace Game {
                     CharacterSkinsManager.GetPlayerClass(n) == m_playerData.PlayerClass || !CharacterSkinsManager.GetPlayerClass(n).HasValue
                 );
                 ListSelectionDialog dialog = new(
-                    "Select Character Skin",
+                    LanguageControl.Get(fName, "1"),
                     items,
                     64f,
                     delegate(object item) {
@@ -182,7 +182,7 @@ namespace Game {
                 DialogsManager.ShowDialog(
                     null,
                     new ListSelectionDialog(
-                        "Select Input Device",
+                        LanguageControl.Get(fName, "2"),
                         m_allInputDevices,
                         56f,
                         d => new InputDeviceWidget { Device = (WidgetInputDevice)d },

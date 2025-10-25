@@ -1,4 +1,5 @@
 <resources>
-    <string name="ApiTitle">Survivalcraft 2.4 API 1.8</string>
-    <string name="ShortTitle">[API1.8]Survivalcraft 2</string>
+  <string name="ApiTitle">Survivalcraft 2.4 API 1.8</string>
+  <string name="ShortTitle">[API1.8]Survivalcraft 2</string>
+  <string name="ImportExternalContentActivityLabel">Import External Content</string>
 </resources>

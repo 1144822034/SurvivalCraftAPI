@@ -33,59 +33,58 @@ namespace SC4Android {
      ),
      IntentFilter(
          ["android.intent.action.VIEW"],
-         DataScheme = "com.candy.survivalcraft",
          Categories = ["android.intent.category.DEFAULT", "android.intent.category.BROWSABLE"]
      )]
     public class MainActivity : EngineActivity {
-        static bool GraterThanAndroid11 { get; } = Build.VERSION.SdkInt >= BuildVersionCodes.R;
-        static bool GraterThanAndroid6 { get; } = Build.VERSION.SdkInt >= BuildVersionCodes.M;
+        public static bool GraterThanAndroid11 { get; } = Build.VERSION.SdkInt >= BuildVersionCodes.R;
+        public static bool GraterThanAndroid6 { get; } = Build.VERSION.SdkInt >= BuildVersionCodes.M;
 
-        bool CheckAndRequestPermission() {
+        public static bool CheckAndRequestPermission(Activity activity) {
             bool arePermissionsGranted = true;
             if (GraterThanAndroid11) {
                 //当版本大于安卓11时
                 if (!Environment.IsExternalStorageManager) {
                     arePermissionsGranted = false;
-                    RunOnUiThread(() => Toast.MakeText(this, "Need Permission 需要权限", ToastLength.Short)!.Show());
-                    StartActivity(new Intent(Settings.ActionManageAppAllFilesAccessPermission, Uri.Parse($"package:{PackageName}")));
+                    activity.RunOnUiThread(() => Toast.MakeText(activity, "Need Permission\n需要权限", ToastLength.Short)?.Show());
+                    activity.StartActivity(new Intent(Settings.ActionManageAppAllFilesAccessPermission, Uri.Parse($"package:{activity.PackageName}")));
                 }
                 return arePermissionsGranted;
             }
             if (GraterThanAndroid6) {
                 //当版本大于安卓6
                 List<string> permissionList = [];
-                Permission readPermissionStatus = CheckSelfPermission(Manifest.Permission.ReadExternalStorage);
+                Permission readPermissionStatus = activity.CheckSelfPermission(Manifest.Permission.ReadExternalStorage);
                 if (readPermissionStatus != Permission.Granted) {
                     arePermissionsGranted = false;
                     permissionList.Add(Manifest.Permission.ReadExternalStorage);
                 }
-                Permission writePermissionStatus = CheckSelfPermission(Manifest.Permission.WriteExternalStorage);
+                Permission writePermissionStatus = activity.CheckSelfPermission(Manifest.Permission.WriteExternalStorage);
                 if (writePermissionStatus != Permission.Granted) {
                     arePermissionsGranted = false;
                     permissionList.Add(Manifest.Permission.WriteExternalStorage);
                 }
                 if (permissionList.Count > 0) {
-                    RunOnUiThread(() => Toast.MakeText(this, "Need Permission 需要权限", ToastLength.Short)!.Show());
-                    RequestPermissions(permissionList.ToArray(), 1);
+                    activity.RunOnUiThread(() => Toast.MakeText(activity, "Need Permission\n需要权限", ToastLength.Short)?.Show());
+                    activity.RequestPermissions(permissionList.ToArray(), 1);
                 }
             }
             return arePermissionsGranted;
         }
 
-        bool IsPermissionGranted() {
+        public static bool IsPermissionGranted(Activity activity) {
             if (GraterThanAndroid11) {
                 return Environment.IsExternalStorageManager;
             }
             if (GraterThanAndroid6) {
-                return CheckSelfPermission(Manifest.Permission.ReadExternalStorage) == Permission.Granted
-                    && CheckSelfPermission(Manifest.Permission.WriteExternalStorage) == Permission.Granted;
+                return activity.CheckSelfPermission(Manifest.Permission.ReadExternalStorage) == Permission.Granted
+                    && activity.CheckSelfPermission(Manifest.Permission.WriteExternalStorage) == Permission.Granted;
             }
             return true;
         }
 
         protected override void OnRun() {
             base.OnRun();
-            if (CheckAndRequestPermission()) {
+            if (CheckAndRequestPermission(this)) {
                 RunRequired = true;
             }
             else {
@@ -94,7 +93,7 @@ namespace SC4Android {
                     if (RunRequired) {
                         break;
                     }
-                    RunRequired = IsPermissionGranted();
+                    RunRequired = IsPermissionGranted(this);
                     if (RunRequired) {
                         break;
                     }
@@ -116,7 +115,7 @@ namespace SC4Android {
             base.OnResume();
             if (m_isPaused && !RunRequired) {
                 m_isPaused = false;
-                RunRequired = CheckAndRequestPermission();
+                RunRequired = CheckAndRequestPermission(this);
             }
         }
 

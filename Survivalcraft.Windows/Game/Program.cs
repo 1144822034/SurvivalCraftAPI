@@ -1,6 +1,9 @@
 #if WINDOWS
 using ImeSharp;
 using System.Diagnostics;
+using System.Security.Cryptography;
+using System.Text;
+using System.Reflection;
 #endif
 using System.Globalization;
 using Engine;
@@ -12,10 +15,12 @@ using Engine.Input;
 namespace Game {
     public static class Program {
         public static double m_frameBeginTime;
-
         public static double m_cpuEndTime;
-
         public static List<Uri> m_urisToHandle = [];
+#if WINDOWS
+        public static Mutex m_mutex;
+        public static bool m_mutexHandled;
+#endif
         public static string SystemLanguage { get; set; }
         public static float LastFrameTime { get; set; }
 
@@ -28,9 +33,52 @@ namespace Game {
 
 #if !ANDROID
         // ReSharper disable UnusedMember.Local
-        static void Main(string[] args)
+        static void Main(string[] args) {
             // ReSharper restore UnusedMember.Local
-        {
+#if WINDOWS
+            string mutexName;
+            using (SHA256 sha256 = SHA256.Create()) {
+                byte[] hash = sha256.ComputeHash(Encoding.UTF8.GetBytes(Assembly.GetEntryAssembly()?.Location ?? "SurvivalcraftApi"));
+                mutexName = $"Global\\{BitConverter.ToString(hash).Replace("-", "").ToLowerInvariant()}";
+            }
+            m_mutex = new Mutex(true, mutexName, out m_mutexHandled);
+            if (!m_mutexHandled) {
+                if (args != null
+                    && args.Length > 0) {
+                    string path = args[0];
+                    ExternalContentType type = ExternalContentManager.ExtensionToType(Storage.GetExtension(path));
+                    if (ExternalContentManager.IsEntryTypeDownloadSupported(type)
+                        && File.Exists(path)) {
+                        using (FileStream fileStream = File.OpenRead(path)) {
+                            string fileName = Storage.GetFileName(path);
+                            try {
+                                switch (type) {
+                                    case ExternalContentType.World: WorldsManager.ImportWorld(fileStream); break;
+                                    case ExternalContentType.BlocksTexture: BlocksTexturesManager.ImportBlocksTexture(fileName, fileStream); break;
+                                    case ExternalContentType.CharacterSkin: CharacterSkinsManager.ImportCharacterSkin(fileName, fileStream); break;
+                                    case ExternalContentType.FurniturePack: FurniturePacksManager.ImportFurniturePack(fileName, fileStream); break;
+                                    case ExternalContentType.Mod: ModsManager.ImportMod(fileName, fileStream, false); break;
+                                }
+                                if (type == ExternalContentType.Mod) {
+                                    Window.MessageBox(IntPtr.Zero, $"Successfully imported {fileName}. And you need to open Manage Mod screen to enable it manually.\n导入 {fileName} 成功。接下来你需要到 Mod 管理屏幕中手动启用它。", "Success 成功", 0x40u);
+                                }
+                                else {
+                                    Window.MessageBox(IntPtr.Zero, $"Successfully imported {fileName}.\n导入 {fileName} 成功", "Success 成功", 0x40u);
+                                }
+                            }
+                            catch (Exception e) {
+                                Window.MessageBox(IntPtr.Zero, $"Failed to import {fileName}, reason:\n导入 {fileName} 失败，原因：\n{e}", null, 0x10u);
+                            }
+                        }
+                    }
+                    return;
+                }
+                string str =
+                    "This game is already running! If you cannot find the window, please stop it from the Task Manager, and check the log file in Bugs directory.\n游戏已经在运行！如果找不到游戏窗口，请从任务管理器终止它，并检查 Bugs 目录中的日志文件。";
+                Window.MessageBox(IntPtr.Zero, str, null, 0x10u);
+                return;
+            }
+#endif
             if (args != null
                 && args.Length > 0) {
                 //拖动到exe的文件解析
@@ -52,6 +100,10 @@ namespace Game {
             };
 #endif
             EntryPoint();
+#if WINDOWS
+            m_mutex.ReleaseMutex();
+            m_mutex.Dispose();
+#endif
             /*AppDomain.CurrentDomain.AssemblyResolve += (_, e) => {
                 //在程序目录下面寻找dll,解决部分设备找不到目录下程序集的问题
                 string location = new FileInfo(typeof(Program).Assembly.Location).Directory!.FullName;

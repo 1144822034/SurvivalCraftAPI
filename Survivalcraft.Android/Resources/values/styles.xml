@@ -18,4 +18,9 @@
 		<item name="android:windowSplashScreenAnimatedIcon">@drawable/splash</item>
 		<item name="android:windowSplashScreenIconBackgroundColor">#FFFFFF</item>
 	</style>
+  <style name="ImportExternalContentDialog" parent="@android:style/Theme.DeviceDefault.DayNight">
+    <item name="android:windowIsTranslucent">true</item>
+    <item name="android:windowBackground">@android:color/transparent</item>
+    <item name="android:backgroundDimEnabled">true</item>
+  </style>
 </resources>

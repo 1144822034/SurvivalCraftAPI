@@ -172,7 +172,7 @@ namespace Game {
             if (!string.IsNullOrEmpty(ExternalContentManager.openFilePath)) {
                 try {
                     ExternalContentEntry externalContentEntry1 = new() {
-                        Type = ExternalContentManager.ExtensionToType(Path.GetExtension(ExternalContentManager.openFilePath)),
+                        Type = ExternalContentManager.ExtensionToType(Storage.GetExtension(ExternalContentManager.openFilePath)),
                         Path = ExternalContentManager.openFilePath,
                         Size = new FileInfo(ExternalContentManager.openFilePath).Length,
                         Time = new FileInfo(ExternalContentManager.openFilePath).CreationTime

@@ -303,6 +303,23 @@ namespace Game {
 
         public static int AnimatedTextureRefreshLimit { get; set; }
 
+        public static bool FileAssociationEnabled {
+            get {
+#if WINDOWS
+                return field;
+#elif ANDROID
+                return true;
+#else
+                return false;
+#endif
+            }
+            set {
+#if WINDOWS
+                field = value;
+#endif
+            }
+        }
+
         public static event Action<string> SettingChanged;
         public static ValuesDictionary KeyboardMappingSettings { get; set; }
         public static ValuesDictionary CameraManageSettings { get; set; }
@@ -383,6 +400,7 @@ namespace Game {
                 MoveWidgetMarginX = 0f;
                 MoveWidgetMarginY = 0f;
                 AnimatedTextureRefreshLimit = 7;
+                FileAssociationEnabled = true;
                 InitializeKeyboardMappingSettings();
                 InitializeCameraManageSettings();
             }
