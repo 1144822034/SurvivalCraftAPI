@@ -18,6 +18,7 @@
         <ApplicationId>com.candy.SurvivalcraftAPI1_8</ApplicationId>
         <AndroidStoreUncompressedFileExtensions>.dll</AndroidStoreUncompressedFileExtensions>
         <AndroidPackageFormat>apk</AndroidPackageFormat>
+        <AndroidUseDesignerAssembly>true</AndroidUseDesignerAssembly>
         <!--签名-->
         <AndroidKeyStore>true</AndroidKeyStore>
         <AndroidSigningKeyAlias>androiddebugkey</AndroidSigningKeyAlias>

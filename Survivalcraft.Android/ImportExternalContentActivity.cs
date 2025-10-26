@@ -9,8 +9,10 @@ using Android.Views;
 using Android.Widget;
 using Engine;
 using Game;
+using Resource = _Microsoft.Android.Resource.Designer.Resource;
 using Uri = Android.Net.Uri;
 
+#pragma warning disable CA1416
 namespace SC4Android {
     [Activity(
          Label = "@string/ImportExternalContentActivityLabel",
@@ -26,14 +28,14 @@ namespace SC4Android {
          DataPathPatterns = [@".*\.scworld", @".*\.scbtex", @".*\.scskin", @".*\.scfpack", @".*\.scmod"],
          Categories = ["android.intent.category.DEFAULT", "android.intent.category.BROWSABLE"]
      ), IntentFilter(["android.intent.action.SEND"], DataMimeType = "*/*", Categories = ["android.intent.category.DEFAULT"])]
-    public class ImportExternalContentActivityLabel : Activity {
+    public class ImportExternalContentActivity : Activity {
         bool permissionGranted;
 
         protected override void OnCreate(Bundle savedInstanceState) {
             base.OnCreate(savedInstanceState);
             Intent intent = Intent;
             if (intent == null) {
-                Toast.MakeText(this, "File Not Found\n未找到文件", ToastLength.Short)?.Show();
+                Toast.MakeText(this, Resources?.GetString(Resource.String.FileNotFound), ToastLength.Short)?.Show();
                 FinishAndRemoveTask();
                 return;
             }
@@ -42,17 +44,24 @@ namespace SC4Android {
                 uri = intent.Data;
             }
             else if (intent.Action == Intent.ActionSend) {
-                uri = intent.GetParcelableExtra(Intent.ExtraStream) as Uri;
+                if (Build.VERSION.SdkInt >= (BuildVersionCodes)33) {
+                    uri = intent.GetParcelableExtra(Intent.ExtraStream, Java.Lang.Class.FromType(typeof(Uri))) as Uri;
+                }
+                else {
+#pragma warning disable CA1422
+                    uri = intent.GetParcelableExtra(Intent.ExtraStream) as Uri;
+#pragma warning restore CA1422
+                }
             }
             if (uri == null) {
-                Toast.MakeText(this, "File Not Found\n未找到文件", ToastLength.Short)?.Show();
+                Toast.MakeText(this, Resources?.GetString(Resource.String.FileNotFound), ToastLength.Short)?.Show();
                 FinishAndRemoveTask();
                 return;
             }
-            GetFileNameFromUri(uri, out string fileName, out long fileSize, out Stream fileStream);
+            GetFileInfosFromUri(uri, out string fileName, out long fileSize, out Stream fileStream);
             if (fileSize == 0
                 || fileStream == null) {
-                Toast.MakeText(this, "File Not Found\n未找到文件", ToastLength.Short)?.Show();
+                Toast.MakeText(this, Resources?.GetString(Resource.String.FileNotFound), ToastLength.Short)?.Show();
                 FinishAndRemoveTask();
                 return;
             }
@@ -74,16 +83,16 @@ namespace SC4Android {
                         }
                     }
                 }
-                new AlertDialog.Builder(this).SetTitle("Import 导入")
-                    ?.SetMessage($"Do you want to import:\n是否导入文件：\n{fileName}？")
-                    ?.SetPositiveButton("Yes 是", async void (_, _) => await ImportFileAsync(fileName, fileSize, fileStream))
-                    ?.SetNegativeButton("No 否", (_, _) => FinishAndRemoveTask())
+                new AlertDialog.Builder(this).SetTitle(Resources?.GetString(Resource.String.Import))
+                    ?.SetMessage(string.Format(Resources?.GetString(Resource.String.InsureImporting)!, fileName))
+                    ?.SetPositiveButton(Resources?.GetString(Resource.String.Yes)!, async void (_, _) => await ImportFileAsync(fileName, fileSize, fileStream))
+                    ?.SetNegativeButton(Resources?.GetString(Resource.String.No)!, (_, _) => FinishAndRemoveTask())
                     ?.Show();
             }
             else {
-                new AlertDialog.Builder(this).SetTitle("Not supported type\n不支持的类型")
-                    ?.SetMessage($"File type {extension} is not supported\n文件类型 {extension} 不支持")
-                    ?.SetPositiveButton("OK", (_, _) => FinishAndRemoveTask())
+                new AlertDialog.Builder(this).SetTitle(Resources?.GetString(Resource.String.NotSupportedType))
+                    ?.SetMessage(string.Format(Resources?.GetString(Resource.String.FileTypeIsNotSupported)!, extension))
+                    ?.SetPositiveButton(Resources?.GetString(Resource.String.Ok)!, (_, _) => FinishAndRemoveTask())
                     ?.SetOnCancelListener(new DialogInterfaceOnCancelListener(FinishAndRemoveTask))
                     ?.Show();
             }
@@ -101,7 +110,7 @@ namespace SC4Android {
                             layout.SetGravity(GravityFlags.Center);
                             ProgressBar progressBar = new(this) { Indeterminate = true };
                             layout.AddView(progressBar);
-                            importingDialog = new AlertDialog.Builder(this).SetTitle("Importing 导入中...")
+                            importingDialog = new AlertDialog.Builder(this).SetTitle(Resources?.GetString(Resource.String.Importing))
                                 ?.SetView(layout)
                                 ?.SetCancelable(false)
                                 ?.Show();
@@ -122,12 +131,19 @@ namespace SC4Android {
                 await stream.DisposeAsync();
                 RunOnUiThread(() => {
                         importingDialog?.Dismiss();
-                        AlertDialog.Builder builder = new AlertDialog.Builder(this).SetTitle("Imported Successfully 导入成功")
-                            ?.SetPositiveButton("OK", (_, _) => FinishAndRemoveTask())
-                            ?.SetOnCancelListener(new DialogInterfaceOnCancelListener(FinishAndRemoveTask));
-                        if (type == ExternalContentType.Mod) {
-                            builder?.SetMessage("And you need to open Manage Mod screen to enable it manually.\n接下来你需要到 Mod 管理屏幕中手动启用它。");
-                        }
+                        AlertDialog.Builder builder = new AlertDialog.Builder(this).SetTitle(Resources?.GetString(Resource.String.ImportedSuccessfully))
+                            ?.SetPositiveButton(Resources?.GetString(Resource.String.Yes)!, (_, _) => {
+                                Intent intent = new Intent(this, typeof(MainActivity));
+                                intent.SetFlags(ActivityFlags.ReorderToFront);
+                                StartActivity(intent);
+                                FinishAndRemoveTask();
+                            })
+                            ?.SetNegativeButton(Resources?.GetString(Resource.String.No)!, (_, _) => FinishAndRemoveTask());
+                        builder?.SetMessage(
+                            type == ExternalContentType.Mod
+                                ? $"{Resources?.GetString(Resource.String.NoticeAfterImportingMod)}\n{Resources?.GetString(Resource.String.InsureLaunchingGame)}"
+                                : Resources?.GetString(Resource.String.InsureLaunchingGame)
+                        );
                         builder?.Show();
                     }
                 );
@@ -135,9 +151,9 @@ namespace SC4Android {
             catch (Exception e) {
                 RunOnUiThread(() => {
                         importingDialog?.Dismiss();
-                        new AlertDialog.Builder(this).SetTitle("Failed to Import 导入失败")
+                        new AlertDialog.Builder(this).SetTitle(Resources?.GetString(Resource.String.FailedToImport))
                             ?.SetMessage(e.Message)
-                            ?.SetPositiveButton("OK", (_, _) => FinishAndRemoveTask())
+                            ?.SetPositiveButton(Resources?.GetString(Resource.String.Ok)!, (_, _) => FinishAndRemoveTask())
                             ?.SetOnCancelListener(new DialogInterfaceOnCancelListener(FinishAndRemoveTask))
                             ?.Show();
                     }
@@ -145,7 +161,7 @@ namespace SC4Android {
             }
         }
 
-        public void GetFileNameFromUri(Uri uri, out string name, out long size, out Stream stream) {
+        public void GetFileInfosFromUri(Uri uri, out string name, out long size, out Stream stream) {
             name = null;
             size = 0L;
             stream = null;

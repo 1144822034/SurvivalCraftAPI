@@ -13,6 +13,7 @@ using Engine;
 using Game;
 using Environment = Android.OS.Environment;
 using Permission = Android.Content.PM.Permission;
+using Resource = _Microsoft.Android.Resource.Designer.Resource;
 using Uri = Android.Net.Uri;
 
 #pragma warning disable CA1416
@@ -45,7 +46,7 @@ namespace SC4Android {
                 //当版本大于安卓11时
                 if (!Environment.IsExternalStorageManager) {
                     arePermissionsGranted = false;
-                    activity.RunOnUiThread(() => Toast.MakeText(activity, "Need Permission\n需要权限", ToastLength.Short)?.Show());
+                    activity.RunOnUiThread(() => Toast.MakeText(activity, activity.Resources?.GetString(Resource.String.NeedPermission), ToastLength.Short)?.Show());
                     activity.StartActivity(new Intent(Settings.ActionManageAppAllFilesAccessPermission, Uri.Parse($"package:{activity.PackageName}")));
                 }
                 return arePermissionsGranted;
@@ -64,7 +65,7 @@ namespace SC4Android {
                     permissionList.Add(Manifest.Permission.WriteExternalStorage);
                 }
                 if (permissionList.Count > 0) {
-                    activity.RunOnUiThread(() => Toast.MakeText(activity, "Need Permission\n需要权限", ToastLength.Short)?.Show());
+                    activity.RunOnUiThread(() => Toast.MakeText(activity, activity.Resources?.GetString(Resource.String.NeedPermission), ToastLength.Short)?.Show());
                     activity.RequestPermissions(permissionList.ToArray(), 1);
                 }
             }
