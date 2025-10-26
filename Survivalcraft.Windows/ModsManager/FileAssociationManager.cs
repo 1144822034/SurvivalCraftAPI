@@ -4,6 +4,8 @@ using System.Reflection;
 using System.Runtime.InteropServices;
 using Engine;
 using Microsoft.Win32;
+
+#pragma warning disable CA1416
 #endif
 
 namespace Game {

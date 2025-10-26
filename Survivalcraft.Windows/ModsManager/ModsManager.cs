@@ -8,6 +8,7 @@ using System.Xml.Linq;
 using Engine;
 using Engine.Serialization;
 using Game;
+using NuGet.Versioning;
 using XmlUtilities;
 using ZipArchive = Game.ZipArchive;
 #if DEBUG
@@ -19,6 +20,7 @@ public static class ModsManager {
     public static string ModSuffix = ".scmod";
     public static string APIVersionString = "1.8.1.3";
     public static string ShortAPIVersionString = "1.8";
+    public static NuGetVersion APINuGetVersion = new(1, 8, 1, 3);
     public static string GameVersion = "2.4.0.0";
     public static string ShortGameVersion = "2.4";
     public static string ReportLink = "https://gitee.com/SC-SPM/SurvivalcraftApi/issues";
@@ -207,10 +209,16 @@ public static class ModsManager {
         if (jsonElement.TryGetProperty("Version", out JsonElement version)
             && version.ValueKind == JsonValueKind.String) {
             modInfo.Version = version.GetString();
+            if (modInfo.Version != null) {
+                NuGetVersion.TryParse(modInfo.Version, out modInfo.NuGetVersion);
+            }
         }
         if (jsonElement.TryGetProperty("ApiVersion", out JsonElement apiVersion)
             && apiVersion.ValueKind == JsonValueKind.String) {
             modInfo.ApiVersion = apiVersion.GetString();
+            if (modInfo.ApiVersion != null) {
+                VersionRange.TryParse(modInfo.ApiVersion, out modInfo.ApiVersionRange);
+            }
         }
         if (jsonElement.TryGetProperty("Description", out JsonElement description)
             && description.ValueKind == JsonValueKind.String) {
@@ -236,12 +244,37 @@ public static class ModsManager {
         {
             modInfo.Email = packageName.GetString();
         }*/
-        if (jsonElement.TryGetProperty("Dependencies", out JsonElement dependencies)
-            && dependencies.ValueKind == JsonValueKind.Array) {
-            modInfo.Dependencies = dependencies.EnumerateArray()
-                .Where(dependency => dependency.ValueKind == JsonValueKind.String)
-                .Select(dependency => dependency.GetString())
-                .ToList();
+        if (jsonElement.TryGetProperty("Dependencies", out JsonElement dependencies)) {
+            if (dependencies.ValueKind == JsonValueKind.Array) {
+                modInfo.Dependencies = dependencies.EnumerateArray()
+                    .Where(dependency => dependency.ValueKind == JsonValueKind.String)
+                    .Select(dependency => dependency.GetString())
+                    .ToList();
+                foreach (string dependency in modInfo.Dependencies) {
+                    int index = dependency.IndexOf(':');
+                    if (index != -1) {
+                        string dependencyPackageName = dependency.Substring(0, index);
+                        string dependencyVersion = dependency.Substring(index + 1);
+                        if (VersionRange.TryParse(dependencyVersion, out VersionRange dependencyVersionRange)) {
+                            modInfo.DependencyRanges.Add(dependencyPackageName, dependencyVersionRange);
+                        }
+                    }
+                    else {
+                        modInfo.DependencyRanges.Add(dependency, VersionRange.All);
+                    }
+                }
+            }
+            else if (dependencies.ValueKind == JsonValueKind.Object) {
+                foreach (var dependency in dependencies.EnumerateObject()) {
+                    if (dependency.Value.ValueKind == JsonValueKind.String) {
+                        string dependencyPackageName = dependency.Name;
+                        string dependencyVersion = dependency.Value.GetString();
+                        if (dependencyVersion != null && VersionRange.TryParse(dependencyVersion, out VersionRange dependencyVersionRange)) {
+                            modInfo.DependencyRanges.Add(dependencyPackageName, dependencyVersionRange);
+                        }
+                    }
+                }
+            }
         }
         if (jsonElement.TryGetProperty("LoadOrder", out JsonElement loadOrder)
             && loadOrder.ValueKind == JsonValueKind.Number) {
@@ -433,16 +466,15 @@ public static class ModsManager {
     /// <param name="path">文件路径</param>
     public static void GetScmods(string path) {
         foreach (string item in Storage.ListFileNames(path)) {
-            string ms = Storage.GetExtension(item);
+            string ms = Storage.GetExtension(item).ToLowerInvariant();
             string ks = Storage.CombinePaths(path, item);
             using Stream stream = Storage.OpenFile(ks, OpenFileMode.Read);
             try {
-                if (ms == ModSuffix
-                    || ms == ".SCNEXT") {
+                if (ms == ModSuffix) {
                     Stream keepOpenStream = ModsManageContentScreen.GetDecipherStream(stream);
                     ModEntity modEntity = new(ks, ZipArchive.Open(keepOpenStream, true));
                     if (modEntity.modInfo == null) {
-                        LoadingScreen.Warning($"[{modEntity.ModFilePath}]缺少ModInfo文件，忽略加载");
+                        LoadingScreen.Warning($"The modinfo.json is missing from [{modEntity.ModFilePath}], and this mod will not be loaded.");
                         continue;
                     }
                     if (string.IsNullOrEmpty(modEntity.modInfo.PackageName)) {

@@ -94,21 +94,34 @@ public class ModsManageContentScreen : Screen {
 
     public static bool IsOldApiVersionMod(ModItem modItem, out string details) {
         ModInfo modInfo = modItem.ModInfo;
-        if (modItem.ModInfo == null) {
+        if (modInfo == null) {
             details = string.Format(LanguageControl.Get(fName, 68), LanguageControl.Unknown);
             return true;
         }
-        if (modInfo.ApiVersion.StartsWith("1.4")
+        if (modInfo.ApiVersionRange != null) {
+            if (!modInfo.ApiVersionRange.Satisfies(ModsManager.APINuGetVersion)) {
+                details = string.Format(LanguageControl.Get(fName, 76), modInfo.ApiVersion);
+                return true;
+            }
+            if (!modInfo.ApiVersionRange.HasUpperBound
+                && modInfo.ApiVersionRange.MinVersion != null
+                && modInfo.ApiVersionRange.MinVersion.Major == 1
+                && modInfo.ApiVersionRange.MinVersion.Minor <= 7) {
+                details = string.Format(LanguageControl.Get(fName, 68), modInfo.ApiVersion);
+                return true;
+            }
+        }
+        else if (modInfo.ApiVersion.StartsWith("1.4")
             || modInfo.ApiVersion.StartsWith("1.5")
             || modInfo.ApiVersion.StartsWith("1.6")
             || modInfo.ApiVersion.StartsWith("1.7")) {
-            details = string.Format(LanguageControl.Get(fName, 68), modItem.ModInfo.ApiVersion);
+            details = string.Format(LanguageControl.Get(fName, 68), modInfo.ApiVersion);
             return true;
         }
         details = string.Format(
             LanguageControl.Get(fName, 3),
-            modItem.ModInfo.Version,
-            modItem.ModInfo.Author,
+            modInfo.Version,
+            modInfo.Author,
             MathF.Round(modItem.ExternalContentEntry.Size / 1000)
         );
         return false;

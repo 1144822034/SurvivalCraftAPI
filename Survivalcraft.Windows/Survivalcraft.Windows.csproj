@@ -50,6 +50,7 @@
         <PackageReference Include="ImeSharp.ImmOnly" Version="1.0.0" Condition="'$(TargetFramework)' == 'net9.0-windows'" />
         <PackageReference Include="Jint" Version="4.4.1" />
         <PackageReference Include="NAudio.Flac.Unknown.Mod" Version="1.0.3" />
+        <PackageReference Include="NuGet.Versioning" Version="6.14.0" />
     </ItemGroup>
     <ItemGroup Condition="'$(TargetFramework)' == 'net9.0-windows'">
         <None Update="Content.zip">

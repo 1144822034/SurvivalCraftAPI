@@ -2,6 +2,7 @@ using System.Reflection;
 using System.Xml.Linq;
 using Engine;
 using Engine.Graphics;
+using NuGet.Versioning;
 
 namespace Game {
     public class ModEntity {
@@ -332,40 +333,26 @@ namespace Game {
         ///     检查依赖项
         /// </summary>
         public virtual void CheckDependencies(List<ModEntity> modEntities) {
-            if (modInfo.Dependencies is { Count: 0 }) {
+            if (modInfo.DependencyRanges.Count == 0) {
                 IsDependencyChecked = true;
                 modEntities.Add(this);
                 return;
             }
             LoadingScreen.Info($"[{modInfo.Name}] Checking dependencies.");
-            for (int j = 0; j < modInfo.Dependencies.Count; j++) {
-                int k = j;
-                string name = modInfo.Dependencies[k];
-                string dn = "";
-                Version dnversion = new();
-                bool noNeedToCheckVersion = false;
-                if (name.Contains(":")) {
-                    string[] tmpa = name.Split(new[] { ':' });
-                    if (tmpa.Length == 2) {
-                        dn = tmpa[0];
-                        dnversion = new Version(tmpa[1]);
-                    }
-                }
-                else {
-                    dn = name;
-                    noNeedToCheckVersion = true;
-                }
-                ModEntity entity = ModsManager.ModListAll.Find(px => px.modInfo.PackageName == dn
-                    && (noNeedToCheckVersion || new Version(px.modInfo.Version) == dnversion)
+            foreach ((string name, VersionRange range) in modInfo.DependencyRanges) {
+                ModEntity entity = ModsManager.ModListAll.Find(px => px.modInfo.PackageName == name
+                    && range.Satisfies(px.modInfo.NuGetVersion)
                 );
                 if (entity != null) {
-                    //依赖项最先被加载
                     if (!entity.IsDependencyChecked) {
+                        if (entity.modInfo.DependencyRanges.ContainsKey(modInfo.PackageName)) {
+                            throw new Exception($"[{modInfo.Name}] Dependency {name} is dependent on {modInfo.Name}, which is not allowed.");
+                        }
                         entity.CheckDependencies(modEntities);
                     }
                 }
                 else {
-                    throw new Exception($"[{modInfo.Name}] Lack of dependency {name}");
+                    throw new Exception($"[{modInfo.Name}] Failed to find dependency {name}");
                 }
             }
             IsDependencyChecked = true;
@@ -409,7 +396,7 @@ namespace Game {
 
         public override bool Equals(object obj) {
             if (obj is ModEntity px) {
-                return px.modInfo.PackageName == modInfo.PackageName && new Version(px.modInfo.Version) == new Version(modInfo.Version);
+                return px.modInfo.PackageName == modInfo.PackageName && px.modInfo.NuGetVersion.Equals(modInfo.NuGetVersion);
             }
             return false;
         }
