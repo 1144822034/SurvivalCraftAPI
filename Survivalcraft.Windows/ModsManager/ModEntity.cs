@@ -341,7 +341,7 @@ namespace Game {
             LoadingScreen.Info($"[{modInfo.Name}] Checking dependencies.");
             foreach ((string name, VersionRange range) in modInfo.DependencyRanges) {
                 ModEntity entity = ModsManager.ModListAll.Find(px => px.modInfo.PackageName == name
-                    && range.Satisfies(px.modInfo.NuGetVersion)
+                    && (range.Satisfies(px.modInfo.NuGetVersion) || px.modInfo.Version == range.OriginalString)
                 );
                 if (entity != null) {
                     if (!entity.IsDependencyChecked) {

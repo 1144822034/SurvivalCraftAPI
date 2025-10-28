@@ -24,8 +24,16 @@ namespace SC4Android {
      IntentFilter(
          ["android.intent.action.VIEW"],
          DataSchemes = ["file", "content"],
-         DataMimeType = "*/*",
-         DataPathPatterns = [@".*\.scworld", @".*\.scbtex", @".*\.scskin", @".*\.scfpack", @".*\.scmod"],
+         DataMimeTypes = ["*/*", "image/png", "image/webp"],
+         DataPathPatterns = [
+             @".*\.scworld",
+             @".*\.scbtex",
+             @".*\.scskin",
+             @".*\.scfpack",
+             @".*\.scmod",
+             @".*\.png",
+             @".*\.webp"
+         ],
          Categories = ["android.intent.category.DEFAULT", "android.intent.category.BROWSABLE"]
      ), IntentFilter(["android.intent.action.SEND"], DataMimeType = "*/*", Categories = ["android.intent.category.DEFAULT"])]
     public class ImportExternalContentActivity : Activity {
@@ -85,7 +93,10 @@ namespace SC4Android {
                 }
                 new AlertDialog.Builder(this).SetTitle(Resources?.GetString(Resource.String.Import))
                     ?.SetMessage(string.Format(Resources?.GetString(Resource.String.InsureImporting)!, fileName))
-                    ?.SetPositiveButton(Resources?.GetString(Resource.String.Yes)!, async void (_, _) => await ImportFileAsync(fileName, fileSize, fileStream))
+                    ?.SetPositiveButton(
+                        Resources?.GetString(Resource.String.Yes)!,
+                        async void (_, _) => await ImportFileAsync(fileName, fileSize, fileStream)
+                    )
                     ?.SetNegativeButton(Resources?.GetString(Resource.String.No)!, (_, _) => FinishAndRemoveTask())
                     ?.Show();
             }
@@ -131,13 +142,17 @@ namespace SC4Android {
                 await stream.DisposeAsync();
                 RunOnUiThread(() => {
                         importingDialog?.Dismiss();
-                        AlertDialog.Builder builder = new AlertDialog.Builder(this).SetTitle(Resources?.GetString(Resource.String.ImportedSuccessfully))
-                            ?.SetPositiveButton(Resources?.GetString(Resource.String.Yes)!, (_, _) => {
-                                Intent intent = new Intent(this, typeof(MainActivity));
-                                intent.SetFlags(ActivityFlags.ReorderToFront);
-                                StartActivity(intent);
-                                FinishAndRemoveTask();
-                            })
+                        AlertDialog.Builder builder = new AlertDialog.Builder(this)
+                            .SetTitle(Resources?.GetString(Resource.String.ImportedSuccessfully))
+                            ?.SetPositiveButton(
+                                Resources?.GetString(Resource.String.Yes)!,
+                                (_, _) => {
+                                    Intent intent = new(this, typeof(MainActivity));
+                                    intent.SetFlags(ActivityFlags.ReorderToFront);
+                                    StartActivity(intent);
+                                    FinishAndRemoveTask();
+                                }
+                            )
                             ?.SetNegativeButton(Resources?.GetString(Resource.String.No)!, (_, _) => FinishAndRemoveTask());
                         builder?.SetMessage(
                             type == ExternalContentType.Mod
@@ -184,7 +199,6 @@ namespace SC4Android {
             catch {
                 // ignored
             }
-
             if (string.IsNullOrEmpty(name)) {
                 name = Path.GetFileName(uri.Path);
             }

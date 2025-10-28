@@ -208,17 +208,15 @@ public static class ModsManager {
         }
         if (jsonElement.TryGetProperty("Version", out JsonElement version)
             && version.ValueKind == JsonValueKind.String) {
-            modInfo.Version = version.GetString();
+            modInfo.Version = version.GetString()?.Trim();
             if (modInfo.Version != null) {
                 NuGetVersion.TryParse(modInfo.Version, out modInfo.NuGetVersion);
             }
         }
         if (jsonElement.TryGetProperty("ApiVersion", out JsonElement apiVersion)
             && apiVersion.ValueKind == JsonValueKind.String) {
-            modInfo.ApiVersion = apiVersion.GetString();
-            if (modInfo.ApiVersion != null) {
-                VersionRange.TryParse(modInfo.ApiVersion, out modInfo.ApiVersionRange);
-            }
+            modInfo.ApiVersion = apiVersion.GetString()?.Trim();
+            TryPareVersionRange(modInfo.ApiVersion, out modInfo.ApiVersionRange);
         }
         if (jsonElement.TryGetProperty("Description", out JsonElement description)
             && description.ValueKind == JsonValueKind.String) {
@@ -254,8 +252,8 @@ public static class ModsManager {
                     int index = dependency.IndexOf(':');
                     if (index != -1) {
                         string dependencyPackageName = dependency.Substring(0, index);
-                        string dependencyVersion = dependency.Substring(index + 1);
-                        if (VersionRange.TryParse(dependencyVersion, out VersionRange dependencyVersionRange)) {
+                        string dependencyVersion = dependency.Substring(index + 1).Trim();
+                        if (TryPareVersionRange(dependencyVersion, out VersionRange dependencyVersionRange)) {
                             modInfo.DependencyRanges.Add(dependencyPackageName, dependencyVersionRange);
                         }
                     }
@@ -265,11 +263,11 @@ public static class ModsManager {
                 }
             }
             else if (dependencies.ValueKind == JsonValueKind.Object) {
-                foreach (var dependency in dependencies.EnumerateObject()) {
+                foreach (JsonProperty dependency in dependencies.EnumerateObject()) {
                     if (dependency.Value.ValueKind == JsonValueKind.String) {
                         string dependencyPackageName = dependency.Name;
-                        string dependencyVersion = dependency.Value.GetString();
-                        if (dependencyVersion != null && VersionRange.TryParse(dependencyVersion, out VersionRange dependencyVersionRange)) {
+                        string dependencyVersion = dependency.Value.GetString()?.Trim();
+                        if (TryPareVersionRange(dependencyVersion, out VersionRange dependencyVersionRange)) {
                             modInfo.DependencyRanges.Add(dependencyPackageName, dependencyVersionRange);
                         }
                     }
@@ -779,6 +777,83 @@ public static class ModsManager {
             }
             Modify(DataObjects, element);
         }
+    }
+
+    public static bool TryPareVersionRange(string value, out VersionRange versionRange) {
+        if (string.IsNullOrEmpty(value)) {
+            versionRange = null;
+            return false;
+        }
+        value = value.Trim();
+        if (value.Length == 0) {
+            versionRange = null;
+            return false;
+        }
+        char firstChar = value[0];
+        switch (firstChar) {
+            case '=': {
+                if (NuGetVersion.TryParse(value.Substring(1), out NuGetVersion nuGetVersion)) {
+                    versionRange = new VersionRange(nuGetVersion, true, nuGetVersion, true);
+                    return true;
+                }
+                break;
+            }
+            case '>': {
+                if (value.Length > 1) {
+                    if (value[1] == '=') {
+                        if (NuGetVersion.TryParse(value.Substring(2), out NuGetVersion nuGetVersion)) {
+                            versionRange = new VersionRange(nuGetVersion, true);
+                            return true;
+                        }
+                    }
+                    else {
+                        if (NuGetVersion.TryParse(value.Substring(1), out NuGetVersion nuGetVersion)) {
+                            versionRange = new VersionRange(nuGetVersion, false);
+                            return true;
+                        }
+                    }
+                }
+                break;
+            }
+            case '<': {
+                if (value.Length > 1) {
+                    if (value[1] == '=') {
+                        if (NuGetVersion.TryParse(value.Substring(2), out NuGetVersion nuGetVersion)) {
+                            versionRange = new VersionRange(null, false, nuGetVersion, true);
+                            return true;
+                        }
+                    }
+                    else {
+                        if (NuGetVersion.TryParse(value.Substring(1), out NuGetVersion nuGetVersion)) {
+                            versionRange = new VersionRange(null, false, nuGetVersion);
+                            return true;
+                        }
+                    }
+                }
+                break;
+            }
+            case '^': {
+                if (NuGetVersion.TryParse(value.Substring(1), out NuGetVersion nuGetVersion)) {
+                    versionRange = new VersionRange(nuGetVersion, true, new NuGetVersion(nuGetVersion.Major + 1, 0, 0, 0));
+                    return true;
+                }
+                break;
+            }
+            case '~': {
+                if (NuGetVersion.TryParse(value.Substring(1), out NuGetVersion nuGetVersion)) {
+                    versionRange = new VersionRange(nuGetVersion, true, new NuGetVersion(nuGetVersion.Major, nuGetVersion.Minor + 1, 0, 0));
+                    return true;
+                }
+                break;
+            }
+            default:
+                if (VersionRange.TryParse(value, out versionRange)) {
+                    return true;
+                }
+                break;
+        }
+        versionRange = null;
+        return false;
     }
 #if DEBUG
     /// <summary>
