@@ -31,6 +31,11 @@
               <BevelledButtonWidget Name="OpenGameLogButton" Style="{Styles/ButtonStyle_310x60}" VerticalAlignment="Center" Margin="20, 0" Text="[SettingsCompatibilityScreen:13]"/>
             </UniformSpacingPanelWidget>
 
+            <UniformSpacingPanelWidget Name="ShareGameLogButtonPanel" Direction="Horizontal" IsVisible="false">
+              <LabelWidget HorizontalAlignment="Far" VerticalAlignment="Center" Margin="20, 0" />
+              <BevelledButtonWidget Name="ShareGameLogButton" Style="{Styles/ButtonStyle_310x60}" VerticalAlignment="Center" Margin="20, 0" Text="[SettingsCompatibilityScreen:15]"/>
+            </UniformSpacingPanelWidget>
+
             <UniformSpacingPanelWidget Direction="Horizontal">
               <LabelWidget HorizontalAlignment="Far" VerticalAlignment="Center" Margin="20, 0" />
               <BevelledButtonWidget Name="ReportButton" Style="{Styles/ButtonStyle_310x60}" VerticalAlignment="Center" Margin="20, 0" Text="[SettingsCompatibilityScreen:10]"/>

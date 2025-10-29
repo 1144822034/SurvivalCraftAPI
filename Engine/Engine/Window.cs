@@ -43,6 +43,10 @@ namespace Engine {
         public static IInputContext m_inputContext;
 #endif
 
+        #if WINDOWS
+        public static IntPtr m_hwnd;
+        #endif
+
         static bool m_closing;
 
         static int? m_swapInterval;
@@ -546,6 +550,9 @@ namespace Engine {
         static void InitializeAll() {
             try {
 #if !ANDROID
+#if WINDOWS
+                m_hwnd = m_gameWindow.Native?.Win32?.Hwnd ?? IntPtr.Zero;
+#endif
                 using (Stream iconStream = typeof(Window).GetTypeInfo().Assembly.GetManifestResourceStream("Engine.Resources.icon.png")) {
                     if (iconStream != null) {
                         Image<Rgba32> image = SixLabors.ImageSharp.Image.Load<Rgba32>(Image.DefaultImageSharpDecoderOptions, iconStream);

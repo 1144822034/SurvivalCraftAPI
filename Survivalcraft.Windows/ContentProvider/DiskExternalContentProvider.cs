@@ -16,6 +16,8 @@ namespace Game {
 
         public static string LocalPath = AppDomain.CurrentDomain.BaseDirectory;
 
+        public bool IsLocalProvider => true;
+
         public string Description => LanguageControl.Get(fName, "Description");
 
         public DiskExternalContentProvider() {
@@ -75,10 +77,11 @@ namespace Game {
             ThreadPool.QueueUserWorkItem(
                 delegate {
                     try {
-                        using (FileStream destination = new(Path.Combine(LocalPath, path), FileMode.Create, FileAccess.Write, FileShare.None)) {
+                        string destinationPath = Path.Combine(LocalPath, path);
+                        using (FileStream destination = new(destinationPath, FileMode.Create, FileAccess.Write, FileShare.None)) {
                             stream.CopyTo(destination);
                         }
-                        Dispatcher.Dispatch(delegate { success(null); });
+                        Dispatcher.Dispatch(delegate { success(destinationPath); });
                     }
                     catch (Exception ex) {
                         Dispatcher.Dispatch(delegate { failure(ex); });

@@ -54,6 +54,8 @@ namespace Game {
 
         public bool IsLoggedIn => !string.IsNullOrEmpty(SettingsManager.ScpboxAccessToken);
 
+        public bool IsLocalProvider => false;
+
         public SchubExternalContentProvider() {
             Program.HandleUri += HandleUri;
             Window.Activated += WindowActivated;

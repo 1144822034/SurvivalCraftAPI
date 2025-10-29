@@ -5,6 +5,7 @@ using Environment = Android.OS.Environment;
 using Android.OS;
 #else
 using System.Reflection;
+using System.Diagnostics;
 #endif
 
 namespace Engine {
@@ -313,6 +314,46 @@ namespace Engine {
                 sanitized.Append(InvalidFileNameChars.Contains(c) ? replacement : c);
             }
             return sanitized.ToString();
+        }
+
+        /*
+         * <Summary>
+         *  使用外部应用打开文件
+         * </Summary>
+         * <Param name="path">文件路径</Param>
+         * <Param name="chooserTitle">（仅安卓）应用选择器标题，留空时使用文件名</Param>
+         * <Param name="mimeType">（仅安卓）MIME 类型，留空时自动根据文件后缀推断</Param>
+         */
+        public static void OpenFileWithExternalApplication(string path, string chooserTitle = null, string mimeType = null) {
+            if (!FileExists(path)) {
+                throw new FileNotFoundException($"Open {path} failed, because it is not exists.");
+            }
+            path = ProcessPath(path, false, false);
+#if WINDOWS
+            Process.Start("explorer.exe", path);
+#elif LINUX
+            Process.Start("xdg-open", path);
+#elif ANDROID
+            Window.Activity.OpenFile(path, chooserTitle, mimeType);
+#endif
+        }
+
+        /*
+         * <Summary>
+         *  分享文件，当前版本仅支持安卓
+         * </Summary>
+         * <Param name="path">文件路径</Param>
+         * <Param name="chooserTitle">应用选择器标题，留空时使用文件名</Param>
+         * <Param name="mimeType">MIME 类型，留空时自动根据文件后缀推断</Param>
+         */
+        public static void ShareFile(string path, string chooserTitle = null, string mimeType = null) {
+            if (!FileExists(path)) {
+                throw new FileNotFoundException($"Share {path} failed, because it is not exists.");
+            }
+            path = ProcessPath(path, false, false);
+#if ANDROID
+            Window.Activity.ShareFile(path, chooserTitle, mimeType);
+#endif
         }
     }
 }

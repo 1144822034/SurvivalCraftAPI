@@ -52,6 +52,8 @@ namespace Game {
 
         public bool RequiresLogin => true;
 
+        public bool IsLocalProvider => false;
+
         public bool IsLoggedIn => !string.IsNullOrEmpty(SettingsManager.DropboxAccessToken);
 
         public DropboxExternalContentProvider() {

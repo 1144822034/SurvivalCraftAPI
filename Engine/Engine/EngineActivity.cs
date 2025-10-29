@@ -71,7 +71,7 @@ namespace Engine {
                 throw new FileNotFoundException($"Open {path} failed, because it is not exists.");
             }
             Uri uri = Build.VERSION.SdkInt >= BuildVersionCodes.N
-                ? AndroidX.Core.Content.FileProvider.GetUriForFile(this, PackageName + ".fileprovider", file)
+                ? AndroidX.Core.Content.FileProvider.GetUriForFile(this, $"{PackageName}.fileprovider", file)
                 : Uri.FromFile(file);
             Intent intent = new(Intent.ActionView);
             mimeType ??= Android.Webkit.MimeTypeMap.Singleton?.GetMimeTypeFromExtension(Storage.GetExtension(path));
@@ -82,15 +82,32 @@ namespace Engine {
                 intent.SetDataAndType(uri, mimeType);
             }
             intent.AddFlags(ActivityFlags.GrantReadUriPermission | ActivityFlags.NewTask);
-
-            if (Application.Context.PackageManager?.QueryIntentActivities(intent, PackageInfoFlags.MatchDefaultOnly)?.Any() ?? false)
-            {
+            if (Application.Context.PackageManager?.QueryIntentActivities(intent, PackageInfoFlags.MatchDefaultOnly)?.Any() ?? false) {
                 StartActivity(Intent.CreateChooser(intent, chooserTitle ?? Storage.GetFileName(path)));
             }
-            else
-            {
+            else {
                 throw new InvalidOperationException($"Open {path} failed, because no app can open it.");
             }
+        }
+
+        public void ShareFile(string path, string chooserTitle = null, string mimeType = null) {
+            string processedAndroidFilePath = Storage.ProcessPath(RunPath.AndroidFilePath, false, false);
+            if (!path.StartsWith(processedAndroidFilePath)) {
+                throw new ArgumentException($"Share {path} failed, because it is not in {processedAndroidFilePath}.");
+            }
+            Java.IO.File file = new(path);
+            if (!file.Exists()) {
+                throw new FileNotFoundException($"Share {path} failed, because it does not exist.");
+            }
+            Uri uri = Build.VERSION.SdkInt >= BuildVersionCodes.N
+                ? AndroidX.Core.Content.FileProvider.GetUriForFile(this, $"{PackageName}.fileprovider", file)
+                : Uri.FromFile(file);
+            Intent intent = new(Intent.ActionSend);
+            mimeType ??= Android.Webkit.MimeTypeMap.Singleton?.GetMimeTypeFromExtension(Storage.GetExtension(path)) ?? "*/*";
+            intent.SetType(mimeType);
+            intent.PutExtra(Intent.ExtraStream, uri);
+            intent.AddFlags(ActivityFlags.GrantReadUriPermission | ActivityFlags.NewTask);
+            StartActivity(Intent.CreateChooser(intent, chooserTitle ?? Storage.GetFileName(path)));
         }
 
         protected override void OnPause() {
