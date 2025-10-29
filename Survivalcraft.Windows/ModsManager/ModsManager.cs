@@ -8,6 +8,7 @@ using System.Xml.Linq;
 using Engine;
 using Engine.Serialization;
 using Game;
+using Game.IContentReader;
 using NuGet.Versioning;
 using XmlUtilities;
 using ZipArchive = Game.ZipArchive;
@@ -202,7 +203,7 @@ public static class ModsManager {
 
     public static ModInfo DeserializeJson(string json) {
         ModInfo modInfo = new();
-        JsonElement jsonElement = JsonDocument.Parse(json).RootElement;
+        JsonElement jsonElement = JsonDocument.Parse(json, JsonDocumentReader.DefaultJsonOptions).RootElement;
         if (jsonElement.TryGetProperty("Name", out JsonElement name)) {
             modInfo.Name = name.GetString();
         }

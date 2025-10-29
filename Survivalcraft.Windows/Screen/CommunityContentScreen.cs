@@ -2,6 +2,7 @@ using System.Text.Json;
 using System.Xml.Linq;
 using Engine;
 using Engine.Graphics;
+using Game.IContentReader;
 using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.PixelFormats;
 using SixLabors.ImageSharp.Processing;
@@ -254,7 +255,7 @@ namespace Game {
                                         delegate(byte[] data) {
                                             DialogsManager.HideDialog(busyDialog);
                                             m_treePanel.RemoveAtTag(communityContentEntry);
-                                            JsonElement result = JsonDocument.Parse(data).RootElement;
+                                            JsonElement result = JsonDocument.Parse(data, JsonDocumentReader.DefaultJsonOptions).RootElement;
                                             string msg = result[0].GetInt32() == 200
                                                 ? LanguageControl.Get(fName, 27) + communityContentEntry.Name
                                                 : result[1].GetString();
@@ -304,7 +305,7 @@ namespace Game {
                                                 DialogsManager.HideDialog(busyDialog);
                                                 m_order = Order.ByBoutique;
                                                 PopulateList(null, true);
-                                                JsonElement result = JsonDocument.Parse(data).RootElement;
+                                                JsonElement result = JsonDocument.Parse(data, JsonDocumentReader.DefaultJsonOptions).RootElement;
                                                 string msg = result[0].GetInt32() == 200
                                                     ? LanguageControl.Get(fName, 19) + communityContentEntry.Name
                                                     : result[1].GetString();
@@ -346,7 +347,7 @@ namespace Game {
                                             delegate(byte[] data) {
                                                 DialogsManager.HideDialog(busyDialog);
                                                 PopulateList(null, true);
-                                                JsonElement result = JsonDocument.Parse(data).RootElement;
+                                                JsonElement result = JsonDocument.Parse(data, JsonDocumentReader.DefaultJsonOptions).RootElement;
                                                 string msg = result[0].GetInt32() == 200
                                                     ? LanguageControl.Get(fName, 22) + communityContentEntry.Name
                                                     : result[1].GetString();
@@ -388,7 +389,7 @@ namespace Game {
                         else {
                             PopulateList(null, true);
                         }
-                        JsonElement result = JsonDocument.Parse(data).RootElement;
+                        JsonElement result = JsonDocument.Parse(data, JsonDocumentReader.DefaultJsonOptions).RootElement;
                         string msg = result[0].GetInt32() == 200 ? sucessMsg + communityContentEntry.Name : result[1].GetString();
                         DialogsManager.ShowDialog(
                             null,

@@ -6,7 +6,7 @@ namespace Game.IContentReader {
         public override string[] DefaultSuffix => ["json"];
 
         public override object Get(ContentInfo[] contents) {
-            JsonElement element = JsonDocument.Parse(new StreamReader(contents[0].Duplicate()).ReadToEnd()).RootElement;
+            JsonElement element = JsonDocument.Parse(new StreamReader(contents[0].Duplicate()).ReadToEnd(), JsonDocumentReader.DefaultJsonOptions).RootElement;
             return element.ValueKind == JsonValueKind.Array ? element : throw new InvalidDataException($"{contents[0].Filename}is not Json array");
         }
     }
@@ -22,14 +22,18 @@ namespace Game.IContentReader {
         public override string[] DefaultSuffix => ["json"];
 
         public override object Get(ContentInfo[] contents) {
-            JsonElement element = JsonDocument.Parse(new StreamReader(contents[0].Duplicate()).ReadToEnd()).RootElement;
+            JsonElement element = JsonDocument.Parse(new StreamReader(contents[0].Duplicate()).ReadToEnd(), JsonDocumentReader.DefaultJsonOptions).RootElement;
             return element.ValueKind == JsonValueKind.Object ? element : throw new InvalidDataException($"{contents[0].Filename}is not Json object");
         }
     }
 
     public class JsonDocumentReader : IContentReader {
+        public static readonly JsonDocumentOptions DefaultJsonOptions = new JsonDocumentOptions {
+            AllowTrailingCommas = true,
+            CommentHandling = JsonCommentHandling.Skip
+        };
         public override string Type => "System.Text.Json.JsonDocument";
         public override string[] DefaultSuffix => ["json"];
-        public override object Get(ContentInfo[] contents) => JsonDocument.Parse(new StreamReader(contents[0].Duplicate()).ReadToEnd());
+        public override object Get(ContentInfo[] contents) => JsonDocument.Parse(new StreamReader(contents[0].Duplicate()).ReadToEnd(), DefaultJsonOptions);
     }
 }

@@ -4,6 +4,7 @@ using System.Text;
 using System.Text.Json;
 using System.Xml.Linq;
 using Engine;
+using Game.IContentReader;
 using XmlUtilities;
 
 namespace Game {
@@ -619,7 +620,7 @@ namespace Game {
                 progress,
                 delegate(byte[] data) {
                     int i = 0;
-                    foreach (JsonProperty property in JsonDocument.Parse(data).RootElement.EnumerateObject()) {
+                    foreach (JsonProperty property in JsonDocument.Parse(data, JsonDocumentReader.DefaultJsonOptions).RootElement.EnumerateObject()) {
                         if (i == 2) {
                             success(property.Value.GetString() == "Y");
                             break;
