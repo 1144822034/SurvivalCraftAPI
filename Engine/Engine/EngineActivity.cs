@@ -3,8 +3,11 @@
 using Android.App;
 using Android.Content;
 using Android.Content.PM;
+using Android.Database;
 using Android.Media;
 using Android.OS;
+using Android.Provider;
+using Android.Runtime;
 using Android.Views;
 using Engine.Input;
 using Silk.NET.Windowing.Sdl.Android;
@@ -29,6 +32,9 @@ namespace Engine {
 
         public static string BasePath = RunPath.AndroidFilePath;
         public static string ConfigPath = RunPath.AndroidFilePath;
+
+        const int PickFileRequestCode = 1001;
+        TaskCompletionSource<(System.IO.Stream Stream, string FileName)> filePickTcs;
 
         AudioManager AudioManager {
             get {
@@ -108,6 +114,34 @@ namespace Engine {
             intent.PutExtra(Intent.ExtraStream, uri);
             intent.AddFlags(ActivityFlags.GrantReadUriPermission | ActivityFlags.NewTask);
             StartActivity(Intent.CreateChooser(intent, chooserTitle ?? Storage.GetFileName(path)));
+        }
+
+        public Task<(System.IO.Stream Stream, string FileName)> ChooseFileAsync(string chooserTitle = null) {
+            Intent intent = new(Intent.ActionOpenDocument);
+            intent.AddCategory(Intent.CategoryOpenable);
+            intent.SetType("*/*");
+            filePickTcs = new TaskCompletionSource<(System.IO.Stream, string)>();
+            StartActivityForResult(string.IsNullOrEmpty(chooserTitle) ? intent : Intent.CreateChooser(intent, chooserTitle), PickFileRequestCode);
+            return filePickTcs.Task;
+        }
+
+        protected override void OnActivityResult(int requestCode, [GeneratedEnum] Result resultCode, Intent data) {
+            base.OnActivityResult(requestCode, resultCode, data);
+            if (requestCode == PickFileRequestCode) {
+                if (resultCode == Result.Ok
+                    && data != null) {
+                    try {
+                        System.IO.Stream stream = GetStreamFromUri(data.Data, out string fileName);
+                        filePickTcs?.TrySetResult((stream, fileName));
+                    }
+                    catch (Exception ex) {
+                        filePickTcs?.TrySetException(ex);
+                    }
+                }
+                else {
+                    filePickTcs?.TrySetResult((null, null));
+                }
+            }
         }
 
         protected override void OnPause() {
@@ -255,6 +289,30 @@ namespace Engine {
                 major = 2;
                 minor = 0;
             }
+        }
+
+        public System.IO.Stream GetStreamFromUri(Uri uri, out string fileName) {
+            System.IO.Stream stream = null;
+            fileName = null;
+            try {
+                using (ICursor cursor = ContentResolver?.Query(uri, null, null, null, null)) {
+                    if (cursor != null
+                        && cursor.MoveToFirst()) {
+                        int nameIndex = cursor.GetColumnIndex(IOpenableColumns.DisplayName);
+                        if (nameIndex >= 0) {
+                            fileName = cursor.GetString(nameIndex);
+                        }
+                    }
+                }
+                stream = ContentResolver?.OpenInputStream(uri);
+            }
+            catch {
+                // ignored
+            }
+            if (string.IsNullOrEmpty(fileName)) {
+                fileName = Path.GetFileName(uri.Path);
+            }
+            return stream;
         }
     }
 }

@@ -19,6 +19,7 @@ using System.Diagnostics;
 using Engine.Audio;
 using Engine.Graphics;
 using Engine.Input;
+using Silk.NET.Core.Contexts;
 using Silk.NET.Maths;
 using Silk.NET.Windowing;
 using Environment = System.Environment;
@@ -42,10 +43,6 @@ namespace Engine {
 
         public static IInputContext m_inputContext;
 #endif
-
-        #if WINDOWS
-        public static IntPtr m_hwnd;
-        #endif
 
         static bool m_closing;
 
@@ -259,6 +256,29 @@ namespace Engine {
                     m_view.GLContext?.SwapInterval(value);
                     m_swapInterval = value;
                 }
+            }
+        }
+
+        public static IntPtr Handle {
+            get {
+                INativeWindow native = m_view.Native;
+                if (native != null) {
+                    NativeWindowFlags kind = native.Kind;
+                    if (kind.HasFlag(NativeWindowFlags.Win32)) {
+                        return native.Win32?.Hwnd ?? IntPtr.Zero;
+                    }
+                    if (kind.HasFlag(NativeWindowFlags.Android)) {
+                        return native.Android?.Window ?? IntPtr.Zero;
+                    }
+                    if (kind.HasFlag(NativeWindowFlags.X11)) {
+                        return (IntPtr)(native.X11?.Window.ToUInt64() ?? 0UL);
+                    }
+                    if (kind.HasFlag(NativeWindowFlags.Wayland)) {
+                        return native.Wayland?.Surface ?? IntPtr.Zero;
+                    }
+                }
+                return IntPtr.Zero;
+
             }
         }
 
@@ -550,9 +570,6 @@ namespace Engine {
         static void InitializeAll() {
             try {
 #if !ANDROID
-#if WINDOWS
-                m_hwnd = m_gameWindow.Native?.Win32?.Hwnd ?? IntPtr.Zero;
-#endif
                 using (Stream iconStream = typeof(Window).GetTypeInfo().Assembly.GetManifestResourceStream("Engine.Resources.icon.png")) {
                     if (iconStream != null) {
                         Image<Rgba32> image = SixLabors.ImageSharp.Image.Load<Rgba32>(Image.DefaultImageSharpDecoderOptions, iconStream);

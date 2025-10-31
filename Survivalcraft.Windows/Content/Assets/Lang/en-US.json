@@ -38,7 +38,16 @@
   },
   "ContentScreen": {
     "1": "Mod Management",
-    "2": "Content Management"
+    "2": "Content Management",
+    "3": "Select the file you want to import",
+    "4": "Import {0} Successfully",
+    "ExtensionName": {
+      ".scworld": "World",
+      ".scbtex": "Block Texture",
+      ".scskin": "Player Skin",
+      ".scfpack": "Furniture Pack",
+      ".scmod": "Mod"
+    }
   },
   "ModsManageContentScreen": {
     "1": "Manage mod content",
@@ -2985,10 +2994,12 @@
       "7": "From Link",
       "8": "Manage downloaded content",
       "9": "Manage Content",
-      "10": "Access content created by other Original community members and registered for public access",
+      "10": "Access content created by other original community members and registered for public access",
       "11": "Original Community",
       "12": "Manage downloaded mod",
-      "13": "Manage Mod"
+      "13": "Manage Mod",
+      "14": "Import content from the file picker of your system",
+      "15": "Device"
     },
     "ExternalContentScreen": {
       "1": "",
