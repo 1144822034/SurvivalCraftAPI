@@ -39,6 +39,8 @@ namespace Engine.Input {
         public static Dictionary<int, int> m_deviceToIndex = [];
         public static List<int> m_toRemove = [];
         public static ConcurrentQueue<KeyInfo> m_cachedKeyEvents = [];
+#elif IOS
+
 #else
         public static IReadOnlyList<IGamepad> m_gamepads;
 #endif
@@ -49,15 +51,15 @@ namespace Engine.Input {
         static State[] m_states = [new(), new(), new(), new()];
 
         internal static void Initialize() {
-#if !ANDROID
+#if !ANDROID && !IOS
             m_gamepads = Window.m_inputContext.Gamepads;
 #endif
         }
 
         internal static void Dispose() { }
 
-        internal static void BeforeFrame() {
 #if ANDROID
+        internal static void BeforeFrame() {
             if (Time.PeriodicEvent(2.0, 0.0)) {
                 m_toRemove.Clear();
                 foreach (int key in m_deviceToIndex.Keys) {
@@ -176,7 +178,10 @@ namespace Engine.Input {
                 m_states[value].IsConnected = false;
             }
         }
+#elif IOS
+        internal static void BeforeFrame() {}
 #else
+        internal static void BeforeFrame() {
             for (int padIndex = 0; padIndex < 4; padIndex++) {
                 if (padIndex >= m_gamepads.Count) {
                     break;

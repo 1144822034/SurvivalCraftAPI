@@ -140,7 +140,7 @@ namespace Game {
             LastFrameTime = (float)(Time.RealTime - m_frameBeginTime);
             LastCpuFrameTime = (float)(m_cpuEndTime - m_frameBeginTime);
             m_frameBeginTime = Time.RealTime;
-#if !ANDROID
+#if !ANDROID &&!IOS
             if (Keyboard.IsKeyDownOnce(Key.F11)) {
                 SettingsManager.WindowMode = SettingsManager.WindowMode == WindowMode.Fullscreen ? WindowMode.Resizable : WindowMode.Fullscreen;
                 Mouse.m_lastMousePosition = null;
@@ -157,7 +157,9 @@ namespace Game {
                     MusicManager.Update();
                     ScreensManager.Update();
                     DialogsManager.Update();
+#if !IOS
                     JsInterface.Update();
+#endif
                 }
                 else {
                     ExceptionManager.UpdateExceptionScreen();

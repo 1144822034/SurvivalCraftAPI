@@ -49,7 +49,7 @@ namespace Game {
                 m_writer = new StreamWriter(m_stream);
             }
             catch (Exception ex) {
-#if !ANDROID
+#if !ANDROID && !IOS
 #if WINDOWS
                 AllocConsole();
                 Window.Closed += () => FreeConsole();

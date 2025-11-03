@@ -86,7 +86,20 @@ namespace Game {
         public static bool ShowLogoInScreenshots { get; set; }
 
         public static ScreenshotSize ScreenshotSize { get; set; }
+#if IOS
+        private static Point2 m_screenshotSizeCustom;
+        public static Point2 ScreenshotSizeCustom {
+            get { return m_screenshotSizeCustom; }
+            set {
+                int max = Math.Min(Display.MaxTextureSize, 16384);
+                int width = MathUtils.Clamp(value.X, 120, max);
+                int height = MathUtils.Clamp(value.Y, 120, max);
+                value = new Point2(width, height);
+            }
+        }
 
+
+#else
         public static Point2 ScreenshotSizeCustom {
             get;
             set {
@@ -96,6 +109,7 @@ namespace Game {
                 field = new Point2(width, height);
             }
         }
+#endif
 
         public static WindowMode WindowMode {
             get => m_windowMode;
@@ -256,7 +270,7 @@ namespace Game {
         public static ValuesDictionary KeyboardMappingSettings { get; set; }
         public static ValuesDictionary CameraManageSettings { get; set; }
 
-        static readonly Lock m_saveLock = new();
+        static readonly object m_saveLock = new();
 
         public static void Initialize() {
             {
@@ -499,9 +513,6 @@ namespace Game {
         }
 
         public static void SaveSettings() {
-            if (!m_saveLock.TryEnter(0)) {
-                return;
-            }
             try {
                 try {
                     ModsManager.SaveConfigs();
@@ -547,7 +558,6 @@ namespace Game {
                 ExceptionManager.ReportExceptionToUser(str, e);
             }
             finally {
-                m_saveLock.Exit();
             }
         }
     }

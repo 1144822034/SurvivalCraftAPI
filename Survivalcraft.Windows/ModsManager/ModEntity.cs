@@ -315,6 +315,7 @@ namespace Game {
         }
 
         public virtual void LoadJs() {
+#if !IOS
             bool flag = true;
             GetFiles(
                 ".js",
@@ -326,6 +327,7 @@ namespace Game {
                     JsInterface.Execute(new StreamReader(stream).ReadToEnd());
                 }
             );
+#endif
         }
 
         /// <summary>

@@ -8,7 +8,7 @@ using System.Text;
 namespace Engine {
     public class ConsoleLogSink : ILogSink {
         public ConsoleLogSink() {
-#if !ANDROID
+#if !ANDROID && !IOS
             Console.OutputEncoding = Encoding.UTF8;
 #endif
         }

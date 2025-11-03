@@ -12,6 +12,8 @@ namespace Engine.Input {
         static float m_queuedMouseWheelMovement;
 
         static bool m_pointerCaptureRequested;
+#elif IOS
+
 #else
         public static IMouse m_mouse;
 
@@ -42,13 +44,13 @@ namespace Engine.Input {
         public static event Action<MouseButtonEvent> MouseUp;
 
         public static void SetMousePosition(int x, int y) {
-#if !ANDROID
+#if !ANDROID && !IOS
             m_mouse.Position = new System.Numerics.Vector2(x, y);
 #endif
         }
 
         internal static void Initialize() {
-#if !ANDROID
+#if !ANDROID && !IOS
             m_mouse = Window.m_inputContext.Mice[0];
             m_mouse.MouseDown += MouseDownHandler;
             m_mouse.MouseUp += MouseUpHandler;
@@ -77,6 +79,8 @@ namespace Engine.Input {
             }
             MouseWheelMovement = (int)MathUtils.Round(m_queuedMouseWheelMovement) * 120;
             m_queuedMouseWheelMovement = 0f;
+#elif IOS
+
 #else
             if (Window.IsActive) {
                 Point2 position = new((int)m_mouse.Position.X, (int)m_mouse.Position.Y);
@@ -222,7 +226,7 @@ namespace Engine.Input {
             }
             if (!IsMouseVisible) {
                 MousePosition = null;
-#if !ANDROID
+#if !ANDROID && !IOS
                 m_mouse.Cursor.CursorMode = Window.IsActive ? CursorMode.Disabled : CursorMode.Normal;
             }
             else {

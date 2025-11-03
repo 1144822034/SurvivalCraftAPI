@@ -2,6 +2,7 @@
 #pragma warning disable CA1416
 using Android.Content;
 using Android.OS;
+#elif IOS
 #else
 using System.Reflection;
 using System.Runtime.CompilerServices;
@@ -15,12 +16,13 @@ using Monitor = Silk.NET.Windowing.Monitor;
 using System.Runtime.InteropServices;
 #endif
 #endif
-using System.Diagnostics;
 using Engine.Audio;
 using Engine.Graphics;
 using Engine.Input;
 using Silk.NET.Maths;
+using Silk.NET.OpenGLES;
 using Silk.NET.Windowing;
+using System.Diagnostics;
 using Environment = System.Environment;
 
 namespace Engine {
@@ -37,6 +39,8 @@ namespace Engine {
 
 #if ANDROID
         public static EngineActivity Activity => EngineActivity.m_activity;
+#elif IOS
+        public static IWindow m_gameWindow;
 #else
         public static IWindow m_gameWindow;
 
@@ -55,7 +59,7 @@ namespace Engine {
 
         public static Point2 ScreenSize {
             get {
-#if ANDROID
+#if ANDROID || IOS
                 return new Point2(m_view.Size.X, m_view.Size.Y);
 #else
                 IMonitor monitor = m_gameWindow?.Monitor;
@@ -104,7 +108,7 @@ namespace Engine {
 
         public static WindowMode WindowMode {
             get {
-#if ANDROID
+#if ANDROID || IOS
                 return WindowMode.Fullscreen;
 #else
                 VerifyWindowOpened();
@@ -116,7 +120,7 @@ namespace Engine {
             set
             // ReSharper restore ValueParameterNotUsed
             {
-#if ANDROID
+#if ANDROID || IOS
 #else
                 VerifyWindowOpened();
                 switch (value) {
@@ -151,7 +155,7 @@ namespace Engine {
         public static Point2 Position {
             get {
                 VerifyWindowOpened();
-#if ANDROID
+#if ANDROID || IOS
                 return Point2.Zero;
 #else
                 return new Point2(m_gameWindow.Position.X, m_gameWindow.Position.Y);
@@ -161,7 +165,7 @@ namespace Engine {
             set
             // ReSharper restore ValueParameterNotUsed
             {
-#if ANDROID
+#if ANDROID || IOS
 #else
                 VerifyWindowOpened();
                 m_gameWindow.Position = new Vector2D<int>(value.X, value.Y);
@@ -172,13 +176,13 @@ namespace Engine {
         public static Point2 Size {
             get {
                 VerifyWindowOpened();
-                return new Point2(m_view.Size.X, m_view.Size.Y);
+                return new Point2(m_view.FramebufferSize.X, m_view.FramebufferSize.Y);
             }
             // ReSharper disable ValueParameterNotUsed
             set
             // ReSharper restore ValueParameterNotUsed
             {
-#if ANDROID
+#if ANDROID || IOS
 #else
                 VerifyWindowOpened();
                 m_gameWindow.Size = new Vector2D<int>(value.X, value.Y);
@@ -195,7 +199,7 @@ namespace Engine {
             set
             // ReSharper restore ValueParameterNotUsed
             {
-#if !ANDROID
+#if !ANDROID && !IOS
                 VerifyWindowOpened();
                 m_titlePrefix = value;
                 m_gameWindow.Title = $"{m_titlePrefix}{m_titleSuffix}";
@@ -212,7 +216,7 @@ namespace Engine {
             set
             // ReSharper restore ValueParameterNotUsed
             {
-#if !ANDROID
+#if !ANDROID && !IOS
                 VerifyWindowOpened();
                 m_titleSuffix = value;
                 m_gameWindow.Title = $"{m_titlePrefix}{m_titleSuffix}";
@@ -222,7 +226,7 @@ namespace Engine {
 
         public static string Title {
             get {
-#if ANDROID
+#if ANDROID || IOS
                 return string.Empty;
 #else
                 VerifyWindowOpened();
@@ -233,7 +237,7 @@ namespace Engine {
             set
             // ReSharper restore ValueParameterNotUsed
             {
-#if !ANDROID
+#if !ANDROID && !IOS
                 VerifyWindowOpened();
                 m_gameWindow.Title = value;
                 m_titlePrefix = value;
@@ -279,7 +283,7 @@ namespace Engine {
 
         public static event Action LowMemory;
 
-#if ANDROID
+#if ANDROID || IOS
         public const string WindowingLibrary = "Silk.NET.Windowing.Sdl";
 #else
         public const string WindowingLibrary = "Silk.NET.Windowing.Glfw";
@@ -318,6 +322,8 @@ namespace Engine {
             Silk.NET.Windowing.Window.TryAdd(WindowingLibrary);
 #if DIRECT3D11
             GraphicsAPI api = GraphicsAPI.None;
+#elif IOS
+            GraphicsAPI api = new(ContextAPI.OpenGLES, ContextProfile.Core, ContextFlags.Default, new APIVersion(3, 0));
 #elif DEBUG
             GraphicsAPI api = new(ContextAPI.OpenGLES, ContextProfile.Compatability, ContextFlags.Debug, new APIVersion(3, 2));
 #elif ANDROID
@@ -341,6 +347,9 @@ namespace Engine {
             Activity.Resumed += ResumedHandler;
             Activity.Destroyed += DestroyedHandler;
             Activity.NewIntent += NewIntentHandler;
+#elif IOS
+            ViewOptions options = ViewOptions.Default with { API = api };
+            m_view = Silk.NET.Windowing.Window.GetView(options);
 #else
             Point2 screenSize = ScreenSize;
             if (screenSize.X == 0
@@ -363,9 +372,9 @@ namespace Engine {
             try {
                 m_view.Run(); //会阻塞，不要放置在前边
             }
-#if !ANDROID
+#if !ANDROID && !IOS
             catch (GlfwException e) {
-                if (e.ErrorCode == ErrorCode.VersionUnavailable) {
+                if (e.ErrorCode == Silk.NET.GLFW.ErrorCode.VersionUnavailable) {
                     const string str =
                         "Your graphics card driver does not support the graphics API used by the current program. Please try updating your graphics card driver or using the compatible patch.\n你的显卡驱动不支持当前程序使用的图形API，请尝试更新显卡驱动，或使用兼容补丁。";
                     Log.Error($"str\n{e}");
@@ -384,7 +393,7 @@ namespace Engine {
 #endif
             finally {
 #if !DIRECT3D11
-                GLWrapper.GL.Dispose();
+                GLWrapper.GL?.Dispose();
 #endif
                 m_view?.Dispose();
             }
@@ -437,8 +446,8 @@ namespace Engine {
         }
 
         static void ResizeHandler(Vector2D<int> _) {
-#if ANDROID
-            if (m_state != 0) {
+#if ANDROID || IOS
+            if (m_state != State.Uncreated) {
                 Display.Resize();
                 Resized?.Invoke();
             }
@@ -447,17 +456,18 @@ namespace Engine {
             Resized?.Invoke();
 #endif
         }
-
+        public static bool Debu;
         static void RenderFrameHandler(double lastRenderDelta) {
             m_lastRenderDelta = (float)lastRenderDelta;
             BeforeFrameAll();
             Frame?.Invoke();
             AfterFrameAll();
+
             if (!m_closing) {
 #if DIRECT3D11
                 DXWrapper.Present(m_swapInterval ?? 1);
 #else
-                m_view.GLContext?.SwapBuffers();
+                m_view.SwapBuffers(); ;
 #endif
             }
             else {
@@ -540,7 +550,7 @@ namespace Engine {
 
         static void InitializeAll() {
             try {
-#if !ANDROID
+#if !ANDROID && !IOS
                 using (Stream iconStream = typeof(Window).GetTypeInfo().Assembly.GetManifestResourceStream("Engine.Resources.icon.png")) {
                     if (iconStream != null) {
                         Image<Rgba32> image = SixLabors.ImageSharp.Image.Load<Rgba32>(Image.DefaultImageSharpDecoderOptions, iconStream);
@@ -549,14 +559,13 @@ namespace Engine {
                         m_gameWindow.SetWindowIcon([new RawImage(image.Width, image.Height, pixelBytes)]);
                     }
                 }
-#endif
-                Dispatcher.Initialize();
-                Display.Initialize();
-#if !ANDROID
                 InputWindowExtensions.ShouldLoadFirstPartyPlatforms(false);
                 InputWindowExtensions.TryAdd(InputLibrary);
                 m_inputContext = m_view.CreateInput();
+
 #endif
+                Dispatcher.Initialize();
+                Display.Initialize();
                 Keyboard.Initialize();
                 Mouse.Initialize();
                 Touch.Initialize();

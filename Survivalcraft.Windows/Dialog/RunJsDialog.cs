@@ -52,12 +52,14 @@ namespace Game {
 
         public void Dismiss(bool flag) {
             if (flag) {
+#if !IOS
                 Stopwatch stopwatch = Stopwatch.StartNew();
                 string result = JsInterface.Evaluate(m_inputBox.Text);
                 stopwatch.Stop();
                 TimeSpan timeCosted = stopwatch.Elapsed;
                 m_outputBox.Text = result;
                 m_timeCostedLabel.Text = $"{Math.Floor(timeCosted.TotalSeconds)}s {timeCosted.Milliseconds}ms";
+#endif
             }
             else {
                 DialogsManager.HideDialog(this);

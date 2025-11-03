@@ -1,8 +1,11 @@
 using System.Text;
+
 #if ANDROID
 #pragma warning disable CA1416
 using Environment = Android.OS.Environment;
 using Android.OS;
+#elif IOS
+using Foundation;
 #else
 using System.Reflection;
 #endif
@@ -23,6 +26,18 @@ namespace Engine {
                     StatFs statFs = new(Environment.DataDirectory?.Path);
                     long num = statFs.BlockSizeLong;
                     return statFs.AvailableBlocksLong * num;
+                }
+                catch (Exception) {
+                    return long.MaxValue;
+                }
+#elif IOS
+                try {
+                    var paths = NSSearchPath.GetDirectories(NSSearchPathDirectory.DocumentDirectory,
+                                              NSSearchPathDomain.User, true);
+
+                    var attributes = NSFileManager.DefaultManager.GetFileSystemAttributes(paths[0]);
+
+                    return (long)attributes.FreeSize;
                 }
                 catch (Exception) {
                     return long.MaxValue;
@@ -229,6 +244,25 @@ namespace Engine {
             if (path.StartsWith("config:")) {
                 isApp = false;
                 return Path.Combine(EngineActivity.ConfigPath, path.Substring(8).TrimStart(Path.DirectorySeparatorChar));
+            }
+            throw new InvalidOperationException($"Invalid path \"{path}\".");
+        }
+#elif IOS
+        public static string ProcessPath(string path, bool writeAccess, bool failIfApp) => ProcessPath(path, writeAccess, failIfApp, out _);
+        public static string ProcessPath(string path, bool writeAccess, bool failIfApp, out bool isApp) {
+            ArgumentNullException.ThrowIfNull(path);
+            if (Path.DirectorySeparatorChar != '/') {
+                path = path.Replace('/', Path.DirectorySeparatorChar);
+            }
+            if (Path.DirectorySeparatorChar != '\\') {
+                path = path.Replace('\\', Path.DirectorySeparatorChar);
+            }
+            if (path.StartsWith("app:") || path.StartsWith("data:")) {
+                isApp = false;
+                return Path.Combine(
+                    System.Environment.GetFolderPath(System.Environment.SpecialFolder.MyDocuments),
+                    path.Substring(5).TrimStart(Path.DirectorySeparatorChar)
+                );
             }
             throw new InvalidOperationException($"Invalid path \"{path}\".");
         }

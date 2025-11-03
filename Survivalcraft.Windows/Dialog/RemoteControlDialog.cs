@@ -1,3 +1,4 @@
+#if !IOS
 using System.Net;
 using System.Xml.Linq;
 
@@ -81,3 +82,10 @@ namespace Game {
         }
     }
 }
+#else
+namespace Game {
+    public class RemoteControlDialog : Dialog {
+
+    }
+}
+#endif

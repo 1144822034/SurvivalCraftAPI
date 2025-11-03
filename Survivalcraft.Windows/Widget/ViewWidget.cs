@@ -74,8 +74,7 @@ namespace Game {
         }
 
         public virtual void SetupScalingRenderTarget() {
-            float num = SettingsManager.ResolutionMode == ResolutionMode.Low ? 0.5f :
-                SettingsManager.ResolutionMode != ResolutionMode.Medium ? 1f : 0.75f;
+            float num = SettingsManager.ResolutionMode == ResolutionMode.Low ? 0.5f : SettingsManager.ResolutionMode != ResolutionMode.Medium ? 1f : 0.75f;
             float num2 = GlobalTransform.Right.Length();
             float num3 = GlobalTransform.Up.Length();
             Vector2 vector = new(ActualSize.X * num2, ActualSize.Y * num3);

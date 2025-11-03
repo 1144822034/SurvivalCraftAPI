@@ -1,3 +1,4 @@
+#if !IOS
 using System.Diagnostics;
 using System.Net;
 using System.Text;
@@ -316,3 +317,111 @@ namespace Game {
         }
     }
 }
+#else
+using Engine;
+using Engine.Input;
+using JavaScriptCore;
+using System.Runtime.InteropServices.JavaScript;
+using static System.Runtime.InteropServices.JavaScript.JSType;
+
+namespace Game {
+    public class JsInterface {
+        private static JSContext jSContext;
+        public static Dictionary<string, List<JSValue>> handlersDictionary;
+        private static JsModLoader loader;
+
+
+        public static void Initiate() {
+            jSContext = new JSContext();
+            handlersDictionary = new();
+
+        }
+        public static JSValue Invoke(string str, params object[] arguments) {
+            try {
+                var jv = JSValue.CreateArray(jSContext);
+                JSValue[] jSValues = new JSValue[arguments.Length];
+                for (int i = 0; i < arguments.Length; i++) jSValues[i] = JSValue.From((NSObject)arguments[i],jSContext);
+                return jSContext.GlobalObject.GetProperty(str).Call(jSValues);
+            }
+            catch (Exception ex) {
+                Log.Error(ex);
+            }
+            return null;
+        }
+
+        public static void RegisterEvent() {
+            var keyDownHandlers = GetHandlers("keyDownHandlers");
+            if (keyDownHandlers != null
+                && keyDownHandlers.Count > 0) {
+                Keyboard.KeyDown += delegate (Key key) {
+                    string keyString = key.ToString();
+                    keyDownHandlers.ForEach(keyDownEvt => { keyDownEvt.Call(new JSValue[] { JSValue.From(keyString,jSContext) }); });
+                };
+            }
+            var keyUpHandlers = GetHandlers("keyUpHandlers");
+            if (keyUpHandlers != null
+                && keyUpHandlers.Count > 0) {
+                Keyboard.KeyUp += delegate (Key key) {
+                    string keyString = key.ToString();
+                    keyUpHandlers.ForEach(keyDownEvt => { keyDownEvt.Call(new JSValue[] { JSValue.From(keyString, jSContext) }); });
+                };
+            }
+            var frameHandlers = GetHandlers("frameHandlers");
+            if (frameHandlers != null
+                && frameHandlers.Count > 0) {
+                Window.Frame += delegate { frameHandlers.ForEach(frameEvt => { frameEvt.Call(new JSValue[] { JSValue.From("", jSContext) }); }); };
+            }
+            handlersDictionary = [];
+            loader = (JsModLoader)ModsManager.ModLoaders.Find(item => item is JsModLoader);
+            loader.JSContext = jSContext;
+            GetAndRegisterHandlers("OnMinerDig");
+            GetAndRegisterHandlers("OnMinerPlace");
+            GetAndRegisterHandlers("OnPlayerSpawned");
+            GetAndRegisterHandlers("OnPlayerDead");
+            GetAndRegisterHandlers("ProcessAttackment");
+            GetAndRegisterHandlers("CalculateCreatureInjuryAmount");
+            GetAndRegisterHandlers("OnProjectLoaded");
+            GetAndRegisterHandlers("OnProjectDisposed");
+        }
+
+        public static void Execute(string str) {
+            try {
+                jSContext.EvaluateScript(str);
+            }
+            catch (Exception ex) {
+                Log.Error(ex);
+            }
+        }
+
+        public static List<JSValue> GetHandlers(string str) {
+            JSValue array = jSContext.GlobalObject.GetProperty(str);
+            if (array.IsNull) {
+                return null;
+            }
+            array.ToArray();
+            JSValue.From(array,jSContext);
+            List<JSValue> list = new() { array };
+            return list;
+        }
+
+        public static void GetAndRegisterHandlers(string handlesName) {
+            try {
+                if (handlersDictionary.ContainsKey(handlesName)) {
+                    return;
+                }
+                List<JSValue> handlers = GetHandlers($"{handlesName}Handlers");
+                if (handlers != null
+                    && handlers.Count > 0) {
+                    handlersDictionary.Add(handlesName, handlers);
+                    ModsManager.RegisterHook(handlesName, loader);
+                }
+            }
+            catch (Exception ex) {
+                Log.Error(ex);
+            }
+        }
+
+    }
+}
+
+#endif

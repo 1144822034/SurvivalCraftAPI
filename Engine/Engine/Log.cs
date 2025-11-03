@@ -27,7 +27,7 @@ namespace Engine {
                     }
                 }
             }
-#if ANDROID
+#if ANDROID || IOS
             Console.WriteLine($"SCAPI[{type}]{message}");
 #endif
         }
@@ -86,7 +86,7 @@ namespace Engine {
 
         public static void Error(string message) {
             Write(LogType.Error, message);
-#if !ANDROID
+#if !ANDROID && !IOS
             Window.TitleSuffix = $" #{message}";
 #endif
         }

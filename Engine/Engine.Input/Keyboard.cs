@@ -202,7 +202,7 @@ namespace Engine.Input {
         }
 
         internal static void Initialize() {
-#if !ANDROID
+#if !ANDROID && !IOS
             m_keyboard = Window.m_inputContext.Keyboards[0];
             m_keyboard.KeyDown += KeyDownHandler;
             m_keyboard.KeyUp += KeyUpHandler;

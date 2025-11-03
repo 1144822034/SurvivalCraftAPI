@@ -241,7 +241,7 @@ namespace Game {
             }
             if (m_addAnotherButton.IsClicked
                 && VerifyName()) {
-                m_playerData.SubsystemPlayers.AddPlayerData(m_playerData);
+                m_playerData.SubsystemPlayers.AddPlayerData(m_playerData);                
                 ScreensManager.SwitchScreen("Player", Mode.Initial, m_playerData.SubsystemPlayers.Project);
             }
             if ((Input.Back || Input.Cancel || Children.Find<ButtonWidget>("TopBar.Back").IsClicked)

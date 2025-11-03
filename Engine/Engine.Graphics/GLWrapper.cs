@@ -1,6 +1,6 @@
-using System.Diagnostics;
 using Silk.NET.OpenGLES;
-#if DEBUG
+using System.Diagnostics;
+#if DEBUG &&!IOS
 using System.Runtime.InteropServices;
 #endif
 
@@ -9,6 +9,8 @@ namespace Engine.Graphics {
         public static GL GL;
 
         public static int m_mainFramebuffer;
+
+        public static int m_mainDepthbuffer;
 
         public static int m_mainColorbuffer;
 
@@ -100,7 +102,14 @@ namespace Engine.Graphics {
 
         public static void Initialize() {
             GL = GL.GetApi(Window.m_view);
-#if DEBUG
+#if IOS
+            m_mainFramebuffer = GL.GetInteger((GLEnum)GetPName.DrawFramebufferBinding);
+            m_mainDepthbuffer = GL.GetInteger((GLEnum)GetPName.RenderbufferBinding);
+            m_mainColorbuffer = GL.GetInteger(GLEnum.ColorAttachment0);
+#else
+            m_mainFramebuffer = 0;
+#endif
+#if DEBUG && !IOS
             unsafe {
                 GL.DebugMessageCallback(DebugMessageDelegate, IntPtr.Zero.ToPointer());
                 GL.Enable(EnableCap.DebugOutput);
@@ -556,7 +565,16 @@ namespace Engine.Graphics {
         }
 
         public static void ApplyRenderTarget(RenderTarget2D renderTarget) {
-            BindFramebuffer(renderTarget?.m_frameBuffer ?? m_mainFramebuffer);
+            if (renderTarget != null) {
+                BindFramebuffer(renderTarget.m_frameBuffer);
+                if (renderTarget.m_depthBuffer != 0) {
+                    GL.BindRenderbuffer(RenderbufferTarget.Renderbuffer, (uint)renderTarget.m_depthBuffer);
+                }
+            }
+            else {
+                BindFramebuffer(m_mainFramebuffer);
+                GL.BindRenderbuffer(RenderbufferTarget.Renderbuffer, (uint)m_mainDepthbuffer);
+            }
         }
 
         public static unsafe void ApplyShaderAndBuffers(Shader shader,
@@ -564,6 +582,15 @@ namespace Engine.Graphics {
             IntPtr vertexOffset,
             int arrayBuffer,
             int? elementArrayBuffer) {
+
+#if IOS && DEBUG
+            string log = GL.GetProgramInfoLog((uint)shader.m_program);
+            if(!string.IsNullOrEmpty(log)) Console.WriteLine("Program Link Error: " + log);
+            log = GL.GetShaderInfoLog((uint)shader.m_program);
+            if (!string.IsNullOrEmpty(log))  Console.WriteLine("Shader Compile Error: " + log);
+#endif
+
+
             shader.PrepareForDrawing();
             BindBuffer(BufferTargetARB.ArrayBuffer, arrayBuffer);
             if (elementArrayBuffer.HasValue) {
@@ -679,7 +706,7 @@ namespace Engine.Graphics {
                                 TextureParameterName.TextureWrapT,
                                 (int)TranslateTextureAddressMode(samplerState.AddressModeV)
                             );
-#if !ANDROID
+#if !ANDROID && !IOS
                             GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMinLod, samplerState.MinLod);
                             GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMaxLod, samplerState.MaxLod);
 #endif
@@ -702,7 +729,7 @@ namespace Engine.Graphics {
             if (color.HasValue) {
                 all |= ClearBufferMask.ColorBufferBit;
                 ClearColor(color.Value);
-                ColorMask(15);
+                ColorMask(0xF);
             }
             if (depth.HasValue) {
                 all |= ClearBufferMask.DepthBufferBit;
@@ -715,7 +742,7 @@ namespace Engine.Graphics {
                 all |= ClearBufferMask.StencilBufferBit;
                 ClearStencil(stencil.Value);
             }
-            if (all != 0) {
+            if (all != ClearBufferMask.None) {
                 ApplyRenderTarget(renderTarget);
                 if (Disable(EnableCap.ScissorTest)) {
                     m_rasterizerState = null;
@@ -958,7 +985,7 @@ namespace Engine.Graphics {
         public static InternalFormat TranslateDepthFormat(DepthFormat depthFormat) {
             return depthFormat switch {
                 DepthFormat.Depth16 => InternalFormat.DepthComponent16,
-#if ANDROID
+#if ANDROID || IOS
                 DepthFormat.Depth24Stencil8 => GL_OES_packed_depth_stencil ? InternalFormat.Depth24Stencil8 : InternalFormat.DepthComponent16,
 #else
                 DepthFormat.Depth24Stencil8 => InternalFormat.Depth24Stencil8,
@@ -966,23 +993,17 @@ namespace Engine.Graphics {
                 _ => throw new InvalidOperationException("Unsupported DepthFormat.")
             };
         }
-#if DEBUG
-        static readonly DebugProc DebugMessageDelegate = (_,
-            type,
-            _,
-            _,
-            length,
-            pMessage,
-            _) => {
+#if DEBUG && !IOS
+        public static void DebugMessageDelegate (GLEnum source, GLEnum type, int id, GLEnum severity, int length, nint message, nint userParam) {
             if (type == GLEnum.DebugTypeOther) {
                 return;
             }
-            string message = Marshal.PtrToStringAnsi(pMessage, length);
-            Console.WriteLine($"[{type.ToString().Substring(9)}] {message}");
+            string messageText = Marshal.PtrToStringAnsi(message, length);
+            Console.WriteLine($"[{type.ToString().Substring(9)}] {messageText}");
             if (type == GLEnum.DebugTypeError) {
                 Debugger.Break();
             }
-        };
+        }
 #endif
         [Conditional("DEBUG")]
         public static void CheckGLError() { }

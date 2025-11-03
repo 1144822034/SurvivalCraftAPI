@@ -25,7 +25,7 @@ namespace Engine.Audio {
         }
 
         internal static unsafe void Initialize() {
-#if !ANDROID
+#if !ANDROID && !IOS
             //直接加载
             string fullPath = Path.GetDirectoryName(
                 RunPath.GetExecutablePath() == "" ? RunPath.GetEntryPath() : RunPath.GetExecutablePath()
