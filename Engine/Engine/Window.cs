@@ -256,7 +256,10 @@ namespace Engine {
                 VerifyWindowOpened();
                 value = Math.Clamp(value, 0, 4);
                 if (value != PresentationInterval) {
+                    //IOS不支持下面的设置
+#if !IOS
                     m_view.GLContext?.SwapInterval(value);
+#endif
                     m_swapInterval = value;
                 }
             }

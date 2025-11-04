@@ -1,0 +1,56 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+    <PropertyGroup>
+        <TargetFramework>net9.0-ios18.0</TargetFramework>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+        <AllowUnsafeBlocks>True</AllowUnsafeBlocks>
+        <SupportedOSPlatformVersion>15.0</SupportedOSPlatformVersion>
+        <AssemblyName>Engine</AssemblyName>
+        <RootNamespace>Engine</RootNamespace>
+        <IsTrimmable>true</IsTrimmable>
+        <Platforms>AnyCPU</Platforms>
+    </PropertyGroup>
+    <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+        <MtouchLink>None</MtouchLink>
+    </PropertyGroup>
+    <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+        <MtouchLink>None</MtouchLink>
+    </PropertyGroup>
+    <ItemGroup>
+        <Compile Include="..\Engine\**\*.cs" />
+    </ItemGroup>
+    <ItemGroup>
+        <Compile Remove="..\Engine\obj\**\*.cs" />
+        <Compile Remove="..\Engine\Properties\*.cs"></Compile>
+        <Compile Remove="..\Engine\Engine.Graphics\DXWrapper.cs" />
+    </ItemGroup>
+    <ItemGroup>
+      <EmbeddedResource Include="Resources\Debugfont.lst" />
+      <EmbeddedResource Include="Resources\Debugfont.png" />
+      <EmbeddedResource Include="Resources\icon.png" />
+      <EmbeddedResource Include="Resources\Lit.psh" />
+      <EmbeddedResource Include="Resources\Lit.vsh" />
+      <EmbeddedResource Include="Resources\Unlit.psh" />
+      <EmbeddedResource Include="Resources\Unlit.vsh" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <PackageReference Include="NVorbis" Version="0.10.5" />
+        <PackageReference Include="SixLabors.ImageSharp" Version="3.1.11" />
+        <PackageReference Include="NLayer.NAudioSupport" Version="1.4.0" />
+        <PackageReference Include="NAudio.Core" Version="2.2.1" />
+        <PackageReference Include="Silk.NET.Windowing" Version="2.22.0" />
+        <PackageReference Include="Silk.NET.OpenGLES" Version="2.22.0" />
+        <PackageReference Include="Silk.NET.OpenAL" Version="2.22.0" />
+        <PackageReference Include="Silk.NET.Input" Version="2.22.0" />
+        <PackageReference Include="System.Net.Http" Version="4.3.4" />
+        <PackageReference Include="System.Private.Uri" Version="4.3.2" />
+        <PackageReference Include="System.Text.RegularExpressions" Version="4.3.1" />
+        <PackageReference Include="Tomlyn" Version="0.19.0" />
+    </ItemGroup>
+    <ItemGroup>
+      <Reference Include="Bass.Net">
+        <HintPath>Bass.Net.dll</HintPath>
+      </Reference>
+    </ItemGroup>
+</Project>

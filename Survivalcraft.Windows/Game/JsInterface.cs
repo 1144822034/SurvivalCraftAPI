@@ -317,11 +317,16 @@ namespace Game {
         }
     }
 }
-#else
+#elif __IOS
 using Engine;
 using Engine.Input;
 using JavaScriptCore;
+using System.Diagnostics;
+using System.Net;
 using System.Runtime.InteropServices.JavaScript;
+using System.Text;
+using System.Text.Json;
+using System.Xml.Linq;
 using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace Game {
@@ -329,13 +334,80 @@ namespace Game {
         private static JSContext jSContext;
         public static Dictionary<string, List<JSValue>> handlersDictionary;
         private static JsModLoader loader;
+        public static HttpListener httpListener;
+        public static int httpPort;
+        public static string httpPassword;
+        public static bool httpProcessing;
+        public static bool httpScriptPrepared;
+        public static TaskCompletionSource<HttpResponse> httpResponse = new();
+        private static string httpScript;
+        public const string fName = "JsInterface";
 
 
         public static void Initiate() {
             jSContext = new JSContext();
             handlersDictionary = new();
 
+            string codeString = null;
+            try {
+                if (Storage.FileExists("app:init.js")) {
+                    codeString = Storage.ReadAllText("app:init.js");
+                }
+            }
+            catch {
+                Log.Warning(LanguageControl.Get(fName, "5"));
+            }
+            Execute(codeString);
+            httpListener = new HttpListener();
+            if (ModsManager.Configs.TryGetValue("RemoteControlPort", out string portString)
+                && int.TryParse(portString, out int port)) {
+                SetHttpPort(port);
+            }
+            else {
+                SetHttpPort((DateTime.Now.Millisecond * 32749 + 8191) % 9000 + 1024, true);
+            }
+            if (ModsManager.Configs.TryGetValue("RemoteControlPassword", out string password)) {
+                httpPassword = password;
+            }
+            else {
+                httpPassword = ((DateTime.Now.Millisecond * 49999 + 3067) % 9000 + 999).ToString();
+                ModsManager.SetConfig("RemoteControlPassword", httpPassword);
+            }
+            if (ModsManager.Configs.TryGetValue("RemoteControlEnabled", out string enable)
+                && bool.Parse(enable)) {
+                Task.Run(StartHttpListener);
+            }
+
         }
+
+        public static void SetHttpPort(int port, bool updateConfig = false) {
+            httpPort = port;
+#if DEBUG
+            httpListener.Prefixes.Add("http://+:28256/");
+#elif RELEASE
+            httpListener.Prefixes.Clear();
+            httpListener.Prefixes.Add($"http://{IPAddress.Loopback}:{port}/");
+            httpListener.Prefixes.Add($"http://localhost:{port}/");
+#endif
+            if (updateConfig) {
+                ModsManager.SetConfig("RemoteControlPort", port.ToString());
+            }
+        }
+
+        public static async Task StartHttpListener() {
+            try {
+                httpListener.Start();
+            }
+            catch (Exception e) {
+                Log.Error($"Remote control server starts failed: {e}");
+            }
+            while (httpListener.IsListening) {
+                HttpListenerContext context = await httpListener.GetContextAsync();
+                _ = Task.Run(() => HandleHttpRequest(context));
+            }
+        }
+
+
         public static JSValue Invoke(string str, params object[] arguments) {
             try {
                 var jv = JSValue.CreateArray(jSContext);
@@ -384,23 +456,26 @@ namespace Game {
             GetAndRegisterHandlers("OnProjectDisposed");
         }
 
-        public static void Execute(string str) {
+        public static JSValue Execute(string str) {
             try {
-                jSContext.EvaluateScript(str);
+                return jSContext.EvaluateScript(str);
             }
             catch (Exception ex) {
                 Log.Error(ex);
             }
+            return null;
         }
 
         public static List<JSValue> GetHandlers(string str) {
-            JSValue array = jSContext.GlobalObject.GetProperty(str);
-            if (array.IsNull) {
+            JSValue arrayValue = jSContext.GlobalObject.GetProperty(str);
+            if (!arrayValue.IsArray) {
                 return null;
             }
-            array.ToArray();
-            JSValue.From(array,jSContext);
-            List<JSValue> list = new() { array };
+            List<JSValue> list = new();
+            int length = arrayValue.GetProperty("length").ToInt32();
+            for (int i=0;i<length;i++) {
+                list.Add(arrayValue.GetProperty(i.ToString()));
+            }
             return list;
         }
 
@@ -419,6 +494,94 @@ namespace Game {
             catch (Exception ex) {
                 Log.Error(ex);
             }
+        }
+
+        public static void Update() {
+            if (httpProcessing & httpScriptPrepared) {
+                Stopwatch stopwatch = Stopwatch.StartNew();
+                var result = Execute(httpScript);
+                stopwatch.Stop();
+                httpResponse.SetResult(
+                    new HttpResponse {
+                        success = true,
+                        result = result.ToString(),
+                        timeCosted = stopwatch.Elapsed
+                    }
+                );
+            }
+        }
+
+        public static async void HandleHttpRequest(HttpListenerContext context) {
+            try {
+                string responseString;
+                if (httpProcessing) {
+                    responseString = ErrorJsonResponse(LanguageControl.Get(fName, "1"));
+                }
+                else if (context.Request.HttpMethod == "POST") {
+                    if (httpPassword.Length == 0
+                        || (context.Request.Headers.Get("password")?.Equals(httpPassword) ?? false)) {
+                        httpProcessing = true;
+                        httpScriptPrepared = false;
+                        httpResponse = new TaskCompletionSource<HttpResponse>();
+                        try {
+                            using (Stream bodyStream = context.Request.InputStream) {
+                                using (StreamReader reader = new(bodyStream, context.Request.ContentEncoding)) {
+                                    string requestBody = reader.ReadToEnd();
+                                    if (requestBody.Length > 0) {
+                                        httpScript = requestBody;
+                                        httpScriptPrepared = true;
+                                        responseString = JsonSerializer.Serialize(await httpResponse.Task);
+                                    }
+                                    else {
+                                        responseString = ErrorJsonResponse(LanguageControl.Get(fName, "2"));
+                                    }
+                                }
+                            }
+                        }
+                        catch (Exception e) {
+                            responseString = ErrorJsonResponse(e.ToString());
+                        }
+                        httpProcessing = false;
+                    }
+                    else {
+                        responseString = ErrorJsonResponse(LanguageControl.Get(fName, "3"));
+                    }
+                }
+                else if (context.Request.HttpMethod == "ELEVATE") {
+                    responseString = "Sucess";
+                }
+                else {
+                    responseString = ErrorJsonResponse(LanguageControl.Get(fName, "4"));
+                }
+                HttpListenerResponse response = context.Response;
+                response.ContentType = "application/json";
+                byte[] buffer = Encoding.UTF8.GetBytes(responseString);
+                response.ContentLength64 = buffer.Length;
+                Stream output = response.OutputStream;
+                await output.WriteAsync(buffer);
+                output.Close();
+            }
+            catch (Exception e) {
+                context.Response.Close();
+                Log.Error(e);
+            }
+        }
+        public static void StopHttpListener() {
+            //确实能关掉，但有报错，原因不明
+            try {
+                httpListener.Stop();
+            }
+            catch {
+                // ignored
+            }
+        }
+        public static string ErrorJsonResponse(string error) =>
+            JsonSerializer.Serialize(new HttpResponse { success = false, result = error, timeCosted = TimeSpan.Zero });
+
+        public class HttpResponse {
+            public bool success { get; set; }
+            public string result { get; set; }
+            public TimeSpan timeCosted { get; set; }
         }
 
     }

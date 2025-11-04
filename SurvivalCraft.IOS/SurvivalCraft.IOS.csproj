@@ -1,0 +1,72 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+    <PropertyGroup>
+        <TargetFramework>net9.0-ios18.0</TargetFramework>
+        <OutputType>Exe</OutputType>
+        <Nullable>enable</Nullable>
+        <ImplicitUsings>true</ImplicitUsings>
+        <AllowUnsafeBlocks>True</AllowUnsafeBlocks>
+        <AssemblyName>Survivalcraft</AssemblyName>
+        <ProvisioningType>manual</ProvisioningType>
+        <EnableSGenConc>True</EnableSGenConc>
+        <SupportedOSPlatformVersion>15.0</SupportedOSPlatformVersion>
+        <ApplicationId>com.survivalcraft.api</ApplicationId>
+
+    </PropertyGroup>
+    <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+        <MtouchLink>None</MtouchLink>
+        <EnableHotReload>false</EnableHotReload>
+    </PropertyGroup>
+    <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+        <MtouchLink>None</MtouchLink>
+        <MtouchUseLlvm>False</MtouchUseLlvm>
+    </PropertyGroup>
+    <ItemGroup>
+        <Compile Include="..\Survivalcraft.Windows\**\*.cs" Exclude="..\Survivalcraft.Windows\obj\**\*.cs" />
+    </ItemGroup>
+    <ItemGroup>
+        <Compile Remove="..\Survivalcraft.Windows\Properties\AssemblyInfo.cs" />
+    </ItemGroup>
+    <ItemGroup>
+        <EmbeddedResource Include="..\Survivalcraft.Windows\Content.zip" Link="Content.zip">
+            <LogicalName>Game.Content.zip</LogicalName>
+        </EmbeddedResource>
+        <None Include="..\Survivalcraft.Windows\init.js" Link="init.js">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </None>
+    </ItemGroup>
+    <ItemGroup>
+      <ProjectReference Include="..\Engine.IOS\Engine.IOS.csproj" />
+      <ProjectReference Include="..\EntitySystem.IOS\EntitySystem.IOS.csproj" />
+    </ItemGroup>
+    <ItemGroup>
+      <Reference Include="Bass.Net">
+        <HintPath>..\Engine.IOS\Bass.Net.dll</HintPath>
+      </Reference>
+    </ItemGroup>
+
+
+    <ItemGroup>
+        <!--IOS真机原生库加载-->
+        <NativeReference Include="native/bass.xcframework/ios-arm64_armv7_armv7s/bass.framework" Condition="'$(RuntimeIdentifier)'=='ios-arm64'">
+            <Kind>Framework</Kind>
+            <ForceLoad>true</ForceLoad>
+        </NativeReference>
+        <NativeReference Include="native/bassflac.xcframework/ios-arm64_armv7_armv7s/bassflac.framework" Condition="'$(RuntimeIdentifier)'=='ios-arm64'">
+            <Kind>Framework</Kind>
+            <ForceLoad>true</ForceLoad>
+        </NativeReference>
+
+
+        <!--IOS模拟器原生库加载-->
+        <NativeReference Include="native/bass.xcframework/ios-arm64_i386_x86_64-simulator/bass.framework" Condition="'$(RuntimeIdentifier)'=='iossimulator-arm64'">
+            <Kind>Framework</Kind>
+            <ForceLoad>true</ForceLoad>
+        </NativeReference>
+        <NativeReference Include="native/bassflac.xcframework/ios-arm64_i386_x86_64-simulator/bassflac.framework" Condition="'$(RuntimeIdentifier)'=='iossimulator-arm64'">
+            <Kind>Framework</Kind>
+            <ForceLoad>true</ForceLoad>
+        </NativeReference>
+    </ItemGroup>
+
+
+</Project>
