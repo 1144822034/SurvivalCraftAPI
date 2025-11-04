@@ -1,0 +1,57 @@
+name: Build iOS Release IPA
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [ "main" ]
+
+jobs:
+  build:
+    runs-on: macos-15  # macOS ARM64 runner
+
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v4
+
+    - name: Install .NET 9
+      uses: actions/setup-dotnet@v4
+      with:
+        dotnet-version: 9.0.x
+
+    - name: Install MAUI workload
+      run: dotnet workload install maui ios
+
+    - name: Decode signing certificate
+      run: |
+        echo "$IOS_CERTIFICATE_P12" | base64 --decode > ios_cert.p12
+        echo "$IOS_PROVISION_PROFILE" | base64 --decode > ios_profile.mobileprovision
+
+    - name: Install certificate to keychain
+      run: |
+        security create-keychain -p "" build.keychain
+        security import ios_cert.p12 -k build.keychain -P "$IOS_CERTIFICATE_PASSWORD" -A
+        security default-keychain -s build.keychain
+        security unlock-keychain -p "" build.keychain
+        security set-key-partition-list -S apple-tool:,apple: -s -k "" build.keychain
+
+    - name: Install Provisioning Profile
+      run: |
+        mkdir -p ~/Library/MobileDevice/Provisioning\ Profiles
+        uuid=$(grep -aom1 -E '<key>UUID</key><string>.*</string>' ios_profile.mobileprovision | sed -e 's/<key>UUID<\/key><string>//' -e 's/<\/string>//')
+        cp ios_profile.mobileprovision ~/Library/MobileDevice/Provisioning\ Profiles/$uuid.mobileprovision
+
+    - name: Build IPA
+      run: |
+        dotnet publish "SurvivalCraft.IOS/SurvivalCraft.IOS.csproj" \
+          -f net9.0-ios \
+          -c Release \
+          -p:CodesignKey="iPhone Distribution" \
+          -p:CodesignProvision=$uuid \
+          -p:RuntimeIdentifier=ios-arm64 \
+          --self-contained true
+
+    - name: Upload IPA artifact
+      uses: actions/upload-artifact@v4
+      with:
+        name: SurvivalCraft.ipa
+        path: "**/*.ipa"
