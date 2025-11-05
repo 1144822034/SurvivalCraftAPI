@@ -47,6 +47,7 @@ namespace Game {
                     "ProjectXmlLoad",
                     loader => {
                         loader.ProjectXmlLoad(projectNode);
+                        loader.ProjectXmlLoad(projectNode, worldInfo, gamesWidget);
                         return false;
                     }
                 );

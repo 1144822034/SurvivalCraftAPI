@@ -62,7 +62,7 @@ namespace GameEntitySystem {
 
         List<Component> m_components;
 
-        internal bool m_isAddedToProject;
+        public bool m_isAddedToProject;
 
         public Project Project => m_project;
 

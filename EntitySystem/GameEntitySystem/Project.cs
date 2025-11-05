@@ -38,6 +38,7 @@ namespace GameEntitySystem {
 
         public bool PostponeFireEntityAddedEvents = true;
 
+        public Project() { }
         public Project(GameDatabase gameDatabase, ProjectData projectData) {
             try {
                 m_gameDatabase = gameDatabase;
@@ -105,7 +106,7 @@ namespace GameEntitySystem {
         }
 
         public virtual Subsystem FindSubsystem(Type type, string name, bool throwOnError) {
-            foreach (Subsystem subsystem in m_subsystems) {
+            foreach (Subsystem subsystem in Subsystems) {
                 if (type.GetTypeInfo().IsAssignableFrom(subsystem.GetType().GetTypeInfo())
                     && (name == null || subsystem.ValuesDictionary.DatabaseObject.Name == name)) {
                     return subsystem;
@@ -126,7 +127,7 @@ namespace GameEntitySystem {
                     throw new ArgumentNullException(nameof(name));
                 }
             }
-            foreach (Subsystem subsystem in m_subsystems) {
+            foreach (Subsystem subsystem in Subsystems) {
                 if (subsystem.ValuesDictionary.DatabaseObject.Name == name) {
                     return subsystem;
                 }
@@ -144,7 +145,7 @@ namespace GameEntitySystem {
         public virtual T FindSubsystem<T>(string name, bool throwOnError) where T : class => FindSubsystem(typeof(T), name, throwOnError) as T;
 
         public virtual IEnumerable<Subsystem> FindSubsystems(Type type) {
-            foreach (Subsystem subsystem in m_subsystems) {
+            foreach (Subsystem subsystem in Subsystems) {
                 if (type.GetTypeInfo().IsAssignableFrom(subsystem.GetType().GetTypeInfo())) {
                     yield return subsystem;
                 }
@@ -152,7 +153,7 @@ namespace GameEntitySystem {
         }
 
         public virtual IEnumerable<T> FindSubsystems<T>() where T : class {
-            foreach (Subsystem subsystem in m_subsystems) {
+            foreach (Subsystem subsystem in Subsystems) {
                 if (subsystem is T val) {
                     yield return val;
                 }
@@ -299,8 +300,8 @@ namespace GameEntitySystem {
                     entity.DisposeInternal();
                 }
             }
-            if (m_subsystems != null) {
-                foreach (Subsystem subsystem in m_subsystems) {
+            if (Subsystems != null) {
+                foreach (Subsystem subsystem in Subsystems) {
                     subsystem.DisposeInternal();
                 }
             }

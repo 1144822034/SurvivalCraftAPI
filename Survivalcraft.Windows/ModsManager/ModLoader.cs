@@ -681,7 +681,9 @@ namespace Game {
         ///     Project.xml加载时执行
         /// </summary>
         /// <param name="xElement"></param>
+        [Obsolete("Use ProjectXmlLoad(XElement xElement, WorldInfo worldInfo, ContainerWidget gameWidget)")]
         public virtual void ProjectXmlLoad(XElement xElement) { }
+        public virtual void ProjectXmlLoad(XElement xElement, WorldInfo worldInfo, ContainerWidget gameWidget) { }
 
         /// <summary>
         ///     Project.xml保存时执行
