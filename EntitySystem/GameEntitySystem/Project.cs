@@ -16,13 +16,13 @@ namespace GameEntitySystem {
 
         public Dictionary<Entity, bool> m_entities = [];
 
-        public GameDatabase GameDatabase => m_gameDatabase;
+        public virtual GameDatabase GameDatabase => m_gameDatabase;
 
-        public DatabaseObject ProjectTemplate => m_projectTemplate;
+        public virtual DatabaseObject ProjectTemplate => m_projectTemplate;
 
-        public List<Subsystem> Subsystems => m_subsystems;
+        public virtual List<Subsystem> Subsystems => m_subsystems;
 
-        public Dictionary<Entity, bool>.KeyCollection Entities => m_entities.Keys;
+        public virtual Dictionary<Entity, bool>.KeyCollection Entities => m_entities.Keys;
 
         public static event EventHandler<EntityAddRemoveEventArgs> EntityAdded;
 
@@ -45,10 +45,10 @@ namespace GameEntitySystem {
                 m_projectTemplate = m_projectData.ValuesDictionary.DatabaseObject;
                 Dictionary<string, Subsystem> dictionary = [];
                 foreach (ValuesDictionary item in from x in projectData.ValuesDictionary.Values
-                    select x as ValuesDictionary
+                                                  select x as ValuesDictionary
                     into x
-                    where x != null && x.DatabaseObject != null && x.DatabaseObject.Type == gameDatabase.MemberSubsystemTemplateType
-                    select x) {
+                                                  where x != null && x.DatabaseObject != null && x.DatabaseObject.Type == gameDatabase.MemberSubsystemTemplateType
+                                                  select x) {
                     bool value = item.GetValue<bool>("IsOptional");
                     string value2 = item.GetValue<string>("Class");
                     Type type = TypeCache.FindType(value2, false, !value);
@@ -104,7 +104,7 @@ namespace GameEntitySystem {
             }
         }
 
-        public Subsystem FindSubsystem(Type type, string name, bool throwOnError) {
+        public virtual Subsystem FindSubsystem(Type type, string name, bool throwOnError) {
             foreach (Subsystem subsystem in m_subsystems) {
                 if (type.GetTypeInfo().IsAssignableFrom(subsystem.GetType().GetTypeInfo())
                     && (name == null || subsystem.ValuesDictionary.DatabaseObject.Name == name)) {
@@ -120,7 +120,7 @@ namespace GameEntitySystem {
             return null;
         }
 
-        public Subsystem FindSubsystem(string name, bool throwOnError) {
+        public virtual Subsystem FindSubsystem(string name, bool throwOnError) {
             if (throwOnError) {
                 if (string.IsNullOrEmpty(name)) {
                     throw new ArgumentNullException(nameof(name));
@@ -137,13 +137,13 @@ namespace GameEntitySystem {
             return null;
         }
 
-        public T FindSubsystem<T>() where T : class => FindSubsystem(typeof(T), null, false) as T;
+        public virtual T FindSubsystem<T>() where T : class => FindSubsystem(typeof(T), null, false) as T;
 
-        public T FindSubsystem<T>(bool throwOnError) where T : class => FindSubsystem(typeof(T), null, throwOnError) as T;
+        public virtual T FindSubsystem<T>(bool throwOnError) where T : class => FindSubsystem(typeof(T), null, throwOnError) as T;
 
-        public T FindSubsystem<T>(string name, bool throwOnError) where T : class => FindSubsystem(typeof(T), name, throwOnError) as T;
+        public virtual T FindSubsystem<T>(string name, bool throwOnError) where T : class => FindSubsystem(typeof(T), name, throwOnError) as T;
 
-        public IEnumerable<Subsystem> FindSubsystems(Type type) {
+        public virtual IEnumerable<Subsystem> FindSubsystems(Type type) {
             foreach (Subsystem subsystem in m_subsystems) {
                 if (type.GetTypeInfo().IsAssignableFrom(subsystem.GetType().GetTypeInfo())) {
                     yield return subsystem;
@@ -151,7 +151,7 @@ namespace GameEntitySystem {
             }
         }
 
-        public IEnumerable<T> FindSubsystems<T>() where T : class {
+        public virtual IEnumerable<T> FindSubsystems<T>() where T : class {
             foreach (Subsystem subsystem in m_subsystems) {
                 if (subsystem is T val) {
                     yield return val;
@@ -159,11 +159,11 @@ namespace GameEntitySystem {
             }
         }
 
-        public Entity FindEntity(int EntityID) {
+        public virtual Entity FindEntity(int EntityID) {
             return Entities.FirstOrDefault(entity => entity.Id == EntityID, null);
         }
 
-        public Entity CreateEntity(ValuesDictionary valuesDictionary, int entityId = 0) {
+        public virtual Entity CreateEntity(ValuesDictionary valuesDictionary, int entityId = 0) {
             try {
                 Entity entity = new(this, valuesDictionary, entityId);
                 IdToEntityMap idToEntityMap = new([]);
@@ -175,7 +175,7 @@ namespace GameEntitySystem {
             }
         }
 
-        public void AddEntity(Entity entity) {
+        public virtual void AddEntity(Entity entity) {
             if (entity.Project != this) {
                 throw new Exception("Entity does not belong to this project.");
             }
@@ -192,7 +192,7 @@ namespace GameEntitySystem {
             }
         }
 
-        public void RemoveEntity(Entity entity, bool disposeEntity) {
+        public virtual void RemoveEntity(Entity entity, bool disposeEntity) {
             if (entity.Project != this) {
                 throw new Exception("Entity does not belong to this project.");
             }
@@ -206,19 +206,19 @@ namespace GameEntitySystem {
             }
         }
 
-        public void AddEntities(IEnumerable<Entity> entities) {
+        public virtual void AddEntities(IEnumerable<Entity> entities) {
             foreach (Entity entity in entities) {
                 AddEntity(entity);
             }
         }
 
-        public void RemoveEntities(IEnumerable<Entity> entities, bool disposeEntities) {
+        public virtual void RemoveEntities(IEnumerable<Entity> entities, bool disposeEntities) {
             foreach (Entity entity in entities) {
                 RemoveEntity(entity, disposeEntities);
             }
         }
 
-        public List<Entity> InitializeEntities(EntityDataList entityDataList) {
+        public virtual List<Entity> InitializeEntities(EntityDataList entityDataList) {
             List<Entity> list = new(entityDataList.EntitiesData.Count);
             Dictionary<int, Entity> dictionary = [];
             foreach (EntityData entitiesDatum in entityDataList.EntitiesData) {
@@ -242,7 +242,7 @@ namespace GameEntitySystem {
             return list;
         }
 
-        public void LoadEntities(EntityDataList entityDataList, List<Entity> entityList) {
+        public virtual void LoadEntities(EntityDataList entityDataList, List<Entity> entityList) {
             int num = 0;
             if (entityDataList?.EntitiesData != null) {
                 foreach (EntityData entitiesDatum2 in entityDataList.EntitiesData) {
@@ -258,7 +258,7 @@ namespace GameEntitySystem {
             PostponeFireEntityAddedEvents = false;
         }
 
-        public EntityDataList SaveEntities(IEnumerable<Entity> entities) {
+        public virtual EntityDataList SaveEntities(IEnumerable<Entity> entities) {
             IEnumerable<Entity> enumerable = entities as Entity[] ?? entities.ToArray();
             Dictionary<Entity, bool> dictionary = DetermineNotOwnedEntities(enumerable);
             int num = 1;
@@ -278,7 +278,7 @@ namespace GameEntitySystem {
             return entityDataList;
         }
 
-        public ProjectData Save() {
+        public virtual ProjectData Save() {
             ProjectData projectData = new() { ValuesDictionary = [] };
             projectData.ValuesDictionary.DatabaseObject = ProjectTemplate;
             foreach (Subsystem subsystem in Subsystems) {
@@ -293,7 +293,7 @@ namespace GameEntitySystem {
             return projectData;
         }
 
-        public void Dispose() {
+        public virtual void Dispose() {
             if (m_entities != null) {
                 foreach (Entity entity in m_entities.Keys) {
                     entity.DisposeInternal();
@@ -310,7 +310,7 @@ namespace GameEntitySystem {
             GC.SuppressFinalize(this);
         }
 
-        public void FireEntityAddedEvents(Entity entity) {
+        public virtual void FireEntityAddedEvents(Entity entity) {
             foreach (Component component in entity.Components) {
                 component.OnEntityAdded();
             }
@@ -321,7 +321,7 @@ namespace GameEntitySystem {
             entity.FireEntityAddedEvent();
         }
 
-        public void FireEntityRemovedEvents(Entity entity) {
+        public virtual void FireEntityRemovedEvents(Entity entity) {
             foreach (Component component in entity.Components) {
                 component.OnEntityRemoved();
             }
@@ -352,7 +352,7 @@ namespace GameEntitySystem {
             return dictionary;
         }
 
-        public void LoadSubsystem(Subsystem subsystem,
+        public virtual void LoadSubsystem(Subsystem subsystem,
             Dictionary<string, Subsystem> subsystemsByName,
             Dictionary<Subsystem, bool> loadedSubsystems,
             int depth) {
