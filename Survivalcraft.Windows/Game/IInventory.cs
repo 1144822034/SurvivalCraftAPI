@@ -23,6 +23,7 @@ namespace Game {
 
         void ProcessSlotItems(int slotIndex, int value, int count, int processCount, out int processedValue, out int processedCount);
 
+        /// <returns>实际移除的数量</returns>
         int RemoveSlotItems(int slotIndex, int count);
 
         void DropAllItems(Vector3 position);

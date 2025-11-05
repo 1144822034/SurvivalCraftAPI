@@ -102,10 +102,10 @@ namespace Game {
         public InventorySlotWidget() {
             Size = new Vector2(72f, 72f);
             List<Widget> list = new();
-            //不知道做什么的
+            //格子边框
             m_rectangleWidget = new BevelledRectangleWidget { BevelSize = -2f, DirectionalLight = 0.15f, CenterColor = Color.Transparent };
             list.Add(m_rectangleWidget);
-            //方块背景色
+            //格子背景色
             m_highlightWidget = new RectangleWidget { FillColor = Color.Transparent, OutlineColor = Color.Transparent };
             list.Add(m_highlightWidget);
             //方块图标

@@ -100,9 +100,7 @@ namespace Game {
                 : LanguageControl.Get(fName, 4);
             m_providerNameLabel.Text = m_externalContentProvider.DisplayName;
             m_upDirectoryButton.IsEnabled = m_externalContentProvider.IsLoggedIn && m_path != "/";
-            m_loginLogoutButton.Text = m_externalContentProvider.IsLoggedIn
-                ? LanguageControl.Get(fName, 5)
-                : LanguageControl.Get(fName, 6);
+            m_loginLogoutButton.Text = m_externalContentProvider.IsLoggedIn ? LanguageControl.Get(fName, 5) : LanguageControl.Get(fName, 6);
             m_loginLogoutButton.IsVisible = m_externalContentProvider.RequiresLogin;
             m_copyLinkButton.IsVisible = m_externalContentProvider.SupportsLinks;
             m_copyLinkButton.IsEnabled = externalContentEntry != null
@@ -182,24 +180,12 @@ namespace Game {
                     }
                     else {
                         string message = LanguageControl.Get(fName, 14) + ExternalContentManager.openFilePath;
-                        DialogsManager.ShowDialog(
-                            null,
-                            new MessageDialog(
-                                LanguageControl.Get(fName, 13),
-                                message,
-                                LanguageControl.Ok,
-                                null,
-                                null
-                            )
-                        );
+                        DialogsManager.ShowDialog(null, new MessageDialog(LanguageControl.Get(fName, 13), message, LanguageControl.Ok, null, null));
                         Log.Error(message);
                     }
                 }
                 catch (Exception e) {
-                    DialogsManager.ShowDialog(
-                        null,
-                        new MessageDialog(LanguageControl.Get(fName, 13), e.ToString(), LanguageControl.Ok, null, null)
-                    );
+                    DialogsManager.ShowDialog(null, new MessageDialog(LanguageControl.Get(fName, 13), e.ToString(), LanguageControl.Ok, null, null));
                     Log.Error($"{LanguageControl.Get(fName, 13)} {ExternalContentManager.openFilePath}\n{e}");
                 }
                 ExternalContentManager.openFilePath = string.Empty;
@@ -270,6 +256,18 @@ namespace Game {
                         delegate {
                             stream.Dispose();
                             DialogsManager.HideDialog(busyDialog);
+                            if (entry.Type != ExternalContentType.Mod) {
+                                DialogsManager.ShowDialog(
+                                    null,
+                                    new MessageDialog(
+                                        LanguageControl.Success,
+                                        string.Format(LanguageControl.Get("ContentScreen", "4"), Storage.GetFileName(entry.Path)),
+                                        LanguageControl.Ok,
+                                        null,
+                                        null
+                                    )
+                                );
+                            }
                         },
                         delegate(Exception error) {
                             stream.Dispose();

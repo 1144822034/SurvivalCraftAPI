@@ -37,12 +37,13 @@ namespace Game {
             if (sort) {
                 m_recipes.Sort(
                     delegate(CraftingRecipe r1, CraftingRecipe r2) {
-                        if (r1.DisplayOrder == r2.DisplayOrder) {
+                        int result = Comparer<int>.Default.Compare(r1.DisplayOrder, r2.DisplayOrder);
+                        if (result == 0) {
                             int y = r1.Ingredients.Count(s => !string.IsNullOrEmpty(s));
                             int x = r2.Ingredients.Count(s => !string.IsNullOrEmpty(s));
                             return Comparer<int>.Default.Compare(x, y);
                         }
-                        return Comparer<int>.Default.Compare(r1.DisplayOrder, r2.DisplayOrder);
+                        return result;
                     }
                 );
             }

@@ -12,6 +12,11 @@ namespace Game {
             return value;
         }
 
+        public ComponentBlockEntity GetBlockEntity(Point3 coordinates) {
+            m_blockEntities.TryGetValue(coordinates, out ComponentBlockEntity value);
+            return value;
+        }
+
         public ComponentBlockEntity GetBlockEntity(MovingBlock movingBlock) {
             m_movingBlockEntities.TryGetValue(movingBlock, out ComponentBlockEntity value);
             return value;
