@@ -28,10 +28,10 @@ jobs:
 
     - name: Install certificate to keychain
       run: |
-        security create-keychain -p "1234" build.keychain
-        security import ios_cert.p12 -k build.keychain -P "1234" -A
+        security create-keychain -p "1" build.keychain
+        security import ios_cert.p12 -k build.keychain -P "1" -A
         security default-keychain -s build.keychain
-        security unlock-keychain -p "1234" build.keychain
+        security unlock-keychain -p "1" build.keychain
         security set-key-partition-list -S apple-tool:,apple: -s -k "" build.keychain
 
     - name: Install Provisioning Profile
