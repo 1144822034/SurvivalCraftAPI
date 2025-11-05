@@ -10,7 +10,7 @@ namespace Game {
 
         public BlockMesh m_standalonePaintBlockMesh = new();
 
-        public new const string fName = "PaintBucketBlock";
+        public const string fName = "PaintBucketBlock";
 
         public override void Initialize() {
             Model model = ContentManager.Get<Model>("Models/FullBucket");

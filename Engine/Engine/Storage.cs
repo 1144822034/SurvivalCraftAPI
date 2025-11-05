@@ -366,10 +366,12 @@ namespace Engine {
          * <Param name="defaultPath">（安卓无效）默认路径</Param>
          * <Param name="mode">（安卓永远只读）文件打开模式</Param>
          */
+#pragma warning disable CS1998
         public static async Task<(Stream, string)> ChooseFile(string title = null,
             KeyValuePair<string, string[]>[] filters = null,
             string defaultPath = null,
             OpenFileMode mode = OpenFileMode.Read) {
+#pragma warning restore CS1998
             if (mode == OpenFileMode.Create
                 || mode == OpenFileMode.CreateOrOpen) {
                 throw new ArgumentException("mode");
@@ -416,7 +418,7 @@ namespace Engine {
             );
             if (result.IsOk
                 && !string.IsNullOrEmpty(result.Path)) {
-                return (File.Open(result.Path, FileMode.Open, mode == OpenFileMode.Read ? FileAccess.Read : FileAccess.ReadWrite, FileShare.Read), GetFileName(result.Path));
+                return ( File.Open(result.Path, FileMode.Open, mode == OpenFileMode.Read ? FileAccess.Read : FileAccess.ReadWrite, FileShare.Read), GetFileName(result.Path));
             }
             return (null, null);
 #endif

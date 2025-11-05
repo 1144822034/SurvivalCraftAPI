@@ -40,7 +40,7 @@ namespace Game {
 
         public readonly Color SpringColor;
 
-        public new const string fName = "DeciduousLeavesBlock";
+        public const string fName = "DeciduousLeavesBlock";
 
         public DeciduousLeavesBlock(float summerStart,
             float autumnStart,

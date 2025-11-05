@@ -8,7 +8,7 @@ namespace Game {
 
         public BlockMesh m_standaloneBlockMesh = new();
 
-        public new const string fName = "PumpkinSoupBucketBlock";
+        public const string fName = "PumpkinSoupBucketBlock";
 
         public override void Initialize() {
             Model model = ContentManager.Get<Model>("Models/FullBucket");
