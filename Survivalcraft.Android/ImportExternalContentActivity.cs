@@ -66,47 +66,46 @@ namespace SC4Android {
                 FinishAndRemoveTask();
                 return;
             }
-            using (Stream fileStream = GetStreamAndInfosFromUri(uri, out string fileName, out long fileSize)) {
-                if (fileSize == 0
-                    || fileStream == null) {
-                    Toast.MakeText(this, Resources?.GetString(Resource.String.FileNotFound), ToastLength.Short)?.Show();
-                    FinishAndRemoveTask();
-                    return;
-                }
-                string extension = Storage.GetExtension(fileName)?.ToLowerInvariant();
-                ExternalContentType type = ExternalContentManager.ExtensionToType(extension);
-                if (ExternalContentManager.IsEntryTypeDownloadSupported(type)) {
-                    if (MainActivity.CheckAndRequestPermission(this)) {
-                        permissionGranted = true;
-                    }
-                    else {
-                        while (true) {
-                            Thread.Sleep(100);
-                            if (permissionGranted) {
-                                break;
-                            }
-                            permissionGranted = MainActivity.IsPermissionGranted(this);
-                            if (permissionGranted) {
-                                break;
-                            }
-                        }
-                    }
-                    new AlertDialog.Builder(this).SetTitle(Resources?.GetString(Resource.String.Import))
-                        ?.SetMessage(string.Format(Resources?.GetString(Resource.String.InsureImporting)!, fileName))
-                        ?.SetPositiveButton(
-                            Resources?.GetString(Resource.String.Yes)!,
-                            async void (_, _) => await ImportFileAsync(fileName, fileSize, fileStream)
-                        )
-                        ?.SetNegativeButton(Resources?.GetString(Resource.String.No)!, (_, _) => FinishAndRemoveTask())
-                        ?.Show();
+            Stream fileStream = GetStreamAndInfosFromUri(uri, out string fileName, out long fileSize);
+            if (fileSize == 0
+                || fileStream == null) {
+                Toast.MakeText(this, Resources?.GetString(Resource.String.FileNotFound), ToastLength.Short)?.Show();
+                FinishAndRemoveTask();
+                return;
+            }
+            string extension = Storage.GetExtension(fileName)?.ToLowerInvariant();
+            ExternalContentType type = ExternalContentManager.ExtensionToType(extension);
+            if (ExternalContentManager.IsEntryTypeDownloadSupported(type)) {
+                if (MainActivity.CheckAndRequestPermission(this)) {
+                    permissionGranted = true;
                 }
                 else {
-                    new AlertDialog.Builder(this).SetTitle(Resources?.GetString(Resource.String.NotSupportedType))
-                        ?.SetMessage(string.Format(Resources?.GetString(Resource.String.FileTypeIsNotSupported)!, extension))
-                        ?.SetPositiveButton(Resources?.GetString(Resource.String.Ok)!, (_, _) => FinishAndRemoveTask())
-                        ?.SetOnCancelListener(new DialogInterfaceOnCancelListener(FinishAndRemoveTask))
-                        ?.Show();
+                    while (true) {
+                        Thread.Sleep(100);
+                        if (permissionGranted) {
+                            break;
+                        }
+                        permissionGranted = MainActivity.IsPermissionGranted(this);
+                        if (permissionGranted) {
+                            break;
+                        }
+                    }
                 }
+                new AlertDialog.Builder(this).SetTitle(Resources?.GetString(Resource.String.Import))
+                    ?.SetMessage(string.Format(Resources?.GetString(Resource.String.InsureImporting)!, fileName))
+                    ?.SetPositiveButton(
+                        Resources?.GetString(Resource.String.Yes)!,
+                        async void (_, _) => await ImportFileAsync(fileName, fileSize, fileStream)
+                    )
+                    ?.SetNegativeButton(Resources?.GetString(Resource.String.No)!, (_, _) => FinishAndRemoveTask())
+                    ?.Show();
+            }
+            else {
+                new AlertDialog.Builder(this).SetTitle(Resources?.GetString(Resource.String.NotSupportedType))
+                    ?.SetMessage(string.Format(Resources?.GetString(Resource.String.FileTypeIsNotSupported)!, extension))
+                    ?.SetPositiveButton(Resources?.GetString(Resource.String.Ok)!, (_, _) => FinishAndRemoveTask())
+                    ?.SetOnCancelListener(new DialogInterfaceOnCancelListener(FinishAndRemoveTask))
+                    ?.Show();
             }
         }
 

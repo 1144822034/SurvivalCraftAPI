@@ -162,7 +162,9 @@ namespace Game {
             if (modInfo == null) {
                 return;
             }
-            GetFile("icon.png", stream => { LoadIcon(stream); });
+            if(!GetFile("icon.webp", LoadIcon)) {
+                GetFile("icon.png", LoadIcon);
+            }
             foreach (KeyValuePair<string, ZipArchiveEntry> c in ModFiles) {
                 ZipArchiveEntry zipArchiveEntry = c.Value;
                 string filename = zipArchiveEntry.FilenameInZip;

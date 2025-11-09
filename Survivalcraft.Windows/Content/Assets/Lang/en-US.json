@@ -124,7 +124,10 @@
     "72": "Failed to access on your device",
     "73": "Dereinforcing",
     "74": "Failed to load the icon of {0}, reason: {1}",
-    "75": "Failed to load the mod information from the modinfo.json of {0}, reason: {1}"
+    "75": "Failed to load the mod information from the modinfo.json of {0}, reason: {1}",
+    "76": "A mod for API {0} cannot be used in this API version",
+    "77": "Homepage",
+    "78": "The homepage link of this mod is not set."
   },
   "ManageContentScreen": {
     "1": "Blocks Texture | {0}x{1}",
