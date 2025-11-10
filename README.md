@@ -110,3 +110,5 @@
   * Long (Discord: daylong89)
 * 罗马尼亚语 (Română) 翻译
   * NBG (Discord: nbgr)
+* 俄语 (Русский) 补充翻译
+  * Dasyukevich Pavel (VK: pawwel3l) 
