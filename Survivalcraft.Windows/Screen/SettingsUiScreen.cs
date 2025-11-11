@@ -61,7 +61,7 @@ namespace Game {
             m_originalCommunityContentModeButton = Children.Find<ButtonWidget>("OriginalCommunityContentModeButton");
             m_deleteWorldNeedToTextButton = Children.Find<ButtonWidget>("DeleteWorldNeedToTextButton");
             int maxWidth = Math.Min(Display.MaxTextureSize, 16320);
-            m_screenshotSizeCustomWidthSlider.MaxValue = SettingsManager.ScreenshotSizeCustomWidths.LastIndexOfAnyInRange(0, maxWidth);
+            m_screenshotSizeCustomWidthSlider.MaxValue = SettingsManager.ScreenshotSizeCustomWidths[SettingsManager.ScreenshotSizeCustomWidths.Length-1];
             m_screenshotSizeCustomAspectRatioSlider.MaxValue = SettingsManager.ScreenshotSizeCustomAspectRatios.Length - 1;
             m_screenshotSizeCustomWidthSlider.Value = SettingsManager.ScreenshotSizeCustomWidthIndex;
             m_screenshotSizeCustomAspectRatioSlider.Value = SettingsManager.ScreenshotSizeCustomAspectRatioIndex;

@@ -86,8 +86,9 @@ namespace Game {
         public static bool ShowLogoInScreenshots { get; set; }
 
         public static ScreenshotSize ScreenshotSize { get; set; }
-#if IOS
+
         private static Point2 m_screenshotSizeCustom;
+
         public static Point2 ScreenshotSizeCustom {
             get { return m_screenshotSizeCustom; }
             set {
@@ -97,11 +98,8 @@ namespace Game {
                 value = new Point2(width, height);
             }
         }
-
-
-#else
         public static int[] ScreenshotSizeCustomWidths = [
-            80,
+    80,
             160,
             320,
             480,
@@ -119,18 +117,22 @@ namespace Game {
             10240,
             12288,
             15360
-        ];
-
+];
         public static int ScreenshotSizeCustomWidthIndex {
-            get;
+            get { return ScreenshotSizeCustomWidthIndex; }
             set {
                 value = MathUtils.Clamp(value, 0, ScreenshotSizeCustomWidths.Length - 1);
                 int widthMax = Math.Min(Display.MaxTextureSize, 16384);
-                field = widthMax > ScreenshotSizeCustomWidths[value] ? value : ScreenshotSizeCustomWidths.LastIndexOfAnyInRange(0, widthMax);
+                if(widthMax <= ScreenshotSizeCustomWidths[value]) {
+                    for (int i=0;i< ScreenshotSizeCustomWidths.Length;i++) {
+                        if (ScreenshotSizeCustomWidths[i] >= 0 && ScreenshotSizeCustomWidths[i] <= widthMax) {
+                            value =  i;
+                            break;
+                        }
+                    }
+                }
             }
         }
-#endif
-
         public static float[] ScreenshotSizeCustomAspectRatios = [
             1f,
             4f / 5f,
@@ -158,8 +160,10 @@ namespace Game {
         ];
 
         public static int ScreenshotSizeCustomAspectRatioIndex {
-            get;
-            set => field = MathUtils.Clamp(value, 0, ScreenshotSizeCustomAspectRatios.Length - 1);
+            get {  return ScreenshotSizeCustomAspectRatioIndex; }
+            set {
+                value = MathUtils.Clamp(value, 0, ScreenshotSizeCustomAspectRatios.Length - 1);
+            }
         }
 
         public static WindowMode WindowMode {
@@ -338,7 +342,7 @@ namespace Game {
         public static ValuesDictionary KeyboardMappingSettings { get; set; }
         public static ValuesDictionary CameraManageSettings { get; set; }
 
-        static readonly object m_saveLock = new();
+        static readonly Lock m_saveLock = new();
 
         public static void Initialize() {
             {

@@ -411,6 +411,9 @@ namespace Engine {
             }
 #if ANDROID
             return await Window.Activity.ChooseFileAsync(title);
+#elif  IOS
+            throw new Exception("Unsupported Operation");
+
 #else
             string filtersString = null;
             if (filters != null) {
