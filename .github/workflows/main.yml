@@ -36,16 +36,14 @@ jobs:
     - name: Install Provisioning Profile
       run: |
         mkdir -p ~/Library/MobileDevice/Provisioning\ Profiles
-        uuid=$(grep -aom1 -E '<key>UUID</key><string>.*</string>' ios_profile.mobileprovision | sed -e 's/<key>UUID<\/key><string>//' -e 's/<\/string>//')
-        cp ios_profile.mobileprovision ~/Library/Developer/Xcode/UserData/Provisioning\ Profiles/$uuid.mobileprovision
-        ls -l ~/Library/Developer/Xcode/UserData/Provisioning\ Profiles
+        cp ios_profile.mobileprovision ~/Library/MobileDevice/Provisioning\ Profiles
 
     - name: Build IPA
       run: |
         dotnet publish "SurvivalCraft.IOS/SurvivalCraft.IOS.csproj" \
           -c Release \
           -p:CodesignKey="iPhone Distribution" \
-          -p:CodesignProvision=$uuid \
+          -p:CodesignProvision=dac32268-04a1-4a17-8304-143d0ce4c49e \
           -p:RuntimeIdentifier=ios-arm64
 
     - name: Archive Bin Files
