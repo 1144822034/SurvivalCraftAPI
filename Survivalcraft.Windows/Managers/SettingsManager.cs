@@ -118,21 +118,27 @@ namespace Game {
             12288,
             15360
 ];
+        private static int m_screenshotSizeCustomWidthIndex;
+
         public static int ScreenshotSizeCustomWidthIndex {
-            get { return ScreenshotSizeCustomWidthIndex; }
+            get { return m_screenshotSizeCustomWidthIndex; }
             set {
-                value = MathUtils.Clamp(value, 0, ScreenshotSizeCustomWidths.Length - 1);
+                m_screenshotSizeCustomWidthIndex = MathUtils.Clamp(value, 0, ScreenshotSizeCustomWidths.Length - 1);
                 int widthMax = Math.Min(Display.MaxTextureSize, 16384);
-                if(widthMax <= ScreenshotSizeCustomWidths[value]) {
-                    for (int i=0;i< ScreenshotSizeCustomWidths.Length;i++) {
-                        if (ScreenshotSizeCustomWidths[i] >= 0 && ScreenshotSizeCustomWidths[i] <= widthMax) {
-                            value =  i;
-                            break;
-                        }
-                    }
+                if(widthMax <= ScreenshotSizeCustomWidths[m_screenshotSizeCustomWidthIndex]) {
+                    value = ScreenshotSizeCustomWidths.GetLastIndexOfAnyInRange(0,widthMax);
                 }
             }
         }
+
+        private static int GetLastIndexOfAnyInRange(this int[] array,int minValue,int maxValue) {
+            for (int i = array.Length - 1; i >= 0; i--) {
+                if (array[i] >= minValue && array[i] <= maxValue)
+                    return i;
+            }
+            return 0;
+        }
+
         public static float[] ScreenshotSizeCustomAspectRatios = [
             1f,
             4f / 5f,
@@ -158,11 +164,11 @@ namespace Game {
             "32:9",
             "42:9"
         ];
-
+        private static int m_screenshotSizeCustomAspectRatioIndex;
         public static int ScreenshotSizeCustomAspectRatioIndex {
-            get {  return ScreenshotSizeCustomAspectRatioIndex; }
+            get {  return m_screenshotSizeCustomAspectRatioIndex; }
             set {
-                value = MathUtils.Clamp(value, 0, ScreenshotSizeCustomAspectRatios.Length - 1);
+                m_screenshotSizeCustomAspectRatioIndex = MathUtils.Clamp(value, 0, ScreenshotSizeCustomAspectRatios.Length - 1);
             }
         }
 

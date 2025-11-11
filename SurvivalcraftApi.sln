@@ -19,8 +19,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EntitySystem.IOS", "EntityS
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SurvivalCraft.IOS", "SurvivalCraft.IOS\SurvivalCraft.IOS.csproj", "{A486B307-55FA-C2C1-B3AB-3A05986E14AA}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "iOSApp1", "iOSApp1\iOSApp1.csproj", "{1AC33998-0B04-43A3-98F5-1D4851901CD6}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -80,15 +78,6 @@ Global
 		{A486B307-55FA-C2C1-B3AB-3A05986E14AA}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A486B307-55FA-C2C1-B3AB-3A05986E14AA}.Release|Any CPU.Build.0 = Release|Any CPU
 		{A486B307-55FA-C2C1-B3AB-3A05986E14AA}.Release|Any CPU.Deploy.0 = Release|Any CPU
-		{1AC33998-0B04-43A3-98F5-1D4851901CD6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{1AC33998-0B04-43A3-98F5-1D4851901CD6}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{1AC33998-0B04-43A3-98F5-1D4851901CD6}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
-		{1AC33998-0B04-43A3-98F5-1D4851901CD6}.Direct3D11|Any CPU.ActiveCfg = Release|Any CPU
-		{1AC33998-0B04-43A3-98F5-1D4851901CD6}.Direct3D11|Any CPU.Build.0 = Release|Any CPU
-		{1AC33998-0B04-43A3-98F5-1D4851901CD6}.Direct3D11|Any CPU.Deploy.0 = Release|Any CPU
-		{1AC33998-0B04-43A3-98F5-1D4851901CD6}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{1AC33998-0B04-43A3-98F5-1D4851901CD6}.Release|Any CPU.Build.0 = Release|Any CPU
-		{1AC33998-0B04-43A3-98F5-1D4851901CD6}.Release|Any CPU.Deploy.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

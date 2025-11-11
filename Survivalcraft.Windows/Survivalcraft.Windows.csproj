@@ -21,6 +21,7 @@
         <GenerateDocumentationFile>true</GenerateDocumentationFile>
         <ApplicationIcon>Content\icon.ico</ApplicationIcon>
         <ApplicationManifest>Properties\app.manifest</ApplicationManifest>
+        <OutputType>WinExe</OutputType>
     </PropertyGroup>
     <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
         <TargetFramework>net9.0-windows</TargetFramework>
