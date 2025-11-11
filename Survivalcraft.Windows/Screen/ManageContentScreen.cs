@@ -260,7 +260,7 @@ public class ManageContentScreen : Screen {
                     this,
                     new MessageDialog(
                         LanguageControl.Warning,
-                        LanguageControl.Get(GetType().Name, 11),
+                        LanguageControl.Get(fName, 11),
                         LanguageControl.Yes,
                         LanguageControl.No,
                         btn => {

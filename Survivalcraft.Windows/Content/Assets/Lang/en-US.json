@@ -31,14 +31,23 @@
     "3": "Change Enabled",
     "4": "Change Disabled",
     "5": "Mod Downloaded Successfully",
-    "6": "Do you want to switch to Mod Manage Screen to install manually?"
+    "6": "Do you want to switch to Manage Mod screen to enable it manually?"
   },
   "AndroidSdCardExternalContentProvider": {
     "1": "SD Card"
   },
   "ContentScreen": {
     "1": "Mod Management",
-    "2": "Content Management"
+    "2": "Content Management",
+    "3": "Select the file you want to import",
+    "4": "Import {0} Successfully",
+    "ExtensionName": {
+      ".scworld": "World",
+      ".scbtex": "Block Texture",
+      ".scskin": "Player Skin",
+      ".scfpack": "Furniture Pack",
+      ".scmod": "Mod"
+    }
   },
   "ModsManageContentScreen": {
     "1": "Manage mod content",
@@ -58,48 +67,48 @@
     "15": "OK",
     "16": "Full Scan",
     "17": "Default directory",
-    "18": "Disabled",
-    "19": "Enabled",
+    "18": "Disable",
+    "19": "Enable",
     "20": "Scan",
     "21": "Handle",
-    "22": "Uninstall Successed",
-    "23": "Install Successed",
-    "24": "Install Failed",
-    "25": "A mod file with the same package name has been installed or exists",
+    "22": "Disabled Successfully",
+    "23": "Enabled Successfully",
+    "24": "Failed to Enable",
+    "25": "A mod file with the same package name has been enabled or exists",
     "26": "Scanning",
     "27": "Scanning all mods in the current folder",
-    "28": "Scan Successed",
+    "28": "Scan Successfully",
     "29": "The new valid mod file is found in number {0}, if check the result",
     "30": "View",
     "31": "Later",
     "32": "Quick scan of all mods in common folders",
-    "33": "No new mod file is found. Do you want to download it from the Chinese community",
+    "33": "No new mod file is found. Do you want to download it from the Chinese Community",
     "34": "Go",
     "35": "The new valid mod file is found in number {0}",
-    "36": "Not installed the mod",
-    "37": "Installed the mod",
+    "36": "Not enabled the mod",
+    "37": "Enabled the mod",
     "38": "Restart the game mod changes will only take effect, whether to restart",
     "39": "Restart",
     "40": "Current directory:",
     "41": "Directory:{0}\nUnable to scan.",
     "42": "Manage",
     "43": "Loading",
-    "44": "Uninstall",
-    "45": "Installed",
+    "44": "Disabled",
+    "45": "Enabled",
     "46": "Note: Detected that your device can not access the /Android/data directory, can not scan the QQ downloaded mod file, it is recommended to use your own browser to download the mod to the Chinese community.",
     "47": "After downloading the mod, you can perform a full scan, and the directory scanned to the mod will be automatically listed in the automatic scan directory.",
     "48": "The following are the directories that are automatically scanned when entering manager:",
-    "49": "Are you sure you uninstall the mod?",
-    "50": "Mod uninstall failed",
+    "49": "Are you sure to disable the mod?",
+    "50": "Failed to disable the mod",
     "51": "An exception has occurred:",
-    "52": "The same mod is already installed",
-    "53": "The installed Mod versions are consistent and there is no need for duplicate installations",
-    "54": "The current Mod version is {0}, the installed Mod version is {1}, whether to replace",
-    "55": "The same mod is already installed",
-    "56": "Mod replacement failed",
+    "52": "A same mod is already enabled",
+    "53": "The enabled mod versions are consistent and there is no need for duplicate installations",
+    "54": "The current mod version is {0}, the installed mod version is {1}. Do you want to replace?",
+    "55": "The same mod is already enabled",
+    "56": "Failed to replace",
     "57": "The file already exists",
     "58": "The following paths cannot be scanned:",
-    "59": "{0} valid MOD file(s) has/have been scanned\n",
+    "59": "{0} valid mod file(s) has/have been scanned\n",
     "60": "Update",
     "61": "The feature is under development",
     "62": "Background processing",
@@ -108,14 +117,17 @@
     "65": "Mod reinforcement will replace the current mod file, after the reinforcement usually means can not be restored, please back up the file before operation. \nIf the original project file is accidentally lost after reinforcement, you can contact the community administrator to restore the hardened mod file. \nNormal players can ignore this feature.",
     "66": "The current mod file is hardened and does not need to be reinforced",
     "67": "The current mod file reinforcement failed with an unknown error:",
-    "68": "Old API version(API {0}) mod is not available",
-    "69": "This mod is an API 1.3 mod that cannot be used in this API version(API 1.8)",
-    "70": "This mod is an old API version mod, which does not take effect here and is recommended to be removed",
-    "71": "Directory into the failure",
-    "72": "Your device can't access ",
+    "68": "Mod for an old API version(API {0}) is not available",
+    "69": "A mod for an old API version cannot be used in this API version",
+    "70": "A mod for an old API version will not take effect in this API version. It is recommended to be removed",
+    "71": "Failed to enter the directory",
+    "72": "Failed to access on your device",
     "73": "Dereinforcing",
-    "74": "Load the icon of {0} failed, reason: {1}",
-    "75": "Load mod information from the modinfo.json of {0} failed, reason: {1}"
+    "74": "Failed to load the icon of {0}, reason: {1}",
+    "75": "Failed to load the mod information from the modinfo.json of {0}, reason: {1}",
+    "76": "A mod for API {0} cannot be used in this API version",
+    "77": "Homepage",
+    "78": "The homepage link of this mod is not set."
   },
   "ManageContentScreen": {
     "1": "Blocks Texture | {0}x{1}",
@@ -171,6 +183,8 @@
     "13": "Compressing world",
     "14": "Uploading",
     "15": "{0} uploaded.",
+    "16": "Share",
+    "17": "Close",
     "Directory": "Directory",
     "World": "World",
     "Blocks Texture": "Blocks Texture",
@@ -251,6 +265,24 @@
     "6": "Setting \"{0}\" could not be saved. Reason: {1}",
     "7": "Saved settings",
     "8": "Saving settings failed."
+  },
+  "FileAssociationManager": {
+    "1": "Failed to register file associations, unable to retrieve the program path",
+    "2": "Failed to register file associations, unable to create program identifier in the registry",
+    "3": "Failed to register file associations, unable to create open command in the registry",
+    "4": "Failed to register file association, unable to create the open method for {0} in the registry",
+    "5": "Failed to register file associations, reason:",
+    "6": "Successfully registered file associations.",
+    "7": "Failed to unregister file associations, reason:",
+    "8": "Successfully unregistered file associations.",
+    "ExtensionDescription": {
+      ".scworld": "Survivalcraft World",
+      ".scbtex": "Survivalcraft Block Texture",
+      ".scskin": "Survivalcraft Player Skin",
+      ".scfpack": "Survivalcraft Furniture Pack",
+      ".scmod": "Survivalcraft API Mod",
+      ".scmodList": "Survivalcraft API Mod List"
+    }
   },
   "SubsystemCrossbowBlockBehavior": {
     "0": "Draw the crossbow first",
@@ -374,11 +406,19 @@
     "11": "Error loading world",
     "12": "Error Spawning Player",
     "13": "Copy This log",
-    "14": "The world files may be occupied by another program."
+    "14": "The world files may be occupied by another program.",
+    "15": "All",
+    "16": "Warnings",
+    "17": "Errors"
   },
   "MoreCommunityLinkDialog": {
     "1": "No User",
     "2": "Select Active User"
+  },
+  "EditWorldSeedDialog": {
+    "1": "(none)",
+    "2": "(True seed is edited)",
+    "3": "True seed must be a integer between -2147483648 and 2147483647"
   },
   "FurnitureDesignWidget": [
     "Front",
@@ -416,7 +456,9 @@
     "25": "Delete some furniture sets before adding a new one.",
     "26": "All furniture in the set will become uncategorized and will be deleted if not used in the world.",
     "27": "Delete",
-    "28": "Cancel"
+    "28": "Cancel",
+    "29": "Share",
+    "30": "Close"
   },
   "ExternalContentScreen": {
     "1": "Enter",
@@ -796,7 +838,8 @@
     "14": "1 VSYNC",
     "15": "2 VSYNC",
     "16": "Stop Refreshing",
-    "17": "Every Frame"
+    "17": "Every Frame",
+    "18": "(32GB RAM and an extremely fast\ndevice recommended)"
   },
   "RecipaediaDescriptionScreen": {
     "Luminosity": "Luminosity",
@@ -946,7 +989,8 @@
     "7": "Time Of Day:",
     "8": " days",
     "9": "Input Block Contents Manually",
-    "10": "Invalid Block Contents"
+    "10": "Invalid Block Contents",
+    "11": "Terrain Generator Version"
   },
   "ComponentSickness": {
     "1": "Sickness",
@@ -1015,14 +1059,15 @@
     "9": "(not found)",
     "10": "Touchscreen",
     "11": "Virtual Reality",
-    "12": "Invalid player name. Only letters, digits and spaces allowed. Not too short, not too long either."
+    "12": "Invalid player name. At least one character."
   },
   "ModifyWorldScreen": {
     "1": "Are you sure? ",
     "2": "The world will be irrecoverably deleted.",
     "3": "Abandon changes?",
     "4": "You changed some of the world properties, but they were not applied yet.",
-    "5": "Enter \"yes\" to continue"
+    "5": "Enter \"yes\" to continue",
+    "6": "(none)"
   },
   "PlayScreen": {
     "1": "Mod Incompatibility Warning!",
@@ -1036,6 +1081,10 @@
     "9": "{0} world, {1}",
     "10": "{0} worlds, {1}",
     "11": "No worlds"
+  },
+  "NewWorldScreen": {
+    "1": "Leave blank for a random seed",
+    "2": "True seed {0} is set"
   },
   "JsInterface": {
     "1": "There is already a script running.",
@@ -2948,10 +2997,12 @@
       "7": "From Link",
       "8": "Manage downloaded content",
       "9": "Manage Content",
-      "10": "Access content created by other Original community members and registered for public access",
+      "10": "Access content created by other original community members and registered for public access",
       "11": "Original Community",
       "12": "Manage downloaded mod",
-      "13": "Manage Mod"
+      "13": "Manage Mod",
+      "14": "Import content from the file picker of your system",
+      "15": "Device"
     },
     "ExternalContentScreen": {
       "1": "",
@@ -3095,7 +3146,12 @@
       "7": "...",
       "8": "Reset To Defaults:",
       "9": "Reset",
-      "10": "Report API Bug"
+      "10": "Report API Bug",
+      "11": "Game Log:",
+      "12": "View Log",
+      "13": "Open Log File",
+      "14": "File Association",
+      "15": "Share Log File"
     },
     "SettingsControlsScreen": [
       "Adjust Controls Settings",
@@ -3186,8 +3242,8 @@
       "Input \"yes\" to delete world:",
       "Original Community Content",
       "Hide Crosshair:",
-      "Custom screenshot width",
-      "Custom screenshot height"
+      "Custom screenshot height",
+      "Custom screenshot aspect ratio"
     ],
     "TrialEndedScreen": {
       "1": "The day has ended",
@@ -3228,7 +3284,8 @@
       "25": "Player-on-Player Attacks:",
       "26": "Changing Seasons:",
       "27": "Length Of Year:",
-      "28": "Season:"
+      "28": "Season:",
+      "29": "Terrain Generator Version:"
     },
     "ReleasesScreen": {
       "1": "{0} Version List",
@@ -3689,6 +3746,15 @@
       "9": "Password: ",
       "10": "Change Password",
       "11": "Close"
+    },
+    "EditWorldSeedDialog": {
+      "1": "Edit World Seed",
+      "2": "After editing the true seed, the seed will be fixed to empty string.\n The true seed is an integer between -2147483648 and 2147483647.",
+      "3": "Seed",
+      "4": "True Seed",
+      "5": "Reset",
+      "6": "OK",
+      "7": "Cancel"
     }
   },
   "FireworksBlock": {

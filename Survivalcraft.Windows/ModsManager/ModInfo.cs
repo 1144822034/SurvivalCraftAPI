@@ -1,3 +1,5 @@
+using NuGet.Versioning;
+
 namespace Game {
     public enum LoadOrder {
         Survivalcraft = -2147483648,
@@ -10,6 +12,9 @@ namespace Game {
         public string Name, Version, ApiVersion, Description, ScVersion, Link, Author, PackageName;
         public int LoadOrder = 0;
         public List<string> Dependencies = [];
+        public NuGetVersion NuGetVersion;
+        public VersionRange ApiVersionRange;
+        public Dictionary<string, VersionRange> DependencyRanges = [];
 
         /// <summary>
         ///     该项为true表示：在存档中不记录该模组的modInfo，当玩家在未装载该模组，并运行之前带有该模组的存档时，不报错

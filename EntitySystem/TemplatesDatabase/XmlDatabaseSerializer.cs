@@ -64,20 +64,6 @@ namespace TemplatesDatabase {
             foreach (XElement item3 in XmlUtils.FindChildElement(node, "Assemblies", true).Elements()) {
                 string attributeValue13 = XmlUtils.GetAttributeValue<string>(item3, "Name");
                 try {
-#if DIRECT3D11
-					switch(attributeValue13)
-					{
-						case "Survivalcraft":
-							attributeValue13 = "SurvivalcraftDirect3D11";
-							break;
-						case "Engine":
-							attributeValue13 = "EngineDirect3D11";
-							break;
-						case "EntitySystem":
-							attributeValue13 = "EntitySystemDirect3D11";
-							break;
-					}
-#endif
                     Assembly.Load(new AssemblyName(attributeValue13));
                 }
                 catch (Exception ex) {

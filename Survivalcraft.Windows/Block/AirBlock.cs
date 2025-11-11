@@ -3,7 +3,7 @@ using Engine.Graphics;
 
 namespace Game {
     public class AirBlock : Block {
-        public new const string fName = "AirBlock";
+        public const string fName = "AirBlock";
 
         public static int Index = 0;
 

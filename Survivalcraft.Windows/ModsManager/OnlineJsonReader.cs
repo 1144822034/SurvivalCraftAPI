@@ -2,6 +2,7 @@
 
 using System.Net.Http;
 using System.Text.Json;
+using Game.IContentReader;
 
 namespace Game {
     public static class OnlineJsonReader {
@@ -16,7 +17,7 @@ namespace Game {
             HttpResponseMessage response = await m_client.GetAsync(url);
             response.EnsureSuccessStatusCode();
             string jsonString = await response.Content.ReadAsStringAsync();
-            return JsonDocument.Parse(jsonString);
+            return JsonDocument.Parse(jsonString, JsonDocumentReader.DefaultJsonOptions);
         }
     }
 }

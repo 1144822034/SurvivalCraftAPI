@@ -4,12 +4,10 @@ using Engine.Graphics;
 namespace Game {
     public class FurnitureBlock : Block, IPaintableBlock, IElectricElementBlock {
         public static int Index = 227;
-
         public Matrix[] m_matrices = new Matrix[4];
-
         public int[][] m_facesMaps = [[0, 1, 2, 3, 4, 5], [1, 2, 3, 0, 4, 5], [2, 3, 0, 1, 4, 5], [3, 0, 1, 2, 4, 5]];
-
         public int[][] m_reverseFacesMaps = [[0, 1, 2, 3, 4, 5], [3, 0, 1, 2, 4, 5], [2, 3, 0, 1, 4, 5], [1, 2, 3, 0, 4, 5]];
+        public const string fName = "FurnitureBlock";
 
         public override void Initialize() {
             for (int i = 0; i < 4; i++) {
@@ -353,7 +351,7 @@ namespace Game {
                         SetDesignIndex(0, furnitureDesign2.Index, furnitureDesign2.ShadowStrengthFactor, furnitureDesign2.IsLightEmitter)
                     ),
                     ResultCount = 1,
-                    Description = LanguageControl.Get(GetType().Name, 0),
+                    Description = LanguageControl.Get(fName, 0),
                     Ingredients = (string[])ingredients.Clone()
                 };
             }
@@ -378,7 +376,7 @@ namespace Game {
                         SetDesignIndex(0, furnitureDesign3.Index, furnitureDesign3.ShadowStrengthFactor, furnitureDesign3.IsLightEmitter)
                     ),
                     ResultCount = 1,
-                    Description = LanguageControl.Get(GetType().Name, 0),
+                    Description = LanguageControl.Get(fName, 0),
                     Ingredients = (string[])ingredients.Clone()
                 };
             }
@@ -403,7 +401,7 @@ namespace Game {
                         SetDesignIndex(0, furnitureDesign4.Index, furnitureDesign4.ShadowStrengthFactor, furnitureDesign4.IsLightEmitter)
                     ),
                     ResultCount = 1,
-                    Description = LanguageControl.Get(GetType().Name, 0),
+                    Description = LanguageControl.Get(fName, 0),
                     Ingredients = (string[])ingredients.Clone()
                 };
             }
@@ -466,7 +464,7 @@ namespace Game {
         public void DisplayError() {
             DialogsManager.ShowDialog(
                 null,
-                new MessageDialog(LanguageControl.Error, LanguageControl.Get(GetType().Name, 1), LanguageControl.Ok, null, null)
+                new MessageDialog(LanguageControl.Error, LanguageControl.Get(fName, 1), LanguageControl.Ok, null, null)
             );
         }
 

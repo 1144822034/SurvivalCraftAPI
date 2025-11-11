@@ -4,7 +4,7 @@ using Engine.Input;
 using Engine.Media;
 
 namespace Game {
-    [Obsolete($"LegacyTextBoxWidget is obsolete, please use {nameof(TextBoxWidget)} instead.")]
+    [Obsolete($"LegacyTextBoxWidget is obsolete, please use {nameof(LegacyTextBoxWidget)} instead.")]
     public class LegacyTextBoxWidget : Widget {
         public BitmapFont m_font;
 

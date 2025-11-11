@@ -769,7 +769,7 @@ namespace Game {
                 }
                 float probability = item2.Value.IsIncendiary ? 0.5f : 0.2f;
                 Block block = BlocksManager.Blocks[num6];
-                if (block.FireDuration > 0f
+                if (block.GetFireDuration(cellValue) > 0f
                     && item2.Value.Pressure / block.GetExplosionResilience(cellValue) > 0.2f
                     && m_random.Bool(probability)) {
                     m_subsystemFireBlockBehavior.SetCellOnFire(item2.Key.X, item2.Key.Y, item2.Key.Z, item2.Value.IsIncendiary ? 1f : 0.3f);

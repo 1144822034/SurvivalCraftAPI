@@ -363,6 +363,24 @@ namespace Game {
                 );
                 DialogsManager.ShowDialog(
                     m_componentPlayer.GuiWidget,
+#if ANDROID
+                    new MessageDialog(
+                        LanguageControl.Get(fName, 21),
+                        string.Format(LanguageControl.Get(fName, 22), displayName),
+                        LanguageControl.Get(fName, "29"),
+                        LanguageControl.Get(fName, "30"),
+                        button => {
+                            if (button == MessageDialogButton.Button1) {
+                                try {
+                                    Storage.ShareFile(FurniturePacksManager.GetFileName($"{displayName}.scfpack"));
+                                }
+                                catch (Exception e) {
+                                    DialogsManager.ShowDialog(null, new MessageDialog(LanguageControl.Error, e.Message, LanguageControl.Ok, null, null));
+                                }
+                            }
+                        }
+                    )
+#else
                     new MessageDialog(
                         LanguageControl.Get(fName, 21),
                         string.Format(LanguageControl.Get(fName, 22), displayName),
@@ -370,6 +388,7 @@ namespace Game {
                         null,
                         null
                     )
+#endif
                 );
             }
             catch (Exception ex) {

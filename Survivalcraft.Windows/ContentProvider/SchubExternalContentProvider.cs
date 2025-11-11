@@ -3,6 +3,7 @@ using System.Text;
 using System.Text.Json;
 using System.Text.Json.Nodes;
 using Engine;
+using Game.IContentReader;
 
 namespace Game {
     public class SchubExternalContentProvider : IExternalContentProvider {
@@ -52,6 +53,8 @@ namespace Game {
         public bool RequiresLogin => true;
 
         public bool IsLoggedIn => !string.IsNullOrEmpty(SettingsManager.ScpboxAccessToken);
+
+        public bool IsLocalProvider => false;
 
         public SchubExternalContentProvider() {
             Program.HandleUri += HandleUri;
@@ -115,7 +118,7 @@ namespace Game {
                     progress,
                     delegate(byte[] result) {
                         try {
-                            success(JsonElementToEntry(JsonDocument.Parse(result).RootElement));
+                            success(JsonElementToEntry(JsonDocument.Parse(result, JsonDocumentReader.DefaultJsonOptions).RootElement));
                         }
                         catch (Exception obj2) {
                             failure(obj2);
@@ -190,7 +193,7 @@ namespace Game {
                     progress,
                     delegate(byte[] result) {
                         try {
-                            success(JsonElementToLinkAddress(JsonDocument.Parse(result).RootElement));
+                            success(JsonElementToLinkAddress(JsonDocument.Parse(result, JsonDocumentReader.DefaultJsonOptions).RootElement));
                         }
                         catch (Exception obj2) {
                             failure(obj2);
@@ -209,7 +212,7 @@ namespace Game {
                 LoginDialog login = new();
                 login.succ = delegate(byte[] a) {
                     StreamReader streamReader = new(new MemoryStream(a));
-                    JsonElement json = JsonDocument.Parse(streamReader.ReadToEnd()).RootElement;
+                    JsonElement json = JsonDocument.Parse(streamReader.ReadToEnd(), JsonDocumentReader.DefaultJsonOptions).RootElement;
                     if (json.GetProperty("code").GetInt32() == 200) {
                         JsonElement data = json.GetProperty("data");
                         SettingsManager.ScpboxAccessToken = data.GetProperty("accessToken").GetString() ?? string.Empty;

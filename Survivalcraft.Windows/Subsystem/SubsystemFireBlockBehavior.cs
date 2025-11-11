@@ -80,7 +80,7 @@ namespace Game {
         public bool SetCellOnFire(int x, int y, int z, float fireExpandability) {
             int cellValue = SubsystemTerrain.Terrain.GetCellValue(x, y, z);
             int num = Terrain.ExtractContents(cellValue);
-            if (BlocksManager.Blocks[num].FireDuration == 0f) {
+            if (BlocksManager.Blocks[num].GetFireDuration(cellValue) == 0f) {
                 return false;
             }
             bool result = false;
@@ -244,20 +244,26 @@ namespace Game {
 
         public override void OnNeighborBlockChanged(int x, int y, int z, int neighborX, int neighborY, int neighborZ) {
             int num = Terrain.ExtractData(SubsystemTerrain.Terrain.GetCellValue(x, y, z));
+            int cellValue_px = SubsystemTerrain.Terrain.GetCellValue(x + 1, y, z);
+            int cellValue_nx = SubsystemTerrain.Terrain.GetCellValue(x - 1, y, z);
+            int cellValue_py = SubsystemTerrain.Terrain.GetCellValue(x, y + 1, z);
+            int cellValue_ny = SubsystemTerrain.Terrain.GetCellValue(x, y - 1, z);
+            int cellValue_pz = SubsystemTerrain.Terrain.GetCellValue(x, y, z + 1);
+            int cellValue_nz = SubsystemTerrain.Terrain.GetCellValue(x, y, z - 1);
             if ((num & 1) != 0
-                && BlocksManager.Blocks[SubsystemTerrain.Terrain.GetCellContents(x, y, z + 1)].FireDuration == 0f) {
+                && BlocksManager.Blocks[Terrain.ExtractContents(cellValue_pz)].GetFireDuration(cellValue_pz) == 0f) {
                 num &= -2;
             }
             if ((num & 2) != 0
-                && BlocksManager.Blocks[SubsystemTerrain.Terrain.GetCellContents(x + 1, y, z)].FireDuration == 0f) {
+                && BlocksManager.Blocks[Terrain.ExtractContents(cellValue_px)].GetFireDuration(cellValue_px) == 0f) {
                 num &= -3;
             }
             if ((num & 4) != 0
-                && BlocksManager.Blocks[SubsystemTerrain.Terrain.GetCellContents(x, y, z - 1)].FireDuration == 0f) {
+                && BlocksManager.Blocks[Terrain.ExtractContents(cellValue_nz)].GetFireDuration(cellValue_nz) == 0f) {
                 num &= -5;
             }
             if ((num & 8) != 0
-                && BlocksManager.Blocks[SubsystemTerrain.Terrain.GetCellContents(x - 1, y, z)].FireDuration == 0f) {
+                && BlocksManager.Blocks[Terrain.ExtractContents(cellValue_nx)].GetFireDuration(cellValue_nx) == 0f) {
                 num &= -9;
             }
             if (m_fireData.TryGetValue(new Point3(x, y, z), out FireData value)) {
@@ -294,7 +300,7 @@ namespace Game {
             }
             int contents = 104;
             if (num == 0
-                && BlocksManager.Blocks[SubsystemTerrain.Terrain.GetCellContents(x, y - 1, z)].FireDuration == 0f) {
+                && BlocksManager.Blocks[Terrain.ExtractContents(cellValue_ny)].GetFireDuration(cellValue_ny) == 0f) {
                 contents = 0;
             }
             int value2 = Terrain.ReplaceData(Terrain.ReplaceContents(contents), num);
@@ -380,15 +386,15 @@ namespace Game {
             int x = fireData.Point.X + point.X;
             int y = fireData.Point.Y + point.Y;
             int z = fireData.Point.Z + point.Z;
-            int cellContents = SubsystemTerrain.Terrain.GetCellContents(x, y, z);
-            Block block = BlocksManager.Blocks[cellContents];
+            int cellValue = SubsystemTerrain.Terrain.GetCellValue(x, y, z);
+            Block block = BlocksManager.Blocks[Terrain.ExtractContents(cellValue)];
             switch (face) {
                 case 4: break;
-                case 0: fireData.Time0 = block.FireDuration * m_random.Float(0.75f, 1.25f); break;
-                case 1: fireData.Time1 = block.FireDuration * m_random.Float(0.75f, 1.25f); break;
-                case 2: fireData.Time2 = block.FireDuration * m_random.Float(0.75f, 1.25f); break;
-                case 3: fireData.Time3 = block.FireDuration * m_random.Float(0.75f, 1.25f); break;
-                case 5: fireData.Time5 = block.FireDuration * m_random.Float(0.75f, 1.25f); break;
+                case 0: fireData.Time0 = block.GetFireDuration(cellValue) * m_random.Float(0.75f, 1.25f); break;
+                case 1: fireData.Time1 = block.GetFireDuration(cellValue) * m_random.Float(0.75f, 1.25f); break;
+                case 2: fireData.Time2 = block.GetFireDuration(cellValue) * m_random.Float(0.75f, 1.25f); break;
+                case 3: fireData.Time3 = block.GetFireDuration(cellValue) * m_random.Float(0.75f, 1.25f); break;
+                case 5: fireData.Time5 = block.GetFireDuration(cellValue) * m_random.Float(0.75f, 1.25f); break;
             }
         }
 

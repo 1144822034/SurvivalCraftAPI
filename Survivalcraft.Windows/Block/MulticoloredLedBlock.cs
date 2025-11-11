@@ -77,7 +77,7 @@ namespace Game {
                 ResultCount = 4,
                 ResultValue = Terrain.MakeBlockValue(254, 0, 0),
                 RequiredHeatLevel = 0f,
-                Description = LanguageControl.Get(GetType().Name, 1),
+                Description = LanguageControl.Get("MulticoloredLedBlock", 1),
                 Ingredients = { [1] = "glass", [4] = "wire", [6] = "copperingot", [7] = "copperingot", [8] = "copperingot" }
             };
             yield return craftingRecipe;

@@ -12,6 +12,8 @@ namespace Game {
 
         string Description { get; }
 
+        bool IsLocalProvider { get; }
+
         void Login(CancellableProgress progress, Action success, Action<Exception> failure);
 
         void Logout();

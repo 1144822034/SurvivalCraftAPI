@@ -4,6 +4,7 @@ using Engine.Graphics;
 namespace Game {
     public class CottonBlock : CrossBlock {
         public static int Index = 204;
+        public const string fName = "CottonBlock";
 
         public override IEnumerable<int> GetCreativeValues() {
             yield return Terrain.MakeBlockValue(204, 0, SetIsWild(SetSize(0, 2), true));
@@ -13,9 +14,9 @@ namespace Game {
 
         public override string GetDisplayName(SubsystemTerrain subsystemTerrain, int value) {
             if (!GetIsWild(Terrain.ExtractData(value))) {
-                return LanguageControl.Get(GetType().Name, 0);
+                return LanguageControl.Get(fName, 0);
             }
-            return LanguageControl.Get(GetType().Name, 1);
+            return LanguageControl.Get(fName, 1);
         }
 
         public override void GetDropValues(SubsystemTerrain subsystemTerrain,

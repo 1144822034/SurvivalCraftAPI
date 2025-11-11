@@ -2,17 +2,14 @@ using System.Xml.Linq;
 
 namespace Game {
     public class PlayerWidget : CanvasWidget {
-        public PlayerData m_playerData;
-
         public PlayerModelWidget m_playerModel;
-
         public LabelWidget m_nameLabel;
-
         public LabelWidget m_detailsLabel;
-
         public ButtonWidget m_editButton;
 
+        public PlayerData m_playerData;
         public SubsystemTimeOfDay m_subsystemTimeOfDay;
+        public const string fName = "PlayerWidget";
 
         public PlayerWidget(PlayerData playerData, CharacterSkinsCache characterSkinsCache) {
             XElement node = ContentManager.Get<XElement>("Widgets/PlayerWidget");
@@ -35,7 +32,7 @@ namespace Game {
             m_detailsLabel.Text += "\n";
             LabelWidget detailsLabel = m_detailsLabel;
             detailsLabel.Text = string.Format(
-                LanguageControl.Get(GetType().Name, 0),
+                LanguageControl.Get(fName, 0),
                 detailsLabel.Text,
                 PlayerScreen.GetDeviceDisplayName(m_playerData.InputDevice)
             );
@@ -50,10 +47,10 @@ namespace Game {
             }
             m_detailsLabel.Text += m_playerData.LastSpawnTime >= 0.0
                 ? string.Format(
-                    LanguageControl.Get(GetType().Name, 1),
+                    LanguageControl.Get(fName, 1),
                     $"{(subsystemGameInfo.TotalElapsedGameTime - m_playerData.LastSpawnTime) / time:N1}"
                 )
-                : LanguageControl.Get(GetType().Name, 2);
+                : LanguageControl.Get(fName, 2);
             if (m_editButton.IsClicked) {
                 ScreensManager.SwitchScreen("Player", PlayerScreen.Mode.Edit, m_playerData);
             }

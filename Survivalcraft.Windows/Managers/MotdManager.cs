@@ -2,6 +2,7 @@ using System.Globalization;
 using System.Text.Json;
 using System.Xml.Linq;
 using Engine;
+using Game.IContentReader;
 using XmlUtilities;
 
 namespace Game {
@@ -89,7 +90,7 @@ namespace Game {
                 null,
                 null,
                 new CancellableProgress(),
-                data => { UpdateResult = JsonDocument.Parse(data); },
+                data => { UpdateResult = JsonDocument.Parse(data, JsonDocumentReader.DefaultJsonOptions); },
                 ex => { Log.Warning($"Failed processing Update check. Reason: {ex.Message}"); }
             );
         }
@@ -400,7 +401,7 @@ namespace Game {
                             busyDialog.Progress,
                             delegate(byte[] data) {
                                 DialogsManager.HideDialog(busyDialog);
-                                JsonElement result = JsonDocument.Parse(data).RootElement;
+                                JsonElement result = JsonDocument.Parse(data, JsonDocumentReader.DefaultJsonOptions).RootElement;
                                 bool success = result[0].GetInt32() == 200;
                                 string msg = success ? "公告已更新,建议重启游戏检查效果" : result[1].GetString();
                                 if (success) {

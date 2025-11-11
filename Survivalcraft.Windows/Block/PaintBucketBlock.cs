@@ -10,7 +10,7 @@ namespace Game {
 
         public BlockMesh m_standalonePaintBlockMesh = new();
 
-        public new const string fName = "PaintBucketBlock";
+        public const string fName = "PaintBucketBlock";
 
         public override void Initialize() {
             Model model = ContentManager.Get<Model>("Models/FullBucket");
@@ -99,7 +99,7 @@ namespace Game {
 
         public override string GetDisplayName(SubsystemTerrain subsystemTerrain, int value) {
             int color = GetColor(Terrain.ExtractData(value));
-            return SubsystemPalette.GetName(subsystemTerrain, color, LanguageControl.GetBlock(GetType().Name, "DisplayName"));
+            return SubsystemPalette.GetName(subsystemTerrain, color, LanguageControl.GetBlock("PaintBucketBlock", "DisplayName"));
         }
 
         public override int GetDamageDestructionValue(int value) => Terrain.MakeBlockValue(90);

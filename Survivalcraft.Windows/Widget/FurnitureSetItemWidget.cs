@@ -7,8 +7,8 @@ namespace Game {
         public FurnitureInventoryPanel m_furnitureInventoryPanel;
 
         public FurnitureSet m_furnitureSet;
-
         public bool m_highlighted;
+        public const string fName = "FurnitureSetItemWidget";
 
         public FurnitureSetItemWidget(FurnitureInventoryPanel furnitureInventoryWidget, FurnitureSet furnitureSet) {
             m_furnitureInventoryPanel = furnitureInventoryWidget;
@@ -17,8 +17,8 @@ namespace Game {
             LoadContents(this, node);
             LabelWidget labelWidget = Children.Find<LabelWidget>("FurnitureSetItem.Name");
             LabelWidget labelWidget2 = Children.Find<LabelWidget>("FurnitureSetItem.DesignsCount");
-            labelWidget.Text = furnitureSet == null ? LanguageControl.Get(GetType().Name, 0) : furnitureSet.Name;
-            labelWidget2.Text = string.Format(LanguageControl.Get(GetType().Name, 1), CountFurnitureDesigns());
+            labelWidget.Text = furnitureSet == null ? LanguageControl.Get(fName, 0) : furnitureSet.Name;
+            labelWidget2.Text = string.Format(LanguageControl.Get(fName, 1), CountFurnitureDesigns());
         }
 
         public void DragDrop(Widget dragWidget, object data) {

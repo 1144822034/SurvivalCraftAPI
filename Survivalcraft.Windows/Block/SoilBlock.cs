@@ -5,7 +5,7 @@ namespace Game {
     public class SoilBlock : CubeBlock {
         public static int Index = 168;
 
-        public new static string fName = "SoilBlock";
+        public static string fName = "SoilBlock";
 
         public static BoundingBox[] m_collisionBoxes = [new(new Vector3(0f, 0f, 0f), new Vector3(1f, 0.9375f, 1f))];
 

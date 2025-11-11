@@ -214,26 +214,29 @@ namespace Game {
             if (!ValidateWorldName(worldSettings.Name)) {
                 throw new InvalidOperationException($"World name \"{worldSettings.Name}\" is invalid.");
             }
-            int num;
-            if (string.IsNullOrEmpty(worldSettings.Seed)) {
-                num = (int)(long)(Time.RealTime * 1000.0);
+            int worldSeed;
+            if (worldSettings.CustomWorldSeed) {
+                worldSeed = worldSettings.WorldSeed;
+            }
+            else if (string.IsNullOrEmpty(worldSettings.Seed)) {
+                worldSeed = (int)(long)(Time.RealTime * 1000.0);
             }
             else if (worldSettings.Seed == "0") {
-                num = 0;
+                worldSeed = 0;
             }
             else {
-                num = 0;
+                worldSeed = 0;
                 int num2 = 1;
                 string seed = worldSettings.Seed;
                 foreach (char c in seed) {
-                    num += c * num2;
+                    worldSeed += c * num2;
                     num2 += 29;
                 }
             }
             ValuesDictionary valuesDictionary = new();
             worldSettings.Save(valuesDictionary, false);
             valuesDictionary.SetValue("WorldDirectoryName", unusedWorldDirectoryName);
-            valuesDictionary.SetValue("WorldSeed", num);
+            valuesDictionary.SetValue("WorldSeed", worldSeed);
             ValuesDictionary valuesDictionary2 = new();
             valuesDictionary2.SetValue("Players", new ValuesDictionary());
             DatabaseObject databaseObject = DatabaseManager.GameDatabase.Database.FindDatabaseObject(

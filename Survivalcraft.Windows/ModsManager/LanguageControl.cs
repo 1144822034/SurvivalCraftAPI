@@ -2,6 +2,7 @@ using System.Globalization;
 using System.Text.Json;
 using System.Text.Json.Nodes;
 using Engine;
+using Game.IContentReader;
 
 namespace Game {
     public static class LanguageControl {
@@ -63,7 +64,7 @@ namespace Game {
             if (txt.Length > 0) { //加载原版语言包
                 JsonNode newJsonNode;
                 try {
-                    newJsonNode = JsonNode.Parse(txt);
+                    newJsonNode = JsonNode.Parse(txt, null, JsonDocumentReader.DefaultJsonOptions);
                 }
                 catch (Exception e) {
                     Log.Error($"Invalid json file, reason: {e}");
@@ -83,7 +84,7 @@ namespace Game {
             if (txt.Length > 0) {
                 JsonNode newJsonNode;
                 try {
-                    newJsonNode = JsonNode.Parse(txt);
+                    newJsonNode = JsonNode.Parse(txt, null, JsonDocumentReader.DefaultJsonOptions);
                 }
                 catch (Exception e) {
                     Log.Error($"Invalid json file, reason: {e}");

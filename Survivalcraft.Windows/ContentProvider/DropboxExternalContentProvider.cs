@@ -3,6 +3,7 @@ using System.Text;
 using System.Text.Json;
 using System.Text.Json.Nodes;
 using Engine;
+using Game.IContentReader;
 
 namespace Game {
     public class DropboxExternalContentProvider : IExternalContentProvider {
@@ -50,6 +51,8 @@ namespace Game {
         public bool SupportsLinks => true;
 
         public bool RequiresLogin => true;
+
+        public bool IsLocalProvider => false;
 
         public bool IsLoggedIn => !string.IsNullOrEmpty(SettingsManager.DropboxAccessToken);
 
@@ -113,7 +116,7 @@ namespace Game {
                     progress,
                     delegate(byte[] result) {
                         try {
-                            success(JsonElementToEntry(JsonDocument.Parse(result).RootElement));
+                            success(JsonElementToEntry(JsonDocument.Parse(result, JsonDocumentReader.DefaultJsonOptions).RootElement));
                         }
                         catch (Exception obj2) {
                             failure(obj2);
@@ -188,7 +191,7 @@ namespace Game {
                     progress,
                     delegate(byte[] result) {
                         try {
-                            success(JsonElementToLinkAddress(JsonDocument.Parse(result).RootElement));
+                            success(JsonElementToLinkAddress(JsonDocument.Parse(result, JsonDocumentReader.DefaultJsonOptions).RootElement));
                         }
                         catch (Exception obj2) {
                             failure(obj2);
@@ -241,7 +244,7 @@ namespace Game {
                                     new MemoryStream(),
                                     loginProcessData.Progress,
                                     delegate(byte[] result) {
-                                        SettingsManager.DropboxAccessToken = JsonDocument.Parse(result)
+                                        SettingsManager.DropboxAccessToken = JsonDocument.Parse(result, JsonDocumentReader.DefaultJsonOptions)
                                             .RootElement.GetProperty("access_token")
                                             .GetString();
                                         loginProcessData.Succeed(this);

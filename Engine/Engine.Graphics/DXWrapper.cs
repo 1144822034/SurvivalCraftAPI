@@ -60,8 +60,7 @@ namespace Engine.Graphics {
         ];
 
         public static void CreateDevice() {
-            IntPtr handle = Window.m_view.Native?.Win32?.Hwnd ?? IntPtr.Zero;
-            if (handle == IntPtr.Zero) {
+            if (Window.Handle == IntPtr.Zero) {
                 throw new InvalidOperationException("Failed to get window handle");
             }
 #if DEBUG
@@ -97,7 +96,7 @@ namespace Engine.Graphics {
             };
             using (Device3 device2 = Device.QueryInterface<Device3>()) {
                 using (Factory3 parent = device2.Adapter.GetParent<Factory3>()) {
-                    using (SwapChain1 swapChain = new(parent, Device, handle, ref swapChainDescription)) {
+                    using (SwapChain1 swapChain = new(parent, Device, Window.Handle, ref swapChainDescription)) {
                         SwapChain = swapChain.QueryInterface<SwapChain2>();
                     }
                 }

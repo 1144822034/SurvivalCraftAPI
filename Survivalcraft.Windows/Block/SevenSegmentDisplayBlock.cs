@@ -55,7 +55,7 @@ namespace Game {
                     RemainsCount = 1,
                     RemainsValue = Terrain.MakeBlockValue(90),
                     RequiredHeatLevel = 0f,
-                    Description = LanguageControl.Get(GetType().Name, 1),
+                    Description = LanguageControl.Get("SevenSegmentDisplayBlock", 1),
                     Ingredients = {
                         [0] = "glass",
                         [2] = "glass",

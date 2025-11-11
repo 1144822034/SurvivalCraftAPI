@@ -136,7 +136,7 @@ namespace Game {
         }
 
         public override string GetDisplayName(SubsystemTerrain subsystemTerrain, int value) =>
-            LanguageControl.Get(GetType().Name, (int)GetMode(Terrain.ExtractData(value)));
+            LanguageControl.Get("PistonBlock", (int)GetMode(Terrain.ExtractData(value)));
 
         public override BlockPlacementData GetPlacementValue(SubsystemTerrain subsystemTerrain,
             ComponentMiner componentMiner,

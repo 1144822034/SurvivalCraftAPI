@@ -42,6 +42,10 @@ namespace Game {
 
         public SliderWidget m_biomeSizeSlider;
 
+        public Widget m_terrainGeneratorVersionButtonPanel;
+
+        public ButtonWidget m_terrainGeneratorVersionButton;
+
         public RectangleWidget m_blocksTextureIcon;
 
         public LabelWidget m_blocksTextureLabel;
@@ -194,6 +198,8 @@ namespace Game {
             m_temperatureOffsetSlider = Children.Find<SliderWidget>("TemperatureOffset");
             m_humidityOffsetSlider = Children.Find<SliderWidget>("HumidityOffset");
             m_biomeSizeSlider = Children.Find<SliderWidget>("BiomeSize");
+            m_terrainGeneratorVersionButtonPanel = Children.Find<Widget>("TerrainGeneratorVersionPanel");
+            m_terrainGeneratorVersionButton = Children.Find<ButtonWidget>("TerrainGeneratorVersion");
             m_paletteButton = Children.Find<ButtonWidget>("Palette");
             m_supernaturalCreaturesButton = Children.Find<ButtonWidget>("SupernaturalCreatures");
             m_friendlyFireButton = Children.Find<ButtonWidget>("FriendlyFire");
@@ -222,6 +228,7 @@ namespace Game {
             m_biomeSizeSlider.MinValue = 0f;
             m_biomeSizeSlider.MaxValue = m_biomeSizes.Length - 1;
             m_biomeSizeSlider.Granularity = 1f;
+            m_terrainGeneratorVersionButton.Text = VersionsManager.SerializationVersion;
             m_yearDaysSlider.MinValue = 0f;
             m_yearDaysSlider.MaxValue = m_yearDays.Length - 1;
             m_yearDaysSlider.Granularity = 1f;
@@ -413,6 +420,20 @@ namespace Game {
                 m_worldSettings.BiomeSize = m_biomeSizes[Math.Clamp((int)m_biomeSizeSlider.Value, 0, m_biomeSizes.Length - 1)];
                 m_descriptionLabel.Text = StringsManager.GetString("BiomeSize.Description");
             }
+            if (m_terrainGeneratorVersionButton.IsClicked) {
+                DialogsManager.ShowDialog(
+                    null,
+                    new ListSelectionDialog(
+                        LanguageControl.Get(fName, "11"),
+                        new[] { "2.1", "2.2", "2.3", "2.4", VersionsManager.SerializationVersion }.Distinct(),
+                        56f,
+                        e => e as string,
+                        delegate(object e) {
+                            m_worldSettings.OriginalSerializationVersion = e as string;
+                        }
+                    )
+                );
+            }
             if (m_blocksTextureButton.IsClicked) {
                 BlocksTexturesManager.UpdateBlocksTexturesList();
                 ListSelectionDialog dialog = new(
@@ -526,6 +547,11 @@ namespace Game {
             m_humidityOffsetSlider.Text = FormatOffset(m_worldSettings.HumidityOffset);
             m_biomeSizeSlider.Value = FindNearestIndex(m_biomeSizes, m_worldSettings.BiomeSize);
             m_biomeSizeSlider.Text = $"{m_worldSettings.BiomeSize}x";
+            m_terrainGeneratorVersionButtonPanel.IsVisible = !m_flatTerrainPanel.IsVisible;
+            if (m_flatTerrainPanel.IsVisible) {
+                m_worldSettings.OriginalSerializationVersion = VersionsManager.SerializationVersion;
+            }
+            m_terrainGeneratorVersionButton.Text = m_worldSettings.OriginalSerializationVersion;
             m_environmentBehaviorButton.Text = LanguageControl.Get("EnvironmentBehaviorMode", m_worldSettings.EnvironmentBehaviorMode.ToString());
             m_timeOfDayButton.Text = LanguageControl.Get("TimeOfDayMode", m_worldSettings.TimeOfDayMode.ToString());
             m_areSeasonsChangingCheckBox.IsChecked = m_worldSettings.AreSeasonsChanging;

@@ -40,8 +40,8 @@ namespace Game {
                             }
                             break;
                         case ScreenshotSize.Custom:
-                            width = SettingsManager.ScreenshotSizeCustom.X;
-                            height = SettingsManager.ScreenshotSizeCustom.Y;
+                            width = SettingsManager.ScreenshotSizeCustomWidths[SettingsManager.ScreenshotSizeCustomWidthIndex];
+                            height = (int)(width * SettingsManager.ScreenshotSizeCustomAspectRatios[SettingsManager.ScreenshotSizeCustomAspectRatioIndex]);
                             break;
                         default:
                             width = 1920;

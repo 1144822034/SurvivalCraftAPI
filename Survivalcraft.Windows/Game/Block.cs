@@ -178,8 +178,6 @@ namespace Game {
         public int PriorityInteract = 2000;
         public int PriorityPlace = 1000;
 
-        public static string fName = "Block";
-
         public Random Random = new();
 
         public static BoundingBox[] m_defaultCollisionBoxes = [new(Vector3.Zero, Vector3.One)];
@@ -190,7 +188,7 @@ namespace Game {
         public virtual void Initialize() {
             if (Durability < -1
                 || Durability > 65535) {
-                throw new InvalidOperationException(string.Format(LanguageControl.Get(fName, 1), DefaultDisplayName));
+                throw new InvalidOperationException(string.Format(LanguageControl.Get(GetType().Name, 1), DefaultDisplayName));
             }
         }
 

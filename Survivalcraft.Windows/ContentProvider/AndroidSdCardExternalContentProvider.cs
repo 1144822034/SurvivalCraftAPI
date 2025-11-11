@@ -21,6 +21,8 @@ public class AndroidSdCardExternalContentProvider : IExternalContentProvider {
 
     public bool IsLoggedIn => true;
 
+    public bool IsLocalProvider => true;
+
     public void Dispose() { }
 
     public void Login(CancellableProgress progress, Action success, Action<Exception> failure) => failure(new NotSupportedException());
@@ -76,7 +78,7 @@ public class AndroidSdCardExternalContentProvider : IExternalContentProvider {
                     using (FileStream destination = new(po, FileMode.Create, FileAccess.Write, FileShare.None)) {
                         stream.CopyTo(destination);
                     }
-                    Dispatcher.Dispatch(delegate { success(null); });
+                    Dispatcher.Dispatch(delegate { success(uniquePath); });
                 }
                 catch (Exception ex) {
                     Dispatcher.Dispatch(delegate { failure(ex); });
@@ -122,7 +124,7 @@ public class AndroidSdCardExternalContentProvider : IExternalContentProvider {
         }
         string fileNameWithoutExtension = Path.GetFileNameWithoutExtension(path);
         string extension = Path.GetExtension(path);
-        while (File.Exists(text)
+        while (Storage.FileExists(text)
             && num < 1000) {
             string path2 = fileNameWithoutExtension + num + extension;
             text = Path.Combine(directoryName, path2);

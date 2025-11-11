@@ -188,6 +188,19 @@ namespace Game {
             }
         }
 
+        public void ChangeTextNoEvent(string value) {
+            string text = value == null ? string.Empty :
+                value.Length > MaximumLength ? value.Substring(0, MaximumLength) : value;
+            if (text != m_text) {
+                m_text = text;
+                Caret = Math.Clamp(Caret, 0, m_text.Length);
+                if (!TasksQueue.OfType<SetCursorPositionTask>().Any()) {
+                    TasksQueue.Enqueue(new SetCursorPositionTask());
+                }
+                LimitScrollValue();
+            }
+        }
+
         /// <summary>
         ///     <para>
         ///         输入法 “组合窗” 的文本， 可能为 null。

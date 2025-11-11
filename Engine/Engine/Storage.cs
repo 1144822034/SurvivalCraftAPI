@@ -1,5 +1,3 @@
-using System.Text;
-
 #if ANDROID
 #pragma warning disable CA1416
 using Environment = Android.OS.Environment;
@@ -8,7 +6,10 @@ using Android.OS;
 using Foundation;
 #else
 using System.Reflection;
+using System.Diagnostics;
+using NativeFileDialogCore;
 #endif
+using System.Text;
 
 namespace Engine {
     public static class Storage {
@@ -347,6 +348,113 @@ namespace Engine {
                 sanitized.Append(InvalidFileNameChars.Contains(c) ? replacement : c);
             }
             return sanitized.ToString();
+        }
+
+        /*
+         * <Summary>
+         *  使用外部应用打开文件
+         * </Summary>
+         * <Param name="path">文件路径</Param>
+         * <Param name="chooserTitle">（仅安卓）应用选择器标题，留空时使用文件名</Param>
+         * <Param name="mimeType">（仅安卓）MIME 类型，留空时自动根据文件后缀推断</Param>
+         */
+        public static void OpenFileWithExternalApplication(string path, string chooserTitle = null, string mimeType = null) {
+            if (!FileExists(path)) {
+                throw new FileNotFoundException($"Open {path} failed, because it is not exists.");
+            }
+            path = ProcessPath(path, false, false);
+#if WINDOWS
+            Process.Start("explorer.exe", path);
+#elif LINUX
+            Process.Start("xdg-open", path);
+#elif ANDROID
+            Window.Activity.OpenFile(path, chooserTitle, mimeType);
+#endif
+        }
+
+        /*
+         * <Summary>
+         *  分享文件，当前版本仅支持安卓
+         * </Summary>
+         * <Param name="path">文件路径</Param>
+         * <Param name="chooserTitle">应用选择器标题，留空时使用文件名</Param>
+         * <Param name="mimeType">MIME 类型，留空时自动根据文件后缀推断</Param>
+         */
+        public static void ShareFile(string path, string chooserTitle = null, string mimeType = null) {
+            if (!FileExists(path)) {
+                throw new FileNotFoundException($"Share {path} failed, because it is not exists.");
+            }
+            path = ProcessPath(path, false, false);
+#if ANDROID
+            Window.Activity.ShareFile(path, chooserTitle, mimeType);
+#endif
+        }
+
+        /*
+         * <Summary>
+         *   使用系统文件选择器选择并打开文件
+         * </Summary>
+         * <Param name="title">文件选择器的标题</Param>
+         * <Param name="filters">（安卓无效）过滤器列表。键为名称，例如“图片”；值为通配符列表，例如["*.png", "*.jpg"]</Param>
+         * <Param name="defaultPath">（安卓无效）默认路径</Param>
+         * <Param name="mode">（安卓永远只读）文件打开模式</Param>
+         */
+#pragma warning disable CS1998
+        public static async Task<(Stream, string)> ChooseFile(string title = null,
+            KeyValuePair<string, string[]>[] filters = null,
+            string defaultPath = null,
+            OpenFileMode mode = OpenFileMode.Read) {
+#pragma warning restore CS1998
+            if (mode == OpenFileMode.Create
+                || mode == OpenFileMode.CreateOrOpen) {
+                throw new ArgumentException("mode");
+            }
+#if ANDROID
+            return await Window.Activity.ChooseFileAsync(title);
+#else
+            string filtersString = null;
+            if (filters != null) {
+                StringBuilder sb = new();
+                bool firstAdded1 = false;
+                foreach (KeyValuePair<string, string[]> filter in filters) {
+                    if (firstAdded1) {
+                        sb.Append(';');
+                    }
+                    else {
+                        firstAdded1 = true;
+                    }
+                    sb.Append('[');
+                    sb.Append(filter.Key);
+                    sb.Append('|');
+                    bool firstAdded2 = false;
+                    foreach (string ext in filter.Value) {
+                        if (firstAdded2) {
+                            sb.Append(',');
+                        }
+                        else {
+                            firstAdded2 = true;
+                        }
+                        sb.Append(ext);
+                    }
+                    sb.Append(']');
+                }
+                filtersString = sb.ToString();
+            }
+            DialogResult result = Dialog.FileOpenEx(
+                filtersString,
+                defaultPath,
+                title,
+                null,
+                null,
+                null,
+                Window.Handle
+            );
+            if (result.IsOk
+                && !string.IsNullOrEmpty(result.Path)) {
+                return ( File.Open(result.Path, FileMode.Open, mode == OpenFileMode.Read ? FileAccess.Read : FileAccess.ReadWrite, FileShare.Read), GetFileName(result.Path));
+            }
+            return (null, null);
+#endif
         }
     }
 }

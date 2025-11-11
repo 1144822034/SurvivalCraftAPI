@@ -2,12 +2,11 @@
     <PropertyGroup>
         <NoWarn>$(NoWarn);CS1591</NoWarn>
         <RootNamespace>Game</RootNamespace>
-        <AssemblyName Condition="'$(Configuration)' != 'Direct3D11'">Survivalcraft</AssemblyName>
-        <AssemblyName Condition="'$(Configuration)' == 'Direct3D11'">SurvivalcraftDirect3D11</AssemblyName>
+        <AssemblyName>Survivalcraft</AssemblyName>
         <Configurations>Debug;Release;Direct3D11</Configurations>
         <PackageId>SurvivalcraftAPI.Survivalcraft</PackageId>
         <Title>SurvivalcraftAPI.Survivalcraft</Title><!--For NuGet Package-->
-        <Version>1.8.1.3</Version><!--For NuGet Package-->
+        <Version>1.8.2.0</Version><!--For NuGet Package-->
         <PackageProjectUrl>https://gitee.com/SC-SPM/SurvivalcraftApi</PackageProjectUrl>
         <RepositoryUrl>https://gitee.com/SC-SPM/SurvivalcraftApi</RepositoryUrl>
         <RepositoryType>Git</RepositoryType>
@@ -51,6 +50,7 @@
         <PackageReference Include="ImeSharp.ImmOnly" Version="1.0.0" Condition="'$(TargetFramework)' == 'net9.0-windows'" />
         <PackageReference Include="Jint" Version="4.4.1" />
         <PackageReference Include="NAudio.Flac.Unknown.Mod" Version="1.0.3" />
+        <PackageReference Include="NuGet.Versioning" Version="6.14.0" />
     </ItemGroup>
     <ItemGroup Condition="'$(TargetFramework)' == 'net9.0-windows'">
         <None Update="Content.zip">
@@ -66,6 +66,10 @@
             <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
         </None>
         <None Update="Compatible Patch Note 兼容补丁使用说明.txt" Condition="'$(Configuration)' == 'Direct3D11'">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </None>
+        <None Include="..\README.md">
+            <Link>Readme 请读我.md</Link>
             <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
         </None>
     </ItemGroup>

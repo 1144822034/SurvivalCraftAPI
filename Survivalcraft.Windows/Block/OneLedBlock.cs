@@ -54,7 +54,7 @@ namespace Game {
                 ResultCount = 4,
                 ResultValue = Terrain.MakeBlockValue(253, 0, 0),
                 RequiredHeatLevel = 0f,
-                Description = LanguageControl.Get(GetType().Name, 1),
+                Description = LanguageControl.Get("OneLedBlock", 1),
                 Ingredients = {
                     [0] = "glass",
                     [1] = "glass",

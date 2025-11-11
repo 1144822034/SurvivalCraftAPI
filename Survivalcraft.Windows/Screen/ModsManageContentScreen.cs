@@ -88,27 +88,38 @@ public class ModsManageContentScreen : Screen {
 
     public List<string> m_commonPathList = [];
 
-    public bool m_isAdmin;
-
     public string[] m_commonPaths = []; //Abandoned
 
     public static bool IsOldApiVersionMod(ModItem modItem, out string details) {
         ModInfo modInfo = modItem.ModInfo;
-        if (modItem.ModInfo == null) {
-            details = string.Format(LanguageControl.Get(fName, 68), "1.3");
+        if (modInfo == null) {
+            details = string.Format(LanguageControl.Get(fName, 68), LanguageControl.Unknown);
             return true;
         }
-        if (modInfo.ApiVersion.StartsWith("1.4")
+        if (modInfo.ApiVersionRange != null) {
+            if (!modInfo.ApiVersionRange.Satisfies(ModsManager.APINuGetVersion)) {
+                details = string.Format(LanguageControl.Get(fName, 76), modInfo.ApiVersion);
+                return true;
+            }
+            if (!modInfo.ApiVersionRange.HasUpperBound
+                && modInfo.ApiVersionRange.MinVersion != null
+                && modInfo.ApiVersionRange.MinVersion.Major == 1
+                && modInfo.ApiVersionRange.MinVersion.Minor <= 7) {
+                details = string.Format(LanguageControl.Get(fName, 68), modInfo.ApiVersion);
+                return true;
+            }
+        }
+        else if (modInfo.ApiVersion.StartsWith("1.4")
             || modInfo.ApiVersion.StartsWith("1.5")
             || modInfo.ApiVersion.StartsWith("1.6")
             || modInfo.ApiVersion.StartsWith("1.7")) {
-            details = string.Format(LanguageControl.Get(fName, 68), modItem.ModInfo.ApiVersion);
+            details = string.Format(LanguageControl.Get(fName, 68), modInfo.ApiVersion);
             return true;
         }
         details = string.Format(
             LanguageControl.Get(fName, 3),
-            modItem.ModInfo.Version,
-            modItem.ModInfo.Author,
+            modInfo.Version,
+            modInfo.Author,
             MathF.Round(modItem.ExternalContentEntry.Size / 1000)
         );
         return false;
@@ -143,7 +154,7 @@ public class ModsManageContentScreen : Screen {
         m_uninstallFilterButton.Text = LanguageControl.Get(fName, 44);
         m_installFilterButton.Text = LanguageControl.Get(fName, 45);
         m_firstEnterScreen = false;
-        m_actionButton3.Text = LanguageControl.Get(fName, 73);
+        m_actionButton3.Text = LanguageControl.Get(fName, 77);
         m_modsContentList.ItemWidgetFactory = delegate(object item) {
             ModItem modItem = (ModItem)item;
             XElement node2 = ContentManager.Get<XElement>("Widgets/ExternalContentItem");
@@ -266,7 +277,6 @@ public class ModsManageContentScreen : Screen {
     }
 
     public override void Enter(object[] parameters) {
-        CommunityContentManager.IsAdmin(new CancellableProgress(), delegate(bool isAdmin) { m_isAdmin = isAdmin; }, delegate { });
         if (!Storage.DirectoryExists(m_uninstallPath)) {
             Storage.CreateDirectory(m_uninstallPath);
         }
@@ -362,7 +372,6 @@ public class ModsManageContentScreen : Screen {
     }
 
     public override void Update() {
-        m_actionButton3.IsVisible = m_isAdmin;
         m_uninstallFilterButton.IsChecked = m_filter != StateFilter.InstallState;
         m_installFilterButton.IsChecked = m_filter == StateFilter.InstallState;
         m_uninstallFilterButton.Color = m_filter == StateFilter.InstallState ? Color.White : Color.Green;
@@ -385,17 +394,20 @@ public class ModsManageContentScreen : Screen {
             m_actionButton.Text = m_filter == StateFilter.InstallState ? LanguageControl.Get(fName, 18) : LanguageControl.Get(fName, 19);
             m_actionButton.IsEnabled = !(modItem.ModInfo == null && m_filter != StateFilter.InstallState);
             m_actionButton2.IsEnabled = false;
+            m_actionButton3.IsEnabled = true;
         }
         else if (modItem != null
             && modItem.ExternalContentEntry.Type == ExternalContentType.Directory) {
             m_actionButton.IsEnabled = true;
             m_actionButton.Text = LanguageControl.Get(fName, 20);
             m_actionButton2.IsEnabled = m_filter != StateFilter.InstallState;
+            m_actionButton3.IsEnabled = false;
         }
         else {
             m_actionButton.Text = LanguageControl.Get(fName, 21);
             m_actionButton.IsEnabled = false;
             m_actionButton2.IsEnabled = m_filter != StateFilter.InstallState;
+            m_actionButton3.IsEnabled = false;
         }
         if (m_actionButton.IsClicked) {
             if (modItem != null
@@ -687,7 +699,23 @@ public class ModsManageContentScreen : Screen {
         if (m_actionButton3.IsClicked
             && modItem != null
             && modItem.ExternalContentEntry.Type == ExternalContentType.Mod) {
-            Stream stream = Storage.OpenFile(modItem.ExternalContentEntry.Path, OpenFileMode.ReadWrite);
+            if (string.IsNullOrEmpty(modItem.ModInfo?.Link)) {
+                DialogsManager.ShowDialog(
+                    null,
+                    new MessageDialog(
+                        LanguageControl.Error,
+                        LanguageControl.Get(fName, 78),
+                        LanguageControl.Ok,
+                        null,
+                        null
+                    )
+                );
+            }
+            else {
+                WebBrowserManager.LaunchBrowser(modItem.ModInfo.Link);
+            }
+            //这个按钮原本的作用是“解固”
+            /*Stream stream = Storage.OpenFile(modItem.ExternalContentEntry.Path, OpenFileMode.ReadWrite);
             if (stream == null) {
                 return;
             }
@@ -708,7 +736,7 @@ public class ModsManageContentScreen : Screen {
             DialogsManager.ShowDialog(
                 null,
                 new MessageDialog("操作成功", $"{Storage.GetSystemPath(ModsManager.ModDisPath)}/Original.scmod", LanguageControl.Ok, null, null)
-            );
+            );*/
         }
         if (m_upDirectoryButton.IsClicked) {
             string directory = Storage.GetDirectoryName(m_path);

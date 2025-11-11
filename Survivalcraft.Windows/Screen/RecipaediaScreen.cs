@@ -16,24 +16,17 @@ namespace Game {
         }
 
         public ListPanelWidget m_blocksList;
-
         public LabelWidget m_categoryLabel;
-
         public ButtonWidget m_prevCategoryButton;
-
         public ButtonWidget m_nextCategoryButton;
-
         public ButtonWidget m_detailsButton;
-
         public ButtonWidget m_recipesButton;
-
         public Screen m_previousScreen;
 
         public List<string> m_categories = [];
-
         public int m_categoryIndex;
-
         public int m_listCategoryIndex = -1;
+        public const string fName = "RecipaediaScreen";
 
         /// <summary>
         ///     在方块项目被点击时执行
@@ -101,11 +94,11 @@ namespace Game {
                 num = CraftingRecipesManager.Recipes.Count(r => r.ResultValue == value);
             }
             if (num > 0) {
-                m_recipesButton.Text = $"{num} {(num == 1 ? LanguageControl.Get(GetType().Name, 1) : LanguageControl.Get(GetType().Name, 2))}";
+                m_recipesButton.Text = $"{num} {(num == 1 ? LanguageControl.Get(fName, 1) : LanguageControl.Get(fName, 2))}";
                 m_recipesButton.IsEnabled = true;
             }
             else {
-                m_recipesButton.Text = LanguageControl.Get(GetType().Name, 3);
+                m_recipesButton.Text = LanguageControl.Get(fName, 3);
                 m_recipesButton.IsEnabled = false;
             }
             m_detailsButton.IsEnabled = value.HasValue;

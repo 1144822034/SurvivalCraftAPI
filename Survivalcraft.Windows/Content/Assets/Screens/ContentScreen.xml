@@ -24,6 +24,14 @@
 
       <StackPanelWidget Direction="Horizontal">
         <CanvasWidget Size="350, 90">
+          <LabelWidget Text="[ContentScreen:14]" FontScale="0.7" Color="128, 128, 128" WordWrap="true" HorizontalAlignment="Far" VerticalAlignment="Center" TextAnchor="VerticalCenter,HorizontalCenter" />
+        </CanvasWidget>
+        <CanvasWidget Size="20, 0" />
+        <BevelledButtonWidget Name="Device" Text="[ContentScreen:15]" Style="{Styles/ButtonStyle_310x60}" VerticalAlignment="Center" />
+      </StackPanelWidget>
+
+      <StackPanelWidget Direction="Horizontal">
+        <CanvasWidget Size="350, 90">
           <LabelWidget Text="[ContentScreen:4]" FontScale="0.7" Color="128, 128, 128" WordWrap="true" HorizontalAlignment="Far" VerticalAlignment="Center" TextAnchor="VerticalCenter,HorizontalCenter" />
         </CanvasWidget>
         <CanvasWidget Size="20, 0" />

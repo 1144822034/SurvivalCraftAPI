@@ -52,14 +52,14 @@
               <LabelWidget Text="[GamepadHelpDialog:31]" Color="160, 160, 160"/>
               <LabelWidget Text="[GamepadHelpDialog:32]" Color="160, 160, 160" />
               <LabelWidget Text="[GamepadHelpDialog:33]" Color="160, 160, 160" />
-              <LabelWidget Text="[GamepadHelpDialog:34]"  Color="160, 160, 160"/>
-              <LabelWidget Text="[GamepadHelpDialog:35]"  Color="160, 160, 160"/>
-              <LabelWidget Text="[GamepadHelpDialog:36]"  Color="160, 160, 160" />
-              <LabelWidget Text="[GamepadHelpDialog:37]"  Color="160, 160, 160" />
-              <LabelWidget Text="[GamepadHelpDialog:38]"  Color="160, 160, 160" />
-              <LabelWidget Text="[GamepadHelpDialog:39]"  Color="160, 160, 160" />
-              <LabelWidget Text="[GamepadHelpDialog:40]"  Color="160, 160, 160" />
-              <LabelWidget Text="[GamepadHelpDialog:41]"  Color="160, 160, 160" />
+              <LabelWidget Text="[GamepadHelpDialog:34]" Color="160, 160, 160"/>
+              <LabelWidget Text="[GamepadHelpDialog:35]" Color="160, 160, 160"/>
+              <LabelWidget Text="[GamepadHelpDialog:36]" Color="160, 160, 160" />
+              <LabelWidget Text="[GamepadHelpDialog:37]" Color="160, 160, 160" />
+              <LabelWidget Text="[GamepadHelpDialog:38]" Color="160, 160, 160" />
+              <LabelWidget Text="[GamepadHelpDialog:39]" Color="160, 160, 160" />
+              <LabelWidget Text="[GamepadHelpDialog:40]" Color="160, 160, 160" />
+              <LabelWidget Text="[GamepadHelpDialog:41]" Color="160, 160, 160" />
             </StackPanelWidget>
           </StackPanelWidget>
 

@@ -14,6 +14,8 @@ namespace Game {
 
         public LabelWidget m_blankSeedLabel;
 
+        public ButtonWidget m_seedButton;
+
         public LabelWidget m_descriptionLabel;
 
         public LabelWidget m_errorLabel;
@@ -24,6 +26,8 @@ namespace Game {
 
         public WorldSettings m_worldSettings;
 
+        public const string fName = "NewWorldScreen";
+
         public NewWorldScreen() {
             XElement node = ContentManager.Get<XElement>("Screens/NewWorldScreen");
             LoadContents(this, node);
@@ -33,12 +37,13 @@ namespace Game {
             m_startingPositionButton = Children.Find<ButtonWidget>("StartingPosition");
             m_worldOptionsButton = Children.Find<ButtonWidget>("WorldOptions");
             m_blankSeedLabel = Children.Find<LabelWidget>("BlankSeed");
+            m_seedButton = Children.Find<ButtonWidget>("SeedButton");
             m_descriptionLabel = Children.Find<LabelWidget>("Description");
             m_errorLabel = Children.Find<LabelWidget>("Error");
             m_playButton = Children.Find<ButtonWidget>("Play");
-            m_nameTextBox.TextChanged += delegate { m_worldSettings.Name = m_nameTextBox.Text.Trim(); };
+            m_nameTextBox.TextChanged += delegate { m_worldSettings.Name = m_nameTextBox.Text; };
             m_nameTextBox.MaximumLength = 128;
-            m_seedTextBox.TextChanged += delegate { m_worldSettings.Seed = m_seedTextBox.Text.Trim(); };
+            m_seedTextBox.TextChanged += delegate { m_worldSettings.Seed = m_seedTextBox.Text; };
         }
 
         public override void Enter(object[] parameters) {
@@ -51,6 +56,29 @@ namespace Game {
         }
 
         public override void Update() {
+            if (m_seedButton.IsClicked) {
+                DialogsManager.ShowDialog(
+                    null,
+                    new EditWorldSeedDialog(
+                        m_worldSettings.CustomWorldSeed ? null : m_seedTextBox.Text,
+                        m_worldSettings.WorldSeed,
+                        (seed, trueSeed) => {
+                            if (seed == null) {
+                                m_worldSettings.CustomWorldSeed = true;
+                                m_worldSettings.WorldSeed = trueSeed;
+                                m_seedTextBox.IsEnabled = false;
+                                m_worldSettings.Seed = String.Empty;
+                            }
+                            else {
+                                m_worldSettings.CustomWorldSeed = false;
+                                m_worldSettings.WorldSeed = 0;
+                                m_seedTextBox.IsEnabled = true;
+                                m_seedTextBox.Text = seed;
+                            }
+                        }
+                    )
+                );
+            }
             if (m_gameModeButton.IsClicked) {
                 DialogsManager.ShowDialog(
                     null,
@@ -69,7 +97,10 @@ namespace Game {
             m_startingPositionButton.Text = LanguageControl.Get("StartingPositionMode", m_worldSettings.StartingPositionMode.ToString());
             m_playButton.IsVisible = flag;
             m_errorLabel.IsVisible = !flag;
-            m_blankSeedLabel.IsVisible = m_worldSettings.Seed.Length == 0 && !m_seedTextBox.HasFocus;
+            m_blankSeedLabel.IsVisible = string.IsNullOrEmpty(m_worldSettings.Seed) && !m_seedTextBox.HasFocus;
+            m_blankSeedLabel.Text = m_worldSettings.CustomWorldSeed
+                ? string.Format(LanguageControl.Get(fName, "2"), m_worldSettings.WorldSeed)
+                : LanguageControl.Get(fName, "1");
             m_descriptionLabel.Text = StringsManager.GetString($"GameMode.{m_worldSettings.GameMode}.Description");
             if (m_worldOptionsButton.IsClicked) {
                 ScreensManager.SwitchScreen("WorldOptions", m_worldSettings, false);

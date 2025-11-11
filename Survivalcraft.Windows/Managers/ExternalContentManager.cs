@@ -277,11 +277,44 @@ namespace Game {
                                                             // ReSharper restore AccessToModifiedClosure
                                                             Cleanup();
                                                             DialogsManager.HideDialog(busyDialog);
-                                                            if (string.IsNullOrEmpty(link)) {
+                                                            if (provider.IsLocalProvider) {
+#if ANDROID
                                                                 DialogsManager.ShowDialog(
                                                                     null,
                                                                     new MessageDialog(
-                                                                        "Success",
+                                                                        LanguageControl.Success,
+                                                                        string.Format(
+                                                                            LanguageControl.Get(fName, 15),
+                                                                            DataSizeFormatter.Format(length)
+                                                                        ),
+                                                                        LanguageControl.Get(fName, "16"),
+                                                                        LanguageControl.Get(fName, "17"),
+                                                                        button => {
+                                                                            if (button == MessageDialogButton.Button1) {
+                                                                                try {
+                                                                                    Storage.ShareFile(link);
+                                                                                }
+                                                                                catch (Exception e) {
+                                                                                    DialogsManager.ShowDialog(
+                                                                                        null,
+                                                                                        new MessageDialog(
+                                                                                            LanguageControl.Error,
+                                                                                            e.Message,
+                                                                                            LanguageControl.Ok,
+                                                                                            null,
+                                                                                            null
+                                                                                        )
+                                                                                    );
+                                                                                }
+                                                                            }
+                                                                        }
+                                                                    )
+                                                                );
+#else
+                                                                DialogsManager.ShowDialog(
+                                                                    null,
+                                                                    new MessageDialog(
+                                                                        LanguageControl.Success,
                                                                         string.Format(
                                                                             LanguageControl.Get(fName, 15),
                                                                             DataSizeFormatter.Format(length)
@@ -291,6 +324,7 @@ namespace Game {
                                                                         null
                                                                     )
                                                                 );
+#endif
                                                             }
                                                             else {
                                                                 DialogsManager.ShowDialog(null, new ExternalContentLinkDialog(link));

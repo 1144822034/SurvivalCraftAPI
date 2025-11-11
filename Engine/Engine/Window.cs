@@ -19,6 +19,7 @@ using System.Runtime.InteropServices;
 using Engine.Audio;
 using Engine.Graphics;
 using Engine.Input;
+using Silk.NET.Core.Contexts;
 using Silk.NET.Maths;
 using Silk.NET.OpenGLES;
 using Silk.NET.Windowing;
@@ -265,6 +266,29 @@ namespace Engine {
             }
         }
 
+        public static IntPtr Handle {
+            get {
+                INativeWindow native = m_view.Native;
+                if (native != null) {
+                    NativeWindowFlags kind = native.Kind;
+                    if (kind.HasFlag(NativeWindowFlags.Win32)) {
+                        return native.Win32?.Hwnd ?? IntPtr.Zero;
+                    }
+                    if (kind.HasFlag(NativeWindowFlags.Android)) {
+                        return native.Android?.Window ?? IntPtr.Zero;
+                    }
+                    if (kind.HasFlag(NativeWindowFlags.X11)) {
+                        return (IntPtr)(native.X11?.Window.ToUInt64() ?? 0UL);
+                    }
+                    if (kind.HasFlag(NativeWindowFlags.Wayland)) {
+                        return native.Wayland?.Surface ?? IntPtr.Zero;
+                    }
+                }
+                return IntPtr.Zero;
+
+            }
+        }
+
         public static bool IsCreated => m_state != State.Uncreated;
         public static bool IsActive => m_state == State.Active;
 
@@ -475,7 +499,12 @@ namespace Engine {
             }
             else {
 #if ANDROID
-                Activity.Finish();
+                if (Build.VERSION.SdkInt >= (BuildVersionCodes)21) {
+                    Activity.FinishAndRemoveTask();
+                }
+                else {
+                    Activity.FinishAffinity();
+                }
 #else
                 m_gameWindow.Close();
 #endif

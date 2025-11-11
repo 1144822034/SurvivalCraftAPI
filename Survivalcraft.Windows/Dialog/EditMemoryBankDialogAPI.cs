@@ -14,6 +14,7 @@ namespace Game {
         public int lastvalue;
         public bool isclick = true;
         public List<ClickTextWidget> list = [];
+        public const string fName = "EditMemoryBankDialog";
 
         public byte LastOutput { get; set; }
 
@@ -28,7 +29,7 @@ namespace Game {
             BevelledRectangleWidget rectangleWidget = new() { Style = ContentManager.Get<XElement>("Styles/DialogArea") };
             StackPanelWidget stackPanel = new() { Direction = LayoutDirection.Vertical };
             LabelWidget labelWidget = new() {
-                Text = LanguageControl.GetContentWidgets(GetType().Name, 0), HorizontalAlignment = WidgetAlignment.Center, Margin = new Vector2(0, 10)
+                Text = LanguageControl.GetContentWidgets(fName, 0), HorizontalAlignment = WidgetAlignment.Center, Margin = new Vector2(0, 10)
             };
             StackPanelWidget stackPanelWidget = new() {
                 Direction = LayoutDirection.Horizontal,
@@ -261,7 +262,7 @@ namespace Game {
                     else if (cc == 16) {
                         stackPanelWidget.Children.Add(
                             makeFuncButton(
-                                LanguageControl.GetContentWidgets(GetType().Name, 1),
+                                LanguageControl.GetContentWidgets(fName, 1),
                                 delegate {
                                     AudioManager.PlaySound("Audio/UI/ButtonClick", 1f, 0f, 0f);
                                     for (int ai = 0; ai < Data.Count; ai++) {
@@ -275,7 +276,7 @@ namespace Game {
                     else if (cc == 17) {
                         stackPanelWidget.Children.Add(
                             makeFuncButton(
-                                LanguageControl.GetContentWidgets(GetType().Name, 2),
+                                LanguageControl.GetContentWidgets(fName, 2),
                                 delegate {
                                     AudioManager.PlaySound("Audio/UI/ButtonClick", 1f, 0f, 0f);
                                     DynamicArray<byte> tmp = new();
@@ -297,7 +298,7 @@ namespace Game {
             }
             LabelWidget labelWidget = new() {
                 FontScale = 0.8f,
-                Text = LanguageControl.GetContentWidgets(GetType().Name, 3),
+                Text = LanguageControl.GetContentWidgets(fName, 3),
                 HorizontalAlignment = WidgetAlignment.Center,
                 Margin = new Vector2(0f, 10f),
                 Color = Color.DarkGray
@@ -314,7 +315,7 @@ namespace Game {
             );
             stack.Children.Add(
                 MakeButton(
-                    LanguageControl.GetContentWidgets(GetType().Name, 4),
+                    LanguageControl.GetContentWidgets(fName, 4),
                     delegate {
                         for (int i = 0; i < Data.Count; i++) {
                             memory.Write(i, Data[i]);
@@ -327,7 +328,7 @@ namespace Game {
             );
             stack.Children.Add(
                 MakeButton(
-                    LanguageControl.GetContentWidgets(GetType().Name, 5),
+                    LanguageControl.GetContentWidgets(fName, 5),
                     delegate {
                         AudioManager.PlaySound("Audio/UI/ButtonClick", 1f, 0f, 0f);
                         DialogsManager.HideDialog(this);

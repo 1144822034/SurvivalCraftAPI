@@ -18,6 +18,7 @@
         <ApplicationId>com.candy.SurvivalcraftAPI1_8</ApplicationId>
         <AndroidStoreUncompressedFileExtensions>.dll</AndroidStoreUncompressedFileExtensions>
         <AndroidPackageFormat>apk</AndroidPackageFormat>
+        <AndroidUseDesignerAssembly>true</AndroidUseDesignerAssembly>
         <!--签名-->
         <AndroidKeyStore>true</AndroidKeyStore>
         <AndroidSigningKeyAlias>androiddebugkey</AndroidSigningKeyAlias>
@@ -25,7 +26,6 @@
         <AndroidSigningStorePass>android</AndroidSigningStorePass>
         <AndroidSigningKeyPass>android</AndroidSigningKeyPass>
         <!--优化-->
-        <LinkAll>true</LinkAll>
         <PublishTrimmed>false</PublishTrimmed><!--切记不要修改，如果修改会导致运行时不完整-->
         <TrimMode>partial</TrimMode>
         <AndroidDexTool>d8</AndroidDexTool>
@@ -75,6 +75,7 @@
     <ItemGroup>
         <PackageReference Include="Jint" Version="4.4.1"/>
         <PackageReference Include="NAudio.Flac.Unknown.Mod" Version="1.0.3"/>
+        <PackageReference Include="NuGet.Versioning" Version="6.14.0" />
     </ItemGroup>
     <ItemGroup>
         <ProjectReference Include="..\EntitySystem\EntitySystem.csproj"/>

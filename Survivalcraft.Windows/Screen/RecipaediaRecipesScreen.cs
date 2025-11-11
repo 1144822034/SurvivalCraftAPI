@@ -4,18 +4,14 @@ using Engine;
 namespace Game {
     public class RecipaediaRecipesScreen : Screen {
         public CraftingRecipeWidget m_craftingRecipeWidget;
-
         public SmeltingRecipeWidget m_smeltingRecipeWidget;
-
         public ButtonWidget m_prevRecipeButton;
-
         public ButtonWidget m_nextRecipeButton;
 
         public int m_recipeIndex;
-
         public List<CraftingRecipe> m_craftingRecipes = [];
-
         public int RecipesCount;
+        public const string fName = "RecipaediaRecipesScreen";
 
         public static RecipaediaRecipesScreen Default => new();
 
@@ -42,13 +38,13 @@ namespace Game {
                     CraftingRecipe craftingRecipe = m_craftingRecipes[m_recipeIndex];
                     if (craftingRecipe.RequiredHeatLevel == 0f) {
                         m_craftingRecipeWidget.Recipe = craftingRecipe;
-                        m_craftingRecipeWidget.NameSuffix = string.Format(LanguageControl.GetContentWidgets(GetType().Name, 1), m_recipeIndex + 1);
+                        m_craftingRecipeWidget.NameSuffix = string.Format(LanguageControl.GetContentWidgets(fName, 1), m_recipeIndex + 1);
                         m_craftingRecipeWidget.IsVisible = true;
                         m_smeltingRecipeWidget.IsVisible = false;
                     }
                     else {
                         m_smeltingRecipeWidget.Recipe = craftingRecipe;
-                        m_smeltingRecipeWidget.NameSuffix = string.Format(LanguageControl.GetContentWidgets(GetType().Name, 1), m_recipeIndex + 1);
+                        m_smeltingRecipeWidget.NameSuffix = string.Format(LanguageControl.GetContentWidgets(fName, 1), m_recipeIndex + 1);
                         m_smeltingRecipeWidget.IsVisible = true;
                         m_craftingRecipeWidget.IsVisible = false;
                     }

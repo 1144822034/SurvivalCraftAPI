@@ -8,6 +8,8 @@ using System.Xml.Linq;
 using Engine;
 using Engine.Serialization;
 using Game;
+using Game.IContentReader;
+using NuGet.Versioning;
 using XmlUtilities;
 using ZipArchive = Game.ZipArchive;
 #if DEBUG
@@ -17,7 +19,9 @@ using System.IO.Compression;
 #endif
 public static class ModsManager {
     public static string ModSuffix = ".scmod";
-    public static string APIVersionString = "1.8.1.3";
+    public static string APIVersionString = "1.8.2.0";
+    public static string ShortAPIVersionString = "1.8";
+    public static NuGetVersion APINuGetVersion = new(1, 8, 2, 0);
     public static string GameVersion = "2.4.0.0";
     public static string ShortGameVersion = "2.4";
     public static string ReportLink = "https://gitee.com/SC-SPM/SurvivalcraftApi/issues";
@@ -199,17 +203,21 @@ public static class ModsManager {
 
     public static ModInfo DeserializeJson(string json) {
         ModInfo modInfo = new();
-        JsonElement jsonElement = JsonDocument.Parse(json).RootElement;
+        JsonElement jsonElement = JsonDocument.Parse(json, JsonDocumentReader.DefaultJsonOptions).RootElement;
         if (jsonElement.TryGetProperty("Name", out JsonElement name)) {
             modInfo.Name = name.GetString();
         }
         if (jsonElement.TryGetProperty("Version", out JsonElement version)
             && version.ValueKind == JsonValueKind.String) {
-            modInfo.Version = version.GetString();
+            modInfo.Version = version.GetString()?.Trim();
+            if (modInfo.Version != null) {
+                NuGetVersion.TryParse(modInfo.Version, out modInfo.NuGetVersion);
+            }
         }
         if (jsonElement.TryGetProperty("ApiVersion", out JsonElement apiVersion)
             && apiVersion.ValueKind == JsonValueKind.String) {
-            modInfo.ApiVersion = apiVersion.GetString();
+            modInfo.ApiVersion = apiVersion.GetString()?.Trim();
+            TryPareVersionRange(modInfo.ApiVersion, out modInfo.ApiVersionRange);
         }
         if (jsonElement.TryGetProperty("Description", out JsonElement description)
             && description.ValueKind == JsonValueKind.String) {
@@ -235,12 +243,37 @@ public static class ModsManager {
         {
             modInfo.Email = packageName.GetString();
         }*/
-        if (jsonElement.TryGetProperty("Dependencies", out JsonElement dependencies)
-            && dependencies.ValueKind == JsonValueKind.Array) {
-            modInfo.Dependencies = dependencies.EnumerateArray()
-                .Where(dependency => dependency.ValueKind == JsonValueKind.String)
-                .Select(dependency => dependency.GetString())
-                .ToList();
+        if (jsonElement.TryGetProperty("Dependencies", out JsonElement dependencies)) {
+            if (dependencies.ValueKind == JsonValueKind.Array) {
+                modInfo.Dependencies = dependencies.EnumerateArray()
+                    .Where(dependency => dependency.ValueKind == JsonValueKind.String)
+                    .Select(dependency => dependency.GetString())
+                    .ToList();
+                foreach (string dependency in modInfo.Dependencies) {
+                    int index = dependency.IndexOf(':');
+                    if (index != -1) {
+                        string dependencyPackageName = dependency.Substring(0, index);
+                        string dependencyVersion = dependency.Substring(index + 1).Trim();
+                        if (TryPareVersionRange(dependencyVersion, out VersionRange dependencyVersionRange)) {
+                            modInfo.DependencyRanges.Add(dependencyPackageName, dependencyVersionRange);
+                        }
+                    }
+                    else {
+                        modInfo.DependencyRanges.Add(dependency, VersionRange.All);
+                    }
+                }
+            }
+            else if (dependencies.ValueKind == JsonValueKind.Object) {
+                foreach (JsonProperty dependency in dependencies.EnumerateObject()) {
+                    if (dependency.Value.ValueKind == JsonValueKind.String) {
+                        string dependencyPackageName = dependency.Name;
+                        string dependencyVersion = dependency.Value.GetString()?.Trim();
+                        if (TryPareVersionRange(dependencyVersion, out VersionRange dependencyVersionRange)) {
+                            modInfo.DependencyRanges.Add(dependencyPackageName, dependencyVersionRange);
+                        }
+                    }
+                }
+            }
         }
         if (jsonElement.TryGetProperty("LoadOrder", out JsonElement loadOrder)
             && loadOrder.ValueKind == JsonValueKind.Number) {
@@ -316,7 +349,9 @@ public static class ModsManager {
         }
     }
 
-    public static string ImportMod(string name, Stream stream) {
+    public static string ImportMod(string name, Stream stream) => ImportMod(name, stream, true);
+
+    public static string ImportMod(string name, Stream stream, bool showDialog) {
         if (!Storage.DirectoryExists(ModDisPath)) {
             Storage.CreateDirectory(ModDisPath);
         }
@@ -337,25 +372,27 @@ public static class ModsManager {
         using (Stream fileStream = Storage.OpenFile(path, OpenFileMode.CreateOrOpen)) {
             stream.CopyTo(fileStream);
         }
-        List<string> importModList = ScreensManager.FindScreen<ModsManageContentScreen>("ModsManageContent").m_latestScanModList;
-        if (!importModList.Contains(realName)) {
-            importModList.Add(realName);
-        }
-        DialogsManager.ShowDialog(
-            null,
-            new MessageDialog(
-                LanguageControl.Get(fName, "5"),
-                LanguageControl.Get(fName, "6"),
-                LanguageControl.Yes,
-                LanguageControl.Back,
-                delegate(MessageDialogButton result) {
-                    if (result == MessageDialogButton.Button1) {
-                        ScreensManager.SwitchScreen("ModsManageContent");
+        if (showDialog) {
+            List<string> importModList = ScreensManager.FindScreen<ModsManageContentScreen>("ModsManageContent").m_latestScanModList;
+            if (!importModList.Contains(realName)) {
+                importModList.Add(realName);
+            }
+            DialogsManager.ShowDialog(
+                null,
+                new MessageDialog(
+                    LanguageControl.Get(fName, "5"),
+                    LanguageControl.Get(fName, "6"),
+                    LanguageControl.Yes,
+                    LanguageControl.Back,
+                    delegate(MessageDialogButton result) {
+                        if (result == MessageDialogButton.Button1) {
+                            ScreensManager.SwitchScreen("ModsManageContent");
+                        }
                     }
-                }
-            )
-        );
-        return LanguageControl.Get(fName, "5");
+                )
+            );
+        }
+        return realName;
     }
 
     public static void ModListAllDo(Action<ModEntity> entity) {
@@ -428,16 +465,15 @@ public static class ModsManager {
     /// <param name="path">文件路径</param>
     public static void GetScmods(string path) {
         foreach (string item in Storage.ListFileNames(path)) {
-            string ms = Storage.GetExtension(item);
+            string ms = Storage.GetExtension(item).ToLowerInvariant();
             string ks = Storage.CombinePaths(path, item);
             using Stream stream = Storage.OpenFile(ks, OpenFileMode.Read);
             try {
-                if (ms == ModSuffix
-                    || ms == ".SCNEXT") {
+                if (ms == ModSuffix) {
                     Stream keepOpenStream = ModsManageContentScreen.GetDecipherStream(stream);
                     ModEntity modEntity = new(ks, ZipArchive.Open(keepOpenStream, true));
                     if (modEntity.modInfo == null) {
-                        LoadingScreen.Warning($"[{modEntity.ModFilePath}]缺少ModInfo文件，忽略加载");
+                        LoadingScreen.Warning($"The modinfo.json is missing from [{modEntity.ModFilePath}], and this mod will not be loaded.");
                         continue;
                     }
                     if (string.IsNullOrEmpty(modEntity.modInfo.PackageName)) {
@@ -742,6 +778,83 @@ public static class ModsManager {
             }
             Modify(DataObjects, element);
         }
+    }
+
+    public static bool TryPareVersionRange(string value, out VersionRange versionRange) {
+        if (string.IsNullOrEmpty(value)) {
+            versionRange = null;
+            return false;
+        }
+        value = value.Trim();
+        if (value.Length == 0) {
+            versionRange = null;
+            return false;
+        }
+        char firstChar = value[0];
+        switch (firstChar) {
+            case '=': {
+                if (NuGetVersion.TryParse(value.Substring(1), out NuGetVersion nuGetVersion)) {
+                    versionRange = new VersionRange(nuGetVersion, true, nuGetVersion, true);
+                    return true;
+                }
+                break;
+            }
+            case '>': {
+                if (value.Length > 1) {
+                    if (value[1] == '=') {
+                        if (NuGetVersion.TryParse(value.Substring(2), out NuGetVersion nuGetVersion)) {
+                            versionRange = new VersionRange(nuGetVersion, true);
+                            return true;
+                        }
+                    }
+                    else {
+                        if (NuGetVersion.TryParse(value.Substring(1), out NuGetVersion nuGetVersion)) {
+                            versionRange = new VersionRange(nuGetVersion, false);
+                            return true;
+                        }
+                    }
+                }
+                break;
+            }
+            case '<': {
+                if (value.Length > 1) {
+                    if (value[1] == '=') {
+                        if (NuGetVersion.TryParse(value.Substring(2), out NuGetVersion nuGetVersion)) {
+                            versionRange = new VersionRange(null, false, nuGetVersion, true);
+                            return true;
+                        }
+                    }
+                    else {
+                        if (NuGetVersion.TryParse(value.Substring(1), out NuGetVersion nuGetVersion)) {
+                            versionRange = new VersionRange(null, false, nuGetVersion);
+                            return true;
+                        }
+                    }
+                }
+                break;
+            }
+            case '^': {
+                if (NuGetVersion.TryParse(value.Substring(1), out NuGetVersion nuGetVersion)) {
+                    versionRange = new VersionRange(nuGetVersion, true, new NuGetVersion(nuGetVersion.Major + 1, 0, 0, 0));
+                    return true;
+                }
+                break;
+            }
+            case '~': {
+                if (NuGetVersion.TryParse(value.Substring(1), out NuGetVersion nuGetVersion)) {
+                    versionRange = new VersionRange(nuGetVersion, true, new NuGetVersion(nuGetVersion.Major, nuGetVersion.Minor + 1, 0, 0));
+                    return true;
+                }
+                break;
+            }
+            default:
+                if (VersionRange.TryParse(value, out versionRange)) {
+                    return true;
+                }
+                break;
+        }
+        versionRange = null;
+        return false;
     }
 #if DEBUG
     /// <summary>

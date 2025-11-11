@@ -76,7 +76,7 @@ namespace Game {
 
         public override string GetDisplayName(SubsystemTerrain subsystemTerrain, int value) {
             int material = GetMaterial(Terrain.ExtractData(value));
-            return LanguageControl.Get(GetType().Name, material);
+            return LanguageControl.Get("PressurePlateBlock", material);
         }
 
         public override IEnumerable<int> GetCreativeValues() => m_creativeValuesByMaterial;

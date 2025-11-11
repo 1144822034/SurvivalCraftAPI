@@ -3,20 +3,14 @@ using Engine;
 
 namespace Game {
     public class EditAdjustableDelayGateDialog : Dialog {
-        public Action<int> m_handler;
-
         public SliderWidget m_delaySlider;
-
         public ButtonWidget m_plusButton;
-
         public ButtonWidget m_minusButton;
-
         public LabelWidget m_delayLabel;
-
         public ButtonWidget m_okButton;
-
         public ButtonWidget m_cancelButton;
 
+        public Action<int> m_handler;
         public int m_delay;
 
         public EditAdjustableDelayGateDialog(int delay, Action<int> handler) {
@@ -57,7 +51,7 @@ namespace Game {
             m_delaySlider.Value = m_delay;
             m_minusButton.IsEnabled = m_delay > m_delaySlider.MinValue;
             m_plusButton.IsEnabled = m_delay < m_delaySlider.MaxValue;
-            m_delayLabel.Text = string.Format(LanguageControl.Get(GetType().Name, 1), Math.Round((m_delay + 1) * 0.01f, 2));
+            m_delayLabel.Text = string.Format(LanguageControl.Get("EditAdjustableDelayGateDialog", 1), Math.Round((m_delay + 1) * 0.01f, 2));
         }
 
         public void Dismiss(int? result) {

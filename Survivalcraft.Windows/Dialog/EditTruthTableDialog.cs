@@ -9,22 +9,16 @@ namespace Game {
         public Widget m_gridPanel;
 
         public ButtonWidget m_okButton;
-
         public ButtonWidget m_cancelButton;
-
         public ButtonWidget m_switchViewButton;
-
         public CheckboxWidget[] m_lineCheckboxes = new CheckboxWidget[16];
-
         public TextBoxWidget m_linearTextBox;
-
+        
         public TruthTableData m_truthTableData;
-
         public TruthTableData m_tmpTruthTableData;
-
-        public byte[] m_lastTmpTruthTableDataData = new byte[16];
-
+        public byte[] m_lastTmpTruthTableDataData;
         public bool m_ignoreTextChanges;
+        public const string fName = "EditTruthTableDialog";
 
         public EditTruthTableDialog(TruthTableData truthTableData, Action<bool> handler) {
             XElement node = ContentManager.Get<XElement>("Dialogs/EditTruthTableDialog");
@@ -69,14 +63,14 @@ namespace Game {
                 m_lineCheckboxes[i].IsChecked = m_tmpTruthTableData.Data[i] > 0;
             }
             if (m_linearPanel.IsVisible) {
-                m_switchViewButton.Text = LanguageControl.Get(GetType().Name, 1);
+                m_switchViewButton.Text = LanguageControl.Get(fName, 1);
                 if (m_switchViewButton.IsClicked) {
                     m_linearPanel.IsVisible = false;
                     m_gridPanel.IsVisible = true;
                 }
             }
             else {
-                m_switchViewButton.Text = LanguageControl.Get(GetType().Name, 2);
+                m_switchViewButton.Text = LanguageControl.Get(fName, 2);
                 if (m_switchViewButton.IsClicked) {
                     m_linearPanel.IsVisible = true;
                     m_gridPanel.IsVisible = false;

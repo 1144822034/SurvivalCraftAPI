@@ -12,6 +12,11 @@ namespace Game {
             return value;
         }
 
+        public ComponentBlockEntity GetBlockEntity(Point3 coordinates) {
+            m_blockEntities.TryGetValue(coordinates, out ComponentBlockEntity value);
+            return value;
+        }
+
         public ComponentBlockEntity GetBlockEntity(MovingBlock movingBlock) {
             m_movingBlockEntities.TryGetValue(movingBlock, out ComponentBlockEntity value);
             return value;
@@ -21,10 +26,10 @@ namespace Game {
             ComponentBlockEntity componentBlockEntity = entity.FindComponent<ComponentBlockEntity>();
             if (componentBlockEntity != null) {
                 if (!MovingBlock.IsNullOrStopped(componentBlockEntity.MovingBlock)) {
-                    m_movingBlockEntities[componentBlockEntity.MovingBlock] = componentBlockEntity;
+                    m_movingBlockEntities.Add(componentBlockEntity.MovingBlock, componentBlockEntity);
                 }
                 else if (componentBlockEntity.Coordinates.Y >= 0) {
-                    m_blockEntities[componentBlockEntity.Coordinates] = componentBlockEntity;
+                    m_blockEntities.Add(componentBlockEntity.Coordinates, componentBlockEntity);
                 }
             }
         }

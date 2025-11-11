@@ -4,14 +4,12 @@ using Engine;
 namespace Game {
     public class PlayersScreen : Screen {
         public StackPanelWidget m_playersPanel;
-
         public ButtonWidget m_addPlayerButton;
-
         public ButtonWidget m_screenLayoutButton;
 
         public SubsystemPlayers m_subsystemPlayers;
-
         public CharacterSkinsCache m_characterSkinsCache = new();
+        public const string fName = "PlayersScreen";
 
         public PlayersScreen() {
             XElement node = ContentManager.Get<XElement>("Screens/PlayersScreen");
@@ -44,7 +42,7 @@ namespace Game {
                         null,
                         new MessageDialog(
                             LanguageControl.Unavailable,
-                            LanguageControl.GetContentWidgets(GetType().Name, 3),
+                            LanguageControl.GetContentWidgets(fName, 3),
                             LanguageControl.Ok,
                             null,
                             null
@@ -56,7 +54,7 @@ namespace Game {
                         null,
                         new MessageDialog(
                             LanguageControl.Unavailable,
-                            LanguageControl.GetContentWidgets(GetType().Name, 4),
+                            LanguageControl.GetContentWidgets(fName, 4),
                             LanguageControl.Ok,
                             null,
                             null
@@ -68,7 +66,7 @@ namespace Game {
                         null,
                         new MessageDialog(
                             LanguageControl.Unavailable,
-                            string.Format(LanguageControl.GetContentWidgets(GetType().Name, 5), SubsystemPlayers.MaxPlayers),
+                            string.Format(LanguageControl.GetContentWidgets(fName, 5), SubsystemPlayers.MaxPlayers),
                             LanguageControl.Ok,
                             null,
                             null
@@ -97,7 +95,7 @@ namespace Game {
                     DialogsManager.ShowDialog(
                         null,
                         new ListSelectionDialog(
-                            LanguageControl.GetContentWidgets(GetType().Name, 6),
+                            LanguageControl.GetContentWidgets(fName, 6),
                             array,
                             80f,
                             delegate(object o) {

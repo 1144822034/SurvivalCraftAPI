@@ -361,12 +361,7 @@ namespace Game {
             IsDefaultName = true;
         }
 
-        public static bool VerifyName(string name) {
-            if (name.Length < 2) {
-                return false;
-            }
-            return true;
-        }
+        public static bool VerifyName(string name) => name.Length >= 1;
 
         public virtual void Update() {
             m_stateMachine.Update();

@@ -46,7 +46,9 @@ namespace Game {
                     if (CanGatherPickable(pickable)) {
                         lock (pickable) {
                             GatherPickable(pickable);
-                            pickable.ToRemove = true;
+                            if (!pickable.ToRemove && pickable.Count == 0) {
+                                pickable.ToRemove = true;
+                            }
                         }
                     }
                 }

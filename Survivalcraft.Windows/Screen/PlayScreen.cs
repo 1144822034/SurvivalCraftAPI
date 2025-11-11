@@ -1,3 +1,4 @@
+using System.Globalization;
 using System.Text;
 using System.Xml.Linq;
 using Engine;
@@ -6,19 +7,14 @@ using TemplatesDatabase;
 namespace Game {
     public class PlayScreen : Screen {
         public ListPanelWidget m_worldsListWidget;
-
         public ButtonWidget m_playButton;
-
         public ButtonWidget m_newWorldButton;
-
         public ButtonWidget m_propertiesButton;
 
         public static int MaxWorlds = 300;
-
         public double m_modTipsTime;
-
         public long m_totalWorldsSize;
-
+        public CultureInfo m_cultureInfo;
         public static string fName = "PlayScreen";
 
         public virtual void OnWorldsListWidgetItemClicked(object item) {
@@ -37,9 +33,9 @@ namespace Game {
             containerWidget.Tag = worldInfo;
             labelWidget.Text = worldInfo.WorldSettings.Name;
             labelWidget2.Text = string.Format(
-                "{0} | {1:dd MMM yyyy HH:mm} | {2} | {3} | {4}",
+                "{0} | {1} | {2} | {3} | {4}",
                 DataSizeFormatter.Format(worldInfo.Size),
-                worldInfo.LastSaveTime.ToLocalTime(),
+                worldInfo.LastSaveTime.ToLocalTime().ToString(m_cultureInfo),
                 worldInfo.PlayerInfos.Count > 1
                     ? string.Format(LanguageControl.GetContentWidgets(fName, 9), worldInfo.PlayerInfos.Count)
                     : string.Format(LanguageControl.GetContentWidgets(fName, 10), 1),
@@ -74,6 +70,9 @@ namespace Game {
             m_worldsListWidget.ScrollSpeed = 0f;
             m_worldsListWidget.ItemClicked += OnWorldsListWidgetItemClicked;
             m_modTipsTime = -10000000f;
+            m_cultureInfo = Program.SystemLanguage == null
+                ? CultureInfo.CurrentCulture
+                : new CultureInfo(Program.SystemLanguage);
         }
 
         public override void Enter(object[] parameters) {
@@ -216,35 +215,35 @@ namespace Game {
                     || modsVersionNotCapable.Count > 0) {
                     StringBuilder text = new();
                     if (modsNotLoaded.Count > 0) {
-                        text.AppendLine(LanguageControl.Get(nameof(PlayScreen), 3));
+                        text.AppendLine(LanguageControl.Get(fName, 3));
                     }
                     foreach (ValuesDictionary modDictionary in modsNotLoaded) {
                         text.AppendLine(
                             string.Format(
-                                LanguageControl.Get(nameof(PlayScreen), 4),
+                                LanguageControl.Get(fName, 4),
                                 modDictionary.GetValue("Name", "?"),
                                 modDictionary.GetValue("Version", "?")
                             )
                         );
                     }
                     if (modsVersionNotCapable.Count > 0) {
-                        text.AppendLine(LanguageControl.Get(nameof(PlayScreen), 5));
+                        text.AppendLine(LanguageControl.Get(fName, 5));
                     }
                     foreach (ValuesDictionary modDictionary in modsVersionNotCapable) {
                         text.AppendLine(
                             string.Format(
-                                LanguageControl.Get(nameof(PlayScreen), 6),
+                                LanguageControl.Get(fName, 6),
                                 modDictionary.GetValue("Name", "?"),
                                 modDictionary.GetValue("Version", "?"),
                                 modDictionary.GetValue("CurrentVersion", "?")
                             )
                         );
                     }
-                    text.AppendLine(LanguageControl.Get(nameof(PlayScreen), 7));
+                    text.AppendLine(LanguageControl.Get(fName, 7));
                     DialogsManager.ShowDialog(
                         this,
                         new MessageDialog(
-                            LanguageControl.Get(nameof(PlayScreen), 8),
+                            LanguageControl.Get(fName, 8),
                             text.ToString(),
                             LanguageControl.Yes,
                             LanguageControl.No,

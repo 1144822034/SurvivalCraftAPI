@@ -5,22 +5,16 @@ using Engine.Serialization;
 namespace Game {
     public class EditColorDialog : Dialog {
         public BevelledButtonWidget m_rectangle;
-
         public SliderWidget m_sliderR;
-
         public SliderWidget m_sliderG;
-
         public SliderWidget m_sliderB;
-
         public LabelWidget m_label;
-
         public ButtonWidget m_okButton;
-
         public ButtonWidget m_cancelButton;
-
+        
         public Action<Color?> m_handler;
-
         public Color m_color;
+        public const string fName = "EditColorDialog";
 
         public EditColorDialog(Color color, Action<Color?> handler) {
             WidgetsList children = Children;
@@ -36,7 +30,7 @@ namespace Game {
                 Margin = new Vector2(15f),
                 HorizontalAlignment = WidgetAlignment.Center,
                 Children = {
-                    new LabelWidget { Text = LanguageControl.Get(GetType().Name, 1), HorizontalAlignment = WidgetAlignment.Center },
+                    new LabelWidget { Text = LanguageControl.Get(fName, 1), HorizontalAlignment = WidgetAlignment.Center },
                     new CanvasWidget { Size = new Vector2(0f, 1f / 0f) }
                 }
             };
@@ -50,7 +44,7 @@ namespace Game {
                 HorizontalAlignment = WidgetAlignment.Far,
                 Margin = new Vector2(0f, 10f),
                 Children = {
-                    new LabelWidget { Text = LanguageControl.Get(GetType().Name, 2), Color = Color.Gray, VerticalAlignment = WidgetAlignment.Center },
+                    new LabelWidget { Text = LanguageControl.Get(fName, 2), Color = Color.Gray, VerticalAlignment = WidgetAlignment.Center },
                     new CanvasWidget { Size = new Vector2(10f, 0f) }
                 }
             };
@@ -68,7 +62,7 @@ namespace Game {
                 HorizontalAlignment = WidgetAlignment.Far,
                 Margin = new Vector2(0f, 10f),
                 Children = {
-                    new LabelWidget { Text = LanguageControl.Get(GetType().Name, 3), Color = Color.Gray, VerticalAlignment = WidgetAlignment.Center },
+                    new LabelWidget { Text = LanguageControl.Get(fName, 3), Color = Color.Gray, VerticalAlignment = WidgetAlignment.Center },
                     new CanvasWidget { Size = new Vector2(10f, 0f) }
                 }
             };
@@ -86,7 +80,7 @@ namespace Game {
                 HorizontalAlignment = WidgetAlignment.Far,
                 Margin = new Vector2(0f, 10f),
                 Children = {
-                    new LabelWidget { Text = LanguageControl.Get(GetType().Name, 4), Color = Color.Gray, VerticalAlignment = WidgetAlignment.Center },
+                    new LabelWidget { Text = LanguageControl.Get(fName, 4), Color = Color.Gray, VerticalAlignment = WidgetAlignment.Center },
                     new CanvasWidget { Size = new Vector2(10f, 0f) }
                 }
             };
@@ -146,7 +140,7 @@ namespace Game {
                 DialogsManager.ShowDialog(
                     this,
                     new TextBoxDialog(
-                        LanguageControl.Get(GetType().Name, 5),
+                        LanguageControl.Get(fName, 5),
                         GetColorString(),
                         20,
                         delegate(string s) {
@@ -158,8 +152,8 @@ namespace Game {
                                     DialogsManager.ShowDialog(
                                         this,
                                         new MessageDialog(
-                                            LanguageControl.Get(GetType().Name, 6),
-                                            LanguageControl.Get(GetType().Name, 7),
+                                            LanguageControl.Get(fName, 6),
+                                            LanguageControl.Get(fName, 7),
                                             LanguageControl.Ok,
                                             null,
                                             null

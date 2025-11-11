@@ -5,40 +5,26 @@ using TemplatesDatabase;
 namespace Game {
     public class ComponentHealth : Component, IUpdateable {
         public SubsystemTime m_subsystemTime;
-
         public SubsystemTimeOfDay m_subsystemTimeOfDay;
-
         public SubsystemTerrain m_subsystemTerrain;
-
         public SubsystemParticles m_subsystemParticles;
-
         public SubsystemGameInfo m_subsystemGameInfo;
-
         public SubsystemPickables m_subsystemPickables;
-
         public ComponentCreature m_componentCreature;
-
         public ComponentPlayer m_componentPlayer;
-
         public ComponentOnFire m_componentOnFire;
-
         public ComponentFactors m_componentFactors;
 
         //public Block ExperienceOrbBlock;
 
         public int ExperienceOrbBlockIndex = 8;
-
         public float m_lastHealth;
-
         public bool m_wasStanding;
-
         public float m_redScreenFactor;
-
         public Random m_random = new();
-
         public bool m_regenerateLifeEnabled = true; //生命再生
-
         public float? RedScreenFactorInCrush = 1f;
+        public const string fName = "ComponentHealth";
         public virtual float VoidDamageFactor { get; set; } //y轴过高或者过低造成的伤害系数
         public virtual float AirLackResilience { get; set; } //溺水伤害抗性
         public virtual float MagmaResilience { get; set; } //熔岩伤害抗性
@@ -306,7 +292,7 @@ namespace Game {
                         1f / MagmaResilience * m_componentCreature.ComponentBody.ImmersionFactor * dt,
                         null,
                         false,
-                        LanguageControl.Get(GetType().Name, 1)
+                        LanguageControl.Get(fName, 1)
                     );
                     float num2 = 1.1f + 0.1f * (float)Math.Sin(12.0 * m_subsystemTime.GameTime);
                     m_redScreenFactor = MathUtils.Max(
@@ -324,7 +310,7 @@ namespace Game {
                     }
                 );
                 if (fallDamage > 0f) {
-                    Injure(fallDamage, null, false, LanguageControl.Get(GetType().Name, 2));
+                    Injure(fallDamage, null, false, LanguageControl.Get(fName, 2));
                 }
                 m_wasStanding = m_componentCreature.ComponentBody.StandingOnValue.HasValue
                     || m_componentCreature.ComponentBody.StandingOnBody != null;
@@ -332,15 +318,15 @@ namespace Game {
                 if (VoidDamageFactor > 0f
                     && (position.Y < 0f || position.Y > 296f)
                     && m_subsystemTime.PeriodicGameTimeEvent(2.0, 0.0)) {
-                    Injure(VoidDamageFactor * 0.1f, null, true, LanguageControl.Get(GetType().Name, 3));
-                    m_componentPlayer?.ComponentGui.DisplaySmallMessage(LanguageControl.Get(GetType().Name, 4), Color.White, true, false);
+                    Injure(VoidDamageFactor * 0.1f, null, true, LanguageControl.Get(fName, 3));
+                    m_componentPlayer?.ComponentGui.DisplaySmallMessage(LanguageControl.Get(fName, 4), Color.White, true, false);
                 }
                 //溺水伤害
                 bool num5 = m_subsystemTime.PeriodicGameTimeEvent(1.0, 0.0);
                 if (num5 && Air == 0f) {
                     float num6 = 1f / AirLackResilience;
                     num6 /= m_componentFactors?.ResilienceFactor ?? 1;
-                    Injure(num6, null, false, LanguageControl.Get(GetType().Name, 7));
+                    Injure(num6, null, false, LanguageControl.Get(fName, 7));
                 }
                 //火焰伤害
                 if (num5 && (m_componentOnFire.IsOnFire || m_componentOnFire.TouchesFire)) {
@@ -363,7 +349,7 @@ namespace Game {
                     && CanStrand
                     && m_componentCreature.ComponentBody.ImmersionFactor < 0.25f
                     && (m_componentCreature.ComponentBody.StandingOnValue != 0 || m_componentCreature.ComponentBody.StandingOnBody != null)) {
-                    Injure(1f / AirLackResilience, null, false, LanguageControl.Get(GetType().Name, 6));
+                    Injure(1f / AirLackResilience, null, false, LanguageControl.Get(fName, 6));
                 }
                 //伤害结算
                 float lastHealth = m_lastHealth;

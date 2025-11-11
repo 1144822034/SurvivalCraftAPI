@@ -1,6 +1,7 @@
 using System.Reflection;
 using System.Xml.Linq;
 using Engine;
+using NuGet.Versioning;
 
 namespace Game {
     public class FastDebugModEntity : ModEntity {
@@ -24,9 +25,11 @@ namespace Game {
                 modInfo = new ModInfo {
                     Name = "FastDebug",
                     Version = "1.0.0",
+                    NuGetVersion = new NuGetVersion(1, 0, 0),
                     ApiVersion = ModsManager.APIVersionString,
+                    ApiVersionRange = new VersionRange(ModsManager.APINuGetVersion),
                     Author = "Mod",
-                    Description = "调试Mod插件",
+                    Description = "Debug uncompressed mod.",
                     ScVersion = "2.4.0.0",
                     PackageName = "com.fastdebug"
                 };

@@ -4,59 +4,35 @@ using Engine;
 
 namespace Game {
     public class VitalStatsWidget : CanvasWidget {
-        public ComponentPlayer m_componentPlayer;
-
         public ButtonWidget m_chokeButton;
-
         public LabelWidget m_titleLabel;
-
         public LinkWidget m_healthLink;
-
         public ValueBarWidget m_healthValueBar;
-
         public LinkWidget m_staminaLink;
-
         public ValueBarWidget m_staminaValueBar;
-
         public LinkWidget m_foodLink;
-
         public ValueBarWidget m_foodValueBar;
-
         public LinkWidget m_sleepLink;
-
         public ValueBarWidget m_sleepValueBar;
-
         public LinkWidget m_temperatureLink;
-
         public ValueBarWidget m_temperatureValueBar;
-
         public LinkWidget m_wetnessLink;
-
         public ValueBarWidget m_wetnessValueBar;
-
         public LinkWidget m_strengthLink;
-
         public LabelWidget m_strengthLabel;
-
         public LinkWidget m_resilienceLink;
-
         public LabelWidget m_resilienceLabel;
-
         public LinkWidget m_speedLink;
-
         public LabelWidget m_speedLabel;
-
         public LinkWidget m_hungerLink;
-
         public LabelWidget m_hungerLabel;
-
         public LinkWidget m_experienceLink;
-
         public ValueBarWidget m_experienceValueBar;
-
         public LinkWidget m_insulationLink;
-
         public LabelWidget m_insulationLabel;
+        
+        public ComponentPlayer m_componentPlayer;
+        public const string fName = "VitalStatsWidget"; 
 
         public VitalStatsWidget(ComponentPlayer componentPlayer) {
             m_componentPlayer = componentPlayer;
@@ -92,10 +68,10 @@ namespace Game {
 
         public override void Update() {
             m_titleLabel.Text = string.Format(
-                LanguageControl.GetContentWidgets(nameof(VitalStatsWidget), "PlayerLevel"),
+                LanguageControl.GetContentWidgets(fName, "PlayerLevel"),
                 m_componentPlayer.PlayerData.Name,
                 MathF.Floor(m_componentPlayer.PlayerData.Level),
-                LanguageControl.GetContentWidgets(nameof(VitalStatsWidget), m_componentPlayer.PlayerData.PlayerClass.ToString())
+                LanguageControl.GetContentWidgets(fName, m_componentPlayer.PlayerData.PlayerClass.ToString())
             );
             m_healthValueBar.Value = m_componentPlayer.ComponentHealth.Health;
             m_staminaValueBar.Value = m_componentPlayer.ComponentVitalStats.Stamina;
@@ -157,8 +133,8 @@ namespace Game {
                 DialogsManager.ShowDialog(
                     m_componentPlayer.GuiWidget,
                     new LevelFactorDialog(
-                        LanguageControl.GetContentWidgets(GetType().Name, "Strength"),
-                        LanguageControl.GetContentWidgets(GetType().Name, 16),
+                        LanguageControl.GetContentWidgets(fName, "Strength"),
+                        LanguageControl.GetContentWidgets(fName, 16),
                         factors,
                         total
                     )
@@ -170,8 +146,8 @@ namespace Game {
                 DialogsManager.ShowDialog(
                     m_componentPlayer.GuiWidget,
                     new LevelFactorDialog(
-                        LanguageControl.GetContentWidgets(GetType().Name, "Resilience"),
-                        LanguageControl.GetContentWidgets(GetType().Name, 17),
+                        LanguageControl.GetContentWidgets(fName, "Resilience"),
+                        LanguageControl.GetContentWidgets(fName, 17),
                         factors2,
                         total2
                     )
@@ -183,8 +159,8 @@ namespace Game {
                 DialogsManager.ShowDialog(
                     m_componentPlayer.GuiWidget,
                     new LevelFactorDialog(
-                        LanguageControl.GetContentWidgets(GetType().Name, "Speed"),
-                        LanguageControl.GetContentWidgets(GetType().Name, 18),
+                        LanguageControl.GetContentWidgets(fName, "Speed"),
+                        LanguageControl.GetContentWidgets(fName, 18),
                         factors3,
                         total3
                     )
@@ -196,8 +172,8 @@ namespace Game {
                 DialogsManager.ShowDialog(
                     m_componentPlayer.GuiWidget,
                     new LevelFactorDialog(
-                        LanguageControl.GetContentWidgets(GetType().Name, "Hunger"),
-                        LanguageControl.GetContentWidgets(GetType().Name, 19),
+                        LanguageControl.GetContentWidgets(fName, "Hunger"),
+                        LanguageControl.GetContentWidgets(fName, 19),
                         factors4,
                         total4
                     )

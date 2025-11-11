@@ -15,22 +15,15 @@ namespace Game {
         #endregion
 
         public List<ReleaseInfo> Releases { get; set; } = new(); //所有发布版的信息
-
         public LabelWidget m_titleLabel;
-
         public LabelWidget m_textLabel;
-
         public LabelWidget m_infoLabel;
-
         public ListPanelWidget m_releasesListPanel;
-
         public StackPanelWidget m_releaseInfoPanel;
-
         public Dictionary<BevelledButtonWidget, Asset> m_assetButtons = new(); //点击就下载资源的按钮
-
         public ScrollPanelWidget m_scrollPanel;
-
         public BusyDialog m_busyDialog; //进入时展示的"获取发布版..."的对话框
+        public const string fName = "ReleasesScreen";
 
         public ReleasesScreen() {
             XElement node = ContentManager.Get<XElement>("Screens/ReleasesScreen");
@@ -62,11 +55,11 @@ namespace Game {
                 m_versionComparer = new ReleaseInfoComparer();
             }
             m_busyDialog = new BusyDialog(
-                LanguageControl.GetContentWidgets(nameof(ReleasesScreen), 3),
-                string.Format(LanguageControl.GetContentWidgets(nameof(ReleasesScreen), 2), m_releasesName)
+                LanguageControl.GetContentWidgets(fName, 3),
+                string.Format(LanguageControl.GetContentWidgets(fName, 2), m_releasesName)
             );
             Children.Find<LabelWidget>("TopBar.Label").Text = string.Format(
-                LanguageControl.GetContentWidgets(nameof(ReleasesScreen), 1),
+                LanguageControl.GetContentWidgets(fName, 1),
                 m_releasesName
             );
             if (Releases.Count == 0
@@ -99,14 +92,14 @@ namespace Game {
                     DialogsManager.ShowDialog(
                         null,
                         new MessageDialog(
-                            LanguageControl.GetContentWidgets(nameof(ReleasesScreen), 3),
-                            string.Format(LanguageControl.GetContentWidgets(nameof(ReleasesScreen), 20), m_releasesName, e.Message),
+                            LanguageControl.GetContentWidgets(fName, 3),
+                            string.Format(LanguageControl.GetContentWidgets(fName, 20), m_releasesName, e.Message),
                             LanguageControl.Ok,
                             null,
                             null
                         )
                     );
-                    Log.Error(LanguageControl.GetContentWidgets(nameof(ReleasesScreen), 20), m_releasesName, e.Message);
+                    Log.Error(LanguageControl.GetContentWidgets(fName, 20), m_releasesName, e.Message);
                 }
             }
         }
@@ -125,8 +118,8 @@ namespace Game {
         public string GetVersionSuffix(string currentVersion, string targetVersion) {
             return APIUpdateManager.CompareVersion(currentVersion, targetVersion) switch {
                 -1 => string.Empty,
-                0 => LanguageControl.GetContentWidgets(nameof(ReleasesScreen), 5),
-                1 => LanguageControl.GetContentWidgets(nameof(ReleasesScreen), 6),
+                0 => LanguageControl.GetContentWidgets(fName, 5),
+                1 => LanguageControl.GetContentWidgets(fName, 6),
                 _ => throw new ArgumentOutOfRangeException()
             };
         }
@@ -148,7 +141,7 @@ namespace Game {
             ReleaseInfo releaseInfo = (ReleaseInfo)item;
             m_titleLabel.Text = releaseInfo.name;
             m_infoLabel.Text = string.Format(
-                LanguageControl.GetContentWidgets(nameof(ReleasesScreen), 4),
+                LanguageControl.GetContentWidgets(fName, 4),
                 releaseInfo.author.name,
                 releaseInfo.created_at
             );

@@ -5,27 +5,19 @@ using TemplatesDatabase;
 namespace Game {
     public class BestiaryDescriptionScreen : Screen {
         public ModelWidget m_modelWidget;
-
         public LabelWidget m_nameWidget;
-
         public ButtonWidget m_leftButtonWidget;
-
         public ButtonWidget m_rightButtonWidget;
-
         public LabelWidget m_descriptionWidget;
-
         public LabelWidget m_propertyNames1Widget;
-
         public LabelWidget m_propertyValues1Widget;
-
         public LabelWidget m_propertyNames2Widget;
-
         public LabelWidget m_propertyValues2Widget;
-
         public ContainerWidget m_dropsPanel;
+        
         public int m_index;
-
         public IList<BestiaryCreatureInfo> m_infoList;
+        public const string fName = "BestiaryDescriptionScreen";
 
         public BestiaryDescriptionScreen() {
             XElement node = ContentManager.Get<XElement>("Screens/BestiaryDescriptionScreen");
@@ -79,18 +71,18 @@ namespace Game {
                 m_descriptionWidget.Text = bestiaryCreatureInfo.Description;
                 m_propertyNames1Widget.Text = string.Empty;
                 m_propertyValues1Widget.Text = string.Empty;
-                m_propertyNames1Widget.Text += LanguageControl.Get(GetType().Name, "resilience");
+                m_propertyNames1Widget.Text += LanguageControl.Get(fName, "resilience");
                 LabelWidget propertyValues1Widget = m_propertyValues1Widget;
                 propertyValues1Widget.Text = $"{propertyValues1Widget.Text}{bestiaryCreatureInfo.AttackResilience}\n";
-                m_propertyNames1Widget.Text += LanguageControl.Get(GetType().Name, "attack");
+                m_propertyNames1Widget.Text += LanguageControl.Get(fName, "attack");
                 LabelWidget propertyValues1Widget2 = m_propertyValues1Widget;
                 propertyValues1Widget2.Text =
                     $"{propertyValues1Widget2.Text}{(bestiaryCreatureInfo.AttackPower > 0f ? bestiaryCreatureInfo.AttackPower.ToString("0.0") : LanguageControl.None)}\n";
-                m_propertyNames1Widget.Text += LanguageControl.Get(GetType().Name, "herding");
+                m_propertyNames1Widget.Text += LanguageControl.Get(fName, "herding");
                 LabelWidget propertyValues1Widget3 = m_propertyValues1Widget;
                 propertyValues1Widget3.Text =
                     $"{propertyValues1Widget3.Text}{(bestiaryCreatureInfo.IsHerding ? LanguageControl.Yes : LanguageControl.No)}\n";
-                m_propertyNames1Widget.Text += LanguageControl.Get(GetType().Name, 1);
+                m_propertyNames1Widget.Text += LanguageControl.Get(fName, 1);
                 LabelWidget propertyValues1Widget4 = m_propertyValues1Widget;
                 propertyValues1Widget4.Text =
                     $"{propertyValues1Widget4.Text}{(bestiaryCreatureInfo.CanBeRidden ? LanguageControl.Yes : LanguageControl.No)}\n";
@@ -98,21 +90,21 @@ namespace Game {
                 m_propertyValues1Widget.Text = m_propertyValues1Widget.Text.TrimEnd();
                 m_propertyNames2Widget.Text = string.Empty;
                 m_propertyValues2Widget.Text = string.Empty;
-                m_propertyNames2Widget.Text += LanguageControl.Get(GetType().Name, "speed");
+                m_propertyNames2Widget.Text += LanguageControl.Get(fName, "speed");
                 LabelWidget propertyValues2Widget = m_propertyValues2Widget;
                 propertyValues2Widget.Text = propertyValues2Widget.Text
                     + (bestiaryCreatureInfo.MovementSpeed * 3.6).ToString("0")
-                    + LanguageControl.Get(GetType().Name, "speed unit");
-                m_propertyNames2Widget.Text += LanguageControl.Get(GetType().Name, "jump height");
+                    + LanguageControl.Get(fName, "speed unit");
+                m_propertyNames2Widget.Text += LanguageControl.Get(fName, "jump height");
                 LabelWidget propertyValues2Widget2 = m_propertyValues2Widget;
                 propertyValues2Widget2.Text = propertyValues2Widget2.Text
                     + bestiaryCreatureInfo.JumpHeight.ToString("0.0")
-                    + LanguageControl.Get(GetType().Name, "length unit");
-                m_propertyNames2Widget.Text += LanguageControl.Get(GetType().Name, "weight");
+                    + LanguageControl.Get(fName, "length unit");
+                m_propertyNames2Widget.Text += LanguageControl.Get(fName, "weight");
                 LabelWidget propertyValues2Widget3 = m_propertyValues2Widget;
                 propertyValues2Widget3.Text = propertyValues2Widget3.Text
                     + bestiaryCreatureInfo.Mass
-                    + LanguageControl.Get(GetType().Name, "weight unit");
+                    + LanguageControl.Get(fName, "weight unit");
                 m_propertyNames2Widget.Text += $"{LanguageControl.Get("BlocksManager", "Spawner Eggs")}:";
                 LabelWidget propertyValues2Widget4 = m_propertyValues2Widget;
                 propertyValues2Widget4.Text =
@@ -135,9 +127,9 @@ namespace Game {
                         }
                         string text = item.MinCount >= item.MaxCount
                             ? $"{item.MinCount}"
-                            : string.Format(LanguageControl.Get(GetType().Name, "range"), item.MinCount, item.MaxCount);
+                            : string.Format(LanguageControl.Get(fName, "range"), item.MinCount, item.MaxCount);
                         if (item.Probability < 1f) {
-                            text += string.Format(LanguageControl.Get(GetType().Name, 2), $"{item.Probability * 100f:0}");
+                            text += string.Format(LanguageControl.Get(fName, 2), $"{item.Probability * 100f:0}");
                         }
                         m_dropsPanel.Children.Add(
                             new StackPanelWidget {

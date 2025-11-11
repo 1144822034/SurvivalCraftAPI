@@ -92,6 +92,10 @@
                 <SliderWidget Name="BiomeSize" Size="Infinity, 60" VerticalAlignment="Center" Margin="20, 0" Granularity="2" MinValue="-16" MaxValue="16" />
               </UniformSpacingPanelWidget>
 
+              <UniformSpacingPanelWidget Name="TerrainGeneratorVersionPanel" Direction="Horizontal" Margin="0, 3">
+                <LabelWidget Text="[WorldOptionsScreen:29]" Color="128, 128, 128" HorizontalAlignment="Far" VerticalAlignment="Center" Margin="20, 0" />
+                <BevelledButtonWidget Name="TerrainGeneratorVersion" Style="{Styles/ButtonStyle_310x60}" VerticalAlignment="Center" Margin="20, 0" />
+              </UniformSpacingPanelWidget>
             </StackPanelWidget>
 
             <UniformSpacingPanelWidget Direction="Horizontal" Margin="0, 3">

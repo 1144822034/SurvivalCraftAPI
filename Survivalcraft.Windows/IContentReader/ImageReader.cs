@@ -9,9 +9,7 @@ namespace Game.IContentReader {
             ContentInfo contentInfo = contents[0];
             Image result;
             if (contentInfo.InUse.TryEnter()) {
-                Stopwatch sw = Stopwatch.StartNew();
                 result = Image.Load(contentInfo.Duplicate());
-                sw.Stop();
                 contentInfo.InUse.Exit();
             }
             else {

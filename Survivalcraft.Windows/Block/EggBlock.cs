@@ -29,7 +29,7 @@ namespace Game {
             public BlockMesh BlockMesh;
         }
 
-        public new static string fName = "EggBlock";
+        public static string fName = "EggBlock";
         public static int Index = 118;
         public Dictionary<int, EggType> m_eggTypes = [];
         public ReadOnlyList<EggType> EggTypes => new(m_eggTypes.Values.ToList());

@@ -1,3 +1,4 @@
+using Engine;
 using GameEntitySystem;
 using TemplatesDatabase;
 using static Game.ComponentLevel;
@@ -92,17 +93,23 @@ namespace Game {
 
         public static float CalculateFactorsResult(ICollection<Factor> factors) {
             float ans = 1f;
-            foreach (Factor factor in factors) {
+            foreach (var factor in factors) {
+                if (float.IsNaN(factor.Value) || float.IsInfinity(factor.Value)) {
+                    continue;
+                }
                 switch (factor.FactorAdditionType) {
                     case FactorAdditionType.Multiply: {
-                        ans *= factor.Value;
-                        break;
-                    }
+                            ans *= factor.Value;
+                            break;
+                        }
                     case FactorAdditionType.Add: {
-                        ans += factor.Value;
-                        break;
-                    }
+                            ans += factor.Value;
+                            break;
+                        }
                 }
+            }
+            if (float.IsNaN(ans) || float.IsInfinity(ans)) {
+                ans = 1f;
             }
             return ans;
         }

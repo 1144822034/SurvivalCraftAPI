@@ -48,10 +48,12 @@
     * 其他系统：`(解压到的目录)/Mods`
 * 按上面说明处理后仍然打不开游戏，或者运行遇到任何错误，请尝试移除所有 MOD，如果问题依旧，可在[此处](https://gitee.com/SC-SPM/SurvivalcraftApi/issues)反馈问题
 * 安装 MOD 后打不开游戏，或者运行遇到任何错误，请先向 MOD 作者反馈问题，再由 MOD 作者向本仓库反馈问题
+* 如果 Windows 系统上游戏帧数不低但鼠标调整视角感觉卡顿，关闭系统设置-鼠标设置-增强指针精度，即可解决
+* 要取消 Windows 系统上的文件关联，游戏设置-设备兼容和日志-文件关联，禁用即可
 
 ## 模组开发者引用
 
-1. 首先复制本存储库根目录的`nuget.config`文件到你的解决方案文件夹（和`.sln`文件同一层级）
+1. 首先复制本存储库根目录的`nuget.config`文件到你的解决方案目录（和`.sln`文件同一层级）
 
 2. 有两种常规方式添加引用包 (nupkg)，请选择你喜欢的方式
    
@@ -67,9 +69,9 @@
 
     ```xml
     <ItemGroup>
-      <PackageReference Include="SurvivalcraftAPI.Engine" Version="1.8.1.3"/>
-      <PackageReference Include="SurvivalcraftAPI.EntitySystem" Version="1.8.1.3"/>
-      <PackageReference Include="SurvivalcraftAPI.Survivalcraft" Version="1.8.1.3"/>
+      <PackageReference Include="SurvivalcraftAPI.Engine" Version="1.8.2.0"/>
+      <PackageReference Include="SurvivalcraftAPI.EntitySystem" Version="1.8.2.0"/>
+      <PackageReference Include="SurvivalcraftAPI.Survivalcraft" Version="1.8.2.0"/>
     </ItemGroup>
     ```
 
@@ -108,3 +110,5 @@
   * Long (Discord: daylong89)
 * 罗马尼亚语 (Română) 翻译
   * NBG (Discord: nbgr)
+* 俄语 (Русский) 补充翻译
+  * Dasyukevich Pavel (VK: pawwel3l) 
