@@ -37,7 +37,8 @@ jobs:
       run: |
         mkdir -p ~/Library/MobileDevice/Provisioning\ Profiles
         uuid=$(grep -aom1 -E '<key>UUID</key><string>.*</string>' ios_profile.mobileprovision | sed -e 's/<key>UUID<\/key><string>//' -e 's/<\/string>//')
-        cp ios_profile.mobileprovision ~/Library/MobileDevice/Provisioning\ Profiles/$uuid.mobileprovision
+        cp ios_profile.mobileprovision ~/Library/Developer/Xcode/UserData/Provisioning\ Profiles/$uuid.mobileprovision
+        ls -l ~/Library/Developer/Xcode/UserData/Provisioning\ Profiles
 
     - name: Build IPA
       run: |
