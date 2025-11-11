@@ -40,7 +40,7 @@
 	<key>UIRequiresFullScreen</key>
 	<true/>
 	<key>CFBundleIdentifier</key>
-	<string>com.survivalcraft.api.y251026</string>
+	<string>com.survivalcraft.api</string>
 	<key>UIBackgroundModes</key>
 	<array>
 		<string>audio</string>
