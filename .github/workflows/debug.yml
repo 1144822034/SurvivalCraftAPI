@@ -4,7 +4,7 @@ on:
 
 jobs:
   debug-session:
-    runs-on: ubuntu-latest  # 根据需求选择 runner
+    runs-on: macos-15  # 根据需求选择 runner
     steps:
     - name: Checkout code
       uses: actions/checkout@v4
