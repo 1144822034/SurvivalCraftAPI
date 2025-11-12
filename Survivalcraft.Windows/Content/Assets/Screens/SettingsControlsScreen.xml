@@ -12,17 +12,17 @@
       <BevelledRectangleWidget Style="{Styles/Area}" />
       <ScrollPanelWidget Direction="Vertical" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="3, 3">
         <StackPanelWidget Direction="Vertical" HorizontalAlignment="Center" VerticalAlignment="Center">
-			<UniformSpacingPanelWidget Direction="Horizontal" Margin="0, 3">      
-				<LabelWidget Text="[SettingsControlsScreen:16]" HorizontalAlignment="Far" VerticalAlignment="Center" Margin="20, 0" />
-				<BevelledButtonWidget Name="MemoryBankStyle" Style="{Styles/ButtonStyle_310x60}" VerticalAlignment="Center" Margin="20, 0" />
-			</UniformSpacingPanelWidget>
-			
-			<UniformSpacingPanelWidget Direction="Horizontal" Margin="0, 3">
-				<LabelWidget Text="[SettingsControlsScreen:15]" HorizontalAlignment="Far" VerticalAlignment="Center" Margin="20, 0" />
-				<BevelledButtonWidget Name="AllowInitialIntro" Style="{Styles/ButtonStyle_310x60}" VerticalAlignment="Center" Margin="20, 0" />
-			</UniformSpacingPanelWidget>
+          <UniformSpacingPanelWidget Direction="Horizontal" Margin="0, 3">
+            <LabelWidget Text="[SettingsControlsScreen:16]" HorizontalAlignment="Far" VerticalAlignment="Center" Margin="20, 0" />
+            <BevelledButtonWidget Name="MemoryBankStyle" Style="{Styles/ButtonStyle_310x60}" VerticalAlignment="Center" Margin="20, 0" />
+          </UniformSpacingPanelWidget>
 
-			<UniformSpacingPanelWidget Direction="Horizontal" Margin="0, 3">
+          <UniformSpacingPanelWidget Direction="Horizontal" Margin="0, 3">
+            <LabelWidget Text="[SettingsControlsScreen:15]" HorizontalAlignment="Far" VerticalAlignment="Center" Margin="20, 0" />
+            <BevelledButtonWidget Name="AllowInitialIntro" Style="{Styles/ButtonStyle_310x60}" VerticalAlignment="Center" Margin="20, 0" />
+          </UniformSpacingPanelWidget>
+
+          <UniformSpacingPanelWidget Direction="Horizontal" Margin="0, 3">
             <LabelWidget Text="[SettingsControlsScreen:1]" HorizontalAlignment="Far" VerticalAlignment="Center" Margin="20, 0" />
             <BevelledButtonWidget Name="MoveControlMode" Style="{Styles/ButtonStyle_310x60}" VerticalAlignment="Center" Margin="20, 0" />
           </UniformSpacingPanelWidget>
@@ -52,15 +52,20 @@
             <BevelledButtonWidget Name="HorizontalCreativeFlight" Style="{Styles/ButtonStyle_310x60}" VerticalAlignment="Center" Margin="20, 0" />
           </UniformSpacingPanelWidget>
 
-			<UniformSpacingPanelWidget Name="CreativeDragMaxStackingPanel" Direction="Horizontal" Margin="0, 3">
-				<LabelWidget Text="[SettingsControlsScreen:17]" HorizontalAlignment="Far" VerticalAlignment="Center" Margin="20, 0" />
-				<BevelledButtonWidget Name="CreativeDragMaxStacking" Style="{Styles/ButtonStyle_310x60}" VerticalAlignment="Center" Margin="20, 0" />
-			</UniformSpacingPanelWidget>
-			
-			<UniformSpacingPanelWidget Name="SplitDragHalfPanel" Direction="Horizontal" Margin="0, 3">
-				<LabelWidget Text="[SettingsControlsScreen:18]" HorizontalAlignment="Far" VerticalAlignment="Center" Margin="20, 0" />
-				<BevelledButtonWidget Name="SplitDragHalf" Style="{Styles/ButtonStyle_310x60}" VerticalAlignment="Center" Margin="20, 0" />
-			</UniformSpacingPanelWidget>
+          <UniformSpacingPanelWidget Name="CreativeDragMaxStackingPanel" Direction="Horizontal" Margin="0, 3">
+            <LabelWidget Text="[SettingsControlsScreen:17]" HorizontalAlignment="Far" VerticalAlignment="Center" Margin="20, 0" />
+            <BevelledButtonWidget Name="CreativeDragMaxStacking" Style="{Styles/ButtonStyle_310x60}" VerticalAlignment="Center" Margin="20, 0" />
+          </UniformSpacingPanelWidget>
+
+          <UniformSpacingPanelWidget Name="SplitDragHalfPanel" Direction="Horizontal" Margin="0, 3">
+            <LabelWidget Text="[SettingsControlsScreen:18]" HorizontalAlignment="Far" VerticalAlignment="Center" Margin="20, 0" />
+            <BevelledButtonWidget Name="SplitDragHalf" Style="{Styles/ButtonStyle_310x60}" VerticalAlignment="Center" Margin="20, 0" />
+          </UniformSpacingPanelWidget>
+
+          <UniformSpacingPanelWidget Direction="Horizontal" Margin="0, 3">
+            <LabelWidget Text="[SettingsControlsScreen:26]" HorizontalAlignment="Far" VerticalAlignment="Center" Margin="20, 0" />
+            <BevelledButtonWidget Name="ShortInventoryLooping" Style="{Styles/ButtonStyle_310x60}" VerticalAlignment="Center" Margin="20, 0" />
+          </UniformSpacingPanelWidget>
 
           <UniformSpacingPanelWidget Direction="Horizontal" Margin="0, 3">
             <LabelWidget Text="[SettingsControlsScreen:7]" HorizontalAlignment="Far" VerticalAlignment="Center" Margin="20, 0" />
@@ -107,26 +112,26 @@
             <SliderWidget Name="DragDistanceSlider" Size="Infinity, 60" VerticalAlignment="Center" Margin="20, 0" MinValue="4" MaxValue="16" Granularity="1" />
           </UniformSpacingPanelWidget>
 
-			<UniformSpacingPanelWidget Direction="Horizontal" Margin="0, 3">
-				<LabelWidget Text="[SettingsControlsScreen:20]" HorizontalAlignment="Far" VerticalAlignment="Center" Margin="20, 0" />
-				<SliderWidget Name="MoveWidgetMarginXSlider" Granularity="0.01" MinValue="0" MaxValue="0.3" Size="Infinity, 60" VerticalAlignment="Center" Margin="20, 0" />
-			</UniformSpacingPanelWidget>
+          <UniformSpacingPanelWidget Direction="Horizontal" Margin="0, 3">
+            <LabelWidget Text="[SettingsControlsScreen:20]" HorizontalAlignment="Far" VerticalAlignment="Center" Margin="20, 0" />
+            <SliderWidget Name="MoveWidgetMarginXSlider" Granularity="0.01" MinValue="0" MaxValue="0.3" Size="Infinity, 60" VerticalAlignment="Center" Margin="20, 0" />
+          </UniformSpacingPanelWidget>
 
-		    <UniformSpacingPanelWidget Direction="Horizontal" Margin="0, 3">
-			    <LabelWidget Text="[SettingsControlsScreen:21]" HorizontalAlignment="Far" VerticalAlignment="Center" Margin="20, 0" />
-			    <SliderWidget Name="MoveWidgetMarginYSlider" Granularity="0.01" MinValue="0" MaxValue="0.3" Size="Infinity, 60" VerticalAlignment="Center" Margin="20, 0" />
-		    </UniformSpacingPanelWidget>
+          <UniformSpacingPanelWidget Direction="Horizontal" Margin="0, 3">
+            <LabelWidget Text="[SettingsControlsScreen:21]" HorizontalAlignment="Far" VerticalAlignment="Center" Margin="20, 0" />
+            <SliderWidget Name="MoveWidgetMarginYSlider" Granularity="0.01" MinValue="0" MaxValue="0.3" Size="Infinity, 60" VerticalAlignment="Center" Margin="20, 0" />
+          </UniformSpacingPanelWidget>
 
-			<UniformSpacingPanelWidget Direction="Horizontal" Margin="0, 3">
-				<LabelWidget Text="[SettingsControlsScreen:22]" HorizontalAlignment="Far" VerticalAlignment="Center" Margin="20, 0" />
-				<BevelledButtonWidget Name="KeyboardMappingEntry" Text ="[SettingsControlsScreen:22]" Style="{Styles/ButtonStyle_310x60}" VerticalAlignment="Center" Margin="20, 0" />
-			</UniformSpacingPanelWidget>
-			
-			<UniformSpacingPanelWidget Direction="Horizontal" Margin="0, 3">
-				<LabelWidget Text="[SettingsControlsScreen:23]" HorizontalAlignment="Far" VerticalAlignment="Center" Margin="20, 0" />
-				<BevelledButtonWidget Name="CameraManageEntry" Text ="[SettingsControlsScreen:24]" Style="{Styles/ButtonStyle_310x60}" VerticalAlignment="Center" Margin="20, 0" />
-			</UniformSpacingPanelWidget>
-			
+          <UniformSpacingPanelWidget Direction="Horizontal" Margin="0, 3">
+            <LabelWidget Text="[SettingsControlsScreen:22]" HorizontalAlignment="Far" VerticalAlignment="Center" Margin="20, 0" />
+            <BevelledButtonWidget Name="KeyboardMappingEntry" Text ="[SettingsControlsScreen:22]" Style="{Styles/ButtonStyle_310x60}" VerticalAlignment="Center" Margin="20, 0" />
+          </UniformSpacingPanelWidget>
+
+          <UniformSpacingPanelWidget Direction="Horizontal" Margin="0, 3">
+            <LabelWidget Text="[SettingsControlsScreen:23]" HorizontalAlignment="Far" VerticalAlignment="Center" Margin="20, 0" />
+            <BevelledButtonWidget Name="CameraManageEntry" Text ="[SettingsControlsScreen:24]" Style="{Styles/ButtonStyle_310x60}" VerticalAlignment="Center" Margin="20, 0" />
+          </UniformSpacingPanelWidget>
+
         </StackPanelWidget>
       </ScrollPanelWidget>
     </CanvasWidget>

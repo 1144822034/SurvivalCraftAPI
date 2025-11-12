@@ -3179,7 +3179,8 @@
       "Keyboard Settings",
       "Camera List",
       "Manage",
-      "Gamepad Trigger Threshold:"
+      "Gamepad Trigger Threshold:",
+      "Short Inventory Looping:"
     ],
     "CameraManageScreen": {
       "Enable": "Enable",

@@ -320,6 +320,8 @@ namespace Game {
 
         public static bool DragHalfInSplit { get; set; }
 
+        public static bool ShortInventoryLooping { get; set; }
+
         public static float LowFPSToTimeDeceleration { get; set; }
 
         public static bool UseAPISleepTimeAcceleration { get; set; }
@@ -360,6 +362,7 @@ namespace Game {
             {
                 DisplayLog = false;
                 DragHalfInSplit = true;
+                ShortInventoryLooping = false;
                 m_resolutionMode = ResolutionMode.High;
                 VisibilityRange = 128;
                 ViewAngle = 1f;
