@@ -1786,10 +1786,17 @@ namespace Game {
         public virtual void IsCrosshairVisible(ComponentAimingSights componentAimingSights, ref bool isVisible) { }
 
         /// <summary>
-        ///     用于添加新的按键映射，在重置按键设置时也会使用这里的设置作为默认值。
+        ///     用于添加新的键盘鼠标按键映射，在重置按键设置时也会使用这里的设置作为默认值。
         ///     使用yield return可返回多个键值对。键：映射名；值：按键(Key)或鼠标按钮(MouseButton)
         /// </summary>
         public virtual IEnumerable<KeyValuePair<string, object>> GetKeyboardMappings() {
+            yield break;
+        }
+        /// <summary>
+        ///     用于添加新的手柄按键映射，在重置按键设置时也会使用这里的设置作为默认值。
+        ///     使用yield return可返回多个键值对。键：映射名；值：按键(Key)或鼠标按钮(MouseButton)
+        /// </summary>
+        public virtual IEnumerable<KeyValuePair<string, object>> GetGamepadMappings() {
             yield break;
         }
 

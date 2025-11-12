@@ -1,3 +1,4 @@
+using Engine;
 using System.Xml.Linq;
 
 namespace Game {
@@ -17,6 +18,7 @@ namespace Game {
         public SliderWidget m_lookSensitivitySlider;
         public SliderWidget m_gamepadCursorSpeedSlider;
         public SliderWidget m_gamepadDeadZoneSlider;
+        public SliderWidget m_gamepadTriggerThresholdSlider;
         public SliderWidget m_creativeDigTimeSlider;
         public SliderWidget m_creativeReachSlider;
         public SliderWidget m_holdDurationSlider;
@@ -45,6 +47,7 @@ namespace Game {
             m_lookSensitivitySlider = Children.Find<SliderWidget>("LookSensitivitySlider");
             m_gamepadCursorSpeedSlider = Children.Find<SliderWidget>("GamepadCursorSpeedSlider");
             m_gamepadDeadZoneSlider = Children.Find<SliderWidget>("GamepadDeadZoneSlider");
+            m_gamepadTriggerThresholdSlider = Children.Find<SliderWidget>("GamepadTriggerThresholdSlider");
             m_creativeDigTimeSlider = Children.Find<SliderWidget>("CreativeDigTimeSlider");
             m_creativeReachSlider = Children.Find<SliderWidget>("CreativeReachSlider");
             m_holdDurationSlider = Children.Find<SliderWidget>("HoldDurationSlider");
@@ -96,6 +99,9 @@ namespace Game {
             if (m_gamepadDeadZoneSlider.IsSliding) {
                 SettingsManager.GamepadDeadZone = m_gamepadDeadZoneSlider.Value;
             }
+            if (m_gamepadTriggerThresholdSlider.IsSliding) {
+                SettingsManager.GamepadTriggerThreshold = MathUtils.Clamp(m_gamepadTriggerThresholdSlider.Value, 0f, 0.99f);
+            }
             if (m_creativeDigTimeSlider.IsSliding) {
                 SettingsManager.CreativeDigTime = m_creativeDigTimeSlider.Value;
             }
@@ -146,6 +152,8 @@ namespace Game {
             m_gamepadCursorSpeedSlider.Text = $"{SettingsManager.GamepadCursorSpeed:0.0}x";
             m_gamepadDeadZoneSlider.Value = SettingsManager.GamepadDeadZone;
             m_gamepadDeadZoneSlider.Text = $"{SettingsManager.GamepadDeadZone * 100f:0}%";
+            m_gamepadTriggerThresholdSlider.Value = SettingsManager.GamepadTriggerThreshold;
+            m_gamepadTriggerThresholdSlider.Text = $"{SettingsManager.GamepadTriggerThreshold * 100f:0}%";
             m_creativeDigTimeSlider.Value = SettingsManager.CreativeDigTime;
             m_creativeDigTimeSlider.Text = $"{MathF.Round(1000f * SettingsManager.CreativeDigTime)}ms";
             m_creativeReachSlider.Value = SettingsManager.CreativeReach;

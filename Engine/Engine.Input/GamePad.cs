@@ -17,11 +17,15 @@ namespace Engine.Input {
 
             public float[] Triggers = new float[2];
 
+            public float[] LastTriggers = new float[2];
+
             public bool[] Buttons = new bool[14];
 
             public bool[] LastButtons = new bool[14];
 
             public double[] ButtonsRepeat = new double[14];
+
+            public object ModifierKeyOfCurrentCombo;//记录按下的组合键中的修饰键，避免弹起误触
         }
 #if ANDROID
         public struct KeyInfo {
@@ -259,12 +263,31 @@ namespace Engine.Input {
             throw new ArgumentOutOfRangeException(nameof(deadZone)) :
             IsConnected(gamePadIndex) ? ApplyDeadZone(m_states[gamePadIndex].Triggers[(int)trigger], deadZone) : 0f;
 
+        public static bool IsTriggerDownOnce(int gamePadIndex, GamePadTrigger trigger, float deadZone = 0f, float threshold = 0.5f) {
+            if (deadZone < 0f || deadZone >= 1f)
+                throw new ArgumentOutOfRangeException(nameof(deadZone));
+            if(!IsConnected(gamePadIndex))
+                return false;
+            if (m_states[gamePadIndex].ModifierKeyOfCurrentCombo is GamePadTrigger trigger1 && trigger1 == trigger)
+                return false;//若修饰键按下期间已触发组合键，禁止当前修饰键触发自己的点按行为，避免误触
+            bool current = ApplyDeadZone(m_states[gamePadIndex].Triggers[(int)trigger], deadZone) >= threshold;
+            bool last = ApplyDeadZone(m_states[gamePadIndex].LastTriggers[(int)trigger], deadZone) >= threshold;
+            return !current && last;//扳机必定是修饰键，松开那一刻才算按下一次，避免影响组合键
+        }
+
         public static bool IsButtonDown(int gamePadIndex, GamePadButton button) =>
             IsConnected(gamePadIndex) && m_states[gamePadIndex].Buttons[(int)button];
 
-        public static bool IsButtonDownOnce(int gamePadIndex, GamePadButton button) => IsConnected(gamePadIndex)
-            && m_states[gamePadIndex].Buttons[(int)button]
-            && !m_states[gamePadIndex].LastButtons[(int)button];
+        public static bool IsButtonDownOnce(int gamePadIndex, GamePadButton button) {
+            if (!IsConnected(gamePadIndex))
+                return false;
+            if (m_states[gamePadIndex].ModifierKeyOfCurrentCombo is GamePadButton button1 && button1 == button)
+                return false;//若修饰键按下期间已触发组合键，禁止当前修饰键触发自己的点按行为，避免误触
+            if (IsModifierKey(button))//如果是修饰键，松开那一刻才算按下一次，避免影响组合键
+                return !m_states[gamePadIndex].Buttons[(int)button] && m_states[gamePadIndex].LastButtons[(int)button];
+            else//正常按键依然是按下那一刻算按下一次
+                return m_states[gamePadIndex].Buttons[(int)button] && !m_states[gamePadIndex].LastButtons[(int)button];
+        }
 
         public static bool IsButtonDownRepeat(int gamePadIndex, GamePadButton button) {
             if (IsConnected(gamePadIndex)) {
@@ -278,29 +301,51 @@ namespace Engine.Input {
             return false;
         }
 
-//        /// <summary>
-//        /// 使指定的手柄的马达震动
-//        /// </summary>
-//        /// <param name="gamePadIndex"></param>
-//        /// <param name="vibration">震动幅度(马达速度)，在0到1之间</param>
-//        /// <param name="durationMs">震动持续时间(毫秒)</param>
-//        public static void MakeVibration(int gamePadIndex, float vibration, float durationMs)
-//        {//由于GLFW不支持手柄震动，所以暂时注释掉这段代码
-//#if !ANDROID
-//            if (IsConnected(gamePadIndex))
-//            {
-//                var gamePad = m_gamepads[gamePadIndex];
-//                foreach(var motor in gamePad.VibrationMotors)
-//                {
-//                    motor.Speed = vibration;
-//                    Task.Delay((int)durationMs).ContinueWith(_ =>
-//                    {
-//                        motor.Speed = 0f;
-//                    });
-//                }
-//            }
-//#endif
-//        }
+        public static bool IsAnyModifierKeyHolding(int gamePadIndex, float threshold = 0.5f) {
+            if (!IsConnected(gamePadIndex)) {
+                return false;
+            }
+            State state = m_states[gamePadIndex];
+            return state.Triggers[0] >= threshold
+                || state.Triggers[1] >= threshold
+                || state.Buttons[(int)GamePadButton.LeftShoulder]
+                || state.Buttons[(int)GamePadButton.RightShoulder];
+        }
+
+        public static void SetModifierKeyOfCurrentCombo(int gamePadIndex, object modifierKey) {
+            if (!IsConnected(gamePadIndex)) {
+                return;
+            }
+            if (IsModifierKey(modifierKey)) {
+                m_states[gamePadIndex].ModifierKeyOfCurrentCombo = modifierKey;
+            }
+        }
+        public static bool IsModifierKey(object obj) =>
+            obj is GamePadTrigger || (obj is GamePadButton button && (button == GamePadButton.LeftShoulder || button == GamePadButton.RightShoulder));
+
+        //        /// <summary>
+        //        /// 使指定的手柄的马达震动
+        //        /// </summary>
+        //        /// <param name="gamePadIndex"></param>
+        //        /// <param name="vibration">震动幅度(马达速度)，在0到1之间</param>
+        //        /// <param name="durationMs">震动持续时间(毫秒)</param>
+        //        public static void MakeVibration(int gamePadIndex, float vibration, float durationMs)
+        //        {//由于GLFW不支持手柄震动，所以暂时注释掉这段代码
+        //#if !ANDROID
+        //            if (IsConnected(gamePadIndex))
+        //            {
+        //                var gamePad = m_gamepads[gamePadIndex];
+        //                foreach(var motor in gamePad.VibrationMotors)
+        //                {
+        //                    motor.Speed = vibration;
+        //                    Task.Delay((int)durationMs).ContinueWith(_ =>
+        //                    {
+        //                        motor.Speed = 0f;
+        //                    });
+        //                }
+        //            }
+        //#endif
+        //        }
         public static void Clear() {
             for (int i = 0; i < m_states.Length; i++) {
                 for (int j = 0; j < m_states[i].Sticks.Length; j++) {
@@ -336,6 +381,12 @@ namespace Engine.Input {
                         state.ButtonsRepeat[j] = 0.0;
                     }
                     state.LastButtons[j] = state.Buttons[j];
+                }
+                for (int k = 0; k < state.Triggers.Length; k++) {
+                    state.LastTriggers[k] = state.Triggers[k];
+                }
+                if (!IsAnyModifierKeyHolding(i, 0.08f)) {//所有修饰键都松开时，重置组合键触发标记
+                    state.ModifierKeyOfCurrentCombo = null;
                 }
             }
         }
