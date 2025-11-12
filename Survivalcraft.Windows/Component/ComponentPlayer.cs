@@ -158,9 +158,14 @@ namespace Game {
                 playerInput.Look = Vector2.Zero;
             }
             if (ComponentMiner.Inventory != null) {
-                ComponentMiner.Inventory.ActiveSlotIndex += playerInput.ScrollInventory;
+                int max = ComponentGui.ShortInventoryWidget.m_inventory is ComponentCreativeInventory
+                    ? ComponentGui.ShortInventoryWidget.MaxVisibleSlotsCountInCreative
+                    : ComponentGui.ShortInventoryWidget.MaxVisibleSlotsCount;
+                ComponentMiner.Inventory.ActiveSlotIndex = SettingsManager.ShortInventoryLooping
+                    ? (ComponentMiner.Inventory.ActiveSlotIndex + playerInput.ScrollInventory + max) % max//加上max再取模，防止出现负数结果
+                    : ComponentMiner.Inventory.ActiveSlotIndex + playerInput.ScrollInventory;
                 if (playerInput.SelectInventorySlot.HasValue) {
-                    ComponentMiner.Inventory.ActiveSlotIndex = Math.Clamp(playerInput.SelectInventorySlot.Value, 0, 9);
+                    ComponentMiner.Inventory.ActiveSlotIndex = Math.Clamp(playerInput.SelectInventorySlot.Value, 0, max - 1);
                 }
             }
             ComponentMount mount = ComponentRider.Mount;

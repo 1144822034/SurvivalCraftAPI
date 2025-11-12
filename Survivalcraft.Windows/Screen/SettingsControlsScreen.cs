@@ -13,6 +13,7 @@ namespace Game {
         public ButtonWidget m_horizontalCreativeFlightButton;
         public ButtonWidget m_creativeDragMaxStackingButton;
         public ButtonWidget m_splitDragHalfButton;
+        public ButtonWidget m_shortInventoryLoopingButton;
         public ContainerWidget m_horizontalCreativeFlightPanel;
         public SliderWidget m_moveSensitivitySlider;
         public SliderWidget m_lookSensitivitySlider;
@@ -43,6 +44,7 @@ namespace Game {
             m_horizontalCreativeFlightPanel = Children.Find<ContainerWidget>("HorizontalCreativeFlightPanel");
             m_creativeDragMaxStackingButton = Children.Find<ButtonWidget>("CreativeDragMaxStacking");
             m_splitDragHalfButton = Children.Find<ButtonWidget>("SplitDragHalf");
+            m_shortInventoryLoopingButton = Children.Find<ButtonWidget>("ShortInventoryLooping");
             m_moveSensitivitySlider = Children.Find<SliderWidget>("MoveSensitivitySlider");
             m_lookSensitivitySlider = Children.Find<SliderWidget>("LookSensitivitySlider");
             m_gamepadCursorSpeedSlider = Children.Find<SliderWidget>("GamepadCursorSpeedSlider");
@@ -86,6 +88,9 @@ namespace Game {
             }
             if (m_splitDragHalfButton.IsClicked) {
                 SettingsManager.DragHalfInSplit = !SettingsManager.DragHalfInSplit;
+            }
+            if (m_shortInventoryLoopingButton.IsClicked) {
+                SettingsManager.ShortInventoryLooping = !SettingsManager.ShortInventoryLooping;
             }
             if (m_moveSensitivitySlider.IsSliding) {
                 SettingsManager.MoveSensitivity = m_moveSensitivitySlider.Value;
@@ -144,6 +149,7 @@ namespace Game {
             m_horizontalCreativeFlightButton.Text = SettingsManager.HorizontalCreativeFlight ? LanguageControl.On : LanguageControl.Off;
             m_creativeDragMaxStackingButton.Text = SettingsManager.CreativeDragMaxStacking ? LanguageControl.On : LanguageControl.Off;
             m_splitDragHalfButton.Text = SettingsManager.DragHalfInSplit ? LanguageControl.On : LanguageControl.Off;
+            m_shortInventoryLoopingButton.Text = SettingsManager.ShortInventoryLooping ? LanguageControl.On : LanguageControl.Off;
             m_moveSensitivitySlider.Value = SettingsManager.MoveSensitivity;
             m_moveSensitivitySlider.Text = (SettingsManager.MoveSensitivity * 10f).ToString("0.0");
             m_lookSensitivitySlider.Value = SettingsManager.LookSensitivity;
