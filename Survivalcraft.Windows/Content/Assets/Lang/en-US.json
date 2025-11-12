@@ -3178,7 +3178,8 @@
       "Touch Screen Joystick Offset Y",
       "Keyboard Settings",
       "Camera List",
-      "Manage"
+      "Manage",
+      "Gamepad Trigger Threshold:"
     ],
     "CameraManageScreen": {
       "Enable": "Enable",

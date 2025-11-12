@@ -17,10 +17,6 @@ namespace Game {
 
         public double m_lastJumpTime;
 
-        public float m_lastLeftTrigger;
-
-        public float m_lastRightTrigger;
-
         public Vector2 m_vrSmoothLook;
 
         public bool ToggleFlyInDoubleJump { get; set; } = true;
@@ -246,30 +242,20 @@ namespace Game {
                 Vector3 zero = Vector3.Zero;
                 Vector2 padStickPosition = input.GetPadStickPosition(GamePadStick.Left, SettingsManager.GamepadDeadZone);
                 Vector2 padStickPosition2 = input.GetPadStickPosition(GamePadStick.Right, SettingsManager.GamepadDeadZone);
-                float padTriggerPosition = input.GetPadTriggerPosition(GamePadTrigger.Left);
-                float padTriggerPosition2 = input.GetPadTriggerPosition(GamePadTrigger.Right);
                 float num = MathF.Pow(1.4f, 10f * (SettingsManager.LookSensitivity - 0.5f));
                 zero += new Vector3(2f * padStickPosition.X, 0f, 2f * padStickPosition.Y);
-                zero += Vector3.UnitY * (input.IsPadButtonDown(GamePadButton.A) ? 1 : 0);
-                zero += -Vector3.UnitY * (input.IsPadButtonDown(GamePadButton.RightShoulder) ? 1 : 0);
+                zero += Vector3.UnitY * (input.IsGamepadDown("MoveUp") ? 1 : 0);
+                zero += -Vector3.UnitY * (input.IsGamepadDown("MoveDown") ? 1 : 0);
                 m_playerInput.Move += zero;
                 m_playerInput.CrouchMove += zero;
                 m_playerInput.Look += 0.75f * num * padStickPosition2 * MathF.Pow(padStickPosition2.LengthSquared(), 0.25f);
-                m_playerInput.Jump |= input.IsPadButtonDownOnce(GamePadButton.A);
-                m_playerInput.Dig = padTriggerPosition2 >= 0.5f ? new Ray3(viewPosition, viewDirection) : m_playerInput.Dig;
-                m_playerInput.Hit = padTriggerPosition2 >= 0.5f && m_lastRightTrigger < 0.5f
-                    ? new Ray3(viewPosition, viewDirection)
-                    : m_playerInput.Hit;
-                m_playerInput.Aim = padTriggerPosition >= 0.5f ? new Ray3(viewPosition, viewDirection) : m_playerInput.Aim;
-                m_playerInput.Interact = padTriggerPosition >= 0.5f && m_lastLeftTrigger < 0.5f
-                    ? new Ray3(viewPosition, viewDirection)
-                    : m_playerInput.Interact;
-                m_playerInput.Drop |= input.IsPadButtonDownOnce(GamePadButton.B);
-                m_playerInput.ToggleMount |= input.IsPadButtonDownOnce(GamePadButton.LeftThumb) || input.IsPadButtonDownOnce(GamePadButton.DPadUp);
-                m_playerInput.EditItem |= input.IsPadButtonDownOnce(GamePadButton.LeftShoulder);
-                m_playerInput.ToggleCrouch |= input.IsPadButtonDownOnce(GamePadButton.RightShoulder);
-                m_playerInput.SwitchCameraMode |= input.IsPadButtonDownOnce(GamePadButton.RightThumb)
-                    || input.IsPadButtonDownOnce(GamePadButton.DPadDown);
+                m_playerInput.Jump |= input.IsGamepadDownOnce("Jump");
+                m_playerInput.Dig = input.IsGamepadDown("Dig") ? new Ray3(viewPosition, viewDirection) : m_playerInput.Dig;
+                m_playerInput.Hit = input.IsGamepadDownOnce("Hit") ? new Ray3(viewPosition, viewDirection) : m_playerInput.Hit;
+                m_playerInput.Aim = input.IsGamepadDown("Aim") ? new Ray3(viewPosition, viewDirection) : m_playerInput.Aim;
+                m_playerInput.Interact = input.IsGamepadDownOnce("Interact") ? new Ray3(viewPosition, viewDirection) : m_playerInput.Interact;
+                m_playerInput.ToggleMount |= input.IsGamepadDownOnce("ToggleMount");
+                m_playerInput.ToggleCrouch |= input.IsGamepadDownOnce("ToggleCrouch");
                 if (input.IsPadButtonDownRepeat(GamePadButton.DPadLeft)) {
                     m_playerInput.ScrollInventory--;
                 }
@@ -280,13 +266,21 @@ namespace Game {
                     || padStickPosition2 != Vector2.Zero) {
                     IsControlledByTouch = false;
                 }
-                m_lastLeftTrigger = padTriggerPosition;
-                m_lastRightTrigger = padTriggerPosition2;
             }
             if (!DialogsManager.HasDialogs(m_componentPlayer.GuiWidget) && AllowHandleInput) {
-                m_playerInput.ToggleInventory |= input.IsPadButtonDownOnce(GamePadButton.X);
-                m_playerInput.ToggleClothing |= input.IsPadButtonDownOnce(GamePadButton.Y);
-                m_playerInput.GamepadHelp |= input.IsPadButtonDownOnce(GamePadButton.Start);
+                m_playerInput.ToggleInventory |= input.IsGamepadDownOnce("ToggleInventory");
+                m_playerInput.ToggleClothing |= input.IsGamepadDownOnce("ToggleClothing");
+                m_playerInput.TakeScreenshot |= input.IsGamepadDownOnce("TakeScreenshot");
+                m_playerInput.Drop |= input.IsGamepadDownOnce("Drop");
+                m_playerInput.GamepadHelp |= input.IsGamepadDownOnce("GamepadHelp");
+                if (m_componentGui.ModalPanelWidget == null) {//避免查看背包时使用十字键翻页时触发一些不该触发的功能
+                    m_playerInput.SwitchCameraMode |= input.IsGamepadDownOnce("SwitchCameraMode");
+                    m_playerInput.TimeOfDay |= input.IsGamepadDownOnce("TimeOfDay");
+                    m_playerInput.Lighting |= input.IsGamepadDownOnce("Lightning");
+                    m_playerInput.Precipitation |= input.IsGamepadDownOnce("Precipitation");
+                    m_playerInput.Fog |= input.IsGamepadDownOnce("Fog");
+                    m_playerInput.EditItem |= input.IsGamepadDownOnce("EditItem");
+                }
             }
         }
 

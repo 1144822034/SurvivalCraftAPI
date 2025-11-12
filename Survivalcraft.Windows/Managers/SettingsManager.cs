@@ -206,6 +206,11 @@ namespace Game {
 
         public static float GamepadCursorSpeed { get; set; }
 
+        /// <summary>
+        /// 手柄扳机触发阈值，范围0~1，默认0.5。扳机的按压幅度只有超过这个数时才会被视为“按下”状态，越小则越容易触发。
+        /// </summary>
+        public static float GamepadTriggerThreshold { get; set; }
+
         public static float CreativeDigTime { get; set; }
 
         public static float CreativeReach { get; set; }
@@ -322,6 +327,7 @@ namespace Game {
 
         public static event Action<string> SettingChanged;
         public static ValuesDictionary KeyboardMappingSettings { get; set; }
+        public static ValuesDictionary GamepadMappingSettings { get; set; }
         public static ValuesDictionary CameraManageSettings { get; set; }
 
         static readonly Lock m_saveLock = new();
@@ -364,6 +370,7 @@ namespace Game {
                 LookSensitivity = 0.5f;
                 GamepadDeadZone = 0.16f;
                 GamepadCursorSpeed = 1f;
+                GamepadTriggerThreshold = 0.5f;
                 CreativeDigTime = 0.33f;
                 CreativeReach = 7.5f;
                 MinimumHoldDuration = 0.25f;
@@ -402,6 +409,7 @@ namespace Game {
                 AnimatedTextureRefreshLimit = 7;
                 FileAssociationEnabled = true;
                 InitializeKeyboardMappingSettings();
+                InitializeGamepadMappingSettings();
                 InitializeCameraManageSettings();
             }
             LoadSettings();
@@ -437,6 +445,31 @@ namespace Game {
             KeyboardMappingSettings.SetValue("EditItem", Key.G);
             KeyboardMappingSettings.SetValue("KeyboardHelp", Key.H);
         }
+        public static void InitializeGamepadMappingSettings() {
+            GamepadMappingSettings = new ValuesDictionary();
+            GamepadMappingSettings.SetValue("MoveUp", GamePadButton.A);
+            GamepadMappingSettings.SetValue("MoveDown", GamePadButton.RightShoulder);
+            GamepadMappingSettings.SetValue("Jump", GamePadButton.A);
+            GamepadMappingSettings.SetValue("Dig", GamePadTrigger.Right);
+            GamepadMappingSettings.SetValue("Hit", GamePadTrigger.Right);
+            GamepadMappingSettings.SetValue("Interact", GamePadTrigger.Left);
+            GamepadMappingSettings.SetValue("Aim", GamePadTrigger.Left);
+            GamepadMappingSettings.SetValue("ToggleCrouch", GamePadButton.RightShoulder);
+            GamepadMappingSettings.SetValue("ToggleMount", GamePadButton.DPadUp);
+            GamepadMappingSettings.SetValue("ToggleFly", GamePadButton.Null);
+            GamepadMappingSettings.SetValue("PickBlockType", GamePadButton.Null);
+            GamepadMappingSettings.SetValue("ToggleInventory", GamePadButton.X);
+            GamepadMappingSettings.SetValue("ToggleClothing", GamePadButton.Y);
+            GamepadMappingSettings.SetValue("TakeScreenshot", GamePadButton.Null);
+            GamepadMappingSettings.SetValue("SwitchCameraMode", GamePadButton.DPadDown);
+            GamepadMappingSettings.SetValue("TimeOfDay", GamePadButton.Null);
+            GamepadMappingSettings.SetValue("Lightning", GamePadButton.Null);
+            GamepadMappingSettings.SetValue("Precipitation", GamePadButton.Null);
+            GamepadMappingSettings.SetValue("Fog", GamePadButton.Null);
+            GamepadMappingSettings.SetValue("Drop", GamePadButton.B);
+            GamepadMappingSettings.SetValue("EditItem", GamePadButton.LeftShoulder);
+            GamepadMappingSettings.SetValue("GamepadHelp", GamePadButton.Start);
+        }
 
         public static void InitializeCameraManageSettings() { //键表示摄像机的类名，值表示摄像机的排序（小于0则禁用）
             CameraManageSettings = new ValuesDictionary();
@@ -457,9 +490,32 @@ namespace Game {
             }
             return throwIfNotFound ? throw new ArgumentException(string.Format(LanguageControl.Get(fName, "1"), keyName)) : null;
         }
+        public static object GetGamepadMapping(string keyName, bool throwIfNotFound = true) {
+            if (GamepadMappingSettings.TryGetValue(keyName, out object result)) { //原版设置
+                return result;
+            }
+            //foreach (ValuesDictionary item in ModSettingsManager.ModKeyboardMapSettings.Values) { //模组设置
+            //    if (item.TryGetValue(keyName, out object result2)) {
+            //        return result2;
+            //    }
+            //}
+            return throwIfNotFound ? throw new ArgumentException(string.Format(LanguageControl.Get(fName, "1"), keyName)) : null;
+        }
+
+        public static int GetCameraManageSetting(string keyName, bool throwIfNotFound = true) {
+            if (CameraManageSettings.TryGetValue(keyName, out object result)) { //原版设置
+                return Convert.ToInt32(result);
+            }
+            foreach (ValuesDictionary item in ModSettingsManager.ModCameraManageSettings.Values) { //模组设置
+                if (item.TryGetValue(keyName, out object result2)) {
+                    return Convert.ToInt32(result2);
+                }
+            }
+            return throwIfNotFound ? throw new ArgumentException(string.Format(LanguageControl.Get(fName, "2"), keyName)) : -1;
+        }
 
         /// <summary>
-        ///     仅用于修改现有键位，添加键位请使用<see cref="ModLoader.GetKeyboardMappings" />
+        ///     仅用于修改现有键盘鼠标键位，添加键位请使用<see cref="ModLoader.GetKeyboardMappings" />
         /// </summary>
         /// <param name="keyName"></param>
         /// <param name="value"></param>
@@ -476,17 +532,23 @@ namespace Game {
                 }
             }
         }
-
-        public static int GetCameraManageSetting(string keyName, bool throwIfNotFound = true) {
-            if (CameraManageSettings.TryGetValue(keyName, out object result)) { //原版设置
-                return Convert.ToInt32(result);
+        /// <summary>
+        ///     仅用于修改现有手柄键位，添加键位请使用<see cref="ModLoader.GetGamepadMappings" />
+        /// </summary>
+        /// <param name="keyName"></param>
+        /// <param name="value"></param>
+        public static void SetGamepadMapping(string keyName, object value) {
+            if (GamepadMappingSettings.ContainsKey(keyName)) { //原版设置
+                GamepadMappingSettings[keyName] = value;
             }
-            foreach (ValuesDictionary item in ModSettingsManager.ModCameraManageSettings.Values) { //模组设置
-                if (item.TryGetValue(keyName, out object result2)) {
-                    return Convert.ToInt32(result2);
-                }
-            }
-            return throwIfNotFound ? throw new ArgumentException(string.Format(LanguageControl.Get(fName, "2"), keyName)) : -1;
+            //else {
+            //    foreach (ValuesDictionary item in ModSettingsManager.ModKeyboardMapSettings.Values) { //模组设置
+            //        if (item.ContainsKey(keyName)) {
+            //            item[keyName] = value;
+            //            break;
+            //        }
+            //    }
+            //}
         }
 
         /// <summary>

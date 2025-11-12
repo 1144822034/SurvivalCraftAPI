@@ -13,6 +13,7 @@ namespace Engine.Input {
         DPadLeft,
         DPadUp,
         DPadRight,
-        DPadDown
+        DPadDown,
+        Null = -1
     }
 }

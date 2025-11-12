@@ -1,6 +1,7 @@
 using Engine;
 using Engine.Graphics;
 using Engine.Input;
+using TemplatesDatabase;
 
 namespace Game {
     public class WidgetInput {
@@ -341,7 +342,7 @@ namespace Game {
         }
 
         /// <summary>
-        ///     根据按键映射名称判断按键是否按下
+        ///     根据按键映射名称判断键盘鼠标按键是否按住
         /// </summary>
         /// <param name="mappingName"></param>
         /// <returns></returns>
@@ -358,7 +359,7 @@ namespace Game {
         }
 
         /// <summary>
-        ///     根据按键映射名称判断按键是否按下
+        ///     根据按键映射名称判断键盘鼠标按键是否按下
         /// </summary>
         /// <param name="mappingName"></param>
         /// <returns></returns>
@@ -370,6 +371,55 @@ namespace Game {
             if (key is Key key1
                 && key1 != Key.Null) {
                 return IsKeyDownOnce(key1);
+            }
+            return false;
+        }
+        /// <summary>
+        ///     根据按键映射名称判断手柄按键是否按住
+        /// </summary>
+        /// <param name="mappingName"></param>
+        /// <returns></returns>
+        public bool IsGamepadDown(string mappingName) {
+            object key = SettingsManager.GetGamepadMapping(mappingName);
+            if (key is GamePadTrigger trigger) {
+                return GetPadTriggerPosition(trigger) >= SettingsManager.GamepadTriggerThreshold;
+            }
+            if(key is GamePadButton button && button != GamePadButton.Null) {
+                return IsPadButtonDown(button);
+            }
+            return false;
+        }
+        /// <summary>
+        ///     根据按键映射名称判断手柄按键是否按下
+        /// </summary>
+        /// <param name="mappingName"></param>
+        /// <returns></returns>
+        public bool IsGamepadDownOnce(string mappingName) {
+            //注意：组合键中行动键只能是GamePadButton，并且不能是肩键
+            float threshold = SettingsManager.GamepadTriggerThreshold;
+            object key = SettingsManager.GetGamepadMapping(mappingName);
+            if (key is GamePadTrigger trigger) {
+                return IsTriggerDownOnce(trigger, threshold);
+            }
+            if (key is GamePadButton button && button != GamePadButton.Null && (!IsAnyModifierKeyHolding() || GamePad.IsModifierKey(button))) {//当前没有按住修饰键，或者当前按下的就是修饰键（对于GamePadButton来说是左右肩键）
+                return IsPadButtonDownOnce(button);
+            }
+            if (key is ValuesDictionary combo) {
+                object modifier = combo.GetValue<object>("ModifierKey", null);
+                bool modifierHolding = false;
+                if (modifier is GamePadTrigger trigger1)
+                    modifierHolding = GetPadTriggerPosition(trigger1) >= threshold;
+                else if (modifier is GamePadButton button1 && button1 != GamePadButton.Null)
+                    modifierHolding = IsPadButtonDown(button1);
+                if (modifierHolding) {
+                    object action = combo.GetValue<object>("ActionKey", null);
+                    if (action is GamePadButton button2 && button2 != GamePadButton.Null) {
+                        bool flag = IsPadButtonDownOnce(button2);
+                        if(flag)
+                            SetModifierKeyOfCurrentCombo(modifier);
+                        return flag;
+                    }
+                }
             }
             return false;
         }
@@ -444,6 +494,27 @@ namespace Game {
             }
             return MathUtils.Min(num, 1f);
         }
+        public bool IsTriggerDownOnce(GamePadTrigger trigger, float deadZone = 0f, float threshold = 0.5f) {
+            if (m_isCleared) {
+                return false;
+            }
+            for (int i = 0; i < 4; i++) {
+                if (((uint)Devices & (uint)(2048 << i)) != 0 && GamePad.IsTriggerDownOnce(i, trigger, deadZone, threshold)) {
+                    return true;
+                }
+            }
+            return false;
+        }
+        public void SetModifierKeyOfCurrentCombo(object modifierKey) {
+            if (m_isCleared) {
+                return;
+            }
+            for (int i = 0; i < 4; i++) {
+                if (((uint)Devices & (uint)(2048 << i)) != 0) {
+                    GamePad.SetModifierKeyOfCurrentCombo(i, modifierKey);
+                }
+            }
+        }
 
         public bool IsPadButtonDown(GamePadButton button) {
             if (m_isCleared) {
@@ -483,6 +554,19 @@ namespace Game {
             }
             return false;
         }
+        public bool IsAnyModifierKeyHolding() {
+            if (m_isCleared) {
+                return false;
+            }
+            for (int i = 0; i < 4; i++) {
+                if (((uint)Devices & (uint)(2048 << i)) != 0
+                    && GamePad.IsAnyModifierKeyHolding(i)) {//此处若使用SettingsManager.GamepadTriggerThreshold，恐与GamePad类中使用到IsAnyModifierKeyHolding的地方不一致。因为GamePad无法访问SettingsManager
+                    return true;
+                }
+            }
+            return false;
+        }
+
         ///// <summary>
         ///// 使手柄的马达震动
         ///// </summary>
@@ -746,7 +830,7 @@ namespace Game {
                 }
                 if (!IsPadButtonDown(GamePadButton.A)
                     && m_padDownPoint.HasValue) {
-                    if (GetPadTriggerPosition(GamePadTrigger.Left) > 0.5f) {
+                    if (GetPadTriggerPosition(GamePadTrigger.Left) > SettingsManager.GamepadTriggerThreshold) {
                         SpecialClick = new Segment2(m_padDownPoint.Value, PadCursorPosition);
                     }
                     else {
