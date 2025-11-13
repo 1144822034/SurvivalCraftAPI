@@ -23,21 +23,21 @@
         <ApplicationManifest>Properties\app.manifest</ApplicationManifest>
     </PropertyGroup>
     <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
-        <TargetFramework>net9.0-windows</TargetFramework>
+        <TargetFramework>net10.0-windows</TargetFramework>
         <DefineConstants>DEBUG</DefineConstants>
     </PropertyGroup>
     <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
-        <TargetFrameworks>net9.0;net9.0-windows</TargetFrameworks>
+        <TargetFrameworks>net10.0;net10.0-windows</TargetFrameworks>
         <DebugType>none</DebugType>
         <DefineConstants>TRACE</DefineConstants>
     </PropertyGroup>
     <PropertyGroup Condition=" '$(Configuration)' == 'Direct3D11' ">
-        <TargetFramework>net9.0-windows</TargetFramework>
+        <TargetFramework>net10.0-windows</TargetFramework>
         <DebugType>none</DebugType>
         <DefineConstants>TRACE;RELEASE;DIRECT3D11</DefineConstants>
         <Optimize>true</Optimize>
     </PropertyGroup>
-    <PropertyGroup Condition="'$(TargetFramework)' == 'net9.0-windows'">
+    <PropertyGroup Condition="'$(TargetFramework)' == 'net10.0-windows'">
         <RuntimeIdentifier>win-x64</RuntimeIdentifier>
         <OutputType>WinExe</OutputType>
     </PropertyGroup>
@@ -46,13 +46,13 @@
         <ProjectReference Include="..\EntitySystem\EntitySystem.csproj" />
     </ItemGroup>
     <ItemGroup>
-        <PackageReference Include="TextCopy" Version="6.2.1" Condition="'$(TargetFramework)' == 'net9.0-windows'" />
-        <PackageReference Include="ImeSharp.ImmOnly" Version="1.0.0" Condition="'$(TargetFramework)' == 'net9.0-windows'" />
+        <PackageReference Include="TextCopy" Version="6.2.1" Condition="'$(TargetFramework)' == 'net10.0-windows'" />
+        <PackageReference Include="ImeSharp.ImmOnly" Version="1.0.0" Condition="'$(TargetFramework)' == 'net10.0-windows'" />
         <PackageReference Include="Jint" Version="4.4.1" />
         <PackageReference Include="NAudio.Flac.Unknown.Mod" Version="1.0.3" />
         <PackageReference Include="NuGet.Versioning" Version="6.14.0" />
     </ItemGroup>
-    <ItemGroup Condition="'$(TargetFramework)' == 'net9.0-windows'">
+    <ItemGroup Condition="'$(TargetFramework)' == 'net10.0-windows'">
         <None Update="Content.zip">
             <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
         </None>
@@ -73,7 +73,7 @@
             <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
         </None>
     </ItemGroup>
-    <Target Name="PreBuild" BeforeTargets="PreBuildEvent" Condition="'$(TargetFramework)' == 'net9.0-windows'">
+    <Target Name="PreBuild" BeforeTargets="PreBuildEvent" Condition="'$(TargetFramework)' == 'net10.0-windows'">
         <ZipDirectory SourceDirectory="Content" DestinationFile="Content.zip" Overwrite="true" />
     </Target>
 </Project>

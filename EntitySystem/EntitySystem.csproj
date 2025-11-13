@@ -16,16 +16,16 @@
         <ProduceReferenceAssembly>true</ProduceReferenceAssembly>
     </PropertyGroup>
     <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
-        <TargetFrameworks>net9.0;net9.0-windows;net9.0-android</TargetFrameworks>
+        <TargetFrameworks>net10.0;net10.0-windows;net10.0-android</TargetFrameworks>
         <DefineConstants>DEBUG</DefineConstants>
     </PropertyGroup>
     <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
-        <TargetFrameworks>net9.0;net9.0-windows;net9.0-android</TargetFrameworks>
+        <TargetFrameworks>net10.0;net10.0-windows;net10.0-android</TargetFrameworks>
         <DebugType>none</DebugType>
         <DefineConstants>TRACE</DefineConstants>
     </PropertyGroup>
     <PropertyGroup Condition=" '$(Configuration)' == 'Direct3D11' ">
-        <TargetFramework>net9.0-windows</TargetFramework>
+        <TargetFramework>net10.0-windows</TargetFramework>
         <DebugType>none</DebugType>
         <DefineConstants>TRACE;RELEASE;DIRECT3D11</DefineConstants>
         <Optimize>true</Optimize>
