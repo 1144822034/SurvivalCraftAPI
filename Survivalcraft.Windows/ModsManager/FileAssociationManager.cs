@@ -100,15 +100,25 @@ namespace Game {
         public static bool IsRegistered() {
 #if WINDOWS
             try {
-                string appPath = Assembly.GetEntryAssembly()?.Location;
+                string appPath = Process.GetCurrentProcess().MainModule?.FileName;
                 if (appPath == null) {
                     return false;
                 }
+                string friendlyAppName =
+                    $"{LanguageControl.Get("Usual", "gameName")} {ModsManager.ShortGameVersion} - API {ModsManager.APIVersionString}";
                 string command = $"\"{appPath}\" \"%1\"";
                 foreach (string extension in SupportedExtensions) {
-                    if ((string)Registry.CurrentUser.OpenSubKey($@"Software\Classes\{ProgIdBase}{extension}\shell\open\command", false)?.GetValue("")
-                        != command) {
-                        return false;
+                    using (RegistryKey progKey = Registry.CurrentUser.OpenSubKey($@"Software\Classes\{ProgIdBase}{extension}", false)) {
+                        if (progKey == null) {
+                            return false;
+                        }
+                        if (progKey.GetValue("FriendlyAppName")?.ToString() != friendlyAppName) {
+                            return false;
+                        }
+                        if ((string)progKey.OpenSubKey($@"shell\open\command", false)?.GetValue("")
+                            != command) {
+                            return false;
+                        }
                     }
                     if (Registry.CurrentUser.OpenSubKey(
                                 $@"Software\Microsoft\Windows\CurrentVersion\Explorer\FileExts\{extension}\OpenWithProgids",
