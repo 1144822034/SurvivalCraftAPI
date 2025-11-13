@@ -457,6 +457,7 @@ namespace Game {
             AddLoadAction(delegate { AddScreen("Players", new PlayersScreen()); });
             AddLoadAction(delegate { AddScreen("Player", new PlayerScreen()); });
             AddLoadAction(delegate { AddScreen("KeyboardMapping", new KeyboardMappingScreen()); });
+            AddLoadAction(delegate { AddScreen("GamepadMapping", new GamepadMappingScreen()); });
             AddLoadAction(delegate { AddScreen("CameraManage", new CameraManageScreen()); });
         }
 

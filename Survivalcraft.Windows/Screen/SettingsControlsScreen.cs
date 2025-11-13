@@ -27,6 +27,7 @@ namespace Game {
         public SliderWidget m_moveWidgetMarginXSlider;
         public SliderWidget m_moveWidgetMarginYSlider;
         public ButtonWidget m_keyboardMappingEntry;
+        public ButtonWidget m_gamepadMappingEntry;
         public ButtonWidget m_CameraManageEntry;
 
         public const string fName = "SettingsControlsScreen";
@@ -58,6 +59,7 @@ namespace Game {
             m_moveWidgetMarginXSlider = Children.Find<SliderWidget>("MoveWidgetMarginXSlider");
             m_moveWidgetMarginYSlider = Children.Find<SliderWidget>("MoveWidgetMarginYSlider");
             m_keyboardMappingEntry = Children.Find<ButtonWidget>("KeyboardMappingEntry");
+            m_gamepadMappingEntry = Children.Find<ButtonWidget>("GamepadMappingEntry");
             m_CameraManageEntry = Children.Find<ButtonWidget>("CameraManageEntry");
             m_horizontalCreativeFlightPanel.IsVisible = true;
         }
@@ -130,6 +132,9 @@ namespace Game {
             }
             if (m_keyboardMappingEntry.IsClicked) {
                 ScreensManager.SwitchScreen("KeyboardMapping");
+            }
+            if (m_gamepadMappingEntry.IsClicked) {
+                ScreensManager.SwitchScreen("GamepadMapping");
             }
             if (m_CameraManageEntry.IsClicked) {
                 ScreensManager.SwitchScreen("CameraManage");

@@ -12,9 +12,14 @@ namespace Game {
         public static Dictionary<string, XElement> ModSettingsCache { get; private set; } = new();
 
         /// <summary>
-        ///     储存每个模组的键位映射设置，键：模组包名，值：模组的键位映射设置
+        ///     储存每个模组的键盘鼠标键位映射设置，键：模组包名，值：模组的键位映射设置
         /// </summary>
         public static Dictionary<string, ValuesDictionary> ModKeyboardMapSettings { get; private set; } = new();
+
+        /// <summary>
+        ///     储存每个模组的手柄键位映射设置，键：模组包名，值：模组的键位映射设置
+        /// </summary>
+        public static Dictionary<string, ValuesDictionary> ModGamepadMapSettings { get; private set; } = new();
 
         /// <summary>
         ///     储存每个模组的相机设置，键：模组包名，值：模组的相机设置
@@ -30,6 +35,20 @@ namespace Game {
                     dictionary.TryAdd(item.Key, item.Value);
                 }
                 foreach (ValuesDictionary item in ModKeyboardMapSettings.Values) {
+                    foreach (KeyValuePair<string, object> item2 in item) {
+                        dictionary.TryAdd(item2.Key, item2.Value);
+                    }
+                }
+                return dictionary;
+            }
+        }
+        public static Dictionary<string, object> CombinedGamepadMappingSettings {
+            get { //合并模组设置和原版设置
+                Dictionary<string, object> dictionary = new();
+                foreach (KeyValuePair<string, object> item in SettingsManager.GamepadMappingSettings) {
+                    dictionary.TryAdd(item.Key, item.Value);
+                }
+                foreach (ValuesDictionary item in ModGamepadMapSettings.Values) {
                     foreach (KeyValuePair<string, object> item2 in item) {
                         dictionary.TryAdd(item2.Key, item2.Value);
                     }
@@ -81,11 +100,16 @@ namespace Game {
                 foreach (ModEntity modEntity in ModsManager.ModList) {
                     string packageName = modEntity.modInfo.PackageName;
                     ValuesDictionary modKeyboardSettings = [];
+                    ValuesDictionary modGamepadSettings = [];
                     ValuesDictionary modCameraSettings = [];
                     IEnumerable<KeyValuePair<string, object>> keysToAdd = modEntity.Loader?.GetKeyboardMappings() ?? []; //初始化模组默认键位设置
+                    IEnumerable<KeyValuePair<string, object>> gamepadKeysToAdd = modEntity.Loader?.GetGamepadMappings() ?? []; //初始化模组默认键位设置
                     IEnumerable<KeyValuePair<string, int>> camerasToAdd = modEntity.Loader?.GetCameraList() ?? []; //初始化模组默认相机设置
                     foreach (KeyValuePair<string, object> item1 in keysToAdd) {
                         modKeyboardSettings.Add(item1.Key, item1.Value);
+                    }
+                    foreach (KeyValuePair<string, object> item1 in gamepadKeysToAdd) {
+                        modGamepadSettings.Add(item1.Key, item1.Value);
                     }
                     foreach (KeyValuePair<string, int> item2 in camerasToAdd) {
                         modCameraSettings.Add(item2.Key, item2.Value);
@@ -97,18 +121,19 @@ namespace Game {
                             if (keyboardMapping != null) {
                                 modKeyboardSettings.ApplyOverrides(keyboardMapping, true);
                             }
+                            XElement gamepadMapping = setting.Element("GamepadMapping");
+                            if (gamepadMapping != null) {
+                                modGamepadSettings.ApplyOverrides(gamepadMapping);
+                            }
                             XElement cameraList = setting.Element("CameraList");
                             if (cameraList != null) {
                                 modCameraSettings.ApplyOverrides(cameraList, true);
                             }
                         }
                     }
-                    if (!ModKeyboardMapSettings.TryAdd(packageName, modKeyboardSettings)) {
-                        ModKeyboardMapSettings[packageName] = modKeyboardSettings;
-                    }
-                    if (!ModCameraManageSettings.TryAdd(packageName, modCameraSettings)) {
-                        ModCameraManageSettings[packageName] = modCameraSettings;
-                    }
+                    ModKeyboardMapSettings[packageName] = modKeyboardSettings;
+                    ModGamepadMapSettings[packageName] = modGamepadSettings;
+                    ModCameraManageSettings[packageName] = modCameraSettings;
                 }
                 if (!LanguageControl.TryGet(out string info, fName, "2")) {
                     info = "Loaded mod settings";
@@ -137,12 +162,19 @@ namespace Game {
                     }
                     Log.Warning($"{string.Format(str, packageName)} {e}");
                 }
-                //保存模组的键位映射设置
+                //保存模组的键盘鼠标键位映射设置
                 XElement keyboardMapping = new("KeyboardMapping");
                 if (ModKeyboardMapSettings.TryGetValue(packageName, out ValuesDictionary modKeyboardSettings)
                     && modKeyboardSettings.Count > 0) {
                     modKeyboardSettings.Save(keyboardMapping);
                     settingsElement.Add(keyboardMapping);
+                }
+                //保存模组的手柄键位映射设置
+                XElement gamepadMapping = new("GamepadMapping");
+                if (ModGamepadMapSettings.TryGetValue(packageName, out ValuesDictionary modGamepadSettings)
+                    && modGamepadSettings.Count > 0) {
+                    modGamepadSettings.Save(gamepadMapping);
+                    settingsElement.Add(gamepadMapping);
                 }
                 //保存模组的相机设置
                 XElement cameraList = new("CameraList");
@@ -190,6 +222,20 @@ namespace Game {
                 }
             }
             Log.Information(LanguageControl.Get(fName, "7"));
+        }
+
+        public static void ResetModsGamepadMappingSettings() {
+            foreach (ModEntity modEntity in ModsManager.ModList) {
+                string packageName = modEntity.modInfo.PackageName;
+                if (ModGamepadMapSettings.TryGetValue(packageName, out ValuesDictionary gamepadSettings)) {
+                    gamepadSettings.Clear();
+                    IEnumerable<KeyValuePair<string, object>> keysToAdd = modEntity.Loader?.GetGamepadMappings() ?? [];
+                    foreach (KeyValuePair<string, object> item1 in keysToAdd) {
+                        gamepadSettings.Add(item1.Key, item1.Value);
+                    }
+                }
+            }
+            Log.Information(LanguageControl.Get(fName, "9"));
         }
 
         public static void ResetModsCameraManageSettings() {

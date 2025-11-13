@@ -411,7 +411,7 @@ namespace Game {
                     list.Add(
                         new Tuple<string, Action>(
                             LanguageControl.Get(fName, 91),
-                            delegate { DialogsManager.ShowDialog(ParentWidget, new GamepadHelpDialog()); }
+                            delegate { ScreensManager.SwitchScreen("GamepadMapping"); }
                         )
                     );
                 }

@@ -851,7 +851,7 @@ namespace Game {
             if (IsPadButtonDownOnce(GamePadButton.B)) {
                 Cancel = true;
             }
-            if (IsPadButtonDownOnce(GamePadButton.Back)) {
+            if (IsGamepadDownOnce("Back")) {
                 Back = true;
             }
             if (m_padDragInProgress) {

@@ -123,8 +123,13 @@
           </UniformSpacingPanelWidget>
 
           <UniformSpacingPanelWidget Direction="Horizontal" Margin="0, 3">
-            <LabelWidget Text="[SettingsControlsScreen:22]" HorizontalAlignment="Far" VerticalAlignment="Center" Margin="20, 0" />
+            <LabelWidget Text="[SettingsControlsScreen:27]" HorizontalAlignment="Far" VerticalAlignment="Center" Margin="20, 0" />
             <BevelledButtonWidget Name="KeyboardMappingEntry" Text ="[SettingsControlsScreen:22]" Style="{Styles/ButtonStyle_310x60}" VerticalAlignment="Center" Margin="20, 0" />
+          </UniformSpacingPanelWidget>
+
+          <UniformSpacingPanelWidget Direction="Horizontal" Margin="0, 3">
+            <LabelWidget Text="[SettingsControlsScreen:28]" HorizontalAlignment="Far" VerticalAlignment="Center" Margin="20, 0" />
+            <BevelledButtonWidget Name="GamepadMappingEntry" Text ="[SettingsControlsScreen:22]" Style="{Styles/ButtonStyle_310x60}" VerticalAlignment="Center" Margin="20, 0" />
           </UniformSpacingPanelWidget>
 
           <UniformSpacingPanelWidget Direction="Horizontal" Margin="0, 3">

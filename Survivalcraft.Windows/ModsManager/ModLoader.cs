@@ -1797,6 +1797,13 @@ namespace Game {
         ///     使用yield return可返回多个键值对。键：映射名；值：按键(Key)或鼠标按钮(MouseButton)
         /// </summary>
         public virtual IEnumerable<KeyValuePair<string, object>> GetGamepadMappings() {
+            ////组合键添加示例：
+            ////注：ModifierKey只能是GamePadButton.LeftShoulder或RightShoulder，以及GamePadTrigger.Left或Right
+            ////在组合键中ActionKey可以是四个ModifierKey以外的任意按键
+            //ValuesDictionary valuesDictionary = [];
+            //valuesDictionary.SetValue("ModifierKey", Engine.Input.GamePadButton.LeftShoulder);
+            //valuesDictionary.SetValue("ActionKey", Engine.Input.GamePadButton.X);
+            //yield return new("TimeOfDay", valuesDictionary);
             yield break;
         }
 

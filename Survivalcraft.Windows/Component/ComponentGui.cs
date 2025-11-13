@@ -526,13 +526,7 @@ namespace Game {
                 ScreensManager.SwitchScreen("KeyboardMapping");
             }
             if (playerInput.GamepadHelp) {
-                m_gamepadHelpDialog ??= new GamepadHelpDialog();
-                if (m_gamepadHelpDialog.ParentWidget != null) {
-                    DialogsManager.HideDialog(m_gamepadHelpDialog);
-                }
-                else {
-                    DialogsManager.ShowDialog(m_componentPlayer.GuiWidget, m_gamepadHelpDialog);
-                }
+                ScreensManager.SwitchScreen("GamepadMapping");
             }
             if (m_helpButtonWidget.IsClicked) {
                 ScreensManager.SwitchScreen("Help");

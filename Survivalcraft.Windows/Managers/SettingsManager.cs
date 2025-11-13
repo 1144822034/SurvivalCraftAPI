@@ -472,6 +472,7 @@ namespace Game {
             GamepadMappingSettings.SetValue("Drop", GamePadButton.B);
             GamepadMappingSettings.SetValue("EditItem", GamePadButton.LeftShoulder);
             GamepadMappingSettings.SetValue("GamepadHelp", GamePadButton.Start);
+            GamepadMappingSettings.SetValue("Back", GamePadButton.Back);
         }
 
         public static void InitializeCameraManageSettings() { //键表示摄像机的类名，值表示摄像机的排序（小于0则禁用）
@@ -497,11 +498,11 @@ namespace Game {
             if (GamepadMappingSettings.TryGetValue(keyName, out object result)) { //原版设置
                 return result;
             }
-            //foreach (ValuesDictionary item in ModSettingsManager.ModKeyboardMapSettings.Values) { //模组设置
-            //    if (item.TryGetValue(keyName, out object result2)) {
-            //        return result2;
-            //    }
-            //}
+            foreach (ValuesDictionary item in ModSettingsManager.ModGamepadMapSettings.Values) { //模组设置
+                if (item.TryGetValue(keyName, out object result2)) {
+                    return result2;
+                }
+            }
             return throwIfNotFound ? throw new ArgumentException(string.Format(LanguageControl.Get(fName, "1"), keyName)) : null;
         }
 
@@ -544,14 +545,14 @@ namespace Game {
             if (GamepadMappingSettings.ContainsKey(keyName)) { //原版设置
                 GamepadMappingSettings[keyName] = value;
             }
-            //else {
-            //    foreach (ValuesDictionary item in ModSettingsManager.ModKeyboardMapSettings.Values) { //模组设置
-            //        if (item.ContainsKey(keyName)) {
-            //            item[keyName] = value;
-            //            break;
-            //        }
-            //    }
-            //}
+            else {
+                foreach (ValuesDictionary item in ModSettingsManager.ModGamepadMapSettings.Values) { //模组设置
+                    if (item.ContainsKey(keyName)) {
+                        item[keyName] = value;
+                        break;
+                    }
+                }
+            }
         }
 
         /// <summary>
