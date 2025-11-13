@@ -39,6 +39,10 @@
 	<string>Assets.xcassets/AppIcon.appiconset</string>
 	<key>UIRequiresFullScreen</key>
 	<true/>
+<key>UIFileSharingEnabled</key>
+<true/>
+<key>LSSupportsOpeningDocumentsInPlace</key>
+<true/>
 	<key>CFBundleIdentifier</key>
 	<string>com.survivalcraft.api</string>
 	<key>UIBackgroundModes</key>
