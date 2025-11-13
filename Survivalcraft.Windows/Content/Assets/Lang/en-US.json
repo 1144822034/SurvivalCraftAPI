@@ -254,7 +254,8 @@
     "5": "Error saving mod settings file:",
     "6": "Saved mod settings",
     "7": "Reset mod keyboard mapping settings",
-    "8": "Reset mod camera manage settings"
+    "8": "Reset mod camera manage settings",
+    "9": "Reset mod gamepad mapping settings"
   },
   "SettingsManager": {
     "1": "There's no keyboard mapping setting named \"{0}\"!",
@@ -991,6 +992,29 @@
     "9": "Input Block Contents Manually",
     "10": "Invalid Block Contents",
     "11": "Terrain Generator Version"
+  },
+  "KeyboardMappingScreenKeys": {
+    "Left": "Mouse1",
+    "Right": "Mouse2",
+    "Middle": "Mouse3",
+    "Ext1": "Mouse4",
+    "Ext2": "Mouse5",
+    "LeftArrow": "←",
+    "RightArrow": "→",
+    "UpArrow": "↑",
+    "DownArrow": "↓"
+  },
+  "GamepadMappingScreenKeys": {
+    "LeftThumb": "LS",
+    "RightThumb": "RS",
+    "Left": "LT",
+    "Right": "RT",
+    "LeftShoulder": "LB",
+    "RightShoulder": "RB",
+    "DPadLeft": "←",
+    "DPadRight": "→",
+    "DPadUp": "↑",
+    "DPadDown": "↓"
   },
   "ComponentSickness": {
     "1": "Sickness",
@@ -3176,11 +3200,13 @@
       "Touch Screen Joystick Offset",
       "Touch Screen Joystick Offset X",
       "Touch Screen Joystick Offset Y",
-      "Keyboard Settings",
+      "Set keys",
       "Camera List",
       "Manage",
       "Gamepad Trigger Threshold:",
-      "Short Inventory Looping:"
+      "Short Inventory Looping:",
+      "Keyboard Mapping:",
+      "Gamepad Mapping:"
     ],
     "CameraManageScreen": {
       "Enable": "Enable",

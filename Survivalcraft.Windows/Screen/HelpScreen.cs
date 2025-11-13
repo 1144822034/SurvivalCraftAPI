@@ -87,7 +87,9 @@ namespace Game {
         public override void Enter(object[] parameters) {
             if (ScreensManager.PreviousScreen != ScreensManager.FindScreen<Screen>("HelpTopic")
                 && ScreensManager.PreviousScreen != ScreensManager.FindScreen<Screen>("Recipaedia")
-                && ScreensManager.PreviousScreen != ScreensManager.FindScreen<Screen>("Bestiary")) {
+                && ScreensManager.PreviousScreen != ScreensManager.FindScreen<Screen>("Bestiary")
+                && ScreensManager.PreviousScreen != ScreensManager.FindScreen<Screen>("KeyboardMapping")
+                && ScreensManager.PreviousScreen != ScreensManager.FindScreen<Screen>("GamepadMapping")) {
                 m_previousScreen = ScreensManager.PreviousScreen;
             }
         }
@@ -117,10 +119,10 @@ namespace Game {
 
         public void ShowTopic(HelpTopic helpTopic) {
             if (helpTopic.Name == "Keyboard") {
-                DialogsManager.ShowDialog(null, new KeyboardHelpDialog());
+                ScreensManager.SwitchScreen("KeyboardMapping");
             }
             else if (helpTopic.Name == "Gamepad") {
-                DialogsManager.ShowDialog(null, new GamepadHelpDialog());
+                ScreensManager.SwitchScreen("GamepadMapping");
             }
             else {
                 ScreensManager.SwitchScreen("HelpTopic", helpTopic);

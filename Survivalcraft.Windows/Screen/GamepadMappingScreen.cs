@@ -1,12 +1,13 @@
-using System.Xml.Linq;
 using Engine.Input;
 using Engine.Serialization;
+using System.Xml.Linq;
+using TemplatesDatabase;
 
 namespace Game {
-    public class KeyboardMappingScreen : Screen {
-        public Widget KeyInfoWidget(object item) {
+    public class GamepadMappingScreen : Screen {
+        public Widget GamepadKeyInfoWidget(object item) {
             XElement node = ContentManager.Get<XElement>("Widgets/KeyboardMappingItem");
-            node.SetAttributeValue("Name", $"KeyboardMappingItem_{item}");
+            node.SetAttributeValue("Name", $"GamepadMappingItem_{item}");
             ContainerWidget containerWidget = (ContainerWidget)LoadWidget(this, node, null);
             LabelWidget labelWidget = containerWidget.Children.Find<LabelWidget>("Name");
             LabelWidget labelWidget2 = containerWidget.Children.Find<LabelWidget>("BoundKey");
@@ -14,28 +15,45 @@ namespace Game {
             if (itemString != null) {
                 string translated = LanguageControl.Get(out bool r, fName, itemString);
                 labelWidget.Text = r ? translated : itemString;
-                labelWidget2.Text = HumanReadableConverter.ConvertToString(SettingsManager.GetKeyboardMapping(itemString));
+                object value = SettingsManager.GetGamepadMapping(itemString);
+                if (value is GamePadButton valueKey
+                    && valueKey == GamePadButton.Null) {
+                    labelWidget2.Text = string.Empty;
+                }
+                else if (value is ValuesDictionary valuesDictionary) {
+                    labelWidget2.Text = ConvertGamepadName(valuesDictionary.GetValue<object>("ModifierKey", null)) + " + "
+                        + ConvertGamepadName(valuesDictionary.GetValue<object>("ActionKey", null));
+                }
+                else {
+                    labelWidget2.Text = ConvertGamepadName(value);
+                }
                 m_widgetsByString[itemString] = containerWidget;
             }
             return containerWidget;
         }
+        public static string ConvertGamepadName(object obj) {
+            if(obj == null) return string.Empty;
+            string text = HumanReadableConverter.ConvertToString(obj);
+            string translated = LanguageControl.Get(out bool r, keyName, text);
+            return r ? translated : text;
+        }
 
-        public const string fName = "KeyboardMappingScreen";
-        public const string keyName = "KeyboardMappingScreenKeys";
+        public static string fName => typeof(KeyboardMappingScreen).Name;
+        public static string keyName => "GamepadMappingScreenKeys";
 
         public ListPanelWidget m_keysList;
         public BevelledButtonWidget m_resetButton;
         public BevelledButtonWidget m_setKeyButton;
         public BevelledButtonWidget m_disableKeyButton;
         public bool IsWaitingForKeyInput;
-        public Dictionary<string, ContainerWidget> m_widgetsByString = new();
-        public Dictionary<object, List<string>> m_conflicts = new();
+        public Dictionary<string, ContainerWidget> m_widgetsByString = [];
+        public Dictionary<object, List<string>> m_conflicts = [];
 
-        public KeyboardMappingScreen() {
+        public GamepadMappingScreen() {
             XElement node = ContentManager.Get<XElement>("Screens/KeyboardMappingScreen");
             LoadContents(this, node);
             m_keysList = Children.Find<ListPanelWidget>("KeysList");
-            m_keysList.ItemWidgetFactory = (Func<object, Widget>)Delegate.Combine(m_keysList.ItemWidgetFactory, KeyInfoWidget);
+            m_keysList.ItemWidgetFactory = (Func<object, Widget>)Delegate.Combine(m_keysList.ItemWidgetFactory, GamepadKeyInfoWidget);
             m_keysList.ScrollPosition = 0f;
             m_keysList.ScrollSpeed = 0f;
             m_keysList.ItemClicked += item => { m_keysList.SelectedItem = m_keysList.SelectedItem == item ? null : item; };
@@ -52,17 +70,22 @@ namespace Game {
                 ScreensManager.SwitchScreen(ScreensManager.PreviousScreen);
                 return;
             }
-            foreach (string key in m_widgetsByString.Keys) {
-                LabelWidget labelWidget = m_widgetsByString[key].Children.Find<LabelWidget>("BoundKey");
-                object value = SettingsManager.GetKeyboardMapping(key);
-                if (value is Key valueKey
-                    && valueKey == Key.Null) {
+            foreach (KeyValuePair<string, ContainerWidget> item in m_widgetsByString) {
+                string key = item.Key;
+                LabelWidget labelWidget = item.Value.Children.Find<LabelWidget>("BoundKey");
+                object value = SettingsManager.GetGamepadMapping(key);
+                if (value is GamePadButton valueKey
+                    && valueKey == GamePadButton.Null) {
                     labelWidget.Text = string.Empty;
                 }
                 else {
-                    string text = HumanReadableConverter.ConvertToString(value);
-                    string translated = LanguageControl.Get(out bool r, keyName, text);
-                    labelWidget.Text = r ? translated : text;
+                    if (value is ValuesDictionary valuesDictionary) {
+                        labelWidget.Text = ConvertGamepadName(valuesDictionary.GetValue<object>("ModifierKey", null)) + " + "
+                            + ConvertGamepadName(valuesDictionary.GetValue<object>("ActionKey", null));
+                    }
+                    else {
+                        labelWidget.Text = ConvertGamepadName(value);// r ? translated : text;
+                    }
                     bool hasConflict = false;
                     if (m_conflicts.TryGetValue(value, out List<string> valueList)) {
                         hasConflict = KeyCompatibleGroupsManager.HasConflict(valueList);
@@ -71,7 +94,7 @@ namespace Game {
                 }
             }
             if (m_disableKeyButton.IsClicked) {
-                SetKeyboardMapping(selectedKeyName, Key.Null);
+                SetGamepadMapping(selectedKeyName, GamePadButton.Null);
                 IsWaitingForKeyInput = false;
             }
             if (m_resetButton.IsClicked) {
@@ -80,7 +103,7 @@ namespace Game {
                     LanguageControl.Get("ContentWidgets", fName, "ResetText"),
                     LanguageControl.Yes,
                     LanguageControl.No,
-                    delegate(MessageDialogButton button) {
+                    delegate (MessageDialogButton button) {
                         if (button == MessageDialogButton.Button1) { //重设所有按键
                             ResetAll();
                         }
@@ -91,22 +114,37 @@ namespace Game {
             }
             if (IsWaitingForKeyInput) {
                 m_setKeyButton.IsChecked = true;
-                if (Input.Back
-                    || Input.Cancel) {
+                if (Input.Back) {
                     IsWaitingForKeyInput = false;
                     return;
                 }
-                foreach (Key key in EnumUtils.GetEnumValues(typeof(Key))) {
-                    if (key != Key.Null
-                        && Input.IsKeyDown(key)) {
-                        SetKeyboardMapping(selectedKeyName, key);
+                object holdingModifierKey = null;
+                if (Input.IsPadButtonDown(GamePadButton.LeftShoulder))
+                    holdingModifierKey = GamePadButton.LeftShoulder;
+                else if (Input.IsPadButtonDown(GamePadButton.RightShoulder))
+                    holdingModifierKey = GamePadButton.RightShoulder;
+                else if (Input.GetPadTriggerPosition(GamePadTrigger.Left) > SettingsManager.GamepadTriggerThreshold)
+                    holdingModifierKey = GamePadTrigger.Left;
+                else if (Input.GetPadTriggerPosition(GamePadTrigger.Right) > SettingsManager.GamepadTriggerThreshold)
+                    holdingModifierKey = GamePadTrigger.Right;
+
+                foreach (GamePadButton button in EnumUtils.GetEnumValues(typeof(GamePadButton)).Select(v => (GamePadButton)v)) {
+                    if (button != GamePadButton.Null && Input.IsPadButtonDownOnce(button)) {
+                        if (holdingModifierKey != null && !GamePad.IsModifierKey(button)) {
+                            ValuesDictionary combinedKey = [];
+                            combinedKey.SetValue("ModifierKey", holdingModifierKey);
+                            combinedKey.SetValue("ActionKey", button);
+                            SetGamepadMapping(selectedKeyName, combinedKey);
+                        }
+                        else
+                            SetGamepadMapping(selectedKeyName, button);
                         IsWaitingForKeyInput = false;
                         return;
                     }
                 }
-                foreach (MouseButton mouseButton in EnumUtils.GetEnumValues(typeof(MouseButton))) {
-                    if (Input.IsMouseButtonDown(mouseButton)) {
-                        SetKeyboardMapping(selectedKeyName, mouseButton);
+                foreach (GamePadTrigger trigger in EnumUtils.GetEnumValues(typeof(GamePadTrigger)).Select(v => (GamePadTrigger)v)) {
+                    if (Input.IsTriggerDownOnce(trigger)) {
+                        SetGamepadMapping(selectedKeyName, trigger);
                         IsWaitingForKeyInput = false;
                         return;
                     }
@@ -126,30 +164,30 @@ namespace Game {
 
         public override void Enter(object[] parameters) {
             m_keysList.ClearItems();
-            foreach (string keyName1 in ModSettingsManager.CombinedKeyboardMappingSettings.Keys) {
+            foreach (string keyName1 in ModSettingsManager.CombinedGamepadMappingSettings.Keys) {
                 m_keysList.AddItem(keyName1);
             }
             RefreshConflicts();
         }
 
-        public void SetKeyboardMapping(string keyName1, object value) {
-            SettingsManager.SetKeyboardMapping(keyName1, value);
+        public void SetGamepadMapping(string keyName1, object value) {
+            SettingsManager.SetGamepadMapping(keyName1, value);
             RefreshConflicts();
         }
 
         public void ResetAll() {
-            SettingsManager.InitializeKeyboardMappingSettings();
-            ModSettingsManager.ResetModsKeyboardMappingSettings();
+            SettingsManager.InitializeGamepadMappingSettings();
+            ModSettingsManager.ResetModsGamepadMappingSettings();
             RefreshConflicts();
         }
 
         public void RefreshConflicts() {
             m_conflicts.Clear();
-            foreach (KeyValuePair<string, object> item in ModSettingsManager.CombinedKeyboardMappingSettings) {
+            foreach (KeyValuePair<string, object> item in ModSettingsManager.CombinedGamepadMappingSettings) {
                 string name = item.Key;
                 object obj = item.Value;
                 if (!m_conflicts.TryGetValue(obj, out List<string> value)) {
-                    value = new List<string>();
+                    value = [];
                     m_conflicts[obj] = value;
                 }
                 if (!value.Contains(name)) {

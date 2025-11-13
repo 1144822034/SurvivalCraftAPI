@@ -146,42 +146,42 @@ namespace TemplatesDatabase {
         public void ApplyOverrides(XElement overridesNode, bool overrideExistOnly) {
             foreach (XElement item in overridesNode.Elements()) {
                 if (item.Name == "Value") {
-                    string attributeValue = XmlUtils.GetAttributeValue<string>(item, "Name");
-                    if (overrideExistOnly && !m_dictionary.ContainsKey(attributeValue)) {
+                    string key = XmlUtils.GetAttributeValue<string>(item, "Name");
+                    if (overrideExistOnly && !m_dictionary.ContainsKey(key))
                         continue;
-                    }
-                    string attributeValue2 = XmlUtils.GetAttributeValue<string>(item, "Type", null);
+                    string typeName = XmlUtils.GetAttributeValue<string>(item, "Type", null);
                     Type type;
-                    if (attributeValue2 == null) {
-                        object value = GetValue<object>(attributeValue, null);
-                        if (value == null) {
-                            throw new InvalidOperationException($"Type of override \"{attributeValue}\" cannot be determined.");
-                        }
+                    if (typeName == null) {
+                        object value = GetValue<object>(key, null);
+                        if (value == null)
+                            throw new InvalidOperationException($"Type of override \"{key}\" cannot be determined.");
                         type = value.GetType();
                     }
                     else {
-                        type = TypeCache.FindType(attributeValue2, false, true);
+                        type = TypeCache.FindType(typeName, false, true);
                     }
-                    object attributeValue3 = XmlUtils.GetAttributeValue(item, "Value", type);
-                    SetValue(attributeValue, attributeValue3);
+                    object valueObj = XmlUtils.GetAttributeValue(item, "Value", type);
+                    SetValue(key, valueObj);
                 }
-                else {
-                    if (!(item.Name == "Values")) {
-                        throw new InvalidOperationException($"Unrecognized element \"{item.Name}\" in values dictionary overrides XML.");
-                    }
-                    string attributeValue4 = XmlUtils.GetAttributeValue<string>(item, "Name");
-                    if (overrideExistOnly && !m_dictionary.ContainsKey(attributeValue4)) {
+                else if (item.Name == "Values") {
+                    string key = XmlUtils.GetAttributeValue<string>(item, "Name");
+                    if (overrideExistOnly && !m_dictionary.ContainsKey(key))
                         continue;
+                    ValuesDictionary valuesDictionary;
+                    if (GetValue<object>(key, null) is ValuesDictionary vd) {
+                        valuesDictionary = vd;
                     }
-                    if (GetValue<object>(attributeValue4, null) is not ValuesDictionary valuesDictionary) {
-                        valuesDictionary = [];
-                        SetValue(attributeValue4, valuesDictionary);
+                    else {
+                        valuesDictionary = new ValuesDictionary();
+                        SetValue(key, valuesDictionary);
                     }
                     valuesDictionary.ApplyOverrides(item, overrideExistOnly);
                 }
+                else {
+                    throw new InvalidOperationException($"Unrecognized element \"{item.Name}\" in values dictionary overrides XML.");
+                }
             }
         }
-
         public IEnumerator<KeyValuePair<string, object>> GetEnumerator() => m_dictionary.GetEnumerator();
 
         IEnumerator IEnumerable.GetEnumerator() => m_dictionary.GetEnumerator();
