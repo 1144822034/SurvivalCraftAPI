@@ -1,4 +1,4 @@
-name: Build iOS Release IPA
+name: Build iOS Debug IPA
 
 on:
   workflow_dispatch:
