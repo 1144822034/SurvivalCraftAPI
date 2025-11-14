@@ -413,7 +413,12 @@ public static class ModsManager {
         ModListAll.Add(SurvivalCraftModEntity);
         ModListAll.Add(FastDebug);
         GetScmods(ModsPath);
-        ModListAll.Sort((x, y) => x.modInfo.LoadOrder.CompareTo(y.modInfo.LoadOrder));
+        ModListAll.Sort((x, y) => {
+            int orderX=0, orderY=0;
+            if (x.modInfo != null) orderX = x.modInfo.LoadOrder;
+            if (y.modInfo != null) orderY = y.modInfo.LoadOrder;
+            return orderX - orderY;
+        });
         //float api = float.Parse(APIVersion);
         //读取SCMOD文件到ModListAll列表
         foreach (ModEntity modEntity1 in ModListAll) {
