@@ -14,7 +14,7 @@ namespace Game {
         public int lastvalue;
         public bool isclick = true;
         public List<ClickTextWidget> list = [];
-        public const string fName = "EditMemoryBankDialog";
+        public const string fName = "EditMemoryBankDialogAPI";
 
         public byte LastOutput { get; set; }
 
