@@ -35,9 +35,9 @@ jobs:
 
     - name: Archive ContentPak
       run: |
-        cd Survivalcraft.Windows
-        zip -r Content.zip Content
-        cd ..
+        cd Survivalcraft.Windows/Content
+        zip -r ../Content.zip *
+        cd ../../
 
     - name: Build IPA
       run: |
