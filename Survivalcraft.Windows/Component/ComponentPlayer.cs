@@ -598,7 +598,8 @@ namespace Game {
             ComponentClothing = Entity.FindComponent<ComponentClothing>(true);
             ComponentOuterClothingModel = Entity.FindComponent<ComponentOuterClothingModel>(true);
             int playerIndex = valuesDictionary.GetValue<int>("PlayerIndex");
-            PlayerData = Project.FindSubsystem<SubsystemPlayers>(true).PlayersData.First(d => d.PlayerIndex == playerIndex);
+            SubsystemPlayers subsystemPlayers = Project.FindSubsystem<SubsystemPlayers>(true);
+            PlayerData = subsystemPlayers.m_playersData.First(d => d.PlayerIndex == playerIndex);
         }
 
         public override void Save(ValuesDictionary valuesDictionary, EntityToIdMap entityToIdMap) {

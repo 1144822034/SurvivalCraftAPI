@@ -27,6 +27,7 @@ namespace Game {
         }
 
         public override void MeasureOverride(Vector2 parentAvailableSize) {
+            if (m_inventory == null) return;
             int max = m_inventory is ComponentCreativeInventory ? MaxVisibleSlotsCountInCreative : MaxVisibleSlotsCount;
             m_inventory.VisibleSlotsCount = Math.Clamp((int)((parentAvailableSize.X - 320f - 25f) / 72f), MinVisibleSlotsCount, max);
             if (m_inventory.VisibleSlotsCount != m_inventoryGrid.Children.Count) {

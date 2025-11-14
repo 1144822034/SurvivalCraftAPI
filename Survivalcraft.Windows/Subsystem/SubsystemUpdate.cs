@@ -123,6 +123,7 @@ namespace Game {
                     "SubsystemUpdate",
                     loader => {
                         loader.SubsystemUpdate(dt);
+                        loader.SubsystemUpdate(this, dt);
                         return false;
                     }
                 );

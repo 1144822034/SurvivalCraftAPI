@@ -199,7 +199,7 @@ namespace GameEntitySystem {
             return list;
         }
 
-        internal void InternalLoadEntity(ValuesDictionary valuesDictionary, IdToEntityMap idToEntityMap) {
+        public void InternalLoadEntity(ValuesDictionary valuesDictionary, IdToEntityMap idToEntityMap) {
             foreach (Component component in m_components) {
                 try {
                     component.Load(component.ValuesDictionary, idToEntityMap);
@@ -210,7 +210,7 @@ namespace GameEntitySystem {
             }
         }
 
-        internal void InternalSaveEntity(ValuesDictionary valuesDictionary, EntityToIdMap entityToIdMap) {
+        public void InternalSaveEntity(ValuesDictionary valuesDictionary, EntityToIdMap entityToIdMap) {
             foreach (Component component in Components) {
                 ValuesDictionary valuesDictionary2 = [];
                 component.Save(valuesDictionary2, entityToIdMap);
@@ -220,11 +220,11 @@ namespace GameEntitySystem {
             }
         }
 
-        internal void FireEntityAddedEvent() {
+        public void FireEntityAddedEvent() {
             EntityAdded?.Invoke(this, EventArgs.Empty);
         }
 
-        internal void FireEntityRemovedEvent() {
+        public void FireEntityRemovedEvent() {
             EntityRemoved?.Invoke(this, EventArgs.Empty);
         }
     }
