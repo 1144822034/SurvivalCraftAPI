@@ -45,13 +45,13 @@ jobs:
 
     - name: Archive Bin Files
       run: |
-        mkdir SurvivalCraft.IOS/bin/Release/net9.0-ios18.0/ios-arm64/Payload
-        mv SurvivalCraft.IOS/bin/Release/net9.0-ios18.0/ios-arm64/Survivalcraft.app SurvivalCraft.IOS/bin/Release/net9.0-ios18.0/ios-arm64/Payload
-        cd SurvivalCraft.IOS/bin/Release/net9.0-ios18.0/ios-arm64
+        mkdir SurvivalCraft.IOS/bin/Debug/net9.0-ios18.0/ios-arm64/Payload
+        mv SurvivalCraft.IOS/bin/Debug/net9.0-ios18.0/ios-arm64/Survivalcraft.app SurvivalCraft.IOS/bin/Debug/net9.0-ios18.0/ios-arm64/Payload
+        cd SurvivalCraft.IOS/bin/Debug/net9.0-ios18.0/ios-arm64
         zip -r build.ipa Payload
 
     - name: Upload IPA artifact
       uses: actions/upload-artifact@v4
       with:
         name: SurvivalCraft.ipa
-        path: "SurvivalCraft.IOS/bin/Release/net9.0-ios18.0/ios-arm64/build.ipa"
+        path: "SurvivalCraft.IOS/bin/Debug/net9.0-ios18.0/ios-arm64/build.ipa"
