@@ -1,0 +1,57 @@
+name: Build iOS Release IPA
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [ "main" ]
+
+jobs:
+  build:
+    runs-on: macos-15  # macOS ARM64 runner
+
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v4
+
+    - name: Install .NET 9
+      uses: actions/setup-dotnet@v4
+      with:
+        dotnet-version: 9.0.x
+
+    - name: Install MAUI workload
+      run: dotnet workload install maui ios
+
+    - name: Install certificate to keychain
+      run: |
+        security create-keychain -p "1" build.keychain
+        security default-keychain -s build.keychain
+        security unlock-keychain -p "1" build.keychain
+        security import mytest.p12 -k build.keychain -P "1" -A
+
+    - name: Install Provisioning Profile
+      run: |
+        mkdir -p ~/Library/MobileDevice/Provisioning\ Profiles
+        cp mytest.mobileprovision ~/Library/MobileDevice/Provisioning\ Profiles
+
+    - name: Archive ContentPak
+      run: |
+        cd Survivalcraft.Windows
+        zip -r Content.zip Content
+        cd ..
+
+    - name: Build IPA
+      run: |
+        dotnet publish "SurvivalCraft.IOS/SurvivalCraft.IOS.csproj" -c Debug -p:CodesignKey="Apple Development: 1144822034@qq.com (YZ3PDQZTKN)" -p:CodesignProvision=dac32268-04a1-4a17-8304-143d0ce4c49e -p:RuntimeIdentifier=ios-arm64 -nowarn:CS8618,CS8765,CS8625,CS8600,CS8602,CS8603 /p:Codesign=false /p:EnableCodeSigning=false
+
+    - name: Archive Bin Files
+      run: |
+        mkdir SurvivalCraft.IOS/bin/Release/net9.0-ios18.0/ios-arm64/Payload
+        mv SurvivalCraft.IOS/bin/Release/net9.0-ios18.0/ios-arm64/Survivalcraft.app SurvivalCraft.IOS/bin/Release/net9.0-ios18.0/ios-arm64/Payload
+        cd SurvivalCraft.IOS/bin/Release/net9.0-ios18.0/ios-arm64
+        zip -r build.ipa Payload
+
+    - name: Upload IPA artifact
+      uses: actions/upload-artifact@v4
+      with:
+        name: SurvivalCraft.ipa
+        path: "SurvivalCraft.IOS/bin/Release/net9.0-ios18.0/ios-arm64/build.ipa"
