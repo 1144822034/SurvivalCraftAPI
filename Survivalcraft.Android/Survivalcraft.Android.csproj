@@ -73,9 +73,9 @@
         </AndroidAsset>
     </ItemGroup>
     <ItemGroup>
-        <PackageReference Include="Jint" Version="4.4.1"/>
-        <PackageReference Include="NAudio.Flac.Unknown.Mod" Version="1.0.3"/>
-        <PackageReference Include="NuGet.Versioning" Version="6.14.0" />
+        <PackageReference Include="Jint" Version="4.4.2"/>
+        <PackageReference Include="NAudio.Flac.Unknown.Mod" Version="1.0.4"/>
+        <PackageReference Include="NuGet.Versioning" Version="7.0.0" />
     </ItemGroup>
     <ItemGroup>
         <ProjectReference Include="..\EntitySystem\EntitySystem.csproj"/>
