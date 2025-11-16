@@ -28,9 +28,9 @@
     </ItemGroup>
     <ItemGroup>
         <PackageReference Include="TextCopy" Version="6.2.1" />
-        <PackageReference Include="Jint" Version="4.4.1" />
-        <PackageReference Include="NAudio.Flac.Unknown.Mod" Version="1.0.3" />
-        <PackageReference Include="NuGet.Versioning" Version="6.14.0" />
+        <PackageReference Include="Jint" Version="4.4.2" />
+        <PackageReference Include="NAudio.Flac.Unknown.Mod" Version="1.0.4" />
+        <PackageReference Include="NuGet.Versioning" Version="7.0.0" />
     </ItemGroup>
     <ItemGroup>
         <None Include="..\Survivalcraft.Windows\Content.zip" Link="Content.zip">

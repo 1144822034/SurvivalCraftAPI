@@ -83,32 +83,7 @@ namespace Game {
                 SettingsManager.UIScale = m_uiScaleSlider.Value;
             }
             if (m_languageButton.IsClicked) {
-                DialogsManager.ShowDialog(
-                    null,
-                    new ListSelectionDialog(
-                        null,
-                        LanguageControl.LanguageTypes,
-                        70f,
-                        item => ((KeyValuePair<string, CultureInfo>)item).Value.NativeName,
-                        delegate(object item) { LanguageControl.ChangeLanguage(((KeyValuePair<string, CultureInfo>)item).Key); }
-                    )
-                );
-                /*if (LanguageControl.LanguageTypes.Count > 2)
-                {
-
-                }
-                else
-                {
-                    DialogsManager.ShowDialog(null, new MessageDialog(LanguageControl.Get(fName, 1), LanguageControl.Get(fName, 2), LanguageControl.Yes, LanguageControl.No, delegate (MessageDialogButton button)
-                    {
-                        if (button == MessageDialogButton.Button1)
-                        {
-                            int next = LanguageControl.LanguageTypes.IndexOf(ModsManager.Configs["Language"]) + 1;
-                            if (next == LanguageControl.LanguageTypes.Count) next = 0;
-                            ChangeLanguage(LanguageControl.LanguageTypes[next]);
-                        }
-                    }));
-                }*/
+                LanguageControl.CreateLanguageSelectionDialog(null);
             }
             if (m_displayLogButton.IsClicked) {
                 SettingsManager.DisplayLog = !SettingsManager.DisplayLog;

@@ -18,7 +18,7 @@ namespace Game {
 
         public UpdateOrder UpdateOrder => UpdateOrder.Views;
 
-        public float CalculateSquaredDistanceFromNearestView(Vector3 p) {
+        public virtual float CalculateSquaredDistanceFromNearestView(Vector3 p) {
             float num = float.MaxValue;
             foreach (GameWidget gameWidget in m_gameWidgets) {
                 float num2 = Vector3.DistanceSquared(p, gameWidget.ActiveCamera.ViewPosition);
@@ -29,7 +29,7 @@ namespace Game {
             return num;
         }
 
-        public float CalculateDistanceFromNearestView(Vector3 p) => MathF.Sqrt(CalculateSquaredDistanceFromNearestView(p));
+        public virtual float CalculateDistanceFromNearestView(Vector3 p) => MathF.Sqrt(CalculateSquaredDistanceFromNearestView(p));
 
         public virtual void Update(float dt) {
             foreach (GameWidget gameWidget in GameWidgets) {
@@ -60,7 +60,7 @@ namespace Game {
             }
         }
 
-        public void AddGameWidgetForPlayer(PlayerData playerData) {
+        public virtual void AddGameWidgetForPlayer(PlayerData playerData) {
             int index = 0;
             while (index < MaxGameWidgets
                 && m_gameWidgets.FirstOrDefault(v => v.GameWidgetIndex == index) != null) {
@@ -74,7 +74,7 @@ namespace Game {
             GamesWidget.Children.Add(gameWidget);
         }
 
-        public void RemoveGameWidget(GameWidget gameWidget) {
+        public virtual void RemoveGameWidget(GameWidget gameWidget) {
             m_gameWidgets.Remove(gameWidget);
             GamesWidget.Children.Remove(gameWidget);
         }

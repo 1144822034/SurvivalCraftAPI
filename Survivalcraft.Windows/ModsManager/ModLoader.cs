@@ -618,7 +618,9 @@ namespace Game {
         /// <summary>
         ///     子系统帧更新时执行
         /// </summary>
+        [Obsolete("Use SubsystemUpdate(SubsystemUpdate subsystemUpdate, float dt)")]
         public virtual void SubsystemUpdate(float dt) { }
+        public virtual void SubsystemUpdate(SubsystemUpdate subsystemUpdate, float dt) { }
 
         /// <summary>
         ///     当Project被加载时执行
@@ -681,7 +683,9 @@ namespace Game {
         ///     Project.xml加载时执行
         /// </summary>
         /// <param name="xElement"></param>
+        [Obsolete("Use ProjectXmlLoad(XElement xElement, WorldInfo worldInfo, ContainerWidget gameWidget)")]
         public virtual void ProjectXmlLoad(XElement xElement) { }
+        public virtual void ProjectXmlLoad(XElement xElement, WorldInfo worldInfo, ContainerWidget gameWidget) { }
 
         /// <summary>
         ///     Project.xml保存时执行

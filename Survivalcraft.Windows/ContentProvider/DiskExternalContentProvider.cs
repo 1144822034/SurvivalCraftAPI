@@ -95,6 +95,10 @@ namespace Game {
                 Type = ExternalContentType.Directory, Path = internalPath, Time = new DateTime(1970, 1, 1)
             };
             if (scanContents) {
+                if (internalPath.Length == 2
+                    && internalPath[1] == ':') {
+                    internalPath += '/';
+                }
                 string[] directories = Directory.GetDirectories(internalPath);
                 foreach (string internalPath2 in directories) {
                     externalContentEntry.ChildEntries.Add(GetDirectoryEntry(internalPath2, false));

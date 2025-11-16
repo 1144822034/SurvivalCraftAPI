@@ -822,7 +822,7 @@ namespace Game {
                         Caret = CalculateClickedCharacterIndex(
                             Font,
                             PasswordMode ? new string('*', Text.Length) : Text,
-                            ScreenToWidget(Input.Click.Value.Start) + new Vector2(Scroll, 0),
+                            ScreenToWidget(Input.Drag.Value) + new Vector2(Scroll, 0),
                             FontScale,
                             FontSpacing,
                             ActualSize
@@ -840,7 +840,7 @@ namespace Game {
                     int caret2 = CalculateClickedCharacterIndex(
                         Font,
                         PasswordMode ? new string('*', Text.Length) : Text,
-                        ScreenToWidget(Input.Click.Value.Start) + new Vector2(Scroll, 0),
+                        ScreenToWidget(Input.Drag.Value) + new Vector2(Scroll, 0),
                         FontScale,
                         FontSpacing,
                         ActualSize

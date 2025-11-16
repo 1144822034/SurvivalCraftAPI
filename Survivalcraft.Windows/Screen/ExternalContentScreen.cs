@@ -99,7 +99,13 @@ namespace Game {
                 ? string.Format(LanguageControl.Get(fName, 3), m_path)
                 : LanguageControl.Get(fName, 4);
             m_providerNameLabel.Text = m_externalContentProvider.DisplayName;
+            #if WINDOWS
+            m_upDirectoryButton.IsEnabled = m_externalContentProvider.IsLoggedIn && !(m_path.Length == 2 && m_path[1] == ':');
+            #elif ANDROID
+            m_upDirectoryButton.IsEnabled = m_externalContentProvider.IsLoggedIn && m_path != "/storage/emulated/0";
+            #else
             m_upDirectoryButton.IsEnabled = m_externalContentProvider.IsLoggedIn && m_path != "/";
+            #endif
             m_loginLogoutButton.Text = m_externalContentProvider.IsLoggedIn ? LanguageControl.Get(fName, 5) : LanguageControl.Get(fName, 6);
             m_loginLogoutButton.IsVisible = m_externalContentProvider.RequiresLogin;
             m_copyLinkButton.IsVisible = m_externalContentProvider.SupportsLinks;
@@ -205,7 +211,10 @@ namespace Game {
                 path = DiskExternalContentProvider.LocalPath;
 #endif
             }
-            path = path.Replace("\\", "/");
+            path = path.Replace('\\', '/');
+            if (path.EndsWith("/")) {
+                path = path.Substring(0, path.Length - 1);
+            }
             if (path != m_path) {
                 m_path = path;
                 m_listDirty = true;

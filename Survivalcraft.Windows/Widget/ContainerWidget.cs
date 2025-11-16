@@ -47,13 +47,23 @@ namespace Game {
 
         public override void MeasureOverride(Vector2 parentAvailableSize) {
             foreach (Widget child in Children) {
-                child.Measure(Vector2.Max(parentAvailableSize - 2f * child.Margin, Vector2.Zero));
+                try {
+                    child.Measure(Vector2.Max(parentAvailableSize - 2f * child.Margin, Vector2.Zero));
+                }
+                catch (Exception e) {
+                    throw new Exception($"Exception measuring widget of type {child.GetType().FullName}.", e);
+                }
             }
         }
 
         public override void ArrangeOverride() {
             foreach (Widget child in Children) {
-                ArrangeChildWidgetInCell(Vector2.Zero, ActualSize, child);
+                try {
+                    ArrangeChildWidgetInCell(Vector2.Zero, ActualSize, child);
+                }
+                catch(Exception e) {
+                    throw new Exception($"Exception arranging widget of type {child.GetType().FullName}.", e);
+                }
             }
         }
 
