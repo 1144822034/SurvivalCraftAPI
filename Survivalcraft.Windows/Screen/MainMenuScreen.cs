@@ -82,26 +82,7 @@ namespace Game {
                 * Matrix.CreateScale(num, num, 1f)
                 * Matrix.CreateTranslation(rectangleWidget.ActualSize.X / 2f, rectangleWidget.ActualSize.Y / 2f, 0f);
             if (m_languageSwitchButton?.IsClicked ?? false) {
-                IOrderedEnumerable<KeyValuePair<string, CultureInfo>> sorted = LanguageControl.LanguageTypes.OrderBy(item => {
-                        if (item.Key == "en-US") {
-                            return 0;
-                        }
-                        if (item.Key == "zh-CN") {
-                            return 1;
-                        }
-                        return 2;
-                    }
-                );
-                DialogsManager.ShowDialog(
-                    null,
-                    new ListSelectionDialog(
-                        null,
-                        sorted,
-                        70f,
-                        item => ((KeyValuePair<string, CultureInfo>)item).Value.NativeName,
-                        delegate(object item) { LanguageControl.ChangeLanguage(((KeyValuePair<string, CultureInfo>)item).Key); }
-                    )
-                );
+                LanguageControl.CreateLanguageSelectionDialog(null);
             }
             //更新控制
             if (!APIUpdateManager.IsNeedUpdate.HasValue) {

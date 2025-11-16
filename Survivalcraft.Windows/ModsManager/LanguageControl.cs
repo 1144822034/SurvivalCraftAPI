@@ -34,7 +34,13 @@ namespace Game {
         /// </summary>
         public static Dictionary<string, CultureInfo> LanguageTypes = [];
 
+        public static string CurrentLanguageName { get; set; } = "en-US";
+        public static CultureInfo CurrentLanguageCultureInfo { get; set; } = new("en-US", false);
+
         public static void Initialize(string languageType) {
+            if (!LanguageTypes.TryGetValue(languageType, out CultureInfo cultureInfo)) {
+                throw new Exception($"Language {languageType} not supported.");
+            }
             Ok = null;
             Cancel = null;
             None = null;
@@ -57,6 +63,8 @@ namespace Game {
             Delete = null;
             jsonNode = null;
             ModsManager.SetConfig("Language", languageType);
+            CurrentLanguageName = languageType;
+            CurrentLanguageCultureInfo = cultureInfo;
         }
 
         public static void loadJson(Stream stream) {
@@ -207,7 +215,7 @@ namespace Game {
             }
         }
 
-        /// <returns>当前语言的标识符</returns>
+        /// <returns>当前设置中的语言的标识符，如果是在加载完成后获取语言，建议改用CurrentLanguageName</returns>
         public static string LName() => ModsManager.Configs["Language"];
 
         /// <summary>
@@ -236,7 +244,7 @@ namespace Game {
             if (r) {
                 return result;
             }
-            if (ModsManager.Configs["Language"] != "en-US") {
+            if (CurrentLanguageName != "en-US") {
                 result = Get(out r, englishJsonNode, keys);
             }
             return result;
@@ -327,6 +335,7 @@ namespace Game {
 
         public static void ChangeLanguage(string languageType) {
             Initialize(languageType);
+            CachedLanguageFullNames.Clear();
             if (languageType == "en-US"
                 && englishJsonNode != null) {
                 jsonNode = englishJsonNode;
@@ -358,6 +367,53 @@ namespace Game {
             BlocksManager.Blocks[ClothingBlock.Index].Initialize();
             BlocksManager.Blocks[EggBlock.Index].Initialize();
             ScreensManager.SwitchScreen("MainMenu");
+        }
+
+        public static Dictionary<string, string> CachedLanguageFullNames = [];
+
+        public static void CreateLanguageSelectionDialog(Widget parent) {
+            if (CachedLanguageFullNames.Count == 0) {
+                CultureInfo oldUICulture = Thread.CurrentThread.CurrentUICulture;
+                try {
+                    Thread.CurrentThread.CurrentUICulture = CurrentLanguageCultureInfo;
+                    foreach ((string name, CultureInfo cultureInfo) in LanguageTypes) {
+                        string nativeName = cultureInfo.NativeName;
+                        string displayName = cultureInfo.DisplayName;
+                        CachedLanguageFullNames.Add(name, nativeName == displayName ? nativeName : $"{nativeName} - {displayName}");
+                    }
+                }
+                finally {
+                    Thread.CurrentThread.CurrentUICulture = oldUICulture;
+                }
+            }
+            IOrderedEnumerable<KeyValuePair<string, string>> sorted = CachedLanguageFullNames.OrderBy(item => item.Key switch {
+                    "en-US" => 0,
+                    "zh-CN" => 1,
+                    _ => 2
+                }
+            );
+            DialogsManager.ShowDialog(
+                null,
+                new ListSelectionDialog(
+                    null,
+                    sorted,
+                    70f,
+                    item => item is KeyValuePair<string, string> pair
+                        ? new LabelWidget {
+                            Text = pair.Value,
+                            Color = pair.Key == CurrentLanguageName ? new Color(50, 150, 35) : Color.White,
+                            Margin = new Vector2(20f, 0f),
+                            HorizontalAlignment = WidgetAlignment.Near,
+                            VerticalAlignment = WidgetAlignment.Center
+                        }
+                        : null,
+                    item => {
+                        if (item is KeyValuePair<string, string> pair && pair.Key != CurrentLanguageName) {
+                            ChangeLanguage(pair.Key);
+                        }
+                    }
+                )
+            );
         }
     }
 }

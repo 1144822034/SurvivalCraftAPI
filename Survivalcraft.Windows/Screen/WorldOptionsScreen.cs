@@ -232,8 +232,9 @@ namespace Game {
             m_biomeSizeSlider.Granularity = 1f;
             m_terrainGeneratorVersionButton.Text = VersionsManager.SerializationVersion;
             //当有模组需要使用2.4地形时，禁止玩家更改地形生成器版本，防止玩家误操作导致模组地形不能生成
-            m_terrainGeneratorVersionButton.IsEnabled = 
-                (ForceEnableTerrainGeneratorVersionButton || ModsManager.ModHooks["TerrainContentsGenerator24Initialize"].Count == 0);
+            m_terrainGeneratorVersionButton.IsEnabled = ForceEnableTerrainGeneratorVersionButton
+                || !ModsManager.ModHooks.TryGetValue("TerrainContentsGenerator24Initialize", out ModsManager.ModHook modHook)
+                || modHook.Loaders.Count == 0;
             m_yearDaysSlider.MinValue = 0f;
             m_yearDaysSlider.MaxValue = m_yearDays.Length - 1;
             m_yearDaysSlider.Granularity = 1f;
@@ -267,7 +268,7 @@ namespace Game {
                         enumValues,
                         56f,
                         e => StringsManager.GetString($"TerrainGenerationMode.{(TerrainGenerationMode)e}.Name"),
-                        delegate(object e) {
+                        e => {
                             if (m_worldSettings.GameMode != 0
                                 && ((TerrainGenerationMode)e == TerrainGenerationMode.FlatContinent
                                     || (TerrainGenerationMode)e == TerrainGenerationMode.FlatIsland)) {
@@ -341,16 +342,13 @@ namespace Game {
                         LanguageControl.Get(fName, 2),
                         m_flatTerrainBlockList,
                         72f,
-                        delegate(object index) {
+                        index => {
                             if ((int)index == -1) {
-                                return new StackPanelWidget() {
+                                return new StackPanelWidget {
                                     VerticalAlignment = WidgetAlignment.Center,
                                     Children = {
-                                        new CanvasWidget(){Size = new Vector2(94f, 0f)},
-                                        new LabelWidget() {
-                                            Text = LanguageControl.Get(fName, "9"),
-                                            Color = Color.White
-                                        }
+                                        new CanvasWidget { Size = new Vector2(94f, 0f) },
+                                        new LabelWidget { Text = LanguageControl.Get(fName, "9"), Color = Color.White }
                                     }
                                 };
                             }
@@ -361,7 +359,7 @@ namespace Game {
                                 .GetDisplayName(null, Terrain.MakeBlockValue((int)index));
                             return obj2;
                         },
-                        delegate(object index) {
+                        index => {
                             if ((int)index == -1) {
                                 DialogsManager.ShowDialog(
                                     this,
@@ -373,12 +371,13 @@ namespace Game {
                                             bool flag = true;
                                             if (int.TryParse(str, out int num)) {
                                                 int contents = Terrain.ExtractContents(num);
-                                                if (contents == 0 || BlocksManager.Blocks[contents] is not AirBlock) {
+                                                if (contents == 0
+                                                    || BlocksManager.Blocks[contents] is not AirBlock) {
                                                     flag = false;
                                                     m_worldSettings.TerrainBlockIndex = num;
                                                 }
                                             }
-                                            if(flag) {
+                                            if (flag) {
                                                 DialogsManager.ShowDialog(
                                                     this,
                                                     new MessageDialog(
@@ -433,9 +432,7 @@ namespace Game {
                         new[] { "2.1", "2.2", "2.3", "2.4", VersionsManager.SerializationVersion }.Distinct(),
                         56f,
                         e => e as string,
-                        delegate(object e) {
-                            m_worldSettings.OriginalSerializationVersion = e as string;
-                        }
+                        e => m_worldSettings.OriginalSerializationVersion = e as string
                     )
                 );
             }
@@ -445,7 +442,7 @@ namespace Game {
                     LanguageControl.Get(fName, 3),
                     BlocksTexturesManager.BlockTexturesNames,
                     64f,
-                    delegate(object item) {
+                    item => {
                         XElement node = ContentManager.Get<XElement>("Widgets/BlocksTextureItem");
                         ContainerWidget obj = (ContainerWidget)LoadWidget(this, node, null);
                         Texture2D texture2 = m_blockTexturesCache.GetTexture((string)item);
@@ -454,7 +451,7 @@ namespace Game {
                         obj.Children.Find<RectangleWidget>("BlocksTextureItem.Icon").Subtexture = new Subtexture(texture2, Vector2.Zero, Vector2.One);
                         return obj;
                     },
-                    delegate(object item) { m_worldSettings.BlocksTextureName = (string)item; }
+                    item => m_worldSettings.BlocksTextureName = (string)item
                 );
                 DialogsManager.ShowDialog(null, dialog);
                 m_descriptionLabel.Text = StringsManager.GetString("BlocksTexture.Description");
@@ -484,7 +481,7 @@ namespace Game {
                         EnumUtils.GetEnumValues(typeof(TimeOfDayMode)),
                         56f,
                         e => LanguageControl.Get("TimeOfDayMode", ((TimeOfDayMode)e).ToString()),
-                        delegate(object e) {
+                        e => {
                             m_worldSettings.TimeOfDayMode = (TimeOfDayMode)e;
                             m_descriptionLabel.Text = StringsManager.GetString($"TimeOfDayMode.{(TimeOfDayMode)e}.Description");
                         }
@@ -538,7 +535,9 @@ namespace Game {
             m_flatTerrainShoreRoughnessSlider.Text = $"{m_worldSettings.ShoreRoughness * 100f:0}%";
             m_flatTerrainBlock.Contents = m_worldSettings.TerrainBlockIndex;
             m_flatTerrainMagmaOceanCheckbox.IsChecked = m_worldSettings.TerrainOceanBlockIndex == 92;
-            string text = BlocksManager.Blocks[Terrain.ExtractContents(m_worldSettings.TerrainBlockIndex)]?.GetDisplayName(null, m_worldSettings.TerrainBlockIndex) ?? string.Empty;
+            string text = BlocksManager.Blocks[Terrain.ExtractContents(m_worldSettings.TerrainBlockIndex)]
+                    ?.GetDisplayName(null, m_worldSettings.TerrainBlockIndex)
+                ?? string.Empty;
             m_flatTerrainBlockLabel.Text = text.Length > 10 ? $"{text.Substring(0, 10)}..." : text;
             Texture2D texture = m_blockTexturesCache.GetTexture(m_worldSettings.BlocksTextureName);
             m_blocksTextureIcon.Subtexture = new Subtexture(texture, Vector2.Zero, Vector2.One);
