@@ -88,6 +88,8 @@ namespace Game {
 
         public BlocksTexturesCache m_blockTexturesCache = new();
 
+        public static bool ForceEnableTerrainGeneratorVersionButton = false;
+
         public static float[] m_islandSizes = [
             1f,
             7f,
@@ -229,6 +231,9 @@ namespace Game {
             m_biomeSizeSlider.MaxValue = m_biomeSizes.Length - 1;
             m_biomeSizeSlider.Granularity = 1f;
             m_terrainGeneratorVersionButton.Text = VersionsManager.SerializationVersion;
+            //当有模组需要使用2.4地形时，禁止玩家更改地形生成器版本，防止玩家误操作导致模组地形不能生成
+            m_terrainGeneratorVersionButton.IsEnabled = 
+                (ForceEnableTerrainGeneratorVersionButton || ModsManager.ModHooks["TerrainContentsGenerator24Initialize"].Count == 0);
             m_yearDaysSlider.MinValue = 0f;
             m_yearDaysSlider.MaxValue = m_yearDays.Length - 1;
             m_yearDaysSlider.Granularity = 1f;
