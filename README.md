@@ -14,6 +14,15 @@
 可从 [发布页](https://gitee.com/SC-SPM/SurvivalcraftApi/releases/latest) 下载前缀为`[Android]`，后缀为`.apk`的安装包，安装后即可运行  
 第一次运行可能会跳转到标题为`所有文件访问`的授权界面，请授权此APP（名称：`生存战争2.4 API插件版1.8`），否则此 APP 无法运行
 
+### IOS 苹果系统看这里
+> 需要 64 位 ARM 架构 CPU，最低 OS版本 16.0
+
+可从 [发布页](https://gitee.com/SC-SPM/SurvivalcraftApi/releases/latest) 下载前缀为`[iPhone]`，后缀为`.ipa`的安装包，安装包下载后需要使用爱思助手进行签名
+
+推荐使用`登录自己的Apple ID`方式获取免费签名，签名后ipa包仅自己可用
+
+由于苹果禁用jit功能，<font color="red">所有带dll文件的mod都将不可用</font>！！！ 请等待后续完善javascipt方式运行的mod功能
+
 ### Windows 系统看这里
 > 需要 x64 架构 CPU，最低 Windows 10 版本 1607，显卡驱动需要支持OpenGL ES 3.2 图形 API（对于兼容补丁，需要支持 Direct3D 9 图形 API）
 
