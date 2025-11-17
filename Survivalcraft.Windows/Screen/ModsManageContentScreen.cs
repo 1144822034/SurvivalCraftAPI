@@ -96,6 +96,13 @@ public class ModsManageContentScreen : Screen {
             details = string.Format(LanguageControl.Get(fName, 68), LanguageControl.Unknown);
             return true;
         }
+        if (modInfo.ApiVersion.StartsWith("1.4")
+            || modInfo.ApiVersion.StartsWith("1.5")
+            || modInfo.ApiVersion.StartsWith("1.6")
+            || modInfo.ApiVersion.StartsWith("1.7")) {
+            details = string.Format(LanguageControl.Get(fName, 68), modInfo.ApiVersion);
+            return true;
+        }
         if (modInfo.ApiVersionRange != null) {
             if (!modInfo.ApiVersionRange.Satisfies(ModsManager.APINuGetVersion)) {
                 details = string.Format(LanguageControl.Get(fName, 76), modInfo.ApiVersion);
@@ -109,19 +116,7 @@ public class ModsManageContentScreen : Screen {
                 return true;
             }
         }
-        else if (modInfo.ApiVersion.StartsWith("1.4")
-            || modInfo.ApiVersion.StartsWith("1.5")
-            || modInfo.ApiVersion.StartsWith("1.6")
-            || modInfo.ApiVersion.StartsWith("1.7")) {
-            details = string.Format(LanguageControl.Get(fName, 68), modInfo.ApiVersion);
-            return true;
-        }
-        details = string.Format(
-            LanguageControl.Get(fName, 3),
-            modInfo.Version,
-            modInfo.Author,
-            MathF.Round(modItem.ExternalContentEntry.Size / 1000)
-        );
+        details = modInfo.Description;
         return false;
     }
 
@@ -169,13 +164,23 @@ public class ModsManageContentScreen : Screen {
                     color = Color.Red;
                 }
             }
-            containerWidget.Children.Find<LabelWidget>("ExternalContentItem.Text").Text = modItem.Name;
+            containerWidget.Children.Find<LabelWidget>("ExternalContentItem.Text").Text = m_filter == StateFilter.InstallState ? (modItem.ModInfo?.Name ?? modItem.Name) : modItem.Name;
             containerWidget.Children.Find<LabelWidget>("ExternalContentItem.Text").Color = color;
+            if (modItem.ModInfo == null) {
+                containerWidget.Children.Find<LabelWidget>("ExternalContentItem.Information").IsVisible = false;
+            }
+            else {
+                containerWidget.Children.Find<LabelWidget>("ExternalContentItem.Information").Text = string.Format(
+                    LanguageControl.Get(fName, "79"),
+                    modItem.ModInfo.Version,
+                    modItem.ModInfo.ApiVersion,
+                    modItem.ModInfo.Author,
+                    DataSizeFormatter.Format(modItem.ExternalContentEntry.Size, 2)
+                );
+            }
             containerWidget.Children.Find<LabelWidget>("ExternalContentItem.Details").Text = details;
             RectangleWidget iconWidget = containerWidget.Children.Find<RectangleWidget>("ExternalContentItem.Icon");
             iconWidget.Subtexture = modItem.Subtexture;
-            iconWidget.Size = new Vector2(40, 40);
-            iconWidget.Margin = new Vector2(8, 8);
             return containerWidget;
         };
         m_modsContentList.ItemClicked += delegate(object item) {

@@ -216,8 +216,15 @@ public static class ModsManager {
         }
         if (jsonElement.TryGetProperty("ApiVersion", out JsonElement apiVersion)
             && apiVersion.ValueKind == JsonValueKind.String) {
-            modInfo.ApiVersion = apiVersion.GetString()?.Trim();
-            TryPareVersionRange(modInfo.ApiVersion, out modInfo.ApiVersionRange);
+            string apiVersionString = apiVersion.GetString()?.Trim();
+            modInfo.ApiVersion = apiVersionString;
+            if (apiVersionString == "1.80") {
+                apiVersionString = "1.8";
+            }
+            else if (apiVersionString == "1.81") {
+                apiVersionString = "1.8.1";
+            }
+            TryParseVersionRange(apiVersionString, out modInfo.ApiVersionRange);
         }
         if (jsonElement.TryGetProperty("Description", out JsonElement description)
             && description.ValueKind == JsonValueKind.String) {
@@ -254,7 +261,7 @@ public static class ModsManager {
                     if (index != -1) {
                         string dependencyPackageName = dependency.Substring(0, index);
                         string dependencyVersion = dependency.Substring(index + 1).Trim();
-                        if (TryPareVersionRange(dependencyVersion, out VersionRange dependencyVersionRange)) {
+                        if (TryParseVersionRange(dependencyVersion, out VersionRange dependencyVersionRange)) {
                             modInfo.DependencyRanges.Add(dependencyPackageName, dependencyVersionRange);
                         }
                     }
@@ -268,7 +275,7 @@ public static class ModsManager {
                     if (dependency.Value.ValueKind == JsonValueKind.String) {
                         string dependencyPackageName = dependency.Name;
                         string dependencyVersion = dependency.Value.GetString()?.Trim();
-                        if (TryPareVersionRange(dependencyVersion, out VersionRange dependencyVersionRange)) {
+                        if (TryParseVersionRange(dependencyVersion, out VersionRange dependencyVersionRange)) {
                             modInfo.DependencyRanges.Add(dependencyPackageName, dependencyVersionRange);
                         }
                     }
@@ -780,7 +787,7 @@ public static class ModsManager {
         }
     }
 
-    public static bool TryPareVersionRange(string value, out VersionRange versionRange) {
+    public static bool TryParseVersionRange(string value, out VersionRange versionRange) {
         if (string.IsNullOrEmpty(value)) {
             versionRange = null;
             return false;

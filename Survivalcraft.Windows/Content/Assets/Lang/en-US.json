@@ -117,7 +117,7 @@
     "65": "Mod reinforcement will replace the current mod file, after the reinforcement usually means can not be restored, please back up the file before operation. \nIf the original project file is accidentally lost after reinforcement, you can contact the community administrator to restore the hardened mod file. \nNormal players can ignore this feature.",
     "66": "The current mod file is hardened and does not need to be reinforced",
     "67": "The current mod file reinforcement failed with an unknown error:",
-    "68": "Mod for an old API version(API {0}) is not available",
+    "68": "Mod for an old API version(API {0}) might not run properly",
     "69": "A mod for an old API version cannot be used in this API version",
     "70": "A mod for an old API version will not take effect in this API version. It is recommended to be removed",
     "71": "Failed to enter the directory",
@@ -125,9 +125,10 @@
     "73": "Dereinforcing",
     "74": "Failed to load the icon of {0}, reason: {1}",
     "75": "Failed to load the mod information from the modinfo.json of {0}, reason: {1}",
-    "76": "A mod for API {0} cannot be used in this API version",
+    "76": "A mod for API {0} might not run properly in this API version",
     "77": "Homepage",
-    "78": "The homepage link of this mod is not set."
+    "78": "The homepage link of this mod is not set.",
+    "79": "Mod Ver: {0}  API Ver: {1}  Author: {2}  Size: {3}"
   },
   "ManageContentScreen": {
     "1": "Blocks Texture | {0}x{1}",
