@@ -19,10 +19,10 @@
 
 			<StackPanelWidget Direction="Horizontal" Margin="0, 10">
 				<BevelledButtonWidget Name="UpDirectory" Style="{Styles/ButtonStyle_UpDirectory}"/>
-				<CanvasWidget Size="10, 0"/>
-				<BevelledButtonWidget Name="ActionButton" Size="210, 60" Margin="10, 0"/>
-				<BevelledButtonWidget Name="ActionButton2" Size="210, 60" Margin="10, 0"/>
-				<BevelledButtonWidget Name="ActionButton3" Size="210, 60" Margin="10, 0"/>
+				<CanvasWidget Size="4, 0"/>
+				<BevelledButtonWidget Name="ActionButton" Size="210, 60"/>
+				<BevelledButtonWidget Name="ActionButton2" Size="210, 60" Margin="4, 0"/>
+				<BevelledButtonWidget Name="ActionButton3" Size="210, 60"/>
 				<CanvasWidget Size="Infinity, 0" />
 				<StackPanelWidget Margin="10, 0">
 					<BevelledButtonWidget Name="UninstallFilter" Size="160, 60" VerticalAlignment="Center" Margin="-10, 0"/>

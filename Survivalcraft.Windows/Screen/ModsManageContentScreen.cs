@@ -152,7 +152,7 @@ public class ModsManageContentScreen : Screen {
         m_actionButton3.Text = LanguageControl.Get(fName, 77);
         m_modsContentList.ItemWidgetFactory = delegate(object item) {
             ModItem modItem = (ModItem)item;
-            XElement node2 = ContentManager.Get<XElement>("Widgets/ExternalContentItem");
+            XElement node2 = ContentManager.Get<XElement>("Widgets/ModsManageContentItem");
             ContainerWidget containerWidget = (ContainerWidget)LoadWidget(this, node2, null);
             string details = LanguageControl.Get(fName, 2);
             Color color = Color.White;
@@ -164,13 +164,13 @@ public class ModsManageContentScreen : Screen {
                     color = Color.Red;
                 }
             }
-            containerWidget.Children.Find<LabelWidget>("ExternalContentItem.Text").Text = m_filter == StateFilter.InstallState ? (modItem.ModInfo?.Name ?? modItem.Name) : modItem.Name;
-            containerWidget.Children.Find<LabelWidget>("ExternalContentItem.Text").Color = color;
+            containerWidget.Children.Find<LabelWidget>("ModsManageContentItem.Text").Text = m_filter == StateFilter.InstallState ? (modItem.ModInfo?.Name ?? modItem.Name) : modItem.Name;
+            containerWidget.Children.Find<LabelWidget>("ModsManageContentItem.Text").Color = color;
             if (modItem.ModInfo == null) {
-                containerWidget.Children.Find<LabelWidget>("ExternalContentItem.Information").IsVisible = false;
+                containerWidget.Children.Find<LabelWidget>("ModsManageContentItem.Information").IsVisible = false;
             }
             else {
-                containerWidget.Children.Find<LabelWidget>("ExternalContentItem.Information").Text = string.Format(
+                containerWidget.Children.Find<LabelWidget>("ModsManageContentItem.Information").Text = string.Format(
                     LanguageControl.Get(fName, "79"),
                     modItem.ModInfo.Version,
                     modItem.ModInfo.ApiVersion,
@@ -178,8 +178,8 @@ public class ModsManageContentScreen : Screen {
                     DataSizeFormatter.Format(modItem.ExternalContentEntry.Size, 2)
                 );
             }
-            containerWidget.Children.Find<LabelWidget>("ExternalContentItem.Details").Text = details;
-            RectangleWidget iconWidget = containerWidget.Children.Find<RectangleWidget>("ExternalContentItem.Icon");
+            containerWidget.Children.Find<LabelWidget>("ModsManageContentItem.Details").Text = details;
+            RectangleWidget iconWidget = containerWidget.Children.Find<RectangleWidget>("ModsManageContentItem.Icon");
             iconWidget.Subtexture = modItem.Subtexture;
             return containerWidget;
         };
