@@ -203,7 +203,10 @@ namespace Game {
             }
             ComponentLocomotion componentLocomotion = Target.FindComponent<ComponentLocomotion>();
             if (componentLocomotion != null) {
-                componentLocomotion.StunTime = StunTimeSet ?? (componentLocomotion.StunTime + StunTimeAdd);
+                if (StunTimeSet.HasValue)
+                    componentLocomotion.StunTime = MathUtils.Max(componentLocomotion.StunTime, StunTimeSet.Value);
+                else
+                    componentLocomotion.StunTime += StunTimeAdd;
             }
         }
 

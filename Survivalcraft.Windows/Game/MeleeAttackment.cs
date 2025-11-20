@@ -16,7 +16,7 @@ namespace Game {
             float num6 = MathF.Pow(attackerBody.Mass / targetBody.Mass, 0.5f);
             float x2 = num5 * num6;
             ImpulseFactor = 5.5f * MathUtils.Saturate(x2);
-            StunTimeAdd = 0.25f * MathUtils.Saturate(x2);
+            StunTimeSet = 0.25f * MathUtils.Saturate(x2);
         }
 
         public MeleeAttackment(ComponentBody target, Entity attacker, Vector3 hitPoint, Vector3 hitDirection, float attackPower) : this(
