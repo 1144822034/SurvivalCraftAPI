@@ -8,8 +8,11 @@ namespace Engine.Serialization {
 
         public static string ConvertToString(object value) {
             Type type = value.GetType();
+            Type nullableUnderlyingType = Nullable.GetUnderlyingType(type);
             try {
-                return GetConverter(type, true).ConvertToString(value);
+                return nullableUnderlyingType == null ? GetConverter(type, true).ConvertToString(value) :
+                    (bool)(nullableUnderlyingType.GetProperty("HasValue")?.GetValue(value) ?? false) ? GetConverter(nullableUnderlyingType, true)
+                        .ConvertToString(nullableUnderlyingType.GetProperty("Value")?.GetValue(value)) : string.Empty;
             }
             catch (Exception innerException) {
                 throw new InvalidOperationException($"Cannot convert value of type \"{type.FullName}\" to string.", innerException);
@@ -18,7 +21,16 @@ namespace Engine.Serialization {
 
         public static bool TryConvertFromString(Type type, string data, out object result) {
             try {
-                result = GetConverter(type, true).ConvertFromString(type, data);
+                Type nullableUnderlyingType = Nullable.GetUnderlyingType(type);
+                if (nullableUnderlyingType == null) {
+                    result = GetConverter(type, true).ConvertFromString(type, data);
+                    return true;
+                }
+                if (string.IsNullOrEmpty(data)) {
+                    result = null;
+                    return true;
+                }
+                result = GetConverter(nullableUnderlyingType, true).ConvertFromString(nullableUnderlyingType, data);
                 return true;
             }
             catch (Exception) {
@@ -38,7 +50,9 @@ namespace Engine.Serialization {
 
         public static object ConvertFromString(Type type, string data) {
             try {
-                return GetConverter(type, true).ConvertFromString(type, data);
+                Type nullableUnderlyingType = Nullable.GetUnderlyingType(type);
+                return nullableUnderlyingType == null ? GetConverter(type, true).ConvertFromString(type, data) :
+                    string.IsNullOrEmpty(data) ? null : GetConverter(nullableUnderlyingType, true).ConvertFromString(nullableUnderlyingType, data);
             }
             catch (Exception innerException) {
                 throw new InvalidOperationException($"Cannot convert string \"{data}\" to value of type \"{type.FullName}\".", innerException);

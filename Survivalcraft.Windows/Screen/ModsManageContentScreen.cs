@@ -247,7 +247,7 @@ public class ModsManageContentScreen : Screen {
             sb.AppendLine($"{LanguageControl.Get(fName, "82")}{entity.Size}");
             sb.AppendLine($"{LanguageControl.Get(fName, "83")}{(string.IsNullOrEmpty(modInfo.Description) ? LanguageControl.None : modInfo.Description)}");
             sb.AppendLine($"{LanguageControl.Get(fName, "84")}{(string.IsNullOrEmpty(modInfo.Link) ? LanguageControl.None : modInfo.Link)}");
-            if (string.IsNullOrEmpty(entity.ModFilePath)) {
+            if (!string.IsNullOrEmpty(entity.ModFilePath)) {
                 sb.AppendLine($"{LanguageControl.Get(fName, "85")}{Storage.GetFileName(entity.ModFilePath)}");
             }
             sb.AppendLine($"{LanguageControl.Get(fName, "86")}{modInfo.PackageName}");
