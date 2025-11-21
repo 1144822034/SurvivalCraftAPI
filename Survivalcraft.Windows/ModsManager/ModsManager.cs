@@ -65,7 +65,6 @@ public static class ModsManager {
     public static string ModsSettingsPath { get; } = $"{DocPath}/ModSettings.xml";
     public static string SettingPath { get; } = $"{DocPath}/Settings.xml";
     public static string ConfigsPath { get; } = $"{DocPath}/Configs.xml";
-    public static string ModDisPath { get; } = $"{ExternalPath}/DisabledMods";
     public static string LogPath { get; } = $"{ExternalPath}/Bugs";
     public static string ModsPath = $"{ExternalPath}/Mods";
     public static bool IsAndroid => OperatingSystem.IsAndroid();
@@ -108,8 +107,8 @@ public static class ModsManager {
     public static List<ModEntity> ModList = [];
     public static List<ModLoader> ModLoaders = [];
 
-    [Obsolete("This field has been abolished, no working anymore.")]
-    public static List<ModInfo> DisabledMods = [];
+    //仅手动禁用的
+    public static Dictionary<string, HashSet<string>> DisabledMods = [];
 
     public static Dictionary<string, ModHook> ModHooks = [];
     public static Dictionary<string, Assembly> Dlls = [];
@@ -356,11 +355,9 @@ public static class ModsManager {
         }
     }
 
-    public static string ImportMod(string name, Stream stream) => ImportMod(name, stream, true);
-
-    public static string ImportMod(string name, Stream stream, bool showDialog) {
-        if (!Storage.DirectoryExists(ModDisPath)) {
-            Storage.CreateDirectory(ModDisPath);
+    public static string ImportMod(string name, Stream stream) {
+        if (!Storage.DirectoryExists(ModsPath)) {
+            Storage.CreateDirectory(ModsPath);
         }
         if (!Storage.DirectoryExists(ProcessModListPath)) {
             Storage.CreateDirectory(ProcessModListPath);
@@ -369,35 +366,15 @@ public static class ModsManager {
         if (!realName.EndsWith(ModSuffix)) {
             realName = realName + ModSuffix;
         }
-        string path = Storage.CombinePaths(ModDisPath, realName);
+        string path = Storage.CombinePaths(ModsPath, realName);
         int num = 1;
         while (Storage.FileExists(path)) {
             realName = $"{name}({num}){ModSuffix}";
-            path = Storage.CombinePaths(ModDisPath, realName);
+            path = Storage.CombinePaths(ModsPath, realName);
             num++;
         }
         using (Stream fileStream = Storage.OpenFile(path, OpenFileMode.CreateOrOpen)) {
             stream.CopyTo(fileStream);
-        }
-        if (showDialog) {
-            List<string> importModList = ScreensManager.FindScreen<ModsManageContentScreen>("ModsManageContent").m_latestScanModList;
-            if (!importModList.Contains(realName)) {
-                importModList.Add(realName);
-            }
-            DialogsManager.ShowDialog(
-                null,
-                new MessageDialog(
-                    LanguageControl.Get(fName, "5"),
-                    LanguageControl.Get(fName, "6"),
-                    LanguageControl.Yes,
-                    LanguageControl.Back,
-                    delegate(MessageDialogButton result) {
-                        if (result == MessageDialogButton.Button1) {
-                            ScreensManager.SwitchScreen("ModsManageContent");
-                        }
-                    }
-                )
-            );
         }
         return realName;
     }
@@ -420,11 +397,21 @@ public static class ModsManager {
         ModListAll.Add(SurvivalCraftModEntity);
         ModListAll.Add(FastDebug);
         GetScmods(ModsPath);
-        ModListAll.Sort((x, y) => x.modInfo.LoadOrder.CompareTo(y.modInfo.LoadOrder));
+        ModListAll.Sort((x, y) =>
+            (x.IsDisabled ? int.MaxValue : x.modInfo?.LoadOrder ?? int.MaxValue).CompareTo(
+                y.IsDisabled ? int.MaxValue : y.modInfo?.LoadOrder ?? int.MaxValue
+            )
+        );
         //float api = float.Parse(APIVersion);
         //读取SCMOD文件到ModListAll列表
         foreach (ModEntity modEntity1 in ModListAll) {
-            ModInfo modInfo = modEntity1.modInfo;
+            if (modEntity1.IsDisabled) {
+                continue;
+            }
+            string packageName = modEntity1.modInfo?.PackageName;
+            if (packageName == null) {
+                continue;
+            }
             //ModInfo disabledmod = ToDisable.Find(l => l.PackageName == modInfo.PackageName);
             //if (disabledmod != null && disabledmod.PackageName != SurvivalCraftModEntity.modInfo.PackageName && disabledmod.PackageName != FastDebug.modInfo.PackageName)
             //{
@@ -439,9 +426,11 @@ public static class ModsManager {
             //    ToRemove.Add(modEntity1);
             //    AddException(new Exception($"[{modEntity1.modInfo.PackageName}]Target version {modInfo.Version} is less than api version {APIVersion}."), true);
             //}
-            List<ModEntity> modEntities = ModListAll.FindAll(px => px.modInfo.PackageName == modInfo.PackageName);
+            List<ModEntity> modEntities = ModListAll.FindAll(px => !px.IsDisabled && px.modInfo?.PackageName == packageName);
             if (modEntities.Count > 1) {
-                AddException(new Exception($"Multiple installed [{modInfo.PackageName}], please keep only one."));
+                modEntity1.IsDisabled = true;
+                modEntity1.DisableReason = ModDisableReason.Duplicated;
+                AddException(new Exception($"Multiple mods with PackageName [{packageName}], please keep only one."));
             }
         }
         AppDomain.CurrentDomain.AssemblyResolve += (_, args) => {
@@ -477,14 +466,19 @@ public static class ModsManager {
             using Stream stream = Storage.OpenFile(ks, OpenFileMode.Read);
             try {
                 if (ms == ModSuffix) {
-                    Stream keepOpenStream = ModsManageContentScreen.GetDecipherStream(stream);
+                    Stream keepOpenStream = GetDecipherStream(stream);
                     ModEntity modEntity = new(ks, ZipArchive.Open(keepOpenStream, true));
                     if (modEntity.modInfo == null) {
                         LoadingScreen.Warning($"The modinfo.json is missing from [{modEntity.ModFilePath}], and this mod will not be loaded.");
-                        continue;
                     }
-                    if (string.IsNullOrEmpty(modEntity.modInfo.PackageName)) {
-                        continue;
+                    else if (modEntity.modInfo.PackageName.Contains(';')) {
+                        modEntity.IsDisabled = true;
+                        modEntity.DisableReason = ModDisableReason.InvalidPackageName;
+                    }
+                    else if (DisabledMods.TryGetValue(modEntity.modInfo.PackageName, out HashSet<string> disabledVersions)
+                        && disabledVersions.Contains(modEntity.modInfo.Version)) {
+                        modEntity.IsDisabled = true;
+                        modEntity.DisableReason = ModDisableReason.Manually;
                     }
                     ModListAll.Add(modEntity);
                 }
@@ -495,9 +489,7 @@ public static class ModsManager {
             }
         }
         foreach (string dir in Storage.ListDirectoryNames(path)) {
-            if (dir != ModDisPath) {
-                GetScmods(Storage.CombinePaths(path, dir));
-            }
+            GetScmods(Storage.CombinePaths(path, dir));
         }
     }
 
@@ -863,6 +855,116 @@ public static class ModsManager {
         versionRange = null;
         return false;
     }
+
+    public static string HeadingCode = "有头有脸天才少年,耍猴表演敢为人先";
+    public static string HeadingCode2 = "修改他人mod请获得原作者授权，否则小心出名！";
+
+    public static Stream GetDecipherStream(Stream stream) {
+        MemoryStream keepOpenStream = new();
+        byte[] buff = new byte[stream.Length];
+        stream.ReadExactly(buff);
+        byte[] hc = Encoding.UTF8.GetBytes(HeadingCode);
+        bool decipher = true;
+        for (int i = 0; i < hc.Length; i++) {
+            if (hc[i] != buff[i]) {
+                decipher = false;
+                break;
+            }
+        }
+        byte[] hc2 = Encoding.UTF8.GetBytes(HeadingCode2);
+        bool decipher2 = true;
+        for (int i = 0; i < hc2.Length; i++) {
+            if (hc2[i] != buff[i]) {
+                decipher2 = false;
+                break;
+            }
+        }
+        if (decipher) {
+            byte[] buff2 = new byte[buff.Length - hc.Length];
+            for (int i = 0; i < buff2.Length; i++) {
+                buff2[i] = buff[buff.Length - 1 - i];
+            }
+            keepOpenStream.Write(buff2, 0, buff2.Length);
+            keepOpenStream.Flush();
+        }
+        else if (decipher2) {
+            byte[] buff2 = new byte[buff.Length - hc2.Length];
+            int k = 0;
+            int t = 0;
+            int l = (buff2.Length + 1) / 2;
+            for (int i = 0; i < buff2.Length; i++) {
+                if (i % 2 == 0) {
+                    buff2[i] = buff[hc2.Length + k];
+                    k++;
+                }
+                else {
+                    buff2[i] = buff[hc2.Length + l + t];
+                    t++;
+                }
+            }
+            keepOpenStream.Write(buff2, 0, buff2.Length);
+            keepOpenStream.Flush();
+        }
+        else {
+            stream.Position = 0L;
+            stream.CopyTo(keepOpenStream);
+        }
+        stream.Dispose();
+        keepOpenStream.Position = 0L;
+        return keepOpenStream;
+    }
+
+    public static bool StrengtheningMod(string path) {
+        Stream stream = Storage.OpenFile(path, OpenFileMode.Read);
+        byte[] buff = new byte[stream.Length];
+        stream.ReadExactly(buff);
+        byte[] hc = Encoding.UTF8.GetBytes(HeadingCode);
+        bool decipher = true;
+        for (int i = 0; i < hc.Length; i++) {
+            if (hc[i] != buff[i]) {
+                decipher = false;
+                break;
+            }
+        }
+        byte[] hc2 = Encoding.UTF8.GetBytes(HeadingCode2);
+        bool decipher2 = true;
+        for (int i = 0; i < hc2.Length; i++) {
+            if (hc2[i] != buff[i]) {
+                decipher2 = false;
+                break;
+            }
+        }
+        if (decipher || decipher2) {
+            return false;
+        }
+        byte[] buff2 = new byte[buff.Length + hc2.Length];
+        int k = 0;
+        int l = hc2.Length;
+        for (int i = 0; i < hc2.Length; i++) {
+            buff2[i] = hc2[i];
+        }
+        for (int i = 0; i < buff.Length; i++) {
+            if (i % 2 == 0) {
+                buff2[k + l] = buff[i];
+                k++;
+            }
+        }
+        k = 0;
+        l = hc2.Length + (buff.Length + 1) / 2;
+        for (int i = 0; i < buff.Length; i++) {
+            if (i % 2 != 0) {
+                buff2[k + l] = buff[i];
+                k++;
+            }
+        }
+        string newPath = $"{path.Substring(0, path.LastIndexOf('.'))}({LanguageControl.Get(fName, 63)}).scmod";
+        FileStream fileStream = new(Storage.GetSystemPath(newPath), FileMode.Create, FileAccess.ReadWrite, FileShare.ReadWrite);
+        fileStream.Write(buff2, 0, buff2.Length);
+        fileStream.Flush();
+        stream.Dispose();
+        fileStream.Dispose();
+        return true;
+    }
 #if DEBUG
     /// <summary>
     ///     将 byte[] 转成 Stream
@@ -950,20 +1052,6 @@ public static class ModsManager {
         float nb = (v2.Z - v1.Z) * (v3.X - v1.X) - (v2.X - v1.Z) * (v3.Z - v1.Z);
         float nc = (v2.X - v1.X) * (v3.Y - v1.Y) - (v2.Y - v1.Y) * (v3.X - v1.X);
         return new Vector3(na, nb, nc);
-    }
-
-    public static void SaveToImage(string name, RenderTarget2D renderTarget2D) {
-        try {
-            Image.Save(
-                renderTarget2D.GetData(new Rectangle(0, 0, renderTarget2D.Width, renderTarget2D.Height)),
-                Storage.CombinePaths("app:", name + ".webp"),
-                ImageFileFormat.WebP,
-                true
-            );
-        }
-        catch (Exception e) {
-            Console.WriteLine(e);
-        }
     }
 #endif
 }

@@ -327,6 +327,43 @@ namespace Game {
             }
         }
 
+        public static string DisabledMods {
+            get {
+                List<string> result = [];
+                foreach ((string packageName, HashSet<string> versions) in ModsManager.DisabledMods) {
+                    if (versions.Count == 0) {
+                        continue;
+                    }
+                    result.Add(packageName);
+                    result.Add(versions.Count.ToString());
+                    foreach (string version in versions) {
+                        result.Add(version);
+                    }
+                }
+                return string.Join(";", result);
+            }
+            set {
+                if (string.IsNullOrEmpty(value)) {
+                    return;
+                }
+                string[] array = value.Split(';');
+                Dictionary<string, HashSet<string>> result = [];
+                int i = 0;
+                while (i < array.Length) {
+                    string packageName = array[i++];
+                    if (int.TryParse(array[i++], out int count)) {
+                        HashSet<string> versions = new(count);
+                        int end = i + count;
+                        while (i < end) {
+                            versions.Add(array[i++]);
+                        }
+                        result.Add(packageName, versions);
+                    }
+                }
+                ModsManager.DisabledMods = result;
+            }
+        }
+
         public static event Action<string> SettingChanged;
         public static ValuesDictionary KeyboardMappingSettings { get; set; }
         public static ValuesDictionary GamepadMappingSettings { get; set; }

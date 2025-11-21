@@ -28,13 +28,16 @@ namespace Game {
                     NuGetVersion = new NuGetVersion(1, 0, 0),
                     ApiVersion = ModsManager.APIVersionString,
                     ApiVersionRange = new VersionRange(ModsManager.APINuGetVersion),
-                    Author = "Mod",
-                    Description = "Debug uncompressed mod.",
+                    Link = "https://gitee.com/SC-SPM/SurvivalcraftApi",
+                    Author = "SC-SPM",
+                    Description = "Debug uncompressed mod. 调试未压缩模组",
                     ScVersion = "2.4.0.0",
-                    PackageName = "com.fastdebug"
+                    PackageName = "fastdebug"
                 };
             }
-            GetFile("icon.png", LoadIcon);
+            if(!GetFile("icon.webp", LoadIcon)) {
+                GetFile("icon.png", LoadIcon);
+            }
         }
 
         public void ReadDirResouces(string basepath, string path) {

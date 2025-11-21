@@ -128,7 +128,18 @@
     "76": "A mod for API {0} might not run properly in this API version",
     "77": "Homepage",
     "78": "The homepage link of this mod is not set.",
-    "79": "Mod Ver: {0}  API Ver: {1}  Author: {2}  Size: {3}"
+    "79": "Mod Ver:",
+    "80": "API Ver: ",
+    "81": "Author: ",
+    "82": "Size: ",
+    "83": "Description: ",
+    "84": "Homepage: ",
+    "85": "File Name: ",
+    "86": "Package Name: ",
+    "87": "Dependencies: ",
+    "88": "Disable Reason: ",
+    "89": "Details",
+    "90": "*Need Restart"
   },
   "ManageContentScreen": {
     "1": "Blocks Texture | {0}x{1}",
@@ -1206,6 +1217,14 @@
     "Spring",
     "Late Spring"
   ],
+  "ModDisableReason": {
+    "Unknown": "Unknown",
+    "Manually": "Manually",
+    "NoModInfo": "No modinfo.json file in this mod",
+    "DependencyError": "Dependency Error. Check game log.",
+    "Duplicated": "The mod is duplicated.",
+    "InvalidPackageName": "The package name of this mod contains \";\""
+  },
   "Blocks": {
     "AirBlock:0": {
       "DisplayName": "Air",

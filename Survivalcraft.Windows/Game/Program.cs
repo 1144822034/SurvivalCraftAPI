@@ -57,14 +57,9 @@ namespace Game {
                                     case ExternalContentType.BlocksTexture: BlocksTexturesManager.ImportBlocksTexture(fileName, fileStream); break;
                                     case ExternalContentType.CharacterSkin: CharacterSkinsManager.ImportCharacterSkin(fileName, fileStream); break;
                                     case ExternalContentType.FurniturePack: FurniturePacksManager.ImportFurniturePack(fileName, fileStream); break;
-                                    case ExternalContentType.Mod: ModsManager.ImportMod(fileName, fileStream, false); break;
+                                    case ExternalContentType.Mod: ModsManager.ImportMod(fileName, fileStream); break;
                                 }
-                                if (type == ExternalContentType.Mod) {
-                                    Window.MessageBox(IntPtr.Zero, $"Successfully imported {fileName}. And you need to open Manage Mod screen to enable it manually.\n导入 {fileName} 成功。接下来你需要到 Mod 管理屏幕中手动启用它。", "Success 成功", 0x40u);
-                                }
-                                else {
-                                    Window.MessageBox(IntPtr.Zero, $"Successfully imported {fileName}.\n导入 {fileName} 成功", "Success 成功", 0x40u);
-                                }
+                                Window.MessageBox(IntPtr.Zero, $"Successfully imported {fileName}.\n导入 {fileName} 成功", "Success 成功", 0x40u);
                             }
                             catch (Exception e) {
                                 Window.MessageBox(IntPtr.Zero, $"Failed to import {fileName}, reason:\n导入 {fileName} 失败，原因：\n{e}", null, 0x10u);

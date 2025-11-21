@@ -164,13 +164,10 @@ namespace Game {
                     //根据加载顺序排序后的结果
                     ModsManager.ModList.Clear();
                     foreach (ModEntity item in ModsManager.ModListAll) {
-                        if (item.IsDependencyChecked) {
+                        if (item.IsDependencyChecked || item.IsDisabled) {
                             continue;
                         }
                         item.CheckDependencies(ModsManager.ModList);
-                    }
-                    foreach (ModEntity item in ModsManager.ModListAll) {
-                        item.IsDependencyChecked = false;
                     }
                 }
             );

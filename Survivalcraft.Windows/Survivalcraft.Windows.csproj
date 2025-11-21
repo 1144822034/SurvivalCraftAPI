@@ -19,7 +19,7 @@
         <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
         <Nullable>disable</Nullable>
         <GenerateDocumentationFile>true</GenerateDocumentationFile>
-        <ApplicationIcon>Content\icon.ico</ApplicationIcon>
+        <ApplicationIcon>icon.ico</ApplicationIcon>
         <ApplicationManifest>Properties\app.manifest</ApplicationManifest>
     </PropertyGroup>
     <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
