@@ -36,6 +36,31 @@ namespace Game {
         static void Main(string[] args) {
             // ReSharper restore UnusedMember.Local
 #if WINDOWS
+            if (args != null
+                && args.Length > 0) {
+                string path = args[0];
+                ExternalContentType type = ExternalContentManager.ExtensionToType(Storage.GetExtension(path));
+                if (ExternalContentManager.IsEntryTypeDownloadSupported(type)
+                    && File.Exists(path)) {
+                    using (FileStream fileStream = File.OpenRead(path)) {
+                        string fileName = Storage.GetFileName(path);
+                        try {
+                            switch (type) {
+                                case ExternalContentType.World: WorldsManager.ImportWorld(fileStream); break;
+                                case ExternalContentType.BlocksTexture: BlocksTexturesManager.ImportBlocksTexture(fileName, fileStream); break;
+                                case ExternalContentType.CharacterSkin: CharacterSkinsManager.ImportCharacterSkin(fileName, fileStream); break;
+                                case ExternalContentType.FurniturePack: FurniturePacksManager.ImportFurniturePack(fileName, fileStream); break;
+                                case ExternalContentType.Mod: ModsManager.ImportMod(fileName, fileStream); break;
+                            }
+                            Window.MessageBox(IntPtr.Zero, $"Successfully imported {fileName}.\n导入 {fileName} 成功", "Success 成功", 0x40u);
+                        }
+                        catch (Exception e) {
+                            Window.MessageBox(IntPtr.Zero, $"Failed to import {fileName}, reason:\n导入 {fileName} 失败，原因：\n{e}", null, 0x10u);
+                        }
+                    }
+                }
+                return;
+            }
             string mutexName;
             using (SHA256 sha256 = SHA256.Create()) {
                 byte[] hash = sha256.ComputeHash(Encoding.UTF8.GetBytes(Assembly.GetEntryAssembly()?.Location ?? "SurvivalcraftApi"));
@@ -43,49 +68,13 @@ namespace Game {
             }
             m_mutex = new Mutex(true, mutexName, out m_mutexHandled);
             if (!m_mutexHandled) {
-                if (args != null
-                    && args.Length > 0) {
-                    string path = args[0];
-                    ExternalContentType type = ExternalContentManager.ExtensionToType(Storage.GetExtension(path));
-                    if (ExternalContentManager.IsEntryTypeDownloadSupported(type)
-                        && File.Exists(path)) {
-                        using (FileStream fileStream = File.OpenRead(path)) {
-                            string fileName = Storage.GetFileName(path);
-                            try {
-                                switch (type) {
-                                    case ExternalContentType.World: WorldsManager.ImportWorld(fileStream); break;
-                                    case ExternalContentType.BlocksTexture: BlocksTexturesManager.ImportBlocksTexture(fileName, fileStream); break;
-                                    case ExternalContentType.CharacterSkin: CharacterSkinsManager.ImportCharacterSkin(fileName, fileStream); break;
-                                    case ExternalContentType.FurniturePack: FurniturePacksManager.ImportFurniturePack(fileName, fileStream); break;
-                                    case ExternalContentType.Mod: ModsManager.ImportMod(fileName, fileStream); break;
-                                }
-                                Window.MessageBox(IntPtr.Zero, $"Successfully imported {fileName}.\n导入 {fileName} 成功", "Success 成功", 0x40u);
-                            }
-                            catch (Exception e) {
-                                Window.MessageBox(IntPtr.Zero, $"Failed to import {fileName}, reason:\n导入 {fileName} 失败，原因：\n{e}", null, 0x10u);
-                            }
-                        }
-                    }
-                    return;
-                }
+
                 string str =
                     "This game is already running! If you cannot find the window, please stop it from the Task Manager, and check the log file in Bugs directory.\n游戏已经在运行！如果找不到游戏窗口，请从任务管理器终止它，并检查 Bugs 目录中的日志文件。";
                 Window.MessageBox(IntPtr.Zero, str, null, 0x10u);
                 return;
             }
 #endif
-            if (args != null
-                && args.Length > 0) {
-                //拖动到exe的文件解析
-                if (Path.GetExtension(args[0]) == ".scmodList") {
-                    ModsManager.ModsPath = ModListManager.AnalysisModList(args[0]);
-                }
-                else {
-                    ExternalContentManager.openFilePath = args[0];
-                    //var externalContentScreen=new ExternalContentScreen();
-                    //sexternalContentScreen.Update();
-                }
-            }
 
             // Process.Start("C:\\Windows\\System32\\msg.exe",  "/server:127.0.0.1 * \"此版本为预览版 不建议长期使用");
 #if WINDOWS

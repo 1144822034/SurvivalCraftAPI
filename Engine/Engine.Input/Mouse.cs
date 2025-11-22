@@ -1,4 +1,5 @@
 #if ANDROID
+using Android.App;
 using Android.OS;
 using Android.Views;
 #pragma warning disable CA1416
@@ -141,16 +142,32 @@ namespace Engine.Input {
             }
         }
 
-        static MouseButton TranslateMouseButton(MotionEventButtonState state) {
-            return state switch {
-                MotionEventButtonState.Primary => MouseButton.Left,
-                MotionEventButtonState.Secondary => MouseButton.Right,
-                MotionEventButtonState.Tertiary => MouseButton.Middle,
-                _ => MouseButton.Left
-            };
-        }
+        public static MouseButton TranslateMouseButton(MotionEventButtonState state) => state switch {
+            MotionEventButtonState.Primary => MouseButton.Left,
+            MotionEventButtonState.Secondary => MouseButton.Right,
+            MotionEventButtonState.Tertiary => MouseButton.Middle,
+            MotionEventButtonState.Back => MouseButton.Ext1,
+            MotionEventButtonState.Forward => MouseButton.Ext2,
+            _ => MouseButton.Left
+        };
 
-        class OnCapturedPointerListener : Java.Lang.Object, View.IOnCapturedPointerListener {
+        public static PointerIconType TranslateCursorType(CursorType cursorType) => cursorType switch {
+            CursorType.Arrow => PointerIconType.Arrow,
+            CursorType.IBeam => PointerIconType.Text,
+            CursorType.Crosshair => PointerIconType.Crosshair,
+            CursorType.Hand => PointerIconType.Hand,
+            CursorType.HResize => PointerIconType.HorizontalDoubleArrow,
+            CursorType.VResize => PointerIconType.VerticalDoubleArrow,
+            CursorType.NwseResize => PointerIconType.TopLeftDiagonalDoubleArrow,
+            CursorType.NeswResize => PointerIconType.TopRightDiagonalDoubleArrow,
+            CursorType.ResizeAll => PointerIconType.AllScroll,
+            CursorType.NotAllowed => PointerIconType.NoDrop,
+            CursorType.Grab => PointerIconType.Grab,
+            CursorType.Grabbing => PointerIconType.Grabbing,
+            _ => PointerIconType.Default
+        };
+
+        public class OnCapturedPointerListener : Java.Lang.Object, View.IOnCapturedPointerListener {
             public bool OnCapturedPointer(View view, MotionEvent e) {
                 if (e == null) {
                     return true;
@@ -188,20 +205,32 @@ namespace Engine.Input {
             ProcessMouseMove(new Point2((int)position.X, (int)position.Y));
         }
 
-        static void MouseWheelHandler(IMouse mouse, ScrollWheel scrollWheel) {
-            ProcessMouseWheel(scrollWheel.Y);
-        }
+        static void MouseWheelHandler(IMouse mouse, ScrollWheel scrollWheel) => ProcessMouseWheel(scrollWheel.Y);
 
-        public static MouseButton TranslateMouseButton(Silk.NET.Input.MouseButton mouseButton) {
-            return mouseButton switch {
-                Silk.NET.Input.MouseButton.Left => MouseButton.Left,
-                Silk.NET.Input.MouseButton.Right => MouseButton.Right,
-                Silk.NET.Input.MouseButton.Middle => MouseButton.Middle,
-                Silk.NET.Input.MouseButton.Button4 => MouseButton.Ext1,
-                Silk.NET.Input.MouseButton.Button5 => MouseButton.Ext2,
-                _ => (MouseButton)(-1)
-            };
-        }
+        public static MouseButton TranslateMouseButton(Silk.NET.Input.MouseButton mouseButton) => mouseButton switch {
+            Silk.NET.Input.MouseButton.Left => MouseButton.Left,
+            Silk.NET.Input.MouseButton.Right => MouseButton.Right,
+            Silk.NET.Input.MouseButton.Middle => MouseButton.Middle,
+            Silk.NET.Input.MouseButton.Button4 => MouseButton.Ext1,
+            Silk.NET.Input.MouseButton.Button5 => MouseButton.Ext2,
+            _ => (MouseButton)(-1)
+        };
+
+        public static StandardCursor TranslateCursorType(CursorType cursorType) => cursorType switch {
+            CursorType.Arrow => StandardCursor.Arrow,
+            CursorType.IBeam => StandardCursor.IBeam,
+            CursorType.Crosshair => StandardCursor.Crosshair,
+            CursorType.Hand or CursorType.Grab or CursorType.Grabbing => StandardCursor.Hand,
+            CursorType.HResize => StandardCursor.HResize,
+            CursorType.VResize => StandardCursor.VResize,
+            CursorType.NwseResize => StandardCursor.NwseResize,
+            CursorType.NeswResize => StandardCursor.NeswResize,
+            CursorType.ResizeAll => StandardCursor.ResizeAll,
+            CursorType.NotAllowed => StandardCursor.NotAllowed,
+            CursorType.Wait => StandardCursor.Wait,
+            CursorType.WaitArrow => StandardCursor.WaitArrow,
+            _ => StandardCursor.Default
+        };
 #endif
 
         static Mouse() {
@@ -302,6 +331,17 @@ namespace Engine.Input {
                 && !Keyboard.IsKeyboardVisible) {
                 MouseWheelMovement += (int)(120 * value);
             }
+        }
+
+        public static void SetCursorType(CursorType cursorType) {
+#if ANDROID
+            //不知道为什么安卓上无效
+            if (Build.VERSION.SdkInt >= (BuildVersionCodes)24) {
+                Window.m_surface?.PointerIcon = PointerIcon.GetSystemIcon(Application.Context, TranslateCursorType(cursorType));
+            }
+#else
+            m_mouse.Cursor.StandardCursor = TranslateCursorType(cursorType);
+#endif
         }
 
 #if ANDROID

@@ -173,7 +173,7 @@ namespace Game {
                     );
                 }
             }
-            if (!string.IsNullOrEmpty(ExternalContentManager.openFilePath)) {
+            /*if (!string.IsNullOrEmpty(ExternalContentManager.openFilePath)) {
                 try {
                     ExternalContentEntry externalContentEntry1 = new() {
                         Type = ExternalContentManager.ExtensionToType(Storage.GetExtension(ExternalContentManager.openFilePath)),
@@ -195,7 +195,7 @@ namespace Game {
                     Log.Error($"{LanguageControl.Get(fName, 13)} {ExternalContentManager.openFilePath}\n{e}");
                 }
                 ExternalContentManager.openFilePath = string.Empty;
-            }
+            }*/
             if (Input.Back
                 || Input.Cancel
                 || Children.Find<ButtonWidget>("TopBar.Back").IsClicked) {

@@ -672,6 +672,9 @@ namespace Game {
                 texturedBatch2D.QueueQuad(corner, corner2, 0f, Vector2.Zero, Vector2.One, Color.White);
                 texturedBatch2D.TransformTriangles(Widget.GlobalTransform, count);
             }
+            if (IsMouseCursorVisible && !UseSoftMouseCursor) {
+                Mouse.SetCursorType(m_mouseDragInProgress ? CursorType.Grabbing : CursorType.Default);
+            }
             if (IsPadCursorVisible) {
                 Texture2D texture2D2 = m_padDragInProgress ? ContentManager.Get<Texture2D>("Textures/Gui/PadCursorDrag") :
                     !m_padDownPoint.HasValue ? ContentManager.Get<Texture2D>("Textures/Gui/PadCursor") :

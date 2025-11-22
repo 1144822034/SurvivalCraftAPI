@@ -6,6 +6,7 @@ namespace Game {
         public static string fName = "ExternalContentManager";
 
         //在游戏进入主菜单之前，如果openFilePath为一个文件（存档、模组）路径，那么在进入游戏后，会进行对文件的安装操作
+        [Obsolete]
         public static string openFilePath = string.Empty;
         public static IExternalContentProvider DefaultProvider => Providers.Count <= 0 ? null : Providers[0];
 
