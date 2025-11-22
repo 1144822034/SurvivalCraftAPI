@@ -54,12 +54,12 @@ namespace Engine {
             EnableImmersiveMode();
             VolumeControlStream = Stream.Music;
             RequestedOrientation = ScreenOrientation.SensorLandscape;
+
         }
 
         public void Vibrate(long ms) {
             if (Build.VERSION.SdkInt >= (BuildVersionCodes)26) {
-                Vibrator vibrator = (Vibrator)GetSystemService("vibrator");
-                vibrator?.Vibrate(VibrationEffect.CreateOneShot(ms, VibrationEffect.DefaultAmplitude));
+                (GetSystemService("vibrator") as Vibrator)?.Vibrate(VibrationEffect.CreateOneShot(ms, VibrationEffect.DefaultAmplitude));
             }
         }
 

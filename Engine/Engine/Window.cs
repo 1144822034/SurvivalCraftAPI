@@ -2,6 +2,8 @@
 #pragma warning disable CA1416
 using Android.Content;
 using Android.OS;
+using Android.Views;
+using Org.Libsdl.App;
 #else
 using System.Reflection;
 using System.Runtime.CompilerServices;
@@ -22,6 +24,7 @@ using Engine.Input;
 using Silk.NET.Core.Contexts;
 using Silk.NET.Maths;
 using Silk.NET.Windowing;
+using Display = Engine.Graphics.Display;
 using Environment = System.Environment;
 
 namespace Engine {
@@ -38,6 +41,8 @@ namespace Engine {
 
 #if ANDROID
         public static EngineActivity Activity => EngineActivity.m_activity;
+
+        public static SDLSurface m_surface;
 #else
         public static IWindow m_gameWindow;
 
@@ -569,7 +574,13 @@ namespace Engine {
 
         static void InitializeAll() {
             try {
-#if !ANDROID
+#if ANDROID
+                if (SDLActivity.ContentView is ViewGroup viewGroup
+                    && viewGroup.ChildCount >= 1
+                    && viewGroup.GetChildAt(0) is SDLSurface surface) {
+                    m_surface = surface;
+                }
+#else
                 using (Stream iconStream = typeof(Window).GetTypeInfo().Assembly.GetManifestResourceStream("Engine.Resources.icon.png")) {
                     if (iconStream != null) {
                         Image<Rgba32> image = SixLabors.ImageSharp.Image.Load<Rgba32>(Image.DefaultImageSharpDecoderOptions, iconStream);

@@ -134,7 +134,7 @@ namespace SC4Android {
                             case ExternalContentType.BlocksTexture: BlocksTexturesManager.ImportBlocksTexture(name, stream); break;
                             case ExternalContentType.CharacterSkin: CharacterSkinsManager.ImportCharacterSkin(name, stream); break;
                             case ExternalContentType.FurniturePack: FurniturePacksManager.ImportFurniturePack(name, stream); break;
-                            case ExternalContentType.Mod: ModsManager.ImportMod(name, stream, false); break;
+                            case ExternalContentType.Mod: ModsManager.ImportMod(name, stream ); break;
                         }
                     }
                 );

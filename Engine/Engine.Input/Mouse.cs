@@ -1,5 +1,7 @@
 #if ANDROID
+using Android.OS;
 using Android.Views;
+#pragma warning disable CA1416
 #else
 using Silk.NET.Input;
 #endif
@@ -48,7 +50,11 @@ namespace Engine.Input {
         }
 
         internal static void Initialize() {
-#if !ANDROID
+#if ANDROID
+            if (Build.VERSION.SdkInt >= (BuildVersionCodes)26) {
+                Window.m_surface.SetOnCapturedPointerListener(new OnCapturedPointerListener());
+            }
+#else
             m_mouse = Window.m_inputContext.Mice[0];
             m_mouse.MouseDown += MouseDownHandler;
             m_mouse.MouseUp += MouseUpHandler;
@@ -64,13 +70,17 @@ namespace Engine.Input {
             if (IsMouseVisible) {
                 if (m_pointerCaptureRequested) {
                     m_pointerCaptureRequested = false;
-                    //Window.View.ReleasePointerCapture();
+                    if (Build.VERSION.SdkInt >= (BuildVersionCodes)26) {
+                        Window.m_surface?.ReleasePointerCapture();
+                    }
                 }
             }
             else {
                 if (!m_pointerCaptureRequested) {
                     m_pointerCaptureRequested = true;
-                    //Window.View.RequestPointerCapture();
+                    if (Build.VERSION.SdkInt >= (BuildVersionCodes)26) {
+                        Window.m_surface?.RequestPointerCapture();
+                    }
                 }
                 MouseMovement = Round(m_queuedMouseMovement.X, m_queuedMouseMovement.Y);
                 m_queuedMouseMovement = Vector2.Zero;
@@ -110,7 +120,6 @@ namespace Engine.Input {
 
 #if ANDROID
         internal static void HandleMotionEvent(MotionEvent e) {
-#pragma warning disable CA1416
             switch (e.Action) {
                 case MotionEventActions.Move: {
                     for (int num = e.HistorySize - 1; num >= 0; num--) {
@@ -140,7 +149,19 @@ namespace Engine.Input {
                 _ => MouseButton.Left
             };
         }
-#pragma warning restore CA1416
+
+        class OnCapturedPointerListener : Java.Lang.Object, View.IOnCapturedPointerListener {
+            public bool OnCapturedPointer(View view, MotionEvent e) {
+                if (e == null) {
+                    return true;
+                }
+                if ((e.Source & InputSourceType.MouseRelative) == InputSourceType.MouseRelative)
+                {
+                    HandleMotionEvent(e);
+                }
+                return true;
+            }
+        }
 #else
         static void MouseDownHandler(IMouse mouse, Silk.NET.Input.MouseButton button) {
             MouseButton mouseButton = TranslateMouseButton(button);
