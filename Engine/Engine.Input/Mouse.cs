@@ -1,4 +1,5 @@
 #if ANDROID
+using System.Collections.Concurrent;
 using Android.App;
 using Android.OS;
 using Android.Views;
@@ -10,6 +11,20 @@ using Silk.NET.Input;
 namespace Engine.Input {
     public static class Mouse {
 #if ANDROID
+        public struct MouseButtonInfo {
+            public MotionEventButtonState ButtonState;
+            public MotionEventActions Action;
+            public Point2 Position;
+
+            public MouseButtonInfo(MotionEventActions action, MotionEventButtonState buttonState, Point2 position) {
+                ButtonState = buttonState;
+                Action = action;
+                Position = position;
+            }
+        }
+
+        public static ConcurrentQueue<MouseButtonInfo> m_cachedMouseButtonEvents = [];
+
         static Vector2 m_queuedMouseMovement;
 
         static float m_queuedMouseWheelMovement;
@@ -88,6 +103,19 @@ namespace Engine.Input {
             }
             MouseWheelMovement = (int)MathUtils.Round(m_queuedMouseWheelMovement) * 120;
             m_queuedMouseWheelMovement = 0f;
+            while (!m_cachedMouseButtonEvents.IsEmpty) {
+                if (m_cachedMouseButtonEvents.TryDequeue(out MouseButtonInfo buttonInfo)) {
+                    switch (buttonInfo.Action) {
+                        case MotionEventActions.ButtonPress:
+                            ProcessMouseDown(TranslateMouseButton(buttonInfo.ButtonState), buttonInfo.Position); break;
+                        case MotionEventActions.ButtonRelease:
+                            ProcessMouseUp(TranslateMouseButton(buttonInfo.ButtonState), buttonInfo.Position); break;
+                    }
+                }
+                else {
+                    Thread.Yield();
+                }
+            }
 #else
             if (Window.IsActive) {
                 Point2 position = new((int)m_mouse.Position.X, (int)m_mouse.Position.Y);
@@ -130,8 +158,9 @@ namespace Engine.Input {
                     break;
                 }
                 case MotionEventActions.HoverMove: MousePosition = Round(e.GetX(), e.GetY()); break;
-                case MotionEventActions.ButtonPress: ProcessMouseDown(TranslateMouseButton(e.ActionButton), Round(e.GetX(), e.GetY())); break;
-                case MotionEventActions.ButtonRelease: ProcessMouseUp(TranslateMouseButton(e.ActionButton), Round(e.GetX(), e.GetY())); break;
+                case MotionEventActions.ButtonPress:
+                case MotionEventActions.ButtonRelease:
+                    m_cachedMouseButtonEvents.Enqueue(new MouseButtonInfo(e.Action, e.ActionButton, Round(e.GetX(), e.GetY()))); break;
                 case MotionEventActions.PointerIdShift: {
                     for (int num2 = e.HistorySize - 1; num2 >= 0; num2--) {
                         m_queuedMouseWheelMovement += MathUtils.Sign(e.GetHistoricalAxisValue(Axis.Vscroll, num2));
@@ -172,8 +201,7 @@ namespace Engine.Input {
                 if (e == null) {
                     return true;
                 }
-                if ((e.Source & InputSourceType.MouseRelative) == InputSourceType.MouseRelative)
-                {
+                if ((e.Source & InputSourceType.MouseRelative) == InputSourceType.MouseRelative) {
                     HandleMotionEvent(e);
                 }
                 return true;
