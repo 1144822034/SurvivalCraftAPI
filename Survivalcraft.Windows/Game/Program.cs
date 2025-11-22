@@ -180,10 +180,6 @@ namespace Game {
         }
 
         public static void Run() {
-#if ANDROID
-            // TODO: 待完成。
-            // EngineInputConnection.Implement = new SurvivalcraftInputConnection();
-#endif
             LastFrameTime = (float)(Time.RealTime - m_frameBeginTime);
             LastCpuFrameTime = (float)(m_cpuEndTime - m_frameBeginTime);
             m_frameBeginTime = Time.RealTime;
