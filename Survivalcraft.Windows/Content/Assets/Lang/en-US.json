@@ -41,12 +41,18 @@
     "2": "Content Management",
     "3": "Select the file you want to import",
     "4": "Import {0} Successfully",
+    "5": "Select Community",
     "ExtensionName": {
       ".scworld": "World",
       ".scbtex": "Block Texture",
       ".scskin": "Player Skin",
       ".scfpack": "Furniture Pack",
       ".scmod": "Mod"
+    },
+    "CommunityType": {
+      "OriginalCommunity": "Original Community",
+      "ChineseCommunity": "Chinese Community (Old)",
+      "ChineseCommunity2025": "Chinese Community (New, Web)"
     }
   },
   "ModsManageContentScreen": {
@@ -3041,8 +3047,8 @@
       "1": "Choose Content Type",
       "2": "Access content previously uploaded to one of your public storage spaces",
       "3": "Private",
-      "4": "Access content created by other Chinese community members and registered for public access",
-      "5": "Chinese Community",
+      "4": "Access content created by other community members and registered for public access",
+      "5": "Community",
       "6": "Download a file directly from a web link, if you know it (it's best to use copy\/paste to enter links)",
       "7": "From Link",
       "8": "Manage downloaded content",
