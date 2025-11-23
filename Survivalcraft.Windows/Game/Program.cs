@@ -121,7 +121,7 @@ namespace Game {
             Log.AddLogSink(new GameLogSink());
 #if DEBUG
             Log.AddLogSink(new ConsoleLogSink());
-            title = "[DEBUG]" + title;
+            title = $"[DEBUG]{title}";
 #endif
             Window.UnhandledException += delegate(UnhandledExceptionInfo e) {
                 ExceptionManager.ReportExceptionToUser("Unhandled exception.", e.Exception);

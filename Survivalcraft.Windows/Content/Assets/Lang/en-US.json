@@ -1134,6 +1134,12 @@
     "1": "Leave blank for a random seed",
     "2": "True seed {0} is set"
   },
+  "SettingsCompatibilityScreen": {
+    "1": "Please attach log file when you are reporting any bug.",
+    "2": "After enabling file association, you can open associated files with API to import them.",
+    "3": "After enabling safe mode, API will stop loading any mod.",
+    "4": "Restart game to take effect "
+  },
   "JsInterface": {
     "1": "There is already a script running.",
     "2": "Empty request body.",
@@ -1164,7 +1170,8 @@
     "delete": "Delete",
     "gameName": "Survivalcraft",
     "debug": "DEBUG",
-    "api": "API"
+    "api": "API",
+    "safeMode": "SafeMode"
   },
   "CRMessage": {
     "0": "Make a stone axe instead",
@@ -3092,7 +3099,8 @@
       "9": "kaalus.wordpress.com",
       "10": " for more information.",
       "11": "View Announcement",
-      "12": "API Home Page: "
+      "12": "API Home Page: ",
+      "13": "Disable Safe Mode"
     },
     "ManageContentScreen": {
       "1": "Manage Content",
@@ -3207,7 +3215,8 @@
       "12": "View Log",
       "13": "Open Log File",
       "14": "File Association",
-      "15": "Share Log File"
+      "15": "Share Log File",
+      "16": "Safe Mode"
     },
     "SettingsControlsScreen": [
       "Adjust Controls Settings",

@@ -207,7 +207,7 @@ namespace Game {
         public static float GamepadCursorSpeed { get; set; }
 
         /// <summary>
-        /// 手柄扳机触发阈值，范围0~1，默认0.5。扳机的按压幅度只有超过这个数时才会被视为“按下”状态，越小则越容易触发。
+        ///     手柄扳机触发阈值，范围0~1，默认0.5。扳机的按压幅度只有超过这个数时才会被视为“按下”状态，越小则越容易触发。
         /// </summary>
         public static float GamepadTriggerThreshold { get; set; }
 
@@ -364,6 +364,8 @@ namespace Game {
             }
         }
 
+        public static bool SafeMode { get; set; }
+
         public static event Action<string> SettingChanged;
         public static ValuesDictionary KeyboardMappingSettings { get; set; }
         public static ValuesDictionary GamepadMappingSettings { get; set; }
@@ -448,6 +450,7 @@ namespace Game {
                 MoveWidgetMarginY = 0f;
                 AnimatedTextureRefreshLimit = 7;
                 FileAssociationEnabled = true;
+                SafeMode = false;
                 InitializeKeyboardMappingSettings();
                 InitializeGamepadMappingSettings();
                 InitializeCameraManageSettings();
@@ -485,6 +488,7 @@ namespace Game {
             KeyboardMappingSettings.SetValue("EditItem", Key.G);
             KeyboardMappingSettings.SetValue("KeyboardHelp", Key.H);
         }
+
         public static void InitializeGamepadMappingSettings() {
             GamepadMappingSettings = new ValuesDictionary();
             GamepadMappingSettings.SetValue("MoveUp", GamePadButton.A);
@@ -531,6 +535,7 @@ namespace Game {
             }
             return throwIfNotFound ? throw new ArgumentException(string.Format(LanguageControl.Get(fName, "1"), keyName)) : null;
         }
+
         public static object GetGamepadMapping(string keyName, bool throwIfNotFound = true) {
             if (GamepadMappingSettings.TryGetValue(keyName, out object result)) { //原版设置
                 return result;
@@ -573,6 +578,7 @@ namespace Game {
                 }
             }
         }
+
         /// <summary>
         ///     仅用于修改现有手柄键位，添加键位请使用<see cref="ModLoader.GetGamepadMappings" />
         /// </summary>

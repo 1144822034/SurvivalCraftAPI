@@ -1,4 +1,3 @@
-using System.Globalization;
 using System.Xml.Linq;
 using Engine;
 using Engine.Input;
@@ -9,22 +8,15 @@ namespace Game {
 
         public bool m_versionStringTrial;
 
+        public ButtonWidget m_disableSafeModeButton;
         public ButtonWidget m_showBulletinButton;
-
         public LabelWidget m_copyrightLabel;
-
         public ButtonWidget m_languageSwitchButton;
-
         public ButtonWidget m_updateCheckButton;
-
         public Subtexture m_needToUpdateIcon;
-
         public Subtexture m_dontNeedUpdateIcon;
-
         public RectangleWidget m_updateButtonIcon;
-
         public StackPanelWidget m_leftBottomBar;
-
         public StackPanelWidget m_rightBottomBar;
 
         public const string fName = "MainMenuScreen";
@@ -32,6 +24,7 @@ namespace Game {
         public MainMenuScreen() {
             XElement node = ContentManager.Get<XElement>("Screens/MainMenuScreen");
             LoadContents(this, node);
+            m_disableSafeModeButton = Children.Find<ButtonWidget>("DisableSafeModeButton");
             m_showBulletinButton = Children.Find<ButtonWidget>("BulletinButton", false);
             m_copyrightLabel = Children.Find<LabelWidget>("CopyrightLabel", false);
             m_languageSwitchButton = Children.Find<ButtonWidget>("LanguageSwitchButton", false);
@@ -59,6 +52,9 @@ namespace Game {
             }
             if (MotdManager.CanShowBulletin) {
                 MotdManager.ShowBulletin();
+            }
+            if (SettingsManager.SafeMode) {
+                m_disableSafeModeButton.IsVisible = true;
             }
         }
 
@@ -143,6 +139,19 @@ namespace Game {
             if (Children.Find<ButtonWidget>("Buy").IsClicked) {
                 MarketplaceManager.ShowMarketplace();
             }
+            if (m_disableSafeModeButton.IsClicked) {
+                SettingsManager.SafeMode = false;
+                DialogsManager.ShowDialog(
+                    null,
+                    new MessageDialog(
+                        LanguageControl.Warning,
+                        LanguageControl.Get("SettingsCompatibilityScreen", "4"),
+                        LanguageControl.Ok,
+                        null,
+                        null
+                    )
+                );
+            }
             if (m_showBulletinButton?.IsClicked ?? false) {
                 if (MotdManager.m_bulletin != null
                     && !MotdManager.m_bulletin.Title.Equals("null", StringComparison.CurrentCultureIgnoreCase)) {
@@ -164,9 +173,9 @@ namespace Game {
                     Window.Close();
                 }
             }
-            if (!string.IsNullOrEmpty(ExternalContentManager.openFilePath)) {
+            /*if (!string.IsNullOrEmpty(ExternalContentManager.openFilePath)) {
                 ScreensManager.SwitchScreen("ExternalContent");
-            }
+            }*/
         }
 
         public class Test : IComparer<ReleaseInfo> {

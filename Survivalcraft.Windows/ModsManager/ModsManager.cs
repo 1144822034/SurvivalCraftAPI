@@ -13,8 +13,6 @@ using NuGet.Versioning;
 using XmlUtilities;
 using ZipArchive = Game.ZipArchive;
 #if DEBUG
-using Engine.Media;
-using Engine.Graphics;
 using System.IO.Compression;
 #endif
 public static class ModsManager {
@@ -366,10 +364,11 @@ public static class ModsManager {
         if (!realName.EndsWith(ModSuffix)) {
             realName = realName + ModSuffix;
         }
+        string nameWithoutSuffix = Storage.GetFileNameWithoutExtension(realName);
         string path = Storage.CombinePaths(ModsPath, realName);
         int num = 1;
         while (Storage.FileExists(path)) {
-            realName = $"{name}({num}){ModSuffix}";
+            realName = $"{nameWithoutSuffix}({num}){ModSuffix}";
             path = Storage.CombinePaths(ModsPath, realName);
             num++;
         }
@@ -393,8 +392,11 @@ public static class ModsManager {
         ModListAll.Clear();
         ModLoaders.Clear();
         SurvivalCraftModEntity = new SurvivalCraftModEntity();
-        ModEntity FastDebug = new FastDebugModEntity();
         ModListAll.Add(SurvivalCraftModEntity);
+        if (SettingsManager.SafeMode) {
+            return;
+        }
+        ModEntity FastDebug = new FastDebugModEntity();
         ModListAll.Add(FastDebug);
         GetScmods(ModsPath);
         ModListAll.Sort((x, y) =>
@@ -469,7 +471,12 @@ public static class ModsManager {
                     Stream keepOpenStream = GetDecipherStream(stream);
                     ModEntity modEntity = new(ks, ZipArchive.Open(keepOpenStream, true));
                     if (modEntity.modInfo == null) {
-                        LoadingScreen.Warning($"The modinfo.json is missing from [{modEntity.ModFilePath}], and this mod will not be loaded.");
+                        LoadingScreen.Warning($"The modinfo.json is missing from [{modEntity.ModFilePath}], and this mod will be disabled.");
+                    }
+                    else if (modEntity.modInfo.PackageName == "survivalcraft"
+                        || modEntity.modInfo.PackageName == "fastdebug") {
+                        LoadingScreen.Warning($"The package name of [{modEntity.modInfo.PackageName}] is not allowed, and this mod will not be loaded.");
+                        continue;
                     }
                     else if (modEntity.modInfo.PackageName.Contains(';')) {
                         modEntity.IsDisabled = true;

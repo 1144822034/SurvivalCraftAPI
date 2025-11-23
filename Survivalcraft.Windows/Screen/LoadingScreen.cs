@@ -230,12 +230,13 @@ namespace Game {
                         ScreensManager.SwitchScreen(
                             new LoadingFailedScreen(
                                 "Loading failed 加载失败",
-                                ["Exceptions: 异常信息：", ..exception!.ToString().Split('\n')],
+                                ["Exceptions: 异常信息：", ..exception?.ToString().Split('\n') ?? []],
                                 [
-                                    "Check and add missing mods. 检查模组是否缺失，并添加所缺失的模组",
-                                    "Check the mod version is equal to the required one. 查看模组版本与要求的模组版本是否一致",
-                                    "If not solved, please contact the developer with Game.log in the path below. 若以上方式都无法解决，请联系开发者，并发送下面路径中的 Game.log ",
-                                    Storage.GetSystemPath(ModsManager.LogPath)
+                                    $"Check the API version required by mod is equal to the current API version ({ModsManager.APIVersionString}). Check and add missing mods. If not solved, please contact the developer of the mods or API with Game.log in the path below.",
+                                    $"检查模组是否缺失，并添加所缺失的模组。查看模组所需插件版版本与当前插件版版本（{ModsManager.APIVersionString}）是否一致。若以上方式都无法解决，请联系模组、插件版开发者，并发送下面路径中的 Game.log",
+                                    Storage.GetSystemPath(ModsManager.LogPath),
+                                    "And you can enable Safe Mode to prevent loading any mod.",
+                                    "你还可以启用安全模式，防止加载任何模组。"
                                 ]
                             )
                         );
@@ -310,7 +311,7 @@ namespace Game {
                     LanguageControl.SetUsual();
 #if !ANDROID
                     string title =
-                        $"{LanguageControl.Get("Usual", "gameName")} {ModsManager.ShortGameVersion} - {LanguageControl.Get("Usual", "api")} {ModsManager.APIVersionString}";
+                        $"{(SettingsManager.SafeMode ? $"[{LanguageControl.Get("Usual", "safeMode")}]" : "")}{LanguageControl.Get("Usual", "gameName")} {ModsManager.ShortGameVersion} - {LanguageControl.Get("Usual", "api")} {ModsManager.APIVersionString}";
 #if DEBUG
                     title = $"[{LanguageControl.Get("Usual", "debug")}]{title}";
 #endif
