@@ -15,33 +15,33 @@ public class ModsManageContentScreen : Screen {
 
     public bool m_needRestart;
 
-    public static bool IsOldApiVersionMod(ModEntity modEntity, out string detail) {
+    public static bool IsOldApiVersionMod(ModEntity modEntity, out string description) {
         ModInfo modInfo = modEntity.modInfo;
         if (modInfo == null) {
-            detail = string.Format(LanguageControl.Get(fName, "68"), LanguageControl.Unknown);
+            description = string.Format(LanguageControl.Get(fName, "68"), LanguageControl.Unknown);
             return true;
         }
         if (modInfo.ApiVersion.StartsWith("1.4")
             || modInfo.ApiVersion.StartsWith("1.5")
             || modInfo.ApiVersion.StartsWith("1.6")
             || modInfo.ApiVersion.StartsWith("1.7")) {
-            detail = string.Format(LanguageControl.Get(fName, "68"), modInfo.ApiVersion);
+            description = string.Format(LanguageControl.Get(fName, "68"), modInfo.ApiVersion);
             return true;
         }
         if (modInfo.ApiVersionRange != null) {
             if (!modInfo.ApiVersionRange.Satisfies(ModsManager.APINuGetVersion)) {
-                detail = string.Format(LanguageControl.Get(fName, "76"), modInfo.ApiVersion);
+                description = string.Format(LanguageControl.Get(fName, "76"), modInfo.ApiVersion);
                 return true;
             }
             if (!modInfo.ApiVersionRange.HasUpperBound
                 && modInfo.ApiVersionRange.MinVersion != null
                 && modInfo.ApiVersionRange.MinVersion.Major == 1
                 && modInfo.ApiVersionRange.MinVersion.Minor <= 7) {
-                detail = string.Format(LanguageControl.Get(fName, "68"), modInfo.ApiVersion);
+                description = string.Format(LanguageControl.Get(fName, "68"), modInfo.ApiVersion);
                 return true;
             }
         }
-        detail = modInfo.Description;
+        description = modInfo.Description;
         return false;
     }
 
@@ -54,7 +54,7 @@ public class ModsManageContentScreen : Screen {
         m_triggerEnableButton = Children.Find<BevelledButtonWidget>("TriggerEnableButton");
         m_openHomepageButton = Children.Find<BevelledButtonWidget>("OpenHomepageButton");
         m_viewDetailButton.IsEnabled = false;
-        m_viewDetailButton.Text = LanguageControl.Get(fName, "89");
+        m_viewDetailButton.Text = LanguageControl.Get(fName, "79");
         m_triggerEnableButton.IsEnabled = false;
         m_triggerEnableButton.Text = LanguageControl.Get(fName, "18");
         m_openHomepageButton.IsEnabled = false;
@@ -65,7 +65,7 @@ public class ModsManageContentScreen : Screen {
             }
             GetTriggerAndTitle(entity, out string title, out Color titleColor);
             ModsManageContentItemWidget result = new() { Title = title, IsDisabled = entity.IsDisabled, TitleColor = titleColor };
-            if (IsOldApiVersionMod(entity, out string detail)) {
+            if (IsOldApiVersionMod(entity, out string description)) {
                 result.TitleColor = Color.Red;
                 if (entity.modInfo == null) {
                     result.IsInformationVisible = false;
@@ -78,7 +78,7 @@ public class ModsManageContentScreen : Screen {
             if (entity.Icon != null) {
                 result.Icon = entity.Icon;
             }
-            result.Detail = detail;
+            result.Description = description;
             return result;
         };
         m_modsContentList.ItemClicked += item => {
@@ -92,7 +92,7 @@ public class ModsManageContentScreen : Screen {
             m_triggerEnableButton.Text = LanguageControl.Get(fName, GetTrigger(entity) ? "19" : "18");
             m_openHomepageButton.IsEnabled = true;
             if (ReferenceEquals(entity, m_modsContentList.SelectedItem)) {
-                ViewDetail(entity);
+                DialogsManager.ShowDialog(null, new ModDetailsDialog(this, entity));;
             }
         };
     }
@@ -111,41 +111,10 @@ public class ModsManageContentScreen : Screen {
     public override void Update() {
         if (m_modsContentList.SelectedItem is ModEntity entity) {
             if (m_viewDetailButton.IsClicked) {
-                ViewDetail(entity);
+                DialogsManager.ShowDialog(null, new ModDetailsDialog(this, entity));
             }
             if (m_triggerEnableButton.IsClicked) {
-                if (entity.IsDisabled) {
-                    if (entity.DisableReason == ModDisableReason.Manually) {
-                        if (ModsManager.DisabledMods.TryGetValue(entity.modInfo!.PackageName, out HashSet<string> versions)) {
-                            if (!versions.Remove(entity.modInfo.Version)) {
-                                versions.Add(entity.modInfo.Version);
-                            }
-                        }
-                        else {
-                            ModsManager.DisabledMods.Add(entity.modInfo.PackageName, [entity.modInfo.Version]);
-                        }
-                        m_needRestart = true;
-                    }
-                }
-                else if (entity.modInfo!.PackageName is not "survivalcraft" and not "fastdebug") {
-                    if (ModsManager.DisabledMods.TryGetValue(entity.modInfo.PackageName, out HashSet<string> versions)) {
-                        if (!versions.Remove(entity.modInfo.Version)) {
-                            versions.Add(entity.modInfo.Version);
-                        }
-                    }
-                    else {
-                        ModsManager.DisabledMods.Add(entity.modInfo.PackageName, [entity.modInfo.Version]);
-                    }
-                    m_needRestart = true;
-                }
-                if (m_modsContentList.m_widgetsByIndex[m_modsContentList.SelectedIndex!.Value] is ModsManageContentItemWidget itemWidget) {
-                    m_triggerEnableButton.Text = LanguageControl.Get(
-                        fName,
-                        GetTriggerAndTitle(entity, out string title, out Color titleColor) ? "19" : "18"
-                    );
-                    itemWidget.Title = title;
-                    itemWidget.TitleColor = titleColor;
-                }
+                TriggerEnable(entity);
             }
             if (m_openHomepageButton.IsClicked) {
                 if (string.IsNullOrEmpty(entity.modInfo?.Link)) {
@@ -188,8 +157,43 @@ public class ModsManageContentScreen : Screen {
         }
     }
 
+    public void TriggerEnable(ModEntity entity) {
+        if (entity.IsDisabled) {
+            if (entity.DisableReason == ModDisableReason.Manually) {
+                if (ModsManager.DisabledMods.TryGetValue(entity.modInfo!.PackageName, out HashSet<string> versions)) {
+                    if (!versions.Remove(entity.modInfo.Version)) {
+                        versions.Add(entity.modInfo.Version);
+                    }
+                }
+                else {
+                    ModsManager.DisabledMods.Add(entity.modInfo.PackageName, [entity.modInfo.Version]);
+                }
+                m_needRestart = true;
+            }
+        }
+        else if (entity.modInfo!.PackageName is not "survivalcraft" and not "fastdebug") {
+            if (ModsManager.DisabledMods.TryGetValue(entity.modInfo.PackageName, out HashSet<string> versions)) {
+                if (!versions.Remove(entity.modInfo.Version)) {
+                    versions.Add(entity.modInfo.Version);
+                }
+            }
+            else {
+                ModsManager.DisabledMods.Add(entity.modInfo.PackageName, [entity.modInfo.Version]);
+            }
+            m_needRestart = true;
+        }
+        if (m_modsContentList.m_widgetsByIndex[m_modsContentList.SelectedIndex!.Value] is ModsManageContentItemWidget itemWidget) {
+            m_triggerEnableButton.Text = LanguageControl.Get(
+                fName,
+                GetTriggerAndTitle(entity, out string title, out Color titleColor) ? "19" : "18"
+            );
+            itemWidget.Title = title;
+            itemWidget.TitleColor = titleColor;
+        }
+    }
+
     /// <returns>true: mod能被启用，false：mod能被禁用</returns>
-    public bool GetTriggerAndTitle(ModEntity entity, out string title, out Color titleColor) {
+    public static bool GetTriggerAndTitle(ModEntity entity, out string title, out Color titleColor) {
         title = entity.modInfo?.Name ?? Storage.GetFileName(entity.ModFilePath);
         titleColor = Color.White;
         if (entity.IsDisabled) {
@@ -201,7 +205,7 @@ public class ModsManageContentScreen : Screen {
                     return true;
                 }
                 else {
-                    title = $"[{LanguageControl.Get(fName, "23")} {LanguageControl.Get(fName, "90")}] {title}";
+                    title = $"[{LanguageControl.Get(fName, "23")} {LanguageControl.Get(fName, "80")}] {title}";
                     titleColor = Color.Yellow;
                     return false;
                 }
@@ -213,7 +217,7 @@ public class ModsManageContentScreen : Screen {
         if (entity.modInfo != null
             && ModsManager.DisabledMods.TryGetValue(entity.modInfo!.PackageName, out HashSet<string> versions2)
             && versions2.Contains(entity.modInfo.Version)) {
-            title = $"[{LanguageControl.Get(fName, "22")} {LanguageControl.Get(fName, "90")}] {title}";
+            title = $"[{LanguageControl.Get(fName, "22")} {LanguageControl.Get(fName, "80")}] {title}";
             titleColor = Color.Yellow;
             return true;
         }
@@ -221,7 +225,7 @@ public class ModsManageContentScreen : Screen {
     }
 
     /// <returns>true: mod能被启用，false：mod能被禁用</returns>
-    public bool GetTrigger(ModEntity entity) {
+    public static bool GetTrigger(ModEntity entity) {
         if (entity.IsDisabled) {
             if (entity.DisableReason == ModDisableReason.Manually) {
                 return ModsManager.DisabledMods.TryGetValue(entity.modInfo!.PackageName, out HashSet<string> versions1)
@@ -232,41 +236,5 @@ public class ModsManageContentScreen : Screen {
         return entity.modInfo != null
             && ModsManager.DisabledMods.TryGetValue(entity.modInfo!.PackageName, out HashSet<string> versions2)
             && versions2.Contains(entity.modInfo.Version);
-    }
-
-    public void ViewDetail(ModEntity entity) {
-        StringBuilder sb = new();
-        if (entity.IsDisabled) {
-            sb.AppendLine($"{LanguageControl.Get(fName, "88")}{LanguageControl.Get("ModDisableReason", entity.DisableReason.ToString())}");
-        }
-        ModInfo modInfo = entity.modInfo;
-        if (modInfo != null) {
-            sb.AppendLine($"{LanguageControl.Get(fName, "79")}{(string.IsNullOrEmpty(modInfo.Version) ? LanguageControl.None : modInfo.Version)}");
-            sb.AppendLine($"{LanguageControl.Get(fName, "80")}{(string.IsNullOrEmpty(modInfo.ApiVersion) ? LanguageControl.Unknown : modInfo.ApiVersion)}");
-            sb.AppendLine($"{LanguageControl.Get(fName, "81")}{(string.IsNullOrEmpty(modInfo.Author) ? LanguageControl.Unknown : modInfo.Author)}");
-            sb.AppendLine($"{LanguageControl.Get(fName, "82")}{entity.Size}");
-            sb.AppendLine($"{LanguageControl.Get(fName, "83")}{(string.IsNullOrEmpty(modInfo.Description) ? LanguageControl.None : modInfo.Description)}");
-            sb.AppendLine($"{LanguageControl.Get(fName, "84")}{(string.IsNullOrEmpty(modInfo.Link) ? LanguageControl.None : modInfo.Link)}");
-            if (!string.IsNullOrEmpty(entity.ModFilePath)) {
-                sb.AppendLine($"{LanguageControl.Get(fName, "85")}{Storage.GetFileName(entity.ModFilePath)}");
-            }
-            sb.AppendLine($"{LanguageControl.Get(fName, "86")}{modInfo.PackageName}");
-            if (modInfo.DependencyRanges.Count > 0) {
-                sb.AppendLine(LanguageControl.Get(fName, "87"));
-                foreach (KeyValuePair<string, VersionRange> dependency in modInfo.DependencyRanges) {
-                    sb.AppendLine($"  {dependency.Key} {dependency.Value}");
-                }
-            }
-        }
-        DialogsManager.ShowDialog(
-            null,
-            new MessageDialog(
-                $"{(entity.IsDisabled ? $"[{LanguageControl.Get(fName, "22")}] " : "")}{entity.modInfo?.Name ?? Storage.GetFileName(entity.ModFilePath)}",
-                sb.ToString(),
-                LanguageControl.Ok,
-                null,
-                null
-            )
-        );
     }
 }

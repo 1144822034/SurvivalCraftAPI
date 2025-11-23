@@ -7,7 +7,7 @@ namespace Game {
         public readonly RectangleWidget m_disabledOverlayWidget;
         public readonly LabelWidget m_titleWidget;
         public readonly LabelWidget m_informationWidget;
-        public readonly LabelWidget m_detailWidget;
+        public readonly LabelWidget m_descriptionWidget;
 
         public Subtexture Icon {
             get => m_iconWidget.Subtexture;
@@ -42,9 +42,9 @@ namespace Game {
             set => m_informationWidget.IsVisible = value;
         }
 
-        public string Detail {
-            get => m_detailWidget.Text;
-            set => m_detailWidget.Text = value;
+        public string Description {
+            get => m_descriptionWidget.Text;
+            set => m_descriptionWidget.Text = value;
         }
 
         public ModsManageContentItemWidget() {
@@ -54,7 +54,7 @@ namespace Game {
             m_disabledOverlayWidget = Children.Find<RectangleWidget>("ModsManageContentItem.DisabledOverlay");
             m_titleWidget = Children.Find<LabelWidget>("ModsManageContentItem.Title");
             m_informationWidget = Children.Find<LabelWidget>("ModsManageContentItem.Information");
-            m_detailWidget = Children.Find<LabelWidget>("ModsManageContentItem.Detail");
+            m_descriptionWidget = Children.Find<LabelWidget>("ModsManageContentItem.Description");
         }
     }
 }

@@ -19,7 +19,7 @@ namespace Game {
                     "modinfo.json",
                     stream => {
                         modInfo = ModsManager.DeserializeJson(ModsManager.StreamToString(stream));
-                        modInfo.Name = $"[Debug]{modInfo.Name}";
+                        modInfo.Name = $"[FastDebug]{modInfo.Name}";
                     }
                 )) {
                 modInfo = new ModInfo {
