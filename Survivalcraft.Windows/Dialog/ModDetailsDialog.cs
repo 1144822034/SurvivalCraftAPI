@@ -61,7 +61,7 @@ namespace Game {
                     }
                 );
                 m_contentPanel.Children.Add(
-                    new LabelWidget { Text = $"{LanguageControl.Get(fName, "5")}{DataSizeFormatter.Format(entity.Size, 2)}", Margin = margin }
+                    new LabelWidget { Text = $"{LanguageControl.Get(fName, "5")}{DataSizeFormatter.Format(entity.Size)}", Margin = margin }
                 );
                 m_contentPanel.Children.Add(
                     new LabelWidget {

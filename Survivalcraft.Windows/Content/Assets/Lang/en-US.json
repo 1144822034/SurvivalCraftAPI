@@ -134,8 +134,9 @@
     "76": "A mod for API {0} might not run properly in this API version",
     "77": "Homepage",
     "78": "The homepage link of this mod is not set.",
-    "79": "Details",
-    "80": "*Need Restart"
+    "79": "Mod Ver: {0}  API Ver: {1}  Author: {2}  Size: {3}",
+    "80": "Details",
+    "81": "*Need Restart"
   },
   "ManageContentScreen": {
     "1": "Blocks Texture | {0}x{1}",

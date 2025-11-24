@@ -1,9 +1,6 @@
-using System.Text;
 using System.Xml.Linq;
 using Engine;
-using Engine.Graphics;
 using Game;
-using NuGet.Versioning;
 
 public class ModsManageContentScreen : Screen {
     public static string fName = "ModsManageContentScreen";
@@ -54,7 +51,7 @@ public class ModsManageContentScreen : Screen {
         m_triggerEnableButton = Children.Find<BevelledButtonWidget>("TriggerEnableButton");
         m_openHomepageButton = Children.Find<BevelledButtonWidget>("OpenHomepageButton");
         m_viewDetailButton.IsEnabled = false;
-        m_viewDetailButton.Text = LanguageControl.Get(fName, "79");
+        m_viewDetailButton.Text = LanguageControl.Get(fName, "80");
         m_triggerEnableButton.IsEnabled = false;
         m_triggerEnableButton.Text = LanguageControl.Get(fName, "18");
         m_openHomepageButton.IsEnabled = false;
@@ -72,8 +69,13 @@ public class ModsManageContentScreen : Screen {
                 }
             }
             else {
-                result.Information =
-                    $"{LanguageControl.Get(fName, "79")}{entity.modInfo!.Version}  {LanguageControl.Get(fName, "80")}{entity.modInfo.ApiVersion}  {LanguageControl.Get(fName, "81")}{entity.modInfo.Author}  {LanguageControl.Get(fName, "82")}{DataSizeFormatter.Format(entity.Size, 2)}";
+                result.Information = string.Format(
+                    LanguageControl.Get(fName, "79"),
+                    entity.modInfo!.Version,
+                    entity.modInfo.ApiVersion,
+                    entity.modInfo.Author,
+                    DataSizeFormatter.Format(entity.Size)
+                );
             }
             if (entity.Icon != null) {
                 result.Icon = entity.Icon;
@@ -92,7 +94,7 @@ public class ModsManageContentScreen : Screen {
             m_triggerEnableButton.Text = LanguageControl.Get(fName, GetTrigger(entity) ? "19" : "18");
             m_openHomepageButton.IsEnabled = true;
             if (ReferenceEquals(entity, m_modsContentList.SelectedItem)) {
-                DialogsManager.ShowDialog(null, new ModDetailsDialog(this, entity));;
+                DialogsManager.ShowDialog(null, new ModDetailsDialog(this, entity));
             }
         };
     }
@@ -183,10 +185,7 @@ public class ModsManageContentScreen : Screen {
             m_needRestart = true;
         }
         if (m_modsContentList.m_widgetsByIndex[m_modsContentList.SelectedIndex!.Value] is ModsManageContentItemWidget itemWidget) {
-            m_triggerEnableButton.Text = LanguageControl.Get(
-                fName,
-                GetTriggerAndTitle(entity, out string title, out Color titleColor) ? "19" : "18"
-            );
+            m_triggerEnableButton.Text = LanguageControl.Get(fName, GetTriggerAndTitle(entity, out string title, out Color titleColor) ? "19" : "18");
             itemWidget.Title = title;
             itemWidget.TitleColor = titleColor;
         }
@@ -204,11 +203,9 @@ public class ModsManageContentScreen : Screen {
                     titleColor = Color.Red;
                     return true;
                 }
-                else {
-                    title = $"[{LanguageControl.Get(fName, "23")} {LanguageControl.Get(fName, "80")}] {title}";
-                    titleColor = Color.Yellow;
-                    return false;
-                }
+                title = $"[{LanguageControl.Get(fName, "23")} {LanguageControl.Get(fName, "81")}] {title}";
+                titleColor = Color.Yellow;
+                return false;
             }
             title = $"[{LanguageControl.Get(fName, "22")}] {title}";
             titleColor = Color.Red;
@@ -217,7 +214,7 @@ public class ModsManageContentScreen : Screen {
         if (entity.modInfo != null
             && ModsManager.DisabledMods.TryGetValue(entity.modInfo!.PackageName, out HashSet<string> versions2)
             && versions2.Contains(entity.modInfo.Version)) {
-            title = $"[{LanguageControl.Get(fName, "22")} {LanguageControl.Get(fName, "80")}] {title}";
+            title = $"[{LanguageControl.Get(fName, "22")} {LanguageControl.Get(fName, "81")}] {title}";
             titleColor = Color.Yellow;
             return true;
         }

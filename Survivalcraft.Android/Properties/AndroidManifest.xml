@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-  android:versionCode="18200"
-  android:versionName="API1.8.2.0"
+  android:versionCode="18210"
+  android:versionName="API1.8.2.1"
   package="com.candy.survivalcraftAPI1_8">
   <application
     android:label="@string/ApiTitle"

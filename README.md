@@ -79,9 +79,9 @@
 
     ```xml
     <ItemGroup>
-      <PackageReference Include="SurvivalcraftAPI.Engine" Version="1.8.2.0"/>
-      <PackageReference Include="SurvivalcraftAPI.EntitySystem" Version="1.8.2.0"/>
-      <PackageReference Include="SurvivalcraftAPI.Survivalcraft" Version="1.8.2.0"/>
+      <PackageReference Include="SurvivalcraftAPI.Engine" Version="1.8.2.1"/>
+      <PackageReference Include="SurvivalcraftAPI.EntitySystem" Version="1.8.2.1"/>
+      <PackageReference Include="SurvivalcraftAPI.Survivalcraft" Version="1.8.2.1"/>
     </ItemGroup>
     ```
 
