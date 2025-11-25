@@ -478,15 +478,6 @@ public static class ModsManager {
                         LoadingScreen.Warning($"The package name of [{modEntity.modInfo.PackageName}] is not allowed, and this mod will not be loaded.");
                         continue;
                     }
-                    else if (modEntity.modInfo.PackageName.Contains(';')) {
-                        modEntity.IsDisabled = true;
-                        modEntity.DisableReason = ModDisableReason.InvalidPackageName;
-                    }
-                    else if (DisabledMods.TryGetValue(modEntity.modInfo.PackageName, out HashSet<string> disabledVersions)
-                        && disabledVersions.Contains(modEntity.modInfo.Version)) {
-                        modEntity.IsDisabled = true;
-                        modEntity.DisableReason = ModDisableReason.Manually;
-                    }
                     ModListAll.Add(modEntity);
                 }
             }

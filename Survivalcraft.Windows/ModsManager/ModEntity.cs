@@ -171,6 +171,17 @@ namespace Game {
                 DisableReason = ModDisableReason.NoModInfo;
                 return;
             }
+            if (modInfo.PackageName.Contains(';')) {
+                IsDisabled = true;
+                DisableReason = ModDisableReason.InvalidPackageName;
+                return;
+            }
+            if (ModsManager.DisabledMods.TryGetValue(modInfo.PackageName, out HashSet<string> disabledVersions)
+                && disabledVersions.Contains(modInfo.Version)) {
+                IsDisabled = true;
+                DisableReason = ModDisableReason.Manually;
+                return;
+            }
             foreach (KeyValuePair<string, ZipArchiveEntry> c in ModFiles) {
                 ZipArchiveEntry zipArchiveEntry = c.Value;
                 string filename = zipArchiveEntry.FilenameInZip;
