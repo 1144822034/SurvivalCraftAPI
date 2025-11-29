@@ -366,6 +366,8 @@ namespace Game {
 
         public static bool SafeMode { get; set; }
 
+        public static bool AdaptEdgeToEdgeDisplay { get; set; }
+
         public static event Action<string> SettingChanged;
         public static ValuesDictionary KeyboardMappingSettings { get; set; }
         public static ValuesDictionary GamepadMappingSettings { get; set; }
@@ -451,6 +453,7 @@ namespace Game {
                 AnimatedTextureRefreshLimit = 7;
                 FileAssociationEnabled = true;
                 SafeMode = false;
+                AdaptEdgeToEdgeDisplay = Window.HasWideNotch;
                 InitializeKeyboardMappingSettings();
                 InitializeGamepadMappingSettings();
                 InitializeCameraManageSettings();

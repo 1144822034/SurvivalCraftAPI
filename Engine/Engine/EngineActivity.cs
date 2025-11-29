@@ -4,14 +4,17 @@ using Android.App;
 using Android.Content;
 using Android.Content.PM;
 using Android.Database;
+using Android.Graphics;
 using Android.Media;
 using Android.OS;
 using Android.Provider;
 using Android.Runtime;
 using Android.Views;
+using AndroidX.Core.View;
 using Engine.Input;
 using Silk.NET.Windowing.Sdl.Android;
 using Environment = System.Environment;
+using Path = System.IO.Path;
 using Stream = Android.Media.Stream;
 using Uri = Android.Net.Uri;
 // ReSharper disable BitwiseOperatorOnEnumWithoutFlags
@@ -54,7 +57,9 @@ namespace Engine {
             EnableImmersiveMode();
             VolumeControlStream = Stream.Music;
             RequestedOrientation = ScreenOrientation.SensorLandscape;
-
+            if (Build.VERSION.SdkInt >= (BuildVersionCodes)28) {
+                Window?.DecorView.SetOnApplyWindowInsetsListener(new ApplyWindowInsetsListener());
+            }
         }
 
         public void Vibrate(long ms) {
@@ -313,6 +318,32 @@ namespace Engine {
                 fileName = Path.GetFileName(uri.Path);
             }
             return stream;
+        }
+
+        public class ApplyWindowInsetsListener : Java.Lang.Object, View.IOnApplyWindowInsetsListener {
+            public WindowInsets OnApplyWindowInsets(View v, WindowInsets insets) {
+                IList<Rect> boundingRects = insets.DisplayCutout?.BoundingRects;
+                if (boundingRects == null
+                    || boundingRects.Count == 0) {
+                    return WindowInsets.Consumed;
+                }
+                bool hasWideNotch = false;
+                if (boundingRects.Count >= 2) {
+                    hasWideNotch = true;
+                }
+                else {
+                    Rect rect = boundingRects[0];
+                    if (Math.Max(rect.Width(), rect.Height()) > 200) {
+                        hasWideNotch = true;
+                    }
+                }
+                Insets cutoutInsets = insets.GetInsets(WindowInsetsCompat.Type.DisplayCutout());
+                Engine.Window.DisplayCutoutInsetsChangedHandler(
+                    new Vector4(cutoutInsets.Left, cutoutInsets.Top, cutoutInsets.Right, cutoutInsets.Bottom),
+                    hasWideNotch
+                );
+                return WindowInsets.Consumed;
+            }
         }
     }
 }

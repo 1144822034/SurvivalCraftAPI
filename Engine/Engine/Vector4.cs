@@ -232,5 +232,16 @@ namespace Engine {
                 return ptr;
             }
         }
+
+        public Vector2 XY => new(X, Y);
+        public Vector2 XZ => new(X, Z);
+        public Vector2 XW => new(X, W);
+        public Vector2 YZ => new(Y, Z);
+        public Vector2 YW => new(Y, W);
+        public Vector2 ZW => new(Z, W);
+        public Vector3 XYZ => new(X, Y, Z);
+        public Vector3 XYW => new(X, Y, W);
+        public Vector3 XZW => new(X, Z, W);
+        public Vector3 YZW => new(Y, Z, W);
     }
 }

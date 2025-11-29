@@ -120,6 +120,8 @@ namespace Game {
 
         public ComponentInput m_componentInput;
 
+        public GameWidget GameWidget { get; set; }
+
         public ContainerWidget ControlsContainerWidget { get; set; }
 
         public TouchInputWidget ViewWidget { get; set; }
@@ -239,6 +241,7 @@ namespace Game {
             m_subsystemBlockBehaviors = Project.FindSubsystem<SubsystemBlockBehaviors>(true);
             m_componentPlayer = Entity.FindComponent<ComponentPlayer>(true);
             m_componentInput = Entity.FindComponent<ComponentInput>();
+            GameWidget = m_componentPlayer.GameWidget;
             ContainerWidget guiWidget = m_componentPlayer.GuiWidget;
             m_backButtonWidget = guiWidget.Children.Find<ButtonWidget>("BackButton");
             m_inventoryButtonWidget = guiWidget.Children.Find<ButtonWidget>("InventoryButton");
@@ -324,22 +327,22 @@ namespace Game {
 
         public virtual void UpdateSidePanelsAnimation() {
             float num = MathUtils.Min(Time.FrameDuration, 0.1f);
-            bool flag = ModalPanelWidget != null && (m_modalPanelAnimationData == null || m_modalPanelAnimationData.NewWidget != null);
-            float num2 = !(ShowTouchWidget | flag) ? 1 : 0;
-            float x = num2 - m_sidePanelsFactor;
+            bool showModelWidget = ModalPanelWidget != null && (m_modalPanelAnimationData == null || m_modalPanelAnimationData.NewWidget != null);
+            float targetSidePanelsFactor = (ShowTouchWidget | showModelWidget) ? 0 : 1;
+            float x = targetSidePanelsFactor - m_sidePanelsFactor;
             if (MathF.Abs(x) > 0.01f) {
                 m_sidePanelsFactor += Math.Clamp(12f * MathUtils.PowSign(x, 0.75f) * num, 0f - MathF.Abs(x), MathF.Abs(x));
             }
             else {
-                m_sidePanelsFactor = num2;
+                m_sidePanelsFactor = targetSidePanelsFactor;
             }
             m_leftControlsContainerWidget.RenderTransform = Matrix.CreateTranslation(
-                m_leftControlsContainerWidget.ActualSize.X * (0f - m_sidePanelsFactor),
+                (m_leftControlsContainerWidget.ActualSize.X + m_componentPlayer.GuiWidget.MarginLeft / ScreensManager.FinalUiScale) * (0f - m_sidePanelsFactor),
                 0f,
                 0f
             );
             m_rightControlsContainerWidget.RenderTransform = Matrix.CreateTranslation(
-                m_rightControlsContainerWidget.ActualSize.X * m_sidePanelsFactor,
+                (m_rightControlsContainerWidget.ActualSize.X + m_componentPlayer.GuiWidget.MarginRight / ScreensManager.FinalUiScale) * m_sidePanelsFactor,
                 0f,
                 0f
             );

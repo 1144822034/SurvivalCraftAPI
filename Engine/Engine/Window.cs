@@ -5,6 +5,7 @@ using Android.OS;
 using Android.Views;
 using Org.Libsdl.App;
 #else
+using System.Diagnostics;
 using System.Reflection;
 using System.Runtime.CompilerServices;
 using Silk.NET.Core;
@@ -17,7 +18,6 @@ using Monitor = Silk.NET.Windowing.Monitor;
 using System.Runtime.InteropServices;
 #endif
 #endif
-using System.Diagnostics;
 using Engine.Audio;
 using Engine.Graphics;
 using Engine.Input;
@@ -192,6 +192,13 @@ namespace Engine {
             }
         }
 
+        public static bool HasWideNotch { get; set; }
+
+        /// <summary>
+        /// 刘海/水滴/挖孔在屏幕边缘的宽度。X: 左边，Y: 顶部，Z: 右边，W: 底部
+        /// </summary>
+        public static Vector4 DisplayCutoutInsets { get; set; }
+
         public static string TitlePrefix {
             get {
                 VerifyWindowOpened();
@@ -293,6 +300,8 @@ namespace Engine {
         public static event Action Created;
 
         public static event Action Resized;
+
+        public static event Action<Vector4, bool> DisplayCutoutInsetsChanged;
 
         public static event Action Activated;
 
@@ -475,6 +484,15 @@ namespace Engine {
             Display.Resize();
             Resized?.Invoke();
 #endif
+        }
+
+        public static void DisplayCutoutInsetsChangedHandler(Vector4 insets, bool hasWideNotch) {
+            if (HasWideNotch == hasWideNotch && DisplayCutoutInsets == insets) {
+                return;
+            }
+            HasWideNotch = hasWideNotch;
+            DisplayCutoutInsets = insets;
+            DisplayCutoutInsetsChanged?.Invoke(insets, hasWideNotch);
         }
 
         static void RenderFrameHandler(double lastRenderDelta) {

@@ -44,6 +44,8 @@ namespace Game {
         /// </summary>
         public static Screen PreviousScreen { get; set; }
 
+        public static float FinalUiScale { get; set; }
+
         public static T FindScreen<T>(string name) where T : Screen {
             m_screens.TryGetValue(name, out Screen value);
             return (T)value;
@@ -73,6 +75,7 @@ namespace Game {
             UpdateAnimation();
             if (CurrentScreen != null) {
                 Log.Verbose($"Entered screen \"{GetScreenName(CurrentScreen)}\"");
+                UpdateTopBarMarginLeft();
             }
         }
 
@@ -81,6 +84,7 @@ namespace Game {
             RootWidget.WidgetsHierarchyInput = new WidgetInput();
             InitScreens();
             SwitchScreen("Loading");
+            Window.DisplayCutoutInsetsChanged += (_, _) => UpdateTopBarMarginLeft();
         }
 
         public static void InitScreens() {
@@ -283,6 +287,7 @@ namespace Game {
                 num2 = vector.Y / num3;
                 availableSize = new Vector2(num3 / vector.Y * vector.X, num3);
             }
+            FinalUiScale = 1f / num2;
             RootWidget.LayoutTransform = Matrix.CreateScale(num2, num2, 1f);
             if (SettingsManager.UpsideDownLayout) {
                 RootWidget.LayoutTransform *= new Matrix(
@@ -348,6 +353,23 @@ namespace Game {
                 new Vector2(tc1.X, tc1.Y),
                 color
             );
+        }
+
+        public static void UpdateTopBarMarginLeft() {
+            if (SettingsManager.AdaptEdgeToEdgeDisplay
+                && CurrentScreen?.Children.Find<BevelledButtonWidget>("TopBar.Back", false)?.ParentWidget?.ParentWidget is CanvasWidget topBar
+                && topBar.Size.X == 64f) {
+                topBar.MarginLeft = Window.DisplayCutoutInsets.X * FinalUiScale;
+            }
+        }
+
+        public static void ResetAllTopBarMarginLeft() {
+            foreach (Screen screen in m_screens.Values) {
+                if (screen.Children.Find<BevelledButtonWidget>("TopBar.Back", false)?.ParentWidget?.ParentWidget is CanvasWidget topBar
+                    && topBar.Size.X == 64f) {
+                    topBar.MarginLeft = 0f;
+                }
+            }
         }
     }
 }

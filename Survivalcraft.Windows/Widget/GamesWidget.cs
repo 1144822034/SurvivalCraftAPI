@@ -4,7 +4,6 @@ using Engine.Graphics;
 namespace Game {
     public class GamesWidget : ContainerWidget {
         public float m_spacing;
-
         public float m_bevel;
 
         public override void MeasureOverride(Vector2 parentAvailableSize) {
@@ -13,10 +12,24 @@ namespace Game {
         }
 
         public override void ArrangeOverride() {
+            float marginLeft = 0f;
+            float marginRight = 0f;
+            if (SettingsManager.AdaptEdgeToEdgeDisplay) {
+                marginLeft = Window.DisplayCutoutInsets.X * ScreensManager.FinalUiScale;
+                marginRight = Window.DisplayCutoutInsets.Z * ScreensManager.FinalUiScale;
+            }
             if (Children.Count == 1) {
                 ArrangeChildWidgetInCell(Vector2.Zero, ActualSize, Children[0]);
-                if (SettingsManager.ScreenLayout1 == ScreenLayout.Single) {
-                    Children[0].LayoutTransform = Matrix.Identity;
+                if (SettingsManager.ScreenLayout1 == ScreenLayout.Single
+                    && Children[0] is GameWidget gameWidget0) {
+                    gameWidget0.LayoutTransform = Matrix.Identity;
+                    if (SettingsManager.AdaptEdgeToEdgeDisplay) {
+                        ContainerWidget guiWidget = gameWidget0.GuiWidget;
+                        guiWidget.MarginLeft = marginLeft;
+                        guiWidget.MarginTop = 0f;
+                        guiWidget.MarginRight = marginRight;
+                        guiWidget.MarginBottom = 0f;
+                    }
                 }
             }
             else if (Children.Count == 2) {
@@ -31,9 +44,23 @@ namespace Game {
                     float y3 = ActualSize.Y;
                     float num = 0.5f;
                     ArrangeChildWidgetInCell(new Vector2(x, y), new Vector2(x, y) + new Vector2(x3, y3) / num, Children[0]);
-                    Children[0].LayoutTransform = Matrix.CreateScale(num, num, 1f);
+                    if (Children[0] is GameWidget gameWidget0) {
+                        gameWidget0.LayoutTransform = Matrix.CreateScale(num, num, 1f);
+                        ContainerWidget guiWidget = gameWidget0.GuiWidget;
+                        guiWidget.MarginLeft = marginLeft / num;
+                        guiWidget.MarginTop = 0f;
+                        guiWidget.MarginRight = 0f;
+                        guiWidget.MarginBottom = 0f;
+                    }
                     ArrangeChildWidgetInCell(new Vector2(x2, y2), new Vector2(x2, y2) + new Vector2(x3, y3) / num, Children[1]);
-                    Children[1].LayoutTransform = Matrix.CreateScale(num, num, 1f);
+                    if (Children[1] is GameWidget gameWidget1) {
+                        gameWidget1.LayoutTransform = Matrix.CreateScale(num, num, 1f);
+                        ContainerWidget guiWidget = gameWidget1.GuiWidget;
+                        guiWidget.MarginLeft = 0f;
+                        guiWidget.MarginTop = 0f;
+                        guiWidget.MarginRight = marginRight / num;
+                        guiWidget.MarginBottom = 0f;
+                    }
                 }
                 if (SettingsManager.ScreenLayout2 == ScreenLayout.DoubleHorizontal) {
                     m_spacing = 12f;
@@ -46,9 +73,23 @@ namespace Game {
                     float y6 = ActualSize.Y / 2f - m_spacing / 2f;
                     float num2 = 0.48f;
                     ArrangeChildWidgetInCell(new Vector2(x4, y4), new Vector2(x4, y4) + new Vector2(x6, y6) / num2, Children[0]);
-                    Children[0].LayoutTransform = Matrix.CreateScale(num2, num2, 1f);
+                    if (Children[0] is GameWidget gameWidget0) {
+                        gameWidget0.LayoutTransform = Matrix.CreateScale(num2, num2, 1f);
+                        ContainerWidget guiWidget = gameWidget0.GuiWidget;
+                        guiWidget.MarginLeft = marginLeft / num2;
+                        guiWidget.MarginTop = 0f;
+                        guiWidget.MarginRight = marginRight / num2;
+                        guiWidget.MarginBottom = 0f;
+                    }
                     ArrangeChildWidgetInCell(new Vector2(x5, y5), new Vector2(x5, y5) + new Vector2(x6, y6) / num2, Children[1]);
-                    Children[1].LayoutTransform = Matrix.CreateScale(num2, num2, 1f);
+                    if (Children[1] is GameWidget gameWidget1) {
+                        gameWidget1.LayoutTransform = Matrix.CreateScale(num2, num2, 1f);
+                        ContainerWidget guiWidget = gameWidget1.GuiWidget;
+                        guiWidget.MarginLeft = marginLeft / num2;
+                        guiWidget.MarginTop = 0f;
+                        guiWidget.MarginRight = marginRight / num2;
+                        guiWidget.MarginBottom = 0f;
+                    }
                 }
                 if (SettingsManager.ScreenLayout2 == ScreenLayout.DoubleOpposite) {
                     m_spacing = 20f;
@@ -61,43 +102,57 @@ namespace Game {
                     float y9 = ActualSize.Y;
                     float num3 = Window.Size.Y / (float)Window.Size.X;
                     ArrangeChildWidgetInCell(new Vector2(x7, y7), new Vector2(x7, y7) + new Vector2(x9, y9) / num3, Children[0]);
-                    Children[0].LayoutTransform = new Matrix(
-                        0f,
-                        num3,
-                        0f,
-                        0f,
-                        0f - num3,
-                        0f,
-                        0f,
-                        0f,
-                        0f,
-                        0f,
-                        1f,
-                        0f,
-                        0f,
-                        0f,
-                        0f,
-                        1f
-                    );
+                    if (Children[0] is GameWidget gameWidget0) {
+                        gameWidget0.LayoutTransform = new Matrix(
+                            0f,
+                            num3,
+                            0f,
+                            0f,
+                            0f - num3,
+                            0f,
+                            0f,
+                            0f,
+                            0f,
+                            0f,
+                            1f,
+                            0f,
+                            0f,
+                            0f,
+                            0f,
+                            1f
+                        );
+                        ContainerWidget guiWidget = gameWidget0.GuiWidget;
+                        guiWidget.MarginLeft = 0f;
+                        guiWidget.MarginTop = 0f;
+                        guiWidget.MarginRight = 0f;
+                        guiWidget.MarginBottom = marginLeft / num3;
+                    }
                     ArrangeChildWidgetInCell(new Vector2(x8, y8), new Vector2(x8, y8) + new Vector2(x9, y9) / num3, Children[1]);
-                    Children[1].LayoutTransform = new Matrix(
-                        0f,
-                        0f - num3,
-                        0f,
-                        0f,
-                        num3,
-                        0f,
-                        0f,
-                        0f,
-                        0f,
-                        0f,
-                        1f,
-                        0f,
-                        0f,
-                        0f,
-                        0f,
-                        1f
-                    );
+                    if (Children[1] is GameWidget gameWidget1) {
+                        gameWidget1.LayoutTransform = new Matrix(
+                            0f,
+                            0f - num3,
+                            0f,
+                            0f,
+                            num3,
+                            0f,
+                            0f,
+                            0f,
+                            0f,
+                            0f,
+                            1f,
+                            0f,
+                            0f,
+                            0f,
+                            0f,
+                            1f
+                        );
+                        ContainerWidget guiWidget = gameWidget1.GuiWidget;
+                        guiWidget.MarginLeft = 0f;
+                        guiWidget.MarginTop = 0f;
+                        guiWidget.MarginRight = 0f;
+                        guiWidget.MarginBottom = marginRight / num3;
+                    }
                 }
             }
             else if (Children.Count == 3) {
@@ -115,11 +170,32 @@ namespace Game {
                     float y14 = ActualSize.Y / 2f - m_spacing / 2f;
                     float num4 = 0.5f;
                     ArrangeChildWidgetInCell(new Vector2(x10, y10), new Vector2(x10, y10) + new Vector2(x13, y13) / num4, Children[0]);
-                    Children[0].LayoutTransform = Matrix.CreateScale(num4, num4, 1f);
+                    if (Children[0] is GameWidget gameWidget0) {
+                        gameWidget0.LayoutTransform = Matrix.CreateScale(num4, num4, 1f);
+                        ContainerWidget guiWidget = gameWidget0.GuiWidget;
+                        guiWidget.MarginLeft = marginLeft / num4;
+                        guiWidget.MarginTop = 0f;
+                        guiWidget.MarginRight = 0f;
+                        guiWidget.MarginBottom = 0f;
+                    }
                     ArrangeChildWidgetInCell(new Vector2(x11, y11), new Vector2(x11, y11) + new Vector2(x13, y14) / num4, Children[1]);
-                    Children[1].LayoutTransform = Matrix.CreateScale(num4, num4, 1f);
+                    if (Children[1] is GameWidget gameWidget1) {
+                        gameWidget1.LayoutTransform = Matrix.CreateScale(num4, num4, 1f);
+                        ContainerWidget guiWidget = gameWidget1.GuiWidget;
+                        guiWidget.MarginLeft = 0f;
+                        guiWidget.MarginTop = 0f;
+                        guiWidget.MarginRight = marginRight / num4;
+                        guiWidget.MarginBottom = 0f;
+                    }
                     ArrangeChildWidgetInCell(new Vector2(x12, y12), new Vector2(x12, y12) + new Vector2(x13, y14) / num4, Children[2]);
-                    Children[2].LayoutTransform = Matrix.CreateScale(num4, num4, 1f);
+                    if (Children[2] is GameWidget gameWidget2) {
+                        gameWidget2.LayoutTransform = Matrix.CreateScale(num4, num4, 1f);
+                        ContainerWidget guiWidget = gameWidget2.GuiWidget;
+                        guiWidget.MarginLeft = 0f;
+                        guiWidget.MarginTop = 0f;
+                        guiWidget.MarginRight = marginRight / num4;
+                        guiWidget.MarginBottom = 0f;
+                    }
                 }
                 if (SettingsManager.ScreenLayout3 == ScreenLayout.TripleHorizontal) {
                     float x14 = 0f;
@@ -133,11 +209,32 @@ namespace Game {
                     float y18 = ActualSize.Y / 2f - m_spacing / 2f;
                     float num5 = 0.5f;
                     ArrangeChildWidgetInCell(new Vector2(x14, y15), new Vector2(x14, y15) + new Vector2(x17, y18) / num5, Children[0]);
-                    Children[0].LayoutTransform = Matrix.CreateScale(num5, num5, 1f);
+                    if (Children[0] is GameWidget gameWidget0) {
+                        gameWidget0.LayoutTransform = Matrix.CreateScale(num5, num5, 1f);
+                        ContainerWidget guiWidget = gameWidget0.GuiWidget;
+                        guiWidget.MarginLeft = marginLeft / num5;
+                        guiWidget.MarginTop = 0f;
+                        guiWidget.MarginRight = marginRight / num5;
+                        guiWidget.MarginBottom = 0f;
+                    }
                     ArrangeChildWidgetInCell(new Vector2(x15, y16), new Vector2(x15, y16) + new Vector2(x18, y18) / num5, Children[1]);
-                    Children[1].LayoutTransform = Matrix.CreateScale(num5, num5, 1f);
+                    if (Children[1] is GameWidget gameWidget1) {
+                        gameWidget1.LayoutTransform = Matrix.CreateScale(num5, num5, 1f);
+                        ContainerWidget guiWidget = gameWidget1.GuiWidget;
+                        guiWidget.MarginLeft = marginLeft / num5;
+                        guiWidget.MarginTop = 0f;
+                        guiWidget.MarginRight = 0f;
+                        guiWidget.MarginBottom = 0f;
+                    }
                     ArrangeChildWidgetInCell(new Vector2(x16, y17), new Vector2(x16, y17) + new Vector2(x18, y18) / num5, Children[2]);
-                    Children[2].LayoutTransform = Matrix.CreateScale(num5, num5, 1f);
+                    if (Children[2] is GameWidget gameWidget2) {
+                        gameWidget2.LayoutTransform = Matrix.CreateScale(num5, num5, 1f);
+                        ContainerWidget guiWidget = gameWidget2.GuiWidget;
+                        guiWidget.MarginLeft = 0f;
+                        guiWidget.MarginTop = 0f;
+                        guiWidget.MarginRight = marginRight / num5;
+                        guiWidget.MarginBottom = 0f;
+                    }
                 }
                 if (SettingsManager.ScreenLayout3 == ScreenLayout.TripleEven) {
                     float x19 = 0f;
@@ -150,11 +247,32 @@ namespace Game {
                     float y22 = ActualSize.Y / 2f - m_spacing / 2f;
                     float num6 = 0.5f;
                     ArrangeChildWidgetInCell(new Vector2(x19, y19), new Vector2(x19, y19) + new Vector2(x22, y22) / num6, Children[0]);
-                    Children[0].LayoutTransform = Matrix.CreateScale(num6, num6, 1f);
+                    if (Children[0] is GameWidget gameWidget0) {
+                        gameWidget0.LayoutTransform = Matrix.CreateScale(num6, num6, 1f);
+                        ContainerWidget guiWidget = gameWidget0.GuiWidget;
+                        guiWidget.MarginLeft = marginLeft / num6;
+                        guiWidget.MarginTop = 0f;
+                        guiWidget.MarginRight = 0f;
+                        guiWidget.MarginBottom = 0f;
+                    }
                     ArrangeChildWidgetInCell(new Vector2(x20, y20), new Vector2(x20, y20) + new Vector2(x22, y22) / num6, Children[1]);
-                    Children[1].LayoutTransform = Matrix.CreateScale(num6, num6, 1f);
+                    if (Children[1] is GameWidget gameWidget1) {
+                        gameWidget1.LayoutTransform = Matrix.CreateScale(num6, num6, 1f);
+                        ContainerWidget guiWidget = gameWidget1.GuiWidget;
+                        guiWidget.MarginLeft = 0f;
+                        guiWidget.MarginTop = 0f;
+                        guiWidget.MarginRight = marginRight / num6;
+                        guiWidget.MarginBottom = 0f;
+                    }
                     ArrangeChildWidgetInCell(new Vector2(x21, y21), new Vector2(x21, y21) + new Vector2(x22, y22) / num6, Children[2]);
-                    Children[2].LayoutTransform = Matrix.CreateScale(num6, num6, 1f);
+                    if (Children[2] is GameWidget gameWidget2) {
+                        gameWidget2.LayoutTransform = Matrix.CreateScale(num6, num6, 1f);
+                        ContainerWidget guiWidget = gameWidget2.GuiWidget;
+                        guiWidget.MarginLeft = 0f;
+                        guiWidget.MarginTop = 0f;
+                        guiWidget.MarginRight = 0f;
+                        guiWidget.MarginBottom = 0f;
+                    }
                 }
                 if (SettingsManager.ScreenLayout3 == ScreenLayout.TripleOpposite) {
                     float x23 = 0f;
@@ -168,62 +286,83 @@ namespace Game {
                     float y27 = ActualSize.Y / 2f - m_spacing / 2f;
                     float num7 = 0.5f;
                     ArrangeChildWidgetInCell(new Vector2(x23, y23), new Vector2(x23, y23) + new Vector2(x26, y26) / num7, Children[0]);
-                    Children[0].LayoutTransform = new Matrix(
-                        0f,
-                        num7,
-                        0f,
-                        0f,
-                        0f - num7,
-                        0f,
-                        0f,
-                        0f,
-                        0f,
-                        0f,
-                        1f,
-                        0f,
-                        0f,
-                        0f,
-                        0f,
-                        1f
-                    );
+                    if (Children[0] is GameWidget gameWidget0) {
+                        gameWidget0.LayoutTransform = new Matrix(
+                            0f,
+                            num7,
+                            0f,
+                            0f,
+                            0f - num7,
+                            0f,
+                            0f,
+                            0f,
+                            0f,
+                            0f,
+                            1f,
+                            0f,
+                            0f,
+                            0f,
+                            0f,
+                            1f
+                        );
+                        ContainerWidget guiWidget = gameWidget0.GuiWidget;
+                        guiWidget.MarginLeft = 0f;
+                        guiWidget.MarginTop = 0f;
+                        guiWidget.MarginRight = 0f;
+                        guiWidget.MarginBottom = marginLeft / num7;
+                    }
                     ArrangeChildWidgetInCell(new Vector2(x24, y24), new Vector2(x24, y24) + new Vector2(x26, y27) / num7, Children[1]);
-                    Children[1].LayoutTransform = new Matrix(
-                        0f - num7,
-                        0f,
-                        0f,
-                        0f,
-                        0f,
-                        0f - num7,
-                        0f,
-                        0f,
-                        0f,
-                        0f,
-                        1f,
-                        0f,
-                        0f,
-                        0f,
-                        0f,
-                        1f
-                    );
+                    if (Children[1] is GameWidget gameWidget1) {
+                        gameWidget1.LayoutTransform = new Matrix(
+                            0f - num7,
+                            0f,
+                            0f,
+                            0f,
+                            0f,
+                            0f - num7,
+                            0f,
+                            0f,
+                            0f,
+                            0f,
+                            1f,
+                            0f,
+                            0f,
+                            0f,
+                            0f,
+                            1f
+                        );
+                        ContainerWidget guiWidget = gameWidget1.GuiWidget;
+                        guiWidget.MarginLeft = marginRight / num7;
+                        guiWidget.MarginTop = 0f;
+                        guiWidget.MarginRight = 0f;
+                        guiWidget.MarginBottom = 0f;
+                    }
                     ArrangeChildWidgetInCell(new Vector2(x25, y25), new Vector2(x25, y25) + new Vector2(x26, y27) / num7, Children[2]);
-                    Children[2].LayoutTransform = new Matrix(
-                        num7,
-                        0f,
-                        0f,
-                        0f,
-                        0f,
-                        num7,
-                        0f,
-                        0f,
-                        0f,
-                        0f,
-                        1f,
-                        0f,
-                        0f,
-                        0f,
-                        0f,
-                        1f
-                    );
+                    if (Children[2] is GameWidget gameWidget2) {
+                        gameWidget2.LayoutTransform = new Matrix(
+                            num7,
+                            0f,
+                            0f,
+                            0f,
+                            0f,
+                            num7,
+                            0f,
+                            0f,
+                            0f,
+                            0f,
+                            1f,
+                            0f,
+                            0f,
+                            0f,
+                            0f,
+                            1f
+                        );
+                        ContainerWidget guiWidget = gameWidget2.GuiWidget;
+                        guiWidget.MarginLeft = 0f;
+                        guiWidget.MarginTop = 0f;
+                        guiWidget.MarginRight = marginRight / num7;
+                        guiWidget.MarginBottom = 0f;
+                    }
                 }
             }
             else if (Children.Count == 4) {
@@ -242,13 +381,41 @@ namespace Game {
                     float y32 = ActualSize.Y / 2f - m_spacing / 2f;
                     float num8 = 0.5f;
                     ArrangeChildWidgetInCell(new Vector2(x27, y28), new Vector2(x27, y28) + new Vector2(x31, y32) / num8, Children[0]);
-                    Children[0].LayoutTransform = Matrix.CreateScale(num8, num8, 1f);
+                    if (Children[0] is GameWidget gameWidget0) {
+                        gameWidget0.LayoutTransform = Matrix.CreateScale(num8, num8, 1f);
+                        ContainerWidget guiWidget = gameWidget0.GuiWidget;
+                        guiWidget.MarginLeft = marginLeft / num8;
+                        guiWidget.MarginTop = 0f;
+                        guiWidget.MarginRight = 0f;
+                        guiWidget.MarginBottom = 0f;
+                    }
                     ArrangeChildWidgetInCell(new Vector2(x28, y29), new Vector2(x28, y29) + new Vector2(x31, y32) / num8, Children[1]);
-                    Children[1].LayoutTransform = Matrix.CreateScale(num8, num8, 1f);
+                    if (Children[1] is GameWidget gameWidget1) {
+                        gameWidget1.LayoutTransform = Matrix.CreateScale(num8, num8, 1f);
+                        ContainerWidget guiWidget = gameWidget1.GuiWidget;
+                        guiWidget.MarginLeft = 0f;
+                        guiWidget.MarginTop = 0f;
+                        guiWidget.MarginRight = marginRight / num8;
+                        guiWidget.MarginBottom = 0f;
+                    }
                     ArrangeChildWidgetInCell(new Vector2(x29, y30), new Vector2(x29, y30) + new Vector2(x31, y32) / num8, Children[2]);
-                    Children[2].LayoutTransform = Matrix.CreateScale(num8, num8, 1f);
+                    if (Children[2] is GameWidget gameWidget2) {
+                        gameWidget2.LayoutTransform = Matrix.CreateScale(num8, num8, 1f);
+                        ContainerWidget guiWidget = gameWidget2.GuiWidget;
+                        guiWidget.MarginLeft = marginLeft / num8;
+                        guiWidget.MarginTop = 0f;
+                        guiWidget.MarginRight = 0f;
+                        guiWidget.MarginBottom = 0f;
+                    }
                     ArrangeChildWidgetInCell(new Vector2(x30, y31), new Vector2(x30, y31) + new Vector2(x31, y32) / num8, Children[3]);
-                    Children[3].LayoutTransform = Matrix.CreateScale(num8, num8, 1f);
+                    if (Children[3] is GameWidget gameWidget3) {
+                        gameWidget3.LayoutTransform = Matrix.CreateScale(num8, num8, 1f);
+                        ContainerWidget guiWidget = gameWidget3.GuiWidget;
+                        guiWidget.MarginLeft = 0f;
+                        guiWidget.MarginTop = 0f;
+                        guiWidget.MarginRight = marginRight / num8;
+                        guiWidget.MarginBottom = 0f;
+                    }
                 }
                 if (SettingsManager.ScreenLayout4 == ScreenLayout.QuadrupleOpposite) {
                     m_spacing = 12f;
@@ -265,81 +432,109 @@ namespace Game {
                     float y37 = ActualSize.Y / 2f - m_spacing / 2f;
                     float num9 = 0.5f;
                     ArrangeChildWidgetInCell(new Vector2(x32, y33), new Vector2(x32, y33) + new Vector2(x36, y37) / num9, Children[0]);
-                    Children[0].LayoutTransform = new Matrix(
-                        0f - num9,
-                        0f,
-                        0f,
-                        0f,
-                        0f,
-                        0f - num9,
-                        0f,
-                        0f,
-                        0f,
-                        0f,
-                        1f,
-                        0f,
-                        0f,
-                        0f,
-                        0f,
-                        1f
-                    );
+                    if (Children[0] is GameWidget gameWidget0) {
+                        gameWidget0.LayoutTransform = new Matrix(
+                            0f - num9,
+                            0f,
+                            0f,
+                            0f,
+                            0f,
+                            0f - num9,
+                            0f,
+                            0f,
+                            0f,
+                            0f,
+                            1f,
+                            0f,
+                            0f,
+                            0f,
+                            0f,
+                            1f
+                        );
+                        ContainerWidget guiWidget = gameWidget0.GuiWidget;
+                        guiWidget.MarginLeft = 0f;
+                        guiWidget.MarginTop = 0f;
+                        guiWidget.MarginRight = marginLeft / num9;
+                        guiWidget.MarginBottom = 0f;
+                    }
                     ArrangeChildWidgetInCell(new Vector2(x33, y34), new Vector2(x33, y34) + new Vector2(x36, y37) / num9, Children[1]);
-                    Children[1].LayoutTransform = new Matrix(
-                        0f - num9,
-                        0f,
-                        0f,
-                        0f,
-                        0f,
-                        0f - num9,
-                        0f,
-                        0f,
-                        0f,
-                        0f,
-                        1f,
-                        0f,
-                        0f,
-                        0f,
-                        0f,
-                        1f
-                    );
+                    if (Children[1] is GameWidget gameWidget1) {
+                        gameWidget1.LayoutTransform = new Matrix(
+                            0f - num9,
+                            0f,
+                            0f,
+                            0f,
+                            0f,
+                            0f - num9,
+                            0f,
+                            0f,
+                            0f,
+                            0f,
+                            1f,
+                            0f,
+                            0f,
+                            0f,
+                            0f,
+                            1f
+                        );
+                        ContainerWidget guiWidget = gameWidget1.GuiWidget;
+                        guiWidget.MarginLeft = marginRight / num9;
+                        guiWidget.MarginTop = 0f;
+                        guiWidget.MarginRight = 0f;
+                        guiWidget.MarginBottom = 0f;
+                    }
                     ArrangeChildWidgetInCell(new Vector2(x34, y35), new Vector2(x34, y35) + new Vector2(x36, y37) / num9, Children[2]);
-                    Children[2].LayoutTransform = new Matrix(
-                        num9,
-                        0f,
-                        0f,
-                        0f,
-                        0f,
-                        num9,
-                        0f,
-                        0f,
-                        0f,
-                        0f,
-                        1f,
-                        0f,
-                        0f,
-                        0f,
-                        0f,
-                        1f
-                    );
+                    if (Children[2] is GameWidget gameWidget2) {
+                        gameWidget2.LayoutTransform = new Matrix(
+                            num9,
+                            0f,
+                            0f,
+                            0f,
+                            0f,
+                            num9,
+                            0f,
+                            0f,
+                            0f,
+                            0f,
+                            1f,
+                            0f,
+                            0f,
+                            0f,
+                            0f,
+                            1f
+                        );
+                        ContainerWidget guiWidget = gameWidget2.GuiWidget;
+                        guiWidget.MarginLeft = marginLeft / num9;
+                        guiWidget.MarginTop = 0f;
+                        guiWidget.MarginRight = 0f;
+                        guiWidget.MarginBottom = 0f;
+                    }
                     ArrangeChildWidgetInCell(new Vector2(x35, y36), new Vector2(x35, y36) + new Vector2(x36, y37) / num9, Children[3]);
-                    Children[3].LayoutTransform = new Matrix(
-                        num9,
-                        0f,
-                        0f,
-                        0f,
-                        0f,
-                        num9,
-                        0f,
-                        0f,
-                        0f,
-                        0f,
-                        1f,
-                        0f,
-                        0f,
-                        0f,
-                        0f,
-                        1f
-                    );
+                    if (Children[3] is GameWidget gameWidget3) {
+                        gameWidget3.LayoutTransform = new Matrix(
+                            num9,
+                            0f,
+                            0f,
+                            0f,
+                            0f,
+                            num9,
+                            0f,
+                            0f,
+                            0f,
+                            0f,
+                            1f,
+                            0f,
+                            0f,
+                            0f,
+                            0f,
+                            1f
+                        );
+                        ContainerWidget guiWidget = gameWidget3.GuiWidget;
+                        guiWidget.MarginLeft = 0f;
+                        guiWidget.MarginTop = 0f;
+                        guiWidget.MarginRight = marginRight / num9;
+                        guiWidget.MarginBottom = 0f;
+                    }
                 }
             }
             else if (Children.Count > SubsystemPlayers.MaxPlayers) {

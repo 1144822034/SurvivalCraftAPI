@@ -56,6 +56,8 @@ namespace Game {
             if (SettingsManager.SafeMode) {
                 m_disableSafeModeButton.IsVisible = true;
             }
+            m_leftBottomBar.MarginLeft = SettingsManager.AdaptEdgeToEdgeDisplay ? Window.DisplayCutoutInsets.X * ScreensManager.FinalUiScale : 0f;
+            m_rightBottomBar.MarginRight = SettingsManager.AdaptEdgeToEdgeDisplay ? Window.DisplayCutoutInsets.Z * ScreensManager.FinalUiScale : 0f;
         }
 
         public override void Leave() {

@@ -42,10 +42,10 @@ namespace Game {
             float num = 0f;
             foreach (Widget child2 in Children) {
                 if (child2.IsVisible) {
-                    child2.Measure(Vector2.Max(parentAvailableSize - 2f * child2.Margin, Vector2.Zero));
+                    child2.Measure(Vector2.Max(parentAvailableSize - child2.MarginHorizontalSumAndVerticalSum, Vector2.Zero));
                     num = m_direction != 0
-                        ? MathUtils.Max(num, child2.ParentDesiredSize.X + 2f * child2.Margin.X)
-                        : MathUtils.Max(num, child2.ParentDesiredSize.Y + 2f * child2.Margin.Y);
+                        ? MathUtils.Max(num, child2.ParentDesiredSize.X + child2.MarginHorizontalSum)
+                        : MathUtils.Max(num, child2.ParentDesiredSize.Y + child2.MarginVerticalSum);
                 }
             }
             DesiredSize = m_direction == LayoutDirection.Horizontal

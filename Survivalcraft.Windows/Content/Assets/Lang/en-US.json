@@ -3313,7 +3313,8 @@
       "Original Community Content",
       "Hide Crosshair:",
       "Custom screenshot height",
-      "Custom screenshot aspect ratio"
+      "Custom screenshot aspect ratio",
+      "Adapt edge to edge display"
     ],
     "TrialEndedScreen": {
       "1": "The day has ended",

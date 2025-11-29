@@ -405,7 +405,40 @@ namespace Game {
 
         public bool ClampToBounds { get; set; }
 
-        public virtual Vector2 Margin { get; set; }
+        public virtual Vector2 Margin {
+            [Obsolete("Use MarginLeft, MarginTop, MarginRight and MarginBottom instead.")]
+            get => new (MarginLeft, MarginTop);
+            set {
+                MarginLeft = value.X;
+                MarginRight = value.X;
+                MarginTop = value.Y;
+                MarginBottom = value.Y;
+            }
+        }
+
+        public virtual float MarginLeft { get; set; }
+
+        public virtual float MarginRight { get; set; }
+
+        public virtual float MarginTop { get; set; }
+
+        public virtual float MarginBottom { get; set; }
+
+        public virtual Vector4 Margin4 {
+            get => new(MarginLeft, MarginTop, MarginRight, MarginBottom);
+            set {
+                MarginLeft = value.X;
+                MarginTop = value.Y;
+                MarginRight = value.Z;
+                MarginBottom = value.W;
+            }
+        }
+
+        public virtual float MarginHorizontalSum => MarginLeft + MarginRight;
+
+        public virtual float MarginVerticalSum => MarginTop + MarginBottom;
+
+        public virtual Vector2 MarginHorizontalSumAndVerticalSum => new(MarginLeft + MarginRight, MarginTop + MarginBottom);
 
         public virtual WidgetAlignment HorizontalAlignment { get; set; }
 
