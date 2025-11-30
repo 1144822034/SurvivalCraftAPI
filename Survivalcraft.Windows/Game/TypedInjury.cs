@@ -18,7 +18,7 @@ namespace Game {
     }
 
     public class ExplosionInjury : Injury {
-        public ExplosionInjury(float amount) : base(amount, null, false, "Blasted by explosion") { }
+        public ExplosionInjury(float amount) : base(amount, null, false, LanguageControl.Get(typeof(ComponentHealth).Name, 8)) { }
     }
 
     public class BlockInjury : Injury {

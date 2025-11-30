@@ -208,7 +208,8 @@
     "4": "Come back!",
     "5": "Burned to death",
     "6": "Stranded on land",
-    "7": "Suffocated"
+    "7": "Suffocated",
+    "8": "Blasted by explosion"
   },
   "PlayerWidget": [
     "{0} Controlled by {1}",
