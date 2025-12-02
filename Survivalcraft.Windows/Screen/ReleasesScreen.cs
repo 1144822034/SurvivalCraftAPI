@@ -116,12 +116,27 @@ namespace Game {
         }
 
         public string GetVersionSuffix(string currentVersion, string targetVersion) {
-            return APIUpdateManager.CompareVersion(currentVersion, targetVersion) switch {
-                -1 => string.Empty,
-                0 => LanguageControl.GetContentWidgets(fName, 5),
-                1 => LanguageControl.GetContentWidgets(fName, 6),
-                _ => throw new ArgumentOutOfRangeException()
-            };
+            if (currentVersion == APIUpdateManager.LatestVersion) {
+                return LanguageControl.GetContentWidgets(fName, 6);
+            }
+            int firstNumberIndex = currentVersion.IndexOfAny(
+                [
+                    '0',
+                    '1',
+                    '2',
+                    '3',
+                    '4',
+                    '5',
+                    '6',
+                    '7',
+                    '8',
+                    '9'
+                ]
+            );
+            if (firstNumberIndex >= 0 && currentVersion.Substring(firstNumberIndex) == targetVersion) {
+                return LanguageControl.GetContentWidgets(fName, "5");
+            }
+            return string.Empty;
         }
 
         public void PopulateAssetsList(ReleaseInfo releaseInfo) {

@@ -45,6 +45,7 @@ namespace Game {
         public BevelledButtonWidget m_resetButton;
         public BevelledButtonWidget m_setKeyButton;
         public BevelledButtonWidget m_disableKeyButton;
+        public BevelledButtonWidget m_gameHelpButton;
         public bool IsWaitingForKeyInput;
         public Dictionary<string, ContainerWidget> m_widgetsByString = [];
         public Dictionary<object, List<string>> m_conflicts = [];
@@ -60,6 +61,7 @@ namespace Game {
             m_resetButton = Children.Find<BevelledButtonWidget>("Reset");
             m_setKeyButton = Children.Find<BevelledButtonWidget>("SetKey");
             m_disableKeyButton = Children.Find<BevelledButtonWidget>("DisableKey");
+            m_gameHelpButton = Children.Find<BevelledButtonWidget>("GameHelp");
         }
 
         public override void Update() {
@@ -156,6 +158,9 @@ namespace Game {
             if (m_setKeyButton.IsClicked) {
                 IsWaitingForKeyInput = true;
             }
+            if (m_gameHelpButton.IsClicked) {
+                ScreensManager.SwitchScreen("Help");
+            }
             if (!IsWaitingForKeyInput
                 && (Input.Back || Input.Cancel)) {
                 ScreensManager.SwitchScreen(ScreensManager.PreviousScreen);
@@ -163,6 +168,7 @@ namespace Game {
         }
 
         public override void Enter(object[] parameters) {
+            m_gameHelpButton.IsVisible = ScreensManager.PreviousScreen is GameScreen;
             m_keysList.ClearItems();
             foreach (string keyName1 in ModSettingsManager.CombinedGamepadMappingSettings.Keys) {
                 m_keysList.AddItem(keyName1);

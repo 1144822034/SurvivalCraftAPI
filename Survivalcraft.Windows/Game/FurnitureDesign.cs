@@ -25,7 +25,7 @@ namespace Game {
 
         public const int MaxResolution = 256; //家具格分辨率
 
-        public const int MaxTriangles = 65536; //家具复杂度
+        public const int MaxTriangles = 65535; //家具复杂度
 
         public const int MaxNameLength = 100;
 

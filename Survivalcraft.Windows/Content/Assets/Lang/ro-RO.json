@@ -415,7 +415,7 @@
   "ExternalContentScreen": {
     "1": "introduce",
     "2": "Descarcă",
-    "3": "Conținutul",
+    "3": "Conținutul {0}",
     "4": "Neconectat",
     "5": "Deconectare",
     "6": "Autentificare",

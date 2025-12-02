@@ -348,7 +348,7 @@
   "ExternalContentScreen": {
     "1": "Entrar",
     "2": "Descargar",
-    "3": "Contenido almacenado ",
+    "3": "Contenido almacenado {0}",
     "4": "Sesión sin abrir",
     "5": "Cerrar sesión",
     "6": "Iniciar sesión",
