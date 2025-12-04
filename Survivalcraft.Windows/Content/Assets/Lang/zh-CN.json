@@ -51,8 +51,8 @@
     },
     "CommunityType": {
       "OriginalCommunity": "原版社区",
-      "ChineseCommunity": "中文社区（旧）",
-      "ChineseCommunity2025": "中文社区（新，网页）"
+      "ChineseCommunity": "中文社区（内置）",
+      "ChineseCommunityWebSite": "中文社区（网页）"
     }
   },
   "ModsManageContentScreen": {
@@ -1974,7 +1974,7 @@
     },
     "EggBlock:0": {
       "DisplayName": "蛋",
-      "Description": ""
+      "Description": "刷怪蛋。成年鸟类偶尔会产下鸟蛋。如果你仔细寻找，可能会发现并食用它们。烹饪鸡蛋会增加其营养价值。非鸟类的刷怪蛋仅在创造模式下可用，可用于生成所有其他动物。要在创造模式下生成动物，请将蛋扔向坚硬的表面以将其砸碎。一些稀有动物的刷怪蛋即使在创造模式下也无法获得。"
     },
     "StoneAxeBlock:0": {
       "DisplayName": "石斧",

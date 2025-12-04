@@ -6,7 +6,7 @@ namespace Game {
         public enum CommunityType {
             OriginalCommunity,
             ChineseCommunity,
-            ChineseCommunity2025
+            ChineseCommunityWebsite
         }
         public static string fName = "ContentScreen";
 
@@ -125,7 +125,7 @@ namespace Game {
                 }
                 if (SettingsManager.CommunityContentMode != CommunityContentMode.Disabled) {
                     items.Add(CommunityType.ChineseCommunity);
-                    items.Add(CommunityType.ChineseCommunity2025);
+                    items.Add(CommunityType.ChineseCommunityWebsite);
                 }
                 DialogsManager.ShowDialog(
                     null,
@@ -143,7 +143,7 @@ namespace Game {
                                     case CommunityType.ChineseCommunity:
                                         ScreensManager.SwitchScreen("CommunityContent");
                                         break;
-                                    case CommunityType.ChineseCommunity2025:
+                                    case CommunityType.ChineseCommunityWebsite:
                                         WebBrowserManager.LaunchBrowser("https://test.suancaixianyu.cn/");
                                         break;
                                 }

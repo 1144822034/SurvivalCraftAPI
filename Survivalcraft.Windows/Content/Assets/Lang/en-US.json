@@ -51,8 +51,8 @@
     },
     "CommunityType": {
       "OriginalCommunity": "Original Community",
-      "ChineseCommunity": "Chinese Community (Old)",
-      "ChineseCommunity2025": "Chinese Community (New, Web)"
+      "ChineseCommunity": "Chinese Community",
+      "ChineseCommunityWebSite": "Chinese Community (Web Site)"
     }
   },
   "ModsManageContentScreen": {
@@ -3271,11 +3271,11 @@
       "MemoryBank Style:",
       "Creative Mode Drag Max Stack Of Blocks:",
       "Drag Half Stack Of Blocks In Split:",
-      "Touch Screen Joystick Offset",
-      "Touch Screen Joystick Offset X",
-      "Touch Screen Joystick Offset Y",
+      "Touch Screen Joystick Offset:",
+      "Touch Screen Joystick Offset X:",
+      "Touch Screen Joystick Offset Y:",
       "Set keys",
-      "Camera List",
+      "Camera List:",
       "Manage",
       "Gamepad Trigger Threshold:",
       "Short Inventory Looping:",

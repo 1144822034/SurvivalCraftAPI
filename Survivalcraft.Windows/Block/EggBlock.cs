@@ -110,12 +110,6 @@ namespace Game {
 
         public override string GetCategory(int value) => "Spawner Eggs";
 
-        public override string GetDescription(int value) {
-            EggType eggType = GetEggType(Terrain.ExtractData(value));
-            string displayName = m_eggTypes[eggType.EggTypeIndex].DisplayName;
-            return LanguageControl.Get(fName, 3) + displayName.Substring(0, displayName.Length - 1);
-        }
-
         public override float GetNutritionalValue(int value) {
             EggType eggType = GetEggType(Terrain.ExtractData(value));
             if (!GetIsCooked(Terrain.ExtractData(value))) {
