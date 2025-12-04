@@ -4,18 +4,13 @@ using System.Xml.Linq;
 namespace Game {
     public class LevelFactorDialog : Dialog {
         public LabelWidget m_titleWidget;
-
         public LabelWidget m_descriptionWidget;
-
         public LabelWidget m_namesWidget;
-
         public LabelWidget m_valuesWidget;
-
         public LabelWidget m_totalNameWidget;
-
         public LabelWidget m_totalValueWidget;
-
         public ButtonWidget m_okWidget;
+        public const string fName = "LevelFactorDialog";
 
         public LevelFactorDialog(string title, string description, IEnumerable<ComponentLevel.Factor> factors, float total) {
             XElement node = ContentManager.Get<XElement>("Dialogs/LevelFactorDialog");
@@ -33,20 +28,19 @@ namespace Game {
             m_valuesWidget.Text = string.Empty;
             foreach (ComponentLevel.Factor factor in factors) {
                 m_namesWidget.Text += $"{factor.Description,24}\n";
-                switch (factor.FactorAdditionType) {
-                    case FactorAdditionType.Multiply: {
-                        m_valuesWidget.Text += string.Format(CultureInfo.InvariantCulture, "x {0:0.00}\n", factor.Value);
-                        break;
-                    }
-                    case FactorAdditionType.Add: {
-                        m_valuesWidget.Text += string.Format(CultureInfo.InvariantCulture, "+ {0:0.00}\n", factor.Value);
-                        break;
-                    }
-                }
+                string factorValueString = factor.Value switch {
+                    float.NegativeInfinity => LanguageControl.Get(fName, "1"),
+                    float.PositiveInfinity => LanguageControl.Get(fName, "2"),
+                    _ => string.Format(CultureInfo.InvariantCulture, "{0:0.00}", factor.Value)
+                };
+                m_valuesWidget.Text += factor.FactorAdditionType switch {
+                    FactorAdditionType.Multiply => $"x {factorValueString}\n",
+                    _ => $"+ {factorValueString}\n"
+                };
             }
             m_namesWidget.Text = m_namesWidget.Text.TrimEnd();
             m_valuesWidget.Text = m_valuesWidget.Text.TrimEnd();
-            m_totalNameWidget.Text = $"{"TOTAL",24}";
+            m_totalNameWidget.Text = $"{LanguageControl.Get(fName, "3"),24}";
             m_totalValueWidget.Text = string.Format(CultureInfo.InvariantCulture, "x {0:0.00}", total);
         }
 

@@ -1277,6 +1277,15 @@
     "Duplicated": "The mod is duplicated.",
     "InvalidPackageName": "The package name of this mod contains \";\""
   },
+  "LevelFactorDialog": {
+    "1": "-Infinity",
+    "2": "Infinity",
+    "3": "TOTAL"
+  },
+  "PlayerClass": {
+    "Male": "Male",
+    "Female": "Female"
+  },
   "Blocks": {
     "AirBlock:0": {
       "DisplayName": "Air",

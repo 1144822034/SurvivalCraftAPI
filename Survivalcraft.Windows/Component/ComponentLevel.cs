@@ -13,18 +13,23 @@ namespace Game {
         /// <summary>
         ///     这里的Factor类型从struct改为class，是由于模组在修改Factor的时候，通常是需要修改引用的值。
         ///     如果是struct则只能复制并修改值，不能修改引用。
-        ///     Description: 在玩家信息面板上显示影响因素的名称，如“未患流感”
-        ///     Value：该影响因素的具体数值
-        ///     Name：该Factor的索引名称，模组使用Name来在m_xxxFactors列表中查找对应的Factor
-        ///     FactorAdditionType：该影响因子是乘算还是加算
         /// </summary>
         public class Factor {
+            /// <summary>
+            /// 在玩家信息面板上显示影响因素的名称，如“未患流感”
+            /// </summary>
             public string Description;
-
+            /// <summary>
+            /// 该影响因素的具体数值
+            /// </summary>
             public float Value;
-
+            /// <summary>
+            /// 该Factor的索引名称，模组使用Name来在m_xxxFactors列表中查找对应的Factor
+            /// </summary>
             public string Name;
-
+            /// <summary>
+            /// 该影响因子是乘算还是加算
+            /// </summary>
             public FactorAdditionType FactorAdditionType = FactorAdditionType.Multiply;
         }
 
@@ -33,15 +38,13 @@ namespace Game {
         public float? m_lastLevelTextValue;
 
         public ComponentPlayer m_componentPlayer;
-
         public ComponentVitalStats m_componentVitalStats;
+        public string m_cachedPlayerClassName;
+        public string m_cachedGameModeString;
 
         public const float FemaleStrengthFactor = 0.8f;
-
         public const float FemaleResilienceFactor = 0.8f;
-
         public const float FemaleSpeedFactor = 1.03f;
-
         public const float FemaleHungerFactor = 0.7f;
 
         public virtual void AddExperience(int count, bool playSound) {
@@ -93,7 +96,7 @@ namespace Game {
                 new Factor {
                     Name = "PlayerClass",
                     Value = m_componentPlayer.PlayerData.PlayerClass == PlayerClass.Female ? 0.8f : 1f,
-                    Description = m_componentPlayer.PlayerData.PlayerClass.ToString()
+                    Description = m_cachedPlayerClassName
                 }
             );
             float level = m_componentPlayer.PlayerData.Level;
@@ -143,7 +146,7 @@ namespace Game {
                 new Factor {
                     Name = "GameMode",
                     Value = num15,
-                    Description = string.Format(LanguageControl.Get(fName, 12), m_subsystemGameInfo.WorldSettings.GameMode.ToString())
+                    Description = m_cachedGameModeString
                 }
             );
         }
@@ -157,7 +160,7 @@ namespace Game {
                 new Factor {
                     Name = "PlayerClass",
                     Value = m_componentPlayer.PlayerData.PlayerClass == PlayerClass.Female ? 0.8f : 1f,
-                    Description = m_componentPlayer.PlayerData.PlayerClass.ToString()
+                    Description = m_cachedPlayerClassName
                 }
             );
             float level = m_componentPlayer.PlayerData.Level;
@@ -197,7 +200,7 @@ namespace Game {
                 new Factor {
                     Name = "GameMode",
                     Value = num9,
-                    Description = string.Format(LanguageControl.Get(fName, 12), m_subsystemGameInfo.WorldSettings.GameMode.ToString())
+                    Description = m_cachedGameModeString
                 }
             );
         }
@@ -211,7 +214,7 @@ namespace Game {
                 new Factor {
                     Name = "PlayerClass",
                     Value = m_componentPlayer.PlayerData.PlayerClass == PlayerClass.Female ? 1.03f : 1f,
-                    Description = m_componentPlayer.PlayerData.PlayerClass.ToString()
+                    Description = m_cachedPlayerClassName
                 }
             );
             float level = m_componentPlayer.PlayerData.Level;
@@ -298,10 +301,7 @@ namespace Game {
                 new Factor {
                     Name = "GameMode",
                     Value = num5,
-                    Description = string.Format(
-                        LanguageControl.Get(fName, 12),
-                        LanguageControl.Get("GameMode", m_subsystemGameInfo.WorldSettings.GameMode.ToString())
-                    )
+                    Description = m_cachedGameModeString
                 }
             );
         }
@@ -383,6 +383,11 @@ namespace Game {
             m_componentPlayer = Entity.FindComponent<ComponentPlayer>(true);
             m_componentVitalStats = Entity.FindComponent<ComponentVitalStats>(true);
             OtherFactors["Wetness"] = new List<Factor>();
+            m_cachedPlayerClassName = LanguageControl.Get("PlayerClass", m_componentPlayer.PlayerData.PlayerClass.ToString());
+            m_cachedGameModeString = string.Format(
+                LanguageControl.Get(fName, 12),
+                LanguageControl.Get("GameMode", m_subsystemGameInfo.WorldSettings.GameMode.ToString())
+            );
         }
 
         public void GenerateClothingSpeedFactors(int clothingValue) {
