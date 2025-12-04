@@ -249,9 +249,17 @@ namespace Game {
                     //>>>初始化语言列表
                     LanguageControl.LanguageTypes.Clear();
                     foreach (ContentInfo contentInfo in ContentManager.List("Lang")) {
-                        string px = Path.GetFileNameWithoutExtension(contentInfo.Filename);
-                        CultureInfo cultureInfo = new(px!, false);
-                        LanguageControl.LanguageTypes.TryAdd(px, cultureInfo); //第二个参数应为CultureInfo
+                        string fileName = Path.GetFileNameWithoutExtension(contentInfo.Filename);
+                        if (string.IsNullOrEmpty(fileName)) {
+                            continue;
+                        }
+                        try {
+                            CultureInfo cultureInfo = new(fileName.EndsWith("-old") ? fileName.Substring(0, fileName.Length - 4) : fileName, false);
+                            LanguageControl.LanguageTypes.TryAdd(fileName, cultureInfo); //第二个参数应为CultureInfo
+                        }
+                        catch (Exception) {
+                            // ignore
+                        }
                     }
                     //<<<结束
                     if (ModsManager.Configs.TryGetValue("Language", out string value)

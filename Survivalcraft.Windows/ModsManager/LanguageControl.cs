@@ -379,7 +379,12 @@ namespace Game {
                     foreach ((string name, CultureInfo cultureInfo) in LanguageTypes) {
                         string nativeName = cultureInfo.NativeName;
                         string displayName = cultureInfo.DisplayName;
-                        CachedLanguageFullNames.Add(name, nativeName == displayName ? nativeName : $"{nativeName} - {displayName}");
+                        if (name == "zh-CN-old") {
+                            CachedLanguageFullNames.Add(name, $"[旧] {nativeName} - {displayName}");
+                        }
+                        else {
+                            CachedLanguageFullNames.Add(name, nativeName == displayName ? nativeName : $"{nativeName} - {displayName}");
+                        }
                     }
                 }
                 finally {
@@ -389,6 +394,7 @@ namespace Game {
             IOrderedEnumerable<KeyValuePair<string, string>> sorted = CachedLanguageFullNames.OrderBy(item => item.Key switch {
                     "en-US" => 0,
                     "zh-CN" => 1,
+                    "zh-CN-old" => 1000,
                     _ => 2
                 }
             );
