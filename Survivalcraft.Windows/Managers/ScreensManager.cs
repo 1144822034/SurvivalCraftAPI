@@ -42,7 +42,13 @@ namespace Game {
         /// <summary>
         ///     上一个Screen
         /// </summary>
-        public static Screen PreviousScreen { get; set; }
+        public static Screen PreviousScreen {
+            get => PreviousScreens.TryPeek(out Screen previousScreen) ? previousScreen : null;
+            [Obsolete("Use Screen.PreviousScreens instead")]
+            set => throw new InvalidOperationException("Cannot set PreviousScreen after API 1.8.3. Use Screen.PreviousScreens instead");
+        }
+
+        public static Stack<Screen> PreviousScreens { get; } = [];
 
         public static float FinalUiScale { get; set; }
 
@@ -60,6 +66,12 @@ namespace Game {
         }
 
         public static void SwitchScreen(Screen screen, params object[] parameters) {
+            if (screen == CurrentScreen) {
+                return;
+            }
+            if (screen == null) {
+                throw new ArgumentNullException(nameof(screen));
+            }
             if (m_animationData != null) {
                 EndAnimation();
             }
@@ -70,13 +82,22 @@ namespace Game {
                 RootWidget.IsUpdateEnabled = false;
                 CurrentScreen.Input.Clear();
             }
-            PreviousScreen = CurrentScreen;
+            if (screen == PreviousScreen) {
+                PreviousScreens.Pop();
+            }
+            else if (CurrentScreen != null) {
+                PreviousScreens.Push(CurrentScreen);
+            }
             CurrentScreen = screen;
             UpdateAnimation();
             if (CurrentScreen != null) {
                 Log.Verbose($"Entered screen \"{GetScreenName(CurrentScreen)}\"");
                 UpdateTopBarMarginLeft();
             }
+        }
+
+        public static void SwitchPreviousScreen(params object[] parameters) {
+            SwitchScreen(PreviousScreen, parameters);
         }
 
         public static void Initialize() {
