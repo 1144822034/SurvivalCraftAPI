@@ -22,7 +22,8 @@ namespace Game {
 
         public virtual void Update(float dt) {
             if ((SettingsManager.AutoJump || m_alwaysEnabled)
-                && m_subsystemTime.GameTime - m_lastAutoJumpTime > 0.25) {
+                && m_subsystemTime.GameTime - m_lastAutoJumpTime > 0.3
+                && m_componentCreature.ComponentBody.CrouchFactor == 0f) {
                 Vector2? lastWalkOrder = m_componentCreature.ComponentLocomotion.LastWalkOrder;
                 if (lastWalkOrder.HasValue) {
                     Vector2 vector = new(

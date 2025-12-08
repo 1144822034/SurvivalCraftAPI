@@ -12,7 +12,8 @@
     android:usesCleartextTraffic="true"
     android:localeConfig="@xml/locales_config"
     android:appCategory="game"
-    android:isGame="true">
+    android:isGame="true"
+    android:enableOnBackInvokedCallback="false">
     <meta-data
       android:name="android.notch_support"
       android:value="true" />
