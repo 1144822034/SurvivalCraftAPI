@@ -46,7 +46,21 @@ namespace Game {
         ///         This is the description of android text box.
         ///     </para>
         /// </summary>
-        public string Description { get; set; }
+        public string Description { get => field;
+            set {
+                if (field != value
+                    && value != null) {
+                    if (value.StartsWith('[')
+                        && value.EndsWith(']')) {
+                        string[] xp = value.Substring(1, value.Length - 2).Split(':');
+                        field = xp.Length == 2 ? LanguageControl.GetContentWidgets(xp[0], xp[1]) : LanguageControl.Get("Usual", value);
+                    }
+                    else {
+                        field = value;
+                    }
+                }
+            }
+        }
 
         /// <summary>
         ///     <para>
@@ -56,7 +70,22 @@ namespace Game {
         ///         This is the title of android text box.
         ///     </para>
         /// </summary>
-        public string Title { get; set; }
+        public string Title {
+            get => field;
+            set {
+                if (field != value
+                    && value != null) {
+                    if (value.StartsWith('[')
+                        && value.EndsWith(']')) {
+                        string[] xp = value.Substring(1, value.Length - 2).Split(':');
+                        field = xp.Length == 2 ? LanguageControl.GetContentWidgets(xp[0], xp[1]) : LanguageControl.Get("Usual", value);
+                    }
+                    else {
+                        field = value;
+                    }
+                }
+            }
+        }
 
         /// <summary>
         ///     <para>
