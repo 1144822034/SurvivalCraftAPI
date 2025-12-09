@@ -93,7 +93,7 @@ namespace Engine {
                 intent.SetDataAndType(uri, mimeType);
             }
             intent.AddFlags(ActivityFlags.GrantReadUriPermission | ActivityFlags.NewTask);
-            if (Application.Context.PackageManager?.QueryIntentActivities(intent, PackageInfoFlags.MatchDefaultOnly)?.Any() ?? false) {
+            if (Application.Context.PackageManager?.QueryIntentActivities(intent, PackageInfoFlags.MatchDefaultOnly).Any() ?? false) {
                 StartActivity(Intent.CreateChooser(intent, chooserTitle ?? Storage.GetFileName(path)));
             }
             else {
@@ -178,7 +178,9 @@ namespace Engine {
         }
 
         public override bool DispatchTouchEvent(MotionEvent e) {
-            Touch.HandleTouchEvent(e);
+            if (e != null && (e.Source & InputSourceType.Touchscreen) == InputSourceType.Touchscreen) {
+                Touch.HandleTouchEvent(e);
+            }
             return true;
         }
 
