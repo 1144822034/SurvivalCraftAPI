@@ -48,6 +48,9 @@ namespace Game {
                 ReadDirResouces(basepath, $"{path}/{d}");
             }
             foreach (string f in Storage.ListFileNames(path)) {
+                if (f.EndsWith(".scmod")) {
+                    continue;
+                }
                 string abpath = $"{path}/{f}";
                 string FilenameInZip = abpath.Substring(basepath.Length + 1);
                 if (FilenameInZip.StartsWith("Assets/")) {
@@ -62,67 +65,6 @@ namespace Game {
                 }
                 FModFiles.Add(FilenameInZip, new FileInfo(Storage.GetSystemPath(abpath)));
             }
-        }
-
-        public override Assembly[] GetAssemblies() {
-            List<Assembly> assemblies = new();
-            foreach (string c in Storage.ListFileNames(ModsManager.ModsPath)) {
-                if (c.EndsWith(".dll")
-                    && !(c.StartsWith("EntitySystem") || c.StartsWith("Engine") || c.StartsWith("Survivalcraft") || c.StartsWith("OpenTK"))) {
-                    Stream assemblyStream = Storage.OpenFile(Storage.CombinePaths(ModsManager.ModsPath, c), OpenFileMode.Read);
-                    assemblies.Add(Assembly.Load(ModsManager.StreamToBytes(assemblyStream)));
-                }
-            }
-            return [.. assemblies];
-        }
-
-        public override void LoadClo(ClothingBlock block, ref XElement xElement) {
-            foreach (string c in Storage.ListFileNames(ModsManager.ModsPath)) {
-                if (c.EndsWith(".clo")) {
-                    ModsManager.CombineClo(xElement, Storage.OpenFile(Storage.CombinePaths(ModsManager.ModsPath, c), OpenFileMode.Read));
-                }
-            }
-        }
-
-        public override void LoadCr(ref XElement xElement) {
-            foreach (string c in Storage.ListFileNames(ModsManager.ModsPath)) {
-                if (c.EndsWith(".cr")) {
-                    ModsManager.CombineCr(xElement, Storage.OpenFile(Storage.CombinePaths(ModsManager.ModsPath, c), OpenFileMode.Read));
-                }
-            }
-        }
-
-        public override void LoadLauguage() {
-            string path = Storage.CombinePaths(ModsManager.ModsPath, "Assets/Lang");
-            if (Storage.DirectoryExists(path)) {
-                foreach (string c in Storage.ListFileNames(path)) {
-                    string fn = $"{ModsManager.Configs["Language"]}.json";
-                    string fpn = Storage.CombinePaths(path, c);
-                    if (c == fn
-                        && Storage.FileExists(fpn)) {
-                        LanguageControl.loadJson(Storage.OpenFile(fpn, OpenFileMode.Read));
-                    }
-                }
-            }
-        }
-
-        public override void LoadBlocksData() {
-            foreach (string c in Storage.ListFileNames(ModsManager.ModsPath)) {
-                if (c.EndsWith(".csv")) {
-                    BlocksManager.LoadBlocksData(
-                        ModsManager.StreamToString(Storage.OpenFile(Storage.CombinePaths(ModsManager.ModsPath, c), OpenFileMode.Read))
-                    );
-                }
-            }
-        }
-
-        public override void LoadXdb(ref XElement xElement) {
-            foreach (string c in Storage.ListFileNames(ModsManager.ModsPath)) {
-                if (c.EndsWith(".xdb")) {
-                    ModsManager.CombineDataBase(xElement, Storage.OpenFile(Storage.CombinePaths(ModsManager.ModsPath, c), OpenFileMode.Read));
-                }
-            }
-            Loader?.OnXdbLoad(xElement);
         }
 
         /// <summary>

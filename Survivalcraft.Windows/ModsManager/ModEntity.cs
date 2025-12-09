@@ -16,6 +16,7 @@ namespace Game {
         public ModDisableReason DisableReason = ModDisableReason.Unknown;
         public long Size;
         public bool IsDependencyChecked;
+        public static HashSet<string> InvalidDllNames = ["Survivalcraft.dll", "Engine.dll", "EntitySystem.dll"];
         public const string fName = "ModEntity";
 
         public ModLoader Loader {
@@ -134,7 +135,7 @@ namespace Game {
             GetAssetsFile(
                 $"Lang/{language}.json",
                 stream => {
-                    LoadingScreen.Info($"[{modInfo.Name}] Loading Language file");
+                    LoadingScreen.Info($"[{modInfo.Name}] Loading Current Language file");
                     LanguageControl.loadJson(stream);
                 }
             );
@@ -296,7 +297,10 @@ namespace Game {
                         flag = false;
                     }
                     if (!filename.StartsWith("Assets/")) {
-                        assemblies.Add(Assembly.Load(ModsManager.StreamToBytes(stream)));
+                        string fileNameWithoutDirectory = Storage.GetFileName(filename);
+                        if (!InvalidDllNames.Contains(fileNameWithoutDirectory)) {
+                            assemblies.Add(Assembly.Load(ModsManager.StreamToBytes(stream)));
+                        }
                     }
                 }
             ); //获取mod文件内的dll文件（不包括Assets目录内的dll）
