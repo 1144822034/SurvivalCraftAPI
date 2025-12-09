@@ -24,7 +24,7 @@ namespace Game {
             if (attackerCreature != null) {
                 string str = attackerCreature.KillVerbs[m_random.Int(0, attackerCreature.KillVerbs.Count - 1)];
                 string attackerName = attackerCreature.DisplayName;
-                CauseOfDeath = string.Format(LanguageControl.Get("ComponentMiner", 4), attackerName, LanguageControl.Get("ComponentMiner", str));
+                CauseOfDeath = string.Format(LanguageControl.Get("ComponentMiner", 4), LanguageControl.Get("ComponentMiner", str), attackerName);
             }
             else {
                 CauseOfDeath = LanguageControl.Get("ComponentMiner", m_random.Int(0, 5) + 5);
