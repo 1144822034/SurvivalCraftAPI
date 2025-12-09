@@ -81,7 +81,7 @@ namespace Game {
                 || Children.Find<ButtonWidget>("TopBar.Back").IsClicked) {
                 //ScreensManager.SwitchScreen(m_previousScreen);
                 //m_previousScreen = null;
-                ScreensManager.SwitchPreviousScreen();
+                ScreensManager.GoBack();
             }
         }
 

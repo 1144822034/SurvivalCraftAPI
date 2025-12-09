@@ -158,7 +158,7 @@ namespace Game {
             if (Input.Back
                 || Input.Cancel
                 || Children.Find<ButtonWidget>("TopBar.Back").IsClicked) {
-                ScreensManager.SwitchPreviousScreen();
+                ScreensManager.GoBack();
             }
         }
 
