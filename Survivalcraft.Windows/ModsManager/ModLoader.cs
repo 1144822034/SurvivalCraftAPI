@@ -1979,5 +1979,86 @@ namespace Game {
         public virtual void OnAppendModelMesh(BlockMesh blockMesh, BlockMesh blockMesh1, out bool skip) {
             skip = false;
         }
+
+        /// <summary>
+        /// 玩家生命状态（进食）钩子
+        /// </summary>
+        /// <param name="vitalStats">生命状态组件</param>
+        /// <param name="value">物品完整值</param>
+        /// <param name="skipVanilla">是否跳过原版逻辑</param>
+        /// <param name="eatSuccess">输出：进食是否成功</param>
+        public virtual void OnVitalStatsEat(
+            ComponentVitalStats vitalStats,
+            ref int value,
+            ref bool skipVanilla,
+            out bool eatSuccess) {
+            // 默认返回进食失败，模组可重写修改
+            eatSuccess = false;
+        }
+
+        /// <summary>
+        /// 状态（更新饥饿值）钩子
+        /// </summary>
+        /// <param name="vitalStats">生命状态组件</param>
+        /// <param name="food">饥饿值</param>
+        /// <param name="gameTimeDelta">时间增量</param>
+        /// <param name="skipVanilla">是否跳过原版逻辑</param>
+        public virtual void OnVitalStatsUpdateFood(
+            ComponentVitalStats vitalStats,
+            ref float food,
+            ref float gameTimeDelta,
+            ref bool skipVanilla) { }
+
+        /// <summary>
+        /// 状态（更新耐力值）钩子
+        /// </summary>
+        /// <param name="vitalStats">生命状态组件</param>
+        /// <param name="stamina">耐力值</param>
+        /// <param name="gameTimeDelta">时间增量</param>
+        /// <param name="skipVanilla">是否跳过原版逻辑</param>
+        public virtual void OnVitalStatsUpdateStamina(
+            ComponentVitalStats vitalStats,
+            ref float stamina,
+            ref float gameTimeDelta,
+            ref bool skipVanilla) { }
+
+        /// <summary>
+        /// 状态（更新睡眠值）钩子
+        /// </summary>
+        /// <param name="vitalStats">生命状态组件</param>
+        /// <param name="sleep">睡眠值</param>
+        /// <param name="gameTimeDelta">时间增量</param>
+        /// <param name="skipVanilla">是否跳过原版逻辑</param>
+        public virtual void OnVitalStatsUpdateSleep(
+            ComponentVitalStats vitalStats,
+            ref float sleep,
+            ref float gameTimeDelta,
+            ref bool skipVanilla) { }
+
+        /// <summary>
+        /// 状态（更新体温）钩子
+        /// </summary>
+        /// <param name="vitalStats">生命状态组件</param>
+        /// <param name="temperature">体温值</param>
+        /// <param name="gameTimeDelta">时间增量</param>
+        /// <param name="skipVanilla">是否跳过原版逻辑</param>
+        public virtual void OnVitalStatsUpdateTemperature(
+            ComponentVitalStats vitalStats,
+            ref float temperature,
+            ref float gameTimeDelta,
+            ref bool skipVanilla) { }
+
+        /// <summary>
+        /// 状态（更新湿度）钩子
+        /// </summary>
+        /// <param name="vitalStats">生命状态组件</param>
+        /// <param name="wetness">湿度值</param>
+        /// <param name="gameTimeDelta">时间增量</param>
+        /// <param name="skipVanilla">是否跳过原版逻辑</param>
+        public virtual void OnVitalStatsUpdateWetness(
+            ComponentVitalStats vitalStats,
+            ref float wetness,
+            ref float gameTimeDelta,
+            ref bool skipVanilla) { }
     }
 }

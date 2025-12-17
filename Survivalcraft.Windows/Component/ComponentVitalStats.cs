@@ -104,10 +104,27 @@ namespace Game {
         public UpdateOrder UpdateOrder => UpdateOrder.Default;
 
         public virtual bool Eat(int value) {
-            int num = Terrain.ExtractContents(value);
+            bool skipVanilla = false;
+            bool eatSuccess = false;
+            int modifiedValue = value;
+
+            ModsManager.HookAction(
+                "OnVitalStatsEat",
+                loader => {
+                    loader.OnVitalStatsEat(this, ref modifiedValue, ref skipVanilla, out eatSuccess);
+                    return false;
+                }
+            );
+
+            // 如果Mod标记跳过原有逻辑，直接返回Mod的结果
+            if (skipVanilla) {
+                return eatSuccess;
+            }
+
+            int num = Terrain.ExtractContents(modifiedValue);
             Block obj = BlocksManager.Blocks[num];
-            float num2 = obj.GetNutritionalValue(value);
-            float sicknessProbability = obj.GetSicknessProbability(value);
+            float num2 = obj.GetNutritionalValue(modifiedValue);
+            float sicknessProbability = obj.GetSicknessProbability(modifiedValue);
             if (num2 > 0f) {
                 if (m_componentPlayer.ComponentSickness.IsSick
                     && sicknessProbability > 0f) {
@@ -130,7 +147,7 @@ namespace Game {
                     num2 *= 0.75f;
                 }
                 Food += num2;
-                FoodEaten?.Invoke(value);
+                FoodEaten?.Invoke(modifiedValue);
                 m_satiation.TryGetValue(num, out float value2);
                 value2 += MathF.Max(num2, 0.5f);
                 m_satiation[num] = value2;
@@ -229,7 +246,20 @@ namespace Game {
         }
 
         public virtual void UpdateFood() {
+            bool skipVanilla = false;
+            float modifiedFood = Food;
             float gameTimeDelta = m_subsystemTime.GameTimeDelta;
+
+            ModsManager.HookAction(
+                "OnVitalStatsUpdateFood",
+                loader => {
+                    loader.OnVitalStatsUpdateFood(this, ref modifiedFood, ref gameTimeDelta, ref skipVanilla);
+                    return false;
+                }
+            );
+
+            if (skipVanilla) return;
+
             float num = m_componentPlayer.ComponentLocomotion.LastWalkOrder?.Length() ?? 0f;
             float lastJumpOrder = m_componentPlayer.ComponentLocomotion.LastJumpOrder;
             float num2 = m_componentPlayer.ComponentCreatureModel.EyePosition.Y - m_componentPlayer.ComponentBody.Position.Y;
@@ -291,7 +321,20 @@ namespace Game {
         }
 
         public virtual void UpdateStamina() {
+            bool skipVanilla = false;
+            float modifiedStamina = Stamina;
             float gameTimeDelta = m_subsystemTime.GameTimeDelta;
+
+            ModsManager.HookAction(
+                "OnVitalStatsUpdateStamina",
+                loader => {
+                    loader.OnVitalStatsUpdateStamina(this, ref modifiedStamina, ref gameTimeDelta, ref skipVanilla);
+                    return false;
+                }
+            );
+
+            if (skipVanilla) return;
+
             float lastWalkOrder = m_componentPlayer.ComponentLocomotion.LastWalkOrder?.Length() ?? 0f;
             float lastJumpOrder = m_componentPlayer.ComponentLocomotion.LastJumpOrder;
             float playerHeight = m_componentPlayer.ComponentCreatureModel.EyePosition.Y - m_componentPlayer.ComponentBody.Position.Y;
@@ -356,7 +399,6 @@ namespace Game {
                 else {
                     m_pantingSound.Stop();
                 }
-                //玩家耐力低时，会沉入水中
                 float num6 = MathUtils.Saturate(3f * (0.33f - Stamina));
                 if (num6 > 0f
                     && SimplexNoise.Noise((float)MathUtils.Remainder(Time.RealTime, 1000.0)) < num6) {
@@ -373,7 +415,20 @@ namespace Game {
         }
 
         public virtual void UpdateSleep() {
+            bool skipVanilla = false;
+            float modifiedSleep = Sleep;
             float gameTimeDelta = m_subsystemTime.GameTimeDelta;
+
+            ModsManager.HookAction(
+                "OnVitalStatsUpdateSleep",
+                loader => {
+                    loader.OnVitalStatsUpdateSleep(this, ref modifiedSleep, ref gameTimeDelta, ref skipVanilla);
+                    return false;
+                }
+            );
+
+            if (skipVanilla) return;
+
             bool flag = m_componentPlayer.ComponentBody.ImmersionFactor > 0.05f;
             bool flag2 = m_subsystemTime.PeriodicGameTimeEvent(240.0, 9.0);
             if (m_subsystemGameInfo.WorldSettings.GameMode != 0
@@ -438,7 +493,20 @@ namespace Game {
         }
 
         public virtual void UpdateTemperature() {
+            bool skipVanilla = false;
+            float modifiedTemperature = Temperature;
             float gameTimeDelta = m_subsystemTime.GameTimeDelta;
+
+            ModsManager.HookAction(
+                "OnVitalStatsUpdateTemperature",
+                loader => {
+                    loader.OnVitalStatsUpdateTemperature(this, ref modifiedTemperature, ref gameTimeDelta, ref skipVanilla);
+                    return false;
+                }
+            );
+
+            if (skipVanilla) return;
+
             bool flag = m_subsystemTime.PeriodicGameTimeEvent(300.0, 17.0);
             float num = m_componentPlayer.ComponentClothing.Insulation * MathUtils.Lerp(1f, 0.05f, MathUtils.Saturate(4f * Wetness));
             if (m_subsystemGameInfo.WorldSettings.GameMode <= GameMode.Survival) {
@@ -548,7 +616,20 @@ namespace Game {
         }
 
         public virtual void UpdateWetness() {
+            bool skipVanilla = false;
+            float modifiedWetness = Wetness;
             float gameTimeDelta = m_subsystemTime.GameTimeDelta;
+
+            ModsManager.HookAction(
+                "OnVitalStatsUpdateWetness",
+                loader => {
+                    loader.OnVitalStatsUpdateWetness(this, ref modifiedWetness, ref gameTimeDelta, ref skipVanilla);
+                    return false;
+                }
+            );
+
+            if (skipVanilla) return;
+
             Wetness += gameTimeDelta * m_componentPlayer.ComponentLevel.GetOtherFactorResult("Wetness");
             if (m_subsystemGameInfo.WorldSettings.GameMode != 0
                 && m_subsystemGameInfo.WorldSettings.AreAdventureSurvivalMechanicsEnabled) {
