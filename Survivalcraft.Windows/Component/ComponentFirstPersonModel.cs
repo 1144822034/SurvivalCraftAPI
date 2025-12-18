@@ -59,7 +59,7 @@ namespace Game {
         /// <summary>
         /// 强制只绘制手部模型（即使有物品也不绘制）
         /// </summary>
-        public bool ForceDrawHandOnly { get; set; } = true;
+        public bool ForceDrawHandOnly { get; set; } = false;
 
         public int[] DrawOrders => m_drawOrders;
 
