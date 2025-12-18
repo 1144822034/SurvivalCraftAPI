@@ -56,6 +56,11 @@ namespace Game {
 
         public Vector3 ItemRotationOrder { get; set; }
 
+        /// <summary>
+        /// 强制只绘制手部模型（即使有物品也不绘制）
+        /// </summary>
+        public bool ForceDrawHandOnly { get; set; } = true;
+
         public int[] DrawOrders => m_drawOrders;
 
         public UpdateOrder UpdateOrder => UpdateOrder.FirstPersonModels;
@@ -76,7 +81,7 @@ namespace Game {
                     }
                     if (m_pokeAnimationTime > 0f) {
                         float num2 = MathF.Sin(MathF.Sqrt(m_pokeAnimationTime) * (float)Math.PI);
-                        if (m_value != 0) {
+                        if (m_value != 0 && !ForceDrawHandOnly) {
                             identity *= Matrix.CreateRotationX((0f - MathUtils.DegToRad(90f)) * num2);
                             identity *= Matrix.CreateTranslation(-0.5f * num2, 0.1f * num2, 0f * num2);
                         }
@@ -111,7 +116,7 @@ namespace Game {
                     m.Translation = m_componentPlayer.ComponentCreatureModel.EyePosition;
 
                     //ÿ��һ��ʱ�����¼�����ա�������ԭ���ֱ��ڶ�Ӧ�Ļ���ǰ�棬Ϊ���ⱻ�ӿ����������Ƶ�ǰ����
-                    if (m_value != 0) {
+                    if (m_value != 0 && !ForceDrawHandOnly) {
                         if (num5 >= 0
                             && num5 <= 255) {
                             TerrainChunk chunkAtCell = m_subsystemTerrain.Terrain.GetChunkAtCell(x, z);
@@ -140,7 +145,7 @@ namespace Game {
                         }
                     );
                     if (!skipVanilla) {
-                        if (m_value != 0) { //�ֳ���Ʒʱ���Ʒ���ͼ��
+                        if (m_value != 0 && !ForceDrawHandOnly) { //�ֳ���Ʒʱ���Ʒ���ͼ��
                             int num6 = Terrain.ExtractContents(m_value);
                             Block block = BlocksManager.Blocks[num6];
                             Vector3 vector = block.GetFirstPersonRotation(m_value) * ((float)Math.PI / 180f) + m_itemRotation;
