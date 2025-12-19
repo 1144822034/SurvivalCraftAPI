@@ -238,18 +238,26 @@ namespace Game {
                 && HitTestGlobal(input.Click.Value.End) == this) {
                 bool flag = false;
                 if (viewPlayer != null) {
-                    if (viewPlayer.ComponentInput.SplitSourceInventory == m_inventory
-                        && viewPlayer.ComponentInput.SplitSourceSlotIndex == m_slotIndex) {
+
+                    IInventory splitSourceInventory = viewPlayer.ComponentInput.SplitSourceInventory;
+                    int splitSourceSlotIndex = viewPlayer.ComponentInput.SplitSourceSlotIndex;
+
+                    if (splitSourceInventory == m_inventory
+                        && splitSourceSlotIndex == m_slotIndex) {
                         viewPlayer.ComponentInput.SetSplitSourceInventoryAndSlot(null, -1);
                         flag = true;
                     }
-                    else if (viewPlayer.ComponentInput.SplitSourceInventory != null) {
+                    else if (splitSourceInventory != null) {
+                       
+                        int totalCount = splitSourceInventory.GetSlotCount(splitSourceSlotIndex);
+                        int splitCount = CalculateSplitCount(totalCount, DragMode.SingleItem);
+
                         flag = HandleMoveItem(
-                            viewPlayer.ComponentInput.SplitSourceInventory,
-                            viewPlayer.ComponentInput.SplitSourceSlotIndex,
+                            splitSourceInventory,
+                            splitSourceSlotIndex,
                             m_inventory,
                             m_slotIndex,
-                            1
+                            splitCount
                         );
                         AudioManager.PlaySound("Audio/UI/ButtonClick", 1f, 0f, 0f);
                     }
