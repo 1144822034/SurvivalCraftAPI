@@ -269,7 +269,7 @@ namespace Game {
                     else {
                         bool languageNotLoaded = true;
                         string systemLanguage = Program.SystemLanguage;
-                        if (systemLanguage == null) {
+                        if (string.IsNullOrEmpty(systemLanguage)) {
                             //如果不支持系统语言，英语是最佳选择
                             LanguageControl.Initialize("en-US");
                             //languageNotLoaded = false;

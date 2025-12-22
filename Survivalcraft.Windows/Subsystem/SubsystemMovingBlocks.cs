@@ -554,13 +554,13 @@ namespace Game {
             Point3 point = default;
             point.X = movingBlockSet.CurrentVelocity.X > 0f
                 ? (int)MathF.Floor(movingBlockSet.Position.X)
-                : point.X = (int)MathF.Ceiling(movingBlockSet.Position.X);
+                : (int)MathF.Ceiling(movingBlockSet.Position.X);
             point.Y = movingBlockSet.CurrentVelocity.Y > 0f
                 ? (int)MathF.Floor(movingBlockSet.Position.Y)
-                : point.Y = (int)MathF.Ceiling(movingBlockSet.Position.Y);
+                : (int)MathF.Ceiling(movingBlockSet.Position.Y);
             point.Z = movingBlockSet.CurrentVelocity.Z > 0f
                 ? (int)MathF.Floor(movingBlockSet.Position.Z)
-                : point.Z = (int)MathF.Ceiling(movingBlockSet.Position.Z);
+                : (int)MathF.Ceiling(movingBlockSet.Position.Z);
             if (!(point != movingBlockSet.GeometryGenerationPosition)) {
                 return;
             }

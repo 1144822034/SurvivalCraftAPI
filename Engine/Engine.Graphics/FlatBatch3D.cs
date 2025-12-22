@@ -270,6 +270,18 @@ namespace Engine.Graphics {
                 LineIndices.Add(count + i + 1);
             }
         }
+        public void QueueLineStrip(IEnumerable<VertexPositionColor> vertices) {
+            int count = LineVertices.Count;
+            int num = 0;
+            foreach (VertexPositionColor vertex in vertices) {
+                LineVertices.Add(vertex);
+                num++;
+            }
+            for (int i = 0; i < num - 1; i++) {
+                LineIndices.Add(count + i);
+                LineIndices.Add(count + i + 1);
+            }
+        }
 
         public void QueueTriangle(Vector3 p1, Vector3 p2, Vector3 p3, Color color) {
             int count = TriangleVertices.Count;

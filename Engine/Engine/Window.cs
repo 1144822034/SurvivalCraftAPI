@@ -124,7 +124,9 @@ namespace Engine {
             {
 #if ANDROID
 #else
-                VerifyWindowOpened();
+                if (!IsWindowOpened()) {
+                    return;
+                }
                 switch (value) {
                     case WindowMode.Fixed:
                         m_gameWindow.WindowBorder = WindowBorder.Fixed;
@@ -169,7 +171,9 @@ namespace Engine {
             {
 #if ANDROID
 #else
-                VerifyWindowOpened();
+                if (!IsWindowOpened()) {
+                    return;
+                }
                 m_gameWindow.Position = new Vector2D<int>(value.X, value.Y);
 #endif
             }
@@ -186,7 +190,9 @@ namespace Engine {
             {
 #if ANDROID
 #else
-                VerifyWindowOpened();
+                if (!IsWindowOpened()) {
+                    return;
+                }
                 m_gameWindow.Size = new Vector2D<int>(value.X, value.Y);
 #endif
             }
@@ -209,7 +215,9 @@ namespace Engine {
             // ReSharper restore ValueParameterNotUsed
             {
 #if !ANDROID
-                VerifyWindowOpened();
+                if (!IsWindowOpened()) {
+                    return;
+                }
                 m_titlePrefix = value;
                 m_gameWindow.Title = $"{m_titlePrefix}{m_titleSuffix}";
 #endif
@@ -226,7 +234,9 @@ namespace Engine {
             // ReSharper restore ValueParameterNotUsed
             {
 #if !ANDROID
-                VerifyWindowOpened();
+                if (!IsWindowOpened()) {
+                    return;
+                }
                 m_titleSuffix = value;
                 m_gameWindow.Title = $"{m_titlePrefix}{m_titleSuffix}";
 #endif
@@ -247,7 +257,9 @@ namespace Engine {
             // ReSharper restore ValueParameterNotUsed
             {
 #if !ANDROID
-                VerifyWindowOpened();
+                if (!IsWindowOpened()) {
+                    return;
+                }
                 m_gameWindow.Title = value;
                 m_titlePrefix = value;
                 m_titleSuffix = string.Empty;
@@ -262,7 +274,9 @@ namespace Engine {
                 return m_swapInterval.Value;
             }
             set {
-                VerifyWindowOpened();
+                if (!IsWindowOpened()) {
+                    return;
+                }
                 value = Math.Clamp(value, 0, 4);
                 if (value != PresentationInterval) {
                     m_view.GLContext?.SwapInterval(value);
@@ -575,6 +589,8 @@ namespace Engine {
                 throw new InvalidOperationException("Window is not opened.");
             }
         }
+
+        static bool IsWindowOpened() => m_view != null;
 
         static void SubscribeToEvents() {
             m_view.FocusChanged += FocusedChangedHandler;

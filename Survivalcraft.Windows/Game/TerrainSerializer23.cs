@@ -581,6 +581,8 @@ namespace Game {
 
         bool m_ioExceptionDealt;
 
+        public TerrainSerializer23() {}
+
         public TerrainSerializer23(string directoryName, string suffix = "") {
             m_storage = new RegionFileStorage();
             m_storage.Open(directoryName, suffix);

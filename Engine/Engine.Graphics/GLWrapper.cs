@@ -739,6 +739,14 @@ namespace Engine.Graphics {
             }
         }
 
+        public static float LineWidth {
+            get {
+                GL.GetFloat(GetPName.LineWidth, out float width);
+                return width == 0f ? 1f : width;
+            }
+            set => GL.LineWidth(value);
+        }
+
         public static void TranslateVertexElementFormat(VertexElementFormat vertexElementFormat,
             out VertexAttribPointerType type,
             out bool normalize) {

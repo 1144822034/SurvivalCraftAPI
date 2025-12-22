@@ -106,7 +106,6 @@ namespace Game {
         public static void EntryPoint() {
             SystemLanguage = CultureInfo.CurrentUICulture.Name;
             if (string.IsNullOrEmpty(SystemLanguage)) {
-                Log.Debug(RegionInfo.CurrentRegion.DisplayName);
                 SystemLanguage = RegionInfo.CurrentRegion.DisplayName != "United States" ? "zh-CN" : "en-US";
             }
             //预加载

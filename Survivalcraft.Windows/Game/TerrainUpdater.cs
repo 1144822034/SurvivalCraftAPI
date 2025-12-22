@@ -218,6 +218,8 @@ namespace Game {
 
         public event Action<TerrainChunk> ChunkInitialized;
 
+        public TerrainUpdater() {}
+
         public TerrainUpdater(SubsystemTerrain subsystemTerrain) {
             ChunkUpdates = 0;
             m_subsystemTerrain = subsystemTerrain;

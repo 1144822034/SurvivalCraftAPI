@@ -88,7 +88,7 @@ namespace Game {
             );
             dictionary.Add("Is Flammable", block.GetFireDuration(value) > 0f ? LanguageControl.Yes : LanguageControl.No);
             if (block.GetNutritionalValue(value) > 0f) {
-                dictionary.Add("Nutrition", block.GetNutritionalValue(value).ToString(CultureInfo.InvariantCulture));
+                dictionary.Add("Nutrition", block.GetNutritionalValue(value).ToString("F",CultureInfo.InvariantCulture));
             }
             if (block.GetRotPeriod(value) > 0) {
                 dictionary.Add(

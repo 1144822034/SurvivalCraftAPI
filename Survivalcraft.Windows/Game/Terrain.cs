@@ -30,6 +30,12 @@ namespace Game {
                 return terrainChunk;
             }
 
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            public virtual TerrainChunk Get(Point2 p) => Get(p.X, p.Y);
+
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            public virtual TerrainChunk Get(Point3 p) => Get(p.X, p.Z);
+
             public virtual void Add(int x, int y, TerrainChunk chunk) {
                 int num = (x + (y << Shift)) & CapacityMinusOne;
                 while (m_array[num] != null) {
@@ -148,13 +154,23 @@ namespace Game {
 
         public virtual TerrainChunk GetChunkAtCoords(int chunkX, int chunkZ) => m_allChunks.Get(chunkX, chunkZ);
 
+        public virtual TerrainChunk GetChunkAtCoords(Point2 p) => m_allChunks.Get(p.X, p.Y);
+
         public virtual TerrainChunk GetChunkAtCoords(int chunkX, int chunkY, int chunkZ) =>
             chunkY is >= 0 and < TerrainChunk.Height / TerrainChunk.Size ? m_allChunks.Get(chunkX, chunkZ) : null;
 
+        public virtual TerrainChunk GetChunkAtCoords(Point3 chunkP) => chunkP.Y is >= 0 and < TerrainChunk.Height / TerrainChunk.Size ? m_allChunks.Get(chunkP.X, chunkP.Z) : null;
+
         public virtual TerrainChunk GetChunkAtCell(int x, int z) => GetChunkAtCoords(x >> TerrainChunk.SizeBits, z >> TerrainChunk.SizeBits);
+
+        public virtual TerrainChunk GetChunkAtCell(Point2 p) => GetChunkAtCoords(p.X >> TerrainChunk.SizeBits, p.Y >> TerrainChunk.SizeBits);
 
         public virtual TerrainChunk GetChunkAtCell(int x, int y, int z) => y is >= 0 and < TerrainChunk.Height
             ? m_allChunks.Get(x >> TerrainChunk.SizeBits, z >> TerrainChunk.SizeBits)
+            : null;
+
+        public virtual TerrainChunk GetChunkAtCell(Point3 p) => p.Y is >= 0 and < TerrainChunk.Height
+            ? m_allChunks.Get(p.X >> TerrainChunk.SizeBits, p.Z >> TerrainChunk.SizeBits)
             : null;
 
         public virtual TerrainChunk AllocateChunk(int chunkX, int chunkZ) {
@@ -201,63 +217,83 @@ namespace Game {
 
         public static Point3 ToCell(Vector3 p) => new((int)MathF.Floor(p.X), (int)MathF.Floor(p.Y), (int)MathF.Floor(p.Z));
 
-        public virtual bool IsCellValid(int x, int y, int z) => y >= 0 && y < TerrainChunk.Height;
+        public virtual bool IsCellValid(int x, int y, int z) => y is >= 0 and < TerrainChunk.Height;
+
+        public virtual bool IsCellValid(Point3 p) => p.Y is >= 0 and < TerrainChunk.Height;
 
         public virtual int GetCellValue(int x, int y, int z) => !IsCellValid(x, y, z) ? 0 : GetCellValueFast(x, y, z);
 
+        public virtual int GetCellValue(Point3 p) => !IsCellValid(p) ? 0 : GetCellValueFast(p);
+
         public virtual int GetCellContents(int x, int y, int z) => !IsCellValid(x, y, z) ? 0 : GetCellContentsFast(x, y, z);
+
+        public virtual int GetCellContents(Point3 p) => !IsCellValid(p) ? 0 : GetCellContentsFast(p);
 
         public virtual int GetCellLight(int x, int y, int z) => !IsCellValid(x, y, z) ? 0 : GetCellLightFast(x, y, z);
 
+        public virtual int GetCellLight(Point3 p) => !IsCellValid(p) ? 0 : GetCellLightFast(p);
+
         public virtual int GetCellValueFast(int x, int y, int z) => GetChunkAtCell(x, z)?.GetCellValueFast(x & 0xF, y, z & 0xF) ?? 0;
+
+        public virtual int GetCellValueFast(Point3 p) => GetChunkAtCell(p)?.GetCellValueFast(p.X & 0xF, p.Y, p.Z & 0xF) ?? 0;
 
         public virtual int GetCellValueFastChunkExists(int x, int y, int z) => GetChunkAtCell(x, z).GetCellValueFast(x & 0xF, y, z & 0xF);
 
+        public virtual int GetCellValueFastChunkExists(Point3 p) => GetChunkAtCell(p).GetCellValueFast(p.X & 0xF, p.Y, p.Z & 0xF);
+
         public virtual int GetCellContentsFast(int x, int y, int z) => ExtractContents(GetCellValueFast(x, y, z));
+
+        public virtual int GetCellContentsFast(Point3 p) => ExtractContents(GetCellValueFast(p));
 
         public virtual int GetCellLightFast(int x, int y, int z) => ExtractLight(GetCellValueFast(x, y, z));
 
-        public virtual void SetCellValueFast(int x, int y, int z, int value) {
-            GetChunkAtCell(x, z)?.SetCellValueFast(x & 0xF, y, z & 0xF, value);
-        }
+        public virtual int GetCellLightFast(Point3 p) => ExtractLight(GetCellValueFast(p));
+
+        public virtual void SetCellValueFast(int x, int y, int z, int value) => GetChunkAtCell(x, z)?.SetCellValueFast(x & 0xF, y, z & 0xF, value);
+
+        public virtual void SetCellValueFast(Point3 p, int value) => GetChunkAtCell(p.X, p.Z)?.SetCellValueFast(p.X & 0xF, p.Y, p.Z & 0xF, value);
 
         public virtual int CalculateTopmostCellHeight(int x, int z) => GetChunkAtCell(x, z)?.CalculateTopmostCellHeight(x & 0xF, z & 0xF) ?? 0;
 
+        public virtual int CalculateTopmostCellHeight(Point2 p) => GetChunkAtCell(p.X, p.Y)?.CalculateTopmostCellHeight(p.X & 0xF, p.Y & 0xF) ?? 0;
+
         public virtual int GetShaftValue(int x, int z) => GetChunkAtCell(x, z)?.GetShaftValueFast(x & 0xF, z & 0xF) ?? 0;
 
-        public virtual void SetShaftValue(int x, int z, int value) {
-            GetChunkAtCell(x, z)?.SetShaftValueFast(x & 0xF, z & 0xF, value);
-        }
+        public virtual int GetShaftValue(Point2 p) => GetChunkAtCell(p.X, p.Y)?.GetShaftValueFast(p.X & 0xF, p.Y & 0xF) ?? 0;
+
+        public virtual void SetShaftValue(int x, int z, int value) => GetChunkAtCell(x, z)?.SetShaftValueFast(x & 0xF, z & 0xF, value);
+
+        public virtual void SetShaftValue(Point2 p, int value) => GetChunkAtCell(p.X, p.Y)?.SetShaftValueFast(p.X & 0xF, p.Y & 0xF, value);
 
         public virtual int GetTemperature(int x, int z) => ExtractTemperature(GetShaftValue(x, z));
 
-        public virtual void SetTemperature(int x, int z, int temperature) {
-            SetShaftValue(x, z, ReplaceTemperature(GetShaftValue(x, z), temperature));
-        }
+        public virtual int GetTemperature(Point2 p) => ExtractTemperature(GetShaftValue(p));
+
+        public virtual void SetTemperature(int x, int z, int temperature) => SetShaftValue(x, z, ReplaceTemperature(GetShaftValue(x, z), temperature));
+
+        public virtual void SetTemperature(Point2 p, int temperature) => SetShaftValue(p, ReplaceTemperature(GetShaftValue(p), temperature));
 
         public virtual int GetHumidity(int x, int z) => ExtractHumidity(GetShaftValue(x, z));
 
-        public virtual void SetHumidity(int x, int z, int humidity) {
-            SetShaftValue(x, z, ReplaceHumidity(GetShaftValue(x, z), humidity));
-        }
+        public virtual int GetHumidity(Point2 p) => ExtractHumidity(GetShaftValue(p));
+
+        public virtual void SetHumidity(int x, int z, int humidity) => SetShaftValue(x, z, ReplaceHumidity(GetShaftValue(x, z), humidity));
 
         public virtual int GetTopHeight(int x, int z) => ExtractTopHeight(GetShaftValue(x, z));
 
-        public virtual void SetTopHeight(int x, int z, int topHeight) {
-            SetShaftValue(x, z, ReplaceTopHeight(GetShaftValue(x, z), topHeight));
-        }
+        public virtual void SetTopHeight(int x, int z, int topHeight) => SetShaftValue(x, z, ReplaceTopHeight(GetShaftValue(x, z), topHeight));
 
         public virtual int GetBottomHeight(int x, int z) => ExtractBottomHeight(GetShaftValue(x, z));
 
-        public virtual void SetBottomHeight(int x, int z, int bottomHeight) {
-            SetShaftValue(x, z, ReplaceBottomHeight(GetShaftValue(x, z), bottomHeight));
-        }
+        public virtual void SetBottomHeight(int x, int z, int bottomHeight) => SetShaftValue(x, z, ReplaceBottomHeight(GetShaftValue(x, z), bottomHeight));
 
         public virtual int GetSunlightHeight(int x, int z) => ExtractSunlightHeight(GetShaftValue(x, z));
 
-        public virtual void SetSunlightHeight(int x, int z, int sunlightHeight) {
-            SetShaftValue(x, z, ReplaceSunlightHeight(GetShaftValue(x, z), sunlightHeight));
-        }
+        public virtual int GetSunlightHeight(Point2 p) => ExtractSunlightHeight(GetShaftValue(p));
+
+        public virtual void SetSunlightHeight(int x, int z, int sunlightHeight) => SetShaftValue(x, z, ReplaceSunlightHeight(GetShaftValue(x, z), sunlightHeight));
+
+        public virtual void SetSunlightHeight(Point2 p, int sunlightHeight) => SetShaftValue(p, ReplaceSunlightHeight(GetShaftValue(p), sunlightHeight));
 
         public static int MakeBlockValue(int contents) => contents & ContentsMask;
 

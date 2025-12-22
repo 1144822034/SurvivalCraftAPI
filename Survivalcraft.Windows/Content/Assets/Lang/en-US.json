@@ -52,7 +52,7 @@
     "CommunityType": {
       "OriginalCommunity": "Original Community",
       "ChineseCommunity": "Chinese Community",
-      "ChineseCommunityWebSite": "Chinese Community (Web Site)"
+      "ChineseCommunityWebsite": "Chinese Community (Web Site)"
     }
   },
   "ModsManageContentScreen": {
@@ -166,8 +166,9 @@
     "1": "Unsuitable block found",
     "2": "Furniture design is too large",
     "3": "Too many different furniture designs",
-    "4": "Blocks in the wild are not permitted to build furniture",
-    "5": "The durability of hammer is not enough to build furniture"
+    "4": "The scan is stopped because of reaching wild chunk",
+    "5": "The durability of hammer is not enough to build furniture",
+    "6": "No suitable blocks found"
   },
   "SubsystemEggBlockBehavior": {
     "1": "Failed to spawn creature, check game log."

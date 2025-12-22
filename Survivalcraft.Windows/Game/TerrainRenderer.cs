@@ -55,6 +55,8 @@ namespace Game {
             }
         }
 
+        public TerrainRenderer() { }
+
         public TerrainRenderer(SubsystemTerrain subsystemTerrain) {
             m_subsystemTerrain = subsystemTerrain;
             m_subsystemSky = subsystemTerrain.Project.FindSubsystem<SubsystemSky>(true);

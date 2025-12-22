@@ -18,6 +18,8 @@ namespace Game {
             new(0f, 0f, 1f), new(1f, 0f, 0f), new(0f, 0f, -1f), new(-1f, 0f, 0f), new(0f, 1f, 0f), new(0f, -1f, 0f)
         ];
 
+        public static readonly int[][] m_faceToTangents = [[1, 3, 4, 5], [0, 2, 4, 5], [1, 3, 4, 5], [0, 2, 4, 5], [0, 1, 2, 3], [0, 1, 2, 3]];
+
         public Point3 Point {
             get => new(X, Y, Z);
             set {
@@ -34,11 +36,20 @@ namespace Game {
             Face = face;
         }
 
+        public CellFace(Point3 point, int face) {
+            X = point.X;
+            Y = point.Y;
+            Z = point.Z;
+            Face = face;
+        }
+
         public static int OppositeFace(int face) => m_oppositeFaces[face];
 
         public static Point3 FaceToPoint3(int face) => m_faceToPoint3[face];
 
         public static Vector3 FaceToVector3(int face) => m_faceToVector3[face];
+
+        public static int[] FaceToTangents(int face) => m_faceToTangents[face];
 
         public static int Point3ToFace(Point3 p, int maxFace = 5) {
             for (int i = 0; i < maxFace; i++) {
@@ -84,6 +95,10 @@ namespace Game {
                 case 4: return new Plane(new Vector3(0f, 1f, 0f), -(Y + 1));
                 default: return new Plane(new Vector3(0f, -1f, 0f), Y);
             }
+        }
+
+        public Vector3 GetFaceCenter(float offset) {
+            return new Vector3(X + 0.5f, Y + 0.5f, Z + 0.5f) + FaceToVector3(Face) * (0.5f + offset);
         }
 
         public override int GetHashCode() => (X << 11) + (Y << 7) + (Z << 3) + Face;
