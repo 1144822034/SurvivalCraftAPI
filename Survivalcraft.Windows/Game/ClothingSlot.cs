@@ -17,6 +17,7 @@ namespace Game {
         }
 
         public static void Initialize() {
+            ClothingSlots.Clear();
             AddClothingSlot("Head");
             AddClothingSlot("Torso");
             AddClothingSlot("Legs");

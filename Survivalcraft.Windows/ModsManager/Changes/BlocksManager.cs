@@ -397,13 +397,12 @@ namespace Game {
             foreach (ModEntity modEntity in ModsManager.ModList) {
                 modEntity.LoadBlocksData();
             }
-            for (int j = 0; j < m_blocks.Length; j++) {
-                Block block = m_blocks[j];
+            foreach (Block block in m_blocks) {
                 try {
                     block.Initialize();
                 }
                 catch (Exception e) {
-                    LoadingScreen.Warning($"Loading Block {block.GetType().Name} error.{e}");
+                    LoadingScreen.Warning($"Loading Block {block.GetType().Name} error.\n{e}");
                 }
                 foreach (int value in block.GetCreativeValues()) {
                     string category = block.GetCategory(value);

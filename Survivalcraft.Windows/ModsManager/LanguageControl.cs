@@ -366,6 +366,7 @@ namespace Game {
             CraftingRecipesManager.Initialize();
             BlocksManager.Blocks[ClothingBlock.Index].Initialize();
             BlocksManager.Blocks[EggBlock.Index].Initialize();
+            ClothingSlot.Initialize();
             ScreensManager.SwitchScreen("MainMenu");
         }
 

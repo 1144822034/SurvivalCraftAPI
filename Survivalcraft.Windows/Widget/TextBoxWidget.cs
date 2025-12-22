@@ -1593,6 +1593,8 @@ namespace Game {
                 || !HasFocus) {
                 return;
             }
+            Rectangle rect = Display.ScissorRectangle;
+            Display.ScissorRectangle = Display.Viewport.Rectangle;
             FlatBatch2D backgroundFlatBatch = dc.PrimitivesRenderer2D.FlatBatch();
             FlatBatch2D outlineFlatBatch = dc.PrimitivesRenderer2D.FlatBatch(1);
             FlatBatch2D foregroundFlatBatch = dc.PrimitivesRenderer2D.FlatBatch(2);
@@ -1668,6 +1670,8 @@ namespace Game {
             fontBatch.TransformTriangles(Matrix.CreateTranslation(new Vector3(candidateWindowCorner1, 0)));
             fontBatch.TransformTriangles(GlobalTransform);
             ClampToBounds = true;
+            dc.PrimitivesRenderer2D.Flush();
+            Display.ScissorRectangle = rect;
         }
 
         public override void Draw(DrawContext dc) {

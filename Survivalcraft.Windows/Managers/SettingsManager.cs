@@ -459,6 +459,7 @@ namespace Game {
                 InitializeCameraManageSettings();
             }
             LoadSettings();
+            TextBoxWidget.ShowCandidatesWindow = FullScreenMode;
             Window.Deactivated += delegate { SaveSettings(); };
         }
 
