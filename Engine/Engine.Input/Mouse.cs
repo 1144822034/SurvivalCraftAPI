@@ -5,7 +5,9 @@ using Android.OS;
 using Android.Views;
 #pragma warning disable CA1416
 #else
+using Silk.NET.GLFW;
 using Silk.NET.Input;
+using Silk.NET.Windowing.Glfw;
 #endif
 
 namespace Engine.Input {
@@ -126,7 +128,10 @@ namespace Engine.Input {
                     m_lastMousePosition = null;
                 }
                 else {
-                    m_mouse.Cursor.CursorMode = CursorMode.Disabled;
+                    m_mouse.Cursor.CursorMode = CursorMode.Raw;
+                    if (GlfwProvider.GLFW.Value.RawMouseMotionSupported()) {
+
+                    }
                     if (m_lastMousePosition.HasValue) {
                         MouseMovement = new Point2(position.X - m_lastMousePosition.Value.X, position.Y - m_lastMousePosition.Value.Y);
                     }
@@ -301,7 +306,7 @@ namespace Engine.Input {
             if (!IsMouseVisible) {
                 MousePosition = null;
 #if !ANDROID
-                m_mouse.Cursor.CursorMode = Window.IsActive ? CursorMode.Disabled : CursorMode.Normal;
+                m_mouse.Cursor.CursorMode = Window.IsActive ? CursorMode.Raw : CursorMode.Normal;
             }
             else {
                 m_mouse.Cursor.CursorMode = CursorMode.Normal;
