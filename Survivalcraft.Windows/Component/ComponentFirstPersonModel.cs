@@ -115,7 +115,7 @@ namespace Game {
                     Matrix m = Matrix.CreateFromQuaternion(m_componentPlayer.ComponentCreatureModel.EyeRotation);
                     m.Translation = m_componentPlayer.ComponentCreatureModel.EyePosition;
 
-                    //ÿ��һ��ʱ�����¼�����ա�������ԭ���ֱ��ڶ�Ӧ�Ļ���ǰ�棬Ϊ���ⱻ�ӿ����������Ƶ�ǰ����
+                    //每隔一段时间重新计算光照。这两段原本分别在对应的绘制前面，为避免被接口跳过所以移到前面来
                     if (m_value != 0 && !ForceDrawHandOnly) {
                         if (num5 >= 0
                             && num5 <= 255) {

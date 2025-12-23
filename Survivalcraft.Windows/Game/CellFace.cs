@@ -101,6 +101,20 @@ namespace Game {
             return new Vector3(X + 0.5f, Y + 0.5f, Z + 0.5f) + FaceToVector3(Face) * (0.5f + offset);
         }
 
+        public Vector3[] GetVertices(float size, float offset) {
+            float halfSize = size * 0.5f;
+            Vector3 center = GetFaceCenter(offset);
+            int[] tangents = FaceToTangents(Face);
+            Vector3 tangent1 = FaceToVector3(tangents[0]) * halfSize;
+            Vector3 tangent2 = FaceToVector3(tangents[1]) * halfSize;
+            Vector3[] result = new Vector3[4];
+            result[0] = center - tangent1 - tangent2;
+            result[1] = center + tangent1 - tangent2;
+            result[2] = center + tangent1 + tangent2;
+            result[3] = center - tangent1 + tangent2;
+            return result;
+        }
+
         public override int GetHashCode() => (X << 11) + (Y << 7) + (Z << 3) + Face;
 
         public override bool Equals(object obj) {

@@ -14,6 +14,5 @@
   <string name="Importing">Importing...</string>
   <string name="ImportedSuccessfully">Imported Successfully</string>
   <string name="InsureLaunchingGame">Do you want to launch game?</string>
-  <string name="NoticeAfterImportingMod">And you need to open Manage Mod screen to enable it manually.</string>
   <string name="FailedToImport">Failed to Import</string>
 </resources>

@@ -419,5 +419,51 @@ namespace Engine.Graphics {
             QueueLine(array[2], array[6], color);
             QueueLine(array[3], array[7], color);
         }
+
+        public void QueueCube(Vector3 center, float size, Color color) {
+            float halfSize = size / 2f;
+            QueueQuad(
+                new Vector3(center.X - halfSize, center.Y - halfSize, center.Z - halfSize),
+                new Vector3(center.X + halfSize, center.Y - halfSize, center.Z - halfSize),
+                new Vector3(center.X + halfSize, center.Y + halfSize, center.Z - halfSize),
+                new Vector3(center.X - halfSize, center.Y + halfSize, center.Z - halfSize),
+                color
+            );
+            QueueQuad(
+                new Vector3(center.X - halfSize, center.Y - halfSize, center.Z + halfSize),
+                new Vector3(center.X + halfSize, center.Y - halfSize, center.Z + halfSize),
+                new Vector3(center.X + halfSize, center.Y + halfSize, center.Z + halfSize),
+                new Vector3(center.X - halfSize, center.Y + halfSize, center.Z + halfSize),
+                color
+            );
+            QueueQuad(
+                new Vector3(center.X - halfSize, center.Y - halfSize, center.Z - halfSize),
+                new Vector3(center.X - halfSize, center.Y - halfSize, center.Z + halfSize),
+                new Vector3(center.X - halfSize, center.Y + halfSize, center.Z + halfSize),
+                new Vector3(center.X - halfSize, center.Y + halfSize, center.Z - halfSize),
+                color
+            );
+            QueueQuad(
+                new Vector3(center.X + halfSize, center.Y - halfSize, center.Z - halfSize),
+                new Vector3(center.X + halfSize, center.Y - halfSize, center.Z + halfSize),
+                new Vector3(center.X + halfSize, center.Y + halfSize, center.Z + halfSize),
+                new Vector3(center.X + halfSize, center.Y + halfSize, center.Z - halfSize),
+                color
+            );
+            QueueQuad(
+                new Vector3(center.X - halfSize, center.Y - halfSize, center.Z - halfSize),
+                new Vector3(center.X + halfSize, center.Y - halfSize, center.Z - halfSize),
+                new Vector3(center.X + halfSize, center.Y - halfSize, center.Z + halfSize),
+                new Vector3(center.X - halfSize, center.Y - halfSize, center.Z + halfSize),
+                color
+            );
+            QueueQuad(
+                new Vector3(center.X - halfSize, center.Y + halfSize, center.Z - halfSize),
+                new Vector3(center.X + halfSize, center.Y + halfSize, center.Z - halfSize),
+                new Vector3(center.X + halfSize, center.Y + halfSize, center.Z + halfSize),
+                new Vector3(center.X - halfSize, center.Y + halfSize, center.Z + halfSize),
+                color
+            );
+        }
     }
 }

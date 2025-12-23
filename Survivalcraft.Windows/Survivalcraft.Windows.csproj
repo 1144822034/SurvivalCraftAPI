@@ -6,7 +6,7 @@
         <Configurations>Debug;Release;Direct3D11</Configurations>
         <PackageId>SurvivalcraftAPI.Survivalcraft</PackageId>
         <Title>SurvivalcraftAPI.Survivalcraft</Title><!--For NuGet Package-->
-        <Version>1.8.2.1</Version><!--For NuGet Package-->
+        <Version>1.8.2.2</Version><!--For NuGet Package-->
         <PackageProjectUrl>https://gitee.com/SC-SPM/SurvivalcraftApi</PackageProjectUrl>
         <RepositoryUrl>https://gitee.com/SC-SPM/SurvivalcraftApi</RepositoryUrl>
         <RepositoryType>Git</RepositoryType>
@@ -52,7 +52,7 @@
         <PackageReference Include="ImeSharp.ImmOnly" Version="1.0.0" Condition="'$(TargetFramework)' == 'net10.0-windows'" />
         <PackageReference Include="Jint" Version="4.4.2" />
         <PackageReference Include="NAudio.Flac.Unknown.Mod" Version="1.0.4" />
-        <PackageReference Include="NuGet.Versioning" Version="7.0.0" />
+        <PackageReference Include="NuGet.Versioning" Version="7.0.1" />
     </ItemGroup>
     <ItemGroup Condition="'$(TargetFramework)' == 'net10.0-windows'">
         <None Update="Content.zip">

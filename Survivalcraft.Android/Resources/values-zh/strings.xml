@@ -14,6 +14,5 @@
   <string name="Importing">导入中...</string>
   <string name="ImportedSuccessfully">导入成功</string>
   <string name="InsureLaunchingGame">是否启动游戏？</string>
-  <string name="NoticeAfterImportingMod">接下来你需要到 Mod 管理屏幕中手动启用它。</string>
   <string name="FailedToImport">导入失败</string>
 </resources>

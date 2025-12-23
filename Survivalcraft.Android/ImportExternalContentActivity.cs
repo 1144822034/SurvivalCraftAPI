@@ -154,11 +154,7 @@ namespace SC4Android {
                                 }
                             )
                             ?.SetNegativeButton(Resources?.GetString(Resource.String.No)!, (_, _) => FinishAndRemoveTask());
-                        builder?.SetMessage(
-                            type == ExternalContentType.Mod
-                                ? $"{Resources?.GetString(Resource.String.NoticeAfterImportingMod)}\n{Resources?.GetString(Resource.String.InsureLaunchingGame)}"
-                                : Resources?.GetString(Resource.String.InsureLaunchingGame)
-                        );
+                        builder?.SetMessage(Resources?.GetString(Resource.String.InsureLaunchingGame));
                         builder?.Show();
                     }
                 );

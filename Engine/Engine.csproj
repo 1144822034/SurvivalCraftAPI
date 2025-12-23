@@ -6,7 +6,7 @@
         <Configurations>Debug;Release;Direct3D11</Configurations>
         <PackageId>SurvivalcraftAPI.Engine</PackageId>
         <Title>SurvivalcraftAPI.Engine</Title><!--For NuGet Package-->
-        <Version>1.8.2.1</Version><!--For NuGet Package-->
+        <Version>1.8.2.2</Version><!--For NuGet Package-->
         <PackageProjectUrl>https://gitee.com/SC-SPM/SurvivalcraftApi</PackageProjectUrl>
         <RepositoryUrl>https://gitee.com/SC-SPM/SurvivalcraftApi</RepositoryUrl>
         <RepositoryType>Git</RepositoryType>
@@ -55,7 +55,7 @@
         <PackageReference Include="Silk.NET.OpenGLES" Version="2.22.0" Condition="'$(Configuration)' != 'Direct3D11'"/>
         <PackageReference Include="Silk.NET.OpenAL" Version="2.22.0" />
         <PackageReference Include="Silk.NET.Input" Version="2.22.0" Condition="'$(TargetFramework)' != 'net10.0-android'" />
-        <PackageReference Include="Microsoft.Extensions.DependencyModel" Version="9.0.3" /><!--To solve the warning of Silk.NET useing an old version of this-->
+        <PackageReference Include="Microsoft.Extensions.DependencyModel" Version="10.0.1" /><!--To solve the warning of Silk.NET useing an old version of this-->
         <PackageReference Include="System.Net.Http" Version="4.3.4" />
         <PackageReference Include="System.Private.Uri" Version="4.3.2" />
         <PackageReference Include="System.Text.RegularExpressions" Version="4.3.1" />
