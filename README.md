@@ -58,7 +58,7 @@
     * Android 系统：`/storage/emulated/0/Survivalcraft2.4_API1.8/Mods`
     * 其他系统：`(解压到的目录)/Mods`
     * 在 Android 系统和 Windows 系统，你能在打开后缀为`.scmod`的文件时选择插件版，即可完成模组的安装（还支持打开`.scworld`、`.scbtex`、`.scskin`、`.scfpack`）
-* 按上面说明处理后仍然打不开游戏，或者运行遇到任何错误，请尝试移除所有模组，如果问题依旧，可在[此处](https://gitee.com/SC-SPM/SurvivalcraftApi/issues)反馈问题
+* 按上面说明处理后仍然打不开游戏，或者运行遇到任何错误，请尝试移除所有模组，如果问题依旧，可在 [此处](https://gitee.com/SC-SPM/SurvivalcraftApi/issues) 反馈问题
 * 安装模组后打不开游戏，或者运行遇到任何错误，请先向模组作者反馈问题，如有必要再由模组作者向本仓库反馈问题
 * 如果 Windows 系统上游戏帧数不低但鼠标调整视角感觉卡顿，关闭系统设置-鼠标设置-增强指针精度，即可解决
 * 要取消 Windows 系统上的文件关联，游戏设置-设备兼容和日志-文件关联，禁用即可
@@ -81,9 +81,7 @@
 
     ```xml
     <ItemGroup>
-      <PackageReference Include="SurvivalcraftAPI.Engine" Version="1.8.2.1"/>
-      <PackageReference Include="SurvivalcraftAPI.EntitySystem" Version="1.8.2.1"/>
-      <PackageReference Include="SurvivalcraftAPI.Survivalcraft" Version="1.8.2.1"/>
+      <PackageReference Include="SurvivalcraftAPI.Survivalcraft" Version="1.8.2.2"/>
     </ItemGroup>
     ```
 

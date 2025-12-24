@@ -18,7 +18,7 @@ namespace Game {
             new(0f, 0f, 1f), new(1f, 0f, 0f), new(0f, 0f, -1f), new(-1f, 0f, 0f), new(0f, 1f, 0f), new(0f, -1f, 0f)
         ];
 
-        public static readonly int[][] m_faceToTangents = [[1, 3, 4, 5], [0, 2, 4, 5], [1, 3, 4, 5], [0, 2, 4, 5], [0, 1, 2, 3], [0, 1, 2, 3]];
+        public static readonly int[][] m_faceToTangents = [[1, 4, 3, 5], [4, 0, 5, 2], [4, 1, 5, 3], [0, 4, 2, 5], [0, 1, 2, 3], [1, 0, 3, 2]];
 
         public Point3 Point {
             get => new(X, Y, Z);
@@ -97,11 +97,11 @@ namespace Game {
             }
         }
 
-        public Vector3 GetFaceCenter(float offset) {
+        public Vector3 GetFaceCenter(float offset = 0f) {
             return new Vector3(X + 0.5f, Y + 0.5f, Z + 0.5f) + FaceToVector3(Face) * (0.5f + offset);
         }
 
-        public Vector3[] GetVertices(float size, float offset) {
+        public Vector3[] GetFourVertices(float size = 1f, float offset = 0f) {
             float halfSize = size * 0.5f;
             Vector3 center = GetFaceCenter(offset);
             int[] tangents = FaceToTangents(Face);
@@ -113,6 +113,28 @@ namespace Game {
             result[2] = center + tangent1 + tangent2;
             result[3] = center - tangent1 + tangent2;
             return result;
+        }
+
+        public Vector3[] GetSixVertices(float size = 1f, float offset = 0f) {
+            float halfSize = size * 0.5f;
+            Vector3 center = GetFaceCenter(offset);
+            int[] tangents = FaceToTangents(Face);
+            Vector3 tangent1 = FaceToVector3(tangents[0]) * halfSize;
+            Vector3 tangent2 = FaceToVector3(tangents[1]) * halfSize;
+            Vector3 v0 = center - tangent1 - tangent2;
+            Vector3 v1 = center + tangent1 - tangent2;
+            Vector3 v2 = center + tangent1 + tangent2;
+            Vector3 v3 = center - tangent1 + tangent2;
+            return [
+                // Triangle 1
+                v0,
+                v1,
+                v2,
+                // Triangle 2
+                v2,
+                v3,
+                v0
+            ];
         }
 
         public override int GetHashCode() => (X << 11) + (Y << 7) + (Z << 3) + Face;

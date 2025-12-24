@@ -2,6 +2,29 @@
 
 > 说明：此更新日志和发布页的更新日志略有不同
 
+## API 1.8.2.2 (2025-12-24)
+
+### 新增
+* 全新中文翻译
+
+### 修复
+* 已禁用模组的资源仍然会加载的问题
+* 蹲下仍然会知道跳跃的问题
+* Android 端鼠标操作异常的问题
+* Android 端编辑文字弹窗的标题和描述没翻译的问题
+* 在高版本 Android 运行时，返回键会直接返回到桌面的问题
+* Windows 端启用“增强指针精度”时，视角异常跳动的问题
+* 一些翻译问题
+
+### 对于开发者
+* ModLoader 新增 OnVitalStatsEat，OnVitalStatsUpdateFood，OnVitalStatsUpdateStamina，OnVitalStatsUpdateSleep，OnVitalStatsUpdateTemperature，OnVitalStatsUpdateWetness，OnInventorySlotWidgetCalculateSplitCount 接口
+* FastDebugMod 能加载非 Mods 根目录的各类资源文件了
+* Widget 新增四个方向的 Margin
+* ScreensManager 新增 HistoryStack、GoBack 等
+* ComponentFirstPersonModel 新增 ForceDrawHandOnly
+* CellFace 新增 FaceToTangents、GetFourVertices、GetSixVertices
+* Terrain 等相关类新增大量参数类型为 Point3 的方法（以前只有int x, int y, int z 形式的）
+
 ## API 1.8.2.1 (2025-11-24)
 
 ### 新增
