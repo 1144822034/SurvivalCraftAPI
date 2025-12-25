@@ -145,7 +145,7 @@ namespace Game {
                         }
                     );
                     if (!skipVanilla) {
-                        if (m_value != 0 && !ForceDrawHandOnly) { //�ֳ���Ʒʱ���Ʒ���ͼ��
+                        if (m_value != 0 && !ForceDrawHandOnly) { //手持物品时绘制方块图标
                             int num6 = Terrain.ExtractContents(m_value);
                             Block block = BlocksManager.Blocks[num6];
                             Vector3 vector = block.GetFirstPersonRotation(m_value) * ((float)Math.PI / 180f) + m_itemRotation;
@@ -175,7 +175,7 @@ namespace Game {
                             );
                             m_primitivesRenderer.Flush(camera.ProjectionMatrix);
                         }
-                        else { //����ʱ���Ƶ�һ�˳��ֱ�ģ��
+                        else { //空手时绘制第一人称手臂模型
                             Vector3 position4 = new(0.25f, -0.3f, -0.05f);
                             Matrix matrix2 = Matrix.CreateScale(0.01f)
                                 * Matrix.CreateRotationX(0.8f)

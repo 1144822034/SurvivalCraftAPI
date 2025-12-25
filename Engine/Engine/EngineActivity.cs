@@ -173,13 +173,22 @@ namespace Engine {
             }
             finally {
                 Thread.Sleep(250);
-                Environment.Exit(0);
+                //Environment.Exit(0);
             }
         }
 
         public override bool DispatchTouchEvent(MotionEvent e) {
-            if (e != null && (e.Source & InputSourceType.Touchscreen) == InputSourceType.Touchscreen) {
+            if (e == null) {
+                return true;
+            }
+            if ((e.Source & InputSourceType.Touchscreen) == InputSourceType.Touchscreen) {
                 Touch.HandleTouchEvent(e);
+            }
+            else if ((e.Source & InputSourceType.Mouse) == InputSourceType.Mouse
+                || (e.Source & InputSourceType.ClassPointer) == InputSourceType.ClassPointer
+                || (e.Source & InputSourceType.MouseRelative) == InputSourceType.MouseRelative) {
+                Mouse.HandleMotionEvent(e);
+                Log.Information($"DispatchTouchEvent Mouse Source: {e.Source.ToString()}");
             }
             return true;
         }

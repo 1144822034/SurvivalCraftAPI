@@ -144,7 +144,7 @@ public class ModsManageContentScreen : Screen {
                         delegate(MessageDialogButton result) {
                             if (result == MessageDialogButton.Button1) {
                                 SettingsManager.SaveSettings();
-                                Environment.Exit(0);
+                                Window.Close();
                             }
                             if (result == MessageDialogButton.Button2) {
                                 ScreensManager.SwitchScreen("Content");

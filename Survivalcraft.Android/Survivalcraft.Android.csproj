@@ -75,7 +75,7 @@
     <ItemGroup>
         <PackageReference Include="Jint" Version="4.4.2"/>
         <PackageReference Include="NAudio.Flac.Unknown.Mod" Version="1.0.4"/>
-        <PackageReference Include="NuGet.Versioning" Version="7.0.0" />
+        <PackageReference Include="NuGet.Versioning" Version="7.0.1" />
     </ItemGroup>
     <ItemGroup>
         <ProjectReference Include="..\EntitySystem\EntitySystem.csproj"/>

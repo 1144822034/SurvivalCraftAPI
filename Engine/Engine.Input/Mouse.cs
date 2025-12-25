@@ -35,8 +35,9 @@ namespace Engine.Input {
 #else
         public static IMouse m_mouse;
 
-        public static Point2? m_lastMousePosition;
 #endif
+        public static Point2? m_lastMousePosition;
+
         static bool[] m_mouseButtonsDownArray;
 
         static int[] m_mouseButtonsDownFrameArray;
@@ -92,6 +93,8 @@ namespace Engine.Input {
                         Window.m_surface?.ReleasePointerCapture();
                     }
                 }
+                MouseMovement = Point2.Zero;
+                m_lastMousePosition = null;
             }
             else {
                 if (!m_pointerCaptureRequested) {
@@ -100,7 +103,11 @@ namespace Engine.Input {
                         Window.m_surface?.RequestPointerCapture();
                     }
                 }
-                MouseMovement = Round(m_queuedMouseMovement.X, m_queuedMouseMovement.Y);
+                if (m_lastMousePosition.HasValue) {
+                    MouseMovement = Round(m_queuedMouseMovement.X, m_queuedMouseMovement.Y);
+                }
+                //安卓端m_lastMousePosition只用来表示是不是鼠标不可见后的第一帧
+                m_lastMousePosition = Point2.Zero;
                 m_queuedMouseMovement = Vector2.Zero;
             }
             MouseWheelMovement = (int)MathUtils.Round(m_queuedMouseWheelMovement) * 120;
@@ -129,9 +136,6 @@ namespace Engine.Input {
                 }
                 else {
                     m_mouse.Cursor.CursorMode = CursorMode.Raw;
-                    if (GlfwProvider.GLFW.Value.RawMouseMotionSupported()) {
-
-                    }
                     if (m_lastMousePosition.HasValue) {
                         MouseMovement = new Point2(position.X - m_lastMousePosition.Value.X, position.Y - m_lastMousePosition.Value.Y);
                     }
@@ -159,7 +163,7 @@ namespace Engine.Input {
                     for (int num = e.HistorySize - 1; num >= 0; num--) {
                         m_queuedMouseMovement += new Vector2(e.GetHistoricalX(num), e.GetHistoricalY(num));
                     }
-                    m_queuedMouseMovement += new Vector2(e.GetX(), e.GetY());
+                    MousePosition = Round(e.GetX(), e.GetY());
                     break;
                 }
                 case MotionEventActions.HoverMove: MousePosition = Round(e.GetX(), e.GetY()); break;

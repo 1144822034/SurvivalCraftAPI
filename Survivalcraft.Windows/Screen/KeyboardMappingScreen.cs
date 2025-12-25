@@ -125,7 +125,7 @@ namespace Game {
             }
             if (!IsWaitingForKeyInput
                 && (Input.Back || Input.Cancel)) {
-                ScreensManager.SwitchScreen(ScreensManager.PreviousScreen);
+                ScreensManager.GoBack();
             }
         }
 
