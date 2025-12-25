@@ -204,7 +204,7 @@ namespace Engine {
         /// <summary>
         /// 刘海/水滴/挖孔在屏幕边缘的宽度。X: 左边，Y: 顶部，Z: 右边，W: 底部
         /// </summary>
-        public static Vector4 DisplayCutoutInsets { get; set; }
+        public static Vector4 DisplayCutoutInsets { get; set; } = Vector4.Zero;
 
         public static string TitlePrefix {
             get {

@@ -14,6 +14,7 @@ using AndroidX.Core.View;
 using Engine.Input;
 using Silk.NET.Windowing.Sdl.Android;
 using Environment = System.Environment;
+using Insets = AndroidX.Core.Graphics.Insets;
 using Path = System.IO.Path;
 using Stream = Android.Media.Stream;
 using Uri = Android.Net.Uri;
@@ -57,8 +58,8 @@ namespace Engine {
             EnableImmersiveMode();
             VolumeControlStream = Stream.Music;
             RequestedOrientation = ScreenOrientation.SensorLandscape;
-            if (Build.VERSION.SdkInt >= (BuildVersionCodes)28) {
-                Window?.DecorView.SetOnApplyWindowInsetsListener(new ApplyWindowInsetsListener());
+            if (Build.VERSION.SdkInt >= (BuildVersionCodes)28 && Window != null) {
+                ViewCompat.SetOnApplyWindowInsetsListener(Window.DecorView, new ApplyWindowInsetsListener());
             }
         }
 
@@ -331,12 +332,12 @@ namespace Engine {
             return stream;
         }
 
-        public class ApplyWindowInsetsListener : Java.Lang.Object, View.IOnApplyWindowInsetsListener {
-            public WindowInsets OnApplyWindowInsets(View v, WindowInsets insets) {
-                IList<Rect> boundingRects = insets.DisplayCutout?.BoundingRects;
+        public class ApplyWindowInsetsListener : Java.Lang.Object, IOnApplyWindowInsetsListener {
+            public WindowInsetsCompat OnApplyWindowInsets(View v, WindowInsetsCompat insets) {
+                IList<Rect> boundingRects = insets?.DisplayCutout?.BoundingRects;
                 if (boundingRects == null
                     || boundingRects.Count == 0) {
-                    return WindowInsets.Consumed;
+                    return WindowInsetsCompat.Consumed;
                 }
                 bool hasWideNotch = false;
                 if (boundingRects.Count >= 2) {
@@ -349,11 +350,13 @@ namespace Engine {
                     }
                 }
                 Insets cutoutInsets = insets.GetInsets(WindowInsetsCompat.Type.DisplayCutout());
-                Engine.Window.DisplayCutoutInsetsChangedHandler(
-                    new Vector4(cutoutInsets.Left, cutoutInsets.Top, cutoutInsets.Right, cutoutInsets.Bottom),
-                    hasWideNotch
-                );
-                return WindowInsets.Consumed;
+                if (cutoutInsets != null) {
+                    Engine.Window.DisplayCutoutInsetsChangedHandler(
+                        new Vector4(cutoutInsets.Left, cutoutInsets.Top, cutoutInsets.Right, cutoutInsets.Bottom),
+                        hasWideNotch
+                    );
+                }
+                return WindowInsetsCompat.Consumed;
             }
         }
     }
