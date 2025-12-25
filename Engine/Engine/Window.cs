@@ -538,9 +538,8 @@ namespace Engine {
                 else {
                     Activity.FinishAffinity();
                 }
-#else
-                m_gameWindow.Close();
 #endif
+                m_view.Close();
                 if (m_restarting) {
                     ToRestart?.Invoke();
                 }
