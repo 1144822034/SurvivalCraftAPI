@@ -5,7 +5,7 @@ using System.Runtime.InteropServices;
 #endif
 
 namespace Game {
-    public class GameLogSink : ILogSink {
+    public class GameLogSink : ILogSink, IDisposable {
         public static Stream m_stream;
 
         public static StreamWriter m_writer;
@@ -123,6 +123,17 @@ namespace Game {
                     m_writer.WriteLine(message);
                     m_writer.Flush();
                 }
+            }
+        }
+
+        public void Dispose() {
+            if (m_writer != null) {
+                m_writer.Dispose();
+                m_writer = null;
+            }
+            if (m_stream != null) {
+                m_stream.Dispose();
+                m_stream = null;
             }
         }
 

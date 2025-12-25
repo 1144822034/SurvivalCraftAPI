@@ -661,6 +661,7 @@ namespace Engine {
             Touch.Dispose();
             GamePad.Dispose();
             Mixer.Dispose();
+            Log.Dispose();
         }
 
         static void BeforeFrameAll() {

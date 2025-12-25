@@ -2,6 +2,7 @@
 using Android.Content;
 #else
 using Engine.Input;
+using System.Diagnostics;
 #if WINDOWS
 using ImeSharp;
 using System.Diagnostics;
@@ -265,6 +266,7 @@ namespace Game {
 
         public static void Restart() {
 #if ANDROID
+#pragma warning disable CA1416
             Intent intent = new Intent(Window.Activity, Window.Activity.Class);
             Window.Activity.StartActivity(intent);
 #else

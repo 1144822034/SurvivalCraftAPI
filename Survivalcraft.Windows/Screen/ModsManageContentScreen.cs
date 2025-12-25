@@ -38,7 +38,7 @@ public class ModsManageContentScreen : Screen {
                 return true;
             }
         }
-        description = modInfo.Description;
+        description = modEntity.IsDisabled ? $"{LanguageControl.Get("ModDetailsDialog", "8")}{Storage.GetFileName(modEntity.ModFilePath)}" : modInfo.Description;
         return false;
     }
 
@@ -64,8 +64,11 @@ public class ModsManageContentScreen : Screen {
             ModsManageContentItemWidget result = new() { Title = title, IsDisabled = entity.IsDisabled, TitleColor = titleColor };
             if (IsOldApiVersionMod(entity, out string description)) {
                 result.TitleColor = Color.Red;
-                if (entity.modInfo == null) {
+                if (string.IsNullOrEmpty(entity.ModFilePath)) {
                     result.IsInformationVisible = false;
+                }
+                else {
+                    result.Information = Storage.GetFileName(entity.ModFilePath);
                 }
             }
             else {

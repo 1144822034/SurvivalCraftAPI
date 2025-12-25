@@ -127,5 +127,16 @@ namespace Engine {
                 m_logSinks.Clear();
             }
         }
+
+        public static void Dispose() {
+            lock (m_lock) {
+                foreach (ILogSink logSink in m_logSinks) {
+                    if (logSink is IDisposable disposable) {
+                        disposable.Dispose();
+                    }
+                }
+                m_logSinks.Clear();
+            }
+        }
     }
 }
