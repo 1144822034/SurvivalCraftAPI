@@ -1,3 +1,7 @@
+#if ANDROID
+using Android.Content;
+#else
+using Engine.Input;
 #if WINDOWS
 using ImeSharp;
 using System.Diagnostics;
@@ -5,12 +9,10 @@ using System.Security.Cryptography;
 using System.Text;
 using System.Reflection;
 #endif
+#endif
 using System.Globalization;
 using Engine;
 using Engine.Graphics;
-#if !ANDROID
-using Engine.Input;
-#endif
 
 namespace Game {
     public static class Program {
@@ -38,28 +40,45 @@ namespace Game {
 #if WINDOWS
             if (args != null
                 && args.Length > 0) {
-                string path = args[0];
-                ExternalContentType type = ExternalContentManager.ExtensionToType(Storage.GetExtension(path));
-                if (ExternalContentManager.IsEntryTypeDownloadSupported(type)
-                    && File.Exists(path)) {
-                    using (FileStream fileStream = File.OpenRead(path)) {
-                        string fileName = Storage.GetFileName(path);
-                        try {
-                            switch (type) {
-                                case ExternalContentType.World: WorldsManager.ImportWorld(fileStream); break;
-                                case ExternalContentType.BlocksTexture: BlocksTexturesManager.ImportBlocksTexture(fileName, fileStream); break;
-                                case ExternalContentType.CharacterSkin: CharacterSkinsManager.ImportCharacterSkin(fileName, fileStream); break;
-                                case ExternalContentType.FurniturePack: FurniturePacksManager.ImportFurniturePack(fileName, fileStream); break;
-                                case ExternalContentType.Mod: ModsManager.ImportMod(fileName, fileStream); break;
+                switch (args.Length) {
+                    case 1: {
+                        string path = args[0];
+                        ExternalContentType type = ExternalContentManager.ExtensionToType(Storage.GetExtension(path));
+                        if (ExternalContentManager.IsEntryTypeDownloadSupported(type)
+                            && File.Exists(path)) {
+                            using (FileStream fileStream = File.OpenRead(path)) {
+                                string fileName = Storage.GetFileName(path);
+                                try {
+                                    switch (type) {
+                                        case ExternalContentType.World: WorldsManager.ImportWorld(fileStream); break;
+                                        case ExternalContentType.BlocksTexture: BlocksTexturesManager.ImportBlocksTexture(fileName, fileStream); break;
+                                        case ExternalContentType.CharacterSkin: CharacterSkinsManager.ImportCharacterSkin(fileName, fileStream); break;
+                                        case ExternalContentType.FurniturePack: FurniturePacksManager.ImportFurniturePack(fileName, fileStream); break;
+                                        case ExternalContentType.Mod: ModsManager.ImportMod(fileName, fileStream); break;
+                                    }
+                                    Window.MessageBox(IntPtr.Zero, $"Successfully imported {fileName}.\n导入 {fileName} 成功", "Success 成功", 0x40u);
+                                }
+                                catch (Exception e) {
+                                    Window.MessageBox(IntPtr.Zero, $"Failed to import {fileName}, reason:\n导入 {fileName} 失败，原因：\n{e}", null, 0x10u);
+                                }
                             }
-                            Window.MessageBox(IntPtr.Zero, $"Successfully imported {fileName}.\n导入 {fileName} 成功", "Success 成功", 0x40u);
                         }
-                        catch (Exception e) {
-                            Window.MessageBox(IntPtr.Zero, $"Failed to import {fileName}, reason:\n导入 {fileName} 失败，原因：\n{e}", null, 0x10u);
-                        }
+                        return;
                     }
+                    case 2:
+                        if (args[0] != "--wait") {
+                            break;
+                        }
+                        if (int.TryParse(args[1], out int pid)) {
+                            try {
+                                Process.GetProcessById(pid)?.WaitForExit();
+                            }
+                            catch {
+                                // ignored
+                            }
+                        }
+                        break;
                 }
-                return;
             }
             string mutexName;
             using (SHA256 sha256 = SHA256.Create()) {
@@ -113,6 +132,7 @@ namespace Game {
             Window.HandleUri += HandleUriHandler;
             Window.Deactivated += DeactivatedHandler;
             Window.Frame += FrameHandler;
+            Window.ToRestart += Restart;
             CultureInfo.DefaultThreadCurrentCulture = CultureInfo.InvariantCulture;
             CultureInfo.DefaultThreadCurrentUICulture = CultureInfo.InvariantCulture;
             string title = $"Survivalcraft {ModsManager.ShortGameVersion} - API {ModsManager.APIVersionString}";
@@ -240,6 +260,21 @@ namespace Game {
                     m_firstFramePrepared = true;
                 }
             }
+#endif
+        }
+
+        public static void Restart() {
+#if ANDROID
+            Intent intent = new Intent(Window.Activity, Window.Activity.Class);
+            Window.Activity.StartActivity(intent);
+#else
+            Process current = Process.GetCurrentProcess();
+            Process.Start(new ProcessStartInfo
+            {
+                FileName = current.MainModule!.FileName!,
+                Arguments = $"--wait {current.Id}",
+                UseShellExecute = false
+            });
 #endif
         }
     }

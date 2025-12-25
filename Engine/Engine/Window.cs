@@ -50,6 +50,7 @@ namespace Engine {
 #endif
 
         static bool m_closing;
+        static bool m_restarting;
 
         static int? m_swapInterval;
 
@@ -323,6 +324,8 @@ namespace Engine {
 
         public static event Action Closed;
 
+        public static event Action ToRestart;
+
         public static event Action Frame;
 
         public static event Action<UnhandledExceptionInfo> UnhandledException;
@@ -447,6 +450,12 @@ namespace Engine {
             m_closing = true;
         }
 
+        public static void Restart() {
+            VerifyWindowOpened();
+            m_closing = true;
+            m_restarting = true;
+        }
+
         static void LoadHandler() {
             InitializeAll();
             SubscribeToEvents();
@@ -532,6 +541,9 @@ namespace Engine {
 #else
                 m_gameWindow.Close();
 #endif
+                if (m_restarting) {
+                    ToRestart?.Invoke();
+                }
             }
         }
 
