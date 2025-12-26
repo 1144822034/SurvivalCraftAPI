@@ -191,8 +191,6 @@ namespace Engine.Input {
                 m_states[deviceId].Sticks[1] = new Vector2(e.GetAxisValue(Axis.Z), 0f - e.GetAxisValue(Axis.Rz));
                 float l = MathF.Max(e.GetAxisValue(Axis.Ltrigger), e.GetAxisValue(Axis.Brake));
                 float r = MathF.Max(e.GetAxisValue(Axis.Rtrigger), e.GetAxisValue(Axis.Gas));
-                m_states[deviceId].Triggers[0] = l;
-                m_states[deviceId].Triggers[1] = r;
                 ProcessTrigger(e.DeviceId, deviceId, 0, l);
                 ProcessTrigger(e.DeviceId, deviceId, 1, r);
                 float axisX = e.GetAxisValue(Axis.HatX);
@@ -350,6 +348,18 @@ namespace Engine.Input {
         public static float GetTriggerPosition(int gamePadIndex, GamePadTrigger trigger, float deadZone = 0f) => deadZone < 0f || deadZone >= 1f ?
             throw new ArgumentOutOfRangeException(nameof(deadZone)) :
             IsConnected(gamePadIndex) ? ApplyDeadZone(m_states[gamePadIndex].Triggers[(int)trigger], deadZone) : 0f;
+
+        public static bool IsTriggerDown(int gamePadIndex, GamePadTrigger trigger, float deadZone = 0f, float threshold = 0.5f) {
+            if (deadZone < 0f
+                || deadZone >= 1f) {
+                throw new ArgumentOutOfRangeException(nameof(deadZone));
+            }
+            if (!IsConnected(gamePadIndex)) {
+                return false;
+            }
+            float value = ApplyDeadZone(m_states[gamePadIndex].Triggers[(int)trigger], deadZone);
+            return value >= threshold;
+        }
 
         public static bool IsTriggerDownOnce(int gamePadIndex, GamePadTrigger trigger, float deadZone = 0f, float threshold = 0.5f) {
             if (deadZone < 0f
