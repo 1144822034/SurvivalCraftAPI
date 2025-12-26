@@ -40,7 +40,7 @@ namespace Game {
 
         public float? m_gameTimeFactorSleep = 60f;
 
-        public List<DelayedExecutionRequest> m_delayedExecutionsRequests = [];
+        public HashSet<DelayedExecutionRequest> m_delayedExecutionsRequests = [];
 
         public SubsystemPlayers m_subsystemPlayers;
 
@@ -96,17 +96,16 @@ namespace Game {
                 }
             );
             m_gameTime += m_gameTimeDelta;
-            int num = 0;
-            while (num < m_delayedExecutionsRequests.Count) {
-                DelayedExecutionRequest delayedExecutionRequest = m_delayedExecutionsRequests[num];
-                if (delayedExecutionRequest.GameTime >= 0.0
+            HashSet<DelayedExecutionRequest> toRemove = [];
+            foreach (DelayedExecutionRequest delayedExecutionRequest in m_delayedExecutionsRequests) {
+                if (delayedExecutionRequest.GameTime >= 0
                     && GameTime >= delayedExecutionRequest.GameTime) {
-                    m_delayedExecutionsRequests.RemoveAt(num);
+                    toRemove.Add(delayedExecutionRequest);
                     delayedExecutionRequest.Action();
                 }
-                else {
-                    num++;
-                }
+            }
+            foreach (DelayedExecutionRequest delayedExecutionRequest in toRemove) {
+                m_delayedExecutionsRequests.Remove(delayedExecutionRequest);
             }
             if (IsAllPlayerLivingSleeping()) {
                 if (SettingsManager.UseAPISleepTimeAcceleration) {
