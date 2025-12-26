@@ -43,12 +43,12 @@ namespace Engine.Input {
         public struct TriggerInfo {
             public int DeviceId;
             public GamePadTrigger Trigger;
-            public bool IsDown;
+            public float Value;
 
-            public TriggerInfo(int deviceId, GamePadTrigger trigger, bool isDown) {
+            public TriggerInfo(int deviceId, GamePadTrigger trigger, float value) {
                 DeviceId = deviceId;
                 Trigger = trigger;
-                IsDown = isDown;
+                Value = value;
             }
         }
 
@@ -92,26 +92,17 @@ namespace Engine.Input {
                     Disconnect(item);
                 }
             }
-            while (!m_cachedKeyEvents.IsEmpty) {
-                if (m_cachedKeyEvents.TryDequeue(out KeyInfo keyInfo)) {
-                    switch (keyInfo.Action) {
-                        case KeyEventActions.Down: HandleKeyDown(keyInfo.DeviceId, keyInfo.KeyCode); break;
-                        case KeyEventActions.Up: HandleKeyUp(keyInfo.DeviceId, keyInfo.KeyCode); break;
-                    }
+            while (m_cachedKeyEvents.TryDequeue(out KeyInfo keyInfo)) {
+                switch (keyInfo.Action) {
+                    case KeyEventActions.Down: HandleKeyDown(keyInfo.DeviceId, keyInfo.KeyCode); break;
+                    case KeyEventActions.Up: HandleKeyUp(keyInfo.DeviceId, keyInfo.KeyCode); break;
                 }
             }
-            while (!m_cachedTriggerEvents.IsEmpty) {
-                if (m_cachedTriggerEvents.TryDequeue(out TriggerInfo info)) {
-                    int num = TranslateDeviceId(info.DeviceId);
-                    if (num < 0) {
-                        continue;
-                    }
-                    if (info.IsDown) {
-                        m_states[num].Triggers[(int)info.Trigger] = 1f;
-                    }
-                    else {
-                        m_states[num].Triggers[(int)info.Trigger] = 0f;
-                    }
+            while (m_cachedTriggerEvents.TryDequeue(out TriggerInfo info)) {
+                int num = TranslateDeviceId(info.DeviceId);
+                if (num >= 0) {
+                    // 在这里更新 Triggers，此时它是当前帧的最新值
+                    m_states[num].Triggers[(int)info.Trigger] = info.Value;
                 }
             }
         }
@@ -191,18 +182,14 @@ namespace Engine.Input {
                 m_states[deviceId].Sticks[1] = new Vector2(e.GetAxisValue(Axis.Z), 0f - e.GetAxisValue(Axis.Rz));
                 float l = MathF.Max(e.GetAxisValue(Axis.Ltrigger), e.GetAxisValue(Axis.Brake));
                 float r = MathF.Max(e.GetAxisValue(Axis.Rtrigger), e.GetAxisValue(Axis.Gas));
-                ProcessTrigger(e.DeviceId, deviceId, 0, l);
-                ProcessTrigger(e.DeviceId, deviceId, 1, r);
+                m_cachedTriggerEvents.Enqueue(new TriggerInfo(e.DeviceId, GamePadTrigger.Left, l));
+                m_cachedTriggerEvents.Enqueue(new TriggerInfo(e.DeviceId, GamePadTrigger.Right, r));
                 float axisX = e.GetAxisValue(Axis.HatX);
                 float axisY = e.GetAxisValue(Axis.HatY);
-                bool left = axisX < -0.5f;
-                bool right = axisX > 0.5f;
-                bool up = axisY < -0.5f;
-                bool down = axisY > 0.5f;
-                ProcessDpad(deviceId, deviceId, 0, left, Keycode.DpadLeft);
-                ProcessDpad(deviceId, deviceId, 1, right, Keycode.DpadRight);
-                ProcessDpad(deviceId, deviceId, 2, up, Keycode.DpadUp);
-                ProcessDpad(deviceId, deviceId, 3, down, Keycode.DpadDown);
+                ProcessDpad(e.DeviceId, deviceId, 0, axisX < -0.5f, Keycode.DpadLeft);
+                ProcessDpad(e.DeviceId, deviceId, 1, axisX > 0.5f, Keycode.DpadRight);
+                ProcessDpad(e.DeviceId, deviceId, 2, axisY < -0.5f, Keycode.DpadUp);
+                ProcessDpad(e.DeviceId, deviceId, 3, axisY > 0.5f, Keycode.DpadDown);
             }
         }
 
@@ -216,16 +203,6 @@ namespace Engine.Input {
             }
             m_lastDpadStates[padIndex, dpadIndex] = current;
             m_cachedKeyEvents.Enqueue(new KeyInfo(deviceId, keyCode, current ? KeyEventActions.Down : KeyEventActions.Up));
-        }
-
-        public static void ProcessTrigger(int deviceId, int padIndex, int triggerIndex, float value) {
-            bool lastDown = m_lastTriggerDown[padIndex, triggerIndex];
-            bool currentDown = lastDown ? value >= TRIGGER_UP_THRESHOLD : value >= TRIGGER_DOWN_THRESHOLD;
-            if (currentDown == lastDown) {
-                return;
-            }
-            m_lastTriggerDown[padIndex, triggerIndex] = currentDown;
-            m_cachedTriggerEvents.Enqueue(new TriggerInfo(deviceId, (GamePadTrigger)triggerIndex, currentDown));
         }
 
         public static int TranslateDeviceId(int deviceId) {
