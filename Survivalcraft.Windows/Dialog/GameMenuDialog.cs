@@ -51,6 +51,8 @@ namespace Game {
             SubsystemGameInfo subsystemGameInfo = project.FindSubsystem<SubsystemGameInfo>(true);
             SubsystemTimeOfDay subsystemTimeOfDay = project.FindSubsystem<SubsystemTimeOfDay>(true);
             SubsystemFurnitureBlockBehavior subsystemFurnitureBlockBehavior = project.FindSubsystem<SubsystemFurnitureBlockBehavior>(true);
+            Terrain terrain = project.FindSubsystem<SubsystemTerrain>(true).Terrain;
+            SubsystemMetersBlockBehavior subsystemMetersBlockBehavior = project.FindSubsystem<SubsystemMetersBlockBehavior>(true);
             BitmapFont font = LabelWidget.BitmapFont;
             BitmapFont font2 = LabelWidget.BitmapFont;
             Color white = Color.White;
@@ -158,12 +160,49 @@ namespace Game {
                 string.Format(LanguageControl.Get(fName, 29), ((int)MathF.Floor(playerStats.HighestLevel)).ToString("N0"))
             );
             if (componentPlayer != null) {
-                Vector3 position = componentPlayer.ComponentBody.Position;
                 if (subsystemGameInfo.WorldSettings.GameMode == GameMode.Creative) {
+                    Vector3 position = componentPlayer.ComponentBody.Position;
                     AddStat(
                         stackPanelWidget,
                         LanguageControl.Get(fName, 30),
-                        string.Format(LanguageControl.Get(fName, 31), $"{position.X:0}", $"{position.Z:0}", $"{position.Y:0}")
+                        string.Format(LanguageControl.Get(fName, 31), $"{position.X:F1}", $"{position.Z:F1}", $"{position.Y:F1}")
+                    );
+                    Point3 point = Terrain.ToCell(position);
+                    int shaftValue = terrain.GetShaftValue(point.X, point.Z);
+                    int terrainTemperature = Terrain.ExtractTemperature(shaftValue) + SubsystemWeather.GetTemperatureAdjustmentAtHeight(point.Y);
+                    int seasonalTemperatureOffset = terrain.SeasonTemperature;
+                    subsystemMetersBlockBehavior.CalculateTemperature(
+                        point.X,
+                        point.Y,
+                        point.Z,
+                        0f,
+                        0f,
+                        out _,
+                        out _,
+                        out float finalTemperature
+                    );
+                    AddStat(
+                        stackPanelWidget,
+                        LanguageControl.Get(fName, "99"),
+                        string.Format(
+                            LanguageControl.Get(fName, "100"),
+                            $"{terrainTemperature:+0;-0;+0}",
+                            $"{seasonalTemperatureOffset:+0;-0;+0}",
+                            $"{finalTemperature - terrainTemperature - seasonalTemperatureOffset:+0.0;-0.0;+0}",
+                            $"{finalTemperature:F1}"
+                        )
+                    );
+                    int terrainHumidity = Terrain.ExtractHumidity(shaftValue);
+                    int seasonalHumidityOffset = terrain.SeasonHumidity;
+                    AddStat(
+                        stackPanelWidget,
+                        LanguageControl.Get(fName, "101"),
+                        string.Format(
+                            LanguageControl.Get(fName, "102"),
+                            $"{terrainHumidity:+0;-0;+0}",
+                            $"{seasonalHumidityOffset:+0;-0;+0}",
+                            $"{terrainHumidity + seasonalHumidityOffset}"
+                        )
                     );
                 }
                 else {

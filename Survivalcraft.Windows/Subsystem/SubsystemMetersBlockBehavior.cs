@@ -106,6 +106,17 @@ namespace Game {
             return value;
         }
 
+        /// <summary>
+        /// 计算温度
+        /// </summary>
+        /// <param name="x">世界坐标 X</param>
+        /// <param name="y">世界坐标 Y</param>
+        /// <param name="z">世界坐标 Z</param>
+        /// <param name="meterTemperature">温度计（或者生物体）当前的温度（上一帧的温度）</param>
+        /// <param name="meterInsulation">隔热系数。如果这个值很高，外界温度对目标温度的影响会变慢（例如穿了厚衣服）</param>
+        /// <param name="targetTemperature">最终计算出的目标平衡温度（算上隔热后）</param>
+        /// <param name="targetTemperatureFlux">温度变化率（温度改变的速度）</param>
+        /// <param name="environmentTemperature">纯环境温度（不考虑自身隔热）</param>
         public void CalculateTemperature(int x,
             int y,
             int z,

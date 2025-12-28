@@ -42,7 +42,8 @@ namespace Game {
                 return;
             }
             if (terrainRaycastResult.Distance < 3f) {
-                Point3 point = terrainRaycastResult.CellFace.Point;
+                CellFace cellFace = terrainRaycastResult.CellFace;
+                Point3 point = cellFace.Point;
                 int cellValue = m_subsystemTerrain.Terrain.GetCellValue(point.X, point.Y, point.Z);
                 Block obj = BlocksManager.Blocks[Terrain.ExtractContents(cellValue)];
                 if (obj is CrossBlock) {
@@ -50,9 +51,16 @@ namespace Game {
                     m_highlightRaycastResult = terrainRaycastResult;
                 }
                 if (obj.IsEditable_(cellValue)) {
-                    NearbyEditableCell = terrainRaycastResult.CellFace.Point;
+                    NearbyEditableCell = cellFace.Point;
                 }
             }
+#if DEBUG
+            if (m_componentPlayer.GameWidget.GameWidgetIndex == 0) {
+                CellFace cellFace = terrainRaycastResult.CellFace;
+                int cellValue = m_subsystemTerrain.Terrain.GetCellValue(cellFace.X, cellFace.Y, cellFace.Z);
+                PerformanceManager.AddExtraStat($"Block Value: {cellValue}, CellFace: ({cellFace.X},{cellFace.Y},{cellFace.Z},{cellFace.Face}), Distance: {terrainRaycastResult.Distance:F1}");
+            }
+#endif
         }
 
         public virtual void Draw(Camera camera, int drawOrder) {

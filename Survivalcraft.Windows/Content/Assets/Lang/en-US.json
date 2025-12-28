@@ -552,7 +552,7 @@
     "28": "Highest Level Attained",
     "29": "Level {0}",
     "30": "Location",
-    "31": "{0},{1} at altitude {2}",
+    "31": "{0}, {1} at altitude {2}",
     "32": "(unavailable in {0})",
     "33": "Combat Statistics",
     "34": "Players Killed",
@@ -619,7 +619,11 @@
     "95": "Run Javascript",
     "96": "Length Of Year",
     "97": "Season",
-    "98": "(fixed season)"
+    "98": "(fixed season)",
+    "99": "Temperature",
+    "100": "Terrain {0}, Season {1}, Env. {2}, Final {3}",
+    "101": "Humidity",
+    "102": "Terrain {0}, Season {1}, Final {2}"
   },
   "ModDetailsDialog": {
     "1": "Disable Reason: ",
