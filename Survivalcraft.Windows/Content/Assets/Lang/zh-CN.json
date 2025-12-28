@@ -895,7 +895,8 @@
     "Armor Durability": "盔甲耐久度",
     "Insulation": "隔热水平",
     "Movement Speed": "移动速度",
-    "Dynamic Index": "动态索引",
+    "Dynamic Index": "动态方块 ID",
+    "Block Data": "特殊值",
     "1": "是 (最高 {0})",
     "2": "{0} 天"
   },

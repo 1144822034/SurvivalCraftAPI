@@ -893,7 +893,8 @@
     "Armor Durability": "Armor Durability",
     "Insulation": "Insulation",
     "Movement Speed": "Movement Speed",
-    "Dynamic Index": "Dynamic Index",
+    "Dynamic Index": "Dynamic Block Contents",
+    "Block Data": "Block Data",
     "1": "Yes (up to {0})",
     "2": "{0} days"
   },

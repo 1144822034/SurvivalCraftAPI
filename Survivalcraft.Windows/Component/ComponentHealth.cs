@@ -401,7 +401,7 @@ namespace Game {
                     m_componentPlayer.ComponentGui.HealthBarWidget.Value = Health;
                 }
                 if (Health == 0f
-                    && HealthChange < 0f) {
+                    && (HealthChange < 0f || !DeathTime.HasValue)) {
                     DeathTime = m_subsystemGameInfo.TotalElapsedGameTime;
                     Vector3 position2 = m_componentCreature.ComponentBody.Position
                         + new Vector3(0f, m_componentCreature.ComponentBody.StanceBoxSize.Y / 2f, 0f);

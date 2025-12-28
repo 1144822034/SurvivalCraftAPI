@@ -174,7 +174,7 @@ namespace Engine {
             }
             finally {
                 Thread.Sleep(250);
-                //Environment.Exit(0);
+                Environment.Exit(0);
             }
         }
 
@@ -189,7 +189,6 @@ namespace Engine {
                 || (e.Source & InputSourceType.ClassPointer) == InputSourceType.ClassPointer
                 || (e.Source & InputSourceType.MouseRelative) == InputSourceType.MouseRelative) {
                 Mouse.HandleMotionEvent(e);
-                Log.Information($"DispatchTouchEvent Mouse Source: {e.Source.ToString()}");
             }
             return true;
         }
