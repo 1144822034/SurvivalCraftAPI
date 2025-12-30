@@ -623,7 +623,8 @@
     "99": "Temperature",
     "100": "Terrain {0}, Season {1}, Env. {2}, Final {3}",
     "101": "Humidity",
-    "102": "Terrain {0}, Season {1}, Final {2}"
+    "102": "Terrain {0}, Season {1}, Final {2}",
+    "103": "Spawn Location"
   },
   "ModDetailsDialog": {
     "1": "Disable Reason: ",

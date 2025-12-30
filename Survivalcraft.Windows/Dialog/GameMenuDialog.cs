@@ -154,6 +154,14 @@ namespace Game {
                 LanguageControl.Get(fName, 26),
                 MathUtils.Max(playerData.SpawnsCount - 1, 0).ToString("N0") + LanguageControl.Get(fName, 27)
             );
+            if (subsystemGameInfo.WorldSettings.GameMode == GameMode.Creative) {
+                Vector3 position = playerData.SpawnPosition;
+                AddStat(
+                    stackPanelWidget,
+                    LanguageControl.Get(fName, "103"),
+                    string.Format(LanguageControl.Get(fName, 31), $"{position.X:F1}", $"{position.Z:F1}", $"{position.Y:F1}")
+                );
+            }
             AddStat(
                 stackPanelWidget,
                 LanguageControl.Get(fName, 28),
