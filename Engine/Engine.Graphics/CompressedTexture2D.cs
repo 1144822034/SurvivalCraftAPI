@@ -1,9 +1,9 @@
+#if !DIRECT3D11
 using System.Runtime.InteropServices;
 using Silk.NET.OpenGLES;
 using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.PixelFormats;
 #pragma warning disable CS0809 // 过时成员重写未过时成员
-#if !DIRECT3D11
 namespace Engine.Graphics {
     // Only ASTC support
     public class CompressedTexture2D : Texture2D {
@@ -275,7 +275,7 @@ namespace Engine.Graphics {
                 || mipLevel >= MipLevelsCount) {
                 throw new ArgumentOutOfRangeException(nameof(mipLevel));
             }
-            if (source == null || source.Length <= 0) {
+            if (source.IsEmpty) {
                 throw new ArgumentNullException(nameof(source));
             }
         }

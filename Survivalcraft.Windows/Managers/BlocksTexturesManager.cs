@@ -57,12 +57,16 @@ namespace Game {
                         string extension = Storage.GetExtension(fileName.Replace(".scbtex", "")).ToLower();
                         if (extension == ".astc"
                             || extension == ".astcsrgb") {
+#if DIRECT3D11
+                            throw new NotImplementedException();
+#else
                             using (Stream stream = Storage.OpenFile(fileName, OpenFileMode.Read)) {
                                 if (CompressedTexture2D.GetParameters(stream, out int width, out int height, out _, out _)) {
                                     ValidateBlocksTexture(width, height);
                                     texture2D = CompressedTexture2D.Load(stream);
                                 }
                             }
+#endif
                         }
                         else {
                             Image image = Image.Load(fileName);
@@ -94,12 +98,16 @@ namespace Game {
             }
             if (extension == ".astc"
                 || extension == ".astcsrgb") {
+#if DIRECT3D11
+                throw new NotImplementedException();
+#else
                 if (CompressedTexture2D.GetParameters(stream, out int width, out int height, out _, out _)) {
                     ValidateBlocksTexture(width, height);
                 }
                 else {
                     throw new InvalidOperationException("Invalid ASTC file.");
                 }
+#endif
             }
             else {
                 ValidateBlocksTexture(stream);

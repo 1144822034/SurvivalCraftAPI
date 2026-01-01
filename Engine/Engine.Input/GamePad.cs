@@ -123,7 +123,8 @@ namespace Engine.Input {
                     GamePadButton.DPadLeft => 0,
                     GamePadButton.DPadRight => 1,
                     GamePadButton.DPadUp => 2,
-                    GamePadButton.DPadDown => 3
+                    GamePadButton.DPadDown => 3,
+                    _ => throw new ArgumentOutOfRangeException()
                 };
                 m_dpadFromKey[num, idx] = true;
             }

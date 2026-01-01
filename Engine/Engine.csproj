@@ -1,6 +1,6 @@
 <Project Sdk="Microsoft.NET.Sdk">
     <PropertyGroup>
-        <NoWarn>$(NoWarn);CS1591;CS0067</NoWarn>
+        <NoWarn>$(NoWarn);CS1591;CS0067;NU1510</NoWarn>
         <RootNamespace>Engine</RootNamespace>
         <AssemblyName>Engine</AssemblyName>
         <Configurations>Debug;Release;Direct3D11</Configurations>

@@ -72,8 +72,6 @@
     * **推荐：** 在解决方案目录运行以下命令：
 
     ```bat
-    dotnet add package SurvivalcraftAPI.Engine
-    dotnet add package SurvivalcraftAPI.EntitySystem
     dotnet add package SurvivalcraftAPI.Survivalcraft
     ```
 
