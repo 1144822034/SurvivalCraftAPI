@@ -32,7 +32,9 @@ namespace SC4Android {
              @".*\.scfpack",
              @".*\.scmod",
              @".*\.png",
-             @".*\.webp"
+             @".*\.webp",
+             @".*\.astc",
+             @".*\.astcsrgb"
          ],
          Categories = ["android.intent.category.DEFAULT", "android.intent.category.BROWSABLE"]
      ), IntentFilter(["android.intent.action.SEND"], DataMimeType = "*/*", Categories = ["android.intent.category.DEFAULT"])]

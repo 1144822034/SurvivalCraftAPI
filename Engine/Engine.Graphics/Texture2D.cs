@@ -350,8 +350,8 @@ namespace Engine.Graphics {
             if (mipLevelsCount < 1) {
                 throw new ArgumentOutOfRangeException(nameof(mipLevelsCount));
             }
-            if (colorFormat != ColorFormat.LinearLDR && colorFormat != ColorFormat.SrgbLDR) {
-                throw new ArgumentOutOfRangeException(nameof(colorFormat));
+            if (colorFormat == ColorFormat.LinearLDR || colorFormat == ColorFormat.SrgbLDR) {
+                throw new ArgumentException(nameof(colorFormat));
             }
             Width = width;
             Height = height;

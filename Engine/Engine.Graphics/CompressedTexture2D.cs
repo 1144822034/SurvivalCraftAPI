@@ -161,6 +161,9 @@ namespace Engine.Graphics {
         }
 
         public new static CompressedTexture2D Load(Stream stream, bool linear = true, int mipLevelsCount = 1) {
+            if (stream.Length < 16) {
+                throw new Exception("Invalid ASTC stream.");
+            }
             byte[] buffer = new byte[stream.Length];
             stream.Position = 0;
             if (stream.Read(buffer) != stream.Length) {
@@ -189,6 +192,60 @@ namespace Engine.Graphics {
                 //GLWrapper.GL.GenerateMipmap(TextureTarget.Texture2D);
             }
             return texture2D;
+        }
+
+        public static bool GetParameters(Stream stream, out int width, out int height, out int blockWidth, out int blockHeight) {
+            if (stream.Length < 16) {
+                width = 0;
+                height = 0;
+                blockWidth = 0;
+                blockHeight = 0;
+                return false;
+            }
+            byte[] buffer = new byte[13];
+            stream.Position = 0;
+            stream.ReadExactly(buffer, 0, 12);
+            if (buffer[0] != 0x13 || buffer[1] != 0xAB ||
+                buffer[2] != 0xA1 || buffer[3] != 0x5C) {
+                width = 0;
+                height = 0;
+                blockWidth = 0;
+                blockHeight = 0;
+                return false;
+            }
+            blockWidth = buffer[4];
+            blockHeight = buffer[5];
+            width = buffer[7] | (buffer[8] << 8) | (buffer[9] << 16);
+            height = buffer[10] | (buffer[11] << 8) | (buffer[12] << 16);
+            return true;
+        }
+
+        public override void InitializeTexture2D(int width, int height, int mipLevelsCount, ColorFormat colorFormat) {
+            if (width < 1) {
+                throw new ArgumentOutOfRangeException(nameof(width));
+            }
+            if (height < 1) {
+                throw new ArgumentOutOfRangeException(nameof(height));
+            }
+            if (mipLevelsCount < 1) {
+                throw new ArgumentOutOfRangeException(nameof(mipLevelsCount));
+            }
+            if (colorFormat != ColorFormat.LinearLDR && colorFormat != ColorFormat.SrgbLDR) {
+                throw new ArgumentException(nameof(colorFormat));
+            }
+            Width = width;
+            Height = height;
+            ColorFormat = colorFormat;
+            if (mipLevelsCount > 1) {
+                int num = 0;
+                for (int num2 = MathUtils.Max(width, height); num2 >= 1; num2 /= 2) {
+                    num++;
+                }
+                MipLevelsCount = MathUtils.Min(num, mipLevelsCount);
+            }
+            else {
+                MipLevelsCount = 1;
+            }
         }
 
         public void VerifyParametersSetData(int mipLevel, int imageSize, nint source) {

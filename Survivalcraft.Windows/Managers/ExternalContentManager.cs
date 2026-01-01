@@ -42,6 +42,8 @@ namespace Game {
                     yield return ".scbtex";
                     yield return ".webp";
                     yield return ".png";
+                    yield return ".astc";
+                    yield return ".astcsrgb";
                     break;
                 case ExternalContentType.CharacterSkin: yield return ".scskin"; break;
                 case ExternalContentType.FurniturePack: yield return ".scfpack"; break;

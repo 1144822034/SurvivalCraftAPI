@@ -76,7 +76,7 @@ namespace Game {
 #if WINDOWS
                             KeyValuePair<string, string[]>[] filters = [
                                 new(LanguageControl.Get(fName, "ExtensionName", ".scworld"), ["*.scworld"]),
-                                new(LanguageControl.Get(fName, "ExtensionName", ".scbtex"), ["*.scbtex", "*.png", "*.webp"]),
+                                new(LanguageControl.Get(fName, "ExtensionName", ".scbtex"), ["*.scbtex", "*.png", "*.webp", "*.astc", "*.astcsrgb"]),
                                 new(LanguageControl.Get(fName, "ExtensionName", ".scskin"), ["*.scskin"]),
                                 new(LanguageControl.Get(fName, "ExtensionName", ".scfpack"), ["*.scfpack"]),
                                 new(LanguageControl.Get(fName, "ExtensionName", ".scmod"), ["*.scmod"])
