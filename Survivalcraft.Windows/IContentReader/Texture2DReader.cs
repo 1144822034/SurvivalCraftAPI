@@ -3,7 +3,7 @@ using Engine.Graphics;
 namespace Game.IContentReader {
     public class Texture2DReader : IContentReader {
         public override string Type => "Engine.Graphics.Texture2D";
-        public override string[] DefaultSuffix => ["webp", "png", "jpg", "jpeg", "astc", "astcsrgb"];
+        public override string[] DefaultSuffix => ["astc", "astcsrgb", "webp", "png", "jpg", "jpeg"];
 
         public override object Get(ContentInfo[] contents) {
             ContentInfo contentInfo = contents[0];

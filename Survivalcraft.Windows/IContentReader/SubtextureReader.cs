@@ -3,7 +3,7 @@ using Engine.Graphics;
 
 namespace Game.IContentReader {
     public class SubtextureReader : IContentReader {
-        public override string[] DefaultSuffix => ["webp", "txt", "png", "astc", "astcsrgb"];
+        public override string[] DefaultSuffix => ["astc", "astcsrgb", "webp", "txt", "png"];
         public override string Type => "Game.Subtexture";
 
         public override object Get(ContentInfo[] contents) {

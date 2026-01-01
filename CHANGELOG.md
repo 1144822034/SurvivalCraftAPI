@@ -2,6 +2,25 @@
 
 > 说明：此更新日志和发布页的更新日志略有不同
 
+## API 1.8.2.3 (2026-01-01)
+
+### 新增
+* 方块详情界面显示动态 ID 和特殊值（需进入存档）
+* 创造模式的游戏菜单额外显示玩家重生位置坐标，以及所在位置的温度、湿度
+* 支持 ASTC 格式的方块材质
+
+### 修复
+* 安卓端鼠标、手柄输入问题全面修复
+* 低版本安卓可能闪退的问题
+* 生物出生立即死亡后，尸体不消失的问题
+
+### 对于开发者
+* 新纹理类：CompressedTexture2D，可加载 ASTC 格式的压缩纹理。  
+  优点：无需解码，直接传递给 GPU，压缩率和质量损失尚可。  
+  官方工具：[https://github.com/ARM-software/astc-encoder](https://github.com/ARM-software/astc-encoder)  
+  推荐命令：`.\astcenc-avx2.exe -cl 输入路径 输出路径 8x8 -exhaustive`
+* 新增重启游戏的方法：Window.Restart
+
 ## API 1.8.2.2 (2025-12-24)
 
 ### 新增
