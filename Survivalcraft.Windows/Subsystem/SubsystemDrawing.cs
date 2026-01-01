@@ -24,18 +24,14 @@ namespace Game {
 
         public void AddDrawable(IDrawable drawable) {
             lock (m_drawables) {
-                if (m_drawables.ContainsKey(drawable)) {
+                if (!m_drawables.TryAdd(drawable, true)) {
                     Log.Error($"SubsystemDrawing: Drawable [{drawable.GetType().ToString()}] already added.");
                 }
-                m_drawables.Add(drawable, true);
             }
         }
 
         public void RemoveDrawable(IDrawable drawable) {
             lock (m_drawables) {
-                if(!m_drawables.ContainsKey(drawable)) {
-                    return;
-                }
                 m_drawables.Remove(drawable);
             }
         }

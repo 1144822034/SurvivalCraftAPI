@@ -146,31 +146,31 @@ namespace Game {
 
         public static int[] m_lightValuesNormal = [3, 5, 8, 10, 13, 15];
 
-        public float SkyLightIntensity { get; set; }
+        public virtual float SkyLightIntensity { get; set; }
 
-        public int MoonPhase { get; set; }
+        public virtual int MoonPhase { get; set; }
 
-        public int SkyLightValue { get; set; }
+        public virtual int SkyLightValue { get; set; }
 
-        public float VisibilityRange { get; set; }
+        public virtual float VisibilityRange { get; set; }
 
-        public float VisibilityRangeYMultiplier { get; set; }
+        public virtual float VisibilityRangeYMultiplier { get; set; }
 
-        public float ViewUnderWaterDepth { get; set; }
+        public virtual float ViewUnderWaterDepth { get; set; }
 
-        public float ViewUnderMagmaDepth { get; set; }
+        public virtual float ViewUnderMagmaDepth { get; set; }
 
-        public Color ViewFogColor => m_viewFogColor;
+        public virtual Color ViewFogColor => m_viewFogColor;
 
-        public float ViewFogBottom => m_viewFogBottom;
+        public virtual float ViewFogBottom => m_viewFogBottom;
 
-        public float ViewFogTop => m_viewFogTop;
+        public virtual float ViewFogTop => m_viewFogTop;
 
-        public float ViewHazeStart => m_viewHazeStart;
+        public virtual float ViewHazeStart => m_viewHazeStart;
 
-        public float ViewHazeDensity => m_viewHazeDensity;
+        public virtual float ViewHazeDensity => m_viewHazeDensity;
 
-        public float ViewFogDensity => m_viewFogDensity;
+        public virtual float ViewFogDensity => m_viewFogDensity;
 
         public UpdateOrder UpdateOrder => UpdateOrder.Default;
 
@@ -804,7 +804,7 @@ namespace Game {
 
         public CalculateSkyFogDelegate CalculateSkyFog { get; set; }
 
-        public float FogIntegral(float y) => MathUtils.SmoothStep(ViewFogBottom, ViewFogTop, y) * (ViewFogTop - ViewFogBottom) + ViewFogBottom;
+        public virtual float FogIntegral(float y) => MathUtils.SmoothStep(ViewFogBottom, ViewFogTop, y) * (ViewFogTop - ViewFogBottom) + ViewFogBottom;
 
         public virtual void FillSkyVertexBuffer(SkyDome skyDome, float timeOfDay, float precipitationIntensity, int temperature) {
             for (int i = 0; i < 8; i++) {

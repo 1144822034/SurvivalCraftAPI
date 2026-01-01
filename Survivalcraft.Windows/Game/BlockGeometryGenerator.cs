@@ -31,17 +31,17 @@ namespace Game {
             new(0.001f, 0.001f)
         ];
 
-        public readonly Terrain Terrain;
+        public Terrain Terrain;
 
-        public readonly SubsystemTerrain SubsystemTerrain;
+        public SubsystemTerrain SubsystemTerrain;
 
-        public readonly SubsystemElectricity SubsystemElectricity;
+        public SubsystemElectricity SubsystemElectricity;
 
-        public readonly SubsystemFurnitureBlockBehavior SubsystemFurnitureBlockBehavior;
+        public SubsystemFurnitureBlockBehavior SubsystemFurnitureBlockBehavior;
 
-        public readonly SubsystemMetersBlockBehavior SubsystemMetersBlockBehavior;
+        public SubsystemMetersBlockBehavior SubsystemMetersBlockBehavior;
 
-        public readonly SubsystemPalette SubsystemPalette;
+        public SubsystemPalette SubsystemPalette;
 
         public DynamicArray<ElectricConnectionPath> m_tmpConnectionPaths = [];
 
@@ -50,6 +50,8 @@ namespace Game {
         public CornerLights[] m_cornerLightsByFace = new CornerLights[6];
 
         public bool[] m_visibleSides = new bool[6];
+
+        public BlockGeometryGenerator() {}
 
         public BlockGeometryGenerator(Terrain terrain,
             SubsystemTerrain subsystemTerrain,

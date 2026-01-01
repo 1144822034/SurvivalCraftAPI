@@ -17,7 +17,7 @@ namespace Game {
 
         public int[] DrawOrders => m_drawOrders;
 
-        public void QueueShadow(Camera camera, Vector3 shadowPosition, float shadowDiameter, float alpha) {
+        public virtual void QueueShadow(Camera camera, Vector3 shadowPosition, float shadowDiameter, float alpha) {
             if (!SettingsManager.ObjectsShadowsEnabled) {
                 return;
             }
