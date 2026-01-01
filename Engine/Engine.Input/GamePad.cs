@@ -25,7 +25,7 @@ namespace Engine.Input {
 
             public double[] ButtonsRepeat = new double[14];
 
-            public object ModifierKeyOfCurrentCombo;//记录按下的组合键中的修饰键，避免弹起误触
+            public object ModifierKeyOfCurrentCombo; //记录按下的组合键中的修饰键，避免弹起误触
         }
 #if ANDROID
         public struct KeyInfo {
@@ -40,9 +40,28 @@ namespace Engine.Input {
             }
         }
 
+        public struct TriggerInfo {
+            public int DeviceId;
+            public GamePadTrigger Trigger;
+            public float Value;
+
+            public TriggerInfo(int deviceId, GamePadTrigger trigger, float value) {
+                DeviceId = deviceId;
+                Trigger = trigger;
+                Value = value;
+            }
+        }
+
         public static Dictionary<int, int> m_deviceToIndex = [];
         public static List<int> m_toRemove = [];
         public static ConcurrentQueue<KeyInfo> m_cachedKeyEvents = [];
+        public static ConcurrentQueue<TriggerInfo> m_cachedTriggerEvents = [];
+        public static readonly bool[,] m_lastDpadStates = new bool[4, 4];
+        static readonly bool[,] m_dpadFromKey = new bool[4, 4];
+        static readonly bool[,] m_lastTriggerDown = new bool[4, 2];
+
+        const float TRIGGER_DOWN_THRESHOLD = 0.5f;
+        const float TRIGGER_UP_THRESHOLD = 0.4f;
 #elif IOS
 
 #else
@@ -75,15 +94,17 @@ namespace Engine.Input {
                     Disconnect(item);
                 }
             }
-            while (!m_cachedKeyEvents.IsEmpty) {
-                if (m_cachedKeyEvents.TryDequeue(out KeyInfo keyInfo)) {
-                    switch (keyInfo.Action) {
-                        case KeyEventActions.Down: HandleKeyDown(keyInfo.DeviceId, keyInfo.KeyCode); break;
-                        case KeyEventActions.Up: HandleKeyUp(keyInfo.DeviceId, keyInfo.KeyCode); break;
-                    }
+            while (m_cachedKeyEvents.TryDequeue(out KeyInfo keyInfo)) {
+                switch (keyInfo.Action) {
+                    case KeyEventActions.Down: HandleKeyDown(keyInfo.DeviceId, keyInfo.KeyCode); break;
+                    case KeyEventActions.Up: HandleKeyUp(keyInfo.DeviceId, keyInfo.KeyCode); break;
                 }
-                else {
-                    Thread.Yield();
+            }
+            while (m_cachedTriggerEvents.TryDequeue(out TriggerInfo info)) {
+                int num = TranslateDeviceId(info.DeviceId);
+                if (num >= 0) {
+                    // 在这里更新 Triggers，此时它是当前帧的最新值
+                    m_states[num].Triggers[(int)info.Trigger] = info.Value;
                 }
             }
         }
@@ -98,7 +119,29 @@ namespace Engine.Input {
                 return;
             }
             GamePadButton gamePadButton = TranslateKey(keyCode);
+            if (gamePadButton >= GamePadButton.DPadLeft
+                && gamePadButton <= GamePadButton.DPadDown) {
+                int idx = gamePadButton switch {
+                    GamePadButton.DPadLeft => 0,
+                    GamePadButton.DPadRight => 1,
+                    GamePadButton.DPadUp => 2,
+                    GamePadButton.DPadDown => 3,
+                    _ => throw new ArgumentOutOfRangeException()
+                };
+                m_dpadFromKey[num, idx] = true;
+            }
             if (gamePadButton >= GamePadButton.A) {
+                if (gamePadButton >= GamePadButton.DPadLeft
+                    && gamePadButton <= GamePadButton.DPadDown) {
+                    int idx = gamePadButton switch {
+                        GamePadButton.DPadLeft => 0,
+                        GamePadButton.DPadRight => 1,
+                        GamePadButton.DPadUp => 2,
+                        GamePadButton.DPadDown => 3,
+                        _ => throw new ArgumentOutOfRangeException()
+                    };
+                    m_dpadFromKey[num, idx] = true;
+                }
                 m_states[num].Buttons[(int)gamePadButton] = true;
                 return;
             }
@@ -115,6 +158,17 @@ namespace Engine.Input {
             }
             GamePadButton gamePadButton = TranslateKey(keyCode);
             if (gamePadButton >= GamePadButton.A) {
+                if (gamePadButton >= GamePadButton.DPadLeft
+                    && gamePadButton <= GamePadButton.DPadDown) {
+                    int idx = gamePadButton switch {
+                        GamePadButton.DPadLeft => 0,
+                        GamePadButton.DPadRight => 1,
+                        GamePadButton.DPadUp => 2,
+                        GamePadButton.DPadDown => 3,
+                        _ => throw new ArgumentOutOfRangeException()
+                    };
+                    m_dpadFromKey[num, idx] = false;
+                }
                 m_states[num].Buttons[(int)gamePadButton] = false;
                 return;
             }
@@ -125,19 +179,33 @@ namespace Engine.Input {
         }
 
         internal static void HandleMotionEvent(MotionEvent e) {
-            int num = TranslateDeviceId(e.DeviceId);
-            if (num >= 0) {
-                m_states[num].Sticks[0] = new Vector2(e.GetAxisValue(Axis.X), 0f - e.GetAxisValue(Axis.Y));
-                m_states[num].Sticks[1] = new Vector2(e.GetAxisValue(Axis.Z), 0f - e.GetAxisValue(Axis.Rz));
-                m_states[num].Triggers[0] = MathF.Max(e.GetAxisValue(Axis.Ltrigger), e.GetAxisValue(Axis.Brake));
-                m_states[num].Triggers[1] = MathF.Max(e.GetAxisValue(Axis.Rtrigger), e.GetAxisValue(Axis.Gas));
-                float axisValue = e.GetAxisValue(Axis.HatX);
-                float axisValue2 = e.GetAxisValue(Axis.HatY);
-                m_states[num].Buttons[10] = axisValue < -0.5f;
-                m_states[num].Buttons[12] = axisValue > 0.5f;
-                m_states[num].Buttons[11] = axisValue2 < -0.5f;
-                m_states[num].Buttons[13] = axisValue2 > 0.5f;
+            int deviceId = TranslateDeviceId(e.DeviceId);
+            if (deviceId >= 0) {
+                m_states[deviceId].Sticks[0] = new Vector2(e.GetAxisValue(Axis.X), 0f - e.GetAxisValue(Axis.Y));
+                m_states[deviceId].Sticks[1] = new Vector2(e.GetAxisValue(Axis.Z), 0f - e.GetAxisValue(Axis.Rz));
+                float l = MathF.Max(e.GetAxisValue(Axis.Ltrigger), e.GetAxisValue(Axis.Brake));
+                float r = MathF.Max(e.GetAxisValue(Axis.Rtrigger), e.GetAxisValue(Axis.Gas));
+                m_cachedTriggerEvents.Enqueue(new TriggerInfo(e.DeviceId, GamePadTrigger.Left, l));
+                m_cachedTriggerEvents.Enqueue(new TriggerInfo(e.DeviceId, GamePadTrigger.Right, r));
+                float axisX = e.GetAxisValue(Axis.HatX);
+                float axisY = e.GetAxisValue(Axis.HatY);
+                ProcessDpad(e.DeviceId, deviceId, 0, axisX < -0.5f, Keycode.DpadLeft);
+                ProcessDpad(e.DeviceId, deviceId, 1, axisX > 0.5f, Keycode.DpadRight);
+                ProcessDpad(e.DeviceId, deviceId, 2, axisY < -0.5f, Keycode.DpadUp);
+                ProcessDpad(e.DeviceId, deviceId, 3, axisY > 0.5f, Keycode.DpadDown);
             }
+        }
+
+        public static void ProcessDpad(int deviceId, int padIndex, int dpadIndex, bool current, Keycode keyCode) {
+            if (m_dpadFromKey[padIndex, dpadIndex]) {
+                return;
+            }
+            bool last = m_lastDpadStates[padIndex, dpadIndex];
+            if (current == last) {
+                return;
+            }
+            m_lastDpadStates[padIndex, dpadIndex] = current;
+            m_cachedKeyEvents.Enqueue(new KeyInfo(deviceId, keyCode, current ? KeyEventActions.Down : KeyEventActions.Up));
         }
 
         public static int TranslateDeviceId(int deviceId) {
@@ -263,30 +331,51 @@ namespace Engine.Input {
             throw new ArgumentOutOfRangeException(nameof(deadZone)) :
             IsConnected(gamePadIndex) ? ApplyDeadZone(m_states[gamePadIndex].Triggers[(int)trigger], deadZone) : 0f;
 
-        public static bool IsTriggerDownOnce(int gamePadIndex, GamePadTrigger trigger, float deadZone = 0f, float threshold = 0.5f) {
-            if (deadZone < 0f || deadZone >= 1f)
+        public static bool IsTriggerDown(int gamePadIndex, GamePadTrigger trigger, float deadZone = 0f, float threshold = 0.5f) {
+            if (deadZone < 0f
+                || deadZone >= 1f) {
                 throw new ArgumentOutOfRangeException(nameof(deadZone));
-            if(!IsConnected(gamePadIndex))
+            }
+            if (!IsConnected(gamePadIndex)) {
                 return false;
-            if (m_states[gamePadIndex].ModifierKeyOfCurrentCombo is GamePadTrigger trigger1 && trigger1 == trigger)
-                return false;//若修饰键按下期间已触发组合键，禁止当前修饰键触发自己的点按行为，避免误触
+            }
+            float value = ApplyDeadZone(m_states[gamePadIndex].Triggers[(int)trigger], deadZone);
+            return value >= threshold;
+        }
+
+        public static bool IsTriggerDownOnce(int gamePadIndex, GamePadTrigger trigger, float deadZone = 0f, float threshold = 0.5f) {
+            if (deadZone < 0f
+                || deadZone >= 1f) {
+                throw new ArgumentOutOfRangeException(nameof(deadZone));
+            }
+            if (!IsConnected(gamePadIndex)) {
+                return false;
+            }
+            if (m_states[gamePadIndex].ModifierKeyOfCurrentCombo is GamePadTrigger trigger1
+                && trigger1 == trigger) {
+                return false; //若修饰键按下期间已触发组合键，禁止当前修饰键触发自己的点按行为，避免误触
+            }
             bool current = ApplyDeadZone(m_states[gamePadIndex].Triggers[(int)trigger], deadZone) >= threshold;
             bool last = ApplyDeadZone(m_states[gamePadIndex].LastTriggers[(int)trigger], deadZone) >= threshold;
-            return !current && last;//扳机必定是修饰键，松开那一刻才算按下一次，避免影响组合键
+            return !current && last; //扳机必定是修饰键，松开那一刻才算按下一次，避免影响组合键
         }
 
         public static bool IsButtonDown(int gamePadIndex, GamePadButton button) =>
             IsConnected(gamePadIndex) && m_states[gamePadIndex].Buttons[(int)button];
 
         public static bool IsButtonDownOnce(int gamePadIndex, GamePadButton button) {
-            if (!IsConnected(gamePadIndex))
+            if (!IsConnected(gamePadIndex)) {
                 return false;
-            if (m_states[gamePadIndex].ModifierKeyOfCurrentCombo is GamePadButton button1 && button1 == button)
-                return false;//若修饰键按下期间已触发组合键，禁止当前修饰键触发自己的点按行为，避免误触
-            if (IsModifierKey(button))//如果是修饰键，松开那一刻才算按下一次，避免影响组合键
+            }
+            if (m_states[gamePadIndex].ModifierKeyOfCurrentCombo is GamePadButton button1
+                && button1 == button) {
+                return false; //若修饰键按下期间已触发组合键，禁止当前修饰键触发自己的点按行为，避免误触
+            }
+            if (IsModifierKey(button)) { //如果是修饰键，松开那一刻才算按下一次，避免影响组合键
                 return !m_states[gamePadIndex].Buttons[(int)button] && m_states[gamePadIndex].LastButtons[(int)button];
-            else//正常按键依然是按下那一刻算按下一次
-                return m_states[gamePadIndex].Buttons[(int)button] && !m_states[gamePadIndex].LastButtons[(int)button];
+            }
+            //正常按键依然是按下那一刻算按下一次
+            return m_states[gamePadIndex].Buttons[(int)button] && !m_states[gamePadIndex].LastButtons[(int)button];
         }
 
         public static bool IsButtonDownRepeat(int gamePadIndex, GamePadButton button) {
@@ -320,8 +409,9 @@ namespace Engine.Input {
                 m_states[gamePadIndex].ModifierKeyOfCurrentCombo = modifierKey;
             }
         }
-        public static bool IsModifierKey(object obj) =>
-            obj is GamePadTrigger || (obj is GamePadButton button && (button == GamePadButton.LeftShoulder || button == GamePadButton.RightShoulder));
+
+        public static bool IsModifierKey(object obj) => obj is GamePadTrigger
+            || (obj is GamePadButton button && (button == GamePadButton.LeftShoulder || button == GamePadButton.RightShoulder));
 
         //        /// <summary>
         //        /// 使指定的手柄的马达震动
@@ -385,7 +475,7 @@ namespace Engine.Input {
                 for (int k = 0; k < state.Triggers.Length; k++) {
                     state.LastTriggers[k] = state.Triggers[k];
                 }
-                if (!IsAnyModifierKeyHolding(i, 0.08f)) {//所有修饰键都松开时，重置组合键触发标记
+                if (!IsAnyModifierKeyHolding(i, 0.08f)) { //所有修饰键都松开时，重置组合键触发标记
                     state.ModifierKeyOfCurrentCombo = null;
                 }
             }

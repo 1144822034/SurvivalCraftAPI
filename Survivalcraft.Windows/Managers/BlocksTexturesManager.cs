@@ -1,5 +1,6 @@
 using Engine;
 using Engine.Graphics;
+using SixLabors.ImageSharp;
 
 namespace Game {
     public static class BlocksTexturesManager {
@@ -53,10 +54,26 @@ namespace Game {
                 try {
                     string fileName = GetFileName(name);
                     if (Storage.FileExists(fileName)) {
-                        Image image = Image.Load(fileName);
-                        ValidateBlocksTexture(image);
-                        texture2D = Texture2D.Load(image);
-                        texture2D.Tag = image;
+                        string extension = Storage.GetExtension(fileName.Replace(".scbtex", "")).ToLower();
+                        if (extension == ".astc"
+                            || extension == ".astcsrgb") {
+#if DIRECT3D11
+                            throw new NotImplementedException();
+#else
+                            using (Stream stream = Storage.OpenFile(fileName, OpenFileMode.Read)) {
+                                if (CompressedTexture2D.GetParameters(stream, out int width, out int height, out _, out _)) {
+                                    ValidateBlocksTexture(width, height);
+                                    texture2D = CompressedTexture2D.Load(stream);
+                                }
+                            }
+#endif
+                        }
+                        else {
+                            Image image = Image.Load(fileName);
+                            ValidateBlocksTexture(image);
+                            texture2D = Texture2D.Load(image);
+                            texture2D.Tag = image;
+                        }
                     }
                     else {
                         Log.Warning(string.Format(LanguageControl.Get(fName, "1"), name));
@@ -75,10 +92,26 @@ namespace Game {
             if (ex != null) {
                 throw ex;
             }
-            if (Storage.GetExtension(name) != ".scbtex") {
+            string extension = Storage.GetExtension(name).ToLower();
+            if (extension != ".scbtex") {
                 name += ".scbtex";
             }
-            ValidateBlocksTexture(stream);
+            if (extension == ".astc"
+                || extension == ".astcsrgb") {
+#if DIRECT3D11
+                throw new NotImplementedException();
+#else
+                if (CompressedTexture2D.GetParameters(stream, out int width, out int height, out _, out _)) {
+                    ValidateBlocksTexture(width, height);
+                }
+                else {
+                    throw new InvalidOperationException("Invalid ASTC file.");
+                }
+#endif
+            }
+            else {
+                ValidateBlocksTexture(stream);
+            }
             stream.Position = 0L;
             using (Stream destination = Storage.OpenFile(GetFileName(name), OpenFileMode.Create)) {
                 stream.CopyTo(destination);
@@ -107,27 +140,27 @@ namespace Game {
             }
         }
 
+        /// <summary>
+        /// Only for Image type stream.
+        /// </summary>
+        /// <param name="stream"></param>
         public static void ValidateBlocksTexture(Stream stream) {
-            Image image = Image.Load(stream);
-            if (image.Width > 65536
-                || image.Height > 65536) {
-                throw new InvalidOperationException(string.Format(LanguageControl.Get(fName, "4"), image.Width, image.Height));
-            }
-            if (!MathUtils.IsPowerOf2(image.Width)
-                || !MathUtils.IsPowerOf2(image.Height)) {
-                throw new InvalidOperationException(string.Format(LanguageControl.Get(fName, "5"), image.Width, image.Height));
-            }
-            image.Dispose();
+            ImageInfo imageInfo = SixLabors.ImageSharp.Image.Identify(stream);
+            ValidateBlocksTexture(imageInfo.Width, imageInfo.Height);
         }
 
         public static void ValidateBlocksTexture(Image image) {
-            if (image.Width > 65536
-                || image.Height > 65536) {
-                throw new InvalidOperationException(string.Format(LanguageControl.Get(fName, "4"), image.Width, image.Height));
+            ValidateBlocksTexture(image.Width, image.Height);
+        }
+
+        public static void ValidateBlocksTexture(int width, int height) {
+            if (width > 65536
+                || height > 65536) {
+                throw new InvalidOperationException(string.Format(LanguageControl.Get(fName, "4"), width, height));
             }
-            if (!MathUtils.IsPowerOf2(image.Width)
-                || !MathUtils.IsPowerOf2(image.Height)) {
-                throw new InvalidOperationException(string.Format(LanguageControl.Get(fName, "5"), image.Width, image.Height));
+            if (!MathUtils.IsPowerOf2(width)
+                || !MathUtils.IsPowerOf2(height)) {
+                throw new InvalidOperationException(string.Format(LanguageControl.Get(fName, "5"), width, height));
             }
         }
     }

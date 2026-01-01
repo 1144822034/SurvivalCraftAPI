@@ -88,7 +88,7 @@ namespace Game {
             );
             dictionary.Add("Is Flammable", block.GetFireDuration(value) > 0f ? LanguageControl.Yes : LanguageControl.No);
             if (block.GetNutritionalValue(value) > 0f) {
-                dictionary.Add("Nutrition", block.GetNutritionalValue(value).ToString(CultureInfo.InvariantCulture));
+                dictionary.Add("Nutrition", block.GetNutritionalValue(value).ToString("F",CultureInfo.InvariantCulture));
             }
             if (block.GetRotPeriod(value) > 0) {
                 dictionary.Add(
@@ -145,12 +145,11 @@ namespace Game {
                 dictionary.Add("Insulation", $"{clothingData.Insulation:0.0} clo");
                 dictionary.Add("Movement Speed", $"{clothingData.MovementSpeedFactor * 100f:0}%");
             }
-#if DEBUG
             if (GameManager.Project != null
                 && block.BlockIndex > 0) {
                 dictionary.Add("Dynamic Index", block.BlockIndex.ToString());
+                dictionary.Add("Block Data", Terrain.ExtractData(value).ToString());
             }
-#endif
             ModsManager.HookAction(
                 "EditBlockDescriptionScreen",
                 loader => {

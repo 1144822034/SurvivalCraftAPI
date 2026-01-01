@@ -32,7 +32,9 @@ namespace SC4Android {
              @".*\.scfpack",
              @".*\.scmod",
              @".*\.png",
-             @".*\.webp"
+             @".*\.webp",
+             @".*\.astc",
+             @".*\.astcsrgb"
          ],
          Categories = ["android.intent.category.DEFAULT", "android.intent.category.BROWSABLE"]
      ), IntentFilter(["android.intent.action.SEND"], DataMimeType = "*/*", Categories = ["android.intent.category.DEFAULT"])]
@@ -134,7 +136,7 @@ namespace SC4Android {
                             case ExternalContentType.BlocksTexture: BlocksTexturesManager.ImportBlocksTexture(name, stream); break;
                             case ExternalContentType.CharacterSkin: CharacterSkinsManager.ImportCharacterSkin(name, stream); break;
                             case ExternalContentType.FurniturePack: FurniturePacksManager.ImportFurniturePack(name, stream); break;
-                            case ExternalContentType.Mod: ModsManager.ImportMod(name, stream, false); break;
+                            case ExternalContentType.Mod: ModsManager.ImportMod(name, stream ); break;
                         }
                     }
                 );
@@ -154,11 +156,7 @@ namespace SC4Android {
                                 }
                             )
                             ?.SetNegativeButton(Resources?.GetString(Resource.String.No)!, (_, _) => FinishAndRemoveTask());
-                        builder?.SetMessage(
-                            type == ExternalContentType.Mod
-                                ? $"{Resources?.GetString(Resource.String.NoticeAfterImportingMod)}\n{Resources?.GetString(Resource.String.InsureLaunchingGame)}"
-                                : Resources?.GetString(Resource.String.InsureLaunchingGame)
-                        );
+                        builder?.SetMessage(Resources?.GetString(Resource.String.InsureLaunchingGame));
                         builder?.Show();
                     }
                 );

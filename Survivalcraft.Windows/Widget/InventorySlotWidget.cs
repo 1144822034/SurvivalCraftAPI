@@ -238,18 +238,26 @@ namespace Game {
                 && HitTestGlobal(input.Click.Value.End) == this) {
                 bool flag = false;
                 if (viewPlayer != null) {
-                    if (viewPlayer.ComponentInput.SplitSourceInventory == m_inventory
-                        && viewPlayer.ComponentInput.SplitSourceSlotIndex == m_slotIndex) {
+
+                    IInventory splitSourceInventory = viewPlayer.ComponentInput.SplitSourceInventory;
+                    int splitSourceSlotIndex = viewPlayer.ComponentInput.SplitSourceSlotIndex;
+
+                    if (splitSourceInventory == m_inventory
+                        && splitSourceSlotIndex == m_slotIndex) {
                         viewPlayer.ComponentInput.SetSplitSourceInventoryAndSlot(null, -1);
                         flag = true;
                     }
-                    else if (viewPlayer.ComponentInput.SplitSourceInventory != null) {
+                    else if (splitSourceInventory != null) {
+                       
+                        int totalCount = splitSourceInventory.GetSlotCount(splitSourceSlotIndex);
+                        int splitCount = CalculateSplitCount(totalCount, DragMode.SingleItem);
+
                         flag = HandleMoveItem(
-                            viewPlayer.ComponentInput.SplitSourceInventory,
-                            viewPlayer.ComponentInput.SplitSourceSlotIndex,
+                            splitSourceInventory,
+                            splitSourceSlotIndex,
                             m_inventory,
                             m_slotIndex,
-                            1
+                            splitCount
                         );
                         AudioManager.PlaySound("Audio/UI/ButtonClick", 1f, 0f, 0f);
                     }
@@ -291,10 +299,10 @@ namespace Game {
                     && viewPlayer.ComponentInput.SplitSourceSlotIndex == m_slotIndex) {
                     dragMode = SettingsManager.DragHalfInSplit ? DragMode.HalfItems : DragMode.SingleItem;
                 }
-                int num3 = dragMode != 0 ? 1 : slotCount;
-                if (dragMode == DragMode.HalfItems) {
-                    num3 = (slotCount + 1) / 2;
-                }
+
+                // 计算物品分割的数量
+                int num3 = CalculateSplitCount(slotCount, dragMode);
+
                 ContainerWidget containerWidget = (ContainerWidget)LoadWidget(
                     null,
                     ContentManager.Get<XElement>("Widgets/InventoryDragWidget"),
@@ -477,6 +485,44 @@ namespace Game {
             return false;
         }
 
+        /// <summary>
+        /// 计算分割的数量
+        /// </summary>
+        /// <param name="totalCount">总数</param>
+        /// <param name="dragMode"></param>
+        /// <returns>数量</returns>
+        private int CalculateSplitCount(int totalCount, DragMode dragMode) {
+            int splitCount = totalCount; // 默认是全部数量
+
+            switch (dragMode) {
+                case DragMode.AllItems://全部
+                    splitCount = totalCount;
+                    break;
+                case DragMode.SingleItem://单个
+                    splitCount = MathUtils.Min(totalCount, 1); 
+                    break;
+                case DragMode.HalfItems://均分
+                    splitCount = (totalCount + 1) / 2;
+                    break;
+            }
+
+            ModsManager.HookAction(
+                "OnInventorySlotWidgetCalculateSplitCount",
+                loader => {
+                    loader.OnInventorySlotWidgetCalculateSplitCount(
+                        this,
+                        totalCount,
+                        dragMode,
+                        ref splitCount
+                    );
+                    return false;
+                }
+            );
+
+            // 确保数量在1到totalCount之间
+            return MathUtils.Clamp(splitCount, 1, totalCount);
+        }
+
         public virtual bool HandleMoveItem(IInventory sourceInventory,
             int sourceSlotIndex,
             IInventory targetInventory,
@@ -526,12 +572,9 @@ namespace Game {
             int targetSlotCount = targetInventory.GetSlotCount(targetSlotIndex);
             int targetSlotCapacity = targetInventory.GetSlotCapacity(targetSlotIndex, sourceSlotValue);
             int targetSlotProcessCapacity = targetInventory.GetSlotProcessCapacity(targetSlotIndex, sourceSlotValue);
-            if (dragMode == DragMode.SingleItem) {
-                dragCount = MathUtils.Min(dragCount, 1);
-            }
-            else if (dragMode == DragMode.HalfItems) {
-                dragCount = (dragCount + 1) / 2;
-            }
+
+            dragCount = CalculateSplitCount(dragCount, dragMode);
+
             bool flag = false;
             //先进行Process操作
             ModsManager.HookAction(

@@ -3,6 +3,7 @@ using Engine;
 
 namespace Game {
     public class SettingsScreen : Screen {
+        [Obsolete]
         public Screen m_previousScreen;
 
         public ButtonWidget m_performanceButton;
@@ -45,11 +46,11 @@ namespace Game {
             );
         }
 
-        public override void Enter(object[] parameters) {
+        /*public override void Enter(object[] parameters) {
             if (m_previousScreen == null) {
                 m_previousScreen = ScreensManager.PreviousScreen;
             }
-        }
+        }*/
 
         public override void Update() {
             if (m_performanceButton.IsClicked) {
@@ -78,8 +79,9 @@ namespace Game {
             if (Input.Back
                 || Input.Cancel
                 || Children.Find<ButtonWidget>("TopBar.Back").IsClicked) {
-                ScreensManager.SwitchScreen(m_previousScreen);
-                m_previousScreen = null;
+                //ScreensManager.SwitchScreen(m_previousScreen);
+                //m_previousScreen = null;
+                ScreensManager.GoBack();
             }
         }
 

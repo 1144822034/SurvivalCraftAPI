@@ -205,7 +205,7 @@ namespace Game {
                     }
                 }
                 if (valuesDictionary.Count == 0) {
-                    componentMiner.ComponentPlayer?.ComponentGui.DisplaySmallMessage(LanguageControl.Get(fName, 0), Color.White, true, false);
+                    componentMiner.ComponentPlayer?.ComponentGui.DisplaySmallMessage(LanguageControl.Get(fName, "6"), Color.White, true, false);
                     return;
                 }
                 design = new FurnitureDesign(SubsystemTerrain);

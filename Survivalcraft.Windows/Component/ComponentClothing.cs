@@ -621,6 +621,7 @@ namespace Game {
                             if (clothingData == null) {
                                 continue;
                             }
+                            clothingData.Texture ??= ContentManager.Get<Texture2D>(clothingData._textureName);
                             Color fabricColor = clothingData.GetColor(this, clothe);
                             texturedBatch2D = m_primitivesRenderer.TexturedBatch(
                                 clothingData.Texture,
@@ -655,6 +656,7 @@ namespace Game {
                             if (clothingData2 == null) {
                                 continue;
                             }
+                            clothingData2.Texture ??= ContentManager.Get<Texture2D>(clothingData2._textureName);
                             Color fabricColor2 = clothingData2.GetColor(this, clothe2);
                             texturedBatch2D = m_primitivesRenderer.TexturedBatch(
                                 clothingData2.Texture,

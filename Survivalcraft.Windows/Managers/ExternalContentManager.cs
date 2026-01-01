@@ -6,6 +6,7 @@ namespace Game {
         public static string fName = "ExternalContentManager";
 
         //在游戏进入主菜单之前，如果openFilePath为一个文件（存档、模组）路径，那么在进入游戏后，会进行对文件的安装操作
+        [Obsolete]
         public static string openFilePath = string.Empty;
         public static IExternalContentProvider DefaultProvider => Providers.Count <= 0 ? null : Providers[0];
 
@@ -41,6 +42,8 @@ namespace Game {
                     yield return ".scbtex";
                     yield return ".webp";
                     yield return ".png";
+                    yield return ".astc";
+                    yield return ".astcsrgb";
                     break;
                 case ExternalContentType.CharacterSkin: yield return ".scskin"; break;
                 case ExternalContentType.FurniturePack: yield return ".scfpack"; break;
@@ -56,7 +59,7 @@ namespace Game {
                 ExternalContentType.BlocksTexture => ContentManager.Get<Subtexture>("Textures/Atlas/TexturePackIcon"),
                 ExternalContentType.CharacterSkin => ContentManager.Get<Subtexture>("Textures/Atlas/CharacterSkinIcon"),
                 ExternalContentType.FurniturePack => ContentManager.Get<Subtexture>("Textures/Atlas/FurnitureIcon"),
-                ExternalContentType.Mod => ContentManager.Get<Subtexture>("Textures/Gui/DefaultModsIcon"),
+                ExternalContentType.Mod => ContentManager.Get<Subtexture>("Textures/Gui/DefaultModIcon"),
                 _ => ContentManager.Get<Subtexture>("Textures/Atlas/QuestionMarkIcon")
             };
         }

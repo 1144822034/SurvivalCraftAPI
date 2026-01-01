@@ -1,7 +1,8 @@
+using Engine;
 using Engine.Graphics;
 
 namespace Game {
-    public class TerrainGeometry {
+    public class TerrainGeometry : IDisposable {
         public TerrainGeometrySubset SubsetOpaque;
 
         public TerrainGeometrySubset SubsetAlphaTest;
@@ -71,6 +72,31 @@ namespace Game {
             Draws.Clear();
             if (DefaultTexture != null) {
                 Draws.Add(DefaultTexture, this);
+            }
+        }
+
+        public virtual void Dispose() {
+            Utilities.Dispose(ref SubsetOpaque);
+            Utilities.Dispose(ref SubsetAlphaTest);
+            Utilities.Dispose(ref SubsetTransparent);
+            for (int i = 0; i < OpaqueSubsetsByFace.Length; i++)
+            {
+                Utilities.Dispose(ref OpaqueSubsetsByFace[i]);
+            }
+            for (int j = 0; j < AlphaTestSubsetsByFace.Length; j++)
+            {
+                Utilities.Dispose(ref AlphaTestSubsetsByFace[j]);
+            }
+            for (int k = 0; k < TransparentSubsetsByFace.Length; k++)
+            {
+                Utilities.Dispose(ref TransparentSubsetsByFace[k]);
+            }
+            for (int l = 0; l < Subsets.Length; l++)
+            {
+                Utilities.Dispose(ref Subsets[l]);
+            }
+            foreach (TerrainGeometry terrainGeometry in Draws.Values) {
+                terrainGeometry?.Dispose();
             }
         }
     }

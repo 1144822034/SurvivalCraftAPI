@@ -23,6 +23,8 @@ namespace Game {
 
         public object m_highlightRaycastResult;
 
+        public Geometry m_geometry;
+
         public static int[] m_drawOrders = [1, 2000];
 
         public Point3? NearbyEditableCell { get; set; }
@@ -40,7 +42,8 @@ namespace Game {
                 return;
             }
             if (terrainRaycastResult.Distance < 3f) {
-                Point3 point = terrainRaycastResult.CellFace.Point;
+                CellFace cellFace = terrainRaycastResult.CellFace;
+                Point3 point = cellFace.Point;
                 int cellValue = m_subsystemTerrain.Terrain.GetCellValue(point.X, point.Y, point.Z);
                 Block obj = BlocksManager.Blocks[Terrain.ExtractContents(cellValue)];
                 if (obj is CrossBlock) {
@@ -48,9 +51,16 @@ namespace Game {
                     m_highlightRaycastResult = terrainRaycastResult;
                 }
                 if (obj.IsEditable_(cellValue)) {
-                    NearbyEditableCell = terrainRaycastResult.CellFace.Point;
+                    NearbyEditableCell = cellFace.Point;
                 }
             }
+#if DEBUG
+            if (m_componentPlayer.GameWidget.GameWidgetIndex == 0) {
+                CellFace cellFace = terrainRaycastResult.CellFace;
+                int cellValue = m_subsystemTerrain.Terrain.GetCellValue(cellFace.X, cellFace.Y, cellFace.Z);
+                PerformanceManager.AddExtraStat($"Block Value: {cellValue}, CellFace: ({cellFace.X},{cellFace.Y},{cellFace.Z},{cellFace.Face}), Distance: {terrainRaycastResult.Distance:F1}");
+            }
+#endif
         }
 
         public virtual void Draw(Camera camera, int drawOrder) {
@@ -111,11 +121,110 @@ namespace Game {
         }
 
         public virtual void DrawReticleHighlight(Camera camera) {
-            // TODO: 加上？
+            if (camera.Eye != null) {
+                if (!(m_highlightRaycastResult is TerrainRaycastResult result)) {
+                    return;
+                }
+                Vector3 vector = result.HitPoint();
+                Vector3 vector2;
+                if (BlocksManager.Blocks[Terrain.ExtractContents(result.Value)] is CrossBlock) {
+                    vector2 = -result.Ray.Direction;
+                }
+                else {
+                    vector2 = CellFace.FaceToVector3(result.CellFace.Face);
+                }
+                float num = Vector3.Distance(camera.ViewPosition, vector);
+                float num2 = 0.03f + MathUtils.Min(0.008f * num, 0.04f);
+                float num3 = 0.01f * num;
+                Vector3 vector3 = ((MathUtils.Abs(Vector3.Dot(vector2, Vector3.UnitY)) < 0.5f) ? Vector3.UnitY : Vector3.UnitX);
+                Vector3 vector4 = Vector3.Normalize(Vector3.Cross(vector2, vector3));
+                Vector3 vector5 = Vector3.Normalize(Vector3.Cross(vector2, vector4));
+                Subtexture subtexture = ContentManager.Get<Subtexture>("Textures/Atlas/Reticle");
+                TexturedBatch3D texturedBatch3D = m_primitivesRenderer3D.TexturedBatch(
+                    subtexture.Texture,
+                    false,
+                    0,
+                    DepthStencilState.DepthRead,
+                    null,
+                    null,
+                    SamplerState.LinearClamp
+                );
+                Vector3 vector6 = vector + num2 * (-vector4 + vector5) + num3 * vector2;
+                Vector3 vector7 = vector + num2 * (vector4 + vector5) + num3 * vector2;
+                Vector3 vector8 = vector + num2 * (vector4 - vector5) + num3 * vector2;
+                Vector3 vector9 = vector + num2 * (-vector4 - vector5) + num3 * vector2;
+                Vector2 vector10 = new Vector2(subtexture.TopLeft.X, subtexture.TopLeft.Y);
+                Vector2 vector11 = new Vector2(subtexture.BottomRight.X, subtexture.TopLeft.Y);
+                Vector2 vector12 = new Vector2(subtexture.BottomRight.X, subtexture.BottomRight.Y);
+                Vector2 vector13 = new Vector2(subtexture.TopLeft.X, subtexture.BottomRight.Y);
+                texturedBatch3D.QueueQuad(
+                    vector6,
+                    vector7,
+                    vector8,
+                    vector9,
+                    vector10,
+                    vector11,
+                    vector12,
+                    vector13,
+                    Color.White
+                );
+                texturedBatch3D.Flush(camera.ViewProjectionMatrix);
+            }
         }
 
         public virtual void DrawFillHighlight(Camera camera) {
-            // TODO: 加上？
+            if (camera.Eye != null
+                && m_highlightRaycastResult is TerrainRaycastResult result) {
+                CellFace cellFace = result.CellFace;
+                int cellValue = m_subsystemTerrain.Terrain.GetCellValue(cellFace.X, cellFace.Y, cellFace.Z);
+                int num = Terrain.ExtractContents(cellValue);
+                Block block = BlocksManager.Blocks[num];
+                if (m_geometry == null
+                    || cellValue != m_value
+                    || cellFace != m_cellFace) {
+                    Utilities.Dispose(ref m_geometry);
+                    m_geometry = new Geometry(Project.FindSubsystem<SubsystemAnimatedTextures>().AnimatedBlocksTexture);
+                    block.GenerateTerrainVertices(
+                        m_subsystemTerrain.BlockGeometryGenerator,
+                        m_geometry,
+                        cellValue,
+                        cellFace.X,
+                        cellFace.Y,
+                        cellFace.Z
+                    );
+                    m_cellFace = cellFace;
+                    m_value = cellValue;
+                }
+                DynamicArray<TerrainVertex> vertices = m_geometry.SubsetOpaque.Vertices;
+                DynamicArray<int> indices = m_geometry.SubsetOpaque.Indices;
+                Vector3 translation = camera.InvertedViewMatrix.Translation;
+                Vector3 vector = new Vector3(MathUtils.Floor(translation.X), 0f, MathUtils.Floor(translation.Z));
+                Matrix matrix = Matrix.CreateTranslation(vector - translation) * camera.ViewMatrix.OrientationMatrix * camera.ProjectionMatrix;
+                Display.BlendState = BlendState.NonPremultiplied;
+                Display.DepthStencilState = DepthStencilState.Default;
+                Display.RasterizerState = RasterizerState.CullCounterClockwiseScissor;
+                m_shader.GetParameter("u_origin").SetValue(vector.XZ);
+                m_shader.GetParameter("u_viewProjectionMatrix").SetValue(matrix);
+                m_shader.GetParameter("u_viewPosition").SetValue(translation);
+                m_shader.GetParameter("u_texture").SetValue(m_subsystemAnimatedTextures.AnimatedBlocksTexture);
+                m_shader.GetParameter("u_samplerState").SetValue(SamplerState.PointWrap);
+                m_shader.GetParameter("u_fogYMultiplier").SetValue(m_subsystemSky.VisibilityRangeYMultiplier);
+                m_shader.GetParameter("u_fogColor").SetValue(new Vector3(m_subsystemSky.ViewFogColor));
+                m_shader.GetParameter("u_fogBottomTopDensity")
+                    .SetValue(new Vector3(m_subsystemSky.ViewFogBottom, m_subsystemSky.ViewFogTop, m_subsystemSky.ViewFogDensity));
+                m_shader.GetParameter("u_hazeStartDensity").SetValue(new Vector2(m_subsystemSky.ViewHazeStart, m_subsystemSky.ViewHazeDensity));
+                Display.DrawUserIndexed(
+                    PrimitiveType.TriangleList,
+                    m_shader,
+                    TerrainVertex.VertexDeclaration,
+                    vertices.Array,
+                    0,
+                    vertices.Count,
+                    indices.Array,
+                    0,
+                    indices.Count
+                );
+            }
         }
 
         public virtual void DrawOutlineHighlight(Camera camera) {
@@ -220,6 +329,32 @@ namespace Game {
                 return new BoundingBox(boundingBox.Value.Min + vector, boundingBox.Value.Max + vector);
             }
             return new BoundingBox(vector, vector + Vector3.One);
+        }
+
+        public class Geometry : TerrainGeometry {
+            public Geometry(Texture2D texture2D) : base(texture2D) {
+                for (int l = 0; l < Subsets.Length; l++) {
+                    Utilities.Dispose(ref Subsets[l]);
+                }
+                TerrainGeometrySubset terrainGeometrySubset = new ();
+                TerrainGeometrySubset[] array = new[] {
+                    terrainGeometrySubset,
+                    terrainGeometrySubset,
+                    terrainGeometrySubset,
+                    terrainGeometrySubset,
+                    terrainGeometrySubset,
+                    terrainGeometrySubset
+                };
+                SubsetOpaque = terrainGeometrySubset;
+                SubsetAlphaTest = terrainGeometrySubset;
+                SubsetTransparent = terrainGeometrySubset;
+                OpaqueSubsetsByFace = array;
+                AlphaTestSubsetsByFace = array;
+                TransparentSubsetsByFace = array;
+                for (int i = 0; i < 7; i++) {
+                    Subsets[i] = terrainGeometrySubset;
+                }
+            }
         }
     }
 }

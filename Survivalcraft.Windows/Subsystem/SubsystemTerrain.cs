@@ -5,6 +5,7 @@ using TemplatesDatabase;
 namespace Game {
     public class SubsystemTerrain : Subsystem, IDrawable, IUpdateable {
         public static bool TerrainRenderingEnabled = true;
+        public static bool TerrainUpdaterEnabled = true;
 
         public Dictionary<Point3, bool> m_modifiedCells = [];
 
@@ -38,25 +39,25 @@ namespace Game {
 
         public static int[] m_drawOrders = [0, 100];
 
-        public SubsystemGameInfo SubsystemGameInfo { get; set; }
+        public virtual SubsystemGameInfo SubsystemGameInfo { get; set; }
 
-        public SubsystemAnimatedTextures SubsystemAnimatedTextures { get; set; }
+        public virtual SubsystemAnimatedTextures SubsystemAnimatedTextures { get; set; }
 
-        public SubsystemFurnitureBlockBehavior SubsystemFurnitureBlockBehavior { get; set; }
+        public virtual SubsystemFurnitureBlockBehavior SubsystemFurnitureBlockBehavior { get; set; }
 
-        public SubsystemPalette SubsystemPalette { get; set; }
+        public virtual SubsystemPalette SubsystemPalette { get; set; }
 
-        public Terrain Terrain { get; set; }
+        public virtual Terrain Terrain { get; set; }
 
-        public TerrainUpdater TerrainUpdater { get; set; }
+        public virtual TerrainUpdater TerrainUpdater { get; set; }
 
-        public TerrainRenderer TerrainRenderer { get; set; }
+        public virtual TerrainRenderer TerrainRenderer { get; set; }
 
-        public TerrainSerializer23 TerrainSerializer { get; set; }
+        public virtual TerrainSerializer23 TerrainSerializer { get; set; }
 
-        public ITerrainContentsGenerator TerrainContentsGenerator { get; set; }
+        public virtual ITerrainContentsGenerator TerrainContentsGenerator { get; set; }
 
-        public BlockGeometryGenerator BlockGeometryGenerator { get; set; }
+        public virtual BlockGeometryGenerator BlockGeometryGenerator { get; set; }
 
         public int[] DrawOrders => m_drawOrders;
 
@@ -483,8 +484,10 @@ namespace Game {
         }
 
         public virtual void Update(float dt) {
-            TerrainUpdater.Update();
-            ProcessModifiedCells();
+            if (TerrainUpdaterEnabled) {
+                TerrainUpdater.Update();
+                ProcessModifiedCells();
+            }
         }
 
         public override void Load(ValuesDictionary valuesDictionary) {

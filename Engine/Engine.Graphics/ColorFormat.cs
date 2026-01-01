@@ -6,6 +6,8 @@ namespace Engine.Graphics {
         R8,
         R32f,
         RG32f,
-        RGBA32f
+        RGBA32f,
+        LinearLDR,
+        SrgbLDR
     }
 }

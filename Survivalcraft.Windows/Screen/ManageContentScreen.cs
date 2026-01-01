@@ -331,7 +331,7 @@ public class ManageContentScreen : Screen {
                 );
             }
         }
-        if (m_filter == ExternalContentType.Mod
+        /*if (m_filter == ExternalContentType.Mod
             || m_filter == ExternalContentType.Unknown) {
             foreach (ModEntity modEntity in ModsManager.ModListAll) {
                 string author = string.IsNullOrEmpty(modEntity.modInfo.Author) ? "无" : modEntity.modInfo.Author;
@@ -347,7 +347,7 @@ public class ManageContentScreen : Screen {
                     }
                 );
             }
-        }
+        }*/
         list.Sort(
             delegate(ListItem o1, ListItem o2) {
                 if (o1.IsBuiltIn

@@ -2,8 +2,12 @@
 #pragma warning disable CA1416
 using Android.Content;
 using Android.OS;
+using Android.Views;
+using Org.Libsdl.App;
 #elif IOS
+
 #else
+using System.Diagnostics;
 using System.Reflection;
 using System.Runtime.CompilerServices;
 using Silk.NET.Core;
@@ -23,6 +27,7 @@ using Silk.NET.Core.Contexts;
 using Silk.NET.Maths;
 using Silk.NET.OpenGLES;
 using Silk.NET.Windowing;
+using Display = Engine.Graphics.Display;
 using System.Diagnostics;
 using Environment = System.Environment;
 
@@ -40,6 +45,8 @@ namespace Engine {
 
 #if ANDROID
         public static EngineActivity Activity => EngineActivity.m_activity;
+
+        public static SDLSurface m_surface;
 #elif IOS
         public static IWindow m_gameWindow;
 #else
@@ -49,6 +56,7 @@ namespace Engine {
 #endif
 
         static bool m_closing;
+        static bool m_restarting;
 
         static int? m_swapInterval;
 
@@ -123,7 +131,9 @@ namespace Engine {
             {
 #if ANDROID || IOS
 #else
-                VerifyWindowOpened();
+                if (!IsWindowOpened()) {
+                    return;
+                }
                 switch (value) {
                     case WindowMode.Fixed:
                         m_gameWindow.WindowBorder = WindowBorder.Fixed;
@@ -168,7 +178,9 @@ namespace Engine {
             {
 #if ANDROID || IOS
 #else
-                VerifyWindowOpened();
+                if (!IsWindowOpened()) {
+                    return;
+                }
                 m_gameWindow.Position = new Vector2D<int>(value.X, value.Y);
 #endif
             }
@@ -185,11 +197,20 @@ namespace Engine {
             {
 #if ANDROID || IOS
 #else
-                VerifyWindowOpened();
+                if (!IsWindowOpened()) {
+                    return;
+                }
                 m_gameWindow.Size = new Vector2D<int>(value.X, value.Y);
 #endif
             }
         }
+
+        public static bool HasWideNotch { get; set; }
+
+        /// <summary>
+        /// 刘海/水滴/挖孔在屏幕边缘的宽度。X: 左边，Y: 顶部，Z: 右边，W: 底部
+        /// </summary>
+        public static Vector4 DisplayCutoutInsets { get; set; } = Vector4.Zero;
 
         public static string TitlePrefix {
             get {
@@ -201,7 +222,9 @@ namespace Engine {
             // ReSharper restore ValueParameterNotUsed
             {
 #if !ANDROID && !IOS
-                VerifyWindowOpened();
+                if (!IsWindowOpened()) {
+                    return;
+                }
                 m_titlePrefix = value;
                 m_gameWindow.Title = $"{m_titlePrefix}{m_titleSuffix}";
 #endif
@@ -218,7 +241,9 @@ namespace Engine {
             // ReSharper restore ValueParameterNotUsed
             {
 #if !ANDROID && !IOS
-                VerifyWindowOpened();
+                if (!IsWindowOpened()) {
+                    return;
+                }
                 m_titleSuffix = value;
                 m_gameWindow.Title = $"{m_titlePrefix}{m_titleSuffix}";
 #endif
@@ -239,7 +264,9 @@ namespace Engine {
             // ReSharper restore ValueParameterNotUsed
             {
 #if !ANDROID && !IOS
-                VerifyWindowOpened();
+                if (!IsWindowOpened()) {
+                    return;
+                }
                 m_gameWindow.Title = value;
                 m_titlePrefix = value;
                 m_titleSuffix = string.Empty;
@@ -254,7 +281,9 @@ namespace Engine {
                 return m_swapInterval.Value;
             }
             set {
-                VerifyWindowOpened();
+                if (!IsWindowOpened()) {
+                    return;
+                }
                 value = Math.Clamp(value, 0, 4);
                 if (value != PresentationInterval) {
                     //IOS不支持下面的设置
@@ -296,11 +325,15 @@ namespace Engine {
 
         public static event Action Resized;
 
+        public static event Action<Vector4, bool> DisplayCutoutInsetsChanged;
+
         public static event Action Activated;
 
         public static event Action Deactivated;
 
         public static event Action Closed;
+
+        public static event Action ToRestart;
 
         public static event Action Frame;
 
@@ -431,6 +464,12 @@ namespace Engine {
             m_closing = true;
         }
 
+        public static void Restart() {
+            VerifyWindowOpened();
+            m_closing = true;
+            m_restarting = true;
+        }
+
         static void LoadHandler() {
             InitializeAll();
             SubscribeToEvents();
@@ -483,7 +522,16 @@ namespace Engine {
             Resized?.Invoke();
 #endif
         }
-        public static bool Debu;
+
+        public static void DisplayCutoutInsetsChangedHandler(Vector4 insets, bool hasWideNotch) {
+            if (HasWideNotch == hasWideNotch && DisplayCutoutInsets == insets) {
+                return;
+            }
+            HasWideNotch = hasWideNotch;
+            DisplayCutoutInsets = insets;
+            DisplayCutoutInsetsChanged?.Invoke(insets, hasWideNotch);
+        }
+
         static void RenderFrameHandler(double lastRenderDelta) {
             m_lastRenderDelta = (float)lastRenderDelta;
             BeforeFrameAll();
@@ -505,9 +553,11 @@ namespace Engine {
                 else {
                     Activity.FinishAffinity();
                 }
-#else
-                m_gameWindow.Close();
 #endif
+                m_view.Close();
+                if (m_restarting) {
+                    ToRestart?.Invoke();
+                }
             }
         }
 
@@ -566,6 +616,8 @@ namespace Engine {
             }
         }
 
+        static bool IsWindowOpened() => m_view != null;
+
         static void SubscribeToEvents() {
             m_view.FocusChanged += FocusedChangedHandler;
             m_view.Closing += ClosedHandler;
@@ -582,7 +634,13 @@ namespace Engine {
 
         static void InitializeAll() {
             try {
-#if !ANDROID && !IOS
+#if ANDROID && !IOS
+                if (SDLActivity.ContentView is ViewGroup viewGroup
+                    && viewGroup.ChildCount >= 1
+                    && viewGroup.GetChildAt(0) is SDLSurface surface) {
+                    m_surface = surface;
+                }
+#else
                 using (Stream iconStream = typeof(Window).GetTypeInfo().Assembly.GetManifestResourceStream("Engine.Resources.icon.png")) {
                     if (iconStream != null) {
                         Image<Rgba32> image = SixLabors.ImageSharp.Image.Load<Rgba32>(Image.DefaultImageSharpDecoderOptions, iconStream);
@@ -616,6 +674,7 @@ namespace Engine {
             Touch.Dispose();
             GamePad.Dispose();
             Mixer.Dispose();
+            Log.Dispose();
         }
 
         static void BeforeFrameAll() {

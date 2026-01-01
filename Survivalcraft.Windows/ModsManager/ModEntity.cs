@@ -12,7 +12,11 @@ namespace Game {
         public Dictionary<string, ZipArchiveEntry> ModFiles = [];
         public List<Type> BlockTypes = [];
         public string ModFilePath;
+        public bool IsDisabled;
+        public ModDisableReason DisableReason = ModDisableReason.Unknown;
+        public long Size;
         public bool IsDependencyChecked;
+        public static HashSet<string> InvalidDllNames = ["Survivalcraft.dll", "Engine.dll", "EntitySystem.dll"];
         public const string fName = "ModEntity";
 
         public ModLoader Loader {
@@ -32,6 +36,7 @@ namespace Game {
 
         public ModEntity(string FileName, ZipArchive zipArchive) {
             ModFilePath = FileName;
+            Size = Storage.GetFileSize(FileName);
             ModArchive = zipArchive;
             InitResources();
         }
@@ -130,7 +135,7 @@ namespace Game {
             GetAssetsFile(
                 $"Lang/{language}.json",
                 stream => {
-                    LoadingScreen.Info($"[{modInfo.Name}] Loading Language file");
+                    LoadingScreen.Info($"[{modInfo.Name}] Loading Current Language file");
                     LanguageControl.loadJson(stream);
                 }
             );
@@ -158,12 +163,25 @@ namespace Game {
                     ModFiles.Add(zipArchiveEntry.FilenameInZip, zipArchiveEntry);
                 }
             }
+            if (GetFile("icon.webp", LoadIcon)) {
+                GetFile("icon.png", LoadIcon);
+            }
             GetFile("modinfo.json", stream => { modInfo = ModsManager.DeserializeJson(ModsManager.StreamToString(stream)); });
             if (modInfo == null) {
+                IsDisabled = true;
+                DisableReason = ModDisableReason.NoModInfo;
                 return;
             }
-            if(!GetFile("icon.webp", LoadIcon)) {
-                GetFile("icon.png", LoadIcon);
+            if (modInfo.PackageName.Contains(';')) {
+                IsDisabled = true;
+                DisableReason = ModDisableReason.InvalidPackageName;
+                return;
+            }
+            if (ModsManager.DisabledMods.TryGetValue(modInfo.PackageName, out HashSet<string> disabledVersions)
+                && disabledVersions.Contains(modInfo.Version)) {
+                IsDisabled = true;
+                DisableReason = ModDisableReason.Manually;
+                return;
             }
             foreach (KeyValuePair<string, ZipArchiveEntry> c in ModFiles) {
                 ZipArchiveEntry zipArchiveEntry = c.Value;
@@ -279,7 +297,10 @@ namespace Game {
                         flag = false;
                     }
                     if (!filename.StartsWith("Assets/")) {
-                        assemblies.Add(Assembly.Load(ModsManager.StreamToBytes(stream)));
+                        string fileNameWithoutDirectory = Storage.GetFileName(filename);
+                        if (!InvalidDllNames.Contains(fileNameWithoutDirectory)) {
+                            assemblies.Add(Assembly.Load(ModsManager.StreamToBytes(stream)));
+                        }
                     }
                 }
             ); //获取mod文件内的dll文件（不包括Assets目录内的dll）
@@ -337,6 +358,9 @@ namespace Game {
         ///     检查依赖项
         /// </summary>
         public virtual void CheckDependencies(List<ModEntity> modEntities) {
+            if (IsDisabled || modInfo == null) {
+                return;
+            }
             if (modInfo.DependencyRanges.Count == 0) {
                 IsDependencyChecked = true;
                 modEntities.Add(this);
@@ -344,7 +368,9 @@ namespace Game {
             }
             LoadingScreen.Info($"[{modInfo.Name}] Checking dependencies.");
             foreach ((string name, VersionRange range) in modInfo.DependencyRanges) {
-                ModEntity entity = ModsManager.ModListAll.Find(px => px.modInfo.PackageName == name
+                ModEntity entity = ModsManager.ModListAll.Find(px => !px.IsDisabled
+                    && px.modInfo != null
+                    && px.modInfo.PackageName == name
                     && (range.Satisfies(px.modInfo.NuGetVersion) || px.modInfo.Version == range.OriginalString)
                 );
                 if (entity != null) {
@@ -356,6 +382,8 @@ namespace Game {
                     }
                 }
                 else {
+                    IsDisabled = true;
+                    DisableReason = ModDisableReason.DependencyError;
                     throw new Exception($"[{modInfo.Name}] Failed to find dependency {name}");
                 }
             }

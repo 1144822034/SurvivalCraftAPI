@@ -7,6 +7,7 @@ namespace Game {
     public class BestiaryScreen : Screen {
         public ListPanelWidget m_creaturesList;
 
+        [Obsolete]
         public Screen m_previousScreen;
 
         public virtual void OnCreaturesListItemClicked(object item) {
@@ -147,9 +148,9 @@ namespace Game {
         }
 
         public override void Enter(object[] parameters) {
-            if (ScreensManager.PreviousScreen != ScreensManager.FindScreen<Screen>("BestiaryDescription")) {
+            /*if (ScreensManager.PreviousScreen != ScreensManager.FindScreen<Screen>("BestiaryDescription")) {
                 m_previousScreen = ScreensManager.PreviousScreen;
-            }
+            }*/
             m_creaturesList.SelectedItem = null;
         }
 
@@ -157,7 +158,7 @@ namespace Game {
             if (Input.Back
                 || Input.Cancel
                 || Children.Find<ButtonWidget>("TopBar.Back").IsClicked) {
-                ScreensManager.SwitchScreen(m_previousScreen);
+                ScreensManager.GoBack();
             }
         }
 

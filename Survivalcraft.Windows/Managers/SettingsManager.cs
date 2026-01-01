@@ -231,7 +231,7 @@ namespace Game {
         public static float GamepadCursorSpeed { get; set; }
 
         /// <summary>
-        /// 手柄扳机触发阈值，范围0~1，默认0.5。扳机的按压幅度只有超过这个数时才会被视为“按下”状态，越小则越容易触发。
+        ///     手柄扳机触发阈值，范围0~1，默认0.5。扳机的按压幅度只有超过这个数时才会被视为“按下”状态，越小则越容易触发。
         /// </summary>
         public static float GamepadTriggerThreshold { get; set; }
 
@@ -351,6 +351,47 @@ namespace Game {
             }
         }
 
+        public static string DisabledMods {
+            get {
+                List<string> result = [];
+                foreach ((string packageName, HashSet<string> versions) in ModsManager.DisabledMods) {
+                    if (versions.Count == 0) {
+                        continue;
+                    }
+                    result.Add(packageName);
+                    result.Add(versions.Count.ToString());
+                    foreach (string version in versions) {
+                        result.Add(version);
+                    }
+                }
+                return string.Join(";", result);
+            }
+            set {
+                if (string.IsNullOrEmpty(value)) {
+                    return;
+                }
+                string[] array = value.Split(';');
+                Dictionary<string, HashSet<string>> result = [];
+                int i = 0;
+                while (i < array.Length) {
+                    string packageName = array[i++];
+                    if (int.TryParse(array[i++], out int count)) {
+                        HashSet<string> versions = new(count);
+                        int end = i + count;
+                        while (i < end) {
+                            versions.Add(array[i++]);
+                        }
+                        result.Add(packageName, versions);
+                    }
+                }
+                ModsManager.DisabledMods = result;
+            }
+        }
+
+        public static bool SafeMode { get; set; }
+
+        public static bool AdaptEdgeToEdgeDisplay { get; set; }
+
         public static event Action<string> SettingChanged;
         public static ValuesDictionary KeyboardMappingSettings { get; set; }
         public static ValuesDictionary GamepadMappingSettings { get; set; }
@@ -435,11 +476,14 @@ namespace Game {
                 MoveWidgetMarginY = 0f;
                 AnimatedTextureRefreshLimit = 7;
                 FileAssociationEnabled = true;
+                SafeMode = false;
+                AdaptEdgeToEdgeDisplay = Window.HasWideNotch;
                 InitializeKeyboardMappingSettings();
                 InitializeGamepadMappingSettings();
                 InitializeCameraManageSettings();
             }
             LoadSettings();
+            TextBoxWidget.ShowCandidatesWindow = FullScreenMode;
             Window.Deactivated += delegate { SaveSettings(); };
         }
 
@@ -472,6 +516,7 @@ namespace Game {
             KeyboardMappingSettings.SetValue("EditItem", Key.G);
             KeyboardMappingSettings.SetValue("KeyboardHelp", Key.H);
         }
+
         public static void InitializeGamepadMappingSettings() {
             GamepadMappingSettings = new ValuesDictionary();
             GamepadMappingSettings.SetValue("MoveUp", GamePadButton.A);
@@ -518,6 +563,7 @@ namespace Game {
             }
             return throwIfNotFound ? throw new ArgumentException(string.Format(LanguageControl.Get(fName, "1"), keyName)) : null;
         }
+
         public static object GetGamepadMapping(string keyName, bool throwIfNotFound = true) {
             if (GamepadMappingSettings.TryGetValue(keyName, out object result)) { //原版设置
                 return result;
@@ -560,6 +606,7 @@ namespace Game {
                 }
             }
         }
+
         /// <summary>
         ///     仅用于修改现有手柄键位，添加键位请使用<see cref="ModLoader.GetGamepadMappings" />
         /// </summary>

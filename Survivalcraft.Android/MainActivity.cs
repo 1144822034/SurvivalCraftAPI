@@ -29,7 +29,9 @@ namespace SC4Android {
              | ConfigChanges.Orientation
              | ConfigChanges.UiMode
              | ConfigChanges.ScreenLayout
-             | ConfigChanges.SmallestScreenSize,
+             | ConfigChanges.SmallestScreenSize
+             | ConfigChanges.Keyboard
+             | ConfigChanges.KeyboardHidden,
          ScreenOrientation = ScreenOrientation.Landscape
      ),
      IntentFilter(

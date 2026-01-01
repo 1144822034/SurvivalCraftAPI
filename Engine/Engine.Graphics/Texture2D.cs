@@ -50,28 +50,30 @@ namespace Engine.Graphics {
 
         public int Width {
             get => m_width;
-            private set => m_width = value;
+            set => m_width = value;
         }
 
         public int Height {
             get => m_height;
-            private set => m_height = value;
+            set => m_height = value;
         }
 
         public ColorFormat ColorFormat {
             get => m_colorFormat;
-            private set => m_colorFormat = value;
+            set => m_colorFormat = value;
         }
 
         public int MipLevelsCount {
             get => m_mipLevelsCount;
-            private set => m_mipLevelsCount = value;
+            set => m_mipLevelsCount = value;
         }
 
         public object Tag {
             get => m_tag;
             set => m_tag = value;
         }
+
+        public Texture2D() { }
 
         public Texture2D(int width, int height, int mipLevelsCount, ColorFormat colorFormat) {
             InitializeTexture2D(width, height, mipLevelsCount, colorFormat);
@@ -90,7 +92,7 @@ namespace Engine.Graphics {
                     m_pixelType = PixelType.UnsignedShort5551;
                     break;
                 case ColorFormat.R8:
-                    m_pixelFormat = (PixelFormat)6409; // GL_LUMINANCE
+                    m_pixelFormat = (PixelFormat)6409; // GL_LUMINANCE, avoid warning "Deprecated in version 3.2"
                     m_pixelType = PixelType.UnsignedByte;
                     break;
                 default: throw new InvalidOperationException("Unsupported surface format.");
@@ -104,7 +106,7 @@ namespace Engine.Graphics {
             DeleteTexture();
         }
 
-        public void SetData<T>(int mipLevel, T[] source, int sourceStartIndex = 0) where T : struct {
+        public virtual void SetData<T>(int mipLevel, T[] source, int sourceStartIndex = 0) where T : struct {
             VerifyParametersSetData(mipLevel, source, sourceStartIndex);
             GCHandle gCHandle = GCHandle.Alloc(source, GCHandleType.Pinned);
             try {
@@ -116,12 +118,12 @@ namespace Engine.Graphics {
             }
         }
 
-        public void SetData(int mipLevel, nint source) {
+        public virtual void SetData(int mipLevel, nint source) {
             VerifyParametersSetData(mipLevel, source);
             SetDataInternal(mipLevel, source);
         }
 
-        public void SetDataInternal(int mipLevel, nint source) {
+        public virtual void SetDataInternal(int mipLevel, nint source) {
 #if DIRECT3D11
             int num = ColorFormat.GetSize() * Math.Max(Width >> mipLevel, 1);
             DataBox dataBox = new(source, num, 0);
@@ -144,7 +146,7 @@ namespace Engine.Graphics {
 #endif
         }
 
-        public unsafe void SetDataInternal(int mipLevel, void* source) {
+        public virtual unsafe void SetDataInternal(int mipLevel, void* source) {
 #if DIRECT3D11
             int num = ColorFormat.GetSize() * Math.Max(Width >> mipLevel, 1);
             DataBox dataBox = new((nint)source, num, 0);
@@ -167,11 +169,11 @@ namespace Engine.Graphics {
 #endif
         }
 
-        public void SetData(Image<Rgba32> source) {
+        public virtual void SetData(Image<Rgba32> source) {
             SetData(0, source);
         }
 
-        public unsafe void SetData(int mipLevel, Image<Rgba32> source) {
+        public virtual unsafe void SetData(int mipLevel, Image<Rgba32> source) {
             VerifyParametersSetData(source);
             source.DangerousTryGetSinglePixelMemory(out Memory<Rgba32> memory);
             SetDataInternal(mipLevel, memory.Pin().Pointer);
@@ -206,7 +208,7 @@ namespace Engine.Graphics {
             AllocateTexture();
         }
 
-        public void AllocateTexture() {
+        public virtual void AllocateTexture() {
 #if DIRECT3D11
             bool flag = this is RenderTarget2D || MipLevelsCount > 1;
             Texture2DDescription texture2DDescription = new() {
@@ -338,7 +340,7 @@ namespace Engine.Graphics {
             return texture2D;
         }
 
-        internal void InitializeTexture2D(int width, int height, int mipLevelsCount, ColorFormat colorFormat) {
+        public virtual void InitializeTexture2D(int width, int height, int mipLevelsCount, ColorFormat colorFormat) {
             if (width < 1) {
                 throw new ArgumentOutOfRangeException(nameof(width));
             }
@@ -347,6 +349,9 @@ namespace Engine.Graphics {
             }
             if (mipLevelsCount < 1) {
                 throw new ArgumentOutOfRangeException(nameof(mipLevelsCount));
+            }
+            if (colorFormat == ColorFormat.LinearLDR || colorFormat == ColorFormat.SrgbLDR) {
+                throw new ArgumentException(nameof(colorFormat));
             }
             Width = width;
             Height = height;
@@ -363,7 +368,7 @@ namespace Engine.Graphics {
             }
         }
 
-        void VerifyParametersSetData<T>(int mipLevel, T[] source, int sourceStartIndex = 0) where T : struct {
+        public virtual void VerifyParametersSetData<T>(int mipLevel, T[] source, int sourceStartIndex = 0) where T : struct {
             VerifyNotDisposed();
             int num = Utilities.SizeOf<T>();
             int size = ColorFormat.GetSize();
@@ -387,7 +392,7 @@ namespace Engine.Graphics {
             }
         }
 
-        public void VerifyParametersSetData(int mipLevel, nint source) {
+        public virtual void VerifyParametersSetData(int mipLevel, nint source) {
             VerifyNotDisposed();
             if (source == IntPtr.Zero) {
                 throw new ArgumentNullException(nameof(source));

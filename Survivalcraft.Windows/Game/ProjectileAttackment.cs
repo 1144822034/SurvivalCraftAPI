@@ -9,7 +9,7 @@ namespace Game {
             : base(target, attacker, hitPoint, hitDirection, attackPower) {
             Projectile = projectile;
             ImpulseFactor = 2f;
-            StunTimeAdd = 0.2f;
+            StunTimeSet = 0.2f;
             AllowImpulseAndStunWhenDamageIsZero = false;
         }
 

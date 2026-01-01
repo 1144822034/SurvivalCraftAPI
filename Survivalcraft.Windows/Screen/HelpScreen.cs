@@ -12,6 +12,7 @@ namespace Game {
 
         public ButtonWidget m_bestiaryButton;
 
+        [Obsolete]
         public Screen m_previousScreen;
 
         public Dictionary<string, HelpTopic> m_topics = [];
@@ -85,13 +86,13 @@ namespace Game {
         }
 
         public override void Enter(object[] parameters) {
-            if (ScreensManager.PreviousScreen != ScreensManager.FindScreen<Screen>("HelpTopic")
+            /*if (ScreensManager.PreviousScreen != ScreensManager.FindScreen<Screen>("HelpTopic")
                 && ScreensManager.PreviousScreen != ScreensManager.FindScreen<Screen>("Recipaedia")
                 && ScreensManager.PreviousScreen != ScreensManager.FindScreen<Screen>("Bestiary")
                 && ScreensManager.PreviousScreen != ScreensManager.FindScreen<Screen>("KeyboardMapping")
                 && ScreensManager.PreviousScreen != ScreensManager.FindScreen<Screen>("GamepadMapping")) {
                 m_previousScreen = ScreensManager.PreviousScreen;
-            }
+            }*/
         }
 
         public override void Leave() {
@@ -111,7 +112,7 @@ namespace Game {
             if (Input.Back
                 || Input.Cancel
                 || Children.Find<ButtonWidget>("TopBar.Back").IsClicked) {
-                ScreensManager.SwitchScreen(m_previousScreen);
+                ScreensManager.GoBack();
             }
         }
 

@@ -348,7 +348,7 @@ namespace Game {
                 SetUsual(true);
             }
 #if !ANDROID
-            string title = $"{Get("Usual", "gameName")} {ModsManager.ShortGameVersion} - API {ModsManager.APIVersionString}";
+            string title = $"{(SettingsManager.SafeMode ? $"[{LanguageControl.Get("Usual", "safeMode")}]" : "")}{Get("Usual", "gameName")} {ModsManager.ShortGameVersion} - API {ModsManager.APIVersionString}";
 #if DEBUG
             title = $"[{Get("Usual", "debug")}]{title}";
 #endif
@@ -366,6 +366,7 @@ namespace Game {
             CraftingRecipesManager.Initialize();
             BlocksManager.Blocks[ClothingBlock.Index].Initialize();
             BlocksManager.Blocks[EggBlock.Index].Initialize();
+            ClothingSlot.Initialize();
             ScreensManager.SwitchScreen("MainMenu");
         }
 
@@ -379,7 +380,12 @@ namespace Game {
                     foreach ((string name, CultureInfo cultureInfo) in LanguageTypes) {
                         string nativeName = cultureInfo.NativeName;
                         string displayName = cultureInfo.DisplayName;
-                        CachedLanguageFullNames.Add(name, nativeName == displayName ? nativeName : $"{nativeName} - {displayName}");
+                        if (name == "zh-CN-old") {
+                            CachedLanguageFullNames.Add(name, $"[旧] {nativeName} - {displayName}");
+                        }
+                        else {
+                            CachedLanguageFullNames.Add(name, nativeName == displayName ? nativeName : $"{nativeName} - {displayName}");
+                        }
                     }
                 }
                 finally {
@@ -389,6 +395,7 @@ namespace Game {
             IOrderedEnumerable<KeyValuePair<string, string>> sorted = CachedLanguageFullNames.OrderBy(item => item.Key switch {
                     "en-US" => 0,
                     "zh-CN" => 1,
+                    "zh-CN-old" => 1000,
                     _ => 2
                 }
             );

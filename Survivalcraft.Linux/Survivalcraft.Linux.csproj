@@ -30,7 +30,7 @@
         <PackageReference Include="TextCopy" Version="6.2.1" />
         <PackageReference Include="Jint" Version="4.4.2" />
         <PackageReference Include="NAudio.Flac.Unknown.Mod" Version="1.0.4" />
-        <PackageReference Include="NuGet.Versioning" Version="7.0.0" />
+        <PackageReference Include="NuGet.Versioning" Version="7.0.1" />
     </ItemGroup>
     <ItemGroup>
         <None Include="..\Survivalcraft.Windows\Content.zip" Link="Content.zip">

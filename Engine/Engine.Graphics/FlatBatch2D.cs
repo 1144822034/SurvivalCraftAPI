@@ -25,6 +25,34 @@ namespace Engine.Graphics {
             }
         }
 
+        /// 每三个顶点为一个三角形，请确保输入的顶点数量为 3 的倍数
+        public void QueueTriangles(IEnumerable<Vector3> points, Color color) {
+            int count = TriangleVertices.Count;
+            int i = 0;
+            foreach (Vector3 point in points) {
+                TriangleVertices.Add(new VertexPositionColor(point, color));
+                if (++i % 3 == 0) {
+                    TriangleIndices.Add(count + i - 3);
+                    TriangleIndices.Add(count + i - 2);
+                    TriangleIndices.Add(count + i - 1);
+                }
+            }
+        }
+
+        /// 每三个顶点为一个三角形，请确保输入的顶点数量为 3 的倍数
+        public void QueueTriangles(IEnumerable<VertexPositionColor> vertices) {
+            int count = TriangleVertices.Count;
+            int i = 0;
+            foreach (VertexPositionColor vertex in vertices) {
+                TriangleVertices.Add(vertex);
+                if (++i % 3 == 0) {
+                    TriangleIndices.Add(count + i - 3);
+                    TriangleIndices.Add(count + i - 2);
+                    TriangleIndices.Add(count + i - 1);
+                }
+            }
+        }
+
         public void QueueBatchLines(FlatBatch2D batch, Matrix? matrix = null, Color? color = null) {
             int count = LineVertices.Count;
             LineVertices.AddRange(batch.LineVertices);
@@ -44,6 +72,33 @@ namespace Engine.Graphics {
             }
         }
 
+        /// 每两个顶点为一个线段，请确保输入的顶点数量为 2 的倍数
+        public void QueueLines(IEnumerable<Vector3> points, Color color) {
+            int count = LineVertices.Count;
+            int i = 0;
+            foreach (Vector3 point in points) {
+                LineVertices.Add(new VertexPositionColor(point, color));
+                if (++i % 2 == 0) {
+                    LineIndices.Add(count + i - 2);
+                    LineIndices.Add(count + i - 1);
+                }
+            }
+        }
+
+
+        /// 每两个顶点为一个线段，请确保输入的顶点数量为 2 的倍数
+        public void QueueLines(IEnumerable<VertexPositionColor> vertices) {
+            int count = LineVertices.Count;
+            int i = 0;
+            foreach (VertexPositionColor vertex in vertices) {
+                LineVertices.Add(vertex);
+                if (++i % 2 == 0) {
+                    LineIndices.Add(count + i - 2);
+                    LineIndices.Add(count + i - 1);
+                }
+            }
+        }
+
         public void QueueBatch(FlatBatch2D batch, Matrix? matrix = null, Color? color = null) {
             QueueBatchLines(batch, matrix, color);
             QueueBatchTriangles(batch, matrix, color);
@@ -58,15 +113,28 @@ namespace Engine.Graphics {
         }
 
         public void QueueLineStrip(IEnumerable<Vector2> points, float depth, Color color) {
-            int count = LineVertices.Count;
-            int num = 0;
+            int i = LineVertices.Count;
+            bool notFirst = false;
             foreach (Vector2 point in points) {
                 LineVertices.Add(new VertexPositionColor(new Vector3(point, depth), color));
-                num++;
+                if (notFirst) {
+                    LineIndices.Add(i++);
+                    LineIndices.Add(i);
+                }
+                notFirst = true;
             }
-            for (int i = 0; i < num - 1; i++) {
-                LineIndices.Add(count + i);
-                LineIndices.Add(count + i + 1);
+        }
+
+        public void QueueLineStrip(IEnumerable<VertexPositionColor> vertices) {
+            int i = LineVertices.Count;
+            bool notFirst = false;
+            foreach (VertexPositionColor vertex in vertices) {
+                LineVertices.Add(vertex);
+                if (notFirst) {
+                    LineIndices.Add(i++);
+                    LineIndices.Add(i);
+                }
+                notFirst = true;
             }
         }
 

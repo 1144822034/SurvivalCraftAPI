@@ -16,10 +16,9 @@ namespace Game {
             ModsManager.RegisterHook("OnPlayerDead", this);
             ModsManager.RegisterHook("OnModelRendererDrawExtra", this);
             ModsManager.RegisterHook("GetMaxInstancesCount", this);
-            ModsManager.RegisterHook("BeforeWidgetDrawItemRender", this);
+            //ModsManager.RegisterHook("BeforeWidgetDrawItemRender", this);
             ModsManager.RegisterHook("OnDrawItemAssigned", this);
             ModsManager.RegisterHook("WindowModeChanged", this);
-            TextBoxWidget.ShowCandidatesWindow = SettingsManager.FullScreenMode;
         }
 
         public override void InitKeyCompatibleGroups() { //示例：添加按键兼容组，同组内的按键在按键绑定界面不会显示冲突(但功能上仍可能存在冲突，请自行安排)
@@ -169,7 +168,7 @@ namespace Game {
 
         public override int GetMaxInstancesCount() => 7;
 
-        public override void BeforeWidgetDrawItemRender(Widget.DrawItem drawItem,
+        /*public override void BeforeWidgetDrawItemRender(Widget.DrawItem drawItem,
             out bool skipVanillaDraw,
             out Action afterWidgetDraw,
             ref Rectangle scissorRectangle,
@@ -186,7 +185,7 @@ namespace Game {
             }
             skipVanillaDraw = false;
             afterWidgetDraw = null;
-        }
+        }*/
 
         public override void OnDrawItemAssigned(Widget.DrawContext drawContext) {
             int layer = drawContext.m_drawItems.LastOrDefault()?.Layer ?? 0;

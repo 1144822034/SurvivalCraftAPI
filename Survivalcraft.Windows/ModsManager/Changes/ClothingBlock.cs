@@ -294,6 +294,7 @@ namespace Game {
             if (clothingData == null) {
                 return;
             }
+            clothingData.Texture ??= ContentManager.Get<Texture2D>(clothingData._textureName);
             Matrix matrix2 = m_slotTransforms[(int)clothingData.Slot] * Matrix.CreateScale(size) * matrix;
             if (clothingData.IsOuter) {
                 BlocksManager.DrawMeshBlock(

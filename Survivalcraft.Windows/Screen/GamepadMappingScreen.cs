@@ -1,6 +1,6 @@
+using System.Xml.Linq;
 using Engine.Input;
 using Engine.Serialization;
-using System.Xml.Linq;
 using TemplatesDatabase;
 
 namespace Game {
@@ -21,7 +21,8 @@ namespace Game {
                     labelWidget2.Text = string.Empty;
                 }
                 else if (value is ValuesDictionary valuesDictionary) {
-                    labelWidget2.Text = ConvertGamepadName(valuesDictionary.GetValue<object>("ModifierKey", null)) + " + "
+                    labelWidget2.Text = ConvertGamepadName(valuesDictionary.GetValue<object>("ModifierKey", null))
+                        + " + "
                         + ConvertGamepadName(valuesDictionary.GetValue<object>("ActionKey", null));
                 }
                 else {
@@ -31,8 +32,11 @@ namespace Game {
             }
             return containerWidget;
         }
+
         public static string ConvertGamepadName(object obj) {
-            if(obj == null) return string.Empty;
+            if (obj == null) {
+                return string.Empty;
+            }
             string text = HumanReadableConverter.ConvertToString(obj);
             string translated = LanguageControl.Get(out bool r, keyName, text);
             return r ? translated : text;
@@ -45,6 +49,7 @@ namespace Game {
         public BevelledButtonWidget m_resetButton;
         public BevelledButtonWidget m_setKeyButton;
         public BevelledButtonWidget m_disableKeyButton;
+        public BevelledButtonWidget m_gameHelpButton;
         public bool IsWaitingForKeyInput;
         public Dictionary<string, ContainerWidget> m_widgetsByString = [];
         public Dictionary<object, List<string>> m_conflicts = [];
@@ -60,6 +65,7 @@ namespace Game {
             m_resetButton = Children.Find<BevelledButtonWidget>("Reset");
             m_setKeyButton = Children.Find<BevelledButtonWidget>("SetKey");
             m_disableKeyButton = Children.Find<BevelledButtonWidget>("DisableKey");
+            m_gameHelpButton = Children.Find<BevelledButtonWidget>("GameHelp");
         }
 
         public override void Update() {
@@ -80,11 +86,12 @@ namespace Game {
                 }
                 else {
                     if (value is ValuesDictionary valuesDictionary) {
-                        labelWidget.Text = ConvertGamepadName(valuesDictionary.GetValue<object>("ModifierKey", null)) + " + "
+                        labelWidget.Text = ConvertGamepadName(valuesDictionary.GetValue<object>("ModifierKey", null))
+                            + " + "
                             + ConvertGamepadName(valuesDictionary.GetValue<object>("ActionKey", null));
                     }
                     else {
-                        labelWidget.Text = ConvertGamepadName(value);// r ? translated : text;
+                        labelWidget.Text = ConvertGamepadName(value); // r ? translated : text;
                     }
                     bool hasConflict = false;
                     if (m_conflicts.TryGetValue(value, out List<string> valueList)) {
@@ -103,7 +110,7 @@ namespace Game {
                     LanguageControl.Get("ContentWidgets", fName, "ResetText"),
                     LanguageControl.Yes,
                     LanguageControl.No,
-                    delegate (MessageDialogButton button) {
+                    delegate(MessageDialogButton button) {
                         if (button == MessageDialogButton.Button1) { //重设所有按键
                             ResetAll();
                         }
@@ -119,25 +126,31 @@ namespace Game {
                     return;
                 }
                 object holdingModifierKey = null;
-                if (Input.IsPadButtonDown(GamePadButton.LeftShoulder))
+                if (Input.IsPadButtonDown(GamePadButton.LeftShoulder)) {
                     holdingModifierKey = GamePadButton.LeftShoulder;
-                else if (Input.IsPadButtonDown(GamePadButton.RightShoulder))
+                }
+                else if (Input.IsPadButtonDown(GamePadButton.RightShoulder)) {
                     holdingModifierKey = GamePadButton.RightShoulder;
-                else if (Input.GetPadTriggerPosition(GamePadTrigger.Left) > SettingsManager.GamepadTriggerThreshold)
+                }
+                else if (Input.IsPadTriggerDown(GamePadTrigger.Left, 0f, SettingsManager.GamepadTriggerThreshold)) {
                     holdingModifierKey = GamePadTrigger.Left;
-                else if (Input.GetPadTriggerPosition(GamePadTrigger.Right) > SettingsManager.GamepadTriggerThreshold)
+                }
+                else if (Input.IsPadTriggerDown(GamePadTrigger.Right, 0f, SettingsManager.GamepadTriggerThreshold)) {
                     holdingModifierKey = GamePadTrigger.Right;
-
+                }
                 foreach (GamePadButton button in EnumUtils.GetEnumValues(typeof(GamePadButton)).Select(v => (GamePadButton)v)) {
-                    if (button != GamePadButton.Null && Input.IsPadButtonDownOnce(button)) {
-                        if (holdingModifierKey != null && !GamePad.IsModifierKey(button)) {
+                    if (button != GamePadButton.Null
+                        && Input.IsPadButtonDownOnce(button)) {
+                        if (holdingModifierKey != null
+                            && !GamePad.IsModifierKey(button)) {
                             ValuesDictionary combinedKey = [];
                             combinedKey.SetValue("ModifierKey", holdingModifierKey);
                             combinedKey.SetValue("ActionKey", button);
                             SetGamepadMapping(selectedKeyName, combinedKey);
                         }
-                        else
+                        else {
                             SetGamepadMapping(selectedKeyName, button);
+                        }
                         IsWaitingForKeyInput = false;
                         return;
                     }
@@ -156,13 +169,17 @@ namespace Game {
             if (m_setKeyButton.IsClicked) {
                 IsWaitingForKeyInput = true;
             }
+            if (m_gameHelpButton.IsClicked) {
+                ScreensManager.SwitchScreen("Help");
+            }
             if (!IsWaitingForKeyInput
                 && (Input.Back || Input.Cancel)) {
-                ScreensManager.SwitchScreen(ScreensManager.PreviousScreen);
+                ScreensManager.GoBack();
             }
         }
 
         public override void Enter(object[] parameters) {
+            m_gameHelpButton.IsVisible = ScreensManager.PreviousScreen is GameScreen;
             m_keysList.ClearItems();
             foreach (string keyName1 in ModSettingsManager.CombinedGamepadMappingSettings.Keys) {
                 m_keysList.AddItem(keyName1);

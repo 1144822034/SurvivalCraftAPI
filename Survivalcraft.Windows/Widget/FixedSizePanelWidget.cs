@@ -6,12 +6,12 @@ namespace Game {
             Vector2 zero = Vector2.Zero;
             foreach (Widget child in Children) {
                 if (child.IsVisible) {
-                    child.Measure(Vector2.Max(parentAvailableSize - 2f * child.Margin, Vector2.Zero));
+                    child.Measure(Vector2.Max(parentAvailableSize - child.MarginHorizontalSumAndVerticalSum, Vector2.Zero));
                     if (child.ParentDesiredSize.X != float.PositiveInfinity) {
-                        zero.X = MathUtils.Max(zero.X, child.ParentDesiredSize.X + 2f * child.Margin.X);
+                        zero.X = MathUtils.Max(zero.X, child.ParentDesiredSize.X + child.MarginHorizontalSum);
                     }
                     if (child.ParentDesiredSize.Y != float.PositiveInfinity) {
-                        zero.Y = MathUtils.Max(zero.Y, child.ParentDesiredSize.Y + 2f * child.Margin.Y);
+                        zero.Y = MathUtils.Max(zero.Y, child.ParentDesiredSize.Y + child.MarginVerticalSum);
                     }
                 }
             }

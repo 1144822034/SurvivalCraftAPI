@@ -3,12 +3,16 @@ using Engine;
 
 namespace Game {
     public class ContentScreen : Screen {
+        public enum CommunityType {
+            OriginalCommunity,
+            ChineseCommunity,
+            ChineseCommunityWebsite
+        }
         public static string fName = "ContentScreen";
 
         public ButtonWidget m_externalContentButton;
         public ButtonWidget m_deviceButton;
         public ButtonWidget m_communityContentButton;
-        public ButtonWidget m_originalCommunityContentButton;
         public ButtonWidget m_linkButton;
         public ButtonWidget m_manageButton;
         public ButtonWidget m_manageModButton;
@@ -21,7 +25,6 @@ namespace Game {
             m_externalContentButton = Children.Find<ButtonWidget>("External");
             m_deviceButton = Children.Find<ButtonWidget>("Device");
             m_communityContentButton = Children.Find<ButtonWidget>("Community");
-            m_originalCommunityContentButton = Children.Find<ButtonWidget>("OriginalCommunity");
             m_linkButton = Children.Find<ButtonWidget>("Link");
             m_manageButton = Children.Find<BevelledButtonWidget>("Manage");
             m_manageModButton = Children.Find<BevelledButtonWidget>("ManageMod");
@@ -46,7 +49,7 @@ namespace Game {
                     list,
                     70f,
                     item => (string)item,
-                    delegate(object item) {
+                    item => {
                         string selectionResult = (string)item;
                         if (selectionResult == LanguageControl.Get(fName, 1)) {
                             ScreensManager.SwitchScreen("ModsManageContent");
@@ -63,8 +66,7 @@ namespace Game {
         }
 
         public override void Update() {
-            m_communityContentButton.IsEnabled = SettingsManager.CommunityContentMode != CommunityContentMode.Disabled;
-            m_originalCommunityContentButton.IsEnabled = SettingsManager.OriginalCommunityContentMode != CommunityContentMode.Disabled;
+            m_communityContentButton.IsEnabled = SettingsManager.CommunityContentMode != CommunityContentMode.Disabled && SettingsManager.OriginalCommunityContentMode != CommunityContentMode.Disabled;
             if (m_externalContentButton.IsClicked) {
                 ScreensManager.SwitchScreen("ExternalContent");
             }
@@ -74,7 +76,7 @@ namespace Game {
 #if WINDOWS
                             KeyValuePair<string, string[]>[] filters = [
                                 new(LanguageControl.Get(fName, "ExtensionName", ".scworld"), ["*.scworld"]),
-                                new(LanguageControl.Get(fName, "ExtensionName", ".scbtex"), ["*.scbtex", "*.png", "*.webp"]),
+                                new(LanguageControl.Get(fName, "ExtensionName", ".scbtex"), ["*.scbtex", "*.png", "*.webp", "*.astc", "*.astcsrgb"]),
                                 new(LanguageControl.Get(fName, "ExtensionName", ".scskin"), ["*.scskin"]),
                                 new(LanguageControl.Get(fName, "ExtensionName", ".scfpack"), ["*.scfpack"]),
                                 new(LanguageControl.Get(fName, "ExtensionName", ".scmod"), ["*.scmod"])
@@ -117,10 +119,38 @@ namespace Game {
                 );
             }
             if (m_communityContentButton.IsClicked) {
-                ScreensManager.SwitchScreen("CommunityContent");
-            }
-            if (m_originalCommunityContentButton.IsClicked) {
-                ScreensManager.SwitchScreen("OriginalCommunityContent");
+                List<CommunityType> items = [];
+                if (SettingsManager.OriginalCommunityContentMode != CommunityContentMode.Disabled) {
+                    items.Add(CommunityType.OriginalCommunity);
+                }
+                if (SettingsManager.CommunityContentMode != CommunityContentMode.Disabled) {
+                    items.Add(CommunityType.ChineseCommunity);
+                    items.Add(CommunityType.ChineseCommunityWebsite);
+                }
+                DialogsManager.ShowDialog(
+                    null,
+                    new ListSelectionDialog(
+                        LanguageControl.Get(fName, "5"),
+                        items,
+                        70f,
+                        item => item is CommunityType type ? LanguageControl.Get(fName, "CommunityType", type.ToString()) : null,
+                        item => {
+                            if (item is CommunityType type) {
+                                switch (type) {
+                                    case CommunityType.OriginalCommunity:
+                                        ScreensManager.SwitchScreen("OriginalCommunityContent");
+                                        break;
+                                    case CommunityType.ChineseCommunity:
+                                        ScreensManager.SwitchScreen("CommunityContent");
+                                        break;
+                                    case CommunityType.ChineseCommunityWebsite:
+                                        WebBrowserManager.LaunchBrowser("https://test.suancaixianyu.cn/");
+                                        break;
+                                }
+                            }
+                        }
+                    )
+                );
             }
             if (m_linkButton.IsClicked) {
                 DialogsManager.ShowDialog(null, new DownloadContentFromLinkDialog());

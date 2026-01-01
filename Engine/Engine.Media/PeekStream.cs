@@ -81,7 +81,7 @@ namespace Engine.Media {
         }
 
         public override void Write(byte[] buffer, int offset, int count) {
-            throw new NotImplementedException();
+            throw new InvalidOperationException();
         }
 
         public override int ReadByte() {

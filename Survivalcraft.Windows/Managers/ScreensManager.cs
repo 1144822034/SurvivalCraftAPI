@@ -42,7 +42,16 @@ namespace Game {
         /// <summary>
         ///     上一个Screen
         /// </summary>
-        public static Screen PreviousScreen { get; set; }
+        public static Screen PreviousScreen {
+            get;
+            set;
+        }
+
+        public static Stack<Screen> HistoryStack { get; } = [];
+
+        public static Screen TopOfHistoryScreen => HistoryStack.TryPeek(out Screen screen) ? screen : null;
+
+        public static float FinalUiScale { get; set; }
 
         public static T FindScreen<T>(string name) where T : Screen {
             m_screens.TryGetValue(name, out Screen value);
@@ -58,6 +67,12 @@ namespace Game {
         }
 
         public static void SwitchScreen(Screen screen, params object[] parameters) {
+            if (screen == CurrentScreen) {
+                return;
+            }
+            if (screen == null) {
+                throw new ArgumentNullException(nameof(screen));
+            }
             if (m_animationData != null) {
                 EndAnimation();
             }
@@ -69,11 +84,22 @@ namespace Game {
                 CurrentScreen.Input.Clear();
             }
             PreviousScreen = CurrentScreen;
+            if (screen == TopOfHistoryScreen) {
+                HistoryStack.Pop();
+            }
+            else if (CurrentScreen != null) {
+                HistoryStack.Push(CurrentScreen);
+            }
             CurrentScreen = screen;
             UpdateAnimation();
             if (CurrentScreen != null) {
                 Log.Verbose($"Entered screen \"{GetScreenName(CurrentScreen)}\"");
+                UpdateTopBarMarginLeft();
             }
+        }
+
+        public static void GoBack(params object[] parameters) {
+            SwitchScreen(TopOfHistoryScreen, parameters);
         }
 
         public static void Initialize() {
@@ -81,6 +107,7 @@ namespace Game {
             RootWidget.WidgetsHierarchyInput = new WidgetInput();
             InitScreens();
             SwitchScreen("Loading");
+            Window.DisplayCutoutInsetsChanged += (_, _) => UpdateTopBarMarginLeft();
         }
 
         public static void InitScreens() {
@@ -283,6 +310,7 @@ namespace Game {
                 num2 = vector.Y / num3;
                 availableSize = new Vector2(num3 / vector.Y * vector.X, num3);
             }
+            FinalUiScale = 1f / num2;
             RootWidget.LayoutTransform = Matrix.CreateScale(num2, num2, 1f);
             if (SettingsManager.UpsideDownLayout) {
                 RootWidget.LayoutTransform *= new Matrix(
@@ -348,6 +376,23 @@ namespace Game {
                 new Vector2(tc1.X, tc1.Y),
                 color
             );
+        }
+
+        public static void UpdateTopBarMarginLeft() {
+            if (SettingsManager.AdaptEdgeToEdgeDisplay
+                && CurrentScreen?.Children.Find<BevelledButtonWidget>("TopBar.Back", false)?.ParentWidget?.ParentWidget is CanvasWidget topBar
+                && topBar.Size.X == 64f) {
+                topBar.MarginLeft = Window.DisplayCutoutInsets.X * FinalUiScale;
+            }
+        }
+
+        public static void ResetAllTopBarMarginLeft() {
+            foreach (Screen screen in m_screens.Values) {
+                if (screen.Children.Find<BevelledButtonWidget>("TopBar.Back", false)?.ParentWidget?.ParentWidget is CanvasWidget topBar
+                    && topBar.Size.X == 64f) {
+                    topBar.MarginLeft = 0f;
+                }
+            }
         }
     }
 }

@@ -23,11 +23,11 @@
 
       <StackPanelWidget Direction="Horizontal" HorizontalAlignment="Center" Margin="20, 0">
         <BevelledButtonWidget Name="ReportButton" Text="[HelpScreen:4]" Size="Infinity, 60" FontScale="1.25"/>
-        <CanvasWidget Size="20, 0" />
+        <CanvasWidget Size="10, 0" />
         <BevelledButtonWidget Name="BestiaryButton" Text="[HelpScreen:2]" Size="Infinity, 60" FontScale="1.25">
           <BevelledRectangleWidget Name="BevelledButton.Rectangle" CenterColor="120, 65, 30" BevelColor="120, 65, 30" />
         </BevelledButtonWidget>
-        <CanvasWidget Size="20, 0" />
+        <CanvasWidget Size="10, 0" />
         <BevelledButtonWidget Name="RecipaediaButton" Text="[HelpScreen:3]" Size="Infinity, 60" FontScale="1.25">
           <BevelledRectangleWidget Name="BevelledButton.Rectangle" CenterColor="50, 150, 35" BevelColor="50, 150, 35" />
         </BevelledButtonWidget>

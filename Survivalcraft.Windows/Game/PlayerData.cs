@@ -395,7 +395,9 @@ namespace Game {
             ComponentPlayer componentPlayer = entity.FindComponent<ComponentPlayer>();
             if (componentPlayer != null
                 && componentPlayer.PlayerData == this) {
-                if (ComponentPlayer != null) {
+                //多维世界mod会提前为PlayerData.ComponentPlayer赋值，原版行为会在SubsystemPlayers.OnEntityAdded再次赋值
+                //为阻止再次赋值时引发异常所以加了条ComponentPlayer != componentPlayer判断
+                if (ComponentPlayer != null && ComponentPlayer != componentPlayer) {
                     throw new InvalidOperationException(string.Format(LanguageControl.Get(fName, 10), PlayerIndex));
                 }
                 ComponentPlayer = componentPlayer;

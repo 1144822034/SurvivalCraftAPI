@@ -1231,6 +1231,20 @@ namespace Game {
         }
 
         /// <summary>
+        ///     在InventorySlotWidget计算分割物品数量时执行（包括拖拽显示数量和实际移动数量），允许修改最终的分割数量
+        ///     （比如原版的1个/一半分割逻辑，可通过此方法自定义为固定数量、按物品类型分割等）
+        /// </summary>
+        /// <param name="inventorySlotWidget">触发分割数量计算的InventorySlotWidget实例（当前物品槽）</param>
+        /// <param name="totalItemCount">分割前的物品总数量（当前槽位的物品总数）</param>
+        /// <param name="dragMode">当前的拖拽模式（AllItems：全部/SingleItem：单个/HalfItems：一半）</param>
+        /// <param name="splitCount">原版逻辑计算后的分割数量（ref关键字允许修改，修改后会作为最终的分割数量使用）</param>
+        public virtual void OnInventorySlotWidgetCalculateSplitCount(
+            InventorySlotWidget inventorySlotWidget,
+            int totalItemCount,
+            DragMode dragMode,
+            ref int splitCount) { }
+
+        /// <summary>
         ///     在InventorySlotWidget.HandleDragDrop时执行，先执行物品的修改操作
         ///     （比如原版火药拖到枪身上时执行上膛操作）
         /// </summary>
@@ -1979,5 +1993,86 @@ namespace Game {
         public virtual void OnAppendModelMesh(BlockMesh blockMesh, BlockMesh blockMesh1, out bool skip) {
             skip = false;
         }
+
+        /// <summary>
+        /// 玩家生命状态（进食）钩子
+        /// </summary>
+        /// <param name="vitalStats">生命状态组件</param>
+        /// <param name="value">物品完整值</param>
+        /// <param name="skipVanilla">是否跳过原版逻辑</param>
+        /// <param name="eatSuccess">输出：进食是否成功</param>
+        public virtual void OnVitalStatsEat(
+            ComponentVitalStats vitalStats,
+            ref int value,
+            ref bool skipVanilla,
+            out bool eatSuccess) {
+            // 默认返回进食失败，模组可重写修改
+            eatSuccess = false;
+        }
+
+        /// <summary>
+        /// 状态（更新饥饿值）钩子
+        /// </summary>
+        /// <param name="vitalStats">生命状态组件</param>
+        /// <param name="food">饥饿值</param>
+        /// <param name="gameTimeDelta">时间增量</param>
+        /// <param name="skipVanilla">是否跳过原版逻辑</param>
+        public virtual void OnVitalStatsUpdateFood(
+            ComponentVitalStats vitalStats,
+            ref float food,
+            ref float gameTimeDelta,
+            ref bool skipVanilla) { }
+
+        /// <summary>
+        /// 状态（更新耐力值）钩子
+        /// </summary>
+        /// <param name="vitalStats">生命状态组件</param>
+        /// <param name="stamina">耐力值</param>
+        /// <param name="gameTimeDelta">时间增量</param>
+        /// <param name="skipVanilla">是否跳过原版逻辑</param>
+        public virtual void OnVitalStatsUpdateStamina(
+            ComponentVitalStats vitalStats,
+            ref float stamina,
+            ref float gameTimeDelta,
+            ref bool skipVanilla) { }
+
+        /// <summary>
+        /// 状态（更新睡眠值）钩子
+        /// </summary>
+        /// <param name="vitalStats">生命状态组件</param>
+        /// <param name="sleep">睡眠值</param>
+        /// <param name="gameTimeDelta">时间增量</param>
+        /// <param name="skipVanilla">是否跳过原版逻辑</param>
+        public virtual void OnVitalStatsUpdateSleep(
+            ComponentVitalStats vitalStats,
+            ref float sleep,
+            ref float gameTimeDelta,
+            ref bool skipVanilla) { }
+
+        /// <summary>
+        /// 状态（更新体温）钩子
+        /// </summary>
+        /// <param name="vitalStats">生命状态组件</param>
+        /// <param name="temperature">体温值</param>
+        /// <param name="gameTimeDelta">时间增量</param>
+        /// <param name="skipVanilla">是否跳过原版逻辑</param>
+        public virtual void OnVitalStatsUpdateTemperature(
+            ComponentVitalStats vitalStats,
+            ref float temperature,
+            ref float gameTimeDelta,
+            ref bool skipVanilla) { }
+
+        /// <summary>
+        /// 状态（更新湿度）钩子
+        /// </summary>
+        /// <param name="vitalStats">生命状态组件</param>
+        /// <param name="wetness">湿度值</param>
+        /// <param name="gameTimeDelta">时间增量</param>
+        /// <param name="skipVanilla">是否跳过原版逻辑</param>
+        public virtual void OnVitalStatsUpdateWetness(
+            ComponentVitalStats vitalStats,
+            ref float wetness,
+            ref float gameTimeDelta,
+            ref bool skipVanilla) { }
     }
 }

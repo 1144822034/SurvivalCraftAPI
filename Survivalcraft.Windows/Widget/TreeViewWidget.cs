@@ -39,7 +39,7 @@ namespace Game {
             base.MeasureOverride(parentAvailableSize);
             foreach (Widget child in Children) {
                 if (child.IsVisible) { //限制子条目大小
-                    child.Measure(new Vector2(MathUtils.Max(parentAvailableSize.X - 2f * child.Margin.X, 0f), ItemSize));
+                    child.Measure(new Vector2(MathUtils.Max(parentAvailableSize.X - child.MarginHorizontalSum, 0f), ItemSize));
                 }
             }
         }

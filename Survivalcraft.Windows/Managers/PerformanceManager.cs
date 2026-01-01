@@ -166,7 +166,7 @@ namespace Game {
                 }
                 m_fontBatch.QueueText(
                     stringBuilder.ToString(),
-                    Vector2.Transform(Vector2.Zero, ScreensManager.RootWidget.GlobalTransform),
+                    Vector2.Transform(Vector2.Zero, ScreensManager.RootWidget.GlobalTransform) + Window.DisplayCutoutInsets.XY,
                     0f,
                     Color.White,
                     TextAnchor.Default,

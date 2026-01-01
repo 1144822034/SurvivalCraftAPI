@@ -1,7 +1,6 @@
 using System.Xml.Linq;
 using Engine;
 #if !ANDROID
-using System.Diagnostics;
 #endif
 
 namespace Game {
@@ -14,8 +13,10 @@ namespace Game {
         public ButtonWidget m_shareGameLogButton;
         public ButtonWidget m_reportButton;
         public ButtonWidget m_fileAssociationEnabledButton;
+        public ButtonWidget m_safeModeButton;
         public ButtonWidget m_resetDefaultsButton;
         public LabelWidget m_descriptionLabel;
+        public const string fName = "SettingsCompatibilityScreen";
 
         public SettingsCompatibilityScreen() {
             XElement node = ContentManager.Get<XElement>("Screens/SettingsCompatibilityScreen");
@@ -27,6 +28,7 @@ namespace Game {
             m_shareGameLogButtonPanel = Children.Find<ContainerWidget>("ShareGameLogButtonPanel");
             m_reportButton = Children.Find<ButtonWidget>("ReportButton");
             m_fileAssociationEnabledButton = Children.Find<ButtonWidget>("FileAssociationEnabledButton");
+            m_safeModeButton = Children.Find<ButtonWidget>("SafeModeButton");
             m_resetDefaultsButton = Children.Find<ButtonWidget>("ResetDefaultsButton");
             m_descriptionLabel = Children.Find<LabelWidget>("Description");
 #if !WINDOWS
@@ -35,10 +37,11 @@ namespace Game {
 #if ANDROID
             m_shareGameLogButtonPanel.IsVisible = true;
 #endif
+            m_safeModeButton.Text = SettingsManager.SafeMode ? LanguageControl.Enable : LanguageControl.Disable;
         }
 
         public override void Enter(object[] parameters) {
-            m_descriptionLabel.Text = string.Empty;
+            m_descriptionLabel.Text = LanguageControl.Get(fName, "1");
         }
 
         public override void Update() {
@@ -48,13 +51,19 @@ namespace Game {
             //	m_descriptionLabel.Text = StringsManager.GetString("Settings.Compatibility.SinglethreadedTerrainUpdate.Description");
             //}
             if (m_viewGameLogButton.IsClicked) {
+                m_descriptionLabel.Text = LanguageControl.Get(fName, "1");
                 DialogsManager.ShowDialog(null, new ViewGameLogDialog());
             }
             if (m_openGameLogButton.IsClicked) {
+                m_descriptionLabel.Text = LanguageControl.Get(fName, "1");
                 string path = Storage.CombinePaths(ModsManager.LogPath, "Game.log");
                 if (Storage.FileExists(path)) {
                     try {
-                        Storage.OpenFileWithExternalApplication(path, LanguageControl.GetContentWidgets("SettingsCompatibilityScreen", "13"), "text/plain");
+                        Storage.OpenFileWithExternalApplication(
+                            path,
+                            LanguageControl.GetContentWidgets("SettingsCompatibilityScreen", "13"),
+                            "text/plain"
+                        );
                     }
                     catch (Exception e) {
                         DialogsManager.ShowDialog(null, new MessageDialog(LanguageControl.Error, e.Message, LanguageControl.Ok, null, null));
@@ -62,6 +71,7 @@ namespace Game {
                 }
             }
             if (m_shareGameLogButton.IsClicked) {
+                m_descriptionLabel.Text = LanguageControl.Get(fName, "1");
                 string path = Storage.CombinePaths(ModsManager.LogPath, "Game.log");
                 if (Storage.FileExists(path)) {
                     try {
@@ -73,10 +83,12 @@ namespace Game {
                 }
             }
             if (m_reportButton.IsClicked) {
+                m_descriptionLabel.Text = LanguageControl.Get(fName, "1");
                 WebBrowserManager.LaunchBrowser(ModsManager.ReportLink);
             }
 #if WINDOWS
             if (m_fileAssociationEnabledButton.IsClicked) {
+                m_descriptionLabel.Text = LanguageControl.Get(fName, "2");
                 if (SettingsManager.FileAssociationEnabled) {
                     FileAssociationManager.Unregister();
                     SettingsManager.FileAssociationEnabled = false;
@@ -86,6 +98,15 @@ namespace Game {
                 }
             }
 #endif
+            if (m_safeModeButton.IsClicked) {
+                m_descriptionLabel.Text = LanguageControl.Get(fName, "3");
+                SettingsManager.SafeMode = !SettingsManager.SafeMode;
+                m_safeModeButton.Text = SettingsManager.SafeMode ? LanguageControl.Enable : LanguageControl.Disable;
+                DialogsManager.ShowDialog(
+                    null,
+                    new MessageDialog(LanguageControl.Warning, LanguageControl.Get(fName, "4"), LanguageControl.Ok, null, null)
+                );
+            }
             if (m_resetDefaultsButton.IsClicked) {
                 SettingsManager.MultithreadedTerrainUpdate = true;
             }

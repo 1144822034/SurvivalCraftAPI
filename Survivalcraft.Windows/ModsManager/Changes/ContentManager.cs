@@ -193,5 +193,9 @@ namespace Game {
             }
             return new ReadOnlyList<ContentInfo>(contents);
         }
+
+        public static void AddContentReader(IContentReader.IContentReader reader) {
+            ReaderList.TryAdd(reader.Type, reader);
+        }
     }
 }

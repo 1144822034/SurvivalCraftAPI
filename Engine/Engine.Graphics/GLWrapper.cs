@@ -13,91 +13,50 @@ namespace Engine.Graphics {
         public static int m_mainDepthbuffer;
 
         public static int m_mainColorbuffer;
-
         public static int m_arrayBuffer;
-
         public static int m_elementArrayBuffer;
-
         public static int m_texture2D;
-
         public static int[] m_activeTexturesByUnit;
-
         public static TextureUnit m_activeTextureUnit;
-
         public static int m_program;
-
         public static int m_framebuffer;
-
         public static Vector4? m_clearColor;
-
         public static float? m_clearDepth;
-
         public static int? m_clearStencil;
-
         public static TriangleFace m_cullFace;
-
         public static FrontFaceDirection m_frontFace;
-
         public static DepthFunction m_depthFunction;
-
         public static int? m_colorMask;
-
         public static bool? m_depthMask;
-
         public static float m_polygonOffsetFactor;
-
         public static float m_polygonOffsetUnits;
-
         public static Vector4 m_blendColor;
-
         public static BlendEquationModeEXT m_blendEquation;
-
         public static BlendEquationModeEXT m_blendEquationColor;
-
         public static BlendEquationModeEXT m_blendEquationAlpha;
-
         public static BlendingFactor m_blendFuncSource;
-
         public static BlendingFactor m_blendFuncSourceColor;
-
         public static BlendingFactor m_blendFuncSourceAlpha;
-
         public static BlendingFactor m_blendFuncDestination;
-
         public static BlendingFactor m_blendFuncDestinationColor;
-
         public static BlendingFactor m_blendFuncDestinationAlpha;
-
         public static Dictionary<EnableCap, bool> m_enableDisableStates;
-
         public static bool?[] m_vertexAttribArray;
-
         public static RasterizerState m_rasterizerState;
-
         public static DepthStencilState m_depthStencilState;
-
         public static BlendState m_blendState;
-
         public static Dictionary<int, SamplerState> m_textureSamplerStates;
-
         public static Shader m_lastShader;
-
         public static VertexDeclaration m_lastVertexDeclaration;
-
         public static IntPtr m_lastVertexOffset;
-
         public static int m_lastArrayBuffer;
-
         public static Viewport? m_viewport;
-
         public static Rectangle? m_scissorRectangle;
 
         public static bool GL_EXT_texture_filter_anisotropic;
-
         public static bool GL_OES_packed_depth_stencil;
-
+        public static bool GL_KHR_texture_compression_astc_ldr;
         public static int GL_MAX_COMBINED_TEXTURE_IMAGE_UNITS;
-
         public static int GL_MAX_TEXTURE_SIZE;
 
         public static void Initialize() {
@@ -124,9 +83,10 @@ namespace Engine.Graphics {
             Display.DeviceDescription =
                 $"{OpenGLVendor}, Renderer={GL.GetStringS(StringName.Renderer) ?? string.Empty}, Version={GL.GetStringS(StringName.Version) ?? string.Empty}, R={bits[0]} G={bits[1]} B={bits[2]} A={bits[3]}, D={bits[4]} S={bits[5]}, MaxTextureSize={GL_MAX_TEXTURE_SIZE}";
             Log.Information($"Initialized display device: {Display.DeviceDescription}");
-            string @string = GL.GetStringS(StringName.Extensions);
-            GL_EXT_texture_filter_anisotropic = @string?.Contains("GL_EXT_texture_filter_anisotropic") ?? false;
-            GL_OES_packed_depth_stencil = @string?.Contains("GL_OES_packed_depth_stencil") ?? false;
+            string extensions = GL.GetStringS(StringName.Extensions);
+            GL_EXT_texture_filter_anisotropic = extensions?.Contains("GL_EXT_texture_filter_anisotropic") ?? false;
+            GL_OES_packed_depth_stencil = extensions?.Contains("GL_OES_packed_depth_stencil") ?? false;
+            GL_KHR_texture_compression_astc_ldr = extensions?.Contains("GL_KHR_texture_compression_astc_ldr") ?? false;
             GL_MAX_COMBINED_TEXTURE_IMAGE_UNITS = GL.GetInteger(GetPName.MaxCombinedTextureImageUnits);
         }
 
@@ -764,6 +724,14 @@ namespace Engine.Graphics {
             catch (Exception ex) {
                 Log.Error("Failed to recreate graphics resources. Reason: {0}", ex.Message);
             }
+        }
+
+        public static float LineWidth {
+            get {
+                GL.GetFloat(GetPName.LineWidth, out float width);
+                return width == 0f ? 1f : width;
+            }
+            set => GL.LineWidth(value);
         }
 
         public static void TranslateVertexElementFormat(VertexElementFormat vertexElementFormat,

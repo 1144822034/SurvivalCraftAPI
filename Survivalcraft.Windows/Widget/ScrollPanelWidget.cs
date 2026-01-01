@@ -31,9 +31,9 @@ namespace Game {
             float num = 0f;
             foreach (Widget child in Children) {
                 if (child.IsVisible) {
-                    num = Direction != 0
-                        ? MathUtils.Max(num, child.ParentDesiredSize.Y + 2f * child.Margin.Y)
-                        : MathUtils.Max(num, child.ParentDesiredSize.X + 2f * child.Margin.X);
+                    num = Direction != LayoutDirection.Horizontal
+                        ? MathUtils.Max(num, child.ParentDesiredSize.Y + child.MarginVerticalSum)
+                        : MathUtils.Max(num, child.ParentDesiredSize.X + child.MarginHorizontalSum);
                 }
             }
             return num;
@@ -44,10 +44,10 @@ namespace Game {
             foreach (Widget child in Children) {
                 if (child.IsVisible) {
                     if (Direction == LayoutDirection.Horizontal) {
-                        child.Measure(new Vector2(float.MaxValue, MathUtils.Max(parentAvailableSize.Y - 2f * child.Margin.Y, 0f)));
+                        child.Measure(new Vector2(float.MaxValue, MathUtils.Max(parentAvailableSize.Y - child.MarginVerticalSum, 0f)));
                     }
                     else {
-                        child.Measure(new Vector2(MathUtils.Max(parentAvailableSize.X - 2f * child.Margin.X, 0f), float.MaxValue));
+                        child.Measure(new Vector2(MathUtils.Max(parentAvailableSize.X - child.MarginHorizontalSum, 0f), float.MaxValue));
                     }
                 }
             }

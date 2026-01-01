@@ -180,7 +180,7 @@ namespace Engine {
         }
 
         public static string GetFileName(string path) {
-            int num = Math.Max(path.LastIndexOf('/'), path.LastIndexOf("\\"));
+            int num = Math.Max(path.LastIndexOf('/'), path.LastIndexOf('\\'));
             return num >= 0 ? path.Substring(num + 1) : path;
         }
 

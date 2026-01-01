@@ -17,6 +17,9 @@ namespace Game {
 
         public ButtonWidget m_upsideDownButton;
 
+        public UniformSpacingPanelWidget m_adaptEdgeToEdgeDisplayContainer;
+        public ButtonWidget m_adaptEdgeToEdgeDisplay;
+
         public ButtonWidget m_hideMoveLookPadsButton;
 
         public ButtonWidget m_hideCrosshairButton;
@@ -48,6 +51,8 @@ namespace Game {
             m_windowModeButton = Children.Find<ButtonWidget>("WindowModeButton");
             m_uiScaleSlider = Children.Find<SliderWidget>("UIScaleSlider");
             m_upsideDownButton = Children.Find<ButtonWidget>("UpsideDownButton");
+            m_adaptEdgeToEdgeDisplayContainer = Children.Find<UniformSpacingPanelWidget>("AdaptEdgeToEdgeDisplayContainer");
+            m_adaptEdgeToEdgeDisplay = Children.Find<ButtonWidget>("AdaptEdgeToEdgeDisplay");
             m_hideMoveLookPadsButton = Children.Find<ButtonWidget>("HideMoveLookPads");
             m_hideCrosshairButton = Children.Find<ButtonWidget>("HideCrosshair");
             m_showGuiInScreenshotsButton = Children.Find<ButtonWidget>("ShowGuiInScreenshotsButton");
@@ -72,7 +77,8 @@ namespace Game {
         }
 
         public override void Enter(object[] parameters) {
-            m_windowModeContainer.IsVisible = VersionsManager.PlatformString != "Android";
+            m_windowModeContainer.IsVisible = VersionsManager.CurrentPlatform != VersionsManager.Platform.Android;
+            m_adaptEdgeToEdgeDisplayContainer.IsVisible = VersionsManager.CurrentPlatform == VersionsManager.Platform.Android;
         }
 
         public override void Update() {
@@ -94,6 +100,15 @@ namespace Game {
             m_uiScaleSlider.Text = $"{m_uiScaleSlider.Value * 100f:0}%";
             if (m_upsideDownButton.IsClicked) {
                 SettingsManager.UpsideDownLayout = !SettingsManager.UpsideDownLayout;
+            }
+            if (m_adaptEdgeToEdgeDisplay.IsClicked) {
+                SettingsManager.AdaptEdgeToEdgeDisplay = !SettingsManager.AdaptEdgeToEdgeDisplay;
+                if (SettingsManager.AdaptEdgeToEdgeDisplay) {
+                    ScreensManager.UpdateTopBarMarginLeft();
+                }
+                else {
+                    ScreensManager.ResetAllTopBarMarginLeft();
+                }
             }
             if (m_hideMoveLookPadsButton.IsClicked) {
                 SettingsManager.HideMoveLookPads = !SettingsManager.HideMoveLookPads;
@@ -140,6 +155,7 @@ namespace Game {
             m_languageButton.Text = LanguageControl.Get("Language", "Name");
             m_displayLogButton.Text = SettingsManager.DisplayLog ? LanguageControl.Yes : LanguageControl.No;
             m_upsideDownButton.Text = SettingsManager.UpsideDownLayout ? LanguageControl.Yes : LanguageControl.No;
+            m_adaptEdgeToEdgeDisplay.Text = SettingsManager.AdaptEdgeToEdgeDisplay ? LanguageControl.Yes : LanguageControl.No;
             m_hideMoveLookPadsButton.Text = SettingsManager.HideMoveLookPads ? LanguageControl.Yes : LanguageControl.No;
             m_hideCrosshairButton.Text = SettingsManager.HideCrosshair ? LanguageControl.Yes : LanguageControl.No;
             m_showGuiInScreenshotsButton.Text = SettingsManager.ShowGuiInScreenshots ? LanguageControl.Yes : LanguageControl.No;

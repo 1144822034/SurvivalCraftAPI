@@ -279,7 +279,7 @@ namespace Game {
             string tips = string.Empty;
             int num = 1;
             try {
-                foreach (ModEntity modEntity in ModsManager.ModListAll) {
+                foreach (ModEntity modEntity in ModsManager.ModList) {
                     foreach (MotdManager.FilterMod value in MotdManager.FilterModAll) {
                         if (value.FilterAPIVersion == ModsManager.APIVersionString
                             && value.PackageName == modEntity.modInfo.PackageName

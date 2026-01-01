@@ -1,16 +1,18 @@
+#if ANDROID
+using Android.Content;
+#else
+using Engine.Input;
+using System.Diagnostics;
 #if WINDOWS
 using ImeSharp;
-using System.Diagnostics;
 using System.Security.Cryptography;
 using System.Text;
 using System.Reflection;
 #endif
+#endif
 using System.Globalization;
 using Engine;
 using Engine.Graphics;
-#if !ANDROID
-using Engine.Input;
-#endif
 
 namespace Game {
     public static class Program {
@@ -36,6 +38,48 @@ namespace Game {
         static void Main(string[] args) {
             // ReSharper restore UnusedMember.Local
 #if WINDOWS
+            if (args != null
+                && args.Length > 0) {
+                switch (args.Length) {
+                    case 1: {
+                        string path = args[0];
+                        ExternalContentType type = ExternalContentManager.ExtensionToType(Storage.GetExtension(path));
+                        if (ExternalContentManager.IsEntryTypeDownloadSupported(type)
+                            && File.Exists(path)) {
+                            using (FileStream fileStream = File.OpenRead(path)) {
+                                string fileName = Storage.GetFileName(path);
+                                try {
+                                    switch (type) {
+                                        case ExternalContentType.World: WorldsManager.ImportWorld(fileStream); break;
+                                        case ExternalContentType.BlocksTexture: BlocksTexturesManager.ImportBlocksTexture(fileName, fileStream); break;
+                                        case ExternalContentType.CharacterSkin: CharacterSkinsManager.ImportCharacterSkin(fileName, fileStream); break;
+                                        case ExternalContentType.FurniturePack: FurniturePacksManager.ImportFurniturePack(fileName, fileStream); break;
+                                        case ExternalContentType.Mod: ModsManager.ImportMod(fileName, fileStream); break;
+                                    }
+                                    Window.MessageBox(IntPtr.Zero, $"Successfully imported {fileName}.\n导入 {fileName} 成功", "Success 成功", 0x40u);
+                                }
+                                catch (Exception e) {
+                                    Window.MessageBox(IntPtr.Zero, $"Failed to import {fileName}, reason:\n导入 {fileName} 失败，原因：\n{e}", null, 0x10u);
+                                }
+                            }
+                        }
+                        return;
+                    }
+                    case 2:
+                        if (args[0] != "--wait") {
+                            break;
+                        }
+                        if (int.TryParse(args[1], out int pid)) {
+                            try {
+                                Process.GetProcessById(pid)?.WaitForExit();
+                            }
+                            catch {
+                                // ignored
+                            }
+                        }
+                        break;
+                }
+            }
             string mutexName;
             using (SHA256 sha256 = SHA256.Create()) {
                 byte[] hash = sha256.ComputeHash(Encoding.UTF8.GetBytes(Assembly.GetEntryAssembly()?.Location ?? "SurvivalcraftApi"));
@@ -43,54 +87,13 @@ namespace Game {
             }
             m_mutex = new Mutex(true, mutexName, out m_mutexHandled);
             if (!m_mutexHandled) {
-                if (args != null
-                    && args.Length > 0) {
-                    string path = args[0];
-                    ExternalContentType type = ExternalContentManager.ExtensionToType(Storage.GetExtension(path));
-                    if (ExternalContentManager.IsEntryTypeDownloadSupported(type)
-                        && File.Exists(path)) {
-                        using (FileStream fileStream = File.OpenRead(path)) {
-                            string fileName = Storage.GetFileName(path);
-                            try {
-                                switch (type) {
-                                    case ExternalContentType.World: WorldsManager.ImportWorld(fileStream); break;
-                                    case ExternalContentType.BlocksTexture: BlocksTexturesManager.ImportBlocksTexture(fileName, fileStream); break;
-                                    case ExternalContentType.CharacterSkin: CharacterSkinsManager.ImportCharacterSkin(fileName, fileStream); break;
-                                    case ExternalContentType.FurniturePack: FurniturePacksManager.ImportFurniturePack(fileName, fileStream); break;
-                                    case ExternalContentType.Mod: ModsManager.ImportMod(fileName, fileStream, false); break;
-                                }
-                                if (type == ExternalContentType.Mod) {
-                                    Window.MessageBox(IntPtr.Zero, $"Successfully imported {fileName}. And you need to open Manage Mod screen to enable it manually.\n导入 {fileName} 成功。接下来你需要到 Mod 管理屏幕中手动启用它。", "Success 成功", 0x40u);
-                                }
-                                else {
-                                    Window.MessageBox(IntPtr.Zero, $"Successfully imported {fileName}.\n导入 {fileName} 成功", "Success 成功", 0x40u);
-                                }
-                            }
-                            catch (Exception e) {
-                                Window.MessageBox(IntPtr.Zero, $"Failed to import {fileName}, reason:\n导入 {fileName} 失败，原因：\n{e}", null, 0x10u);
-                            }
-                        }
-                    }
-                    return;
-                }
+
                 string str =
                     "This game is already running! If you cannot find the window, please stop it from the Task Manager, and check the log file in Bugs directory.\n游戏已经在运行！如果找不到游戏窗口，请从任务管理器终止它，并检查 Bugs 目录中的日志文件。";
                 Window.MessageBox(IntPtr.Zero, str, null, 0x10u);
                 return;
             }
 #endif
-            if (args != null
-                && args.Length > 0) {
-                //拖动到exe的文件解析
-                if (Path.GetExtension(args[0]) == ".scmodList") {
-                    ModsManager.ModsPath = ModListManager.AnalysisModList(args[0]);
-                }
-                else {
-                    ExternalContentManager.openFilePath = args[0];
-                    //var externalContentScreen=new ExternalContentScreen();
-                    //sexternalContentScreen.Update();
-                }
-            }
 
             // Process.Start("C:\\Windows\\System32\\msg.exe",  "/server:127.0.0.1 * \"此版本为预览版 不建议长期使用");
 #if WINDOWS
@@ -122,7 +125,6 @@ namespace Game {
         public static void EntryPoint() {
             SystemLanguage = CultureInfo.CurrentUICulture.Name;
             if (string.IsNullOrEmpty(SystemLanguage)) {
-                Log.Debug(RegionInfo.CurrentRegion.DisplayName);
                 SystemLanguage = RegionInfo.CurrentRegion.DisplayName != "United States" ? "zh-CN" : "en-US";
             }
             //预加载
@@ -130,6 +132,7 @@ namespace Game {
             Window.HandleUri += HandleUriHandler;
             Window.Deactivated += DeactivatedHandler;
             Window.Frame += FrameHandler;
+            Window.ToRestart += Restart;
             CultureInfo.DefaultThreadCurrentCulture = CultureInfo.InvariantCulture;
             CultureInfo.DefaultThreadCurrentUICulture = CultureInfo.InvariantCulture;
             string title = $"Survivalcraft {ModsManager.ShortGameVersion} - API {ModsManager.APIVersionString}";
@@ -137,7 +140,7 @@ namespace Game {
             Log.AddLogSink(new GameLogSink());
 #if DEBUG
             Log.AddLogSink(new ConsoleLogSink());
-            title = "[DEBUG]" + title;
+            title = $"[DEBUG]{title}";
 #endif
             Window.UnhandledException += delegate(UnhandledExceptionInfo e) {
                 ExceptionManager.ReportExceptionToUser("Unhandled exception.", e.Exception);
@@ -185,10 +188,6 @@ namespace Game {
         }
 
         public static void Run() {
-#if ANDROID
-            // TODO: 待完成。
-            // EngineInputConnection.Implement = new SurvivalcraftInputConnection();
-#endif
             LastFrameTime = (float)(Time.RealTime - m_frameBeginTime);
             LastCpuFrameTime = (float)(m_cpuEndTime - m_frameBeginTime);
             m_frameBeginTime = Time.RealTime;
@@ -263,6 +262,22 @@ namespace Game {
                     m_firstFramePrepared = true;
                 }
             }
+#endif
+        }
+
+        public static void Restart() {
+#if ANDROID
+#pragma warning disable CA1416
+            Intent intent = new Intent(Window.Activity, Window.Activity.Class);
+            Window.Activity.StartActivity(intent);
+#else
+            Process current = Process.GetCurrentProcess();
+            Process.Start(new ProcessStartInfo
+            {
+                FileName = current.MainModule!.FileName!,
+                Arguments = $"--wait {current.Id}",
+                UseShellExecute = false
+            });
 #endif
         }
     }

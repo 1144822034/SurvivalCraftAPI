@@ -27,7 +27,10 @@
 				<BevelledButtonWidget Name="Settings" Style="{Styles/ButtonStyle_310x60}" HorizontalAlignment="Center" VerticalAlignment="Center" Text="[MainMenuScreen:4]" />
 				<BevelledButtonWidget Name="Help" Style="{Styles/ButtonStyle_310x60}" HorizontalAlignment="Center" VerticalAlignment="Center" Text="[MainMenuScreen:5]" />
 			</StackPanelWidget>
-			<BevelledButtonWidget Name="Buy" Style="{Styles/ButtonStyle_310x60}" HorizontalAlignment="Center" VerticalAlignment="Center" Text="[MainMenuScreen:6]" IsVisible="false" />
+			<StackPanelWidget HorizontalAlignment="Center">
+				<BevelledButtonWidget Name="Buy" Style="{Styles/ButtonStyle_310x60}" HorizontalAlignment="Center" VerticalAlignment="Center" Text="[MainMenuScreen:6]" IsVisible="false" />
+				<BevelledButtonWidget Name="DisableSafeModeButton" Style="{Styles/ButtonStyle_310x60}" HorizontalAlignment="Center" VerticalAlignment="Center" Text="[MainMenuScreen:13]" IsVisible="false" />
+			</StackPanelWidget>
 		</StackPanelWidget>
 
 		<CanvasWidget Size="0, Infinity" />

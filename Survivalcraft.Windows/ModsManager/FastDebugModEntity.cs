@@ -19,7 +19,7 @@ namespace Game {
                     "modinfo.json",
                     stream => {
                         modInfo = ModsManager.DeserializeJson(ModsManager.StreamToString(stream));
-                        modInfo.Name = $"[Debug]{modInfo.Name}";
+                        modInfo.Name = $"[FastDebug]{modInfo.Name}";
                     }
                 )) {
                 modInfo = new ModInfo {
@@ -28,13 +28,16 @@ namespace Game {
                     NuGetVersion = new NuGetVersion(1, 0, 0),
                     ApiVersion = ModsManager.APIVersionString,
                     ApiVersionRange = new VersionRange(ModsManager.APINuGetVersion),
-                    Author = "Mod",
-                    Description = "Debug uncompressed mod.",
+                    Link = "https://gitee.com/SC-SPM/SurvivalcraftApi",
+                    Author = "SC-SPM",
+                    Description = "Debug uncompressed mod. 调试未压缩模组",
                     ScVersion = "2.4.0.0",
-                    PackageName = "com.fastdebug"
+                    PackageName = "fastdebug"
                 };
             }
-            GetFile("icon.png", LoadIcon);
+            if(!GetFile("icon.webp", LoadIcon)) {
+                GetFile("icon.png", LoadIcon);
+            }
         }
 
         public void ReadDirResouces(string basepath, string path) {
@@ -45,6 +48,9 @@ namespace Game {
                 ReadDirResouces(basepath, $"{path}/{d}");
             }
             foreach (string f in Storage.ListFileNames(path)) {
+                if (f.EndsWith(".scmod")) {
+                    continue;
+                }
                 string abpath = $"{path}/{f}";
                 string FilenameInZip = abpath.Substring(basepath.Length + 1);
                 if (FilenameInZip.StartsWith("Assets/")) {
@@ -59,67 +65,6 @@ namespace Game {
                 }
                 FModFiles.Add(FilenameInZip, new FileInfo(Storage.GetSystemPath(abpath)));
             }
-        }
-
-        public override Assembly[] GetAssemblies() {
-            List<Assembly> assemblies = new();
-            foreach (string c in Storage.ListFileNames(ModsManager.ModsPath)) {
-                if (c.EndsWith(".dll")
-                    && !(c.StartsWith("EntitySystem") || c.StartsWith("Engine") || c.StartsWith("Survivalcraft") || c.StartsWith("OpenTK"))) {
-                    Stream assemblyStream = Storage.OpenFile(Storage.CombinePaths(ModsManager.ModsPath, c), OpenFileMode.Read);
-                    assemblies.Add(Assembly.Load(ModsManager.StreamToBytes(assemblyStream)));
-                }
-            }
-            return [.. assemblies];
-        }
-
-        public override void LoadClo(ClothingBlock block, ref XElement xElement) {
-            foreach (string c in Storage.ListFileNames(ModsManager.ModsPath)) {
-                if (c.EndsWith(".clo")) {
-                    ModsManager.CombineClo(xElement, Storage.OpenFile(Storage.CombinePaths(ModsManager.ModsPath, c), OpenFileMode.Read));
-                }
-            }
-        }
-
-        public override void LoadCr(ref XElement xElement) {
-            foreach (string c in Storage.ListFileNames(ModsManager.ModsPath)) {
-                if (c.EndsWith(".cr")) {
-                    ModsManager.CombineCr(xElement, Storage.OpenFile(Storage.CombinePaths(ModsManager.ModsPath, c), OpenFileMode.Read));
-                }
-            }
-        }
-
-        public override void LoadLauguage() {
-            string path = Storage.CombinePaths(ModsManager.ModsPath, "Assets/Lang");
-            if (Storage.DirectoryExists(path)) {
-                foreach (string c in Storage.ListFileNames(path)) {
-                    string fn = $"{ModsManager.Configs["Language"]}.json";
-                    string fpn = Storage.CombinePaths(path, c);
-                    if (c == fn
-                        && Storage.FileExists(fpn)) {
-                        LanguageControl.loadJson(Storage.OpenFile(fpn, OpenFileMode.Read));
-                    }
-                }
-            }
-        }
-
-        public override void LoadBlocksData() {
-            foreach (string c in Storage.ListFileNames(ModsManager.ModsPath)) {
-                if (c.EndsWith(".csv")) {
-                    BlocksManager.LoadBlocksData(
-                        ModsManager.StreamToString(Storage.OpenFile(Storage.CombinePaths(ModsManager.ModsPath, c), OpenFileMode.Read))
-                    );
-                }
-            }
-        }
-
-        public override void LoadXdb(ref XElement xElement) {
-            foreach (string c in Storage.ListFileNames(ModsManager.ModsPath)) {
-                if (c.EndsWith(".xdb")) {
-                    ModsManager.CombineDataBase(xElement, Storage.OpenFile(Storage.CombinePaths(ModsManager.ModsPath, c), OpenFileMode.Read));
-                }
-            }
-            Loader?.OnXdbLoad(xElement);
         }
 
         /// <summary>

@@ -6,7 +6,7 @@
         <Configurations>Debug;Release;Direct3D11</Configurations>
         <PackageId>SurvivalcraftAPI.EntitySystem</PackageId>
         <Title>SurvivalcraftAPI.EntitySystem</Title><!--For NuGet Package-->
-        <Version>1.8.2.0</Version><!--For NuGet Package-->
+        <Version>1.8.2.3</Version><!--For NuGet Package-->
         <PackageProjectUrl>https://gitee.com/SC-SPM/SurvivalcraftApi</PackageProjectUrl>
         <RepositoryUrl>https://gitee.com/SC-SPM/SurvivalcraftApi</RepositoryUrl>
         <RepositoryType>Git</RepositoryType>

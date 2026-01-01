@@ -10,13 +10,13 @@ namespace Game {
 
         public List<GameWidget> m_gameWidgets = [];
 
-        public GamesWidget GamesWidget { get; set; }
+        public virtual GamesWidget GamesWidget { get; set; }
 
-        public ReadOnlyList<GameWidget> GameWidgets => new(m_gameWidgets);
+        public virtual ReadOnlyList<GameWidget> GameWidgets => new(m_gameWidgets);
 
-        public SubsystemTerrain SubsystemTerrain { get; set; }
+        public virtual SubsystemTerrain SubsystemTerrain { get; set; }
 
-        public UpdateOrder UpdateOrder => UpdateOrder.Views;
+        public virtual UpdateOrder UpdateOrder => UpdateOrder.Views;
 
         public virtual float CalculateSquaredDistanceFromNearestView(Vector3 p) {
             float num = float.MaxValue;

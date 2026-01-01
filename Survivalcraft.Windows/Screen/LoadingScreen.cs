@@ -164,13 +164,10 @@ namespace Game {
                     //根据加载顺序排序后的结果
                     ModsManager.ModList.Clear();
                     foreach (ModEntity item in ModsManager.ModListAll) {
-                        if (item.IsDependencyChecked) {
+                        if (item.IsDependencyChecked || item.IsDisabled) {
                             continue;
                         }
                         item.CheckDependencies(ModsManager.ModList);
-                    }
-                    foreach (ModEntity item in ModsManager.ModListAll) {
-                        item.IsDependencyChecked = false;
                     }
                 }
             );
@@ -233,12 +230,13 @@ namespace Game {
                         ScreensManager.SwitchScreen(
                             new LoadingFailedScreen(
                                 "Loading failed 加载失败",
-                                ["Exceptions: 异常信息：", ..exception!.ToString().Split('\n')],
+                                ["Exceptions: 异常信息：", ..exception?.ToString().Split('\n') ?? []],
                                 [
-                                    "Check and add missing mods. 检查模组是否缺失，并添加所缺失的模组",
-                                    "Check the mod version is equal to the required one. 查看模组版本与要求的模组版本是否一致",
-                                    "If not solved, please contact the developer with Game.log in the path below. 若以上方式都无法解决，请联系开发者，并发送下面路径中的 Game.log ",
-                                    Storage.GetSystemPath(ModsManager.LogPath)
+                                    $"Check the API version required by mod is equal to the current API version ({ModsManager.APIVersionString}). Check and add missing mods. If not solved, please contact the developer of the mods or API with Game.log in the path below.",
+                                    $"检查模组是否缺失，并添加所缺失的模组。查看模组所需插件版版本与当前插件版版本（{ModsManager.APIVersionString}）是否一致。若以上方式都无法解决，请联系模组、插件版开发者，并发送下面路径中的 Game.log",
+                                    Storage.GetSystemPath(ModsManager.LogPath),
+                                    "And you can enable Safe Mode to prevent loading any mod.",
+                                    "你还可以启用安全模式，防止加载任何模组。"
                                 ]
                             )
                         );
@@ -251,9 +249,17 @@ namespace Game {
                     //>>>初始化语言列表
                     LanguageControl.LanguageTypes.Clear();
                     foreach (ContentInfo contentInfo in ContentManager.List("Lang")) {
-                        string px = Path.GetFileNameWithoutExtension(contentInfo.Filename);
-                        CultureInfo cultureInfo = new(px!, false);
-                        LanguageControl.LanguageTypes.TryAdd(px, cultureInfo); //第二个参数应为CultureInfo
+                        string fileName = Path.GetFileNameWithoutExtension(contentInfo.Filename);
+                        if (string.IsNullOrEmpty(fileName)) {
+                            continue;
+                        }
+                        try {
+                            CultureInfo cultureInfo = new(fileName.EndsWith("-old") ? fileName.Substring(0, fileName.Length - 4) : fileName, false);
+                            LanguageControl.LanguageTypes.TryAdd(fileName, cultureInfo); //第二个参数应为CultureInfo
+                        }
+                        catch (Exception) {
+                            // ignore
+                        }
                     }
                     //<<<结束
                     if (ModsManager.Configs.TryGetValue("Language", out string value)
@@ -263,7 +269,7 @@ namespace Game {
                     else {
                         bool languageNotLoaded = true;
                         string systemLanguage = Program.SystemLanguage;
-                        if (systemLanguage == null) {
+                        if (string.IsNullOrEmpty(systemLanguage)) {
                             //如果不支持系统语言，英语是最佳选择
                             LanguageControl.Initialize("en-US");
                             //languageNotLoaded = false;
@@ -313,7 +319,7 @@ namespace Game {
                     LanguageControl.SetUsual();
 #if !ANDROID
                     string title =
-                        $"{LanguageControl.Get("Usual", "gameName")} {ModsManager.ShortGameVersion} - {LanguageControl.Get("Usual", "api")} {ModsManager.APIVersionString}";
+                        $"{(SettingsManager.SafeMode ? $"[{LanguageControl.Get("Usual", "safeMode")}]" : "")}{LanguageControl.Get("Usual", "gameName")} {ModsManager.ShortGameVersion} - {LanguageControl.Get("Usual", "api")} {ModsManager.APIVersionString}";
 #if DEBUG
                     title = $"[{LanguageControl.Get("Usual", "debug")}]{title}";
 #endif

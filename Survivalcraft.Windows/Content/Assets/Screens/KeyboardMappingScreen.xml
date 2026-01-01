@@ -17,9 +17,10 @@
       </CanvasWidget>
 
       <StackPanelWidget Direction="Horizontal" HorizontalAlignment="Center" Margin="4, 10">
-        <BevelledButtonWidget Name="SetKey" Size="Infinity, 60" Margin="10, 0" Text="[KeyboardMappingScreen:SetKey]" VerticalAlignment="Center" />
-        <BevelledButtonWidget Name="DisableKey" Size="Infinity, 60" Margin="10, 0" Text="[KeyboardMappingScreen:DisableKey]" VerticalAlignment="Center" />
-        <BevelledButtonWidget Name="Reset" Size="Infinity, 60" Margin="10, 0" Text="[KeyboardMappingScreen:Reset]" VerticalAlignment="Center" />
+        <BevelledButtonWidget Name="SetKey" Size="Infinity, 60" Margin="5, 0" Text="[KeyboardMappingScreen:SetKey]" VerticalAlignment="Center" />
+        <BevelledButtonWidget Name="DisableKey" Size="Infinity, 60" Margin="5, 0" Text="[KeyboardMappingScreen:DisableKey]" VerticalAlignment="Center" />
+        <BevelledButtonWidget Name="Reset" Size="Infinity, 60" Margin="5, 0" Text="[KeyboardMappingScreen:Reset]" VerticalAlignment="Center" />
+        <BevelledButtonWidget Name="GameHelp" Size="Infinity, 60" Margin="5, 0" Text="[KeyboardMappingScreen:GameHelp]" VerticalAlignment="Center" />
       </StackPanelWidget>
     </StackPanelWidget>
   </StackPanelWidget>

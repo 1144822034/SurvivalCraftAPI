@@ -60,6 +60,8 @@ namespace Engine.Media {
         public readonly Image<Rgba32> m_trueImage;
         public bool m_isDisposed;
 
+        public Image() {}
+
         public Image(Image image) {
             ArgumentNullException.ThrowIfNull(image);
             m_trueImage = image.m_trueImage.Clone();
