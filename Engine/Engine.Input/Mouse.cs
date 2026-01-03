@@ -4,6 +4,8 @@ using Android.App;
 using Android.OS;
 using Android.Views;
 #pragma warning disable CA1416
+#elif IOS
+
 #else
 using Silk.NET.GLFW;
 using Silk.NET.Input;
@@ -71,10 +73,12 @@ namespace Engine.Input {
         }
 
         internal static void Initialize() {
-#if ANDROID && !IOS
+#if ANDROID
             if (Build.VERSION.SdkInt >= (BuildVersionCodes)26) {
                 Window.m_surface.SetOnCapturedPointerListener(new OnCapturedPointerListener());
             }
+#elif IOS
+
 #else
             m_mouse = Window.m_inputContext.Mice[0];
             m_mouse.MouseDown += MouseDownHandler;
@@ -219,6 +223,10 @@ namespace Engine.Input {
                 return true;
             }
         }
+#elif IOS
+
+
+
 #else
         static void MouseDownHandler(IMouse mouse, Silk.NET.Input.MouseButton button) {
             MouseButton mouseButton = TranslateMouseButton(button);
@@ -379,6 +387,8 @@ namespace Engine.Input {
             if (Build.VERSION.SdkInt >= (BuildVersionCodes)24) {
                 Window.m_surface?.PointerIcon = PointerIcon.GetSystemIcon(Application.Context, TranslateCursorType(cursorType));
             }
+#elif IOS
+
 #else
             m_mouse.Cursor.StandardCursor = TranslateCursorType(cursorType);
 #endif

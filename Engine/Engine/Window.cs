@@ -634,12 +634,14 @@ namespace Engine {
 
         static void InitializeAll() {
             try {
-#if ANDROID && !IOS
+#if ANDROID
                 if (SDLActivity.ContentView is ViewGroup viewGroup
                     && viewGroup.ChildCount >= 1
                     && viewGroup.GetChildAt(0) is SDLSurface surface) {
                     m_surface = surface;
                 }
+#elif IOS
+
 #else
                 using (Stream iconStream = typeof(Window).GetTypeInfo().Assembly.GetManifestResourceStream("Engine.Resources.icon.png")) {
                     if (iconStream != null) {

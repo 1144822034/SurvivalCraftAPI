@@ -46,6 +46,10 @@ namespace Game {
         ///         This is the description of android text box.
         ///     </para>
         /// </summary>
+#if IOS
+        public string Description { get; set; }
+#else
+
         public string Description { get => field;
             set {
                 if (field != value
@@ -62,6 +66,8 @@ namespace Game {
             }
         }
 
+#endif
+
         /// <summary>
         ///     <para>
         ///         Android 文本框的 Title。
@@ -70,6 +76,10 @@ namespace Game {
         ///         This is the title of android text box.
         ///     </para>
         /// </summary>
+#if IOS
+        public string Title { get; set; }
+
+#else
         public string Title {
             get => field;
             set {
@@ -86,16 +96,16 @@ namespace Game {
                 }
             }
         }
-
-        /// <summary>
-        ///     <para>
-        ///         旧版文本框的光标位置，现版本不再使用。
-        ///     </para>
-        ///     <para>
-        ///         Old caret position, now is deprecated.
-        ///     </para>
-        /// </summary>
-        [Obsolete($"TextBoxWidget.m_caretPosition is deprecated, use {nameof(TextBoxWidget)}.{nameof(Caret)} instead.", true)]
+#endif
+            /// <summary>
+            ///     <para>
+            ///         旧版文本框的光标位置，现版本不再使用。
+            ///     </para>
+            ///     <para>
+            ///         Old caret position, now is deprecated.
+            ///     </para>
+            /// </summary>
+            [Obsolete($"TextBoxWidget.m_caretPosition is deprecated, use {nameof(TextBoxWidget)}.{nameof(Caret)} instead.", true)]
         public int m_caretPosition;
 
         /// <summary>
@@ -147,7 +157,7 @@ namespace Game {
         [Obsolete($"TextBoxWidget.m_focusStartTime is deprecated, use {nameof(TextBoxWidget)}.{nameof(FocusStartTime)} instead.", true)]
         public float m_focusStartTime = 0;
 
-        #endregion
+#endregion
 
         // 文本存储
 
