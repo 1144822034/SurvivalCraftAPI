@@ -1,26 +1,27 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
-  <PropertyGroup>
-      <TargetFramework>net9.0-ios18.0</TargetFramework>
-    <Nullable>enable</Nullable>
-    <ImplicitUsings>true</ImplicitUsings>
-    <AssemblyName>EntitySystem</AssemblyName>
-    <RootNamespace>EntitySystem</RootNamespace>
-    <OutputType>Library</OutputType>
-    <SupportedOSPlatformVersion>15.0</SupportedOSPlatformVersion>
-    <Platforms>AnyCPU</Platforms>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
-    <MtouchLink>None</MtouchLink>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
-    <MtouchLink>None</MtouchLink>
-  </PropertyGroup>
-
+    <PropertyGroup>
+        <AssemblyName>EntitySystem</AssemblyName>
+        <RootNamespace>EntitySystem</RootNamespace>
+        <TargetFramework>net10.0-ios</TargetFramework>
+        <NeutralLanguage>zh-CN</NeutralLanguage>
+        <LangVersion>preview</LangVersion>
+        <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+        <Nullable>disable</Nullable>
+        <ProduceReferenceAssembly>true</ProduceReferenceAssembly>
+        <SupportedOSPlatformVersion>15.0</SupportedOSPlatformVersion>
+        <IsTrimmable>true</IsTrimmable>
+    </PropertyGroup>
+    <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+        <MtouchLink>None</MtouchLink>
+    </PropertyGroup>
+    <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+        <DebugType>none</DebugType>
+        <MtouchLink>None</MtouchLink>
+    </PropertyGroup>
     <ItemGroup>
         <Compile Include="..\EntitySystem\**\*.cs" Exclude="..\EntitySystem\obj\**\*.cs;..\EntitySystem\Properties\*.cs" />
     </ItemGroup>
-
     <ItemGroup>
-      <ProjectReference Include="..\Engine.IOS\Engine.IOS.csproj" />
+        <ProjectReference Include="..\Engine.IOS\Engine.IOS.csproj" />
     </ItemGroup>
 </Project>
