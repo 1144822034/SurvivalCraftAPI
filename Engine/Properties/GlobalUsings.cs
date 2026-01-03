@@ -1,6 +1,3 @@
-global using Color = Engine.Color;
-global using Image = Engine.Media.Image;
-global using Rectangle = Engine.Rectangle;
 global using System;
 global using System.IO;
 global using System.Collections;
