@@ -40,8 +40,8 @@
         </None>
     </ItemGroup>
     <ItemGroup>
-        <ProjectReference Include="..\Engine.IOS\Engine.IOS.csproj" />
-        <ProjectReference Include="..\EntitySystem.IOS\EntitySystem.IOS.csproj" />
+        <ProjectReference Include="..\Engine\Engine.csproj" />
+        <ProjectReference Include="..\EntitySystem\EntitySystem.csproj" />
     </ItemGroup>
     <ItemGroup>
         <Reference Include="Bass.Net">
