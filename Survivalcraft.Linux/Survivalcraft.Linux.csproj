@@ -1,9 +1,9 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
     <PropertyGroup>
         <NoWarn>$(NoWarn);CS1591</NoWarn>
         <RootNamespace>Game</RootNamespace>
         <AssemblyName>Survivalcraft</AssemblyName>
-        <TargetFramework>net10.0</TargetFramework>
+        <TargetFramework>net9.0</TargetFramework>
         <RuntimeIdentifier>linux-x64</RuntimeIdentifier>
         <ApplicationVersion>2.4.0.0</ApplicationVersion>
         <AssemblyVersion>2.4.0.0</AssemblyVersion>
