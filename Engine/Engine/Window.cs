@@ -645,7 +645,7 @@ namespace Engine {
 #else
                 using (Stream iconStream = typeof(Window).GetTypeInfo().Assembly.GetManifestResourceStream("Engine.Resources.icon.png")) {
                     if (iconStream != null) {
-                        Image<Rgba32> image = SixLabors.ImageSharp.Image.Load<Rgba32>(Image.DefaultImageSharpDecoderOptions, iconStream);
+                        Image<Rgba32> image = SixLabors.ImageSharp.Image.Load<Rgba32>(Engine.Media.Image.DefaultImageSharpDecoderOptions, iconStream);
                         byte[] pixelBytes = new byte[image.Width * image.Height * Unsafe.SizeOf<Rgba32>()];
                         image.CopyPixelDataTo(pixelBytes);
                         m_gameWindow.SetWindowIcon([new RawImage(image.Width, image.Height, pixelBytes)]);

@@ -13,8 +13,8 @@
         <EnableSGenConc>true</EnableSGenConc>
         <SupportedOSPlatformVersion>15.0</SupportedOSPlatformVersion>
         <IsTrimmable>true</IsTrimmable>
+        <TargetFramework>net10.0-ios</TargetFramework>
         <ApplicationId>com.survivalcraft.api</ApplicationId>
-        <Configuration Condition="'$(Configuration)' == ''">IOS</Configuration>
     </PropertyGroup>
     <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
         <MtouchLink>None</MtouchLink>

@@ -9,7 +9,6 @@ using System.Runtime.InteropServices;
 using Engine.Media;
 using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.PixelFormats;
-
 namespace Engine.Graphics {
     public class RenderTarget2D : Texture2D {
         DepthFormat m_depthFormat;
@@ -64,12 +63,12 @@ namespace Engine.Graphics {
             }
         }
 
-        public unsafe Image GetData(Rectangle sourceRectangle) {
+        public unsafe Engine.Media.Image GetData(Rectangle sourceRectangle) {
             VerifyNotDisposed();
-            Image<Rgba32> image = new(Image.DefaultImageSharpConfiguration, sourceRectangle.Width, sourceRectangle.Height);
+            Image<Rgba32> image = new(Engine.Media.Image.DefaultImageSharpConfiguration, sourceRectangle.Width, sourceRectangle.Height);
             image.DangerousTryGetSinglePixelMemory(out Memory<Rgba32> memory);
             GetDataInternal((nint)memory.Pin().Pointer, sourceRectangle);
-            return new Image(image);
+            return new Engine.Media.Image(image);
         }
 
         public void GetData(nint target, Rectangle sourceRectangle) {
@@ -254,7 +253,7 @@ namespace Engine.Graphics {
             return renderTarget2D;
         }
 
-        public new static RenderTarget2D Load(Image image, int mipLevelsCount = 1) {
+        public new static RenderTarget2D Load(Engine.Media.Image image, int mipLevelsCount = 1) {
             RenderTarget2D renderTarget2D = new(image.Width, image.Height, mipLevelsCount, ColorFormat.Rgba8888, DepthFormat.None);
             renderTarget2D.SetData(image.m_trueImage);
             if (mipLevelsCount > 1) {
@@ -269,9 +268,9 @@ namespace Engine.Graphics {
         }
 
         public new static RenderTarget2D Load(Stream stream, bool premultiplyAlpha = false, int mipLevelsCount = 1) {
-            Image image = Image.Load(stream);
+            var image = Engine.Media.Image.Load(stream);
             if (premultiplyAlpha) {
-                Image.PremultiplyAlpha(image);
+                Engine.Media.Image.PremultiplyAlpha(image);
             }
             return Load(image, mipLevelsCount);
         }
@@ -281,7 +280,7 @@ namespace Engine.Graphics {
             return Load(stream, premultiplyAlpha, mipLevelsCount);
         }
 
-        public static Image Save(RenderTarget2D renderTarget) {
+        public static Engine.Media.Image Save(RenderTarget2D renderTarget) {
             if (renderTarget.ColorFormat != ColorFormat.Rgba8888) {
                 throw new InvalidOperationException("Unsupported color format.");
             }
@@ -292,7 +291,7 @@ namespace Engine.Graphics {
             if (renderTarget.ColorFormat != ColorFormat.Rgba8888) {
                 throw new InvalidOperationException("Unsupported color format.");
             }
-            Image.Save(renderTarget.GetData(new Rectangle(0, 0, renderTarget.Width, renderTarget.Height)), stream, format, saveAlpha);
+            Engine.Media.Image.Save(renderTarget.GetData(new Rectangle(0, 0, renderTarget.Width, renderTarget.Height)), stream, format, saveAlpha);
         }
 
         public static void Save(RenderTarget2D renderTarget, string fileName, ImageFileFormat format, bool saveAlpha) {
