@@ -7,7 +7,7 @@ on:
 
 jobs:
   build:
-    runs-on: macos-15  # macOS ARM64 runner
+    runs-on: macos-latest  # macOS ARM64 runner
 
     steps:
       - name: Checkout
