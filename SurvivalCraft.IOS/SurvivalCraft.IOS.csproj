@@ -14,6 +14,7 @@
         <SupportedOSPlatformVersion>15.0</SupportedOSPlatformVersion>
         <IsTrimmable>true</IsTrimmable>
         <ApplicationId>com.survivalcraft.api</ApplicationId>
+        <Configuration Condition="'$(Configuration)' == ''">IOS</Configuration>
     </PropertyGroup>
     <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
         <MtouchLink>None</MtouchLink>
@@ -44,7 +45,7 @@
     </ItemGroup>
     <ItemGroup>
         <Reference Include="Bass.Net">
-            <HintPath>..\Engine.IOS\Bass.Net.dll</HintPath>
+            <HintPath>..\Engine\Bass.Net.dll</HintPath>
         </Reference>
     </ItemGroup>
     <ItemGroup>
