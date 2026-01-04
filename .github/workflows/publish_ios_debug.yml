@@ -41,7 +41,7 @@ jobs:
 
     - name: Build IPA
       run: |
-        dotnet publish "SurvivalCraft.IOS/SurvivalCraft.IOS.csproj" -c Debug -p:CodesignKey="Apple Development: 1144822034@qq.com (YZ3PDQZTKN)" -p:CodesignProvision=dac32268-04a1-4a17-8304-143d0ce4c49e -p:RuntimeIdentifier=ios-arm64 -nowarn:CS8618,CS8765,CS8625,CS8600,CS8602,CS8603 /p:Codesign=false /p:EnableCodeSigning=false
+        dotnet publish "SurvivalCraft.IOS/SurvivalCraft.IOS.csproj" -c IOS -p:CodesignKey="Apple Development: 1144822034@qq.com (YZ3PDQZTKN)" -p:CodesignProvision=dac32268-04a1-4a17-8304-143d0ce4c49e -p:RuntimeIdentifier=ios-arm64 -nowarn:CS8618,CS8765,CS8625,CS8600,CS8602,CS8603 /p:Codesign=false /p:EnableCodeSigning=false
 
     - name: Archive Bin Files
       run: |
