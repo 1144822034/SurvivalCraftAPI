@@ -286,7 +286,7 @@ namespace Engine.Graphics {
             return texture2D;
         }
 
-        public static Texture2D Load(Image image, int mipLevelsCount = 1) {
+        public static Texture2D Load(Engine.Media.Image image, int mipLevelsCount = 1) {
             Texture2D texture2D = new(image.Width, image.Height, mipLevelsCount, ColorFormat.Rgba8888);
             texture2D.SetData(image.m_trueImage);
             if (mipLevelsCount > 1) {
@@ -312,14 +312,14 @@ namespace Engine.Graphics {
                 GLWrapper.GL.GenerateMipmap(TextureTarget.Texture2D);
 #endif
             }
-            texture2D.Tag = new Image(image);
+            texture2D.Tag = new Engine.Media.Image(image);
             return texture2D;
         }
 
         public static Texture2D Load(Stream stream, bool premultiplyAlpha = false, int mipLevelsCount = 1) {
-            Image image = Image.Load(stream);
+            var image = Engine.Media.Image.Load(stream);
             if (premultiplyAlpha) {
-                Image.PremultiplyAlpha(image);
+                Engine.Media.Image.PremultiplyAlpha(image);
             }
             return Load(image, mipLevelsCount);
         }

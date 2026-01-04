@@ -2,7 +2,7 @@
     <PropertyGroup>
         <AssemblyName>Survivalcraft</AssemblyName>
         <RootNamespace>Game</RootNamespace>
-        <TargetFramework>net10.0-ios</TargetFramework>
+        <TargetFramework>net9.0-ios18.0</TargetFramework>
         <LangVersion>preview</LangVersion>
         <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
         <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
@@ -39,12 +39,12 @@
         </None>
     </ItemGroup>
     <ItemGroup>
-        <ProjectReference Include="..\Engine.IOS\Engine.IOS.csproj" />
-        <ProjectReference Include="..\EntitySystem.IOS\EntitySystem.IOS.csproj" />
+        <ProjectReference Include="..\Engine\Engine.csproj" />
+        <ProjectReference Include="..\EntitySystem\EntitySystem.csproj" />
     </ItemGroup>
     <ItemGroup>
         <Reference Include="Bass.Net">
-            <HintPath>..\Engine.IOS\Bass.Net.dll</HintPath>
+            <HintPath>..\Engine\Bass.Net.dll</HintPath>
         </Reference>
     </ItemGroup>
     <ItemGroup>
