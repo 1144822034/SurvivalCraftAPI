@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
     <PropertyGroup>
         <NoWarn>$(NoWarn);CS1591</NoWarn>
         <RootNamespace>EntitySystem</RootNamespace>
@@ -17,11 +17,11 @@
         <ProduceReferenceAssembly>true</ProduceReferenceAssembly>
     </PropertyGroup>
     <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
-        <TargetFrameworks>net10.0;net10.0-windows;net10.0-android;net10.0-ios</TargetFrameworks>
+        <TargetFrameworks>net10.0;net10.0-windows;net10.0-android;net9.0-ios</TargetFrameworks>
         <DefineConstants>DEBUG</DefineConstants>
     </PropertyGroup>
     <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
-        <TargetFrameworks>net10.0;net10.0-windows;net10.0-android;net10.0-ios</TargetFrameworks>
+        <TargetFrameworks>net10.0;net10.0-windows;net10.0-android;net9.0-ios</TargetFrameworks>
         <DebugType>none</DebugType>
         <DefineConstants>TRACE</DefineConstants>
     </PropertyGroup>
