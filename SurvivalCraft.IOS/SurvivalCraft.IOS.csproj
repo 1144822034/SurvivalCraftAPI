@@ -13,7 +13,6 @@
         <EnableSGenConc>true</EnableSGenConc>
         <SupportedOSPlatformVersion>15.0</SupportedOSPlatformVersion>
         <IsTrimmable>true</IsTrimmable>
-        <TargetFramework>net10.0-ios</TargetFramework>
         <ApplicationId>com.survivalcraft.api</ApplicationId>
     </PropertyGroup>
     <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
