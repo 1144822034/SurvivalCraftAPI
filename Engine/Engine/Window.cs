@@ -5,7 +5,7 @@ using Android.OS;
 using Android.Views;
 using Org.Libsdl.App;
 #elif IOS
-
+using UIKit;
 #else
 using System.Diagnostics;
 using System.Reflection;
@@ -49,6 +49,7 @@ namespace Engine {
         public static SDLSurface m_surface;
 #elif IOS
         public static IWindow m_gameWindow;
+        public static UIViewController RootViewController;
 #else
         public static IWindow m_gameWindow;
 

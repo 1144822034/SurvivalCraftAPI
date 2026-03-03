@@ -812,7 +812,7 @@ namespace Game {
                     FocusStartTime = Time.RealTime;
 #if WINDOWS
                     ShowInputMethod();
-#elif ANDROID
+#elif ANDROID || IOS
                     Keyboard.ShowKeyboard(
                         Title ?? "",
                         Description ?? "",
