@@ -49,7 +49,7 @@
         <PackageReference Include="NVorbis" Version="0.10.5" />
         <PackageReference Include="SixLabors.ImageSharp" Version="3.1.12" /><!--An powerful and popular audio libaury-->
         <PackageReference Include="NLayer.NAudioSupport" Version="1.4.0" /><!--MP3 support-->
-        <PackageReference Include="NAudio.Flac.Unknown.Mod" Version="1.0.4" PrivateAssets="all" Condition="'$(TargetFramework)' != 'net9.0-ios'" /><!--Source: https://github.com/XiaofengdiZhu/NAudio.Flac/ -->
+        <PackageReference Include="NAudio.Flac.Unknown.Mod" Version="1.0.4" PrivateAssets="all" Condition="'$(TargetFramework)' != 'net9.0-ios18.0'" /><!--Source: https://github.com/XiaofengdiZhu/NAudio.Flac/ -->
         <PackageReference Include="NAudio.Core" Version="2.2.1" /><!--Resolve reference confliction between NLayer.NAudioSupport and NAudio.Flac.Unknown.Mod-->
         <PackageReference Include="Silk.NET.Windowing" Version="2.22.0" />
         <PackageReference Include="Silk.NET.OpenGLES" Version="2.22.0" Condition="'$(Configuration)' != 'Direct3D11'" />
