@@ -4,8 +4,12 @@ using System.Collections.Concurrent;
 using Android.App;
 using Android.Views;
 using Android.Widget;
+#elif IOS
+using UIKit;
+using Silk.NET.Input;
 #else
 using Silk.NET.Input;
+using static System.Net.WebRequestMethods;
 #endif
 
 namespace Engine.Input {
@@ -211,7 +215,26 @@ namespace Engine.Input {
         }
 
         internal static void Dispose() { }
-#if !ANDROID
+#if IOS
+        static void ShowKeyboardInternal(string title, string description, string defaultText, bool passwordMode, Action<string> enter, Action cancel) {
+
+            UIAlertController alertController = UIAlertController.Create(title, defaultText, UIAlertControllerStyle.Alert);
+
+            alertController.AddTextField((UITextField obj) => {
+                obj.Placeholder = description;
+            });
+
+            alertController.AddAction(UIAlertAction.Create("OK", UIAlertActionStyle.Default, (UIAlertAction obj) => {
+                var userInput = alertController.TextFields[0].Text;
+                enter(userInput);
+            }));
+
+            alertController.AddAction(UIAlertAction.Create("Cancel", UIAlertActionStyle.Cancel, (UIAlertAction obj) => {
+                cancel();
+            }));
+            Window.RootViewController.PresentViewController(alertController, true, null);
+        }
+#elif !ANDROID
         // ReSharper disable UnusedParameter.Local
         static void ShowKeyboardInternal(string title, string description, string defaultText, bool passwordMode, Action<string> enter, Action cancel)
             // ReSharper restore UnusedParameter.Local
