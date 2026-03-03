@@ -34,7 +34,7 @@ unsafe {
             var kitValue = Engine.Window.m_view.Native.UIKit.Value;
             var window = ObjCRuntime.Runtime.GetNSObject<UIWindow>(kitValue.Window);
             var uiView = window.RootViewController.View;
-            Engine.Window.RootViewController = uiView;
+            Engine.Window.RootViewController = window.RootViewController;
             uiView.Add(new TouchView(uiView));
         };
         Game.Program.EntryPoint();

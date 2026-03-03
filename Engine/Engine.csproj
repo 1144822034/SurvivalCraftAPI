@@ -19,11 +19,11 @@
         <ProduceReferenceAssembly>true</ProduceReferenceAssembly>
     </PropertyGroup>
     <PropertyGroup Condition="'$(Configuration)' == 'Debug'">
-        <TargetFrameworks>net10.0;net10.0-windows;net10.0-android;net9.0-ios</TargetFrameworks>
+        <TargetFrameworks>net10.0;net10.0-windows;net10.0-android;net10.0-ios</TargetFrameworks>
         <DefineConstants>DEBUG</DefineConstants>
     </PropertyGroup>
     <PropertyGroup Condition="'$(Configuration)' == 'Release'">
-        <TargetFrameworks>net10.0;net10.0-windows;net10.0-android;net9.0-ios</TargetFrameworks>
+        <TargetFrameworks>net10.0;net10.0-windows;net10.0-android;net10.0-ios</TargetFrameworks>
         <DebugType>none</DebugType>
         <DefineConstants>TRACE</DefineConstants>
     </PropertyGroup>
@@ -75,7 +75,7 @@
         <Compile Remove="Engine.Graphics\GLWrapper.cs" Condition="'$(Configuration)' == 'Direct3D11'" />
     </ItemGroup>
     <ItemGroup>
-      <Reference Include="Bass.Net" Condition="'$(TargetFramework)' == 'net9.0-ios'">
+      <Reference Include="Bass.Net" Condition="'$(TargetFramework)' == 'net10.0-ios'">
         <HintPath>..\SurvivalCraft.IOS\ref\Bass.Net.dll</HintPath>
       </Reference>
     </ItemGroup>
