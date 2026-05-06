@@ -19,11 +19,11 @@
         <ProduceReferenceAssembly>true</ProduceReferenceAssembly>
     </PropertyGroup>
     <PropertyGroup Condition="'$(Configuration)' == 'Debug'">
-        <TargetFrameworks>net10.0;net10.0-windows;net10.0-android;net9.0-ios18.0</TargetFrameworks>
+        <TargetFrameworks>net10.0;net10.0-windows;net10.0-android;net10.0-ios</TargetFrameworks>
         <DefineConstants>DEBUG</DefineConstants>
     </PropertyGroup>
     <PropertyGroup Condition="'$(Configuration)' == 'Release'">
-        <TargetFrameworks>net10.0;net10.0-windows;net10.0-android;net9.0-ios18.0</TargetFrameworks>
+        <TargetFrameworks>net10.0;net10.0-windows;net10.0-android;net10.0-ios</TargetFrameworks>
         <DebugType>none</DebugType>
         <DefineConstants>TRACE</DefineConstants>
     </PropertyGroup>
@@ -49,7 +49,7 @@
         <PackageReference Include="NVorbis" Version="0.10.5" />
         <PackageReference Include="SixLabors.ImageSharp" Version="3.1.12" /><!--An powerful and popular audio libaury-->
         <PackageReference Include="NLayer.NAudioSupport" Version="1.4.0" /><!--MP3 support-->
-        <PackageReference Include="NAudio.Flac.Unknown.Mod" Version="1.0.4" PrivateAssets="all" Condition="'$(TargetFramework)' != 'net9.0-ios18.0'" /><!--Source: https://github.com/XiaofengdiZhu/NAudio.Flac/ -->
+        <PackageReference Include="NAudio.Flac.Unknown.Mod" Version="1.0.4" PrivateAssets="all" Condition="'$(TargetFramework)' != 'net10.0-ios'" /><!--Source: https://github.com/XiaofengdiZhu/NAudio.Flac/ -->
         <PackageReference Include="NAudio.Core" Version="2.2.1" /><!--Resolve reference confliction between NLayer.NAudioSupport and NAudio.Flac.Unknown.Mod-->
         <PackageReference Include="Silk.NET.Windowing" Version="2.22.0" />
         <PackageReference Include="Silk.NET.OpenGLES" Version="2.22.0" Condition="'$(Configuration)' != 'Direct3D11'" />
@@ -75,7 +75,7 @@
         <Compile Remove="Engine.Graphics\GLWrapper.cs" Condition="'$(Configuration)' == 'Direct3D11'" />
     </ItemGroup>
     <ItemGroup>
-      <Reference Include="Bass.Net" Condition="'$(TargetFramework)' == 'net9.0-ios18.0'">
+      <Reference Include="Bass.Net" Condition="'$(TargetFramework)' == 'net10.0-ios'">
         <HintPath>..\SurvivalCraft.IOS\ref\Bass.Net.dll</HintPath>
       </Reference>
     </ItemGroup>

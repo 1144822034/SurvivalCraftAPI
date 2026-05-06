@@ -2,7 +2,7 @@
     <PropertyGroup>
         <AssemblyName>Survivalcraft</AssemblyName>
         <RootNamespace>Game</RootNamespace>
-        <TargetFramework>net9.0-ios18.0</TargetFramework>
+        <TargetFrameworks>net10.0-ios</TargetFrameworks>
         <LangVersion>preview</LangVersion>
         <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
         <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
